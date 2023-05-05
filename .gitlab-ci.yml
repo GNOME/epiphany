@@ -76,55 +76,29 @@ eslint:
   except:
     - gnome-*
 
+.flatpak rules:
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ "^gnome-*"
+      variables:
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
+    - if: $CI_COMMIT_BRANCH !~ "^gnome-*" && $CI_COMMIT_BRANCH != "master"
+      variables:
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
+
 flatpak:
-  extends: '.flatpak'
+  extends:
+    - '.flatpak'
+    - '.flatpak rules'
   needs: []
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
-  except:
-    - master
-    - gnome-*
 
 flatpak aarch64:
-  extends: '.flatpak@aarch64'
+  extends:
+    - '.flatpak@aarch64'
+    - '.flatpak rules'
   needs: []
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
-  except:
-    - master
-    - gnome-*
-
-flatpak stable:
-  extends: '.flatpak'
-  needs: []
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
-  only:
-    - gnome-*
-
-flatpak aarch64 stable:
-  extends: '.flatpak@aarch64'
-  needs: []
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
-  only:
-    - gnome-*
-
-flatpak master:
-  extends: '.flatpak'
-  needs: []
-  variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
-  only:
-    - master
-
-flatpak aarch64 master:
-  extends: '.flatpak@aarch64'
-  needs: []
-  variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
-  only:
-    - master
 
 scanbuild:
   extends: '.flatpak'
@@ -142,12 +116,12 @@ scanbuild:
 nightly:
   extends: '.publish_nightly'
   stage: .post
-  needs: ['flatpak master']
+  needs: ['flatpak']
 
 nightly aarch64:
   extends: '.publish_nightly'
   stage: .post
-  needs: ['flatpak aarch64 master']
+  needs: ['flatpak aarch64']
 
 # Canary is disabled indefinitely until a WebKit runtime built for GTK 4 is available.
 #
