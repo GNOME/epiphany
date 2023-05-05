@@ -49,6 +49,7 @@ check-code-style:
     - '.fdo.distribution-image@alpine'
     - '.alpine.container.common'
   stage: 'test'
+  needs: [ 'build.container.alpine@x86_64' ]
   interruptible: true
   script:
     - bash data/check-code-style
@@ -64,6 +65,7 @@ eslint:
     - '.fdo.distribution-image@alpine'
     - '.alpine.container.common'
   stage: 'test'
+  needs: [ 'build.container.alpine@x86_64' ]
   interruptible: true
   script:
     - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
@@ -76,6 +78,7 @@ eslint:
 
 flatpak:
   extends: '.flatpak'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
   except:
@@ -84,6 +87,7 @@ flatpak:
 
 flatpak aarch64:
   extends: '.flatpak@aarch64'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
   except:
@@ -92,6 +96,7 @@ flatpak aarch64:
 
 flatpak stable:
   extends: '.flatpak'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
@@ -99,6 +104,7 @@ flatpak stable:
 
 flatpak aarch64 stable:
   extends: '.flatpak@aarch64'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
@@ -106,6 +112,7 @@ flatpak aarch64 stable:
 
 flatpak master:
   extends: '.flatpak'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
@@ -113,6 +120,7 @@ flatpak master:
 
 flatpak aarch64 master:
   extends: '.flatpak@aarch64'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
   only:
@@ -120,6 +128,7 @@ flatpak aarch64 master:
 
 scanbuild:
   extends: '.flatpak'
+  needs: []
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
@@ -133,12 +142,12 @@ scanbuild:
 nightly:
   extends: '.publish_nightly'
   stage: .post
-  dependencies: ['flatpak master']
+  needs: ['flatpak master']
 
 nightly aarch64:
   extends: '.publish_nightly'
   stage: .post
-  dependencies: ['flatpak aarch64 master']
+  needs: ['flatpak aarch64 master']
 
 # Canary is disabled indefinitely until a WebKit runtime built for GTK 4 is available.
 #
