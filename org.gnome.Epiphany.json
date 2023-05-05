@@ -118,6 +118,20 @@
                 "-Dprofile=Devel",
                 "-Dgranite=enabled"
             ],
+            "run-tests" : true,
+            "build-options" : {
+                "test-args" : [
+                    "--device=dri",
+                    "--filesystem=xdg-download",
+                    "--share=ipc",
+                    "--share=network",
+                    "--socket=fallback-x11",
+                    "--socket=pulseaudio",
+                    "--socket=wayland",
+                    "--system-talk-name=org.freedesktop.GeoClue2",
+                    "--own-name=org.gnome.Epiphany.WebAppProvider"
+                ]
+            },
             "sources" : [
                 {
                     "type" : "git",
