@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-05-07 14:30+0000\n"
-"PO-Revision-Date: 2023-05-08 10:41+0330\n"
+"POT-Creation-Date: 2023-05-08 07:12+0000\n"
+"PO-Revision-Date: 2023-05-09 13:17+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -146,6 +146,9 @@ msgid ""
 "search term replaced with %s. \"bang\" is the bang (shortcut word) of the search "
 "engine."
 msgstr ""
+"سیاههٔ موتورهای جست‌وجو. آرایه‌ای از دیکشنری‌ها که که هرکدام مربوط به یک موتور "
+"جست‌وجوست. کلیدهای پشتیبانی شده: «name» نام موتور جست‌وجو. «url» نشانی جست‌وجو با "
+"جایگزینی %s به جای عبارت. «bang» واژهٔ میان‌بر برای جست‌وجو."
 
 #: data/org.gnome.epiphany.gschema.xml:72
 msgid "Enable Google Search Suggestions"
@@ -232,7 +235,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "Active clear data items."
-msgstr ""
+msgstr "فعّال کردن موارد دادهٔ شفاف."
 
 #: data/org.gnome.epiphany.gschema.xml:111
 msgid ""
@@ -241,6 +244,10 @@ msgid ""
 "application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = Plugins "
 "data, 128 = HSTS policies cache, 256 = Intelligent Tracking Prevention data."
 msgstr ""
+"گزینش (بیت‌مسک) این که کدام موارد دادهٔ شفاف باید به صورت پیش‌گزیده فعّال باشند. 1 = "
+"کلوچک‌ها، 2 = انبارهٔ HTTP دیسک، 4 = داده‌ّهای ذخیرهٔ محلی، 8 = انبارهٔ برنامهٔ وب "
+"برون‌خط، 16 = پایگاه‌داده‌های IndexDB، 32 = پایگاه‌داده‌های WebSQL، 64 = داده‌های "
+"افزایه‌ها، 128 = انبارهٔ سیاست‌های HSTS، 256 = داده‌های پیشگیری از ردیابی هوشمند."
 
 #: data/org.gnome.epiphany.gschema.xml:117
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -287,6 +294,7 @@ msgid ""
 "Chooses the style of the main body text for articles in reader mode. Possible "
 "values are “sans” and “serif”."
 msgstr ""
+"گزینش سبک متن بدنهٔ اصلی مقاله در حالت خواندن. مقدارهای ممکن: «sans» و «serif»."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Reader mode color scheme."
@@ -299,10 +307,14 @@ msgid ""
 "dark background). This setting is ignored on systems that provide a system-wide "
 "dark style preference, such as GNOME 42 and newer."
 msgstr ""
+"گزینش سبک رنگ‌ها برای نمایش در حالت خواندن. مقدارهای ممکن «light» (متن تیره روی "
+"پس‌زمینهٔ روشن) و «dark» (متن روشن روی پس‌زمینهٔ تیره) هستند. این تنظیم روی "
+"سامانه‌هایی که ترجیحات سبک تیرهٔ سراسری فراهم می‌کنند همچون گنوم ۴۲ و جدیدتر نادیده "
+"گرفته می‌شود."
 
 #: data/org.gnome.epiphany.gschema.xml:146
 msgid "Minimum font size"
-msgstr "حداقل اندازه قلم"
+msgstr "کمینهٔ اندازهٔ قلم"
 
 #: data/org.gnome.epiphany.gschema.xml:150
 msgid "Use GNOME fonts"
@@ -430,13 +442,15 @@ msgstr "اینکه آیا گذرواژه‌ها ذخیره و در سایت‌ه
 
 #: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable site-specific quirks"
-msgstr ""
+msgstr "به کار انداختن خصلت‌ها برای هر پایگاه"
 
 #: data/org.gnome.epiphany.gschema.xml:216
 msgid ""
 "Enable quirks to make specific websites work better. You might want to disable "
 "this setting if debugging a specific issue."
 msgstr ""
+"به کار انداختن خصلت‌ها برای بهتر کار کردن پایگاه‌های خاص. شاید بخواهید برای "
+"اشکال‌زدایی مشکلی خاصی این تنظیم را از کار بیندازید."
 
 #: data/org.gnome.epiphany.gschema.xml:220
 msgid "Enable safe browsing"
@@ -447,6 +461,8 @@ msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe Browsing "
 "API v4."
 msgstr ""
+"این که مرور امن به کار بیفتد. مرور امن با نگارش ۴ رابط برنامه‌نویسی مرور امن گوگل "
+"کار می‌کند."
 
 #: data/org.gnome.epiphany.gschema.xml:225
 msgid "Enable Intelligent Tracking Prevention (ITP)"
@@ -465,6 +481,8 @@ msgid ""
 "Whether to allow websites to store cookies, local storage data, and IndexedDB "
 "databases. Disabling this will break many websites."
 msgstr ""
+"این که به پایگاه‌ها اجازهٔ ذخیرهٔ کلوچک‌ها، داده‌های ذخیرهٔ‌محلی و پایگاه‌داده‌های "
+"IndexedDB داده شود. از کار انداختنش بسیاری ازپایگاه‌ها را خراب خواهد کرد."
 
 #: data/org.gnome.epiphany.gschema.xml:235
 msgid "Default zoom level for new pages"
@@ -481,6 +499,9 @@ msgid ""
 "be loaded as a URL unless a search engine is explicitly selected from the "
 "dropdown menu."
 msgstr ""
+"این که هنگام وارد شدن چیزی که شبیه URL نیست در نوار نشانی به طور خودکار در وب "
+"جست‌وجو شود. اگر این تنظیم از کار بیفتد همه چیز به عنوان نشانی بار خواهد شد مگر "
+"این که موتور جست‌وجویی از فهرست پایین افتادنی گزیده شود."
 
 #: data/org.gnome.epiphany.gschema.xml:244
 msgid "Enable mouse gestures"
@@ -491,6 +512,8 @@ msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s behaviour "
 "and are activated using the middle mouse button + gesture."
 msgstr ""
+"این که ژست‌های موشی به کار بیفتد. ژست‌های موشی بر پایهٔ رفتار اوپرا بوده و با کلید "
+"وسط موشی + ژست‌ها فعّال می‌شوند."
 
 #: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last upload directory"
@@ -519,6 +542,10 @@ msgid ""
 "on embedded devices, but increases memory usage requirements and could expose "
 "severe hardware-specific graphics driver bugs."
 msgstr ""
+"این که شتاب‌دهی سخت‌افزاری به کار بیفتد. مقدارهای ممکن «always» و «never» هستند. "
+"ممکن است برای داشتن کارایی قابل قبول روی افزاره‌های تعبیه شده نیاز به شتاب‌دهی "
+"سخت‌افزاری باشد: ولی نیازمندی‌های استفادهٔ حافظه را افزایش داده و می‌تواند مشکلات "
+"راه‌انداز گرافیکی وابسته به سخت‌افزار شدیدی بروز دهد."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "Always ask for download directory"
@@ -630,6 +657,7 @@ msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
+"این که پنجره‌ای جدید که از نشستی پیشین بازگردانده نشده باید از ابتدا بیشینه باشد."
 
 #: data/org.gnome.epiphany.gschema.xml:342
 msgid "Disable forward and back buttons"
@@ -640,6 +668,8 @@ msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users from "
 "accessing immediate browser history"
 msgstr ""
+"اگر روی true تنظیم شود دکمه‌های پیس‌روی و بازگشت از کار افتاده تا از دسترسی "
+"کاربران به تاریخچهٔ مرور لحظه‌ای پیش‌گیری شود"
 
 #: data/org.gnome.epiphany.gschema.xml:361
 msgid "Firefox Sync Token Server URL"
@@ -709,6 +739,7 @@ msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
+"در صورتی که مجموعه‌های افی باید با مجموعه‌های فایرفاکس هم‌گام شوند TRUE وگرنه FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:401
 msgid "Enable bookmarks sync"
@@ -716,7 +747,7 @@ msgstr "به کار انداختن همگام‌سازی نشانک"
 
 #: data/org.gnome.epiphany.gschema.xml:402
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "در صورتی که مجموعه‌های نشانک باید هم‌گام شوند TRUE وگرنه FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:406
 msgid "Bookmarks sync timestamp"
@@ -724,7 +755,7 @@ msgstr "برچسب‌زمانی همگام‌سازی نشانک‌ها"
 
 #: data/org.gnome.epiphany.gschema.xml:407
 msgid "The timestamp at which last bookmarks sync was made."
-msgstr ""
+msgstr "برچسب زمانی که آخرین هم‌گام سازی نشانک‌ها انجام شده."
 
 #: data/org.gnome.epiphany.gschema.xml:411 data/org.gnome.epiphany.gschema.xml:426
 #: data/org.gnome.epiphany.gschema.xml:441
@@ -736,6 +767,7 @@ msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"در صورتی که لازم است مجموعه‌های نشانک برای نخستین بار هم‌گام شوند TRUE وگرنه FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:416
 msgid "Enable passwords sync"
@@ -743,7 +775,7 @@ msgstr "به کار انداختن همگام‌سازی گذرواژه"
 
 #: data/org.gnome.epiphany.gschema.xml:417
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "در صورتی که مجموعه‌های گذرواژه باید هم‌گام شوند TRUE وگرنه FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:421
 msgid "Passwords sync timestamp"
@@ -751,13 +783,15 @@ msgstr "برچسب‌زمانی همگام‌سازی گذرواژه‌ها"
 
 #: data/org.gnome.epiphany.gschema.xml:422
 msgid "The timestamp at which last passwords sync was made."
-msgstr ""
+msgstr "برچسب زمانی که آخرین هم‌گام سازی گذرواژه‌ها انجام شده."
 
 #: data/org.gnome.epiphany.gschema.xml:427
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"در صورتی که لازم است مجموعه‌های گذرواژه برای نخستین بار هم‌گام شوند TRUE وگرنه "
+"FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:431
 msgid "Enable history sync"
@@ -765,7 +799,7 @@ msgstr "به کار انداختن همگام‌سازی تاریخچه"
 
 #: data/org.gnome.epiphany.gschema.xml:432
 msgid "TRUE if history collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "در صورتی که مجموعه‌های تاریخچه باید هم‌گام شوند TRUE وگرنه FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:436
 msgid "History sync timestamp"
@@ -773,13 +807,15 @@ msgstr "برچسب‌زمانی همگام‌سازی تاریخچه"
 
 #: data/org.gnome.epiphany.gschema.xml:437
 msgid "The timestamp at which last history sync was made."
-msgstr ""
+msgstr "برچسب زمانی که آخرین هم‌گام سازی تاریخچه انجام شده."
 
 #: data/org.gnome.epiphany.gschema.xml:442
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"در صورتی که لازم است مجموعه‌های تاریخچه برای نخستین بار هم‌گام شوند TRUE وگرنه "
+"FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:446
 msgid "Enable open tabs sync"
@@ -787,7 +823,7 @@ msgstr "به کار انداختن همگام‌سازی زبانه‌های ب�
 
 #: data/org.gnome.epiphany.gschema.xml:447
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "در صورتی که مجموعه‌های زبانه‌های باز باید هم‌گام شوند TRUE وگرنه FALSE."
 
 #: data/org.gnome.epiphany.gschema.xml:451
 msgid "Open tabs sync timestamp"
@@ -795,11 +831,11 @@ msgstr "برچسب‌زمانی همگام‌سازی زبانه‌های باز
 
 #: data/org.gnome.epiphany.gschema.xml:452
 msgid "The timestamp at which last open tabs sync was made."
-msgstr ""
+msgstr "برچسب زمانی که آخرین هم‌گام سازی زبانه‌های باز انجام شده."
 
 #: data/org.gnome.epiphany.gschema.xml:463
 msgid "Decision to apply when microphone permission is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ صدابَر برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:464
 msgid ""
@@ -808,10 +844,13 @@ msgid ""
 "ask the user for permission, while “allow” and “deny” tell it to automatically "
 "make the decision upon request."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ دسترسی به صدابَر کاربر را گرفته "
+"یا نه استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند "
+"و allow و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
 #: data/org.gnome.epiphany.gschema.xml:468
 msgid "Decision to apply when geolocation permission is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ موقعیت مکانی برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:469
 msgid ""
@@ -820,10 +859,13 @@ msgid ""
 "ask the user for permission, while “allow” and “deny” tell it to automatically "
 "make the decision upon request."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ دسترسی به مکان کاربر را گرفته "
+"یا نه استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند "
+"و allow و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
 #: data/org.gnome.epiphany.gschema.xml:473
 msgid "Decision to apply when notification permission is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ آگاهی برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:474
 msgid ""
@@ -832,10 +874,13 @@ msgid ""
 "user for permission, while “allow” and “deny” tell it to automatically make the "
 "decision upon request."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ نمایش آگاهی‌ها را گرفته یا نه "
+"استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و "
+"allow و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
 #: data/org.gnome.epiphany.gschema.xml:478
 msgid "Decision to apply when save password permission is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ ذخیرهٔ گذراژه برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
@@ -844,10 +889,13 @@ msgid ""
 "for permission, while “allow” and “deny” tell it to automatically make the "
 "decision upon request."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ ذخیرهٔ گذرواژه‌ها را گرفته یا نه "
+"استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و "
+"allow و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
 #: data/org.gnome.epiphany.gschema.xml:483
 msgid "Decision to apply when webcam permission is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ دوربین برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
@@ -856,10 +904,14 @@ msgid ""
 "the user for permission, while “allow” and “deny” tell it to automatically make "
 "the decision upon request."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ دسترسی به دوربین کاربر را "
+"گرفته یا نه استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه "
+"درخواست کند و allow و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته "
+"شود."
 
 #: data/org.gnome.epiphany.gschema.xml:488
 msgid "Decision to apply when advertisement permission is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ تبلیغ برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
@@ -868,10 +920,13 @@ msgid ""
 "is used, while “allow” and “deny” tell it to automatically make the decision "
 "upon request."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ تبلیغات را گرفته یا نه استفاده "
+"می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow و deny "
+"می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
 #: data/org.gnome.epiphany.gschema.xml:493
 msgid "Decision to apply when an autoplay policy is requested for this host"
-msgstr ""
+msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ پخش خودکار برای این میزبان"
 
 #: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
@@ -880,6 +935,9 @@ msgid ""
 "“allow” and “deny” tell it to allow / deny all requests to autoplay media "
 "respectively."
 msgstr ""
+"این گزینه برای ذخیرهٔ این که میزبان داده شده اجازهٔ پخش خودکار را گرفته یا نه "
+"استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و "
+"allow و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
 #: embed/ephy-about-handler.c:117 embed/ephy-about-handler.c:119
 msgid "Memory usage"
