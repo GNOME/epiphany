@@ -1627,7 +1627,7 @@ static void
 set_image_from_favicon (EphyApplicationDialogData *data)
 {
   g_autoptr (GIcon) icon = NULL;
-  g_autoptr (GdkTexture) icon_texture = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
+  GdkTexture *icon_texture = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
 
   icon = ephy_favicon_get_from_texture_scaled (icon_texture, 0, 0);
 
