@@ -1648,8 +1648,11 @@ set_app_icon_from_filename (EphyApplicationDialogData *data,
                             const char                *filename)
 {
   g_autoptr (GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GError) error = NULL;
 
-  pixbuf = gdk_pixbuf_new_from_file_at_size (filename, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE, NULL);
+  pixbuf = gdk_pixbuf_new_from_file_at_size (filename, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE, &error);
+  if (pixbuf == NULL)
+    g_warning ("Failed to create pixbuf for %s: %s", filename, error->message);
 
   if (pixbuf != NULL) {
     data->framed_pixbuf = frame_pixbuf (G_ICON (pixbuf), &data->icon_rgba, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
@@ -1658,9 +1661,8 @@ set_app_icon_from_filename (EphyApplicationDialogData *data,
     create_install_dialog_when_ready (data);
   }
   if (data->icon_v == NULL) {
-    g_warning ("Failed to get icon for web app %s, giving up", data->display_address);
-    ephy_application_dialog_data_free (data);
-    return;
+    g_warning ("Failed to get icon for web app %s, falling back to favicon", data->display_address);
+    set_image_from_favicon (data);
   }
 }
 
