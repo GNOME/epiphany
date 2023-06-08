@@ -2382,16 +2382,10 @@ load_all_available_popovers (EphyWindow  *window,
 }
 
 static void
-load_changed_cb (EphyWebView     *view,
-                 WebKitLoadEvent  load_event,
-                 EphyWindow      *window)
+destroy_permission_popovers_for_view (EphyWindow  *window,
+                                      EphyWebView *view)
 {
   GList *popover_list;
-
-  sync_tab_load_status (view, load_event, window);
-
-  if (load_event != WEBKIT_LOAD_STARTED)
-    return;
 
   /* Freeing open permission popovers will also free the outstanding permission
    * requests, which is equivalent to denying them.
@@ -2399,7 +2393,19 @@ load_changed_cb (EphyWebView     *view,
   popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
   g_hash_table_steal (window->active_permission_popovers, view);
   g_list_free_full (popover_list, g_object_unref);
+}
 
+static void
+load_changed_cb (EphyWebView     *view,
+                 WebKitLoadEvent  load_event,
+                 EphyWindow      *window)
+{
+  sync_tab_load_status (view, load_event, window);
+
+  if (load_event != WEBKIT_LOAD_STARTED)
+    return;
+
+  destroy_permission_popovers_for_view (window, view);
   if (view == ephy_embed_get_web_view (window->active_embed))
     load_all_available_popovers (window, view);
 }
@@ -2932,6 +2938,8 @@ ephy_window_close_tab (EphyWindow *window,
 
     ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_NEW_TAB);
   }
+
+  destroy_permission_popovers_for_view (window, ephy_embed_get_web_view (tab));
 
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
 
