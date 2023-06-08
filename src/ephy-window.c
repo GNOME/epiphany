@@ -180,7 +180,7 @@ struct _EphyWindow {
   GtkWidget *toast_overlay;
   GtkWidget *switch_to_tab;
   AdwToast *switch_toast;
-  GHashTable *active_permission_requests;
+  GHashTable *active_permission_popovers;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -2653,7 +2653,7 @@ static void
 load_all_available_popovers (EphyWindow  *window,
                              EphyWebView *view)
 {
-  GList *popover_list = g_hash_table_lookup (window->active_permission_requests, view);
+  GList *popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
   EphyLocationEntry *lentry;
   GList *l;
@@ -2692,13 +2692,13 @@ popover_response_cb (EphyWindow *window,
     ephy_location_entry_set_password_popover (lentry, NULL);
 
   view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
-  popover_list = g_hash_table_lookup (window->active_permission_requests, view);
+  popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
   popover_list = g_list_remove (popover_list, popover);
 
   if (!popover_list)
-    g_hash_table_steal (window->active_permission_requests, view);
+    g_hash_table_steal (window->active_permission_popovers, view);
   else
-    g_hash_table_replace (window->active_permission_requests, view, popover_list);
+    g_hash_table_replace (window->active_permission_popovers, view, popover_list);
 
   g_object_unref (popover);
 }
@@ -2813,7 +2813,7 @@ permission_requested_cb (EphyWebView             *view,
   } else {
     EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
     EphyLocationEntry *lentry;
-    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_requests, view);
+    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_popovers, view);
 
     g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
 
@@ -2823,7 +2823,7 @@ permission_requested_cb (EphyWebView             *view,
     ephy_location_entry_add_permission_popover (lentry, popover);
     ephy_location_entry_show_best_permission_popover (lentry);
     list = g_list_append (list, popover);
-    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_requests, view, list);
+    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_popovers, view, list);
 
     g_signal_connect (popover, "allow", G_CALLBACK (popover_allow_cb), window);
     g_signal_connect (popover, "deny", G_CALLBACK (popover_deny_cb), window);
@@ -3278,7 +3278,7 @@ is_browser_default (void)
 }
 
 static void
-free_permission_requests (gpointer  key,
+free_permission_popovers (gpointer  key,
                           GList    *value)
 {
   g_list_free_full (value, g_object_unref);
@@ -3305,10 +3305,10 @@ ephy_window_dispose (GObject *object)
 
     g_hash_table_unref (window->action_labels);
 
-    g_hash_table_foreach (window->active_permission_requests,
-                          (GHFunc)free_permission_requests, NULL);
+    g_hash_table_foreach (window->active_permission_popovers,
+                          (GHFunc)free_permission_popovers, NULL);
 
-    g_hash_table_unref (window->active_permission_requests);
+    g_hash_table_unref (window->active_permission_popovers);
   }
 
   G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
@@ -3792,7 +3792,7 @@ save_password_cb (EphyEmbedShell          *shell,
   } else {
     EphyPasswordPopover *popover = ephy_password_popover_new (request_data);
     EphyWebView *view = ephy_shell_get_active_web_view (EPHY_SHELL (shell));
-    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_requests, view);
+    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_popovers, view);
 
     title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (ephy_window_get_header_bar (EPHY_WINDOW (window)))));
 
@@ -3805,7 +3805,7 @@ save_password_cb (EphyEmbedShell          *shell,
     ephy_location_entry_set_password_popover (lentry, popover);
     ephy_location_entry_show_password_popover (lentry);
     list = g_list_append (list, popover);
-    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_requests, view, list);
+    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_popovers, view, list);
 
     g_signal_connect_swapped (popover, "response", G_CALLBACK (popover_response_cb), window);
   }
@@ -3905,7 +3905,7 @@ ephy_window_constructed (GObject *object)
                          g_strdup (action_label[i].label));
   }
 
-  window->active_permission_requests = g_hash_table_new (g_direct_hash,
+  window->active_permission_popovers = g_hash_table_new (g_direct_hash,
                                                          g_direct_equal);
 
   /* Set accels for actions */
