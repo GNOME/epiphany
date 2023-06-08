@@ -2356,6 +2356,53 @@ progress_update (WebKitWebView *web_view,
   ephy_location_entry_set_progress (EPHY_LOCATION_ENTRY (title_widget), progress, loading);
 }
 
+static void
+load_all_available_popovers (EphyWindow  *window,
+                             EphyWebView *view)
+{
+  GList *popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  EphyLocationEntry *lentry;
+  GList *l;
+
+  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
+    return;
+
+  lentry = EPHY_LOCATION_ENTRY (title_widget);
+
+  ephy_location_entry_set_password_popover (lentry, NULL);
+  ephy_location_entry_clear_permission_buttons (lentry);
+
+  for (l = popover_list; l; l = l->next) {
+    if (EPHY_IS_PASSWORD_POPOVER (l->data))
+      ephy_location_entry_set_password_popover (lentry, EPHY_PASSWORD_POPOVER (l->data));
+    else if (EPHY_IS_PERMISSION_POPOVER (l->data))
+      ephy_location_entry_add_permission_popover (lentry, EPHY_PERMISSION_POPOVER (l->data));
+  }
+}
+
+static void
+load_changed_cb (EphyWebView     *view,
+                 WebKitLoadEvent  load_event,
+                 EphyWindow      *window)
+{
+  GList *popover_list;
+
+  sync_tab_load_status (view, load_event, window);
+
+  if (load_event != WEBKIT_LOAD_STARTED)
+    return;
+
+  /* Freeing open permission popovers will also free the outstanding permission
+   * requests, which is equivalent to denying them.
+   */
+  popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
+  g_hash_table_steal (window->active_permission_popovers, view);
+  g_list_free_full (popover_list, g_object_unref);
+
+  if (view == ephy_embed_get_web_view (window->active_embed))
+    load_all_available_popovers (window, view);
+}
 
 static void
 ephy_window_connect_active_embed (EphyWindow *window)
@@ -2428,7 +2475,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
                            G_CALLBACK (sync_tab_document_type),
                            window, 0);
   g_signal_connect_object (view, "load-changed",
-                           G_CALLBACK (sync_tab_load_status),
+                           G_CALLBACK (load_changed_cb),
                            window, 0);
   g_signal_connect_object (view, "notify::navigation",
                            G_CALLBACK (sync_tab_navigation),
@@ -2647,31 +2694,6 @@ reader_mode_cb (EphyWebView *view,
                 EphyWindow  *window)
 {
   update_reader_mode (window, view);
-}
-
-static void
-load_all_available_popovers (EphyWindow  *window,
-                             EphyWebView *view)
-{
-  GList *popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
-  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-  EphyLocationEntry *lentry;
-  GList *l;
-
-  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
-    return;
-
-  lentry = EPHY_LOCATION_ENTRY (title_widget);
-
-  ephy_location_entry_set_password_popover (lentry, NULL);
-  ephy_location_entry_clear_permission_buttons (lentry);
-
-  for (l = popover_list; l; l = l->next) {
-    if (EPHY_IS_PASSWORD_POPOVER (l->data))
-      ephy_location_entry_set_password_popover (lentry, EPHY_PASSWORD_POPOVER (l->data));
-    else if (EPHY_IS_PERMISSION_POPOVER (l->data))
-      ephy_location_entry_add_permission_popover (lentry, EPHY_PERMISSION_POPOVER (l->data));
-  }
 }
 
 static void
