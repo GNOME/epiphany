@@ -3786,8 +3786,8 @@ save_password_cb (EphyEmbedShell          *shell,
     GtkBox *entry_box;
     GtkWidget *password_entry;
 
-    dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), _("Save login?"),
-                                                         _("Passwords are saved only on your device and can be removed at any time in Preferences")));
+    dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), _("Save password?"),
+                                                         _("Passwords can be removed at any time in Preferences")));
     adw_message_dialog_add_responses (dialog,
                                       "close", _("Not Now"),
                                       "never", _("Never Save"),
