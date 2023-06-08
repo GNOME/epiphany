@@ -929,7 +929,7 @@ decide_policy_cb (WebKitWebView            *web_view,
 
 static gboolean
 permission_request_cb (WebKitWebView           *web_view,
-                       WebKitPermissionRequest *decision)
+                       WebKitPermissionRequest *request)
 {
   const char *address;
   char *origin;
@@ -940,17 +940,17 @@ permission_request_cb (WebKitWebView           *web_view,
 
   shell = ephy_embed_shell_get_default ();
 
-  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
+  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (request)) {
     permission_type = EPHY_PERMISSION_TYPE_ACCESS_LOCATION;
-  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
+  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (request)) {
     permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
-  } else if (WEBKIT_IS_CLIPBOARD_PERMISSION_REQUEST (decision)) {
+  } else if (WEBKIT_IS_CLIPBOARD_PERMISSION_REQUEST (request)) {
     permission_type = EPHY_PERMISSION_TYPE_CLIPBOARD;
-  } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (decision)) {
+  } else if (WEBKIT_IS_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (request)) {
     permission_type = EPHY_PERMISSION_TYPE_WEBSITE_DATA_ACCESS;
-  } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (decision)) {
-    gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
-    gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision));
+  } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (request)) {
+    gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (request));
+    gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (request));
 
     if (is_for_audio_device) {
       if (is_for_video_device)
@@ -998,10 +998,10 @@ permission_request_cb (WebKitWebView           *web_view,
 
   switch (permission) {
     case EPHY_PERMISSION_PERMIT:
-      webkit_permission_request_allow (decision);
+      webkit_permission_request_allow (request);
       goto out;
     case EPHY_PERMISSION_DENY:
-      webkit_permission_request_deny (decision);
+      webkit_permission_request_deny (request);
       goto out;
     case EPHY_PERMISSION_UNDECIDED:
       /* Application mode implies being OK with notifications. */
@@ -1011,9 +1011,9 @@ permission_request_cb (WebKitWebView           *web_view,
                                                  permission_type,
                                                  origin,
                                                  EPHY_PERMISSION_PERMIT);
-        webkit_permission_request_allow (decision);
+        webkit_permission_request_allow (request);
       } else {
-        g_signal_emit_by_name (web_view, "permission-requested", permission_type, decision, origin);
+        g_signal_emit_by_name (web_view, "permission-requested", permission_type, request, origin);
       }
   }
 
