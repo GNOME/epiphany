@@ -81,7 +81,7 @@ webkitgtk_requirement = '>= 2.41.1'
 
 conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_74')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_74')
-conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_6')
+conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_10')
 conf.set('GDK_VERSION_MAX_ALLOWED', 'GDK_VERSION_4_10')
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
