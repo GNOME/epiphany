@@ -982,7 +982,9 @@ window_cmd_show_help (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
 {
-  gtk_show_uri (GTK_WINDOW (user_data), "help:epiphany", GDK_CURRENT_TIME);
+  g_autoptr (GtkUriLauncher) launcher = gtk_uri_launcher_new ("help:epiphany");
+
+  gtk_uri_launcher_launch (launcher, GTK_WINDOW (user_data), NULL, NULL, NULL);
 }
 
 #define ABOUT_GROUP "About"
@@ -2575,8 +2577,11 @@ window_cmd_send_to (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyEmbed *embed;
-  char *command, *subject, *body;
+  g_autofree char *command = NULL;
+  g_autofree char *subject = NULL;
+  g_autofree char *body = NULL;
   const char *location, *title;
+  g_autoptr (GtkUriLauncher) launcher = NULL;
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
@@ -2592,12 +2597,8 @@ window_cmd_send_to (GSimpleAction *action,
                          "?Subject=", subject,
                          "&Body=", body, NULL);
 
-  g_free (subject);
-  g_free (body);
-
-  gtk_show_uri (GTK_WINDOW (window), command, GDK_CURRENT_TIME);
-
-  g_free (command);
+  launcher = gtk_uri_launcher_new (command);
+  gtk_uri_launcher_launch (launcher, GTK_WINDOW (window), NULL, NULL, NULL);
 }
 
 void

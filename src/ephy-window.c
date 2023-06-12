@@ -2091,8 +2091,9 @@ decide_navigation_policy (WebKitWebView            *web_view,
   uri = webkit_uri_request_get_uri (request);
 
   if (!ephy_embed_utils_address_has_web_scheme (uri) && webkit_navigation_action_is_user_gesture (navigation_action)) {
-    gtk_show_uri (GTK_WINDOW (window), uri, GDK_CURRENT_TIME);
+    g_autoptr (GtkUriLauncher) launcher = gtk_uri_launcher_new (uri);
 
+    gtk_uri_launcher_launch (launcher, GTK_WINDOW (window), NULL, NULL, NULL);
     webkit_policy_decision_ignore (decision);
     return TRUE;
   }

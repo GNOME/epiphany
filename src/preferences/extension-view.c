@@ -89,10 +89,12 @@ on_homepage_activated (AdwActionRow *row,
                        gpointer      user_data)
 {
   EphyExtensionView *self = EPHY_EXTENSION_VIEW (user_data);
+  g_autoptr (GtkUriLauncher) launcher = NULL;
 
-  gtk_show_uri (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                ephy_web_extension_get_homepage_url (self->web_extension),
-                GDK_CURRENT_TIME);
+  launcher = gtk_uri_launcher_new (ephy_web_extension_get_homepage_url (self->web_extension));
+  gtk_uri_launcher_launch (launcher,
+                           GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                           NULL, NULL, NULL);
 }
 
 static void
