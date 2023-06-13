@@ -6,8 +6,9 @@ cache:
   paths:
     - _ccache/
 
+# This workflow disables merge request pipelines. Use only branch pipelines.
+# https://docs.gitlab.com/ee/ci/yaml/workflow.html
 workflow:
-  # https://docs.gitlab.com/ee/ci/yaml/workflow.html
   rules:
     - if: '$CI_COMMIT_TAG'
     - if: '$CI_COMMIT_BRANCH'
@@ -63,8 +64,8 @@ check-code-style:
     paths:
       - ${ESLINT_LOG}
     when: on_failure
-  except:
-    - gnome-*
+  rules:
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 eslint:
   extends:
@@ -79,18 +80,18 @@ eslint:
     paths:
       - ${ESLINT_LOG}
     when: on_failure
-  except:
-    - gnome-*
+  rules:
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 .flatpak rules:
   rules:
-    - if: $CI_COMMIT_BRANCH =~ "^gnome-*"
+    - if: $CI_COMMIT_BRANCH =~ /gnome-\d\d+/
       variables:
         CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled'
     - if: $CI_COMMIT_BRANCH == "master"
       variables:
         CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled'
-    - if: $CI_COMMIT_BRANCH !~ "^gnome-*" && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/ && $CI_COMMIT_BRANCH != "master"
       variables:
         CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled --werror'
 
