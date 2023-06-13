@@ -83,6 +83,8 @@ conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_74')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_74')
 conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_10')
 conf.set('GDK_VERSION_MAX_ALLOWED', 'GDK_VERSION_4_10')
+conf.set('ADW_VERSION_MIN_REQUIRED', 'ADW_VERSION_1_4')
+conf.set('ADW_VERSION_MAX_ALLOWED', 'ADW_VERSION_1_4')
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-4', version: '>= 3.9.0')
