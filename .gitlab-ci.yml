@@ -1,10 +1,16 @@
 include:
- - remote: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
- - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/3d80a75e1284935e69219bfa80bc6064c6786819/templates/alpine.yml'
+  - remote: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
+  - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/3d80a75e1284935e69219bfa80bc6064c6786819/templates/alpine.yml'
 
 cache:
   paths:
     - _ccache/
+
+workflow:
+  # https://docs.gitlab.com/ee/ci/yaml/workflow.html
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH'
 
 variables:
   BUNDLE: 'epiphany-git.flatpak'
@@ -49,6 +55,7 @@ check-code-style:
     - '.fdo.distribution-image@alpine'
     - '.alpine.container.common'
   stage: 'test'
+  needs: [ 'build.container.alpine@x86_64' ]
   interruptible: true
   script:
     - bash data/check-code-style
@@ -64,6 +71,7 @@ eslint:
     - '.fdo.distribution-image@alpine'
     - '.alpine.container.common'
   stage: 'test'
+  needs: [ 'build.container.alpine@x86_64' ]
   interruptible: true
   script:
     - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
@@ -74,54 +82,35 @@ eslint:
   except:
     - gnome-*
 
+.flatpak rules:
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ "^gnome-*"
+      variables:
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled'
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled'
+    - if: $CI_COMMIT_BRANCH !~ "^gnome-*" && $CI_COMMIT_BRANCH != "master"
+      variables:
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled --werror'
+
 flatpak:
-  extends: '.flatpak'
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
-  except:
-    - master
-    - gnome-*
+  extends:
+    - '.flatpak'
+    - '.flatpak rules'
+  needs: []
 
 flatpak aarch64:
-  extends: '.flatpak@aarch64'
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} --werror'
-  except:
-    - master
-    - gnome-*
-
-flatpak stable:
-  extends: '.flatpak'
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dsoup2=enabled'
-  only:
-    - gnome-*
-
-flatpak aarch64 stable:
-  extends: '.flatpak@aarch64'
-  variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dsoup2=enabled'
-  only:
-    - gnome-*
-
-flatpak master:
-  extends: '.flatpak'
-  variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
-  only:
-    - master
-
-flatpak aarch64 master:
-  extends: '.flatpak@aarch64'
-  variables:
-    CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY}'
-  only:
-    - master
+  extends:
+    - '.flatpak@aarch64'
+    - '.flatpak rules'
+  needs: []
 
 scanbuild:
   extends: '.flatpak'
+  needs: []
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
   script:
     - flatpak-builder --user --disable-rofiles-fuse --stop-at=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH}
     - flatpak build flatpak_app bash -c "source /usr/lib/sdk/llvm14/enable.sh; meson --prefix=/app ${CONFIG_OPTS} _build; SCANBUILD=$(pwd)/.run-scan-build ninja -C _build scan-build"
@@ -133,58 +122,9 @@ scanbuild:
 nightly:
   extends: '.publish_nightly'
   stage: .post
-  dependencies: ['flatpak master']
+  needs: ['flatpak']
 
 nightly aarch64:
   extends: '.publish_nightly'
   stage: .post
-  dependencies: ['flatpak aarch64 master']
-
-# Canary is disabled indefinitely until a WebKit runtime built for GTK 4 is available.
-#
-#canary:
-#  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master'
-#  stage: 'test'
-#  interruptible: true
-#  allow_failure: true
-#  tags:
-#    - flatpak
-#  variables:
-#    SDK_REPO: 'https://software.igalia.com/flatpak-refs/webkit-sdk.flatpakrepo'
-#    BUNDLE: 'epiphany-canary.flatpak'
-#  script:
-#    # TODO: Switch to debug? 5GB downloads though.
-#    - python3 generate-canary-manifest.py --release
-#    - flatpak remote-add --user --if-not-exists webkit-sdk ${SDK_REPO}
-#    - flatpak-builder --user --install-deps-from=webkit-sdk --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
-#    - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${SDK_REPO} org.gnome.Epiphany.Canary
-#    - tar cf canary-repo.tar repo/
-#    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json webkitgtk.zip
-#
-#  artifacts:
-#    name: 'Canary Flatpak artifacts'
-#    expose_as: 'Get Canary Flatpak bundle here'
-#    when: 'always'
-#    paths:
-#      - "${BUNDLE}"
-#      - "canary-repo.tar"
-#    expire_in: 14 days
-#  cache:
-#    - key: "$CI_JOB_NAME"
-#      paths:
-#        - '.flatpak-builder/downloads'
-#        - '.flatpak-builder/git'
-#    - key: "$CI_JOB_NAME"
-#      paths:
-#        - '.flatpak-builder/cache'
-#        - '.flatpak-builder/ccache'
-#  except:
-#    - gnome-*
-#
-#canary nightly:
-#  extends: '.publish_nightly'
-#  allow_failure: true
-#  stage: .post
-#  dependencies: ['canary']
-#  before_script:
-#    - mv canary-repo.tar repo.tar
+  needs: ['flatpak aarch64']
