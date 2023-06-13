@@ -64,7 +64,9 @@ static void
 on_any_data_view_back_button_clicked (GtkWidget       *data_view,
                                       EphyPrefsDialog *prefs_dialog)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   adw_preferences_window_close_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   prefs_dialog->active_data_view = NULL;
 }
@@ -77,8 +79,10 @@ present_data_view (EphyPrefsDialog *prefs_dialog,
                            G_CALLBACK (on_any_data_view_back_button_clicked),
                            prefs_dialog, 0);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   adw_preferences_window_present_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog),
                                           presented_view);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   prefs_dialog->active_data_view = presented_view;
 }
