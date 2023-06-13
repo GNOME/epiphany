@@ -437,18 +437,18 @@ ephy_indicator_bin_set_badge_color (EphyIndicatorBin *self,
 
   gtk_widget_remove_css_class (GTK_WIDGET (self), "needs-attention");
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (color) {
     g_autofree char *col_str = gdk_rgba_to_string (color);
     css = g_strdup_printf (".needs-attention > indicator { background-color: %s; }", col_str);
     provider = gtk_css_provider_new ();
     gtk_css_provider_load_from_data (provider, css, -1);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     context = gtk_widget_get_style_context (GTK_WIDGET (self->indicator));
     gtk_style_context_add_provider (context, GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
     gtk_widget_add_css_class (GTK_WIDGET (self), "needs-attention");
   }
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_BADGE]);
