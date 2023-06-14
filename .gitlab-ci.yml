@@ -50,6 +50,8 @@ build.container.alpine@x86_64:
       uncrustify
     FDO_DISTRIBUTION_EXEC: >-
       npm install -g eslint
+  rules:
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 check-code-style:
   extends:
