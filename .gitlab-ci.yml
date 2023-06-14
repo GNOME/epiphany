@@ -119,6 +119,8 @@ scanbuild:
     when: on_failure
     paths:
       - _build/meson-logs/scanbuild
+  rules:
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 nightly:
   extends: '.publish_nightly'
