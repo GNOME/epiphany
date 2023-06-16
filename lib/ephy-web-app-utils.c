@@ -969,62 +969,62 @@ ephy_web_icon_copy_cb (GFile        *file,
 gboolean
 ephy_web_application_save (EphyWebApplication *app)
 {
+  g_autoptr (GKeyFile) key = NULL;
   g_autofree char *contents = NULL;
+  g_autofree char *name = NULL;
+  g_autofree char *icon = NULL;
+  g_autofree char *exec = NULL;
+  g_auto (GStrv) strings = NULL;
+  guint exec_length;
+  gboolean changed = FALSE;
   gboolean saved = FALSE;
   g_autoptr (GError) error = NULL;
 
   g_assert (!ephy_is_running_inside_sandbox ());
 
-  if (g_file_get_contents (app->desktop_path, &contents, NULL, &error)) {
-    g_autoptr (GKeyFile) key = NULL;
-    g_autofree char *name = NULL;
-    g_autofree char *icon = NULL;
-    g_autofree char *exec = NULL;
-    g_auto (GStrv) strings = NULL;
-    guint exec_length;
-    gboolean changed = FALSE;
-
-    key = g_key_file_new ();
-    g_key_file_load_from_data (key, contents, -1, 0, NULL);
-
-    name = g_key_file_get_string (key, "Desktop Entry", "Name", NULL);
-    if (g_strcmp0 (name, app->name) != 0) {
-      changed = TRUE;
-      g_key_file_set_string (key, "Desktop Entry", "Name", app->name);
-    }
-
-    icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
-    if (g_strcmp0 (icon, app->icon_path) != 0) {
-      g_autoptr (GFile) new_icon = NULL;
-      g_autoptr (GFile) old_icon = NULL;
-      changed = TRUE;
-      new_icon = g_file_new_for_path (app->icon_path);
-      old_icon = g_file_new_for_path (icon);
-      g_file_copy_async (new_icon, old_icon, G_FILE_COPY_OVERWRITE,
-                         G_PRIORITY_DEFAULT, NULL, NULL, NULL,
-                         (GAsyncReadyCallback)ephy_web_icon_copy_cb, NULL);
-    }
-
-    exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
-    strings = g_strsplit (exec, " ", -1);
-
-    exec_length = g_strv_length (strings);
-    if (g_strcmp0 (strings[exec_length - 1], app->url) != 0) {
-      changed = TRUE;
-      g_free (strings[exec_length - 1]);
-      strings[exec_length - 1] = g_strdup (app->url);
-      g_free (exec);
-      exec = g_strjoinv (" ", strings);
-      g_key_file_set_string (key, "Desktop Entry", "Exec", exec);
-    }
-
-    if (changed) {
-      saved = g_key_file_save_to_file (key, app->desktop_path, &error);
-      if (!saved)
-        g_warning ("Failed to save desktop file of web application: %s\n", error->message);
-    }
-  } else {
+  if (!g_file_get_contents (app->desktop_path, &contents, NULL, &error)) {
     g_warning ("Failed to load desktop file of web application: %s\n", error->message);
+    return FALSE;
+  }
+
+  key = g_key_file_new ();
+  g_key_file_load_from_data (key, contents, -1, 0, NULL);
+
+  name = g_key_file_get_string (key, "Desktop Entry", "Name", NULL);
+  if (g_strcmp0 (name, app->name) != 0) {
+    changed = TRUE;
+    g_key_file_set_string (key, "Desktop Entry", "Name", app->name);
+  }
+
+  icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
+  if (g_strcmp0 (icon, app->icon_path) != 0) {
+    g_autoptr (GFile) new_icon = NULL;
+    g_autoptr (GFile) old_icon = NULL;
+    changed = TRUE;
+    new_icon = g_file_new_for_path (app->icon_path);
+    old_icon = g_file_new_for_path (icon);
+    g_file_copy_async (new_icon, old_icon, G_FILE_COPY_OVERWRITE,
+                       G_PRIORITY_DEFAULT, NULL, NULL, NULL,
+                       (GAsyncReadyCallback)ephy_web_icon_copy_cb, NULL);
+  }
+
+  exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
+  strings = g_strsplit (exec, " ", -1);
+
+  exec_length = g_strv_length (strings);
+  if (g_strcmp0 (strings[exec_length - 1], app->url) != 0) {
+    changed = TRUE;
+    g_free (strings[exec_length - 1]);
+    strings[exec_length - 1] = g_strdup (app->url);
+    g_free (exec);
+    exec = g_strjoinv (" ", strings);
+    g_key_file_set_string (key, "Desktop Entry", "Exec", exec);
+  }
+
+  if (changed) {
+    saved = g_key_file_save_to_file (key, app->desktop_path, &error);
+    if (!saved)
+      g_warning ("Failed to save desktop file of web application: %s\n", error->message);
   }
 
   return saved;
