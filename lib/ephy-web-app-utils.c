@@ -1019,9 +1019,15 @@ ephy_web_application_save (EphyWebApplication *app)
     }
 
     if (changed) {
-      saved = g_key_file_save_to_file (key, app->desktop_path, &error);
+      char *resolved_path = realpath (app->desktop_path, NULL);
+      if (!resolved_path) {
+        g_warning ("Failed to save web application %s: failed to resolve path %s: %s", app->name, app->desktop_path, g_strerror (errno));
+        return FALSE;
+      }
+      saved = g_key_file_save_to_file (key, resolved_path, &error);
       if (!saved)
         g_warning ("Failed to save desktop file of web application: %s\n", error->message);
+      free (resolved_path);
     }
   } else {
     g_warning ("Failed to load desktop file of web application: %s\n", error->message);
