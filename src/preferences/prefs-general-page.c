@@ -610,6 +610,8 @@ save_web_application (PrefsGeneralPage *general_page)
   gboolean changed = FALSE;
   const char *text;
 
+  general_page->webapp_save_id = 0;
+
   if (!general_page->webapp)
     return G_SOURCE_REMOVE;
 
