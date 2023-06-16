@@ -509,9 +509,6 @@ text_pressed_cb (EphyLocationEntry *entry,
     show_context_menu (entry, x, y);
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   }
-
-  if (n_click >= 2)
-    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 }
 
 static GIcon *
