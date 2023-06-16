@@ -227,3 +227,12 @@ ephy_title_box_new (void)
 {
   return g_object_new (EPHY_TYPE_TITLE_BOX, NULL);
 }
+
+void
+ephy_title_box_reset (EphyTitleBox *self,
+                      const char   *title,
+                      const char   *address)
+{
+  gtk_label_set_text (GTK_LABEL (self->title), title);
+  ephy_title_box_title_widget_set_address (EPHY_TITLE_WIDGET (self), address);
+}

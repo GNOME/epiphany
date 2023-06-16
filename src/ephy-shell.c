@@ -1600,3 +1600,31 @@ ephy_shell_get_active_web_view (EphyShell *shell)
 
   return ephy_embed_get_web_view (EPHY_EMBED (page));
 }
+
+void
+ephy_shell_resync_title_boxes (EphyShell  *shell,
+                               const char *title,
+                               const char *address)
+{
+  GList *windows;
+  EphyEmbedShellMode mode;
+
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
+  g_assert (mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+  while (windows) {
+    EphyWindow *window = EPHY_WINDOW (windows->data);
+    EphyHeaderBar *header_bar;
+    EphyTitleBox *title_box;
+
+    header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+    title_box = EPHY_TITLE_BOX (ephy_header_bar_get_title_widget (header_bar));
+    g_assert (EPHY_IS_TITLE_BOX (title_box));
+
+    ephy_title_box_reset (title_box, title, address);
+    gtk_window_set_title (GTK_WINDOW (window), title);
+
+    windows = windows->next;
+  }
+}

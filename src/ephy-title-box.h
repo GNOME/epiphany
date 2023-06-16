@@ -33,4 +33,8 @@ G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, AdwBin)
 
 EphyTitleBox       *ephy_title_box_new                  (void);
 
+void                ephy_title_box_reset                (EphyTitleBox *self,
+                                                         const char   *title,
+                                                         const char   *address);
+
 G_END_DECLS

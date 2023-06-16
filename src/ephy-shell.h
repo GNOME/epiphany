@@ -136,4 +136,8 @@ EphyWebView              *ephy_shell_get_web_view              (EphyShell       
 
 EphyWebView              *ephy_shell_get_active_web_view       (EphyShell        *shell);
 
+void                      ephy_shell_resync_title_boxes        (EphyShell        *shell,
+                                                                const char       *title,
+                                                                const char       *address);
+
 G_END_DECLS

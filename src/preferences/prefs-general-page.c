@@ -30,6 +30,7 @@
 #include "ephy-langs.h"
 #include "ephy-settings.h"
 #include "ephy-search-engine-listbox.h"
+#include "ephy-shell.h"
 #include "ephy-web-app-utils.h"
 #include "webapp-additional-urls-dialog.h"
 
@@ -635,8 +636,12 @@ save_web_application (PrefsGeneralPage *general_page)
     changed = TRUE;
   }
 
-  if (changed)
+  if (changed) {
     ephy_web_application_save (general_page->webapp);
+    ephy_shell_resync_title_boxes (ephy_shell_get_default (),
+                                   general_page->webapp->name,
+                                   general_page->webapp->url);
+  }
 
   return G_SOURCE_REMOVE;
 }
