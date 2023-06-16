@@ -1632,17 +1632,24 @@ set_image_from_favicon (EphyApplicationDialogData *data)
   GdkTexture *icon_texture = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
 
   icon = ephy_favicon_get_from_texture_scaled (icon_texture, 0, 0);
-
   if (icon != NULL) {
     data->framed_pixbuf = frame_pixbuf (icon, NULL, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
     g_assert (data->icon_v == NULL);
     data->icon_v = g_icon_serialize (G_ICON (data->framed_pixbuf));
-    create_install_dialog_when_ready (data);
+  } else {
+    g_autoptr (GBytes) bytes = NULL;
+
+    bytes = g_resources_lookup_data ("/org/gnome/epiphany/page-icons/web-app-icon-missing.svg",
+                                     G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                     NULL);
+    g_assert (bytes);
+
+    icon = g_bytes_icon_new (bytes);
+    data->icon_v = g_icon_serialize (icon);
   }
-  if (data->icon_v == NULL) {
-    g_warning ("Failed to get favicon for web app %s, giving up", data->display_address);
-    ephy_application_dialog_data_free (data);
-  }
+
+  g_assert (data->icon_v != NULL);
+  create_install_dialog_when_ready (data);
 }
 
 static void
@@ -1853,7 +1860,8 @@ save_as_application_proceed (EphyApplicationDialogData *data)
 
   notification = g_notification_new (message);
 
-  g_notification_set_icon (notification, G_ICON (data->framed_pixbuf));
+  if (data->framed_pixbuf)
+    g_notification_set_icon (notification, G_ICON (data->framed_pixbuf));
 
   if (success) {
     /* Translators: Desktop notification when a new web app is created. */
