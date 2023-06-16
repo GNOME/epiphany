@@ -969,7 +969,7 @@ ephy_web_icon_copy_cb (GFile        *file,
 gboolean
 ephy_web_application_save (EphyWebApplication *app)
 {
-  g_autoptr (GKeyFile) key = NULL;
+  g_autoptr (GKeyFile) keyfile = NULL;
   g_autofree char *contents = NULL;
   g_autofree char *name = NULL;
   g_autofree char *icon = NULL;
@@ -987,16 +987,16 @@ ephy_web_application_save (EphyWebApplication *app)
     return FALSE;
   }
 
-  key = g_key_file_new ();
-  g_key_file_load_from_data (key, contents, -1, 0, NULL);
+  keyfile = g_key_file_new ();
+  g_key_file_load_from_data (keyfile, contents, -1, 0, NULL);
 
-  name = g_key_file_get_string (key, "Desktop Entry", "Name", NULL);
+  name = g_key_file_get_string (keyfile, "Desktop Entry", "Name", NULL);
   if (g_strcmp0 (name, app->name) != 0) {
     changed = TRUE;
-    g_key_file_set_string (key, "Desktop Entry", "Name", app->name);
+    g_key_file_set_string (keyfile, "Desktop Entry", "Name", app->name);
   }
 
-  icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
+  icon = g_key_file_get_string (keyfile, "Desktop Entry", "Icon", NULL);
   if (g_strcmp0 (icon, app->icon_path) != 0) {
     g_autoptr (GFile) new_icon = NULL;
     g_autoptr (GFile) old_icon = NULL;
@@ -1008,7 +1008,7 @@ ephy_web_application_save (EphyWebApplication *app)
                        (GAsyncReadyCallback)ephy_web_icon_copy_cb, NULL);
   }
 
-  exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
+  exec = g_key_file_get_string (keyfile, "Desktop Entry", "Exec", NULL);
   strings = g_strsplit (exec, " ", -1);
 
   exec_length = g_strv_length (strings);
@@ -1018,11 +1018,11 @@ ephy_web_application_save (EphyWebApplication *app)
     strings[exec_length - 1] = g_strdup (app->url);
     g_free (exec);
     exec = g_strjoinv (" ", strings);
-    g_key_file_set_string (key, "Desktop Entry", "Exec", exec);
+    g_key_file_set_string (keyfile, "Desktop Entry", "Exec", exec);
   }
 
   if (changed) {
-    saved = g_key_file_save_to_file (key, app->desktop_path, &error);
+    saved = g_key_file_save_to_file (keyfile, app->desktop_path, &error);
     if (!saved)
       g_warning ("Failed to save desktop file of web application: %s\n", error->message);
   }
