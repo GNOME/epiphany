@@ -59,6 +59,9 @@ enum {
 
 static GParamSpec *props[LAST_PROP];
 
+/* Ignore AdwFlap deprecations throughout entire file */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 show_ui (EphyFullscreenBox *self)
 {
@@ -553,3 +556,6 @@ ephy_fullscreen_box_set_content (EphyFullscreenBox *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT]);
 }
+
+/* Ignore AdwFlap deprecations throughout entire file */
+G_GNUC_END_IGNORE_DEPRECATIONS

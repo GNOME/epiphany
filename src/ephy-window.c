@@ -3842,6 +3842,9 @@ save_password_cb (EphyEmbedShell          *shell,
   }
 }
 
+/* Ignore AdwLeaflet deprecations throughout next several functions */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 notify_leaflet_child_cb (EphyWindow *window)
 {
@@ -4201,6 +4204,9 @@ ephy_window_close_pages_view (EphyWindow *window)
 
   adw_leaflet_navigate (ADW_LEAFLET (window->main_leaflet), ADW_NAVIGATION_DIRECTION_BACK);
 }
+
+/* Ignore AdwLeaflet deprecations for above several functions */
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * ephy_window_get_find_toolbar:
