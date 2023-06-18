@@ -191,11 +191,26 @@ transform_bookmark_title (GBinding     *binding,
 }
 
 static void
+ephy_bookmark_row_map (GtkWidget *widget)
+{
+  EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (widget);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitFaviconDatabase *database;
+
+  GTK_WIDGET_CLASS (ephy_bookmark_row_parent_class)->map (widget);
+
+  database = ephy_embed_shell_get_favicon_database (shell);
+  webkit_favicon_database_get_favicon (database,
+                                       ephy_bookmark_get_url (self->bookmark),
+                                       self->cancellable,
+                                       (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
+                                       self);
+}
+
+static void
 ephy_bookmark_row_constructed (GObject *object)
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitFaviconDatabase *database;
 
   G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->constructed (object);
 
@@ -211,13 +226,6 @@ ephy_bookmark_row_constructed (GObject *object)
                    self->properties_button,
                    "visible",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
-
-  database = ephy_embed_shell_get_favicon_database (shell);
-  webkit_favicon_database_get_favicon (database,
-                                       ephy_bookmark_get_url (self->bookmark),
-                                       self->cancellable,
-                                       (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
-                                       self);
 }
 
 static void
@@ -230,6 +238,8 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
   object_class->get_property = ephy_bookmark_row_get_property;
   object_class->dispose = ephy_bookmark_row_dispose;
   object_class->constructed = ephy_bookmark_row_constructed;
+
+  widget_class->map = ephy_bookmark_row_map;
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
