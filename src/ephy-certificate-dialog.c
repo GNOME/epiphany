@@ -50,7 +50,7 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 struct _EphyCertificateDialog {
-  GtkWindow parent_object;
+  AdwWindow parent_object;
 
   GtkWidget *icon;
   GtkWidget *title;
@@ -61,7 +61,7 @@ struct _EphyCertificateDialog {
   EphySecurityLevel security_level;
 };
 
-G_DEFINE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, ADW_TYPE_WINDOW)
 
 static char *
 bytes_to_display (GBytes *bytes)
@@ -447,6 +447,7 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   GtkWidget *grid;
   GtkWidget *scrolled_window;
   GtkWidget *clamp;
+  GtkWidget *toolbar_view;
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
 
@@ -493,8 +494,12 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), clamp);
 
-  gtk_window_set_child (GTK_WINDOW (dialog), scrolled_window);
-  gtk_window_set_titlebar (GTK_WINDOW (dialog), gtk_header_bar_new ());
+  toolbar_view = adw_toolbar_view_new ();
+  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view),
+                                adw_header_bar_new ());
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view),
+                                scrolled_window);
+  adw_window_set_content (ADW_WINDOW (dialog), toolbar_view);
 }
 
 GtkWidget *
