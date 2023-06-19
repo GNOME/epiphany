@@ -282,7 +282,6 @@ ephy_header_bar_constructed (GObject *object)
   header_bar->zoom_level_label = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
 
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    remove_menu_item (menu, "app.new-window");
     remove_menu_item (menu, "app.new-incognito");
     remove_menu_item (menu, "app.reopen-closed-tab");
     remove_menu_item (menu, "win.save-as-application");

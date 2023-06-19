@@ -385,6 +385,7 @@ static GActionEntry non_incognito_extra_app_entries[] = {
 };
 
 static GActionEntry app_mode_app_entries[] = {
+  { "new-window", new_window, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
@@ -555,7 +556,6 @@ ephy_shell_startup (GApplication *application)
     }
 
     /* Actions that are disabled in app mode */
-    set_accel_for_action (shell, "app.new-window", "<Primary>n");
     set_accel_for_action (shell, "app.new-incognito", "<Primary><Shift>n");
     set_accel_for_action (shell, "app.reopen-closed-tab", "<Primary><Shift>t");
     set_accel_for_action (shell, "app.import-bookmarks", "<Primary><Shift>m");
@@ -580,6 +580,7 @@ ephy_shell_startup (GApplication *application)
   }
 
   /* Actions that are available in both app mode and browser mode */
+  set_accel_for_action (shell, "app.new-window", "<Primary>n");
   set_accel_for_action (shell, "app.history", "<Primary>h");
   set_accel_for_action (shell, "app.preferences", "<Primary>comma");
   set_accel_for_action (shell, "app.quit", "<Primary>q");
