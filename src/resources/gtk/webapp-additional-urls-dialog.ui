@@ -7,67 +7,72 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <template class="EphyWebappAdditionalURLsDialog" parent="GtkWindow">
+  <template class="EphyWebappAdditionalURLsDialog" parent="AdwWindow">
     <property name="modal">True</property>
     <property name="default_width">300</property>
     <property name="default_height">400</property>
     <property name="destroy_with_parent">True</property>
     <property name="title" translatable="yes">Additional URLs</property>
-    <property name="titlebar">
-      <object class="GtkHeaderBar"/>
-    </property>
-    <property name="child">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="xalign">0</property>
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="label" translatable="yes">A URL that starts with any of the additional URLs will be opened by the web application. If you omit the URL scheme, the one from the currently loaded URL will be used.</property>
-            <property name="wrap">True</property>
-          </object>
+    <style>
+      <class name="view"/>
+    </style>
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
         </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="vexpand">True</property>
-            <property name="hscrollbar_policy">never</property>
+        <property name="content">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkTreeView" id="treeview">
-                <property name="model">liststore</property>
-                <property name="enable_search">False</property>
-                <property name="search_column">0</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="tree_selection">
-                    <property name="mode">multiple</property>
-                    <signal name="changed" handler="on_treeview_selection_changed"/>
-                  </object>
-                </child>
+              <object class="GtkLabel">
+                <property name="xalign">0</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="label" translatable="yes">A URL that starts with any of the additional URLs will be opened by the web application. If you omit the URL scheme, the one from the currently loaded URL will be used.</property>
+                <property name="wrap">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="url_column">
-                    <property name="sizing">autosize</property>
-                    <property name="title" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
-                    <property name="clickable">True</property>
-                    <property name="reorderable">True</property>
-                    <property name="sort_column_id">0</property>
-                    <child>
-                      <object class="GtkCellRendererText">
-                        <property name="editable">TRUE</property>
-                        <signal name="edited" handler="on_cell_edited"/>
+                  <object class="GtkTreeView" id="treeview">
+                    <property name="model">liststore</property>
+                    <property name="enable_search">False</property>
+                    <property name="search_column">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="tree_selection">
+                        <property name="mode">multiple</property>
+                        <signal name="changed" handler="on_treeview_selection_changed"/>
                       </object>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="url_column">
+                        <property name="sizing">autosize</property>
+                        <property name="title" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
+                        <property name="clickable">True</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_column_id">0</property>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="editable">TRUE</property>
+                            <signal name="edited" handler="on_cell_edited"/>
+                          </object>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
               </object>
             </child>
           </object>
-        </child>
-        <child>
+        </property>
+        <child type="bottom">
           <object class="GtkActionBar">
             <property name="revealed">True</property>
             <child type="start">
