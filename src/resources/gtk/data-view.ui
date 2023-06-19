@@ -2,20 +2,11 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
-  <template class="EphyDataView" parent="GtkWidget">
-    <child>
+  <template class="EphyDataView" parent="AdwNavigationPage">
+    <property name="child">
       <object class="AdwToolbarView" id="box">
         <child type="top">
-          <object class="GtkHeaderBar" id="header_bar">
-            <property name="title-widget">
-              <object class="AdwWindowTitle" id="window_title"/>
-            </property>
-            <child type="start">
-              <object class="GtkButton" id="back_button">
-                <property name="icon-name">go-previous-symbolic</property>
-                <signal name="clicked" handler="on_back_button_clicked"/>
-              </object>
-            </child>
+          <object class="AdwHeaderBar" id="header_bar">
             <child type="end">
               <object class="GtkToggleButton" id="search_button">
                 <property name="icon-name">edit-find-symbolic</property>
@@ -94,6 +85,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

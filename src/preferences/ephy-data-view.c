@@ -27,8 +27,6 @@
 typedef struct {
   GtkWidget *box;
   GtkWidget *child;
-  GtkWidget *window_title;
-  GtkWidget *back_button;
   GtkWidget *clear_button;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
@@ -47,7 +45,7 @@ typedef struct {
 
 static void ephy_data_view_buildable_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyDataView, ephy_data_view, GTK_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (EphyDataView, ephy_data_view, ADW_TYPE_NAVIGATION_PAGE,
                          G_ADD_PRIVATE (EphyDataView)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 ephy_data_view_buildable_init))
@@ -56,7 +54,6 @@ static GtkBuildableIface *parent_buildable_iface;
 
 enum {
   PROP_0,
-  PROP_TITLE,
   PROP_CLEAR_ACTION_NAME,
   PROP_CLEAR_ACTION_TARGET,
   PROP_CLEAR_BUTTON_LABEL,
@@ -75,7 +72,6 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 enum {
-  BACK_BUTTON_CLICKED,
   CLEAR_BUTTON_CLICKED,
   LAST_SIGNAL,
 };
@@ -111,13 +107,6 @@ update (EphyDataView *self)
 }
 
 static void
-on_back_button_clicked (GtkWidget    *button,
-                        EphyDataView *self)
-{
-  g_signal_emit (self, signals[BACK_BUTTON_CLICKED], 0);
-}
-
-static void
 on_clear_button_clicked (EphyDataView *self)
 {
   g_signal_emit (self, signals[CLEAR_BUTTON_CLICKED], 0);
@@ -147,9 +136,6 @@ ephy_data_view_set_property (GObject      *object,
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
 
   switch (prop_id) {
-    case PROP_TITLE:
-      adw_window_title_set_title (ADW_WINDOW_TITLE (priv->window_title), g_value_get_string (value));
-      break;
     case PROP_CLEAR_ACTION_NAME:
       gtk_actionable_set_action_name (GTK_ACTIONABLE (priv->clear_button), g_value_get_string (value));
       break;
@@ -204,9 +190,6 @@ ephy_data_view_get_property (GObject    *object,
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
 
   switch (prop_id) {
-    case PROP_TITLE:
-      g_value_set_string (value, adw_window_title_get_title (ADW_WINDOW_TITLE (priv->window_title)));
-      break;
     case PROP_CLEAR_ACTION_NAME:
       g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (priv->clear_button)));
       break;
@@ -250,17 +233,6 @@ ephy_data_view_get_property (GObject    *object,
 }
 
 static void
-ephy_data_view_dispose (GObject *object)
-{
-  EphyDataView *self = EPHY_DATA_VIEW (object);
-  EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
-
-  g_clear_pointer (&priv->box, gtk_widget_unparent);
-
-  G_OBJECT_CLASS (ephy_data_view_parent_class)->dispose (object);
-}
-
-static void
 ephy_data_view_finalize (GObject *object)
 {
   EphyDataView *self = EPHY_DATA_VIEW (object);
@@ -293,14 +265,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
 
   object_class->set_property = ephy_data_view_set_property;
   object_class->get_property = ephy_data_view_get_property;
-  object_class->dispose = ephy_data_view_dispose;
   object_class->finalize = ephy_data_view_finalize;
-
-  obj_properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         NULL, NULL,
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_CLEAR_ACTION_NAME] =
     g_param_spec_string ("clear-action-name",
@@ -376,13 +341,6 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-  signals[BACK_BUTTON_CLICKED] =
-    g_signal_new ("back-button-clicked",
-                  EPHY_TYPE_DATA_VIEW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
-
   /**
    * EphyLocationEntry::user-changed:
    * @entry: the object on which the signal is emitted
@@ -403,8 +361,6 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
                                                "/org/gnome/epiphany/gtk/data-view.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, box);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, window_title);
-  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, back_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, clear_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_page);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, search_bar);
@@ -413,11 +369,8 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, spinner);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, stack);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_back_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
-
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 
   gtk_widget_class_add_binding (widget_class, GDK_KEY_F, GDK_CONTROL_MASK,
                                 (GtkShortcutFunc)find_shortuct_cb, NULL);

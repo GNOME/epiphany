@@ -23,12 +23,11 @@
 #include "extension-view.h"
 
 struct _EphyExtensionView {
-  AdwBin parent_instance;
+  AdwNavigationPage parent_instance;
 
   GtkWidget *box;
 
   GtkWidget *window_title;
-  GtkWidget *back_button;
 
   GtkWidget *author_row;
   GtkWidget *author_label;
@@ -43,7 +42,7 @@ struct _EphyExtensionView {
   EphyWebExtension *web_extension;
 };
 
-G_DEFINE_FINAL_TYPE (EphyExtensionView, ephy_extension_view, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyExtensionView, ephy_extension_view, ADW_TYPE_NAVIGATION_PAGE)
 
 enum {
   PROP_0,
@@ -52,13 +51,6 @@ enum {
 };
 
 static GParamSpec *properties[LAST_PROP];
-
-enum {
-  BACK_BUTTON_CLICKED,
-  LAST_SIGNAL,
-};
-
-static gint signals[LAST_SIGNAL] = { 0 };
 
 static void
 open_inspector (GSimpleAction *action,
@@ -76,13 +68,6 @@ open_inspector (GSimpleAction *action,
 static const GActionEntry extension_entries [] = {
   { "inspector", open_inspector },
 };
-
-static void
-on_back_button_clicked (GtkWidget         *button,
-                        EphyExtensionView *self)
-{
-  g_signal_emit (self, signals[BACK_BUTTON_CLICKED], 0);
-}
 
 static void
 on_homepage_activated (AdwActionRow *row,
@@ -114,7 +99,7 @@ on_remove_confirmed (EphyExtensionView *self)
   g_assert (self->web_extension);
   ephy_web_extension_manager_uninstall (manager, self->web_extension);
 
-  g_signal_emit (self, signals[BACK_BUTTON_CLICKED], 0);
+  gtk_widget_activate_action (GTK_WIDGET (self), "navigation.pop", NULL);
 }
 
 static void
@@ -152,6 +137,9 @@ update (EphyExtensionView *self)
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
   /* Window Title */
+  adw_navigation_page_set_title (ADW_NAVIGATION_PAGE (self),
+                                 ephy_web_extension_get_name (self->web_extension));
+
   adw_window_title_set_title (ADW_WINDOW_TITLE (self->window_title),
                               ephy_web_extension_get_name (self->web_extension));
   adw_window_title_set_subtitle (ADW_WINDOW_TITLE (self->window_title),
@@ -243,18 +231,10 @@ ephy_extension_view_class_init (EphyExtensionViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  signals[BACK_BUTTON_CLICKED] =
-    g_signal_new ("back-button-clicked",
-                  EPHY_TYPE_EXTENSION_VIEW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
-
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/extension-view.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, window_title);
-  gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, back_button);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, author_row);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, author_label);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, version_row);
@@ -262,7 +242,6 @@ ephy_extension_view_class_init (EphyExtensionViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, homepage_row);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, enabled_row);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_back_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_homepage_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_toggle_extension_enabled);

@@ -10,20 +10,14 @@
     </section>
   </menu>
 
-  <template class="EphyExtensionView" parent="AdwBin">
+  <template class="EphyExtensionView" parent="AdwNavigationPage">
     <child>
       <object class="AdwToolbarView" id="box">
         <child type="top">
-          <object class="GtkHeaderBar" id="header_bar">
+          <object class="AdwHeaderBar" id="header_bar">
             <property name="title-widget">
               <object class="AdwWindowTitle" id="window_title"/>
             </property>
-            <child type="start">
-              <object class="GtkButton" id="back_button">
-                <property name="icon-name">go-previous-symbolic</property>
-                <signal name="clicked" handler="on_back_button_clicked"/>
-              </object>
-            </child>
             <child type="end">
               <object class="GtkMenuButton" id="menu_button">
                 <property name="menu-model">menu</property>

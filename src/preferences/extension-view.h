@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_EXTENSION_VIEW (ephy_extension_view_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyExtensionView, ephy_extension_view, EPHY, EXTENSION_VIEW, AdwBin)
+G_DECLARE_FINAL_TYPE (EphyExtensionView, ephy_extension_view, EPHY, EXTENSION_VIEW, AdwNavigationPage)
 
 EphyExtensionView *ephy_extension_view_new            (EphyWebExtension *extension);
 

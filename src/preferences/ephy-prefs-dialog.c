@@ -41,8 +41,6 @@ struct _EphyPrefsDialog {
 
   PrefsGeneralPage *general_page;
   GtkWidget *extensions_page;
-
-  GtkWidget *active_data_view;
 };
 
 G_DEFINE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_WINDOW)
@@ -61,48 +59,21 @@ on_close_request (EphyPrefsDialog *prefs_dialog)
 }
 
 static void
-on_any_data_view_back_button_clicked (GtkWidget       *data_view,
-                                      EphyPrefsDialog *prefs_dialog)
-{
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  adw_preferences_window_close_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog));
-  G_GNUC_END_IGNORE_DEPRECATIONS
-
-  prefs_dialog->active_data_view = NULL;
-}
-
-static void
-present_data_view (EphyPrefsDialog *prefs_dialog,
-                   GtkWidget       *presented_view)
-{
-  g_signal_connect_object (presented_view, "back-button-clicked",
-                           G_CALLBACK (on_any_data_view_back_button_clicked),
-                           prefs_dialog, 0);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  adw_preferences_window_present_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog),
-                                          presented_view);
-  G_GNUC_END_IGNORE_DEPRECATIONS
-
-  prefs_dialog->active_data_view = presented_view;
-}
-
-static void
 on_passwords_row_activated (GtkWidget       *privacy_page,
                             EphyPrefsDialog *prefs_dialog)
 {
-  GtkWidget *view = g_object_new (EPHY_TYPE_PASSWORDS_VIEW, NULL);
+  AdwNavigationPage *page = g_object_new (EPHY_TYPE_PASSWORDS_VIEW, NULL);
 
-  present_data_view (prefs_dialog, view);
+  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog), page);
 }
 
 static void
 on_clear_data_row_activated (GtkWidget       *privacy_page,
                              EphyPrefsDialog *prefs_dialog)
 {
-  GtkWidget *view = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
+  AdwNavigationPage *page = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
 
-  present_data_view (prefs_dialog, view);
+  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog), page);
 }
 
 static void
@@ -110,9 +81,9 @@ on_extension_row_activated (GtkWidget        *extensions_page,
                             EphyWebExtension *extension,
                             EphyPrefsDialog  *prefs_dialog)
 {
-  GtkWidget *view = GTK_WIDGET (ephy_extension_view_new (extension));
+  AdwNavigationPage *page = ADW_NAVIGATION_PAGE (ephy_extension_view_new (extension));
 
-  present_data_view (prefs_dialog, view);
+  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog), page);
 }
 
 static void
