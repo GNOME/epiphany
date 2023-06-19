@@ -11,66 +11,69 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <template class="SyncedTabsDialog" parent="GtkWindow">
+  <template class="SyncedTabsDialog" parent="AdwWindow">
     <property name="height_request">500</property>
     <property name="modal">True</property>
     <property name="destroy_with_parent">True</property>
     <property name="title" translatable="yes">Synced Tabs</property>
-    <property name="titlebar">
-      <object class="GtkHeaderBar"/>
-    </property>
-    <property name="child">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="margin-top">15</property>
-        <property name="margin-bottom">15</property>
-        <property name="margin-start">15</property>
-        <property name="margin-end">15</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="xalign">0</property>
-            <property name="wrap">True</property>
-            <property name="max-width-chars">50</property>
-            <property name="label" translatable="yes">Below are the synced open tabs of your other devices that use Firefox Sync with this account. Open a tab by double clicking its name (tabs under Local Tabs cannot be opened).</property>
-          </object>
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
         </child>
-        <child>
+        <property name="content">
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="margin-bottom">15</property>
+            <property name="margin-start">15</property>
+            <property name="margin-end">15</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="vexpand">True</property>
+              <object class="GtkLabel">
+                <property name="xalign">0</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">50</property>
+                <property name="label" translatable="yes">Below are the synced open tabs of your other devices that use Firefox Sync with this account. Open a tab by double clicking its name (tabs under Local Tabs cannot be opened).</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkTreeView" id="treeview">
-                    <property name="model">treestore</property>
-                    <property name="headers-visible">False</property>
-                    <signal name="row-activated" handler="treeview_row_activated_cb"/>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection">
-                        <property name="mode">single</property>
-                      </object>
-                    </child>
+                  <object class="GtkScrolledWindow">
+                    <property name="vexpand">True</property>
                     <child>
-                      <object class="GtkTreeViewColumn">
-                        <child>
-                          <object class="GtkCellRendererPixbuf"/>
-                          <attributes>
-                            <attribute name="gicon">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="ellipsize">end</property>
+                      <object class="GtkTreeView" id="treeview">
+                        <property name="model">treestore</property>
+                        <property name="headers-visible">False</property>
+                        <signal name="row-activated" handler="treeview_row_activated_cb"/>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection">
+                            <property name="mode">single</property>
                           </object>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <child>
+                              <object class="GtkCellRendererPixbuf"/>
+                              <attributes>
+                                <attribute name="gicon">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <child>
+                              <object class="GtkCellRendererText">
+                                <property name="ellipsize">end</property>
+                              </object>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </child>
@@ -79,7 +82,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </property>
   </template>

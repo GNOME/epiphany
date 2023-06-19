@@ -30,7 +30,7 @@
 #include <json-glib/json-glib.h>
 
 struct _SyncedTabsDialog {
-  GtkWindow parent_instance;
+  AdwWindow parent_instance;
 
   EphyOpenTabsManager *manager;
 
@@ -42,7 +42,7 @@ struct _SyncedTabsDialog {
   GCancellable *cancellable;
 };
 
-G_DEFINE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, ADW_TYPE_WINDOW)
 
 enum {
   ICON_COLUMN,

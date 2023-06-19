@@ -22,14 +22,13 @@
 
 #include "ephy-open-tabs-manager.h"
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_SYNCED_TABS_DIALOG (synced_tabs_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, EPHY, SYNCED_TABS_DIALOG, GtkWindow)
+G_DECLARE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, EPHY, SYNCED_TABS_DIALOG, AdwWindow)
 
 SyncedTabsDialog *synced_tabs_dialog_new (EphyOpenTabsManager *manager);
 
