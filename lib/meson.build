@@ -1,4 +1,5 @@
 types_headers = [
+  'ephy-adaptive-mode.h',
   'ephy-permissions-manager.h',
   'ephy-prefs.h',
   'ephy-security-levels.h',

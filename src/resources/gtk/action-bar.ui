@@ -2,21 +2,22 @@
 <interface>
   <template class="EphyActionBar" parent="AdwBin">
     <child>
-      <object class="GtkRevealer" id="revealer">
-        <property name="transition-type">slide-up</property>
+      <object class="GtkBox" id="toolbar">
+        <style>
+          <class name="toolbar"/>
+        </style>
         <child>
-          <object class="GtkActionBar" id="action_bar">
-            <child type="start">
-              <object class="EphyActionBarStart" id="action_bar_start"/>
-            </child>
-            <child type="end">
-              <object class="AdwTabButton" id="tab_button">
-                <property name="action_name">win.tabs-view</property>
-              </object>
-            </child>
-            <child type="end">
-              <object class="EphyActionBarEnd" id="action_bar_end"/>
-            </child>
+          <object class="EphyActionBarStart" id="action_bar_start">
+            <property name="hexpand">True</property>
+            <property name="halign">start</property>
+          </object>
+        </child>
+        <child>
+          <object class="EphyActionBarEnd" id="action_bar_end"/>
+        </child>
+        <child>
+          <object class="AdwTabButton" id="tab_button">
+            <property name="action_name">win.tabs-view</property>
           </object>
         </child>
       </object>

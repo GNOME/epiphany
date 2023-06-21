@@ -57,8 +57,6 @@ struct _EphyHeaderBar {
   GtkWidget *header_bar;
   EphyWindow *window;
   EphyTitleWidget *title_widget;
-  GtkRevealer *start_revealer;
-  GtkRevealer *end_revealer;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   GtkWidget *page_menu_button;
@@ -147,14 +145,6 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
   }
 }
 
-static void
-update_revealer_visibility (GtkRevealer *revealer)
-{
-  gtk_widget_set_visible (GTK_WIDGET (revealer),
-                          gtk_revealer_get_reveal_child (revealer) ||
-                          gtk_revealer_get_child_revealed (revealer));
-}
-
 static gboolean
 remove_menu_item (GMenu      *menu,
                   const char *action_name)
@@ -232,16 +222,8 @@ ephy_header_bar_constructed (GObject *object)
 
   /* Start action elements */
   header_bar->action_bar_start = ephy_action_bar_start_new ();
-  header_bar->start_revealer = GTK_REVEALER (gtk_revealer_new ());
-  g_signal_connect (header_bar->start_revealer, "notify::child-revealed",
-                    G_CALLBACK (update_revealer_visibility), NULL);
-  g_signal_connect (header_bar->start_revealer, "notify::reveal-child",
-                    G_CALLBACK (update_revealer_visibility), NULL);
-  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->start_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
-  gtk_revealer_set_child (GTK_REVEALER (header_bar->start_revealer), GTK_WIDGET (header_bar->action_bar_start));
-
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar->header_bar),
-                             GTK_WIDGET (header_bar->start_revealer));
+                             GTK_WIDGET (header_bar->action_bar_start));
 
   embed_shell = ephy_embed_shell_get_default ();
 
@@ -347,16 +329,8 @@ ephy_header_bar_constructed (GObject *object)
 
   /* End action elements */
   header_bar->action_bar_end = ephy_action_bar_end_new ();
-  header_bar->end_revealer = GTK_REVEALER (gtk_revealer_new ());
-  g_signal_connect (header_bar->end_revealer, "notify::child-revealed",
-                    G_CALLBACK (update_revealer_visibility), NULL);
-  g_signal_connect (header_bar->end_revealer, "notify::reveal-child",
-                    G_CALLBACK (update_revealer_visibility), NULL);
-  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->end_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
-  gtk_revealer_set_child (GTK_REVEALER (header_bar->end_revealer), GTK_WIDGET (header_bar->action_bar_end));
-
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar),
-                           GTK_WIDGET (header_bar->end_revealer));
+                           GTK_WIDGET (header_bar->action_bar_end));
 
   /* Sync the size of placeholder in EphyActionBarStart with downloads button */
   downloads_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -458,14 +432,14 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
 
   switch (adaptive_mode) {
     case EPHY_ADAPTIVE_MODE_NORMAL:
-      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
-      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), TRUE);
+      gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), TRUE);
+      gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), TRUE);
       gtk_widget_set_visible (header_bar->combined_stop_reload_button, FALSE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
-      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), FALSE);
-      gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), FALSE);
+      gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), FALSE);
+      gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), FALSE);
       gtk_widget_set_visible (header_bar->combined_stop_reload_button, TRUE);
 
       break;

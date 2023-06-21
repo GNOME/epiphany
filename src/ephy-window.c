@@ -160,7 +160,6 @@ struct _EphyWindow {
   GHashTable *action_labels;
   EphyTabView *tab_view;
   AdwTabBar *tab_bar;
-  GtkRevealer *tab_bar_revealer;
   GtkRevealer *pages_menu_revealer;
   EphyPagesPopover *pages_popover;
   GtkWidget *action_bar;
@@ -208,6 +207,7 @@ enum {
   PROP_ACTIVE_CHILD,
   PROP_CHROME,
   PROP_SINGLE_TAB_MODE,
+  PROP_ADAPTIVE_MODE,
 };
 
 /* Make sure not to overlap with those in ephy-lockdown.c */
@@ -404,18 +404,22 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyWindow, ephy_window, ADW_TYPE_APPLICATION_WIN
 static void
 sync_chromes_visibility (EphyWindow *window)
 {
-  gboolean show_tabsbar, fullscreen;
+  gboolean show_tabsbar, is_wide, fullscreen;
 
   if (window->closing)
     return;
 
   show_tabsbar = (window->chrome & EPHY_WINDOW_CHROME_TABSBAR);
+  is_wide = window->adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL;
   fullscreen = gtk_window_is_fullscreen (GTK_WINDOW (window));
 
   gtk_widget_set_visible (GTK_WIDGET (window->header_bar),
                           !fullscreen || window->show_fullscreen_header_bar);
-  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar_revealer),
-                          show_tabsbar && !(window->is_popup) &&
+  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar),
+                          show_tabsbar && is_wide && !(window->is_popup) &&
+                          (!fullscreen || window->show_fullscreen_header_bar));
+  gtk_widget_set_visible (GTK_WIDGET (window->action_bar),
+                          !is_wide &&
                           (!fullscreen || window->show_fullscreen_header_bar));
 }
 
@@ -485,45 +489,11 @@ sync_tab_security (EphyWebView *view,
 }
 
 static void
-update_adaptive_mode (EphyWindow *window)
+ephy_window_set_adaptive_mode (EphyWindow       *window,
+                               EphyAdaptiveMode  adaptive_mode)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
   EphyActionBar *action_bar = EPHY_ACTION_BAR (window->action_bar);
-  gboolean is_narrow, is_mobile_landscape;
-  EphyAdaptiveMode adaptive_mode;
-  gint width, height;
-  GdkDisplay *display;
-  GdkSurface *surface;
-  GdkMonitor *monitor = NULL;
-  GdkRectangle geometry = {};
-
-  /* Get the monitor to guess whether we are on a mobile or not. If not found,
-   * fallback to the window size.
-   */
-  display = gtk_widget_get_display (GTK_WIDGET (window));
-  surface = gtk_native_get_surface (GTK_NATIVE (window));
-
-  if (window->is_maximized || window->is_fullscreen) {
-    width = gtk_widget_get_width (GTK_WIDGET (window));
-    height = gtk_widget_get_height (GTK_WIDGET (window));
-  } else {
-    width = window->current_width;
-    height = window->current_height;
-  }
-
-  if (display != NULL && surface != NULL)
-    monitor = gdk_display_get_monitor_at_surface (display, surface);
-  if (monitor != NULL)
-    gdk_monitor_get_geometry (monitor, &geometry);
-  else
-    geometry.height = height;
-
-  is_narrow = width <= 600;
-  is_mobile_landscape = geometry.height <= 400 &&
-                        (window->is_maximized || window->is_fullscreen);
-  adaptive_mode = (is_narrow || is_mobile_landscape) && !is_desktop_pantheon () ?
-                  EPHY_ADAPTIVE_MODE_NARROW :
-                  EPHY_ADAPTIVE_MODE_NORMAL;
 
   if (window->adaptive_mode == adaptive_mode)
     return;
@@ -533,8 +503,7 @@ update_adaptive_mode (EphyWindow *window)
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
   ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
 
-  gtk_revealer_set_reveal_child (window->tab_bar_revealer,
-                                 adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
+  sync_chromes_visibility (window);
 
   if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
     gtk_widget_add_css_class (GTK_WIDGET (window), "narrow");
@@ -565,8 +534,6 @@ notify_fullscreen_cb (EphyWindow *window)
     sync_tab_load_status (ephy_embed_get_web_view (embed), WEBKIT_LOAD_STARTED, window);
     sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
   }
-
-  update_adaptive_mode (window);
 
   if (embed) {
     if (fullscreen)
@@ -3373,6 +3340,9 @@ ephy_window_set_property (GObject      *object,
     case PROP_SINGLE_TAB_MODE:
       ephy_window_set_is_popup (window, g_value_get_boolean (value));
       break;
+    case PROP_ADAPTIVE_MODE:
+      ephy_window_set_adaptive_mode (window, g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3396,6 +3366,9 @@ ephy_window_get_property (GObject    *object,
       break;
     case PROP_SINGLE_TAB_MODE:
       g_value_set_boolean (value, window->is_popup);
+      break;
+    case PROP_ADAPTIVE_MODE:
+      g_value_set_enum (value, window->adaptive_mode);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3441,8 +3414,6 @@ ephy_window_show (GtkWidget *widget)
       window->has_default_size = TRUE;
     }
   }
-
-  update_adaptive_mode (window);
 
   GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
 
@@ -3505,8 +3476,6 @@ compute_size_cb (EphyWindow      *window,
                                  &window->current_width,
                                  &window->current_height);
   }
-
-  update_adaptive_mode (window);
 }
 
 static void
@@ -3677,20 +3646,6 @@ setup_location_controller (EphyWindow    *window,
                             G_CALLBACK (ephy_link_open), window);
 
   return location_controller;
-}
-
-static GtkWidget *
-setup_action_bar (EphyWindow *window)
-{
-  GtkWidget *action_bar;
-
-  action_bar = GTK_WIDGET (ephy_action_bar_new (window));
-
-  g_object_bind_property (window->fullscreen_box, "revealed",
-                          action_bar, "can-reveal",
-                          G_BINDING_SYNC_CREATE);
-
-  return action_bar;
 }
 
 static const char *disabled_actions_for_app_mode[] = {
@@ -3891,6 +3846,7 @@ ephy_window_constructed (GObject *object)
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
+  AdwBreakpoint *breakpoint;
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   GtkEventController *controller;
@@ -3972,7 +3928,6 @@ ephy_window_constructed (GObject *object)
 
   window->tab_view = setup_tab_view (window);
   window->tab_bar = adw_tab_bar_new ();
-  window->tab_bar_revealer = GTK_REVEALER (gtk_revealer_new ());
   window->main_leaflet = adw_leaflet_new ();
   window->fullscreen_box = ephy_fullscreen_box_new ();
   window->pages_view = ephy_pages_view_new ();
@@ -3981,7 +3936,6 @@ ephy_window_constructed (GObject *object)
   g_signal_connect_swapped (window->main_leaflet, "notify::visible-child",
                             G_CALLBACK (notify_leaflet_child_cb), window);
 
-  gtk_revealer_set_transition_type (window->tab_bar_revealer, GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
   adw_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
   ephy_pages_view_set_tab_view (window->pages_view, window->tab_view);
 
@@ -3999,14 +3953,13 @@ ephy_window_constructed (GObject *object)
   /* Setup the toolbar. */
   window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
-  window->action_bar = setup_action_bar (window);
+  window->action_bar = GTK_WIDGET (ephy_action_bar_new (window));
   window->toast_overlay = adw_toast_overlay_new ();
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
 
-  gtk_revealer_set_child (window->tab_bar_revealer, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
-  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar_revealer));
+  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar);
 
   adw_leaflet_append (ADW_LEAFLET (window->main_leaflet), GTK_WIDGET (window->fullscreen_box));
@@ -4090,6 +4043,15 @@ ephy_window_constructed (GObject *object)
   g_signal_connect_swapped (controller, "key-released", G_CALLBACK (handle_key_cb), window);
   gtk_widget_add_controller (GTK_WIDGET (window), controller);
 #endif
+
+  gtk_widget_set_size_request (GTK_WIDGET (window), 360, 200);
+
+  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("min-width: 600px"));
+  adw_breakpoint_add_setters (breakpoint,
+                              G_OBJECT (window), "adaptive-mode", EPHY_ADAPTIVE_MODE_NORMAL,
+                              NULL);
+
+  adw_application_window_add_breakpoint (ADW_APPLICATION_WINDOW (window), breakpoint);
 }
 
 static void
@@ -4132,6 +4094,16 @@ ephy_window_class_init (EphyWindowClass *klass)
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS));
 
+  g_object_class_install_property (object_class,
+                                   PROP_ADAPTIVE_MODE,
+                                   g_param_spec_enum ("adaptive-mode",
+                                                      NULL,
+                                                      NULL,
+                                                      EPHY_TYPE_ADAPTIVE_MODE,
+                                                      EPHY_ADAPTIVE_MODE_NARROW,
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_STATIC_STRINGS));
+
   shell = ephy_shell_get_default ();
   manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
   g_signal_connect (manager, "download-completed", G_CALLBACK (download_completed_cb), NULL);
@@ -4144,6 +4116,7 @@ ephy_window_init (EphyWindow *window)
   LOG ("EphyWindow initialising %p", window);
 
   window->uid = window_uid++;
+  window->adaptive_mode = EPHY_ADAPTIVE_MODE_NARROW;
 }
 
 /**

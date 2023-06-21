@@ -28,7 +28,6 @@
 enum {
   PROP_0,
   PROP_WINDOW,
-  PROP_CAN_REVEAL,
   N_PROPERTIES
 };
 
@@ -38,13 +37,12 @@ struct _EphyActionBar {
   AdwBin parent_instance;
 
   EphyWindow *window;
-  GtkRevealer *revealer;
+  GtkWidget *toolbar;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   AdwTabButton *tab_button;
 
   EphyAdaptiveMode adaptive_mode;
-  gboolean can_reveal;
 };
 
 G_DEFINE_FINAL_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
@@ -63,18 +61,6 @@ sync_chromes_visibility (EphyActionBar *action_bar)
 }
 
 static void
-update_revealer (EphyActionBar *action_bar)
-{
-  gboolean reveal = action_bar->can_reveal &&
-                    (action_bar->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
-
-  if (reveal)
-    gtk_widget_set_visible (GTK_WIDGET (action_bar), TRUE);
-
-  gtk_revealer_set_reveal_child (action_bar->revealer, reveal);
-}
-
-static void
 ephy_action_bar_set_property (GObject      *object,
                               guint         property_id,
                               const GValue *value,
@@ -86,10 +72,6 @@ ephy_action_bar_set_property (GObject      *object,
     case PROP_WINDOW:
       action_bar->window = EPHY_WINDOW (g_value_get_object (value));
       g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
-      break;
-    case PROP_CAN_REVEAL:
-      action_bar->can_reveal = g_value_get_boolean (value);
-      update_revealer (action_bar);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -107,9 +89,6 @@ ephy_action_bar_get_property (GObject    *object,
   switch (property_id) {
     case PROP_WINDOW:
       g_value_set_object (value, action_bar->window);
-      break;
-    case PROP_CAN_REVEAL:
-      g_value_set_boolean (value, action_bar->can_reveal);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -150,12 +129,6 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  object_properties[PROP_CAN_REVEAL] =
-    g_param_spec_boolean ("can-reveal",
-                          NULL, NULL,
-                          TRUE,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
   g_object_class_install_properties (gobject_class,
                                      N_PROPERTIES,
                                      object_properties);
@@ -163,9 +136,6 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar.ui");
 
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBar,
-                                        revealer);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
                                         action_bar_start);
@@ -194,13 +164,6 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 
   ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
                                            EPHY_ADAPTIVE_MODE_NARROW);
-
-  g_object_bind_property (action_bar->revealer, "child-revealed",
-                          action_bar, "visible",
-                          G_BINDING_DEFAULT);
-
-  action_bar->can_reveal = true;
-  update_revealer (action_bar);
 }
 
 EphyActionBar *
@@ -233,6 +196,4 @@ ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
   ephy_action_bar_end_set_show_bookmark_button (action_bar->action_bar_end,
                                                 adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW &&
                                                 mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-
-  update_revealer (action_bar);
 }

@@ -62,6 +62,7 @@ show_ui (EphyFullscreenBox *self)
   g_clear_handle_id (&self->timeout_id, g_source_remove);
 
   adw_toolbar_view_set_reveal_top_bars (self->toolbar_view, TRUE);
+  adw_toolbar_view_set_reveal_bottom_bars (self->toolbar_view, TRUE);
 }
 
 static void
@@ -73,6 +74,8 @@ hide_ui (EphyFullscreenBox *self)
     return;
 
   adw_toolbar_view_set_reveal_top_bars (self->toolbar_view, FALSE);
+  adw_toolbar_view_set_reveal_bottom_bars (self->toolbar_view, FALSE);
+
   gtk_widget_grab_focus (GTK_WIDGET (self->toolbar_view));
 }
 
