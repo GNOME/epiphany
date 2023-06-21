@@ -580,7 +580,8 @@ notify_fullscreen_cb (EphyWindow *window)
 
   sync_chromes_visibility (window);
 
-  window->show_fullscreen_header_bar = FALSE;
+  if (!fullscreen)
+    window->show_fullscreen_header_bar = FALSE;
 
   action_group = ephy_window_get_action_group (window, "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
