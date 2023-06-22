@@ -2593,14 +2593,17 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
                         AdwTabPage *page,
                         EphyWindow *window)
 {
+  EphyWebView *view = NULL;
   GActionGroup *action_group;
   GAction *action;
   int n_pages;
   int n_pinned_pages;
   int position;
   gboolean pinned;
+  gboolean muted;
 
   if (page) {
+    view = ephy_embed_get_web_view (EPHY_EMBED (adw_tab_page_get_child (page)));
     n_pages = adw_tab_view_get_n_pages (tab_view);
     n_pinned_pages = adw_tab_view_get_n_pinned_pages (tab_view);
     position = adw_tab_view_get_page_position (tab_view, page);
@@ -2638,6 +2641,12 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "close");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !page || !pinned);
+
+  muted = view && webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "mute");
+  g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                             g_variant_new_boolean (muted));
 }
 
 static gboolean
