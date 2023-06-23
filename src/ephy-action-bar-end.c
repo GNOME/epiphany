@@ -275,11 +275,13 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   EphyDownloadsManager *downloads_manager;
   GtkWidget *popover;
   EphyWebExtensionManager *extension_manager;
+  EphyEmbedShell *embed_shell;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar_end));
 
   /* Downloads */
-  downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
+  embed_shell = ephy_embed_shell_get_default ();
+  downloads_manager = ephy_embed_shell_get_downloads_manager (embed_shell);
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer),
                                  ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
@@ -299,6 +301,9 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
     gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->overview_button),
                                    "view-grid");
   }
+
+  gtk_widget_set_visible (action_bar_end->overview_button,
+                          ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   g_signal_connect_object (downloads_manager, "download-added",
                            G_CALLBACK (download_added_cb),
