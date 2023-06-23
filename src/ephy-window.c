@@ -4079,9 +4079,9 @@ ephy_window_constructed (GObject *object)
 
   gtk_widget_set_size_request (GTK_WIDGET (window), 360, 200);
 
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("min-width: 600px"));
+  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 600px"));
   adw_breakpoint_add_setters (breakpoint,
-                              G_OBJECT (window), "adaptive-mode", EPHY_ADAPTIVE_MODE_NORMAL,
+                              G_OBJECT (window), "adaptive-mode", EPHY_ADAPTIVE_MODE_NARROW,
                               NULL);
 
   adw_application_window_add_breakpoint (ADW_APPLICATION_WINDOW (window), breakpoint);
@@ -4133,7 +4133,7 @@ ephy_window_class_init (EphyWindowClass *klass)
                                                       NULL,
                                                       NULL,
                                                       EPHY_TYPE_ADAPTIVE_MODE,
-                                                      EPHY_ADAPTIVE_MODE_NARROW,
+                                                      EPHY_ADAPTIVE_MODE_NORMAL,
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_STATIC_STRINGS));
 
@@ -4149,7 +4149,7 @@ ephy_window_init (EphyWindow *window)
   LOG ("EphyWindow initialising %p", window);
 
   window->uid = window_uid++;
-  window->adaptive_mode = EPHY_ADAPTIVE_MODE_NARROW;
+  window->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
 }
 
 /**
