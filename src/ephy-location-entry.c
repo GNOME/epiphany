@@ -1994,11 +1994,6 @@ ephy_location_entry_set_adaptive_mode (EphyLocationEntry *entry,
 {
   entry->adaptive_mode = adaptive_mode;
 
-  if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
-    gtk_widget_add_css_class (GTK_WIDGET (entry), "narrow");
-  else
-    gtk_widget_remove_css_class (GTK_WIDGET (entry), "narrow");
-
   ephy_location_entry_set_bookmark_icon_state (entry, entry->icon_state);
 }
 
