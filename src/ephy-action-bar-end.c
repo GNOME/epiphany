@@ -373,14 +373,6 @@ ephy_action_bar_end_get_downloads_revealer (EphyActionBarEnd *action_bar_end)
 }
 
 void
-ephy_action_bar_end_set_show_bookmark_button (EphyActionBarEnd *action_bar_end,
-                                              gboolean          show)
-{
-  gtk_widget_set_visible (action_bar_end->bookmark_button, show);
-}
-
-
-void
 ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd      *action_bar_end,
                                              EphyBookmarkIconState  state)
 {
@@ -452,6 +444,8 @@ void
 ephy_action_bar_end_set_adaptive_mode (EphyActionBarEnd *action_bar_end,
                                        EphyAdaptiveMode  adaptive_mode)
 {
+  gtk_widget_set_visible (action_bar_end->bookmark_button,
+                          adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
   gtk_widget_set_visible (action_bar_end->overview_button,
                           adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
 }

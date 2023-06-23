@@ -494,7 +494,6 @@ ephy_window_set_adaptive_mode (EphyWindow       *window,
                                EphyAdaptiveMode  adaptive_mode)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-  EphyActionBar *action_bar = EPHY_ACTION_BAR (window->action_bar);
 
   if (window->adaptive_mode == adaptive_mode)
     return;
@@ -502,7 +501,6 @@ ephy_window_set_adaptive_mode (EphyWindow       *window,
   window->adaptive_mode = adaptive_mode;
 
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
-  ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
 
   sync_chromes_visibility (window);
 

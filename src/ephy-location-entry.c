@@ -1469,6 +1469,7 @@ ephy_location_entry_init (EphyLocationEntry *entry)
   entry->block_update = FALSE;
   entry->saved_text = NULL;
   entry->page_actions = NULL;
+  entry->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
 
   gtk_widget_init_template (GTK_WIDGET (entry));
 

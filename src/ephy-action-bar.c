@@ -41,8 +41,6 @@ struct _EphyActionBar {
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   AdwTabButton *tab_button;
-
-  EphyAdaptiveMode adaptive_mode;
 };
 
 G_DEFINE_FINAL_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
@@ -186,16 +184,4 @@ EphyActionBarEnd *
 ephy_action_bar_get_action_bar_end (EphyActionBar *action_bar)
 {
   return action_bar->action_bar_end;
-}
-
-void
-ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
-                                   EphyAdaptiveMode  adaptive_mode)
-{
-  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-
-  action_bar->adaptive_mode = adaptive_mode;
-  ephy_action_bar_end_set_show_bookmark_button (action_bar->action_bar_end,
-                                                adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW &&
-                                                mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 }

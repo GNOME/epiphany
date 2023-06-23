@@ -37,7 +37,5 @@ G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, AdwBin);
 EphyActionBar      *ephy_action_bar_new                  (EphyWindow *window);
 EphyActionBarStart *ephy_action_bar_get_action_bar_start (EphyActionBar *action_bar);
 EphyActionBarEnd   *ephy_action_bar_get_action_bar_end   (EphyActionBar *action_bar);
-void                ephy_action_bar_set_adaptive_mode    (EphyActionBar    *action_bar,
-                                                          EphyAdaptiveMode  adaptive_mode);
 
 G_END_DECLS

@@ -427,9 +427,6 @@ void
 ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
-  ephy_action_bar_end_set_show_bookmark_button (header_bar->action_bar_end,
-                                                adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
-
   switch (adaptive_mode) {
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), TRUE);
