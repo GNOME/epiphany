@@ -1015,8 +1015,9 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
 {
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autoptr (WebKitSettings) settings = NULL;
-  WebKitWebContext *web_context;
+  WebKitWebContext *web_context = NULL;
   GtkWidget *web_view;
+  WebKitWebView *background_view;
   const char *custom_user_agent;
 
   settings = webkit_settings_new_with_settings ("enable-write-console-messages-to-stdout", TRUE,
@@ -1032,16 +1033,20 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   else
     webkit_settings_set_user_agent_with_application_details (settings, "Epiphany", EPHY_VERSION);
 
-  web_context = webkit_web_context_new ();
-  webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
-  webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
-                                                         "ephy-webextension");
-  g_signal_connect_object (web_context, "initialize-web-process-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
+  /* If there is a background view the web context is shared with the related-view property. */
+  background_view = ephy_web_extension_manager_get_background_web_view (manager, web_extension);
+  if (!background_view) {
+    web_context = webkit_web_context_new ();
+    webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
+    webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
+                                                           "ephy-webextension");
+    g_signal_connect_object (web_context, "initialize-web-process-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
+  }
 
   web_view = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                            "web-context", web_context,
                            "settings", settings,
-                           "related-view", ephy_web_extension_manager_get_background_web_view (manager, web_extension),
+                           "related-view", background_view,
                            "default-content-security-policy", ephy_web_extension_get_content_security_policy (web_extension),
                            "web-extension-mode", WEBKIT_WEB_EXTENSION_MODE_MANIFESTV2,
                            NULL);
