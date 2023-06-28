@@ -379,8 +379,15 @@ ephy_window_open_link (EphyLink      *link,
     ephy_web_view_load_url (web_view, address);
   else if (flags & EPHY_LINK_NEW_TAB)
     ephy_web_view_load_new_tab_page (web_view);
-  else if (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_HOME_PAGE))
-    ephy_web_view_load_homepage (web_view);
+  else if (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_HOME_PAGE)) {
+    EphyShell *shell = ephy_shell_get_default ();
+    EphyWebApplication *webapp = ephy_shell_get_webapp (shell);
+    if (webapp) {
+      ephy_web_view_load_url (web_view, webapp->url);
+    } else {
+      ephy_web_view_load_homepage (web_view);
+    }
+  }
 
   if (ephy_web_view_get_is_blank (web_view))
     ephy_window_activate_location (window);
