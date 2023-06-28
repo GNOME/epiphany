@@ -31,6 +31,7 @@
 #include "ephy-session.h"
 #include "ephy-sync-service.h"
 #include "ephy-web-extension-manager.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-window.h"
 
 #include <webkit/webkit.h>
@@ -135,6 +136,8 @@ EphyWebView              *ephy_shell_get_web_view              (EphyShell       
                                                                 guint64           id);
 
 EphyWebView              *ephy_shell_get_active_web_view       (EphyShell        *shell);
+
+EphyWebApplication       *ephy_shell_get_webapp                (EphyShell        *shell);
 
 void                      ephy_shell_resync_title_boxes        (EphyShell        *shell,
                                                                 const char       *title,

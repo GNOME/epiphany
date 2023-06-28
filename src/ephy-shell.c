@@ -71,6 +71,7 @@ struct _EphyShell {
   EphyShellStartupContext *local_startup_context;
   EphyShellStartupContext *remote_startup_context;
   GSList *open_uris_idle_ids;
+  EphyWebApplication *webapp;
 
   gchar *open_notification_id;
   gboolean startup_finished;
@@ -563,6 +564,8 @@ ephy_shell_startup (GApplication *application)
     set_accel_for_action (shell, "app.shortcuts", "<Primary>question");
     set_accel_for_action (shell, "app.help", "F1");
   } else {
+    shell->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir (), EPHY_WEB_APP_NO_TMP_ICON);
+
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
                                      application);
@@ -908,6 +911,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->history_manager);
   g_clear_object (&shell->open_tabs_manager);
   g_clear_object (&shell->web_extension_manager);
+  g_clear_pointer (&shell->webapp, ephy_web_application_free);
 
   if (shell->open_notification_id) {
     g_application_withdraw_notification (G_APPLICATION (shell), shell->open_notification_id);
@@ -1600,6 +1604,12 @@ ephy_shell_get_active_web_view (EphyShell *shell)
   page = ephy_tab_view_get_selected_page (tab_view);
 
   return ephy_embed_get_web_view (EPHY_EMBED (page));
+}
+
+EphyWebApplication *
+ephy_shell_get_webapp (EphyShell *shell)
+{
+  return shell->webapp;
 }
 
 void

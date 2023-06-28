@@ -46,7 +46,6 @@ struct _PrefsGeneralPage {
   AdwPreferencesPage parent_instance;
 
   /* Web Application */
-  EphyWebApplication *webapp;
   guint webapp_save_id;
   GtkWidget *webapp_box;
   GtkWidget *webapp_icon;
@@ -115,7 +114,6 @@ prefs_general_page_dispose (GObject *object)
     g_object_unref (general_page->add_lang_dialog);
   }
 
-  g_clear_pointer (&general_page->webapp, ephy_web_application_free);
   G_OBJECT_CLASS (prefs_general_page_parent_class)->dispose (object);
 }
 
@@ -609,38 +607,39 @@ save_web_application (PrefsGeneralPage *general_page)
 {
   gboolean changed = FALSE;
   const char *text;
+  EphyWebApplication *webapp = ephy_shell_get_webapp (ephy_shell_get_default ());
 
   general_page->webapp_save_id = 0;
 
-  if (!general_page->webapp)
+  if (!webapp)
     return G_SOURCE_REMOVE;
 
   text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_url_row));
-  if (g_strcmp0 (general_page->webapp->url, text) != 0) {
-    g_free (general_page->webapp->url);
-    general_page->webapp->url = g_strdup (text);
+  if (g_strcmp0 (webapp->url, text) != 0) {
+    g_free (webapp->url);
+    webapp->url = g_strdup (text);
     changed = TRUE;
   }
 
   text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_title_row));
-  if (g_strcmp0 (general_page->webapp->name, text) != 0) {
-    g_free (general_page->webapp->name);
-    general_page->webapp->name = g_strdup (text);
+  if (g_strcmp0 (webapp->name, text) != 0) {
+    g_free (webapp->name);
+    webapp->name = g_strdup (text);
     changed = TRUE;
   }
 
   text = (const char *)g_object_get_data (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-path");
-  if (g_strcmp0 (general_page->webapp->icon_path, text) != 0) {
-    g_free (general_page->webapp->icon_path);
-    general_page->webapp->icon_path = g_strdup (text);
+  if (g_strcmp0 (webapp->icon_path, text) != 0) {
+    g_free (webapp->icon_path);
+    webapp->icon_path = g_strdup (text);
     changed = TRUE;
   }
 
   if (changed) {
-    ephy_web_application_save (general_page->webapp);
+    ephy_web_application_save (webapp);
     ephy_shell_resync_title_boxes (ephy_shell_get_default (),
-                                   general_page->webapp->name,
-                                   general_page->webapp->url);
+                                   webapp->name,
+                                   webapp->url);
   }
 
   return G_SOURCE_REMOVE;
@@ -649,7 +648,8 @@ save_web_application (PrefsGeneralPage *general_page)
 static void
 prefs_general_page_save_web_application (PrefsGeneralPage *general_page)
 {
-  if (!general_page->webapp)
+  EphyWebApplication *webapp = ephy_shell_get_webapp (ephy_shell_get_default ());
+  if (!webapp)
     return;
 
   g_clear_handle_id (&general_page->webapp_save_id, g_source_remove);
@@ -994,17 +994,11 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   /* ========================== Web Application ============================= */
   /* ======================================================================== */
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION &&
-      !ephy_is_running_inside_sandbox ()) {
-    general_page->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir (),
-                                                                       EPHY_WEB_APP_NO_TMP_ICON);
-    g_assert (general_page->webapp);
-
-    if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {
-      prefs_general_page_update_webapp_icon (general_page, general_page->webapp->icon_path);
-      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_url_row), general_page->webapp->url);
-      gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_title_row), general_page->webapp->name);
-    }
+  EphyWebApplication *webapp = ephy_shell_get_webapp (ephy_shell_get_default ());
+  if (webapp && !ephy_is_running_inside_sandbox () && !g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SYSTEM)) {
+    prefs_general_page_update_webapp_icon (general_page, webapp->icon_path);
+    gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_url_row), webapp->url);
+    gtk_editable_set_text (GTK_EDITABLE (general_page->webapp_title_row), webapp->name);
   }
 
   /* ======================================================================== */
