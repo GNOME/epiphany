@@ -199,6 +199,7 @@ sync_secrets_store_finished_cb (EphySyncService       *service,
     gtk_widget_set_visible (sync_dialog->sync_page_group, FALSE);
     gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, TRUE);
     gtk_widget_set_visible (sync_dialog->sync_options_group, TRUE);
+    gtk_widget_set_visible (sync_dialog->sync_now_button, TRUE);
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (sync_dialog, error->message);
@@ -542,6 +543,7 @@ on_sync_sign_out_button_clicked (GtkWidget             *button,
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (sync_dialog);
+  gtk_widget_set_visible (sync_dialog->sync_now_button, FALSE);
   gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, FALSE);
   gtk_widget_set_visible (sync_dialog->sync_options_group, FALSE);
   gtk_widget_set_visible (sync_dialog->sync_page_group, TRUE);
@@ -750,6 +752,7 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
 
   if (!user) {
     sync_setup_firefox_iframe (sync_dialog);
+    gtk_widget_set_visible (sync_dialog->sync_now_button, FALSE);
     gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, FALSE);
     gtk_widget_set_visible (sync_dialog->sync_options_group, FALSE);
   } else {
