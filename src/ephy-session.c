@@ -513,7 +513,8 @@ ephy_session_close (EphySession *session)
 }
 
 typedef struct {
-  GdkRectangle geometry;
+  int width;
+  int height;
   gboolean is_maximized;
   gboolean is_fullscreen;
 
@@ -525,10 +526,12 @@ static void
 get_window_geometry (EphyWindow    *window,
                      SessionWindow *session_window)
 {
+  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (window));
+  session_window->height = gdk_surface_get_height (surface);
+  session_window->width = gdk_surface_get_width (surface);
+
   session_window->is_maximized = ephy_window_is_maximized (window);
   session_window->is_fullscreen = ephy_window_is_fullscreen (window);
-
-  ephy_window_get_geometry (window, &session_window->geometry);
 }
 
 typedef struct {
@@ -736,46 +739,6 @@ write_tab (xmlTextWriterPtr  writer,
 }
 
 static int
-write_window_geometry (xmlTextWriterPtr  writer,
-                       GdkRectangle     *geometry,
-                       gboolean          is_maximized,
-                       gboolean          is_fullscreen)
-{
-  int ret;
-
-  /* set window properties */
-  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"x", "%d",
-                                           geometry->x);
-  if (ret < 0)
-    return ret;
-
-  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"y", "%d",
-                                           geometry->y);
-  if (ret < 0)
-    return ret;
-
-  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"width", "%d",
-                                           geometry->width);
-  if (ret < 0)
-    return ret;
-
-  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"height", "%d",
-                                           geometry->height);
-  if (ret < 0)
-    return ret;
-
-  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"is-maximized", "%d",
-                                           is_maximized);
-  if (ret < 0)
-    return ret;
-
-  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"is-fullscreen", "%d",
-                                           is_fullscreen);
-
-  return ret;
-}
-
-static int
 write_ephy_window (xmlTextWriterPtr  writer,
                    SessionWindow    *window)
 {
@@ -804,7 +767,19 @@ write_ephy_window (xmlTextWriterPtr  writer,
   if (ret < 0)
     return ret;
 
-  ret = write_window_geometry (writer, &window->geometry, window->is_maximized, window->is_fullscreen);
+  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"width", "%d", window->width);
+  if (ret < 0)
+    return ret;
+
+  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"height", "%d", window->height);
+  if (ret < 0)
+    return ret;
+
+  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"is-maximized", "%d", window->is_maximized);
+  if (ret < 0)
+    return ret;
+
+  ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"is-fullscreen", "%d", window->is_fullscreen);
   if (ret < 0)
     return ret;
 
@@ -1084,14 +1059,6 @@ confirm_before_recover (EphyWindow *window,
                                  EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL, NULL);
 }
 
-static void
-restore_geometry (GtkWindow    *window,
-                  GdkRectangle *geometry)
-{
-  if (geometry->width > 0 && geometry->height > 0)
-    ephy_window_set_default_size (EPHY_WINDOW (window), geometry->width, geometry->height);
-}
-
 typedef struct {
   EphySession *session;
   guint32 user_time;
@@ -1144,7 +1111,7 @@ session_parse_window (SessionParserContext  *context,
                       const gchar          **names,
                       const gchar          **values)
 {
-  GdkRectangle geometry = { -1, -1, 0, 0 };
+  int width = 0, height = 0;
   gboolean is_maximized = FALSE;
   gboolean is_fullscreen = FALSE;
   guint i;
@@ -1160,18 +1127,12 @@ session_parse_window (SessionParserContext  *context,
   for (i = 0; names[i]; i++) {
     gulong int_value;
 
-    if (strcmp (names[i], "x") == 0) {
+    if (strcmp (names[i], "width") == 0) {
       ephy_string_to_int (values[i], &int_value);
-      geometry.x = int_value;
-    } else if (strcmp (names[i], "y") == 0) {
-      ephy_string_to_int (values[i], &int_value);
-      geometry.y = int_value;
-    } else if (strcmp (names[i], "width") == 0) {
-      ephy_string_to_int (values[i], &int_value);
-      geometry.width = int_value;
+      width = int_value;
     } else if (strcmp (names[i], "height") == 0) {
       ephy_string_to_int (values[i], &int_value);
-      geometry.height = int_value;
+      height = int_value;
     } else if (strcmp (names[i], "is-maximized") == 0) {
       ephy_string_to_int (values[i], &int_value);
       is_maximized = int_value != 0;
@@ -1184,7 +1145,8 @@ session_parse_window (SessionParserContext  *context,
     }
   }
 
-  restore_geometry (GTK_WINDOW (context->window), &geometry);
+  if (width > 0 && height > 0)
+    ephy_window_set_default_size (context->window, width, height);
 
   if (is_maximized)
     gtk_window_maximize (GTK_WINDOW (context->window));

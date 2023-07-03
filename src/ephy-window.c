@@ -180,8 +180,6 @@ struct _EphyWindow {
 
   gint current_width;
   gint current_height;
-  gint current_x;
-  gint current_y;
 
   guint has_default_size : 1;
   guint is_maximized : 1;
@@ -4648,16 +4646,6 @@ gboolean
 ephy_window_is_fullscreen (EphyWindow *window)
 {
   return window->is_fullscreen;
-}
-
-void
-ephy_window_get_geometry (EphyWindow   *window,
-                          GdkRectangle *rectangle)
-{
-  rectangle->x = window->current_x;
-  rectangle->y = window->current_y;
-  rectangle->width = window->current_width;
-  rectangle->height = window->current_height;
 }
 
 guint64
