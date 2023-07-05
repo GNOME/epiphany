@@ -34,11 +34,11 @@ class MyHTMLParser(HTMLParser):
         if tag != "a":
             return
         for (name, value) in attrs:
-            if name == "href" and (value.startswith("release") or value.startswith("debug")) and '@main' in value:
+            if name == "href" and (value.startswith("release") or value.startswith("debug")) and '%40main' in value:
                 self.builds.append(value)
 
 def download_zipped_build(build_type, verbose):
-    url = f"https://webkitgtk-{build_type}.igalia.com/built-products/"
+    url = f"https://webkitgtk4-{build_type}.igalia.com/built-products/"
     with urllib.request.urlopen(url) as page_fd:
         parser = MyHTMLParser()
         parser.feed(page_fd.read().decode("utf-8"))
