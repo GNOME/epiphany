@@ -1217,14 +1217,6 @@ sync_tab_bookmarked_status (EphyWebView *view,
 }
 
 static void
-sync_tab_popup_windows (EphyWebView *view,
-                        GParamSpec  *pspec,
-                        EphyWindow  *window)
-{
-  /* FIXME: show popup count somehow */
-}
-
-static void
 sync_tab_title (EphyEmbed  *embed,
                 GParamSpec *pspec,
                 EphyWindow *window)
@@ -2424,7 +2416,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_title (embed, NULL, window);
   sync_tab_bookmarked_status (view, NULL, window);
   sync_tab_address (view, NULL, window);
-  sync_tab_popup_windows (view, NULL, window);
 
   sync_tab_zoom (web_view, NULL, window);
   sync_tab_page_action (view, NULL, window);
