@@ -526,9 +526,9 @@ static void
 get_window_geometry (EphyWindow    *window,
                      SessionWindow *session_window)
 {
-  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (window));
-  session_window->height = gdk_surface_get_height (surface);
-  session_window->width = gdk_surface_get_width (surface);
+  GtkWidget *child = gtk_window_get_child (GTK_WINDOW (window));
+  session_window->height = gtk_widget_get_height (child);
+  session_window->width = gtk_widget_get_width (child);
 
   session_window->is_maximized = ephy_window_is_maximized (window);
   session_window->is_fullscreen = ephy_window_is_fullscreen (window);
