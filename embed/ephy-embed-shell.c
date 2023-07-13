@@ -477,7 +477,7 @@ history_service_host_deleted_cb (EphyHistoryService *service,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (GUri) deleted_uri = NULL;
 
-  deleted_uri = g_uri_parse (deleted_url, G_URI_FLAGS_NONE, NULL);
+  deleted_uri = g_uri_parse (deleted_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("History.DeleteHost",
                                                                               g_variant_new ("s", g_uri_get_host (deleted_uri))));

@@ -227,7 +227,7 @@ ephy_webextension_scheme_cb (WebKitURISchemeRequest *request,
   gsize length;
 
   uri = g_uri_parse (webkit_uri_scheme_request_get_uri (request),
-                     G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_SCHEME_NORMALIZE,
+                     G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_SCHEME_NORMALIZE,
                      &error);
   if (!uri) {
     webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));

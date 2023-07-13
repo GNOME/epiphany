@@ -235,7 +235,7 @@ ephy_certificate_dialog_set_address (EphyCertificateDialog *dialog,
 {
   g_autoptr (GUri) uri = NULL;
 
-  uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
   gtk_window_set_title (GTK_WINDOW (dialog), g_uri_get_host (uri));
 }
 

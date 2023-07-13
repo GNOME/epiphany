@@ -343,7 +343,7 @@ add_search_engines (EphySuggestionModel *self,
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
     suggestion = ephy_suggestion_new (markup, engine_name, address);
 
-    uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+    uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
     if (uri) {
       g_free (address);
       address = g_strdup_printf ("%s://%s/", g_uri_get_scheme (uri), g_uri_get_host (uri));

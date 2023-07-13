@@ -287,7 +287,7 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
     g_autoptr (GUri) uri = NULL;
     GList *next = l->next;
 
-    uri = g_uri_parse (item->url, G_URI_FLAGS_NONE, NULL);
+    uri = g_uri_parse (item->url, G_URI_FLAGS_PARSE_RELAXED, NULL);
     if (g_strcmp0 (g_uri_get_host (uri), host) == 0) {
       changed = TRUE;
 

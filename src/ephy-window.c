@@ -1528,7 +1528,7 @@ populate_context_menu (WebKitWebView       *web_view,
 
   parse_context_menu_user_data (context_menu, &selected_text);
   if (selected_text && *selected_text) {
-    if (g_uri_is_valid (selected_text, G_URI_FLAGS_NONE, NULL)) {
+    if (g_uri_is_valid (selected_text, G_URI_FLAGS_PARSE_RELAXED, NULL)) {
       GVariant *value;
 
       value = g_variant_new_string (selected_text);

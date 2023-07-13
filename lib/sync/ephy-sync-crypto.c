@@ -307,7 +307,7 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
   hash = options ? g_strdup (options->hash) : NULL;
   payload = options ? options->payload : NULL;
   timestamp = options ? options->timestamp : NULL;
-  uri = g_uri_parse (url, G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   resource = !g_uri_get_query (uri) ? g_strdup (g_uri_get_path (uri))
                                     : g_strconcat (g_uri_get_path (uri),
                                                    "?",

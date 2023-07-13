@@ -898,11 +898,11 @@ urls_have_same_origin (const char *a_url,
   g_autoptr (GUri) a_uri = NULL;
   g_autoptr (GUri) b_uri = NULL;
 
-  a_uri = g_uri_parse (a_url, G_URI_FLAGS_NONE, NULL);
+  a_uri = g_uri_parse (a_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!a_uri || !g_uri_get_host (a_uri))
     return FALSE;
 
-  b_uri = g_uri_parse (b_url, G_URI_FLAGS_NONE, NULL);
+  b_uri = g_uri_parse (b_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!b_uri || !g_uri_get_host (b_uri))
     return FALSE;
 

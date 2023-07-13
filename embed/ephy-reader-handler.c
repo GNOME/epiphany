@@ -300,7 +300,7 @@ ephy_reader_request_start (EphyReaderRequest *request)
   WebKitWebView *web_view;
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
-  uri = g_uri_parse (original_uri, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (original_uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
 
   if (!uri) {
     /* Can't assert because user could theoretically input something weird */

@@ -697,9 +697,9 @@ ephy_web_extension_api_menus_create_context_menu (EphyWebExtension    *self,
   action = g_action_map_lookup_action (G_ACTION_MAP (ephy_shell_get_default ()), "webextension-context-menu");
   g_assert (action);
 
-  document_uri = g_uri_parse (webkit_web_view_get_uri (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  document_uri = g_uri_parse (webkit_web_view_get_uri (web_view), G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   if (webkit_hit_test_result_get_link_uri (hit_test_result))
-    target_uri = g_uri_parse (webkit_hit_test_result_get_link_uri (hit_test_result), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+    target_uri = g_uri_parse (webkit_hit_test_result_get_link_uri (hit_test_result), G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
 
   return create_context_menu_item (menus, ephy_web_extension_get_short_name (self), self, web_view, modifiers,
                                    context_menu, hit_test_result, action, is_audio, is_video, is_editable,

@@ -135,7 +135,7 @@ validate_search_engine_address (const char  *address,
     return FALSE;
   }
 
-  uri = g_uri_parse (uri_friendly_pattern_address->str, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (uri_friendly_pattern_address->str, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!uri) {
     *error_message = _("Address is not a valid URI");
     return FALSE;
