@@ -303,7 +303,7 @@ cookies_handler_set (EphyWebExtensionSender *sender,
     return;
   }
 
-  parsed_uri = g_uri_parse (url, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, &error);
+  parsed_uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, &error);
   if (error) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.set(): Failed to parse URI '%s': %s", url, error->message);
     return;

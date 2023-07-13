@@ -120,7 +120,7 @@ handle_install (EphyWebAppProvider        *skeleton,
                                            _("The install_token is required for the Install() method"));
     goto out;
   }
-  if (!g_uri_is_valid (url, G_URI_FLAGS_NONE, NULL)) {
+  if (!g_uri_is_valid (url, G_URI_FLAGS_PARSE_RELAXED, NULL)) {
     g_dbus_method_invocation_return_error (invocation, EPHY_WEBAPP_PROVIDER_ERROR,
                                            EPHY_WEBAPP_PROVIDER_ERROR_INVALID_ARGS,
                                            _("The url passed was not valid: ‘%s’"), url);

@@ -136,7 +136,7 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
   g_autofree gchar *origin = NULL;
   g_autofree gchar *uri_text = NULL;
 
-  uri = g_uri_parse (address, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
   uri_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", g_uri_get_host (uri));
   /* Label when clicking the lock icon on a secure page. %s is the website's hostname. */
   gtk_label_set_markup (GTK_LABEL (popover->host_label), uri_text);

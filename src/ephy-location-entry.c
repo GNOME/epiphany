@@ -194,7 +194,7 @@ schedule_dns_prefetch (EphyLocationEntry *entry,
   if (resolver == NULL)
     return;
 
-  uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!uri || !g_uri_get_host (uri))
     return;
 
@@ -585,7 +585,7 @@ update_entry_style (EphyLocationEntry *self,
   if (focus)
     goto out;
 
-  uri = g_uri_parse (text, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (text, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!uri)
     goto out;
 

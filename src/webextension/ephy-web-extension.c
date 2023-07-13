@@ -1594,7 +1594,7 @@ parse_uri_with_wildcard_scheme (const char  *uri,
     uri_to_check = modified_uri;
   }
 
-  return g_uri_parse (uri_to_check, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, error);
+  return g_uri_parse (uri_to_check, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, error);
 }
 
 static gboolean
@@ -1675,7 +1675,7 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
     return TRUE;
 
   /* Note this one is NULL terminated. */
-  host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   g_assert (host); /* WebKitGTK shouldn't ever expose an invalid URI. */
   for (guint i = 0; i < self->host_permissions->len - 1; i++) {
     const char *permission = g_ptr_array_index (self->host_permissions, i);
@@ -1706,7 +1706,7 @@ gboolean
 ephy_web_extension_has_host_permission (EphyWebExtension *self,
                                         const char       *host)
 {
-  GUri *uri = g_uri_parse (host, G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  GUri *uri = g_uri_parse (host, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   if (!uri)
     return FALSE;
 

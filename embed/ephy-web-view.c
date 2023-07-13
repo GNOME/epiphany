@@ -585,7 +585,7 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
   g_assert (G_IS_TLS_CERTIFICATE (view->certificate));
   g_assert (view->tls_error_failing_uri != NULL);
 
-  uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
   webkit_network_session_allow_tls_certificate_for_host (ephy_embed_shell_get_network_session (shell),
                                                          view->certificate,
                                                          g_uri_get_host (uri));
@@ -1121,7 +1121,7 @@ ephy_web_view_set_committed_location (EphyWebView *view,
     g_autofree char *new_address = NULL;
 
     /* Strip the query from the URL for about:applications. */
-    uri = g_uri_parse (location, G_URI_FLAGS_NONE, NULL);
+    uri = g_uri_parse (location, G_URI_FLAGS_PARSE_RELAXED, NULL);
     new_address = g_uri_to_string_partial (uri, G_URI_HIDE_QUERY);
     ephy_web_view_set_address (view, new_address);
   } else {
@@ -1180,7 +1180,7 @@ update_security_status_for_committed_load (EphyWebView *view,
     embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
   web_context = webkit_web_view_get_context (WEBKIT_WEB_VIEW (view));
   security_manager = webkit_web_context_get_security_manager (web_context);
-  guri = g_uri_parse (uri, G_URI_FLAGS_NONE, NULL);
+  guri = g_uri_parse (uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
 
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
@@ -2594,7 +2594,7 @@ ephy_web_view_load_url (EphyWebView *view,
     g_autoptr (GUri) uri = NULL;
     g_autofree char *decoded_url = NULL;
 
-    uri = g_uri_parse (effective_url, G_URI_FLAGS_NONE, NULL);
+    uri = g_uri_parse (effective_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
     decoded_url = g_uri_to_string (uri);
     webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view), decoded_url, -1, NULL, NULL, NULL, NULL, NULL);
   } else

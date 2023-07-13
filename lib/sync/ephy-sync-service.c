@@ -751,7 +751,7 @@ ephy_sync_service_verify_certificate (EphySyncService *self,
     goto out;
   }
   accounts_server = ephy_sync_utils_get_accounts_server ();
-  uri = g_uri_parse (accounts_server, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (accounts_server, G_URI_FLAGS_PARSE_RELAXED, NULL);
   expected = g_strdup_printf ("%s@%s",
                               ephy_sync_service_get_secret (self, secrets[UID]),
                               g_uri_get_host (uri));
