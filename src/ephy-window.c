@@ -4413,21 +4413,21 @@ window_has_modified_forms_data_free (WindowHasModifiedFormsData *data)
 }
 
 static void
+force_close_window_cb (EphyWindow *window)
+{
+  window->force_close = TRUE;
+  ephy_window_close (window);
+  window->force_close = FALSE;
+}
+
+static void
 finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
 {
-  gboolean should_close;
-
-  data->window->force_close = TRUE;
-  should_close = ephy_window_close (data->window);
-  data->window->force_close = FALSE;
-
   /* Need to schedule future destruction of the EphyWindow to ensure its child
    * AdwMessageDialog that's displaying the close confirmation warning gets
    * destroyed first.
    */
-  if (should_close)
-    g_idle_add_once ((GSourceOnceFunc)gtk_window_destroy, data->window);
-
+  g_idle_add_once ((GSourceOnceFunc)force_close_window_cb, data->window);
   window_has_modified_forms_data_free (data);
 }
 
@@ -4607,8 +4607,7 @@ ephy_window_close (EphyWindow *window)
       ephy_session_close (session);
   }
 
-  /* See bug #114689 */
-  gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
+  gtk_window_destroy (GTK_WINDOW (window));
 
   return TRUE;
 }
