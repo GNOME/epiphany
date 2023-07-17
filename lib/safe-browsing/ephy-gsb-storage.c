@@ -392,6 +392,8 @@ ephy_gsb_storage_clear_db (EphyGSBStorage *self)
     ephy_sqlite_connection_delete_database (self->db);
     g_clear_object (&self->db);
   }
+
+  self->is_operable = FALSE;
 }
 
 static gboolean
@@ -403,7 +405,10 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
   g_assert (!self->db);
 
   if (!ephy_gsb_storage_open_db (self))
-    return FALSE;
+    {
+      self->is_operable = FALSE;
+      return FALSE;
+    }
 
   success = ephy_gsb_storage_init_metadata_table (self) &&
             ephy_gsb_storage_init_threats_table (self) &&
