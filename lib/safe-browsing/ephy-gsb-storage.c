@@ -55,8 +55,6 @@ struct _EphyGSBStorage {
 
   char *db_path;
   EphySQLiteConnection *db;
-
-  gboolean is_operable;
 };
 
 G_DEFINE_FINAL_TYPE (EphyGSBStorage, ephy_gsb_storage, G_TYPE_OBJECT);
@@ -125,7 +123,7 @@ ephy_gsb_storage_start_transaction (EphyGSBStorage *self)
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   ephy_sqlite_connection_begin_transaction (self->db, &error);
@@ -142,7 +140,7 @@ ephy_gsb_storage_end_transaction (EphyGSBStorage *self)
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   ephy_sqlite_connection_commit_transaction (self->db, &error);
@@ -392,8 +390,6 @@ ephy_gsb_storage_clear_db (EphyGSBStorage *self)
     ephy_sqlite_connection_delete_database (self->db);
     g_clear_object (&self->db);
   }
-
-  self->is_operable = FALSE;
 }
 
 static gboolean
@@ -405,10 +401,7 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
   g_assert (!self->db);
 
   if (!ephy_gsb_storage_open_db (self))
-    {
-      self->is_operable = FALSE;
-      return FALSE;
-    }
+    return FALSE;
 
   success = ephy_gsb_storage_init_metadata_table (self) &&
             ephy_gsb_storage_init_threats_table (self) &&
@@ -417,8 +410,6 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
 
   if (!success)
     ephy_gsb_storage_clear_db (self);
-
-  self->is_operable = success;
 
   return success;
 }
@@ -508,13 +499,9 @@ ephy_gsb_storage_constructed (GObject *object)
   } else {
     LOG ("GSB database exists, opening...");
     success = ephy_gsb_storage_open_db (self);
-    if (success) {
-      if (!ephy_gsb_storage_check_schema_version (self)) {
-        LOG ("GSB database schema incompatibility, recreating database...");
-        ephy_gsb_storage_recreate_db (self);
-      } else {
-        self->is_operable = TRUE;
-      }
+    if (success && !ephy_gsb_storage_check_schema_version (self)) {
+      LOG ("GSB database schema incompatibility, recreating database...");
+      ephy_gsb_storage_recreate_db (self);
     }
   }
 }
@@ -564,7 +551,7 @@ ephy_gsb_storage_is_operable (EphyGSBStorage *self)
 {
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  return self->is_operable;
+  return !!self->db;
 }
 
 /**
@@ -642,7 +629,7 @@ ephy_gsb_storage_set_metadata (EphyGSBStorage *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (key);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   sql = "UPDATE metadata SET value=? WHERE key=?";
@@ -702,7 +689,7 @@ ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = "SELECT threat_type, platform_type, threat_entry_type, client_state FROM threats";
@@ -761,7 +748,7 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (list);
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = "SELECT value FROM hash_prefix WHERE "
@@ -828,7 +815,7 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (list);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   if (clear) {
@@ -884,7 +871,7 @@ ephy_gsb_storage_clear_hash_prefixes (EphyGSBStorage    *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (list);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   sql = "DELETE FROM hash_prefix WHERE "
@@ -929,7 +916,7 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
 
   *num_prefixes = 0;
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = "SELECT value FROM hash_prefix WHERE "
@@ -978,7 +965,7 @@ ephy_gsb_storage_make_delete_hash_prefix_statement (EphyGSBStorage *self,
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = g_string_new ("DELETE FROM hash_prefix WHERE "
@@ -1015,7 +1002,7 @@ ephy_gsb_storage_delete_hash_prefixes_batch (EphyGSBStorage      *self,
   g_assert (list);
   g_assert (prefixes);
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   if (stmt) {
@@ -1074,7 +1061,7 @@ ephy_gsb_storage_delete_hash_prefixes_internal (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (indices);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   LOG ("Deleting %lu hash prefixes...", num_indices);
@@ -1139,7 +1126,7 @@ ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (tes);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   compression = json_object_get_string_member (tes, "compressionType");
@@ -1171,7 +1158,7 @@ ephy_gsb_storage_make_insert_hash_prefix_statement (EphyGSBStorage *self,
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = g_string_new ("INSERT INTO hash_prefix "
@@ -1210,7 +1197,7 @@ ephy_gsb_storage_insert_hash_prefixes_batch (EphyGSBStorage      *self,
   g_assert (list);
   g_assert (prefixes);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   if (stmt) {
@@ -1259,7 +1246,7 @@ ephy_gsb_storage_insert_hash_prefixes_internal (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (prefixes);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   LOG ("Inserting %lu hash prefixes of size %ld...", num_prefixes, prefix_len);
@@ -1322,7 +1309,7 @@ ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (tes);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   compression = json_object_get_string_member (tes, "compressionType");
@@ -1378,7 +1365,7 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (cues);
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = g_string_new ("SELECT value, negative_expires_at <= (CAST(strftime('%s', 'now') AS INT)) "
@@ -1457,7 +1444,7 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (hashes);
 
-  if (!self->is_operable)
+  if (!self->db)
     return NULL;
 
   sql = g_string_new ("SELECT value, threat_type, platform_type, threat_entry_type, "
@@ -1542,7 +1529,7 @@ ephy_gsb_storage_insert_full_hash (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (hash);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   LOG ("Inserting full hash with duration %ld for list %s/%s/%s",
@@ -1624,7 +1611,7 @@ ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   LOG ("Deleting full hashes expired for more than %d seconds", EXPIRATION_THRESHOLD);
@@ -1676,7 +1663,7 @@ ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (prefix);
 
-  if (!self->is_operable)
+  if (!self->db)
     return;
 
   sql = "UPDATE hash_prefix "
