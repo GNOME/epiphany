@@ -342,7 +342,7 @@ tab_view_page_detached_cb (AdwTabView  *tab_view,
                            EphySession *session)
 {
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
-  EphyTabView *ephy_tab_view = EPHY_TAB_VIEW (g_object_get_data (G_OBJECT (tab_view), "ephy-tab-view"));
+  EphyTabView *ephy_tab_view = EPHY_GET_TAB_VIEW_FROM_ADW_TAB_VIEW (tab_view);
 
   ephy_session_save (session);
 

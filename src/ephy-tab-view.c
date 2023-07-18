@@ -149,8 +149,6 @@ ephy_tab_view_init (EphyTabView *self)
 {
   self->tab_view = ADW_TAB_VIEW (adw_tab_view_new ());
 
-  g_object_set_data (G_OBJECT (self->tab_view), "ephy-tab-view", self);
-
   adw_bin_set_child (ADW_BIN (self), GTK_WIDGET (self->tab_view));
 
   g_signal_connect_object (self->tab_view,
