@@ -2346,8 +2346,6 @@ load_all_available_popovers (EphyWindow  *window,
     return;
 
   lentry = EPHY_LOCATION_ENTRY (title_widget);
-
-  ephy_location_entry_set_password_popover (lentry, NULL);
   ephy_location_entry_clear_permission_buttons (lentry);
 
   for (l = popover_list; l; l = l->next) {
