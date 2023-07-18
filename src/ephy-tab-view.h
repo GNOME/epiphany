@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyTabView, ephy_tab_view, EPHY, TAB_VIEW, AdwBin)
 
+#define EPHY_GET_TAB_VIEW_FROM_ADW_TAB_VIEW(view) (EPHY_TAB_VIEW (gtk_widget_get_parent (GTK_WIDGET (view))))
+
 typedef void (*EphyTabViewCallback) (GtkWidget *widget,
                                      gpointer   data);
 
