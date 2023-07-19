@@ -1662,7 +1662,7 @@ populate_context_menu (WebKitWebView       *web_view,
     if (should_show_copy_outside_editable (web_view))
       add_action_to_context_menu (context_menu, window_action_group, "copy",
                                   window);
-    if (can_search_selection)
+    if (can_search_selection && !app_mode)
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
     if (can_open_selection)
