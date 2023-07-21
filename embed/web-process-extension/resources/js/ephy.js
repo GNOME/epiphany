@@ -643,14 +643,37 @@ Ephy.FormManager = class FormManager
         return false;
     }
 
+    _getFormAction()
+    {
+        // We used to naively access this._form.action to get the action
+        // attribute of the form, which works 99% of the time, but fails if any
+        // input element of the form is named "action". We don't want to get
+        // that by mistake, so we can't rely on the JavaScript property. See:
+        // https://gitlab.gnome.org/GNOME/epiphany/-/issues/2114
+        // https://stackoverflow.com/questions/18100630/
+        //
+        // One disadvantage of manually querying the attribute value rather
+        // than directly accessing the property is the value may be a relative
+        // path rather than a URL, so let's always convert to URL here.
+        //
+        // This may not actually be the real action of the form submission,
+        // because the submitter element gets to override the action. However,
+        // we don't know which element will be submitted yet, so we cannot
+        // consider that for autofill purposes. It's OK because the target URL
+        // we save into the password manager is only a heuristic.
+
+        const action = this._form.getAttribute('action');
+        return action ? new URL(action, window.location) : null;
+    }
+
     _passwordFormFocused(event)
     {
         let isFormActionInsecure = false;
-        if (this._form.action) {
-            const url = new URL(this._form.action);
-            if (url.protocol === 'http:') {
+        const actionURL = this._getFormAction();
+        if (actionURL) {
+            if (actionURL.protocol === 'http:') {
                 // We trust localhost to be local since glib!616.
-                const parts = url.hostname.split('.');
+                const parts = actionURL.hostname.split('.');
                 if (parts.length > 0) {
                     const tld = parts[parts.length - 1];
                     isFormActionInsecure = tld !== '127.0.0.1' && tld !== '::1' && tld !== 'localhost';
@@ -767,7 +790,7 @@ Ephy.FormManager = class FormManager
 
         formAuth.origin = new URL(String(window.location)).origin;
         try {
-            formAuth.targetOrigin = new URL(this._form.action).origin;
+            formAuth.targetOrigin = this._getFormAction().origin;
         } catch {
             formAuth.targetOrigin = formAuth.origin;
         }
