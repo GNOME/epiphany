@@ -422,8 +422,7 @@ Ephy.PasswordManager = class PasswordManager
         });
     }
 
-    // FIXME: Why is pageID a parameter here?
-    requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
+    requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew)
     {
         if (Ephy.isSandboxedWebContent()) {
             Ephy.log(`Not requesting to save password for origin=${origin} because web content is sandboxed`);
@@ -434,7 +433,7 @@ Ephy.PasswordManager = class PasswordManager
 
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
-            pageID
+            pageID: this._pageID
         });
     }
 
@@ -623,8 +622,7 @@ Ephy.FormManager = class FormManager
                                                  formAuth.password,
                                                  formAuth.usernameField,
                                                  formAuth.passwordField,
-                                                 authInfo === null,
-                                                 this._pageID);
+                                                 authInfo === null);
             }
         );
     }
