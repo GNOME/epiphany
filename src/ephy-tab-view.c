@@ -429,6 +429,17 @@ update_indicator_cb (AdwTabPage *page)
   adw_tab_page_set_indicator_icon (page, icon);
 }
 
+gboolean
+is_loading_transform_cb (GBinding     *binding,
+                         const GValue *from_value,
+                         GValue       *to_value,
+                         gpointer      user_data)
+{
+  EphyEmbed *embed = user_data;
+  g_value_set_boolean (to_value, g_value_get_boolean (from_value) && !ephy_embed_has_load_pending (embed));
+  return TRUE;
+}
+
 int
 ephy_tab_view_add_tab (EphyTabView *self,
                        EphyEmbed   *embed,
@@ -457,7 +468,7 @@ ephy_tab_view_add_tab (EphyTabView *self,
 
   adw_tab_page_set_indicator_activatable (page, TRUE);
 
-  g_object_bind_property (view, "is-loading", page, "loading", G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (view, "is-loading", page, "loading", G_BINDING_SYNC_CREATE, is_loading_transform_cb, NULL, embed, NULL);
 
   g_signal_connect_object (embed, "notify::title",
                            G_CALLBACK (update_title_cb), page,
