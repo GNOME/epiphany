@@ -652,6 +652,11 @@ load_delayed_request_if_mapped (gpointer user_data)
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
+  /* We have a binding to `is-loading` in `ephy_tab_view_add_tab ()` that depends on
+   * whether the page is a placeholder (to avoid showing the spinner on tabs while restoring the session),
+   * so after removing the placeholder we need to notify it again. */
+  g_object_notify (G_OBJECT (web_view), "is-loading");
+
   return;
 }
 
