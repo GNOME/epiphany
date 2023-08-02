@@ -134,7 +134,8 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
 
   g_object_get (header_bar->window, "fullscreened", &fullscreen, NULL);
 
-  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar->header_bar), !fullscreen);
+  adw_header_bar_set_show_start_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), !fullscreen);
+  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), !fullscreen);
   gtk_widget_set_visible (header_bar->restore_button, fullscreen);
 
   if (fullscreen) {
@@ -217,12 +218,12 @@ ephy_header_bar_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   /* Header bar */
-  header_bar->header_bar = gtk_header_bar_new ();
+  header_bar->header_bar = adw_header_bar_new ();
   adw_bin_set_child (ADW_BIN (header_bar), header_bar->header_bar);
 
   /* Start action elements */
   header_bar->action_bar_start = ephy_action_bar_start_new ();
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar->header_bar),
+  adw_header_bar_pack_start (ADW_HEADER_BAR (header_bar->header_bar),
                              GTK_WIDGET (header_bar->action_bar_start));
 
   embed_shell = ephy_embed_shell_get_default ();
@@ -234,7 +235,7 @@ ephy_header_bar_constructed (GObject *object)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
   event_box = adw_bin_new ();
-  gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header_bar->header_bar), event_box);
+  adw_header_bar_set_title_widget (ADW_HEADER_BAR (header_bar->header_bar), event_box);
   gtk_widget_set_name (event_box, "title-box-container");
 
   if (is_desktop_pantheon ()) {
@@ -268,7 +269,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_set_visible (header_bar->restore_button, FALSE);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (header_bar->restore_button),
                                   "win.fullscreen");
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar),
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar),
                            GTK_WIDGET (header_bar->restore_button));
 
   /* Page Menu */
@@ -324,11 +325,11 @@ ephy_header_bar_constructed (GObject *object)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->page_menu_popover);
   g_object_unref (builder);
 
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar), button);
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar), button);
 
   /* End action elements */
   header_bar->action_bar_end = ephy_action_bar_end_new ();
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar->header_bar),
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar),
                            GTK_WIDGET (header_bar->action_bar_end));
 
   /* Sync the size of placeholder in EphyActionBarStart with downloads button */
