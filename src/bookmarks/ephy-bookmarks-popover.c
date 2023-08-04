@@ -397,21 +397,6 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_open_bookmark (EphyBookmarksPopover *self,
-                                      GtkListBoxRow        *row,
-                                      EphyLinkFlags         flags)
-{
-  GtkWidget *window;
-  const char *url;
-
-  window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
-  g_assert (EPHY_IS_WINDOW (window));
-  url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
-
-  ephy_link_open (EPHY_LINK (window), url, NULL, flags | EPHY_LINK_BOOKMARK);
-}
-
-static void
 row_clicked_cb (GtkGesture           *gesture,
                 int                   n_click,
                 double                x,
@@ -448,7 +433,7 @@ row_clicked_cb (GtkGesture           *gesture,
 
     flags = ephy_link_flags_from_modifiers (modifiers, button == GDK_BUTTON_MIDDLE);
 
-    ephy_bookmarks_popover_open_bookmark (self, row, flags);
+    ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (row), flags);
 
     if (button != GDK_BUTTON_MIDDLE)
       gtk_popover_popdown (GTK_POPOVER (self));

@@ -22,6 +22,7 @@
 
 #include "ephy-bookmark-properties.h"
 #include "ephy-bookmark-row.h"
+#include "ephy-bookmarks-popover.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-helpers.h"
@@ -95,6 +96,15 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   adw_window_set_content (ADW_WINDOW (dialog), toolbar_view);
 
   gtk_window_present (GTK_WINDOW (dialog));
+}
+
+void
+ephy_bookmark_row_open (EphyBookmarkRow *self,
+                        EphyLinkFlags    flags)
+{
+  GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
+  const char *url = ephy_bookmark_get_url (self->bookmark);
+  ephy_link_open (EPHY_LINK (window), url, NULL, flags | EPHY_LINK_BOOKMARK);
 }
 
 static void
@@ -234,6 +244,16 @@ ephy_bookmark_row_constructed (GObject *object)
 }
 
 static void
+ephy_bookmark_row_activate (GtkListBoxRow *row)
+{
+  GtkWidget *popover = gtk_widget_get_ancestor (GTK_WIDGET (row), EPHY_TYPE_BOOKMARKS_POPOVER);
+  if (popover) {
+    gtk_popover_popdown (GTK_POPOVER (popover));
+  }
+  ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (row), 0);
+}
+
+static void
 ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -245,6 +265,8 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
   object_class->constructed = ephy_bookmark_row_constructed;
 
   widget_class->map = ephy_bookmark_row_map;
+
+  GTK_LIST_BOX_ROW_CLASS (klass)->activate = ephy_bookmark_row_activate;
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",

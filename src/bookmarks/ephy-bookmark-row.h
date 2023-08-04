@@ -21,6 +21,7 @@
 #pragma once
 
 #include "ephy-bookmark.h"
+#include "ephy-link.h"
 
 #include <gtk/gtk.h>
 
@@ -35,5 +36,8 @@ GtkWidget           *ephy_bookmark_row_new              (EphyBookmark *bookmark)
 EphyBookmark        *ephy_bookmark_row_get_bookmark     (EphyBookmarkRow *self);
 
 const char          *ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self);
+
+void                 ephy_bookmark_row_open             (EphyBookmarkRow *self,
+                                                         EphyLinkFlags    flags);
 
 G_END_DECLS
