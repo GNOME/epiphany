@@ -20,7 +20,8 @@
         "--socket=pulseaudio",
         "--socket=wayland",
         "--system-talk-name=org.freedesktop.GeoClue2",
-        "--own-name=org.gnome.Epiphany.WebAppProvider"
+        "--own-name=org.gnome.Epiphany.WebAppProvider",
+        "--env=WEBKIT_DISABLE_DMABUF_RENDERER=1"
     ],
     "build-options" : {
         "prepend-path" : "/usr/lib/sdk/vala-nightly/bin/",
