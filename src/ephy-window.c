@@ -4179,17 +4179,20 @@ ephy_window_get_tab_view (EphyWindow *window)
 }
 
 /**
- * ephy_window_open_tab_overview
+ * ephy_window_toggle_tab_overview
  * @window: an #EphyWindow
  *
- * Opens the tab overview
+ * Toggles the tab overview
  **/
 void
-ephy_window_open_tab_overview (EphyWindow *window)
+ephy_window_toggle_tab_overview (EphyWindow *window)
 {
   g_assert (EPHY_IS_WINDOW (window));
 
-  adw_tab_overview_set_open (ADW_TAB_OVERVIEW (window->overview), TRUE);
+  if (!adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview)))
+    adw_tab_overview_set_open (ADW_TAB_OVERVIEW (window->overview), TRUE);
+  else
+    adw_tab_overview_set_open (ADW_TAB_OVERVIEW (window->overview), FALSE);
 }
 
 /**

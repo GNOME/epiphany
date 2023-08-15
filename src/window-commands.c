@@ -2648,7 +2648,7 @@ window_cmd_go_tabs_view (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
 {
-  ephy_window_open_tab_overview (EPHY_WINDOW (user_data));
+  ephy_window_toggle_tab_overview (EPHY_WINDOW (user_data));
 }
 
 static void

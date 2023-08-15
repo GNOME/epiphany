@@ -49,7 +49,7 @@ EphyWindow       *ephy_window_new                 (void);
 
 EphyTabView      *ephy_window_get_tab_view        (EphyWindow *window);
 
-void              ephy_window_open_tab_overview   (EphyWindow *window);
+void              ephy_window_toggle_tab_overview (EphyWindow *window);
 gboolean          ephy_window_is_tab_overview_open (EphyWindow *window);
 
 void              ephy_window_load_url            (EphyWindow *window,
