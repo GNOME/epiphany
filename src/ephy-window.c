@@ -2054,7 +2054,6 @@ decide_navigation_policy (WebKitWebView            *web_view,
   WebKitNavigationType navigation_type;
   WebKitURIRequest *request;
   const char *uri;
-  EphyEmbed *embed;
 
   g_assert (WEBKIT_IS_WEB_VIEW (web_view));
   g_assert (WEBKIT_IS_NAVIGATION_POLICY_DECISION (decision));
@@ -2153,13 +2152,10 @@ decide_navigation_policy (WebKitWebView            *web_view,
       return accept_navigation_policy_decision (window, decision, uri);
     }
 
-    embed = ephy_embed_container_get_active_child
-              (EPHY_EMBED_CONTAINER (window));
-
     new_embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
                                          NULL, NULL,
                                          target_window,
-                                         embed,
+                                         window->active_embed,
                                          flags,
                                          0);
 
@@ -2658,8 +2654,7 @@ static void
 update_reader_mode (EphyWindow  *window,
                     EphyWebView *view)
 {
-  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  EphyWebView *active_view = ephy_embed_get_web_view (embed);
+  EphyWebView *active_view = ephy_embed_get_web_view (window->active_embed);
   gboolean available = ephy_web_view_is_reader_mode_available (view);
   GtkWidget *title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
   EphyLocationEntry *lentry;
@@ -3549,7 +3544,6 @@ sync_user_input_cb (EphyLocationController *action,
                     GParamSpec             *pspec,
                     EphyWindow             *window)
 {
-  EphyEmbed *embed;
   const char *address;
 
   LOG ("sync_user_input_cb");
@@ -3557,13 +3551,11 @@ sync_user_input_cb (EphyLocationController *action,
   if (window->updating_address)
     return;
 
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (EPHY_IS_EMBED (embed));
-
   address = ephy_location_controller_get_address (action);
 
   window->updating_address = TRUE;
-  ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), address);
+  g_assert (EPHY_IS_EMBED (window->active_embed));
+  ephy_web_view_set_typed_address (ephy_embed_get_web_view (window->active_embed), address);
   window->updating_address = FALSE;
 }
 
