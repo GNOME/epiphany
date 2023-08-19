@@ -2654,7 +2654,7 @@ static void
 update_reader_mode (EphyWindow  *window,
                     EphyWebView *view)
 {
-  EphyWebView *active_view = ephy_embed_get_web_view (window->active_embed);
+  EphyWebView *active_view;
   gboolean available = ephy_web_view_is_reader_mode_available (view);
   GtkWidget *title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
   EphyLocationEntry *lentry;
@@ -2662,10 +2662,17 @@ update_reader_mode (EphyWindow  *window,
   if (!EPHY_IS_LOCATION_ENTRY (title_widget))
     return;
 
+  lentry = EPHY_LOCATION_ENTRY (title_widget);
+
+  if (!window->active_embed) {
+    ephy_location_entry_set_reader_mode_state (lentry, FALSE);
+    return;
+  }
+
+  active_view = ephy_embed_get_web_view (window->active_embed);
   if (active_view != view)
     return;
 
-  lentry = EPHY_LOCATION_ENTRY (title_widget);
   ephy_location_entry_set_reader_mode_visible (lentry, available);
 
   if (available)
