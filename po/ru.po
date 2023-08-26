@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-07-28 21:31+0000\n"
-"PO-Revision-Date: 2023-08-01 14:41+0300\n"
+"POT-Creation-Date: 2023-08-16 15:38+0000\n"
+"PO-Revision-Date: 2023-08-16 20:19+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1170,7 +1170,7 @@ msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:805
+#: embed/ephy-embed.c:810
 msgid "Web is being controlled by automation"
 msgstr "Веб-браузер контролируется автоматикой"
 
@@ -2408,11 +2408,11 @@ msgstr[2] "%u минут"
 msgid "Reload the current page"
 msgstr "Обновить текущую страницу"
 
-#: src/ephy-header-bar.c:278
+#: src/ephy-header-bar.c:279
 msgid "Main Menu"
 msgstr "Главное меню"
 
-#: src/ephy-header-bar.c:457
+#: src/ephy-header-bar.c:458
 msgid "Stop loading the current page"
 msgstr "Остановить загрузку текущей страницы"
 
@@ -2843,11 +2843,11 @@ msgstr "Открыть ссылку в окне инкогнито"
 msgid "_Ask Later"
 msgstr "_Спросить позже"
 
-#: src/ephy-window.c:2810
+#: src/ephy-window.c:2810 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Запретить"
 
-#: src/ephy-window.c:2811
+#: src/ephy-window.c:2811 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Разрешить"
 
@@ -3358,6 +3358,7 @@ msgid "Device name"
 msgstr "Имя устройства"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:126
+#: src/resources/gtk/password-popover.ui:79
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -3554,6 +3555,22 @@ msgstr "Найти…"
 #: src/resources/gtk/page-menu-popover.ui:162
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
+
+#: src/resources/gtk/password-popover.ui:22
+msgid "Save login?"
+msgstr "Сохранить логин?"
+
+#: src/resources/gtk/password-popover.ui:42
+msgid ""
+"Passwords are saved only on your device and can be removed at any time in "
+"Preferences"
+msgstr ""
+"Пароли сохраняются только на вашем устройстве и могут быть удалены в любой "
+"момент в Параметрах"
+
+#: src/resources/gtk/password-popover.ui:64
+msgid "_Never Save"
+msgstr "_Никогда не сохранять"
 
 #: src/resources/gtk/passwords-view.ui:25
 #: src/resources/gtk/prefs-privacy-page.ui:68
@@ -4386,9 +4403,6 @@ msgstr "_Включить"
 
 #~ msgid "Tabs"
 #~ msgstr "Вкладки"
-
-#~ msgid "Save login?"
-#~ msgstr "Сохранить логин?"
 
 #~ msgid "Third-party Cookies Request"
 #~ msgstr "Запрос сторонних файлов cookie"
