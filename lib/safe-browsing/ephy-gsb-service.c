@@ -357,7 +357,7 @@ ephy_gsb_service_update (EphyGSBService *self)
 
   g_atomic_int_set (&self->is_updating, TRUE);
   source = g_timeout_source_new (0);
-  g_source_set_name (source, "[epiphany] gsb_service_update_in_thread");
+  g_source_set_static_name (source, "[epiphany] gsb_service_update_in_thread");
   g_source_set_callback (source,
                          (GSourceFunc)ephy_gsb_service_update_in_thread,
                          g_object_ref (self),
@@ -690,7 +690,7 @@ ephy_gsb_service_update_full_hashes_sync (EphyGSBService *self,
   g_mutex_lock (&data.mutex);
 
   source = g_timeout_source_new (0);
-  g_source_set_name (source, "[epiphany] gsb_service_update_full_hashes_in_thread");
+  g_source_set_static_name (source, "[epiphany] gsb_service_update_full_hashes_in_thread");
   g_source_set_callback (source,
                          (GSourceFunc)ephy_gsb_service_update_full_hashes_in_thread,
                          &data, NULL);
