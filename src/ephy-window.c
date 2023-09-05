@@ -2623,6 +2623,7 @@ static gboolean
 present_on_idle_cb (GtkWindow *window)
 {
   gtk_window_present (window);
+  g_object_unref (window);
 
   return FALSE;
 }
