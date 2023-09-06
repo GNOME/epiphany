@@ -3539,10 +3539,13 @@ static void
 ephy_window_finalize (GObject *object)
 {
   EphyWindow *window = EPHY_WINDOW (object);
+  EphyShell *shell = ephy_shell_get_default ();
 
   G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
   g_hash_table_unref (window->action_groups);
+
+  ephy_shell_unregister_window (shell, window);
 
   LOG ("EphyWindow finalised %p", object);
 }
@@ -4138,10 +4141,14 @@ ephy_window_class_init (EphyWindowClass *klass)
 static void
 ephy_window_init (EphyWindow *window)
 {
+  EphyShell *shell = ephy_shell_get_default ();
+
   LOG ("EphyWindow initialising %p", window);
 
   window->uid = window_uid++;
   window->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
+
+  ephy_shell_register_window (shell, window);
 }
 
 /**

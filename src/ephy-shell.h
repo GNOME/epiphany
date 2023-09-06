@@ -143,4 +143,9 @@ void                      ephy_shell_resync_title_boxes        (EphyShell       
                                                                 const char       *title,
                                                                 const char       *address);
 
+void                      ephy_shell_register_window           (EphyShell        *shell,
+                                                                EphyWindow       *window);
+void                      ephy_shell_unregister_window         (EphyShell        *shell,
+                                                                EphyWindow       *window);
+
 G_END_DECLS

@@ -79,6 +79,8 @@ struct _EphyShell {
 #if USE_GRANITE
   GtkStyleProvider *style_provider;
 #endif
+
+  GList *windows; /* unowned, used for assertion only */
 };
 
 static EphyShell *ephy_shell = NULL;
@@ -890,6 +892,20 @@ remove_open_uris_idle_cb (gpointer data)
   g_source_remove (GPOINTER_TO_UINT (data));
 }
 
+void
+ephy_shell_register_window (EphyShell  *shell,
+                            EphyWindow *window)
+{
+  shell->windows = g_list_prepend (shell->windows, window);
+}
+
+void
+ephy_shell_unregister_window (EphyShell  *shell,
+                              EphyWindow *window)
+{
+  shell->windows = g_list_remove (shell->windows, window);
+}
+
 static void
 ephy_shell_dispose (GObject *object)
 {
@@ -935,6 +951,9 @@ ephy_shell_finalize (GObject *object)
 
   g_clear_pointer (&shell->local_startup_context, ephy_shell_startup_context_free);
   g_clear_pointer (&shell->remote_startup_context, ephy_shell_startup_context_free);
+
+  /* Ensure all windows have been destroyed. */
+  g_assert (!shell->windows);
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
