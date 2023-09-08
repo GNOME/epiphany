@@ -72,13 +72,10 @@
 
 #include <webkit/webkit.h>
 
-/**
- * SECTION:ephy-window
- * @short_description: Epiphany's main #GtkWindow widget
- *
- * #EphyWindow is Epiphany's main widget.
+/* WARNING: when modifying accelerators, also check
+ * should_view_receive_key_press_event_first() to see if it needs to be
+ * modified or listed there.
  */
-
 const struct {
   const char *action_and_target;
   const char *accelerators[9];
@@ -565,21 +562,22 @@ notify_fullscreen_cb (EphyWindow *window)
     window->show_fullscreen_header_bar = FALSE;
 }
 
-#if 0
-/* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
 static gboolean
-ephy_window_should_view_receive_key_press_event (EphyWindow      *window,
-                                                 guint            keyval,
-                                                 GdkModifierType  state)
+should_view_receive_key_press_event_first (EphyWindow      *window,
+                                           guint            keyval,
+                                           GdkModifierType  state)
 {
   state &= (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK);
 
-  /* Focus location entry */
-  if (keyval == GDK_KEY_F6)
+  /* Websites are allowed to override most Epiphany accelerators. E.g. on Google
+   * Docs Ctrl+O should open Google's document chooser, not Epiphany's file
+   * chooser, and Ctrl+F should open Google's find, not Epiphany's. But websites
+   * are not allowed to override window and tab management accelerators.
+   */
+
+  if (keyval == GDK_KEY_F6)   /* Focus location entry */
     return FALSE;
 
-  /* Websites are allowed to override most Epiphany accelerators, but not
-   * window or tab management accelerators. */
   if (state == GDK_CONTROL_MASK)
     return keyval != GDK_KEY_n &&            /* New Window */
            keyval != GDK_KEY_q &&            /* Quit */
@@ -620,24 +618,73 @@ ephy_window_should_view_receive_key_press_event (EphyWindow      *window,
 }
 
 static gboolean
-handle_key_cb (EphyWindow            *window,
-               guint                  keyval,
-               guint                  keycode,
-               GdkModifierType        state,
-               GtkEventControllerKey *controller)
+key_pressed_cb (EphyWindow            *window,
+                guint                  keyval,
+                guint                  keycode,
+                GdkModifierType        state,
+                GtkEventControllerKey *controller)
 {
   EphyWebView *view;
 
+  /* If the web view is not focused, follow normal GTK event handling. */
   view = ephy_embed_get_web_view (window->active_embed);
   if (gtk_window_get_focus (GTK_WINDOW (window)) != GTK_WIDGET (view))
     return GDK_EVENT_PROPAGATE;
 
-  if (ephy_window_should_view_receive_key_press_event (window, keyval, state))
-    return gtk_event_controller_key_forward (controller, GTK_WIDGET (view));
+  /* If the web view is focused, it should generally receive the event first to
+   * ensure web content has the ability to override most Epiphany accelerators.
+   * However, we do not allow web content to override certain accelerators. If
+   * the event is sent to the web view first, then nothing else should receive
+   * the event, so stop propagation to prevent the view from receiving the event
+   * a second time.
+   *
+   * WebKit will always handle GTK events that it has received unconditionally,
+   * regardless of whether the corresponding DOM event has been handled (e.g.
+   * by using Event.stopPropagation) or not, because GTK event handling is
+   * synchronous but WebKit event handling is asynchronous. (We don't want to
+   * block the UI process waiting for the web process to decide whether web
+   * content has handled the event.)
+   *
+   * Stopping propagation here creates a nasty side effect: GTK will never
+   * process our action accelerators, because those are handled by GtkWindow,
+   * but handling the event here ensures GtkWindow will never see them. As a
+   * workaround, WebKit will manually convert unhandled events into accelerators
+   * and activate any corresponding actions available on the toplevel window.
+   *
+   * For the WebKit side of this, see webkitWebViewBaseKeyPressed and
+   * webkitWebViewBaseProcessAcceleratorsForKeyPressEvent in
+   * WebKitWebViewBase.cpp. Those functions contain a comment that refers to
+   * this code in Epiphany, so please update the comment there if needed when
+   * changing the code here.
+   */
+  if (should_view_receive_key_press_event_first (window, keyval, state)) {
+    gtk_event_controller_key_forward (controller, GTK_WIDGET (view));
+    return GDK_EVENT_STOP;
+  }
 
   return GDK_EVENT_PROPAGATE;
 }
-#endif
+
+static gboolean
+key_released_cb (EphyWindow            *window,
+                 guint                  keyval,
+                 guint                  keycode,
+                 GdkModifierType        state,
+                 GtkEventControllerKey *controller)
+{
+  EphyWebView *view;
+
+  /* If the web view is not focused, follow normal GTK event handling. */
+  view = ephy_embed_get_web_view (window->active_embed);
+  if (gtk_window_get_focus (GTK_WINDOW (window)) != GTK_WIDGET (view))
+    return GDK_EVENT_PROPAGATE;
+
+  /* If the web view is focused, only it should receive the event. Stop
+   * propagation to ensure the event is not sent to the web view again.
+   */
+  gtk_event_controller_key_forward (controller, GTK_WIDGET (view));
+  return GDK_EVENT_STOP;
+}
 
 static gboolean
 ephy_window_close_request (GtkWindow *window)
@@ -3804,10 +3851,7 @@ ephy_window_constructed (GObject *object)
   GApplication *app;
   AdwBreakpoint *breakpoint;
   g_autoptr (GtkBuilder) builder = NULL;
-#if 0
-  /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   GtkEventController *controller;
-#endif
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
@@ -3993,14 +4037,11 @@ ephy_window_constructed (GObject *object)
 
   ephy_web_extension_manager_install_actions (ephy_web_extension_manager_get_default (), window);
 
-#if 0
-  /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (handle_key_cb), window);
-  g_signal_connect_swapped (controller, "key-released", G_CALLBACK (handle_key_cb), window);
+  g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (key_pressed_cb), window);
+  g_signal_connect_swapped (controller, "key-released", G_CALLBACK (key_released_cb), window);
   gtk_widget_add_controller (GTK_WIDGET (window), controller);
-#endif
 
   gtk_widget_set_size_request (GTK_WIDGET (window), 360, 200);
 
