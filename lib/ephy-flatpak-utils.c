@@ -114,9 +114,9 @@ ephy_open_uri (const char *uri,
   parent = xdp_parent_new_gtk (window);
 
   if (is_dir)
-    xdp_portal_open_directory (portal, parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (TRUE));
+    xdp_portal_open_directory (portal, parent, uri, XDP_OPEN_URI_FLAG_NONE, NULL, opened_uri, GINT_TO_POINTER (TRUE));
   else
-    xdp_portal_open_uri (portal, parent, uri, XDP_OPEN_URI_FLAG_ASK, NULL, opened_uri, GINT_TO_POINTER (FALSE));
+    xdp_portal_open_uri (portal, parent, uri, XDP_OPEN_URI_FLAG_NONE, NULL, opened_uri, GINT_TO_POINTER (FALSE));
 
   xdp_parent_free (parent);
 }
