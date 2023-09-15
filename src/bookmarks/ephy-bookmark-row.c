@@ -83,8 +83,7 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
     gtk_popover_popdown (GTK_POPOVER (popover));
 
   grid = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
-                                       EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
-                                       dialog);
+                                       EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG);
   gtk_window_set_default_widget (GTK_WINDOW (dialog),
                                  ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (grid)));
 

@@ -120,8 +120,7 @@ popover_shown (EphyAddBookmarkPopover *self)
                            G_CONNECT_SWAPPED);
 
   self->grid = ephy_bookmark_properties_new (bookmark,
-                                             EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER,
-                                             GTK_WIDGET (self));
+                                             EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER);
   gtk_popover_set_child (GTK_POPOVER (self), self->grid);
   gtk_popover_set_default_widget (GTK_POPOVER (self),
                                   ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (self->grid)));

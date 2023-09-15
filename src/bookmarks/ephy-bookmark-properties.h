@@ -36,8 +36,7 @@ typedef enum {
 } EphyBookmarkPropertiesType;
 
 GtkWidget *ephy_bookmark_properties_new                (EphyBookmark                   *bookmark,
-                                                        EphyBookmarkPropertiesType  type,
-                                                        GtkWidget                      *parent);
+                                                        EphyBookmarkPropertiesType      type);
 
 GtkWidget *ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *self);
 

@@ -41,7 +41,6 @@ struct _EphyBookmarkProperties {
   gboolean bookmark_is_removed;
 
   EphyBookmarkPropertiesType type;
-  GtkWidget *parent;
 
   GtkWidget *popover_bookmark_label;
   GtkWidget *name_entry;
@@ -60,7 +59,6 @@ enum {
   PROP_0,
   PROP_BOOKMARK,
   PROP_TYPE,
-  PROP_PARENT,
   LAST_PROP
 };
 
@@ -246,7 +244,7 @@ ephy_bookmark_properties_actions_remove_bookmark (EphyBookmarkProperties *self)
   ephy_bookmarks_manager_remove_bookmark (self->manager, self->bookmark);
 
   if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG)
-    gtk_window_destroy (GTK_WINDOW (self->parent));
+    gtk_window_destroy (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
 }
 
 static void
@@ -331,9 +329,6 @@ ephy_bookmark_properties_set_property (GObject      *object,
       break;
     case PROP_TYPE:
       self->type = g_value_get_enum (value);
-      break;
-    case PROP_PARENT:
-      self->parent = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -460,12 +455,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
                        EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_PARENT] =
-    g_param_spec_object ("parent",
-                         NULL, NULL,
-                         GTK_TYPE_WIDGET,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-properties.ui");
@@ -529,16 +518,13 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *self)
 
 GtkWidget *
 ephy_bookmark_properties_new (EphyBookmark               *bookmark,
-                              EphyBookmarkPropertiesType  type,
-                              GtkWidget                  *parent)
+                              EphyBookmarkPropertiesType  type)
 {
   g_assert (EPHY_IS_BOOKMARK (bookmark));
-  g_assert (GTK_IS_WIDGET (parent));
 
   return g_object_new (EPHY_TYPE_BOOKMARK_PROPERTIES,
                        "bookmark", bookmark,
                        "type", type,
-                       "parent", parent,
                        NULL);
 }
 
