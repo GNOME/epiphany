@@ -333,7 +333,7 @@ ephy_bookmark_properties_set_property (GObject      *object,
       self->type = g_value_get_enum (value);
       break;
     case PROP_PARENT:
-      self->parent = g_value_dup_object (value);
+      self->parent = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
