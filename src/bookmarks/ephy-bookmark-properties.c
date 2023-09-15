@@ -420,6 +420,8 @@ ephy_bookmark_properties_finalize (GObject *object)
                                ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
 
+  g_object_unref (self->bookmark);
+
   G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->finalize (object);
 }
 
