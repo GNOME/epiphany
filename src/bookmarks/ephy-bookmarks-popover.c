@@ -319,17 +319,21 @@ ephy_bookmarks_popover_tag_created_cb (EphyBookmarksPopover *self,
 static void
 ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
                                        const char           *tag,
-                                       int                   position,
                                        EphyBookmarksManager *manager)
 {
   GtkListBoxRow *row;
+  int i = 0;
 
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
-  row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), position);
-  gtk_list_box_remove (GTK_LIST_BOX (self->tags_list_box),
-                       GTK_WIDGET (row));
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), i++))) {
+    const char *title = g_object_get_data (G_OBJECT (row), "title");
+    if (g_strcmp0 (title, tag) == 0) {
+      gtk_list_box_remove (GTK_LIST_BOX (self->tags_list_box), GTK_WIDGET (row));
+      break;
+    }
+  }
 
   if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
       g_strcmp0 (self->tag_detail_tag, tag) == 0) {

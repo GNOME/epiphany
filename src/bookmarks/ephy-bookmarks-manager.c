@@ -202,9 +202,8 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_STRING,
-                  G_TYPE_INT);
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 }
 
 static void
@@ -498,7 +497,6 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self,
                                    const char           *tag)
 {
   GSequenceIter *iter = NULL;
-  int position;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_assert (tag != NULL);
@@ -511,15 +509,12 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self,
                             (GCompareDataFunc)ephy_bookmark_tags_compare,
                             NULL);
   g_assert (iter != NULL);
-
-  position = g_sequence_iter_get_position (iter);
-
   g_sequence_remove (iter);
 
   /* Also remove the tag from each bookmark if they have it */
   g_sequence_foreach (self->bookmarks, (GFunc)ephy_bookmark_remove_tag, (gpointer)tag);
 
-  g_signal_emit (self, signals[TAG_DELETED], 0, tag, position);
+  g_signal_emit (self, signals[TAG_DELETED], 0, tag);
 }
 
 gboolean
