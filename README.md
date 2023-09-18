@@ -152,5 +152,5 @@ very much content there.
 
 ## Contact Us
 
-The recommended way to contact us is via the Epiphany mailing list
-<epiphany-list@gnome.org>.
+The recommended way to contact us is via the
+[Epiphany discussion forum](https://discourse.gnome.org/tag/epiphany).
