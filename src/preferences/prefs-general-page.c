@@ -88,6 +88,10 @@ struct _PrefsGeneralPage {
   GtkWidget *lang_listbox;
   GtkWidget *enable_spell_checking_row;
 
+  /* Developer */
+  AdwPreferencesGroup *dev_group;
+  GtkWidget *show_developer_actions_row;
+
   GtkWindow *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
 
@@ -950,6 +954,10 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, lang_listbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, enable_spell_checking_row);
 
+  /* Developer */
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, dev_group);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, show_developer_actions_row);
+
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
@@ -1132,6 +1140,15 @@ setup_general_page (PrefsGeneralPage *general_page)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
                    general_page->enable_spell_checking_row,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  /* ======================================================================== */
+  /* ========================== Developer==================================== */
+  /* ======================================================================== */
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS,
+                   general_page->show_developer_actions_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 

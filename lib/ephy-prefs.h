@@ -107,6 +107,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB            "switch-to-new-tab"
 #define EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS         "enable-webextensions"
 #define EPHY_PREFS_WEB_WEBEXTENSIONS_ACTIVE         "webextensions-active"
+#define EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS       "show-developer-actions"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -136,6 +137,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
   EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB,
   EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,
+  EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS,
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
