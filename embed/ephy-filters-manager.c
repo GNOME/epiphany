@@ -33,6 +33,7 @@
 #include <inttypes.h>
 
 #define ADBLOCK_FILTER_UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
+#define ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED 28 * 24 * 60 * 60 /* In seconds */
 #define ADBLOCK_FILTER_SIDECAR_FILE_SUFFIX ".filterinfo"
 
 struct _EphyFiltersManager {
@@ -46,6 +47,7 @@ struct _EphyFiltersManager {
   GCancellable *cancellable;
   WebKitUserContentFilter *wk_filter;
   WebKitUserContentFilterStore *store;
+  gboolean metered;
 };
 
 G_DEFINE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
@@ -393,6 +395,8 @@ filter_info_setup_enable_compiled_filter (FilterInfo              *self,
 static gboolean
 filter_info_needs_updating_from_source (const FilterInfo *self)
 {
+  gboolean ret;
+
   g_assert (self);
 
   if (!self->manager)
@@ -429,8 +433,14 @@ filter_info_needs_updating_from_source (const FilterInfo *self)
    * last update was before that moment. Also check that the "recent enough"
    * time point can be calculated without undeflowing beforehand.
    */
-  return (self->manager->update_time < ADBLOCK_FILTER_UPDATE_FREQUENCY) ||
-         (self->last_update <= (self->manager->update_time - ADBLOCK_FILTER_UPDATE_FREQUENCY));
+  if (!self->manager->metered)
+    ret = (self->manager->update_time < ADBLOCK_FILTER_UPDATE_FREQUENCY) ||
+          (self->last_update <= (self->manager->update_time - ADBLOCK_FILTER_UPDATE_FREQUENCY));
+  else
+    ret = (self->manager->update_time < ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED) ||
+          (self->last_update <= (self->manager->update_time - ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED));
+
+  return ret;
 }
 
 static void
@@ -701,7 +711,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
          filter_info_needs_updating_from_source (self) ? "" : "not ",
          filter_info_get_identifier (self),
          (self->manager->update_time - self->last_update),
-         ADBLOCK_FILTER_UPDATE_FREQUENCY);
+         self->manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY);
   } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     filter_info_setup_done (self);
     return;
@@ -993,6 +1003,15 @@ update_timeout_cb (EphyFiltersManager *manager)
 }
 
 static void
+on_network_metered (GNetworkMonitor    *monitor,
+                    GParamSpec         *pspec,
+                    EphyFiltersManager *manager)
+
+{
+  manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
+}
+
+static void
 ephy_filters_manager_constructed (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
@@ -1021,7 +1040,10 @@ ephy_filters_manager_constructed (GObject *object)
 
   update_adblock_filter_files_cb (NULL, NULL, manager);
 
-  manager->update_timeout_id = g_timeout_add_seconds (ADBLOCK_FILTER_UPDATE_FREQUENCY,
+  g_signal_connect (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager);
+  manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
+
+  manager->update_timeout_id = g_timeout_add_seconds (manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY,
                                                       (GSourceFunc)update_timeout_cb,
                                                       manager);
 }

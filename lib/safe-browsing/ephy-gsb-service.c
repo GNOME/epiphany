@@ -36,6 +36,7 @@
 #define JITTER            2                               /* seconds */
 #define CURRENT_TIME      (g_get_real_time () / 1000000)  /* seconds */
 #define DEFAULT_WAIT_TIME (30 * 60)                       /* seconds */
+#define DEFAULT_WAIT_TIME_METERED (6 * 2 * 30 * 60)       /* seconds */
 
 struct _EphyGSBService {
   GObject parent_instance;
@@ -54,6 +55,8 @@ struct _EphyGSBService {
   GThread *update_thread;
   GMainLoop *update_loop;
   SoupSession *session;
+
+  gboolean metered;
 };
 
 G_DEFINE_TYPE (EphyGSBService, ephy_gsb_service, G_TYPE_OBJECT);
@@ -205,7 +208,10 @@ ephy_gsb_service_update_in_thread (EphyGSBService *self)
   /* Set up a default next update time in case of failure or non-existent
    * minimum wait duration.
    */
-  self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
+  if (!self->metered)
+    self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
+  else
+    self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME_METERED;
 
   ephy_gsb_storage_delete_old_full_hashes (self->storage);
 
@@ -479,6 +485,15 @@ ephy_gsb_service_constructed (GObject *object)
 }
 
 static void
+on_network_metered (GNetworkMonitor *monitor,
+                    GParamSpec      *pspec,
+                    EphyGSBService  *service)
+
+{
+  service->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
+}
+
+static void
 ephy_gsb_service_init (EphyGSBService *self)
 {
   GMainContext *context = g_main_context_new ();
@@ -486,6 +501,9 @@ ephy_gsb_service_init (EphyGSBService *self)
   self->update_loop = g_main_loop_new (context, FALSE);
   self->update_thread = g_thread_new ("EphyGSBService", (GThreadFunc)run_update_thread, self);
   g_main_context_unref (context);
+
+  g_signal_connect (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), self);
+  self->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
 }
 
 static void
