@@ -1,5 +1,5 @@
 /*!
-  Highlight.js v11.8.0 (git: 65687a907b)
+  Highlight.js v11.9.0 (git: f47103d4f1)
   (c) 2006-2023 undefined and other contributors
   License: BSD-3-Clause
  */
@@ -206,8 +206,8 @@ var hljs = (function () {
     }
   }
 
-  /** @typedef {{scope?: string, language?: string, sublanguage?: boolean, children: Node[]} | string} Node */
-  /** @typedef {{scope?: string, language?: string, sublanguage?: boolean, children: Node[]} } DataNode */
+  /** @typedef {{scope?: string, language?: string, children: Node[]} | string} Node */
+  /** @typedef {{scope?: string, language?: string, children: Node[]} } DataNode */
   /** @typedef {import('highlight.js').Emitter} Emitter */
   /**  */
 
@@ -674,28 +674,18 @@ var hljs = (function () {
     relevance: 0
   };
   const REGEXP_MODE = {
-    // this outer rule makes sure we actually have a WHOLE regex and not simply
-    // an expression such as:
-    //
-    //     3 / something
-    //
-    // (which will then blow up when regex's `illegal` sees the newline)
-    begin: /(?=\/[^/\n]*\/)/,
-    contains: [{
-      scope: 'regexp',
-      begin: /\//,
-      end: /\/[gimuy]*/,
-      illegal: /\n/,
-      contains: [
-        BACKSLASH_ESCAPE,
-        {
-          begin: /\[/,
-          end: /\]/,
-          relevance: 0,
-          contains: [BACKSLASH_ESCAPE]
-        }
-      ]
-    }]
+    scope: "regexp",
+    begin: /\/(?=[^/\n]*\/)/,
+    end: /\/[gimuy]*/,
+    contains: [
+      BACKSLASH_ESCAPE,
+      {
+        begin: /\[/,
+        end: /\]/,
+        relevance: 0,
+        contains: [BACKSLASH_ESCAPE]
+      }
+    ]
   };
   const TITLE_MODE = {
     scope: 'title',
@@ -732,30 +722,30 @@ var hljs = (function () {
 
   var MODES$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    MATCH_NOTHING_RE: MATCH_NOTHING_RE,
-    IDENT_RE: IDENT_RE$1,
-    UNDERSCORE_IDENT_RE: UNDERSCORE_IDENT_RE,
-    NUMBER_RE: NUMBER_RE,
-    C_NUMBER_RE: C_NUMBER_RE,
+    APOS_STRING_MODE: APOS_STRING_MODE,
+    BACKSLASH_ESCAPE: BACKSLASH_ESCAPE,
+    BINARY_NUMBER_MODE: BINARY_NUMBER_MODE,
     BINARY_NUMBER_RE: BINARY_NUMBER_RE,
+    COMMENT: COMMENT,
+    C_BLOCK_COMMENT_MODE: C_BLOCK_COMMENT_MODE,
+    C_LINE_COMMENT_MODE: C_LINE_COMMENT_MODE,
+    C_NUMBER_MODE: C_NUMBER_MODE,
+    C_NUMBER_RE: C_NUMBER_RE,
+    END_SAME_AS_BEGIN: END_SAME_AS_BEGIN,
+    HASH_COMMENT_MODE: HASH_COMMENT_MODE,
+    IDENT_RE: IDENT_RE$1,
+    MATCH_NOTHING_RE: MATCH_NOTHING_RE,
+    METHOD_GUARD: METHOD_GUARD,
+    NUMBER_MODE: NUMBER_MODE,
+    NUMBER_RE: NUMBER_RE,
+    PHRASAL_WORDS_MODE: PHRASAL_WORDS_MODE,
+    QUOTE_STRING_MODE: QUOTE_STRING_MODE,
+    REGEXP_MODE: REGEXP_MODE,
     RE_STARTERS_RE: RE_STARTERS_RE,
     SHEBANG: SHEBANG,
-    BACKSLASH_ESCAPE: BACKSLASH_ESCAPE,
-    APOS_STRING_MODE: APOS_STRING_MODE,
-    QUOTE_STRING_MODE: QUOTE_STRING_MODE,
-    PHRASAL_WORDS_MODE: PHRASAL_WORDS_MODE,
-    COMMENT: COMMENT,
-    C_LINE_COMMENT_MODE: C_LINE_COMMENT_MODE,
-    C_BLOCK_COMMENT_MODE: C_BLOCK_COMMENT_MODE,
-    HASH_COMMENT_MODE: HASH_COMMENT_MODE,
-    NUMBER_MODE: NUMBER_MODE,
-    C_NUMBER_MODE: C_NUMBER_MODE,
-    BINARY_NUMBER_MODE: BINARY_NUMBER_MODE,
-    REGEXP_MODE: REGEXP_MODE,
     TITLE_MODE: TITLE_MODE,
-    UNDERSCORE_TITLE_MODE: UNDERSCORE_TITLE_MODE,
-    METHOD_GUARD: METHOD_GUARD,
-    END_SAME_AS_BEGIN: END_SAME_AS_BEGIN
+    UNDERSCORE_IDENT_RE: UNDERSCORE_IDENT_RE,
+    UNDERSCORE_TITLE_MODE: UNDERSCORE_TITLE_MODE
   });
 
   /**
@@ -1568,7 +1558,7 @@ var hljs = (function () {
     return mode;
   }
 
-  var version = "11.8.0";
+  var version = "11.9.0";
 
   class HTMLInjectionError extends Error {
     constructor(reason, html) {
@@ -1582,6 +1572,7 @@ var hljs = (function () {
   Syntax highlighting with language autodetection.
   https://highlightjs.org/
   */
+
 
 
   /**
@@ -2311,6 +2302,11 @@ var hljs = (function () {
       fire("before:highlightElement",
         { el: element, language });
 
+      if (element.dataset.highlighted) {
+        console.log("Element previously highlighted. To highlight again, first unset `dataset.highlighted`.", element);
+        return;
+      }
+
       // we should be all text, no child nodes (unescaped HTML) - this is possibly
       // an HTML injection attack - it's likely too late if this is already in
       // production (the code has likely already done its damage by the time
@@ -2337,6 +2333,7 @@ var hljs = (function () {
       const result = language ? highlight(text, { language, ignoreIllegals: true }) : highlightAuto(text);
 
       element.innerHTML = result.value;
+      element.dataset.highlighted = "yes";
       updateClassName(element, language, result.language);
       element.result = {
         language: result.language,
@@ -2646,7 +2643,7 @@ var hljs = (function () {
       },
       CSS_VARIABLE: {
         className: "attr",
-        begin: /--[A-Za-z][A-Za-z0-9_-]*/
+        begin: /--[A-Za-z_][A-Za-z0-9_-]*/
       }
     };
   };
@@ -3213,6 +3210,7 @@ var hljs = (function () {
   Website: https://developer.mozilla.org/en-US/docs/Web/CSS
   */
 
+
   /** @type LanguageFn */
   function css(hljs) {
     const regex = hljs.regex;
@@ -3506,6 +3504,7 @@ var hljs = (function () {
   Category: common, scripting, web
   Website: https://developer.mozilla.org/en-US/docs/Web/JavaScript
   */
+
 
   /** @type LanguageFn */
   function javascript(hljs) {
