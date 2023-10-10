@@ -2918,12 +2918,15 @@ clipboard_text_received_cb (GdkClipboard *clipboard,
   EphyWebView *web_view;
   g_autoptr (GError) error = NULL;
   g_autofree char *text = NULL;
+  g_autofree char *normalized = NULL;
 
   text = gdk_clipboard_read_text_finish (clipboard, res, &error);
   if (error) {
     g_warning ("Failed to the URL from clipboard: %s", error->message);
     return;
   }
+
+  normalized = ephy_embed_utils_normalize_or_autosearch_address (text);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
@@ -2934,7 +2937,7 @@ clipboard_text_received_cb (GdkClipboard *clipboard,
                               0);
 
   web_view = ephy_embed_get_web_view (embed);
-  ephy_web_view_load_url (web_view, text);
+  ephy_web_view_load_url (web_view, normalized);
 
   ephy_embed_container_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
   gtk_widget_grab_focus (GTK_WIDGET (embed));
