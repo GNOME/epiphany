@@ -16,7 +16,6 @@ ephywebextension_src = [
   'webextension/adw-widget-utils.c',
   'webextension/ephy-browser-action.c',
   'webextension/ephy-browser-action-row.c',
-  'webextension/ephy-json-utils.c',
   'webextension/ephy-web-extension-manager.c',
   'webextension/ephy-web-extension.c',
 ]

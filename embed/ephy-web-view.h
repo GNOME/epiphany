@@ -179,4 +179,13 @@ GtkWidget                 *ephy_web_view_new_with_user_content_manager (WebKitUs
 
 guint64                    ephy_web_view_get_uid                       (EphyWebView *web_view);
 
+void                       ephy_web_view_get_web_app_manifest_url (EphyWebView         *view,
+                                                                   GCancellable        *cancellable,
+                                                                   GAsyncReadyCallback  callback,
+                                                                   gpointer             user_data);
+char                      *ephy_web_view_get_web_app_manifest_url_finish (EphyWebView   *view,
+                                                                          GAsyncResult  *result,
+                                                                          GError       **error);
+
+
 G_END_DECLS

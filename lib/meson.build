@@ -20,6 +20,7 @@ libephymisc_sources = [
   'ephy-file-dialog-utils.c',
   'ephy-file-helpers.c',
   'ephy-flatpak-utils.c',
+  'ephy-json-utils.c',
   'ephy-langs.c',
   'ephy-notification.c',
   'ephy-notification-container.c',

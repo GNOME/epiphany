@@ -1411,6 +1411,7 @@ typedef struct {
   gboolean webapp_options_set;
   WebKitDownload *download;
   EphyWindow *window;
+  EphyDownload *download_manifest;
 } EphyApplicationDialogData;
 
 static void
@@ -1465,8 +1466,7 @@ static void
 ephy_application_dialog_data_free (EphyApplicationDialogData *data)
 {
   if (data->download) {
-    g_signal_handlers_disconnect_by_func (data->download, download_finished_cb, data);
-    g_signal_handlers_disconnect_by_func (data->download, download_failed_cb, data);
+    g_signal_handlers_disconnect_by_data (data->download, data);
 
     data->download = NULL;
   }
@@ -1699,6 +1699,7 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 
   data->download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell),
                                                         data->icon_href);
+  webkit_download_set_allow_overwrite (data->download, TRUE);
 
   /* We do not want this download to show up in the UI, so let's
    * set 'ephy-download-set' to make Epiphany think this is
@@ -1706,9 +1707,6 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
   /* FIXME: it's probably better to just do this in a clean way
    * instead of using this workaround. */
   g_object_set_data (G_OBJECT (data->download), "ephy-download-set", GINT_TO_POINTER (TRUE));
-
-  destination = g_build_filename (ephy_file_tmp_dir (), data->icon_href, NULL);
-  webkit_download_set_destination (data->download, destination);
 
   g_signal_connect (data->download, "finished",
                     G_CALLBACK (download_finished_cb), data);
@@ -1739,34 +1737,6 @@ fill_default_application_image_cb (GObject      *source,
     set_image_from_favicon (data);
 }
 
-typedef struct {
-  const char *host;
-  const char *name;
-} SiteInfo;
-
-static SiteInfo sites[] = {
-  { "www.facebook.com", "Facebook" },
-  { "twitter.com", "Twitter" },
-  { "gmail.com", "GMail" },
-  { "youtube.com", "YouTube" },
-};
-
-static char *
-get_special_case_application_title_for_host (const char *host)
-{
-  char *title = NULL;
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (sites) && title == NULL; i++) {
-    SiteInfo *info = &sites[i];
-    if (strcmp (host, info->host) == 0) {
-      title = g_strdup (info->name);
-    }
-  }
-
-  return title;
-}
-
 static void
 set_default_application_title (EphyApplicationDialogData *data,
                                char                      *title)
@@ -1779,14 +1749,10 @@ set_default_application_title (EphyApplicationDialogData *data,
     host = g_uri_get_host (uri);
 
     if (host != NULL && host[0] != '\0') {
-      title = get_special_case_application_title_for_host (host);
-
-      if (title == NULL || title[0] == '\0') {
-        if (g_str_has_prefix (host, "www."))
-          title = g_strdup (host + strlen ("www."));
-        else
-          title = g_strdup (host);
-      }
+      if (g_str_has_prefix (host, "www."))
+        title = g_strdup (host + strlen ("www."));
+      else
+        title = g_strdup (host);
     }
   }
 
@@ -1968,6 +1934,155 @@ create_install_dialog_when_ready (EphyApplicationDialogData *data)
                                                data);
 }
 
+static void
+start_fallback (EphyApplicationDialogData *data)
+{
+  LOG ("No webmanifest, using old scraping");
+  ephy_web_view_get_best_web_app_icon (data->view, data->cancellable, fill_default_application_image_cb, data);
+  ephy_web_view_get_web_app_title (data->view, data->cancellable, fill_default_application_title_cb, data);
+  ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
+}
+
+static void
+download_manifest_finished_cb (WebKitDownload            *download,
+                               EphyApplicationDialogData *data)
+{
+  g_autoptr (GError) error = NULL;
+  g_autoptr (JsonParser) parser = json_parser_new ();
+  JsonNode *root;
+  JsonObject *manifest_object;
+  JsonArray *icons;
+  JsonObject *icon;
+  g_autofree char *filename = NULL;
+  const char *title = NULL;
+  const char *str;
+  const char *display;
+  gint pos = 0;
+  gint max_width = 0;
+  g_autofree char *uri = NULL;
+
+  filename = g_filename_from_uri (ephy_download_get_destination (EPHY_DOWNLOAD (download)), NULL, NULL);
+  json_parser_load_from_file (parser, ephy_download_get_destination (EPHY_DOWNLOAD (download)), &error);
+  if (error) {
+    g_warning ("Unable to parse manifest %s: %s", filename, error->message);
+    start_fallback (data);
+    return;
+  }
+
+  root = json_parser_get_root (parser);
+  manifest_object = json_node_get_object (root);
+
+  icons = ephy_json_object_get_array (manifest_object, "icons");
+  for (guint i = 0; i < json_array_get_length (icons); i++) {
+    g_auto (GStrv) size = NULL;
+    const char *sizes;
+    gint width;
+
+    icon = ephy_json_array_get_object (icons, i);
+
+    if (ephy_json_object_get_string (icon, "purpose")) {
+      LOG ("Skipping icon as purpose is set..");
+      continue;
+    }
+
+    sizes = ephy_json_object_get_string (icon, "sizes");
+    if (!sizes)
+      continue;
+
+    size = g_strsplit (sizes, "x", 2);
+    if (!size)
+      continue;
+
+    width = strtol (size[0], NULL, 10);
+    if (max_width < width) {
+      pos = i;
+      max_width = width;
+    }
+  }
+
+  icon = ephy_json_array_get_object (icons, pos);
+  str = ephy_json_object_get_string (icon, "src");
+
+  if (ephy_embed_utils_address_has_web_scheme (str)) {
+    uri = g_strdup (str);
+  } else {
+    uri = g_strdup_printf ("%s/%s", data->url, str);
+  }
+
+  display = ephy_json_object_get_string (manifest_object, "display");
+  if (g_strcmp0 (display, "standalone") == 0 || g_strcmp0 (display, "fullscreen") == 0)
+    data->webapp_options = EPHY_WEB_APPLICATION_MOBILE_CAPABLE;
+  else
+    data->webapp_options = EPHY_WEB_APPLICATION_NONE;
+
+  data->webapp_options_set = TRUE;
+
+  data->icon_href = g_steal_pointer (&uri);
+
+  download_icon_and_set_image (data);
+
+  if (json_object_has_member (manifest_object, "short_name"))
+    title = json_object_get_string_member (manifest_object, "short_name");
+  else if (json_object_has_member (manifest_object, "name"))
+    title = json_object_get_string_member (manifest_object, "name");
+
+  if (title)
+    set_default_application_title (data, g_strdup (title));
+  else
+    ephy_web_view_get_web_app_title (data->view, data->cancellable, fill_default_application_title_cb, data);
+}
+
+static void
+download_manifest_failed_cb (WebKitDownload            *download,
+                             GError                    *error,
+                             EphyApplicationDialogData *data)
+{
+  WebKitURIRequest *request = webkit_download_get_request (download);
+
+  g_warning ("Could not download manifest from %s", webkit_uri_request_get_uri (request));
+  start_fallback (data);
+}
+
+static void
+download_and_use_manifest (EphyApplicationDialogData *data,
+                           const char                *manifest_url)
+{
+  g_autofree char *destination = NULL;
+  g_autofree char *tmp_filename = NULL;
+
+  LOG ("%s: manifest url %s", __FUNCTION__, manifest_url);
+  data->download_manifest = ephy_download_new_for_uri_internal (manifest_url);
+  webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (data->download_manifest), TRUE);
+  tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
+  destination = g_build_filename (ephy_file_tmp_dir (), tmp_filename, NULL);
+  ephy_download_set_destination (data->download_manifest, destination);
+
+  g_signal_connect (data->download_manifest, "completed", G_CALLBACK (download_manifest_finished_cb), data);
+  g_signal_connect (data->download_manifest, "error", G_CALLBACK (download_manifest_failed_cb), data);
+}
+
+static void
+got_manifest_url_cb (GObject      *source,
+                     GAsyncResult *async_result,
+                     gpointer      user_data)
+{
+  EphyApplicationDialogData *data = user_data;
+  g_autofree char *manifest_url = NULL;
+  g_autoptr (GError) error = NULL;
+
+  manifest_url = ephy_web_view_get_web_app_manifest_url_finish (EPHY_WEB_VIEW (source), async_result, &error);
+  if (error || !manifest_url) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+
+    /* No web manifest, fallback to old scraping */
+    start_fallback (data);
+    return;
+  }
+
+  download_and_use_manifest (data, manifest_url);
+}
+
 void
 window_cmd_save_as_application (GSimpleAction *action,
                                 GVariant      *parameter,
@@ -1990,9 +2105,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   data->url = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view));
   data->cancellable = g_cancellable_new ();
 
-  ephy_web_view_get_best_web_app_icon (data->view, data->cancellable, fill_default_application_image_cb, data);
-  ephy_web_view_get_web_app_title (data->view, data->cancellable, fill_default_application_title_cb, data);
-  ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
+  ephy_web_view_get_web_app_manifest_url (data->view, data->cancellable, got_manifest_url_cb, data);
 }
 
 static char *

@@ -4040,3 +4040,57 @@ ephy_web_view_get_uid (EphyWebView *web_view)
 {
   return web_view->uid;
 }
+
+static void
+get_web_app_manifest_url_cb (WebKitWebView *view,
+                             GAsyncResult  *result,
+                             GTask         *task)
+{
+  g_autoptr (JSCValue) js_value = NULL;
+  GError *error = NULL;
+
+  js_value = webkit_web_view_evaluate_javascript_finish (view, result, &error);
+  if (js_value) {
+    char *retval = NULL;
+
+    if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
+      retval = jsc_value_to_string (js_value);
+
+    g_task_return_pointer (task, retval, (GDestroyNotify)g_free);
+  } else {
+    g_task_return_error (task, error);
+  }
+
+  g_object_unref (task);
+}
+
+void
+ephy_web_view_get_web_app_manifest_url (EphyWebView         *view,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  GTask *task;
+
+  g_assert (EPHY_IS_WEB_VIEW (view));
+
+  task = g_task_new (view, cancellable, callback, user_data);
+  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
+                                       "Ephy.getWebAppManifestURL();",
+                                       -1,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                       NULL,
+                                       cancellable,
+                                       (GAsyncReadyCallback)get_web_app_manifest_url_cb,
+                                       task);
+}
+
+char *
+ephy_web_view_get_web_app_manifest_url_finish (EphyWebView   *view,
+                                               GAsyncResult  *result,
+                                               GError       **error)
+{
+  g_assert (g_task_is_valid (result, view));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
