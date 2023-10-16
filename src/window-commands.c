@@ -1468,7 +1468,7 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
     g_signal_handlers_disconnect_by_func (data->download, download_finished_cb, data);
     g_signal_handlers_disconnect_by_func (data->download, download_failed_cb, data);
 
-    data->download = NULL;
+    g_clear_object (&data->download);
   }
 
   g_cancellable_cancel (data->cancellable);
@@ -1791,6 +1791,7 @@ set_default_application_title (EphyApplicationDialogData *data,
   }
 
   if (title == NULL || title[0] == '\0') {
+    g_clear_pointer (&title, g_free);
     title = g_strdup (webkit_web_view_get_title (WEBKIT_WEB_VIEW (data->view)));
   }
 
