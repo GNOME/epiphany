@@ -69,10 +69,6 @@ conf.set('EPHY_MICRO_VERSION', 0)
 conf.set_quoted('EPHY_VERSION', meson.project_version())
 conf.set_quoted('VERSION', '@VCS_TAG@')
 
-gsb_api_key = get_option('gsb_api_key')
-conf.set_quoted('GSB_API_KEY', gsb_api_key)
-conf.set10('ENABLE_GSB', gsb_api_key != '')
-
 glib_requirement = '>= 2.74.0'
 gtk_requirement = '>= 4.10.0'
 libadwaita_requirement = '>= 1.4.beta'

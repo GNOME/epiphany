@@ -36,10 +36,6 @@ enum {
 struct _PrefsPrivacyPage {
   AdwPreferencesPage parent_instance;
 
-  /* Web Safety */
-  GtkWidget *safe_browsing_group;
-  GtkWidget *enable_safe_browsing_row;
-
   /* Web Tracking */
   GtkWidget *enable_itp_row;
   GtkWidget *enable_website_data_storage_row;
@@ -74,18 +70,6 @@ static void
 setup_privacy_page (PrefsPrivacyPage *privacy_page)
 {
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
-
-  /* ======================================================================== */
-  /* ========================== Web Safety ================================== */
-  /* ======================================================================== */
-
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
-                   privacy_page->enable_safe_browsing_row,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-
-  gtk_widget_set_visible (privacy_page->safe_browsing_group, ENABLE_GSB);
 
   /* ======================================================================== */
   /* ========================== Web Tracking ================================ */
@@ -143,10 +127,6 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
-
-  /* Web Safety */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, safe_browsing_group);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_safe_browsing_row);
 
   /* Web Tracking */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_itp_row);

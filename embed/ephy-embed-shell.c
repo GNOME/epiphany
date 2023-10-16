@@ -55,7 +55,6 @@ typedef struct {
   WebKitWebContext *web_context;
   WebKitNetworkSession *network_session;
   EphyHistoryService *global_history_service;
-  EphyGSBService *global_gsb_service;
   EphyEncodings *encodings;
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
@@ -76,7 +75,6 @@ enum {
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
   ALLOW_TLS_CERTIFICATE,
-  ALLOW_UNSAFE_BROWSING,
   RELOAD_PAGE,
   PASSWORD_FORM_FOCUSED,
   PASSWORD_FORM_SUBMITTED,
@@ -192,7 +190,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->page_setup);
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->global_history_service);
-  g_clear_object (&priv->global_gsb_service);
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->reader_handler);
   g_clear_object (&priv->source_handler);
@@ -319,17 +316,6 @@ web_process_extension_reload_page_message_received_cb (WebKitUserContentManager 
 
   page_id = jsc_value_to_double (message);
   g_signal_emit (shell, signals[RELOAD_PAGE], 0, page_id);
-}
-
-static void
-web_process_extension_unsafe_browsing_error_page_message_received_cb (WebKitUserContentManager *manager,
-                                                                      JSCValue                 *message,
-                                                                      EphyEmbedShell           *shell)
-{
-  guint64 page_id;
-
-  page_id = jsc_value_to_double (message);
-  g_signal_emit (shell, signals[ALLOW_UNSAFE_BROWSING], 0, page_id);
 }
 
 static void
@@ -592,30 +578,6 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   }
 
   return priv->global_history_service;
-}
-
-/**
- * ephy_embed_shell_get_global_gsb_service:
- * @shell: the #EphyEmbedShell
- *
- * Return value: (transfer none): the global #EphyGSBService
- **/
-EphyGSBService *
-ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  g_assert (EPHY_IS_EMBED_SHELL (shell));
-
-  if (!priv->global_gsb_service) {
-    g_autofree char *db_path = NULL;
-    g_autofree char *default_cache_dir = ephy_default_cache_dir ();
-
-    db_path = g_build_filename (default_cache_dir, EPHY_GSB_FILE, NULL);
-    priv->global_gsb_service = ephy_gsb_service_new (GSB_API_KEY, db_path);
-  }
-
-  return priv->global_gsb_service;
 }
 
 /**
@@ -1065,22 +1027,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_UINT64);
 
   /**
-   * EphyEmbedShell::allow-unsafe-browsing:
-   * @shell: the #EphyEmbedShell
-   * @page_id: the identifier of the web page
-   *
-   * Emitted when the web process extension requests an exception be
-   * permitted for the unsafe browsing warning on the given page
-   */
-  signals[ALLOW_UNSAFE_BROWSING] =
-    g_signal_new ("allow-unsafe-browsing",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_UINT64);
-
-  /**
    * EphyEmbedShell::reload-page:
    * @shell: the #EphyEmbedShell
    * @page_id: the identifier of the web page
@@ -1378,13 +1324,6 @@ ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
-                                                               "unsafeBrowsingErrorPage",
-                                                               NULL);
-  g_signal_connect_object (ucm, "script-message-received::unsafeBrowsingErrorPage",
-                           G_CALLBACK (web_process_extension_unsafe_browsing_error_page_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "passwordFormFocused",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordFormFocused",
@@ -1442,9 +1381,6 @@ ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
                                                                  priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "tlsErrorPage",
-                                                                 NULL);
-  webkit_user_content_manager_unregister_script_message_handler (ucm,
-                                                                 "unsafeBrowsingErrorPage",
                                                                  NULL);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordManagerRequestSave",

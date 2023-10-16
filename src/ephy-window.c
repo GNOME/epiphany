@@ -41,7 +41,6 @@
 #include "ephy-find-toolbar.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-fullscreen-box.h"
-#include "ephy-gsb-utils.h"
 #include "ephy-header-bar.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-link.h"
@@ -1981,15 +1980,13 @@ typedef struct {
   WebKitWebView *web_view;
   WebKitPolicyDecision *decision;
   WebKitPolicyDecisionType decision_type;
-  char *request_uri;
 } VerifyUrlAsyncData;
 
 static inline VerifyUrlAsyncData *
 verify_url_async_data_new (EphyWindow               *window,
                            WebKitWebView            *web_view,
                            WebKitPolicyDecision     *decision,
-                           WebKitPolicyDecisionType  decision_type,
-                           const char               *request_uri)
+                           WebKitPolicyDecisionType  decision_type)
 {
   VerifyUrlAsyncData *data = g_new (VerifyUrlAsyncData, 1);
 
@@ -1997,7 +1994,6 @@ verify_url_async_data_new (EphyWindow               *window,
   data->web_view = g_object_ref (web_view);
   data->decision = g_object_ref (decision);
   data->decision_type = decision_type;
-  data->request_uri = g_strdup (request_uri);
 
   return data;
 }
@@ -2008,7 +2004,6 @@ verify_url_async_data_free (VerifyUrlAsyncData *data)
   g_object_unref (data->window);
   g_object_unref (data->web_view);
   g_object_unref (data->decision);
-  g_free (data->request_uri);
   g_free (data);
 }
 
@@ -2185,71 +2180,9 @@ decide_navigation_policy (WebKitWebView            *web_view,
 }
 
 static void
-verify_url_cb (EphyGSBService     *service,
-               GAsyncResult       *result,
-               VerifyUrlAsyncData *data)
-{
-  GList *threats = ephy_gsb_service_verify_url_finish (service, result);
-
-  if (threats) {
-    webkit_policy_decision_ignore (data->decision);
-
-    /* Very rarely there are URLs that pose multiple types of threats.
-     * However, inform the user only about the first threat type.
-     */
-    ephy_web_view_load_error_page (EPHY_WEB_VIEW (data->web_view),
-                                   data->request_uri,
-                                   EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING,
-                                   NULL, threats->data);
-
-    g_list_free_full (threats, g_free);
-  } else {
-    decide_navigation_policy (data->web_view, data->decision,
-                              data->decision_type, data->window);
-  }
-
-  verify_url_async_data_free (data);
-}
-
-static gboolean
-decide_navigation (EphyWindow               *window,
-                   WebKitWebView            *web_view,
-                   WebKitPolicyDecision     *decision,
-                   WebKitPolicyDecisionType  decision_type,
-                   const char               *request_uri)
-{
-  EphyGSBService *service;
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING)) {
-    if (ephy_web_view_get_should_bypass_safe_browsing (EPHY_WEB_VIEW (web_view))) {
-      /* This means the user has decided to proceed to an unsafe website. */
-      ephy_web_view_set_should_bypass_safe_browsing (EPHY_WEB_VIEW (web_view), FALSE);
-      return decide_navigation_policy (web_view, decision, decision_type, window);
-    }
-
-    service = ephy_embed_shell_get_global_gsb_service (ephy_embed_shell_get_default ());
-    if (service) {
-      ephy_gsb_service_verify_url (service, request_uri,
-                                   (GAsyncReadyCallback)verify_url_cb,
-                                   /* Note: this refs the policy decision, so we can complete it asynchronously. */
-                                   verify_url_async_data_new (window, web_view,
-                                                              decision, decision_type,
-                                                              request_uri));
-      return TRUE;
-    }
-  }
-
-  return decide_navigation_policy (web_view, decision, decision_type, window);
-}
-
-static void
 resolve_pending_decision (VerifyUrlAsyncData *async_data)
 {
-  decide_navigation (async_data->window,
-                     async_data->web_view,
-                     async_data->decision,
-                     async_data->decision_type,
-                     async_data->request_uri);
+  decide_navigation_policy (async_data->web_view, async_data->decision, async_data->decision_type, async_data->window);
 }
 
 static void
@@ -2274,20 +2207,11 @@ decide_policy_cb (WebKitWebView            *web_view,
                   EphyWindow               *window)
 {
   EphyFiltersManager *filters_manager;
-  WebKitNavigationPolicyDecision *navigation_decision;
-  WebKitNavigationAction *navigation_action;
-  WebKitURIRequest *request;
-  const char *request_uri;
 
   /* Response policy decisions are handled in EphyWebView instead. */
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
       decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
     return FALSE;
-
-  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
-  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
-  request = webkit_navigation_action_get_request (navigation_action);
-  request_uri = webkit_uri_request_get_uri (request);
 
   filters_manager = ephy_embed_shell_get_filters_manager (ephy_embed_shell_get_default ());
   if (!ephy_filters_manager_get_is_initialized (filters_manager)) {
@@ -2295,8 +2219,7 @@ decide_policy_cb (WebKitWebView            *web_view,
     VerifyUrlAsyncData *async_data = verify_url_async_data_new (window,
                                                                 web_view,
                                                                 decision,
-                                                                decision_type,
-                                                                request_uri);
+                                                                decision_type);
     window->pending_decisions = g_list_append (window->pending_decisions,
                                                async_data);
     if (!window->filters_initialized_id) {
@@ -2309,7 +2232,7 @@ decide_policy_cb (WebKitWebView            *web_view,
     return TRUE;
   }
 
-  return decide_navigation (window, web_view, decision, decision_type, request_uri);
+  return decide_navigation_policy (web_view, decision, decision_type, window);
 }
 
 static void

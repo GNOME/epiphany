@@ -4,12 +4,6 @@ option('developer_mode',
   description: 'Enable developer mode'
 )
 
-option('network_tests',
-  type: 'feature',
-  value: 'disabled',
-  description: 'Enable tests that require network access, if unit_tests are enabled'
-)
-
 option('tech_preview',
   type: 'boolean',
   value: false,
@@ -26,12 +20,6 @@ option('unit_tests',
   type: 'feature',
   value: 'enabled',
   description: 'Enable unit tests'
-)
-
-option('gsb_api_key',
-  type: 'string',
-  value: '',
-  description: 'The API key used to access the Google Safe Browsing API v4'
 )
 
 option('granite',

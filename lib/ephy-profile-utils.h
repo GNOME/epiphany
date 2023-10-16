@@ -33,8 +33,6 @@ G_BEGIN_DECLS
 
 #define EPHY_BOOKMARKS_FILE     "bookmarks.gvdb"
 #define EPHY_HISTORY_FILE       "ephy-history.db"
-/* Threat list database for Google Safe Browsing. */
-#define EPHY_GSB_FILE           "gsb-threats.db"
 
 int ephy_profile_utils_get_migration_version (void);
 int ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory);

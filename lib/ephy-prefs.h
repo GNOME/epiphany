@@ -94,7 +94,6 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_ADBLOCK               "enable-adblock"
 #define EPHY_PREFS_WEB_REMEMBER_PASSWORDS           "remember-passwords"
 #define EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS  "enable-site-specific-quirks"
-#define EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING         "enable-safe-browsing"
 #define EPHY_PREFS_WEB_ENABLE_ITP                   "enable-itp"
 #define EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE  "enable-website-data-storage"
 #define EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL           "default-zoom-level"
@@ -125,7 +124,6 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
   EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
-  EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
   EPHY_PREFS_WEB_ENABLE_ITP,
   EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
   EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL,

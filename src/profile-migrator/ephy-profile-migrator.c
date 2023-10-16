@@ -1143,8 +1143,6 @@ migrate_profile_directories (void)
 {
   g_autoptr (GFile) new_directory = NULL;
   g_autoptr (GFile) adblock_directory = NULL;
-  g_autoptr (GFile) gsb_file = NULL;
-  g_autoptr (GFile) gsb_journal_file = NULL;
   GList *web_apps;
   GList *l;
 
@@ -1243,10 +1241,6 @@ migrate_profile_directories (void)
   new_directory = g_file_new_for_path (ephy_default_profile_dir ());
   adblock_directory = g_file_get_child (new_directory, "adblock");
   g_file_delete (adblock_directory, NULL, NULL);
-  gsb_file = g_file_get_child (new_directory, "gsb-threats.db");
-  g_file_delete (gsb_file, NULL, NULL);
-  gsb_journal_file = g_file_get_child (new_directory, "gsb-threats.db-journal");
-  g_file_delete (gsb_journal_file, NULL, NULL);
 }
 
 static void
@@ -1681,6 +1675,19 @@ next:
 }
 
 static void
+migrate_gsb_db (void)
+{
+  g_autofree char *threats_db = g_build_filename (ephy_default_cache_dir (), "gsb-threats.db", NULL);
+  g_autofree char *threats_db_journal = g_build_filename (ephy_default_cache_dir (), "gsb-threats.db-journal", NULL);
+
+  if (g_unlink (threats_db) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", threats_db, g_strerror (errno));
+
+  if (g_unlink (threats_db_journal) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", threats_db_journal, g_strerror (errno));
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1733,6 +1740,7 @@ const EphyProfileMigrator migrators[] = {
   /* FIXME: Please also remove the "search-engines" deprecated gschema key when dropping this migrator in the future. */
   /* 36 */ migrate_search_engines_to_vardict,
   /* 37 */ migrate_pre_flatpak_webapps,
+  /* 38 */ migrate_gsb_db,
 };
 
 static gboolean

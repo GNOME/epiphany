@@ -89,13 +89,13 @@ eslint:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /gnome-\d\d+/
       variables:
-        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled'
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
     - if: $CI_COMMIT_BRANCH == "master"
       variables:
-        CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled'
+        CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/ && $CI_COMMIT_BRANCH != "master"
       variables:
-        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgsb_api_key=${GSB_API_KEY} -Dgranite=enabled --werror'
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled --werror'
 
 flatpak:
   extends:
