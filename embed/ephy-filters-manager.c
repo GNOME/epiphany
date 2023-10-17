@@ -1040,7 +1040,7 @@ ephy_filters_manager_constructed (GObject *object)
 
   update_adblock_filter_files_cb (NULL, NULL, manager);
 
-  g_signal_connect (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager);
+  g_signal_connect_object (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager, 0);
   manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
 
   manager->update_timeout_id = g_timeout_add_seconds (manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY,

@@ -502,7 +502,7 @@ ephy_gsb_service_init (EphyGSBService *self)
   self->update_thread = g_thread_new ("EphyGSBService", (GThreadFunc)run_update_thread, self);
   g_main_context_unref (context);
 
-  g_signal_connect (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), self);
+  g_signal_connect_object (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), self, 0);
   self->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
 }
 
