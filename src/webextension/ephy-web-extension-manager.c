@@ -1709,6 +1709,9 @@ ephy_web_extension_manager_emit_in_background_view (EphyWebExtensionManager *sel
   g_autofree char *script = NULL;
   WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
 
+  if (!web_view)
+    return;
+
   script = g_strdup_printf ("window.browser.%s._emit(%s);", name, json);
 
   webkit_web_view_evaluate_javascript (web_view,
