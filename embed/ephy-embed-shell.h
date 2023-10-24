@@ -83,9 +83,9 @@ EphySearchEngineManager  *ephy_embed_shell_get_search_engine_manager (EphyEmbedS
 EphyPasswordManager      *ephy_embed_shell_get_password_manager      (EphyEmbedShell *shell);
 WebKitFaviconDatabase    *ephy_embed_shell_get_favicon_database      (EphyEmbedShell *shell);
 
-void                     ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
-                                                                WebKitUserContentManager *ucm);
-void                     ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
-                                                                  WebKitUserContentManager *ucm);
+void                     ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
+                                                        WebKitUserContentManager *ucm);
+void                     ephy_embed_shell_unregister_ucm (EphyEmbedShell           *shell,
+                                                          WebKitUserContentManager *ucm);
 
 G_END_DECLS

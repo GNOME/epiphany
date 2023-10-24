@@ -1294,8 +1294,8 @@ ephy_embed_shell_get_favicon_database (EphyEmbedShell *shell)
 }
 
 void
-ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
-                                       WebKitUserContentManager *ucm)
+ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
+                               WebKitUserContentManager *ucm)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
@@ -1370,8 +1370,8 @@ ephy_embed_shell_register_ucm_handler (EphyEmbedShell           *shell,
 }
 
 void
-ephy_embed_shell_unregister_ucm_handler (EphyEmbedShell           *shell,
-                                         WebKitUserContentManager *ucm)
+ephy_embed_shell_unregister_ucm (EphyEmbedShell           *shell,
+                                 WebKitUserContentManager *ucm)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 

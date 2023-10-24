@@ -3446,7 +3446,7 @@ ephy_web_view_finalize (GObject *object)
   WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
 
   ephy_embed_prefs_unregister_ucm (ucm);
-  ephy_embed_shell_unregister_ucm_handler (ephy_embed_shell_get_default (), ucm);
+  ephy_embed_shell_unregister_ucm (ephy_embed_shell_get_default (), ucm);
 
   g_free (view->address);
   g_free (view->display_address);
@@ -3499,7 +3499,7 @@ ephy_web_view_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
 
-  ephy_embed_shell_register_ucm_handler (shell, ucm);
+  ephy_embed_shell_register_ucm (shell, ucm);
   ephy_embed_prefs_register_ucm (ucm);
 
   ephy_web_view_ucm_add_custom_scripts (ucm);
