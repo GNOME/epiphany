@@ -521,7 +521,7 @@ drag_drop_cb (EphyTabView  *self,
     g_auto (GStrv) split = g_strsplit (text, "\n", MAX_NUMBER_OF_URLS);
     int i;
 
-    for (i = 0; *split[i]; i++) {
+    for (i = 0; split[i] && *split[i] != '\0'; i++) {
       const char *uri = split[i];
       g_autofree char *normalized =
         ephy_embed_utils_normalize_or_autosearch_address (uri);
