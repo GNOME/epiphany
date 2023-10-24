@@ -3460,16 +3460,49 @@ ephy_web_view_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
 
+static void
+ephy_web_view_ucm_add_custom_scripts (WebKitUserContentManager *ucm)
+{
+  g_autoptr (WebKitUserScript) script = NULL;
+  g_autoptr (GBytes) youtube_js = NULL;
+  g_auto (GStrv) allow_list = NULL;
+  g_autoptr (GError) error = NULL;
+
+  youtube_js = g_resources_lookup_data ("/org/gnome/epiphany/adguard/youtube.js", 0, &error);
+  if (!youtube_js) {
+    g_warning ("Failed to load youtube.js from AdGuard: %s", error->message);
+    return;
+  }
+
+  allow_list = g_new (char *, 2);
+  allow_list[0] = g_strdup ("https://*.youtube.com/*");
+  allow_list[1] = NULL;
+
+  script = webkit_user_script_new (g_bytes_get_data (youtube_js, NULL),
+                                   WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+                                   WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                   (const char * const *)allow_list,
+                                   NULL);
+  webkit_user_content_manager_add_script (ucm, script);
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 ephy_web_view_constructed (GObject *object)
 {
   EphyWebView *web_view = EPHY_WEB_VIEW (object);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (web_view));
   g_auto (GStrv) cors_allowlist = NULL;
   GtkStyleContext *context;
   GdkRGBA color;
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
+
+  ephy_embed_shell_register_ucm_handler (shell, ucm);
+  ephy_embed_prefs_register_ucm (ucm);
+
+  ephy_web_view_ucm_add_custom_scripts (ucm);
 
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", web_view);
 
@@ -3823,32 +3856,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                 G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
-static void
-ephy_web_view_ucm_add_custom_scripts (WebKitUserContentManager *ucm)
-{
-  g_autoptr (WebKitUserScript) script = NULL;
-  g_autoptr (GBytes) youtube_js = NULL;
-  g_auto (GStrv) allow_list = NULL;
-  g_autoptr (GError) error = NULL;
-
-  youtube_js = g_resources_lookup_data ("/org/gnome/epiphany/adguard/youtube.js", 0, &error);
-  if (!youtube_js) {
-    g_warning ("Failed to load youtube.js from AdGuard: %s", error->message);
-    return;
-  }
-
-  allow_list = g_new (char *, 2);
-  allow_list[0] = g_strdup ("https://*.youtube.com/*");
-  allow_list[1] = NULL;
-
-  script = webkit_user_script_new (g_bytes_get_data (youtube_js, NULL),
-                                   WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
-                                   WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
-                                   (const char * const *)allow_list,
-                                   NULL);
-  webkit_user_content_manager_add_script (ucm, script);
-}
-
 /**
  * ephy_web_view_new:
  *
@@ -3863,11 +3870,6 @@ ephy_web_view_new (void)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   g_autoptr (WebKitUserContentManager) ucm = webkit_user_content_manager_new ();
 
-  ephy_embed_shell_register_ucm_handler (shell, ucm);
-  ephy_embed_prefs_register_ucm (ucm);
-
-  ephy_web_view_ucm_add_custom_scripts (ucm);
-
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "web-context", ephy_embed_shell_get_web_context (shell),
                        "network-session", ephy_embed_shell_get_network_session (shell),
@@ -3880,13 +3882,7 @@ ephy_web_view_new (void)
 GtkWidget *
 ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   g_autoptr (WebKitUserContentManager) ucm = webkit_user_content_manager_new ();
-
-  ephy_web_view_ucm_add_custom_scripts (ucm);
-
-  ephy_embed_shell_register_ucm_handler (shell, ucm);
-  ephy_embed_prefs_register_ucm (ucm);
 
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "related-view", related_view,
