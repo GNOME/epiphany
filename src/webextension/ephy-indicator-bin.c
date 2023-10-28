@@ -169,6 +169,9 @@ ephy_indicator_bin_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, self->child, child_snapshot);
     child_node = gtk_snapshot_free_to_node (child_snapshot);
 
+    if (!child_node)
+      return;
+
     ensure_shader (self);
 
     if (self->shader_compiled) {
