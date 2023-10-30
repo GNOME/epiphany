@@ -302,9 +302,9 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
       /* Most of these fields are at least semi-trusted. The app ID was chosen
        * by ephy so it's safe. The icon URL could be changed by the user to
        * something else after web app creation, though, so better not fully
-       * trust it. Then the app name and the main URL could contain contain
-       * anything at all, so those need to be encoded for sure. Install date
-       * should be fine because it's constructed by Epiphany.
+       * trust it. Then the app name and the main URL could contain anything
+       * at all, so those need to be encoded for sure. Install date should be
+       * fine because it's constructed by Epiphany.
        */
       encoded_icon_path = ephy_encode_for_html_attribute (icon_path);
       encoded_name = ephy_encode_for_html_entity (app->name);
