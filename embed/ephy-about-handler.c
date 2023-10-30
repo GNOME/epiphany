@@ -246,9 +246,13 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                                  GAsyncResult           *result,
                                  WebKitURISchemeRequest *request)
 {
+  WebKitWebView *view;
   GString *data_str;
   gsize data_length;
   GList *applications, *p;
+
+  view = webkit_uri_scheme_request_get_web_view (request);
+  ephy_web_view_register_message_handler (EPHY_WEB_VIEW (view), EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER, EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_CURRENT_PAGE);
 
   data_str = g_string_new (NULL);
   applications = g_task_propagate_pointer (G_TASK (result), NULL);
@@ -259,7 +263,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                             "<script>"
                             "  function deleteWebApp(appID) {"
-                            "    window.webkit.messageHandlers.aboutApps.postMessage(appID);"
+                            "    window.webkit.messageHandlers.aboutApps.postMessage({app: appID, page: %" G_GUINT64_FORMAT "});"
                             "    var row = document.getElementById(appID);"
                             "    row.parentNode.removeChild(row);"
                             "  }"
@@ -267,6 +271,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "</head><div id=\"applications\"><body class=\"applications-body\"><h1>%s</h1>"
                             "<p>%s</p>",
                             _("Apps"),
+                            webkit_web_view_get_page_id (view),
                             _("Apps"),
                             _("List of installed web apps"));
 

@@ -74,8 +74,6 @@ typedef struct {
 enum {
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
-  ALLOW_TLS_CERTIFICATE,
-  RELOAD_PAGE,
   PASSWORD_FORM_FOCUSED,
   PASSWORD_FORM_SUBMITTED,
 
@@ -294,39 +292,6 @@ web_process_extension_overview_message_received_cb (WebKitUserContentManager *ma
                                        url_to_remove, TRUE, NULL,
                                        (EphyHistoryJobCallback)history_set_url_hidden_cb,
                                        shell);
-}
-
-static void
-web_process_extension_tls_error_page_message_received_cb (WebKitUserContentManager *manager,
-                                                          JSCValue                 *message,
-                                                          EphyEmbedShell           *shell)
-{
-  guint64 page_id;
-
-  page_id = jsc_value_to_double (message);
-  g_signal_emit (shell, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
-}
-
-static void
-web_process_extension_reload_page_message_received_cb (WebKitUserContentManager *manager,
-                                                       JSCValue                 *message,
-                                                       EphyEmbedShell           *shell)
-{
-  guint64 page_id;
-
-  page_id = jsc_value_to_double (message);
-  g_signal_emit (shell, signals[RELOAD_PAGE], 0, page_id);
-}
-
-static void
-web_process_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
-                                                      JSCValue                 *message,
-                                                      EphyEmbedShell           *shell)
-{
-  g_autofree char *app_id = NULL;
-
-  app_id = jsc_value_to_string (message);
-  ephy_web_application_delete (app_id, NULL);
 }
 
 static char *
@@ -1010,39 +975,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   EPHY_TYPE_WEB_VIEW);
 
   /**
-   * EphyEmbedShell::allow-tls-certificate:
-   * @shell: the #EphyEmbedShell
-   * @page_id: the identifier of the web page
-   *
-   * Emitted when the web process extension requests an exception be
-   * permitted for the invalid TLS certificate on the given page
-   */
-  signals[ALLOW_TLS_CERTIFICATE] =
-    g_signal_new ("allow-tls-certificate",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_UINT64);
-
-  /**
-   * EphyEmbedShell::reload-page:
-   * @shell: the #EphyEmbedShell
-   * @page_id: the identifier of the web page
-   *
-   * Emitted when the web process extension requests a view be reloaded.
-   * This is needed when window.location.reload() doesn't work properly,
-   * specifically after loading alternate HTML.
-   */
-  signals[RELOAD_PAGE] =
-    g_signal_new ("reload-page",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_UINT64);
-
-  /**
    * EphyEmbedShell::password-form-focused
    * @shell: the #EphyEmbedShell
    * @page_id: the identifier of the web page
@@ -1299,8 +1231,14 @@ ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  /* User content manager */
-  /* FIXME: See https://gitlab.gnome.org/GNOME/epiphany/-/issues/1664 */
+  /* Warning: message handlers connected here should use the private script
+   * world priv->guid to make them unavailable to web content. If a message
+   * handler needs to be temporarily accessible to web content in order to
+   * implement internal Epiphany pages, register it using
+   * ephy_web_view_register_message_handler() to ensure it is unregistered
+   * before any subsequent page load.
+   */
+
   webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "overview",
                                                                priv->guid);
@@ -1309,31 +1247,10 @@ ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
-                                                               "tlsErrorPage",
-                                                               NULL);
-  g_signal_connect_object (ucm, "script-message-received::tlsErrorPage",
-                           G_CALLBACK (web_process_extension_tls_error_page_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (ucm,
-                                                               "reloadPage",
-                                                               NULL);
-  g_signal_connect_object (ucm, "script-message-received::reloadPage",
-                           G_CALLBACK (web_process_extension_reload_page_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "passwordFormFocused",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordFormFocused",
                            G_CALLBACK (web_process_extension_password_form_focused_message_received_cb),
-                           shell, 0);
-
-  webkit_user_content_manager_register_script_message_handler (ucm,
-                                                               "aboutApps",
-                                                               NULL);
-  g_signal_connect_object (ucm, "script-message-received::aboutApps",
-                           G_CALLBACK (web_process_extension_about_apps_message_received_cb),
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
@@ -1379,17 +1296,11 @@ ephy_embed_shell_unregister_ucm (EphyEmbedShell           *shell,
                                                                  "overview",
                                                                  priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
-                                                                 "tlsErrorPage",
-                                                                 NULL);
-  webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordManagerRequestSave",
                                                                  priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordFormFocused",
                                                                  priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler (ucm,
-                                                                 "aboutApps",
-                                                                 NULL);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordManagerSave",
                                                                  priv->guid);

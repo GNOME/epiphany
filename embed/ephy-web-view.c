@@ -120,6 +120,9 @@ struct _EphyWebView {
 
   EphyWebViewErrorPage error_page;
 
+  EphyWebViewMessageHandler message_handlers_to_unregister;
+  gboolean just_registered_message_handlers;
+
   guint unresponsive_process_timeout_id;
   GtkWindow *unresponsive_process_dialog;
 
@@ -568,37 +571,6 @@ password_form_focused_cb (EphyEmbedShell *shell,
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              banner,
                              EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
-}
-
-static void
-allow_tls_certificate_cb (EphyEmbedShell *shell,
-                          guint64         page_id,
-                          EphyWebView    *view)
-{
-  g_autoptr (GUri) uri = NULL;
-
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
-    return;
-
-  g_assert (G_IS_TLS_CERTIFICATE (view->certificate));
-  g_assert (view->tls_error_failing_uri != NULL);
-
-  uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
-  webkit_network_session_allow_tls_certificate_for_host (ephy_embed_shell_get_network_session (shell),
-                                                         view->certificate,
-                                                         g_uri_get_host (uri));
-  ephy_web_view_load_url (view, ephy_web_view_get_address (view));
-}
-
-static void
-reload_page_cb (EphyEmbedShell *shell,
-                guint64         page_id,
-                EphyWebView    *view)
-{
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
-    return;
-
-  webkit_web_view_reload (WEBKIT_WEB_VIEW (view));
 }
 
 static void
@@ -1229,6 +1201,146 @@ reset_background_color (WebKitWebView *web_view)
 }
 
 static void
+tls_error_page_message_received_cb (WebKitUserContentManager *manager,
+                                    JSCValue                 *message,
+                                    EphyWebView              *view)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  g_autoptr (GUri) uri = NULL;
+  guint64 page_id;
+
+  page_id = jsc_value_to_double (message);
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
+    return;
+
+  g_assert (G_IS_TLS_CERTIFICATE (view->certificate));
+  g_assert (view->tls_error_failing_uri != NULL);
+
+  uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
+  webkit_network_session_allow_tls_certificate_for_host (ephy_embed_shell_get_network_session (shell),
+                                                         view->certificate,
+                                                         g_uri_get_host (uri));
+  ephy_web_view_load_url (view, ephy_web_view_get_address (view));
+}
+
+static void
+reload_page_message_received_cb (WebKitUserContentManager *ucm,
+                                 JSCValue                 *message,
+                                 EphyWebView              *view)
+{
+  guint64 page_id = jsc_value_to_double (message);
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
+    return;
+
+  webkit_web_view_reload (WEBKIT_WEB_VIEW (view));
+}
+
+static void
+about_apps_message_received_cb (WebKitUserContentManager *ucm,
+                                JSCValue                 *message,
+                                EphyWebView              *view)
+{
+  g_autoptr (JSCValue) page_id_object = NULL;
+  g_autoptr (JSCValue) app_id_object = NULL;
+  g_autofree char *app_id = NULL;
+  guint64 page_id = 0;
+
+  page_id_object = jsc_value_object_get_property (message, "page");
+  if (!page_id_object)
+    return;
+
+  page_id = jsc_value_to_double (page_id_object);
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
+    return;
+
+  app_id_object = jsc_value_object_get_property (message, "app");
+  if (!app_id_object)
+    return;
+
+  app_id = jsc_value_to_string (app_id_object);
+  ephy_web_application_delete (app_id, NULL);
+}
+
+void
+ephy_web_view_register_message_handler (EphyWebView                    *view,
+                                        EphyWebViewMessageHandler       handler,
+                                        EphyWebViewMessageHandlerScope  scope)
+{
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
+
+  /* Use this function to temporarily register message handlers in the main
+   * script world so they are accessible to Epiphany's internal web content. Use
+   * main world message handlers only for internal Epiphany pages. They should
+   * never be accessible to websites. For message handlers that can use a
+   * private script world, use ephy_embed_shell_register_ucm() instead.
+   *
+   * The parameters of the message should generally contain the page ID, which
+   * should be checked at the top of the callback, because the same
+   * WebKitUserContentManager is shared between many WebKitWebViews and the
+   * callback will execute for every view.
+   *
+   * Message handlers registered here will be unregistered when starting a new
+   * load unless ephy_web_view_register_message_handler() has been called again.
+   * That is, it's possible for them to "stack" by loading different pages
+   * in succession without loading any pages that do not use message handlers.
+   * This should be fine, although there is theoretical abuse potential in
+   * unrealistic scenarios if there are XSS vulnerabilities in internal pages.
+   */
+
+  if (scope == EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD)
+    view->just_registered_message_handlers = TRUE;
+
+  if (view->message_handlers_to_unregister & handler)
+    return;
+
+  switch (handler) {
+    case EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER:
+      webkit_user_content_manager_register_script_message_handler (ucm, "tlsErrorPage", NULL);
+      g_signal_connect_object (ucm, "script-message-received::tlsErrorPage",
+                               G_CALLBACK (tls_error_page_message_received_cb),
+                               view, 0);
+      break;
+    case EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER:
+      webkit_user_content_manager_register_script_message_handler (ucm, "reloadPage", NULL);
+      g_signal_connect_object (ucm, "script-message-received::reloadPage",
+                               G_CALLBACK (reload_page_message_received_cb),
+                               view, 0);
+      break;
+    case EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER:
+      webkit_user_content_manager_register_script_message_handler (ucm, "aboutApps", NULL);
+      g_signal_connect_object (ucm, "script-message-received::aboutApps",
+                               G_CALLBACK (about_apps_message_received_cb),
+                               view, 0);
+      break;
+  }
+
+  view->message_handlers_to_unregister |= handler;
+}
+
+static void
+unregister_message_handlers (EphyWebView *view)
+{
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
+
+  if (view->message_handlers_to_unregister & EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER) {
+    webkit_user_content_manager_unregister_script_message_handler (ucm, "tlsErrorPage", NULL);
+    g_signal_handlers_disconnect_by_func (ucm, tls_error_page_message_received_cb, view);
+  }
+
+  if (view->message_handlers_to_unregister & EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER) {
+    webkit_user_content_manager_unregister_script_message_handler (ucm, "reloadPage", NULL);
+    g_signal_handlers_disconnect_by_func (ucm, reload_page_message_received_cb, view);
+  }
+
+  if (view->message_handlers_to_unregister & EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER) {
+    webkit_user_content_manager_unregister_script_message_handler (ucm, "aboutApps", NULL);
+    g_signal_handlers_disconnect_by_func (ucm, about_apps_message_received_cb, view);
+  }
+
+  view->message_handlers_to_unregister = 0;
+}
+
+static void
 load_changed_cb (WebKitWebView   *web_view,
                  WebKitLoadEvent  load_event,
                  gpointer         user_data)
@@ -1258,6 +1370,10 @@ load_changed_cb (WebKitWebView   *web_view,
 
       ephy_web_view_set_loading_message (view, NULL);
 
+      if (view->just_registered_message_handlers)
+        view->just_registered_message_handlers = FALSE;
+      else if (view->message_handlers_to_unregister)
+        unregister_message_handlers (view);
       break;
     }
     case WEBKIT_LOAD_REDIRECTED:
@@ -1933,6 +2049,8 @@ ephy_web_view_load_error_page (EphyWebView          *view,
                    button_accesskey, button_label);
 #pragma GCC diagnostic pop
 
+  ephy_web_view_register_message_handler (view, EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER, EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD);
+
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
   webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
@@ -2006,6 +2124,8 @@ load_failed_with_tls_error_cb (WebKitWebView        *web_view,
 
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
+
+  ephy_web_view_register_message_handler (view, EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER, EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD);
 
   view->certificate = g_object_ref (certificate);
   view->tls_errors = errors;
@@ -3638,14 +3758,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect_object (shell, "password-form-focused",
                            G_CALLBACK (password_form_focused_cb),
-                           web_view, 0);
-
-  g_signal_connect_object (shell, "allow-tls-certificate",
-                           G_CALLBACK (allow_tls_certificate_cb),
-                           web_view, 0);
-
-  g_signal_connect_object (shell, "reload-page",
-                           G_CALLBACK (reload_page_cb),
                            web_view, 0);
 
   gtk_widget_set_overflow (GTK_WIDGET (web_view), GTK_OVERFLOW_HIDDEN);

@@ -75,6 +75,16 @@ typedef enum {
   EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE,
 } EphyWebViewErrorPage;
 
+typedef enum {
+  EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER = 1 << 0,
+  EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER = 1 << 1,
+  EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER = 1 << 2,
+} EphyWebViewMessageHandler;
+
+typedef enum {
+  EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_CURRENT_PAGE,
+  EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD
+} EphyWebViewMessageHandlerScope;
 
 GType                      ephy_web_view_chrome_get_type          (void);
 GType                      ephy_web_view_security_level_get_type  (void);
@@ -182,6 +192,10 @@ void                       ephy_web_view_get_web_app_manifest_url (EphyWebView  
 char                      *ephy_web_view_get_web_app_manifest_url_finish (EphyWebView   *view,
                                                                           GAsyncResult  *result,
                                                                           GError       **error);
+
+void                       ephy_web_view_register_message_handler (EphyWebView                    *view,
+                                                                   EphyWebViewMessageHandler       handler,
+                                                                   EphyWebViewMessageHandlerScope  scope);
 
 
 G_END_DECLS
