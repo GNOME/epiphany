@@ -54,8 +54,6 @@ typedef enum
 struct _EphyEmbedShellClass
 {
   AdwApplicationClass parent_class;
-
-  void    (* restored_window)  (EphyEmbedShell *shell);
 };
 
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);

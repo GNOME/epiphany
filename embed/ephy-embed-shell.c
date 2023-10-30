@@ -988,8 +988,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
     g_signal_new ("window-restored",
                   EPHY_TYPE_EMBED_SHELL,
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (EphyEmbedShellClass, restored_window),
-                  NULL, NULL, NULL,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
