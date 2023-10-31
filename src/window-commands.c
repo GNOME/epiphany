@@ -1918,7 +1918,7 @@ static void
 create_install_dialog_when_ready (EphyApplicationDialogData *data)
 {
   XdpPortal *portal;
-  XdpParent *parent;
+  g_autoptr (XdpParent) parent = NULL;
 
   if (!data->webapp_options_set || !data->title || !data->icon_v)
     return;
