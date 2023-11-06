@@ -50,7 +50,7 @@ struct _PrefsAppearancePage {
   GtkWidget *css_edit_button;
   GtkWidget *js_row;
   GtkWidget *js_edit_button;
-  GtkWidget *default_zoom_spin_button;
+  GtkWidget *default_zoom_row;
 };
 
 G_DEFINE_FINAL_TYPE (PrefsAppearancePage, prefs_appearance_page, ADW_TYPE_PREFERENCES_PAGE)
@@ -214,15 +214,13 @@ js_edit_button_clicked_cb (GtkWidget           *button,
 }
 
 static gboolean
-on_default_zoom_spin_button_output (GtkSpinButton *spin,
-                                    gpointer       user_data)
+on_default_zoom_row_output (AdwSpinRow *spin,
+                            gpointer    user_data)
 {
-  GtkAdjustment *adjustment;
   g_autofree gchar *text = NULL;
   gdouble value;
 
-  adjustment = gtk_spin_button_get_adjustment (spin);
-  value = (int)gtk_adjustment_get_value (adjustment);
+  value = (int)adw_spin_row_get_value (spin);
   text = g_strdup_printf ("%.f%%", value);
   gtk_editable_set_text (GTK_EDITABLE (spin), text);
 
@@ -230,14 +228,12 @@ on_default_zoom_spin_button_output (GtkSpinButton *spin,
 }
 
 static void
-on_default_zoom_spin_button_value_changed (GtkSpinButton *spin,
-                                           gpointer       user_data)
+on_default_zoom_row_changed (AdwSpinRow *spin,
+                             gpointer    user_data)
 {
-  GtkAdjustment *adjustment;
   gdouble value;
 
-  adjustment = gtk_spin_button_get_adjustment (spin);
-  value = gtk_adjustment_get_value (adjustment);
+  value = adw_spin_row_get_value (spin);
   value = round (value) / 100;
   g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, value);
 }
@@ -337,8 +333,8 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
                     G_CALLBACK (js_edit_button_clicked_cb),
                     appearance_page);
 
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (appearance_page->default_zoom_spin_button),
-                             g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL) * 100);
+  adw_spin_row_set_value (ADW_SPIN_ROW (appearance_page->default_zoom_row),
+                          g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL) * 100);
 }
 
 static void
@@ -365,13 +361,13 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, css_edit_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_edit_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, default_zoom_spin_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, default_zoom_row);
 
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, reader_font_style_get_name);
   gtk_widget_class_bind_template_callback (widget_class, reader_color_scheme_get_name);
-  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_spin_button_output);
-  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_spin_button_value_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_row_output);
+  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_row_changed);
 }
 
 static void

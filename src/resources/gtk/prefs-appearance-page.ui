@@ -121,26 +121,20 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable">False</property>
+          <object class="AdwSpinRow" id="default_zoom_row">
             <property name="title" translatable="yes">Default Zoom Level</property>
-            <child>
-              <object class="GtkSpinButton" id="default_zoom_spin_button">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="zoom_adjustment">
-                    <property name="lower">33</property>
-                    <property name="upper">300</property>
-                    <property name="step_increment">1</property>
-                    <property name="page_increment">10</property>
-                  </object>
-                </property>
-                <property name="max_width_chars">5</property>
-                <property name="valign">center</property>
-                <property name="value">100</property>
-                <signal name="output" handler="on_default_zoom_spin_button_output"/>
-                <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
+            <property name="adjustment">
+              <object class="GtkAdjustment" id="zoom_adjustment">
+                <property name="lower">33</property>
+                <property name="upper">300</property>
+                <property name="step_increment">1</property>
+                <property name="page_increment">10</property>
               </object>
-            </child>
+            </property>
+            <property name="max_width_chars">5</property>
+            <property name="value">100</property>
+            <signal name="output" handler="on_default_zoom_row_output"/>
+            <signal name="changed" handler="on_default_zoom_row_changed"/>
           </object>
         </child>
       </object>
