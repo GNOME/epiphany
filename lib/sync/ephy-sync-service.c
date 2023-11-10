@@ -1981,7 +1981,7 @@ store_secrets_cb (GObject         *source_object,
                   GAsyncResult    *result,
                   EphySyncService *self)
 {
-  GError *error = NULL;
+  g_autoptr (GError) error = NULL;
 
   secret_password_store_finish (result, &error);
   if (error) {
@@ -1999,8 +1999,6 @@ store_secrets_cb (GObject         *source_object,
   self->is_signing_in = FALSE;
 
   g_clear_pointer (&self->user, g_free);
-  if (error)
-    g_error_free (error);
 }
 
 static void
