@@ -44,7 +44,7 @@ test_ephy_encodings_create (void)
   g_assert_cmpstr (ephy_encoding_get_encoding (encoding), ==, "UTF-8");
   g_assert_cmpstr (ephy_encoding_get_title (encoding), ==, "Unicode (UTF-8)");
   g_assert_cmpstr (ephy_encoding_get_title_elided (encoding), ==, "Unicode (UTF-8)");
-  g_assert_cmpstr (ephy_encoding_get_collation_key (encoding), ==, "\311\263\307\276\307\205\305\271\310\215\306\202\306\216\311\263\311\250\306\245\305\237\001\035\035\035\035\035\035\035\035\035\035\035\001\007\002\002\002\002\002\002\007\007\007\002\001\001\346\244\273\001\346\215\264\001\346\211\243\001\346\204\235\001\346\216\257\001\346\205\217\001\346\206\212\001\343\265\233\001\343\265\242\001\346\244\273\001\346\244\231\001\346\234\257\001\343\265\247\001\345\277\241\001\343\265\243");
+  g_assert_cmpstr (ephy_encoding_get_collation_key (encoding), ==, "Unicode (UTF-8)");
   g_assert_cmpint (ephy_encoding_get_language_groups (encoding), ==, LG_UNICODE);
 
   g_object_unref (encoding);
@@ -80,7 +80,7 @@ main (int   argc,
   int ret;
 
   gtk_test_init (&argc, &argv);
-  setlocale (LC_ALL, "");
+  setlocale (LC_ALL, "C.UTF-8");
 
   ephy_debug_init ();
 
