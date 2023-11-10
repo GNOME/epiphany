@@ -399,7 +399,7 @@ secret_password_store_cb (GObject               *source_object,
   secret_password_store_finish (result, &error);
   if (error) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-      g_warning ("Failed to store password record for (%s, %s, %s, %s, %s): %s",
+      g_warning ("Failed to store password record for (%s, %s, %s, %s, %s) (is the secret service or secrets portal broken?): %s",
                  origin,
                  ephy_password_record_get_target_origin (data->record),
                  username,
@@ -596,7 +596,7 @@ retrieve_secret_cb (GObject        *source_object,
   value = secret_retrievable_retrieve_secret_finish (retrievable, result, &error);
   if (!value) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Failed to retrieve password: %s", error->message);
+      g_warning ("Failed to retrieve password (is the secret service or secrets portal broken?): %s", error->message);
     g_error_free (error);
     goto out;
   }
@@ -658,7 +658,7 @@ secret_password_search_cb (GObject        *source_object,
   if (!matches) {
     if (error) {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning ("Failed to search secrets in password schema: %s", error->message);
+        g_warning ("Failed to search secret storage (is the secret service or secrets portal broken?): %s", error->message);
       g_error_free (error);
     }
     if (data->callback)
@@ -757,7 +757,7 @@ secret_password_clear_cb (GObject      *source_object,
     if (data && data->task)
       g_task_return_error (data->task, error);
     else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Failed to clear secrets from password schema: %s", error->message);
+      g_warning ("Failed to clear secrets (is the secret service or secrets portal broken?): %s", error->message);
     g_clear_pointer (&data, manage_record_async_data_free);
     return;
   }

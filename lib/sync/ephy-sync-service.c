@@ -1987,7 +1987,8 @@ store_secrets_cb (GObject         *source_object,
   if (error) {
     if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       return;
-    g_warning ("Failed to store sync secrets: %s", error->message);
+    g_warning ("Failed to store sync secrets (is the secret service or secrets portal broken?): %s", error->message);
+    g_prefix_error_literal (&error, _("Failed to store sync secrets (is the secret service or secrets portal broken?): "));
     ephy_sync_service_destroy_session (self, NULL);
     g_hash_table_remove_all (self->secrets);
   } else {
