@@ -45,7 +45,7 @@
 #include <libxml/xmlwriter.h>
 
 typedef struct {
-  EphyTabView *tab_view;
+  EphyTabView *tab_view; /* nullable, weak ref */
   gint ref_count;
 } TabViewTracker;
 
@@ -150,6 +150,8 @@ static TabViewTracker *
 tab_view_tracker_new (EphyTabView *tab_view)
 {
   TabViewTracker *tracker = g_new0 (TabViewTracker, 1);
+
+  g_assert (!tab_view || EPHY_IS_TAB_VIEW (tab_view));
 
   tracker->ref_count = 1;
   tab_view_tracker_set_tab_view (tracker, tab_view);
@@ -342,7 +344,14 @@ tab_view_page_detached_cb (AdwTabView  *tab_view,
                            EphySession *session)
 {
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
-  EphyTabView *ephy_tab_view = EPHY_GET_TAB_VIEW_FROM_ADW_TAB_VIEW (tab_view);
+  EphyTabView *ephy_tab_view;
+
+  g_assert (ADW_IS_TAB_VIEW (tab_view));
+  /* The EphyTabView will be NULL if closing the last tab of a window, which
+   * indicates the window is being destroyed. This is OK.
+   */
+  ephy_tab_view = EPHY_GET_TAB_VIEW_FROM_ADW_TAB_VIEW (tab_view);
+  g_assert (!ephy_tab_view || EPHY_IS_TAB_VIEW (ephy_tab_view));
 
   ephy_session_save (session);
 
