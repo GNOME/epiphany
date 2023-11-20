@@ -674,7 +674,7 @@ migrate_sync_device_info (void)
   if (!ephy_sync_utils_user_is_signed_in ())
     return;
 
-  /* Fetch the device info from the Firefox Accounts Server. */
+  /* Fetch the device info from the Mozilla Accounts Server. */
   device = ephy_sync_debug_get_current_device ();
   if (!device) {
     g_warning ("Failed to migrate sync device info. Sign in again to Sync "
@@ -687,7 +687,7 @@ migrate_sync_device_info (void)
   ephy_sync_debug_erase_record ("clients", prev_device_id);
   ephy_sync_debug_erase_record ("tabs", prev_device_id);
 
-  /* Use the device id and name assigned by the Firefox Accounts Server at sign in.
+  /* Use the device id and name assigned by the Mozilla Accounts Server at sign in.
    * The user can change later the device name in the Preferences dialog. */
   device_id = json_object_get_string_member (device, "id");
   ephy_sync_utils_set_device_id (device_id);

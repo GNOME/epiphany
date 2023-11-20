@@ -9,7 +9,7 @@
   browsers. The way it is designed ensures data security in such a manner that
   not even Mozilla can read the user data on the storage servers.
 
-  To synchronize data via Firefox Sync, users must own a Firefox account.
+  To synchronize data via Firefox Sync, users must own a Mozilla account.
 
   Behind the Scenes
   -----------------
@@ -54,15 +54,15 @@
   More exactly, since every BrowserID assertion requires a signed identity
   certificate, where do you get the certificate from?
 
-  The certificate is obtained from the Firefox Accounts Server [7][8], more
+  The certificate is obtained from the Mozilla Accounts Server [7][8], more
   specifically from the /certificate/sign endpoint. As you can see in the API,
   requests to this endpoint have to be Hawk-authenticated based on a so-called
   sessionToken (a 32 bytes token) that is obtained from the /account/login
   endpoint (this endpoint does not require Hawk authentication). Details about
-  how the email and the password of the user's Firefox account are stretched to
+  how the email and the password of the user's Mozilla account are stretched to
   obtain the request body of the login request can be found here [9], however it
-  is of no big interest since this is made automatically by the Firefox Accounts
-  Content Server [10] (how Epiphany uses the Firefox Accounts Content Server to
+  is of no big interest since this is made automatically by the Mozilla Accounts
+  Content Server [10] (how Epiphany uses the Mozilla Accounts Content Server to
   do the login will be explained later). What is important to know is how the
   sessionToken is derived to obtain the Hawk id and key that will be used to
   authenticate the request to the certificate endpoint. The process is explained
@@ -71,13 +71,13 @@
 
   To summarize, the steps of obtaining the storage credentials are:
 
-  1. Login with the Firefox account and obtain a sessionToken. This is a one
+  1. Login with the Mozilla account and obtain a sessionToken. This is a one
      time step since the sessionToken lasts forever until revoked by a password
      change or explicit revocation command (via the /session/destroy endpoint of
-     the Firefox Accounts Server) and can be used an unlimited number of times.
+     the Mozilla Accounts Server) and can be used an unlimited number of times.
 
   2. Based on the sessionToken, obtain a signed identity certificate from the
-     /certificate/sign endpoint of the Firefox Accounts Server. The certificate
+     /certificate/sign endpoint of the Mozilla Accounts Server. The certificate
      has a limited lifetime of 24 hours.
 
   3. Create the BrowserID assertion from the previously obtained certificate.
@@ -109,7 +109,7 @@
   different key bundle derived from the Sync Key or the Master Sync Key.
 
   The Master Sync Key is a 32 bytes token available only to sync clients and
-  is obtained from the Firefox Accounts Server via the /account/keys endpoint.
+  is obtained from the Mozilla Accounts Server via the /account/keys endpoint.
   This endpoint enforces the requests to be Hawk-authenticated based on a
   keyFetchToken. The keyFetchToken is also a 32 bytes token and is obtained at
   login along with the sessionToken. The process of deriving the keyFetchToken
@@ -130,7 +130,7 @@
   and keyFetchToken). The hashing algorithm used is SHA-256.
 
   Note that the Master Sync Key is an immutable token which is generated when
-  the Firefox account is created. Therefore, it should be considered a secret
+  the Mozilla account is created. Therefore, it should be considered a secret
   and not ever be displayed in plain text as it could lead to the account's
   data on the Sync Storage Server being compromised.
 
@@ -201,11 +201,11 @@
   --------------------------------------
 
   As mentioned in the previous chapters, a vital part of Firefox Sync is
-  signing in with the email and password of the Firefox account and obtaining
+  signing in with the email and password of the Mozilla account and obtaining
   a sessionToken, a keyFetchToken and an unwrapBKey that are further used to
   access data on the Sync Storage Server.
 
-  In Epiphany, users can sign in with an existing Firefox account or create
+  In Epiphany, users can sign in with an existing Mozilla account or create
   a new one via the Sync tab in the preferences dialog. After the sign in has
   completed successfully, users can customize their sync experience by choosing
   what collections to sync (bookmarks, history, password and open tabs), whether
@@ -213,13 +213,13 @@
 
   However, it is important to understand what happens behind the scenes when
   users sign in. The preferences dialog displays a Firefox iframe where users
-  type their email and password of their Firefox account and click Sign In.
-  The Firefox iframe is actually the web interface of the Firefox Accounts
-  Server, called the Firefox Accounts Content Server. This is the preferred
-  way of communicating sync related information from the Firefox Accounts
+  type their email and password of their Mozilla account and click Sign In.
+  The Firefox iframe is actually the web interface of the Mozilla Accounts
+  Server, called the Mozilla Accounts Content Server. This is the preferred
+  way of communicating sync related information from the Mozilla Accounts
   Server to Firefox Sync clients (the other way is by direct requests to the
-  login endpoint of the Firefox Accounts Server but that has been pretty much
-  restricted from public access). Communication with the Firefox Accounts
+  login endpoint of the Mozilla Accounts Server but that has been pretty much
+  restricted from public access). Communication with the Mozilla Accounts
   Content Server is made via the WebChannels flow [17] which is briefly
   described further.
 
@@ -233,7 +233,7 @@
   the preferences dialog will parse the message and respond with a
   WebChannelMessageToContent event through webkit_web_view_evaluate_javascript()
   if necessary. WebChannelMessageToContent events are messages that go from
-  the web browser to the Firefox Accounts Content Server.
+  the web browser to the Mozilla Accounts Content Server.
   Both WebChannelMessageToChrome and WebChannelMessageToContent events have a
   "detail" JSON object that has the following members: the id of the WebChannel
   and a "message" JSON object.
@@ -280,7 +280,7 @@
       version. The version is kept on the Sync Storage Server in the meta/global
       record [18]. This is a special record that is not encrypted and contains
       general information about the state of the Sync Storage Server. In case
-      the meta/global record is missing (this happens when the Firefox account
+      the meta/global record is missing (this happens when the Mozilla account
       is newly created), EphySyncService will generate and upload a new one.
 
     * It retrieves account's crypto keys from the Sync Storage Server. In case
@@ -312,7 +312,7 @@
   to operate mostly on its own so you probably won't have to deal with it in
   newly written code. EphySyncService handles all aspects of the communication
   with the Sync Storage Server (uploads and downloads records), Token Server
-  (gets the storage credentials) and Firefox Accounts Server (gets account keys,
+  (gets the storage credentials) and Mozilla Accounts Server (gets account keys,
   gets certificates, destroys the session). It also schedules and does
   periodical synchronizations via every collection's manager.
 
@@ -341,7 +341,7 @@
     * _register_device(). This function adds the current device with the given
       name to the clients collection on the Sync Storage Server. The clients
       collection is a special collection which stores data about the devices
-      connected to the Firefox account. It is worth mentioning that every device
+      connected to the Mozilla account. It is worth mentioning that every device
       is identified by a device id and a device name. The device id is randomly
       generated at login by EphySyncService and cannot be changed by users.
       The device name can be edited by users from the preferences dialog.

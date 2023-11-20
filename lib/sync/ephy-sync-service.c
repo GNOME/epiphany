@@ -1107,13 +1107,13 @@ get_signed_certificate_cb (SoupSession *session,
     goto out_no_error;
   }
 
-  /* Since a new Firefox Account password implies new tokens, this will fail
+  /* Since a new Mozilla Account password implies new tokens, this will fail
    * with an error code 110 (Invalid authentication token in request signature)
    * if the user has changed his password since the last time he signed in.
    * When this happens, notify the user to sign in with the new password.
    */
   if (json_object_get_int_member (json, "errno") == 110) {
-    message = _("The password of your Firefox account seems to have been changed.");
+    message = _("The password of your Mozilla account seems to have been changed.");
     suggestion = _("Please visit Firefox Sync and sign in with the new password to continue syncing.");
     ephy_sync_service_sign_out (self);
   }
@@ -1159,7 +1159,7 @@ ephy_sync_service_get_storage_credentials (EphySyncService *self)
 
   /* To get the storage credentials from the Token Server, we need to create a
    * BrowserID assertion. For that we need to obtain an identity certificate
-   * signed by the Firefox Accounts Server.
+   * signed by the Mozilla Accounts Server.
    */
 
   /* Generate a new RSA key pair to sign the new certificate. */
@@ -2551,7 +2551,7 @@ verify_storage_version_cb (SoupSession *session,
   storage_version = json_object_get_int_member (json, "storageVersion");
   if (storage_version != EPHY_SYNC_STORAGE_VERSION) {
     /* Translators: the %d is the storage version, the \n is a newline character. */
-    message = g_strdup_printf (_("Your Firefox Account uses storage version %d. "
+    message = g_strdup_printf (_("Your Mozilla account uses storage version %d. "
                                  "Web only supports version %d."),
                                EPHY_SYNC_STORAGE_VERSION,
                                storage_version);
@@ -2763,7 +2763,7 @@ get_account_keys_cb (SoupSession *session,
     goto out_no_error;
   }
 
-  /* If account is not verified, poll the Firefox Accounts Server
+  /* If account is not verified, poll the Mozilla Accounts Server
    * until the verification has completed.
    */
   if (json_object_get_int_member (json, "errno") == 104) {

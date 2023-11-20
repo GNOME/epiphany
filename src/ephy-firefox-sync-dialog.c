@@ -541,7 +541,7 @@ on_sync_sign_out_button_clicked (GtkWidget             *button,
 
   ephy_sync_service_sign_out (service);
 
-  /* Show Firefox Accounts iframe. */
+  /* Show Mozilla Accounts iframe. */
   sync_setup_firefox_iframe (sync_dialog);
   gtk_widget_set_visible (sync_dialog->sync_now_button, FALSE);
   gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, FALSE);
