@@ -1829,11 +1829,13 @@ ephy_sync_service_sync_internal (EphySyncService *self)
 
   monitor = g_network_monitor_get_default ();
   if (g_network_monitor_get_connectivity (monitor) != G_NETWORK_CONNECTIVITY_FULL) {
+    LOG ("Not syncing because connectivity is not full");
     g_signal_emit (self, signals[SYNC_FINISHED], 0);
     return G_SOURCE_CONTINUE;
   }
 
   if (!self->managers) {
+    LOG ("Not syncing because no sync managers are registered");
     g_signal_emit (self, signals[SYNC_FINISHED], 0);
     return G_SOURCE_CONTINUE;
   }
