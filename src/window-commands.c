@@ -982,9 +982,12 @@ window_cmd_show_help (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
 {
-  g_autoptr (GtkUriLauncher) launcher = gtk_uri_launcher_new ("help:epiphany");
-
-  gtk_uri_launcher_launch (launcher, GTK_WINDOW (user_data), NULL, NULL, NULL);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  /* https://gitlab.gnome.org/GNOME/gtk/-/issues/6135 */
+  gtk_show_uri (GTK_WINDOW (user_data),
+                "help:epiphany",
+                GDK_CURRENT_TIME);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 #define ABOUT_GROUP "About"
