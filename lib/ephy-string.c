@@ -109,7 +109,7 @@ ephy_string_shorten (char  *str,
   /* if the string is already short enough, or if it's too short for
    * us to shorten it, return a new copy */
   if ((gsize)actual_length <= target_length)
-    return str;
+    return g_strdup (str);
 
   /* create string */
   bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
