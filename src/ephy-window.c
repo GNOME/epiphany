@@ -1472,6 +1472,7 @@ populate_context_menu (WebKitWebView       *web_view,
   gboolean is_media = FALSE;
   gboolean is_downloadable_video = FALSE;
   gboolean is_downloadable_audio = FALSE;
+  gboolean is_selected_text = FALSE;
   gboolean can_search_selection = FALSE;
   gboolean can_open_selection = FALSE;
   char *search_selection_action_name = NULL;
@@ -1528,6 +1529,8 @@ populate_context_menu (WebKitWebView       *web_view,
 
   parse_context_menu_user_data (context_menu, &selected_text);
   if (selected_text && *selected_text) {
+    is_selected_text = TRUE;
+
     if (g_uri_is_valid (selected_text, G_URI_FLAGS_PARSE_RELAXED, NULL)) {
       GVariant *value;
 
@@ -1672,7 +1675,7 @@ populate_context_menu (WebKitWebView       *web_view,
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
 
-    if (!is_image && !is_media) {
+    if (!is_selected_text && !is_image && !is_media) {
       add_action_to_context_menu (context_menu, toolbar_action_group,
                                   "navigation-back", window);
       add_action_to_context_menu (context_menu, toolbar_action_group,
