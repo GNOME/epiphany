@@ -46,7 +46,7 @@
 #define NUM_FETCH_LIMIT 15
 
 struct _EphyHistoryDialog {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   EphySnapshotService *snapshot_service;
   EphyHistoryService *history_service;
@@ -90,7 +90,7 @@ struct _EphyHistoryDialog {
   gboolean has_search_results;
 };
 
-G_DEFINE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_DIALOG)
 
 enum {
   PROP_0,

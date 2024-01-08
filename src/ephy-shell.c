@@ -913,10 +913,7 @@ ephy_shell_dispose (GObject *object)
 
   LOG ("EphyShell disposing");
 
-  if (shell->history_dialog) {
-    gtk_window_destroy (GTK_WINDOW (shell->history_dialog));
-    shell->history_dialog = NULL;
-  }
+  g_clear_weak_pointer (&shell->history_dialog);
 
   g_clear_object (&shell->session);
   g_clear_object (&shell->lockdown);
@@ -1266,11 +1263,8 @@ ephy_shell_get_history_dialog (EphyShell *shell)
 
   if (shell->history_dialog == NULL) {
     service = ephy_embed_shell_get_global_history_service (embed_shell);
-    shell->history_dialog = ephy_history_dialog_new (service);
-    g_signal_connect (shell->history_dialog,
-                      "destroy",
-                      G_CALLBACK (window_destroyed),
-                      &shell->history_dialog);
+    g_set_weak_pointer (&shell->history_dialog,
+                        ephy_history_dialog_new (service));
   }
 
   return shell->history_dialog;

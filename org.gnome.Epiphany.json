@@ -49,6 +49,30 @@
             ]
         },
         {
+            "name": "libsass",
+            "buildsystem" : "meson",
+            "cleanup": [ "*" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url" : "https://github.com/lazka/libsass.git",
+                    "branch" : "meson"
+                }
+            ]
+        },
+        {
+            "name": "sassc",
+            "buildsystem" : "meson",
+            "cleanup": [ "*" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url" : "https://github.com/lazka/sassc.git",
+                    "branch" : "meson"
+                }
+            ]
+        },
+        {
             "name": "elementary-stylesheet",
             "buildsystem": "meson",
             "sources": [
@@ -56,33 +80,16 @@
                     "type": "git",
                     "url": "https://github.com/elementary/stylesheet.git"
                 }
-            ],
-            "modules": [
+            ]
+        },
+        {
+            "name": "libadwaita",
+            "buildsystem": "meson",
+            "sources": [
                 {
-                    "name": "sassc",
-                    "buildsystem" : "meson",
-                    "cleanup": [ "*" ],
-                    "sources": [
-                        {
-                            "type": "git",
-                            "url" : "https://github.com/lazka/sassc.git",
-                            "branch" : "meson"
-                        }
-                    ],
-                    "modules": [
-                        {
-                            "name": "libsass",
-                            "buildsystem" : "meson",
-                            "cleanup": [ "*" ],
-                            "sources": [
-                                {
-                                    "type": "git",
-                                    "url" : "https://github.com/lazka/libsass.git",
-                                    "branch" : "meson"
-                                }
-                            ]
-                        }
-                    ]
+                    "type": "git",
+                    "url": "https://gitlab.gnome.org/GNOME/libadwaita.git",
+                    "branch": "wip/alice/bottom-sheets"
                 }
             ]
         },

@@ -2,11 +2,9 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
-  <template class="EphyHistoryDialog" parent="AdwWindow">
-    <property name="modal">True</property>
-    <property name="default-width">640</property>
-    <property name="default-height">580</property>
-    <property name="destroy-with_parent">True</property>
+  <template class="EphyHistoryDialog" parent="AdwDialog">
+    <property name="content-width">640</property>
+    <property name="content-height">580</property>
     <property name="title" translatable="yes">History</property>
     <child>
       <object class="AdwToolbarView">

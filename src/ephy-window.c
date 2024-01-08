@@ -642,6 +642,9 @@ handle_key_cb (EphyWindow            *window,
 static gboolean
 ephy_window_close_request (GtkWindow *window)
 {
+  if (GTK_WINDOW_CLASS (ephy_window_parent_class)->close_request (window))
+    return TRUE;
+
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) && g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
     gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
     return TRUE;
