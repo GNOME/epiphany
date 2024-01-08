@@ -208,7 +208,7 @@ APIs:
 
 ### Contexts
 
-Extensions generally have content running in their own private pages. That is pages under the `eph-webextension:` URL.
+Extensions generally have content running in their own private pages. That is pages under the `ephy-webextension:` URL scheme.
 These pages have full access to the WebExtension API available in the default JavaScriptWorld.
 
 Extensions can also inject [Content Scripts](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts)
