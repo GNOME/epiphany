@@ -244,22 +244,21 @@ impl_set_active_child (EphyEmbedContainer *container,
 }
 
 static GtkWidget *
-construct_confirm_close_dialog (EphyWindow *window,
-                                const char *title,
+construct_confirm_close_dialog (const char *title,
                                 const char *info,
                                 const char *action)
 {
   GtkWidget *dialog;
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (window), title, info);
+  dialog = adw_message_dialog2_new (title, info);
 
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_add_responses (ADW_MESSAGE_DIALOG2 (dialog),
                                     "cancel", _("_Cancel"),
                                     "accept", action,
                                     NULL);
 
-  adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_set_close_response (ADW_MESSAGE_DIALOG2 (dialog), "cancel");
+  adw_message_dialog2_set_response_appearance (ADW_MESSAGE_DIALOG2 (dialog),
                                               "accept",
                                               ADW_RESPONSE_DESTRUCTIVE);
 
@@ -2681,7 +2680,7 @@ set_permission (EphyPermissionPopover *popover,
 }
 
 static void
-on_permission_allow (AdwMessageDialog      *self,
+on_permission_allow (AdwMessageDialog2      *self,
                      char                  *response,
                      EphyPermissionPopover *popover)
 {
@@ -2690,7 +2689,7 @@ on_permission_allow (AdwMessageDialog      *self,
 }
 
 static void
-on_permission_deny (AdwMessageDialog      *self,
+on_permission_deny (AdwMessageDialog2      *self,
                     char                  *response,
                     EphyPermissionPopover *popover)
 {
@@ -2734,29 +2733,29 @@ permission_requested_cb (EphyWebView             *view,
 
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
       (window->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
-    AdwMessageDialog *dialog;
+    AdwMessageDialog2 *dialog;
     g_autofree char *title = NULL;
     g_autofree char *message = NULL;
 
     ephy_permission_popover_get_text (popover, &title, &message);
-    dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), title, message));
+    dialog = ADW_MESSAGE_DIALOG2 (adw_message_dialog2_new (title, message));
 
-    adw_message_dialog_add_responses (dialog,
+    adw_message_dialog2_add_responses (dialog,
                                       "close", _("_Ask Later"),
                                       "deny", _("_Deny"),
                                       "allow", _("_Allow"),
                                       NULL);
 
-    adw_message_dialog_set_body_use_markup (dialog, TRUE);
-    adw_message_dialog_set_response_appearance (dialog, "deny", ADW_RESPONSE_DESTRUCTIVE);
-    adw_message_dialog_set_response_appearance (dialog, "allow", ADW_RESPONSE_SUGGESTED);
-    adw_message_dialog_set_default_response (dialog, "close");
-    adw_message_dialog_set_close_response (dialog, "close");
+    adw_message_dialog2_set_body_use_markup (dialog, TRUE);
+    adw_message_dialog2_set_response_appearance (dialog, "deny", ADW_RESPONSE_DESTRUCTIVE);
+    adw_message_dialog2_set_response_appearance (dialog, "allow", ADW_RESPONSE_SUGGESTED);
+    adw_message_dialog2_set_default_response (dialog, "close");
+    adw_message_dialog2_set_close_response (dialog, "close");
 
     g_signal_connect (dialog, "response::allow", G_CALLBACK (on_permission_allow), popover);
     g_signal_connect (dialog, "response::deny", G_CALLBACK (on_permission_deny), popover);
 
-    gtk_window_present (GTK_WINDOW (dialog));
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
   } else {
     EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
     EphyLocationEntry *lentry;
@@ -2905,7 +2904,7 @@ tab_has_modified_forms_data_free (TabHasModifiedFormsData *data)
 }
 
 static void
-tab_has_modified_forms_dialog_cb (AdwMessageDialog        *dialog,
+tab_has_modified_forms_dialog_cb (AdwMessageDialog2        *dialog,
                                   const char              *response,
                                   TabHasModifiedFormsData *data)
 {
@@ -2945,15 +2944,14 @@ tab_has_modified_forms_cb (EphyWebView             *view,
     } else {
       GtkWidget *dialog;
 
-      dialog = construct_confirm_close_dialog (data->window,
-                                               _("Leave Website?"),
+      dialog = construct_confirm_close_dialog (_("Leave Website?"),
                                                _("A form was modified and has not been submitted"),
                                                _("_Discard Form"));
 
       g_signal_connect (dialog, "response",
                         G_CALLBACK (tab_has_modified_forms_dialog_cb),
                         data);
-      gtk_window_present (GTK_WINDOW (dialog));
+      adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (data->window));
 
       return;
     }
@@ -3210,29 +3208,29 @@ ignore_default_browser (void)
 static void
 add_default_browser_question (EphyWindow *window)
 {
-  AdwMessageDialog *dialog;
+  AdwMessageDialog2 *dialog;
 
-  dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), NULL, NULL));
+  dialog = ADW_MESSAGE_DIALOG2 (adw_message_dialog2_new (NULL, NULL));
 
-  adw_message_dialog_set_heading (dialog, _("Set as Default Browser?"));
+  adw_message_dialog2_set_heading (dialog, _("Set as Default Browser?"));
 #if !TECH_PREVIEW
-  adw_message_dialog_set_body (dialog, _("Use Web as your default web browser and for opening external links"));
+  adw_message_dialog2_set_body (dialog, _("Use Web as your default web browser and for opening external links"));
 #else
-  adw_message_dialog_set_body (dialog, _("Use Epiphany Technology Preview as your default web browser and for opening external links"));
+  adw_message_dialog2_set_body (dialog, _("Use Epiphany Technology Preview as your default web browser and for opening external links"));
 #endif
 
-  adw_message_dialog_add_responses (dialog,
+  adw_message_dialog2_add_responses (dialog,
                                     "close", _("_Ask Again Later"),
                                     "no", _("_No"),
                                     "yes", _("_Yes"),
                                     NULL);
-  adw_message_dialog_set_response_appearance (dialog, "no", ADW_RESPONSE_DESTRUCTIVE);
-  adw_message_dialog_set_response_appearance (dialog, "yes", ADW_RESPONSE_SUGGESTED);
+  adw_message_dialog2_set_response_appearance (dialog, "no", ADW_RESPONSE_DESTRUCTIVE);
+  adw_message_dialog2_set_response_appearance (dialog, "yes", ADW_RESPONSE_SUGGESTED);
 
   g_signal_connect (dialog, "response::yes", G_CALLBACK (set_as_default_browser), NULL);
   g_signal_connect (dialog, "response::no", G_CALLBACK (ignore_default_browser), NULL);
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
 }
 
 static gboolean
@@ -3629,7 +3627,7 @@ on_password_entry_changed (GtkEditable             *entry,
 }
 
 static void
-on_password_never (AdwMessageDialog        *dialog,
+on_password_never (AdwMessageDialog2        *dialog,
                    const char              *response,
                    EphyPasswordRequestData *request_data)
 {
@@ -3643,7 +3641,7 @@ on_password_never (AdwMessageDialog        *dialog,
 }
 
 static void
-on_password_save (AdwMessageDialog        *dialog,
+on_password_save (AdwMessageDialog2        *dialog,
                   const char              *response,
                   EphyPasswordRequestData *request_data)
 {
@@ -3671,25 +3669,25 @@ save_password_cb (EphyEmbedShell          *shell,
 
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
       (EPHY_WINDOW (window)->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
-    AdwMessageDialog *dialog;
+    AdwMessageDialog2 *dialog;
     GtkBox *entry_box;
     GtkWidget *password_entry;
 
-    dialog = ADW_MESSAGE_DIALOG (adw_message_dialog_new (GTK_WINDOW (window), _("Save password?"),
+    dialog = ADW_MESSAGE_DIALOG2 (adw_message_dialog2_new (_("Save password?"),
                                                          _("Passwords can be removed at any time in Preferences")));
-    adw_message_dialog_add_responses (dialog,
+    adw_message_dialog2_add_responses (dialog,
                                       "close", _("Not Now"),
                                       "never", _("Never Save"),
                                       "save", _("Save"),
                                       NULL);
 
-    adw_message_dialog_set_response_appearance (dialog, "never", ADW_RESPONSE_DESTRUCTIVE);
-    adw_message_dialog_set_response_appearance (dialog, "save", ADW_RESPONSE_SUGGESTED);
-    adw_message_dialog_set_default_response (dialog, "close");
-    adw_message_dialog_set_close_response (dialog, "close");
+    adw_message_dialog2_set_response_appearance (dialog, "never", ADW_RESPONSE_DESTRUCTIVE);
+    adw_message_dialog2_set_response_appearance (dialog, "save", ADW_RESPONSE_SUGGESTED);
+    adw_message_dialog2_set_default_response (dialog, "close");
+    adw_message_dialog2_set_close_response (dialog, "close");
 
     entry_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 6));
-    adw_message_dialog_set_extra_child (dialog, GTK_WIDGET (entry_box));
+    adw_message_dialog2_set_extra_child (dialog, GTK_WIDGET (entry_box));
 
     if (request_data->username) {
       GtkWidget *username_entry = gtk_entry_new ();
@@ -3707,7 +3705,7 @@ save_password_cb (EphyEmbedShell          *shell,
     g_signal_connect (dialog, "response::save", G_CALLBACK (on_password_save), request_data);
     g_signal_connect (dialog, "response::never", G_CALLBACK (on_password_never), request_data);
 
-    gtk_window_present (GTK_WINDOW (dialog));
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
   } else {
     EphyPasswordPopover *popover = ephy_password_popover_new (request_data);
     EphyWebView *view = ephy_shell_get_active_web_view (EPHY_SHELL (shell));
@@ -4365,7 +4363,7 @@ static void
 finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
 {
   /* Need to schedule future destruction of the EphyWindow to ensure its child
-   * AdwMessageDialog that's displaying the close confirmation warning gets
+   * AdwMessageDialog2 that's displaying the close confirmation warning gets
    * destroyed first.
    */
   g_idle_add_once ((GSourceOnceFunc)force_close_window_cb, data->window);
@@ -4385,8 +4383,7 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
     impl_set_active_child (EPHY_EMBED_CONTAINER (data->window),
                            data->modified_embed);
 
-    dialog = construct_confirm_close_dialog (data->window,
-                                             _("Leave Website?"),
+    dialog = construct_confirm_close_dialog (_("Leave Website?"),
                                              _("A form was modified and has not been submitted"),
                                              _("_Discard Form"));
     g_signal_connect_swapped (dialog, "response::accept",
@@ -4395,7 +4392,7 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
     g_signal_connect_swapped (dialog, "response::cancel",
                               G_CALLBACK (window_has_modified_forms_data_free),
                               data);
-    gtk_window_present (GTK_WINDOW (dialog));
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (data->window));
 
     return;
   }
@@ -4516,15 +4513,14 @@ ephy_window_close (EphyWindow *window)
       !window->confirmed_close_with_multiple_tabs) {
     GtkWidget *dialog;
 
-    dialog = construct_confirm_close_dialog (window,
-                                             _("Close Multiple Tabs?"),
+    dialog = construct_confirm_close_dialog (_("Close Multiple Tabs?"),
                                              _("If this window is closed, all open tabs will be lost"),
                                              _("C_lose Tabs"));
 
     g_signal_connect_swapped (dialog, "response::accept",
                               G_CALLBACK (window_close_with_multiple_tabs_cb),
                               window);
-    gtk_window_present (GTK_WINDOW (dialog));
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
 
     /* stop window close */
     return FALSE;

@@ -563,16 +563,15 @@ confirmation_dialog_construct (EphyHistoryDialog *self)
 {
   GtkWidget *dialog;
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (self),
-                                   _("Clear Browsing History?"),
+  dialog = adw_message_dialog2_new (_("Clear Browsing History?"),
                                    _("Clearing the browsing history will cause all"
                                      " history links to be permanently deleted."));
 
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_add_responses (ADW_MESSAGE_DIALOG2 (dialog),
                                     "cancel", _("_Cancel"),
                                     "clear", _("Cl_ear"),
                                     NULL);
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_set_response_appearance (ADW_MESSAGE_DIALOG2 (dialog),
                                               "clear",
                                               ADW_RESPONSE_DESTRUCTIVE);
 
@@ -802,7 +801,7 @@ on_clear_all_button_clicked (GtkButton         *button,
                                (gpointer *)confirmation_dialog);
   }
 
-  gtk_widget_set_visible (self->confirmation_dialog, TRUE);
+  adw_dialog_present (ADW_DIALOG (self->confirmation_dialog), GTK_WIDGET (self));
 }
 
 static void

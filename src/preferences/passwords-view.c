@@ -171,19 +171,15 @@ static GtkWidget *
 confirmation_dialog_construct (EphyPasswordsView *self)
 {
   GtkWidget *dialog;
-  GtkRoot *window;
 
-  window = gtk_widget_get_root (GTK_WIDGET (self));
+  dialog = adw_message_dialog2_new (_("Delete All Passwords?"),
+                                    _("This will clear all locally stored passwords, and can not be undone."));
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (window),
-                                   _("Delete All Passwords?"),
-                                   _("This will clear all locally stored passwords, and can not be undone."));
-
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_add_responses (ADW_MESSAGE_DIALOG2 (dialog),
                                     "cancel", _("_Cancel"),
                                     "delete", _("_Delete"),
                                     NULL);
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_set_response_appearance (ADW_MESSAGE_DIALOG2 (dialog),
                                               "delete",
                                               ADW_RESPONSE_DESTRUCTIVE);
 
@@ -210,7 +206,8 @@ forget_all (GSimpleAction *action,
                                (gpointer *)confirmation_dialog);
   }
 
-  gtk_widget_set_visible (self->confirmation_dialog, TRUE);
+  adw_dialog_present (ADW_DIALOG (self->confirmation_dialog),
+                      GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self))));
 }
 
 static void

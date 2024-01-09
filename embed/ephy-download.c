@@ -648,7 +648,7 @@ suggested_filename_data_free (SuggestedFilenameData *data)
 }
 
 static void
-filename_suggested_dialog_cb (AdwMessageDialog      *dialog,
+filename_suggested_dialog_cb (AdwMessageDialog2      *dialog,
                               const char            *response,
                               SuggestedFilenameData *data)
 {
@@ -755,10 +755,9 @@ open_download_confirmation_dialog (EphyDownload *download,
   application = G_APPLICATION (ephy_embed_shell_get_default ());
   toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (toplevel),
-                                   _("Download Requested"),
+  dialog = adw_message_dialog2_new (_("Download Requested"),
                                    NULL);
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+  adw_message_dialog2_add_responses (ADW_MESSAGE_DIALOG2 (dialog),
                                     "cancel", _("_Cancel"),
                                     "download", _("_Download"),
                                     NULL);
@@ -769,7 +768,7 @@ open_download_confirmation_dialog (EphyDownload *download,
   grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
   gtk_widget_set_margin_top (grid, 6);
-  adw_message_dialog_set_extra_child (ADW_MESSAGE_DIALOG (dialog), grid);
+  adw_message_dialog2_set_extra_child (ADW_MESSAGE_DIALOG2 (dialog), grid);
 
   content_length = g_format_size (webkit_uri_response_get_content_length (response));
   content_type = ephy_download_get_content_type (download);
@@ -845,7 +844,7 @@ open_download_confirmation_dialog (EphyDownload *download,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (filename_suggested_dialog_cb), data);
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (toplevel));
 }
 
 static void
