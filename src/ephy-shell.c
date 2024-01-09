@@ -914,6 +914,7 @@ ephy_shell_dispose (GObject *object)
   LOG ("EphyShell disposing");
 
   g_clear_weak_pointer (&shell->history_dialog);
+  g_clear_weak_pointer (&shell->firefox_sync_dialog);
 
   g_clear_object (&shell->session);
   g_clear_object (&shell->lockdown);
@@ -1240,14 +1241,6 @@ ephy_shell_get_net_monitor (EphyShell *shell)
   return shell->network_monitor;
 }
 
-static void
-window_destroyed (GtkWidget  *widget,
-                  GtkWidget **widget_pointer)
-{
-  if (widget_pointer)
-    *widget_pointer = NULL;
-}
-
 /**
  * ephy_shell_get_history_dialog:
  *
@@ -1279,11 +1272,8 @@ GtkWidget *
 ephy_shell_get_firefox_sync_dialog (EphyShell *shell)
 {
   if (shell->firefox_sync_dialog == NULL) {
-    shell->firefox_sync_dialog = ephy_firefox_sync_dialog_new ();
-    g_signal_connect (shell->firefox_sync_dialog,
-                      "destroy",
-                      G_CALLBACK (window_destroyed),
-                      &shell->firefox_sync_dialog);
+    g_set_weak_pointer (&shell->firefox_sync_dialog,
+                        ephy_firefox_sync_dialog_new ());
   }
 
   return shell->firefox_sync_dialog;

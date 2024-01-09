@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <template class="EphyFirefoxSyncDialog" parent="AdwWindow">
-    <property name="modal">False</property>
-    <property name="default-width">640</property>
-    <property name="default-height">800</property>
-    <property name="destroy-with-parent">True</property>
+  <template class="EphyFirefoxSyncDialog" parent="AdwDialog">
+    <property name="content-width">640</property>
+    <property name="content-height">580</property>
     <property name="title" translatable="yes">Firefox Sync</property>
-    <property name="content">
+    <property name="child">
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar">

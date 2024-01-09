@@ -67,7 +67,7 @@ ephy_sync_frequency_new (guint frequency)
 }
 
 struct _EphyFirefoxSyncDialog {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   GtkWidget *sync_page_group;
   GtkWidget *sync_firefox_iframe_box;
@@ -92,7 +92,7 @@ struct _EphyFirefoxSyncDialog {
   WebKitUserScript *fxa_script;
 };
 
-G_DEFINE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, ADW_TYPE_DIALOG)
 
 static const guint sync_frequency_minutes[] = { 5, 15, 30, 60 };
 
