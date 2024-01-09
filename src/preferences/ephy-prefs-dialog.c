@@ -37,16 +37,16 @@
 #include "prefs-extensions-page.h"
 
 struct _EphyPrefsDialog {
-  AdwPreferencesWindow parent_instance;
+  AdwPreferencesDialog parent_instance;
 
   PrefsGeneralPage *general_page;
   GtkWidget *extensions_page;
 };
 
-G_DEFINE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_DIALOG)
 
-static gboolean
-on_close_request (EphyPrefsDialog *prefs_dialog)
+static void
+on_closed (EphyPrefsDialog *prefs_dialog)
 {
   prefs_general_page_on_pd_close_request (prefs_dialog->general_page);
 
@@ -54,8 +54,6 @@ on_close_request (EphyPrefsDialog *prefs_dialog)
    * list row's entries, only save when closing the prefs dialog.
    */
   ephy_search_engine_manager_save_to_settings (ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ()));
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -64,7 +62,7 @@ on_passwords_row_activated (GtkWidget       *privacy_page,
 {
   AdwNavigationPage *page = g_object_new (EPHY_TYPE_PASSWORDS_VIEW, NULL);
 
-  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog), page);
+  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), page);
 }
 
 static void
@@ -73,7 +71,7 @@ on_clear_data_row_activated (GtkWidget       *privacy_page,
 {
   AdwNavigationPage *page = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
 
-  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog), page);
+  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), page);
 }
 
 static void
@@ -83,7 +81,7 @@ on_extension_row_activated (GtkWidget        *extensions_page,
 {
   AdwNavigationPage *page = ADW_NAVIGATION_PAGE (ephy_extension_view_new (extension));
 
-  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (prefs_dialog), page);
+  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), page);
 }
 
 static void
@@ -96,10 +94,10 @@ sync_extensions (EphyPrefsDialog *self)
   if (enable_extensions && !self->extensions_page) {
     self->extensions_page = g_object_new (EPHY_TYPE_PREFS_EXTENSIONS_PAGE, NULL);
     g_signal_connect (self->extensions_page, "extension-row-activated", G_CALLBACK (on_extension_row_activated), self);
-    adw_preferences_window_add (ADW_PREFERENCES_WINDOW (self),
+    adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (self),
                                 ADW_PREFERENCES_PAGE (self->extensions_page));
   } else if (self->extensions_page) {
-    adw_preferences_window_remove (ADW_PREFERENCES_WINDOW (self),
+    adw_preferences_dialog_remove (ADW_PREFERENCES_DIALOG (self),
                                    ADW_PREFERENCES_PAGE (self->extensions_page));
     g_clear_weak_pointer (&self->extensions_page);
   }
@@ -116,7 +114,7 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrefsDialog, general_page);
 
   /* Template file callbacks */
-  gtk_widget_class_bind_template_callback (widget_class, on_close_request);
+  gtk_widget_class_bind_template_callback (widget_class, on_closed);
   gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }
@@ -125,7 +123,6 @@ static void
 ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
 {
   gtk_widget_init_template (GTK_WIDGET (dialog));
-  gtk_window_set_icon_name (GTK_WINDOW (dialog), APPLICATION_ID);
 
   sync_extensions (dialog);
   g_signal_connect_object (EPHY_SETTINGS_WEB,
