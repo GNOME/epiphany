@@ -37,7 +37,7 @@
 #include <webkit/webkit.h>
 
 struct _EphyEncodingDialog {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   EphyEncodings *encodings;
   EphyWindow *window;
@@ -70,7 +70,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, ADW_TYPE_DIALOG)
 
 static void
 select_encoding_row (GtkListBox   *list_box,
