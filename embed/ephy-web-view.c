@@ -23,6 +23,7 @@
 #include "ephy-web-view.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-client-certificate-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -127,6 +128,8 @@ struct _EphyWebView {
   GtkWindow *unresponsive_process_dialog;
 
   guint64 uid;
+
+  EphyClientCertificateManager *client_certificate_manager;
 };
 
 enum {
@@ -1463,6 +1466,7 @@ load_changed_cb (WebKitWebView   *web_view,
       if (!ephy_embed_utils_is_no_show_address (view->address))
         view->reader_js_timeout = g_idle_add_once (run_readability_js_if_needed, web_view);
 
+      g_clear_pointer (&view->client_certificate_manager, ephy_client_certificate_manager_free);
       break;
 
     default:
@@ -2335,6 +2339,21 @@ authenticate_cb (WebKitWebView               *web_view,
   AuthenticationData *data;
   g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
   g_autofree char *origin = NULL;
+
+  if (!webkit_authentication_request_is_retry (request)) {
+    WebKitAuthenticationScheme scheme = webkit_authentication_request_get_scheme (request);
+
+    if (scheme == WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED) {
+      g_clear_pointer (&ephy_web_view->client_certificate_manager, ephy_client_certificate_manager_free);
+      ephy_web_view->client_certificate_manager = ephy_client_certificate_manager_request_certificate (web_view, request);
+      return TRUE;
+    } else if (scheme == WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_PIN_REQUESTED) {
+      g_assert (ephy_web_view->client_certificate_manager);
+      ephy_client_certificate_manager_request_certificate_pin (ephy_web_view->client_certificate_manager, web_view, request);
+      g_clear_pointer (&ephy_web_view->client_certificate_manager, ephy_client_certificate_manager_free);
+      return TRUE;
+    }
+  }
 
   if (webkit_authentication_request_is_retry (request)) {
     webkit_authentication_request_set_can_save_credentials (request, TRUE);
@@ -3555,6 +3574,8 @@ ephy_web_view_dispose (GObject *object)
   g_clear_handle_id (&view->snapshot_timeout_id, g_source_remove);
   g_clear_handle_id (&view->reader_js_timeout, g_source_remove);
   g_clear_handle_id (&view->unresponsive_process_timeout_id, g_source_remove);
+
+  g_clear_pointer (&view->client_certificate_manager, ephy_client_certificate_manager_free);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
