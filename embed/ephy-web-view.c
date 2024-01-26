@@ -1472,39 +1472,6 @@ load_changed_cb (WebKitWebView   *web_view,
   g_object_thaw_notify (object);
 }
 
-/**
- * ephy_web_view_set_placeholder:
- * @view: an #EphyWebView
- * @uri: uri that will eventually be loaded
- * @title: last-known title of the page that will eventually be loaded
- *
- * Makes the #EphyWebView pretend a page that will eventually be loaded is
- * already there.
- *
- **/
-void
-ephy_web_view_set_placeholder (EphyWebView *view,
-                               const char  *uri,
-                               const char  *title)
-{
-  char *html;
-
-  g_assert (EPHY_IS_WEB_VIEW (view));
-
-  /* We want only the actual load to be the one recorded in history, but
-   * doing a load here is the simplest way to replace the loading
-   * spinner with the favicon. */
-  ephy_web_view_freeze_history (view);
-
-  html = g_markup_printf_escaped ("<head><title>%s</title></head>", title);
-
-  webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html, uri, NULL);
-
-  g_free (html);
-
-  ephy_web_view_set_address (view, uri);
-}
-
 static char *
 get_style_sheet (void)
 {
@@ -4062,3 +4029,4 @@ ephy_web_view_get_web_app_manifest_url_finish (EphyWebView   *view,
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
+

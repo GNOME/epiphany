@@ -1021,6 +1021,14 @@ show_notification_cb (WebKitWebView      *web_view,
   return FALSE;
 }
 
+static void
+web_view_created_cb (EphyEmbed   *embed,
+                     EphyWebView *view,
+                     EphyShell   *shell)
+{
+  g_signal_connect (view, "show-notification", G_CALLBACK (show_notification_cb), NULL);
+}
+
 /**
  * ephy_shell_new_tab_full:
  * @shell: a #EphyShell
@@ -1043,7 +1051,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
                          guint32          user_time)
 {
   EphyEmbedShell *embed_shell;
-  GtkWidget *web_view;
+  GtkWidget *web_view = NULL;
   EphyEmbed *embed = NULL;
   gboolean jump_to = FALSE;
   int position = -1;
@@ -1076,10 +1084,6 @@ ephy_shell_new_tab_full (EphyShell       *shell,
 
   if (related_view)
     web_view = ephy_web_view_new_with_related_view (related_view);
-  else
-    web_view = ephy_web_view_new ();
-
-  g_signal_connect (web_view, "show-notification", G_CALLBACK (show_notification_cb), NULL);
 
   embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED,
                                     "web-view", web_view,
@@ -1087,6 +1091,11 @@ ephy_shell_new_tab_full (EphyShell       *shell,
                                     "progress-bar-enabled", ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION,
                                     NULL));
   ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, parent, position, jump_to);
+
+  if (related_view)
+    g_signal_connect (web_view, "show-notification", G_CALLBACK (show_notification_cb), NULL);
+  else
+    g_signal_connect (embed, "web-view-created", G_CALLBACK (web_view_created_cb), shell);
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {

@@ -2312,7 +2312,7 @@ load_changed_cb (EphyWebView     *view,
 }
 
 static void
-ephy_window_connect_active_embed (EphyWindow *window)
+do_connect_active_embed (EphyWindow *window)
 {
   EphyEmbed *embed;
   WebKitWebView *web_view;
@@ -2402,6 +2402,34 @@ ephy_window_connect_active_embed (EphyWindow *window)
   ephy_mouse_gesture_controller_set_web_view (window->mouse_gesture_controller, web_view);
 
   g_object_notify (G_OBJECT (window), "active-child");
+}
+
+static void
+connect_active_embed_view_created_cb (EphyEmbed   *embed,
+                                      EphyWebView *view,
+                                      EphyWindow  *window)
+{
+  if (window->active_embed != embed)
+    return;
+
+  do_connect_active_embed (window);
+}
+
+static void
+ephy_window_connect_active_embed (EphyWindow *window)
+{
+  EphyEmbed *embed;
+  EphyWebView *view;
+
+  g_assert (window->active_embed != NULL);
+
+  embed = window->active_embed;
+  view = ephy_embed_get_web_view (embed);
+
+  if (view)
+    do_connect_active_embed (window);
+  else
+    g_signal_connect (embed, "web-view-created", G_CALLBACK (connect_active_embed_view_created_cb), window);
 }
 
 static void
@@ -2775,6 +2803,28 @@ permission_requested_cb (EphyWebView             *view,
 }
 
 static void
+connect_web_view_for_attached_page (EphyWindow  *window,
+                                    EphyWebView *view)
+{
+  g_signal_connect_object (view, "download-only-load",
+                           G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
+
+  g_signal_connect_object (view, "permission-requested",
+                           G_CALLBACK (permission_requested_cb), window, G_CONNECT_AFTER);
+
+  g_signal_connect_object (view, "notify::reader-mode",
+                           G_CALLBACK (reader_mode_cb), window, G_CONNECT_AFTER);
+}
+
+static void
+page_attached_web_view_created_cb (EphyEmbed   *embed,
+                                   EphyWebView *view,
+                                   EphyWindow  *window)
+{
+  connect_web_view_for_attached_page (window, view);
+}
+
+static void
 tab_view_page_attached_cb (AdwTabView *tab_view,
                            AdwTabPage *page,
                            gint        position,
@@ -2782,6 +2832,7 @@ tab_view_page_attached_cb (AdwTabView *tab_view,
 {
   GtkWidget *content = adw_tab_page_get_child (page);
   EphyEmbed *embed;
+  EphyWebView *view;
 
   g_assert (EPHY_IS_EMBED (content));
 
@@ -2789,14 +2840,12 @@ tab_view_page_attached_cb (AdwTabView *tab_view,
 
   LOG ("page-attached tab view %p embed %p position %d\n", tab_view, embed, position);
 
-  g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
-                           G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
+  view = ephy_embed_get_web_view (embed);
 
-  g_signal_connect_object (ephy_embed_get_web_view (embed), "permission-requested",
-                           G_CALLBACK (permission_requested_cb), window, G_CONNECT_AFTER);
-
-  g_signal_connect_object (ephy_embed_get_web_view (embed), "notify::reader-mode",
-                           G_CALLBACK (reader_mode_cb), window, G_CONNECT_AFTER);
+  if (view)
+    connect_web_view_for_attached_page (window, view);
+  else
+    g_signal_connect_object (embed, "web-view-created", G_CALLBACK (page_attached_web_view_created_cb), window, 0);
 
   if (window->present_on_insert) {
     window->present_on_insert = FALSE;
@@ -3071,6 +3120,27 @@ ephy_window_update_entry_focus (EphyWindow  *window,
 }
 
 static void
+update_selected_page (EphyWindow *window,
+                      EphyEmbed  *embed)
+{
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+
+  ephy_window_set_active_tab (window, embed);
+
+  update_reader_mode (window, view);
+
+  load_all_available_popovers (window, view);
+}
+
+static void
+notify_selected_page_view_created_cb (EphyEmbed   *embed,
+                                      EphyWebView *view,
+                                      EphyWindow  *window)
+{
+  update_selected_page (window, embed);
+}
+
+static void
 tab_view_notify_selected_page_cb (EphyWindow *window)
 {
   EphyEmbed *embed;
@@ -3092,12 +3162,10 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   embed = EPHY_EMBED (ephy_tab_view_get_nth_page (window->tab_view, page_num));
   view = ephy_embed_get_web_view (embed);
 
-  /* update new tab */
-  ephy_window_set_active_tab (window, embed);
-
-  update_reader_mode (window, view);
-
-  load_all_available_popovers (window, view);
+  if (view)
+    update_selected_page (window, embed);
+  else
+    g_signal_connect (embed, "web-view-created", G_CALLBACK (notify_selected_page_view_created_cb), window);
 }
 
 static void

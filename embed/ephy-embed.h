@@ -60,3 +60,4 @@ WebKitWebViewSessionState
                 *ephy_embed_get_session_state             (EphyEmbed *embed);
 
 G_END_DECLS
+

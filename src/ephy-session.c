@@ -326,15 +326,29 @@ ephy_session_get_can_undo_tab_closed (EphySession *session)
 }
 
 static void
+web_view_created_cb (EphyEmbed   *embed,
+                     EphyWebView *view,
+                     EphySession *session)
+{
+  g_signal_connect (view, "load-changed",
+                    G_CALLBACK (load_changed_cb), session);
+}
+
+static void
 tab_view_page_attached_cb (AdwTabView  *tab_view,
                            AdwTabPage  *page,
                            guint        position,
                            EphySession *session)
 {
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
+  EphyWebView *view = ephy_embed_get_web_view (embed);
 
-  g_signal_connect (ephy_embed_get_web_view (embed), "load-changed",
-                    G_CALLBACK (load_changed_cb), session);
+  if (view)
+    g_signal_connect (ephy_embed_get_web_view (embed), "load-changed",
+                      G_CALLBACK (load_changed_cb), session);
+  else
+    g_signal_connect (embed, "web-view-created",
+                      G_CALLBACK (web_view_created_cb), session);
 }
 
 static void
@@ -355,6 +369,7 @@ tab_view_page_detached_cb (AdwTabView  *tab_view,
 
   ephy_session_save (session);
 
+// FIXME: wrong now, must audit entire codebase
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (embed), G_CALLBACK (load_changed_cb),
     session);
@@ -1255,8 +1270,8 @@ session_parse_embed (SessionParserContext  *context,
     if (delay_loading) {
       WebKitURIRequest *request = webkit_uri_request_new (url);
 
+      /* FIXME: do we need to pass URL and title to the embed for the delayed load request? */
       ephy_embed_set_delayed_load_request (embed, request, state);
-      ephy_web_view_set_placeholder (web_view, url, title);
       g_object_unref (request);
     } else {
       WebKitBackForwardList *bf_list;
@@ -1329,11 +1344,13 @@ session_end_element (GMarkupParseContext  *ctx,
       ephy_tab_view_select_nth_page (tab_view, context->active_tab);
 
     if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_TEST) {
-      EphyEmbed *active_child;
-
-      active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (context->window));
-      gtk_widget_grab_focus (GTK_WIDGET (active_child));
-      ephy_window_update_entry_focus (context->window, ephy_embed_get_web_view (active_child));
+// FIXME
+//      EphyEmbed *active_child;
+//
+//      active_child = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (context->window));
+//
+//      gtk_widget_grab_focus (GTK_WIDGET (active_child));
+//      ephy_window_update_entry_focus (context->window, ephy_embed_get_web_view (active_child));
       gtk_widget_set_visible (GTK_WIDGET (context->window), TRUE);
     }
 

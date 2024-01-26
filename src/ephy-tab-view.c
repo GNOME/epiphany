@@ -440,31 +440,11 @@ is_loading_transform_cb (GBinding     *binding,
   return TRUE;
 }
 
-int
-ephy_tab_view_add_tab (EphyTabView *self,
-                       EphyEmbed   *embed,
-                       EphyEmbed   *parent,
-                       int          position,
-                       gboolean     jump_to)
+static void
+do_add_tab (EphyEmbed  *embed,
+            AdwTabPage *page)
 {
-  AdwTabPage *page;
-  EphyWebView *view;
-
-  if (parent) {
-    AdwTabPage *parent_page;
-
-    parent_page = adw_tab_view_get_page (self->tab_view, GTK_WIDGET (parent));
-    page = adw_tab_view_add_page (self->tab_view, GTK_WIDGET (embed), parent_page);
-  } else if (position < 0) {
-    page = adw_tab_view_append (self->tab_view, GTK_WIDGET (embed));
-  } else {
-    page = adw_tab_view_insert (self->tab_view, GTK_WIDGET (embed), position);
-  }
-
-  if (jump_to)
-    adw_tab_view_set_selected_page (self->tab_view, page);
-
-  view = ephy_embed_get_web_view (embed);
+  EphyWebView *view = ephy_embed_get_web_view (embed);
 
   adw_tab_page_set_indicator_activatable (page, TRUE);
 
@@ -492,6 +472,45 @@ ephy_tab_view_add_tab (EphyTabView *self,
   update_title_cb (page);
   update_uri_cb (page);
   update_indicator_cb (page);
+}
+
+static void
+add_tab_web_view_created_cb (EphyEmbed   *embed,
+                             EphyWebView *view,
+                             AdwTabPage  *page)
+{
+  do_add_tab (embed, page);
+}
+
+int
+ephy_tab_view_add_tab (EphyTabView *self,
+                       EphyEmbed   *embed,
+                       EphyEmbed   *parent,
+                       int          position,
+                       gboolean     jump_to)
+{
+  AdwTabPage *page;
+  EphyWebView *view;
+
+  if (parent) {
+    AdwTabPage *parent_page;
+
+    parent_page = adw_tab_view_get_page (self->tab_view, GTK_WIDGET (parent));
+    page = adw_tab_view_add_page (self->tab_view, GTK_WIDGET (embed), parent_page);
+  } else if (position < 0) {
+    page = adw_tab_view_append (self->tab_view, GTK_WIDGET (embed));
+  } else {
+    page = adw_tab_view_insert (self->tab_view, GTK_WIDGET (embed), position);
+  }
+
+  if (jump_to)
+    adw_tab_view_set_selected_page (self->tab_view, page);
+
+  view = ephy_embed_get_web_view (embed);
+  if (view)
+    do_add_tab (embed, page);
+  else
+    g_signal_connect (embed, "web-view-created", G_CALLBACK (add_tab_web_view_created_cb), page);
 
   return adw_tab_view_get_page_position (self->tab_view, page);
 }

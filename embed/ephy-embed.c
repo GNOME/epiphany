@@ -58,7 +58,7 @@ struct _EphyEmbed {
 
   EphyFindToolbar *find_toolbar;
   GtkBox *top_widgets_vbox;
-  WebKitWebView *web_view;
+  WebKitWebView *web_view; /* nullable */
   GSList *destroy_on_transition_list;
   GtkWidget *overlay;
   GtkWidget *floating_bar;
@@ -265,7 +265,7 @@ ephy_embed_set_title (EphyEmbed  *embed,
     g_free (new_title);
     new_title = NULL;
 
-    address = ephy_web_view_get_address (EPHY_WEB_VIEW (embed->web_view));
+    address = embed->web_view ? ephy_web_view_get_address (EPHY_WEB_VIEW (embed->web_view)) : NULL;
     if (address && strcmp (address, "about:blank") != 0)
       new_title = ephy_embed_utils_get_title_from_address (address);
 
@@ -503,6 +503,14 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+  g_signal_new ("web-view-created",
+                EPHY_TYPE_EMBED,
+                G_SIGNAL_RUN_FIRST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                1,
+                EPHY_TYPE_WEB_VIEW);
 }
 
 static gboolean
@@ -628,10 +636,68 @@ progress_update (EphyWebView *view,
 }
 
 static void
+initialize_web_view (EphyEmbed *embed)
+{
+  WebKitWebInspector *inspector;
+
+  if (!embed->web_view) {
+    embed->web_view = WEBKIT_WEB_VIEW (ephy_web_view_new ());
+    g_object_notify_by_pspec (G_OBJECT (embed), obj_properties[PROP_WEB_VIEW]);
+    g_signal_emit_by_name (embed, "web-view-created", embed->web_view);
+  }
+
+  gtk_overlay_set_child (GTK_OVERLAY (embed->overlay), GTK_WIDGET (embed->web_view));
+
+  embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
+  g_signal_connect (embed->find_toolbar, "close",
+                    G_CALLBACK (ephy_embed_find_toolbar_close_cb),
+                    embed);
+
+  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->find_toolbar));
+
+  if (embed->progress_bar_enabled)
+    embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
+                                                          G_CALLBACK (progress_update), embed);
+
+  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->top_widgets_vbox));
+  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->overlay));
+
+  g_object_connect (embed->web_view,
+                    "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
+                    "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
+                    "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
+                    "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
+                    NULL);
+
+  embed->status_handler_id = g_signal_connect (embed->web_view, "notify::status-message",
+                                               G_CALLBACK (status_message_notify_cb),
+                                               embed);
+
+  /* The inspector */
+  inspector = webkit_web_view_get_inspector (embed->web_view);
+
+  g_signal_connect (inspector, "attach",
+                    G_CALLBACK (ephy_embed_attach_inspector_cb),
+                    embed);
+  g_signal_connect (inspector, "closed",
+                    G_CALLBACK (ephy_embed_close_inspector_cb),
+                    embed);
+
+  if (webkit_web_view_is_controlled_by_automation (embed->web_view)) {
+    GtkWidget *banner;
+
+    /* Translators: this means WebDriver control. */
+    banner = adw_banner_new (_("Web is being controlled by automation"));
+    adw_banner_set_revealed (ADW_BANNER (banner), TRUE);
+
+    ephy_embed_add_top_widget (embed, banner, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
+  }
+}
+
+static void
 load_delayed_request_if_mapped (gpointer user_data)
 {
   EphyEmbed *embed = EPHY_EMBED (user_data);
-  EphyWebView *web_view;
   WebKitBackForwardListItem *item;
 
   embed->delayed_request_source_id = 0;
@@ -639,15 +705,17 @@ load_delayed_request_if_mapped (gpointer user_data)
   if (!gtk_widget_get_mapped (GTK_WIDGET (embed)))
     return;
 
-  web_view = ephy_embed_get_web_view (embed);
-  if (embed->delayed_state)
-    webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (web_view), embed->delayed_state);
+  g_assert (!embed->web_view);
+  initialize_web_view (embed);
 
-  item = webkit_back_forward_list_get_current_item (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)));
+  if (embed->delayed_state)
+    webkit_web_view_restore_session_state (embed->web_view, embed->delayed_state);
+
+  item = webkit_back_forward_list_get_current_item (webkit_web_view_get_back_forward_list (embed->web_view));
   if (item)
-    webkit_web_view_go_to_back_forward_list_item (WEBKIT_WEB_VIEW (web_view), item);
+    webkit_web_view_go_to_back_forward_list_item (embed->web_view, item);
   else
-    ephy_web_view_load_request (web_view, embed->delayed_request);
+    ephy_web_view_load_request (EPHY_WEB_VIEW (embed->web_view), embed->delayed_request);
 
   g_clear_object (&embed->delayed_request);
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
@@ -655,7 +723,7 @@ load_delayed_request_if_mapped (gpointer user_data)
   /* We have a binding to `is-loading` in `ephy_tab_view_add_tab ()` that depends on
    * whether the page is a placeholder (to avoid showing the spinner on tabs while restoring the session),
    * so after removing the placeholder we need to notify it again. */
-  g_object_notify (G_OBJECT (web_view), "is-loading");
+  g_object_notify (G_OBJECT (embed->web_view), "is-loading");
 
   return;
 }
@@ -727,7 +795,6 @@ ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed *)object;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitWebInspector *inspector;
   GtkEventController *controller;
 
   g_signal_connect (shell, "window-restored",
@@ -738,9 +805,7 @@ ephy_embed_constructed (GObject *object)
 
   /* Skeleton */
   embed->overlay = gtk_overlay_new ();
-
   gtk_widget_set_vexpand (embed->overlay, TRUE);
-  gtk_overlay_set_child (GTK_OVERLAY (embed->overlay), GTK_WIDGET (embed->web_view));
 
   /* Floating message popup for fullscreen mode. */
   embed->fullscreen_message_label = gtk_label_new (NULL);
@@ -768,50 +833,8 @@ ephy_embed_constructed (GObject *object)
     gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);
   }
 
-  embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
-  g_signal_connect (embed->find_toolbar, "close",
-                    G_CALLBACK (ephy_embed_find_toolbar_close_cb),
-                    embed);
-
-  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->find_toolbar));
-
-  if (embed->progress_bar_enabled)
-    embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
-                                                          G_CALLBACK (progress_update), object);
-
-  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->top_widgets_vbox));
-  gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->overlay));
-
-  g_object_connect (embed->web_view,
-                    "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
-                    "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
-                    "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
-                    "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
-                    NULL);
-
-  embed->status_handler_id = g_signal_connect (embed->web_view, "notify::status-message",
-                                               G_CALLBACK (status_message_notify_cb),
-                                               embed);
-
-  /* The inspector */
-  inspector = webkit_web_view_get_inspector (embed->web_view);
-
-  g_signal_connect (inspector, "attach",
-                    G_CALLBACK (ephy_embed_attach_inspector_cb),
-                    embed);
-  g_signal_connect (inspector, "closed",
-                    G_CALLBACK (ephy_embed_close_inspector_cb),
-                    embed);
-
-  if (webkit_web_view_is_controlled_by_automation (embed->web_view)) {
-    GtkWidget *banner;
-
-    /* Translators: this means WebDriver control. */
-    banner = adw_banner_new (_("Web is being controlled by automation"));
-    adw_banner_set_revealed (ADW_BANNER (banner), TRUE);
-
-    ephy_embed_add_top_widget (embed, banner, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
-  }
+  if (embed->web_view)
+    initialize_web_view (embed);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "motion", G_CALLBACK (floating_bar_motion_cb), embed);
@@ -1019,3 +1042,4 @@ ephy_embed_get_session_state (EphyEmbed *embed)
     return webkit_web_view_session_state_ref (embed->delayed_state);
   return webkit_web_view_get_session_state (embed->web_view);
 }
+
