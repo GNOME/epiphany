@@ -158,7 +158,7 @@ entry_activate_cb (EphyLocationEntry      *entry,
     /* After normalization there are still some cases that are
      * impossible to tell apart. One example is <URI>:<PORT> and <NON
      * WEB SCHEME>:<DATA>. To fix this, let's do a HEAD request to the
-     * effective URI prefxed with http://; if we get OK Status the URI
+     * effective URI prefixed with http://; if we get OK Status the URI
      * exists, and we'll go ahead, otherwise we'll try to launch a
      * proper handler through gtk_show_uri. We only do this in
      * ephy_web_view_load_url, since this case is only relevant for URIs

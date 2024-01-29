@@ -338,7 +338,7 @@ ephy_certificate_dialog_constructed (GObject *object)
   } else {
     switch (dialog->security_level) {
       case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-        /* Message on certificte dialog ertificate dialog */
+        /* Message on certificate dialog */
         gtk_label_set_text (GTK_LABEL (dialog->text), _("No problems have been detected with your connection."));
         break;
       case EPHY_SECURITY_LEVEL_MIXED_CONTENT:

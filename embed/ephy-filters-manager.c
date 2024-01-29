@@ -370,7 +370,7 @@ static GFile *
 filter_info_get_source_file (FilterInfo *self)
 {
   /* It is possible that different Epiphany processes try to download the
-   * same ruleset file simultanously. Using different file names ensures
+   * same ruleset file simultaneously. Using different file names ensures
    * that they do not step on each other toes when writing the downloaded
    * data to disk.
    */
@@ -431,7 +431,7 @@ filter_info_needs_updating_from_source (const FilterInfo *self)
    * have been last updated to be considered "recent enough" (that is, current
    * time minus the update frequency). Then a filter needs an update if its
    * last update was before that moment. Also check that the "recent enough"
-   * time point can be calculated without undeflowing beforehand.
+   * time point can be calculated without underflowing beforehand.
    */
   if (!self->manager->metered)
     ret = (self->manager->update_time < ADBLOCK_FILTER_UPDATE_FREQUENCY) ||

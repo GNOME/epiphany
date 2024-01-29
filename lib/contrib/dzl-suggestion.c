@@ -470,7 +470,7 @@ dzl_suggestion_get_icon (DzlSuggestion *self)
  * @self: a #DzlSuggestion
  * @widget: a widget that may contain the surface
  *
- * This function allows subclasses to dynamicly generate content for the
+ * This function allows subclasses to dynamically generate content for the
  * suggestion such as may be required when integrating with favicons or
  * similar.
  *
@@ -516,7 +516,7 @@ dzl_suggestion_get_secondary_icon (DzlSuggestion *self)
  * @self: a #DzlSuggestion
  * @widget: a widget that may contain the surface
  *
- * This function allows subclasses to dynamicly generate content for the
+ * This function allows subclasses to dynamically generate content for the
  * suggestion such as may be required when integrating with favicons or
  * similar.
  *

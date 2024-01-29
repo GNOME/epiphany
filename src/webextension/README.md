@@ -132,7 +132,7 @@ APIs:
 Limitations:
 
 - Icons are not supported.
-- We can't track when notificaions are shown or dismissed.
+- We can't track when notifications are shown or dismissed.
 
 APIs:
 

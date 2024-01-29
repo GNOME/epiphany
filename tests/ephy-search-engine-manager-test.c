@@ -182,7 +182,7 @@ test_search_engine_manager (void)
     g_assert_cmpstr (ephy_search_engine_get_bang (saved_engine), ==, ephy_search_engine_get_bang (expected_engines[i]));
   }
   /* Check if it also kept the default engine _from the point where we
-   * explicitely saved @manager's settings_, but didn't save it afterwards
+   * explicitly saved @manager's settings_, but didn't save it afterwards
    * (as that's only a simple GSettings value so it would be tempting to
    * save it right away in ephy_search_engine_manager_set_default_engine().
    */

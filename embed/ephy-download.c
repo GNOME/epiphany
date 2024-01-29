@@ -413,7 +413,7 @@ ephy_download_failed (EphyDownload  *download,
  * Executes the given @action for @download, this can be any of
  * #EphyDownloadActionType.
  *
- * Returns: %TRUE if the action was executed succesfully.
+ * Returns: %TRUE if the action was executed successfully.
  *
  **/
 gboolean

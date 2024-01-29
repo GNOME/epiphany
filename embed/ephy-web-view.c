@@ -1889,7 +1889,7 @@ format_no_such_file_error_page (EphyWebView  *view,
  * @error: a GError to inspect, or %NULL
  * @user_data: a pointer to additional data
  *
- * Loads an error page appropiate for @page in @view.
+ * Loads an error page appropriate for @page in @view.
  *
  **/
 void

@@ -258,7 +258,7 @@ ephy_profiler_stop (const char *name)
  *
  * Starts the debugging facility. See Epiphany's HACKING file for
  * more information. It also starts module logging and profiling if the
- * appropiate variables are set: EPHY_LOG_MODULES and EPHY_PROFILE_MODULES.
+ * appropriate variables are set: EPHY_LOG_MODULES and EPHY_PROFILE_MODULES.
  **/
 void
 ephy_debug_init (void)

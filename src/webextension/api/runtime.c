@@ -76,7 +76,7 @@ runtime_handler_get_platform_info (EphyWebExtensionSender *sender,
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "os");
-  /* Epiphany doesn't support Windows or macOS and seperating out BSDs is most likely
+  /* Epiphany doesn't support Windows or macOS and separating out BSDs is most likely
    * to be used improperly anyway. */
   json_builder_add_string_value (builder, "linux");
   json_builder_set_member_name (builder, "arch");

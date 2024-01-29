@@ -184,7 +184,7 @@ window_object_cleared_cb (WebKitScriptWorld         *world,
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
 
-  /* FIXME: This is a herustic that the first view is the background view.
+  /* FIXME: This is a heuristic that the first view is the background view.
    * instead we should indicate this at extension creation time. */
   if (!background_context)
     background_context = js_context;

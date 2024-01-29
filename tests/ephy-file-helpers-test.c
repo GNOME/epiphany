@@ -124,7 +124,7 @@ static const DirTest dir_tests[] = {
   /* Unreadable */
   { "/root/ephy-test-dir", FALSE, FALSE, FALSE },
   /* Unwritable */
-  { "/non-existant/ephy-test-dir", FALSE, FALSE, FALSE },
+  { "/non-existent/ephy-test-dir", FALSE, FALSE, FALSE },
 };
 
 static void

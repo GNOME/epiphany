@@ -201,7 +201,7 @@ ephy_web_application_get_config_directory (const char *id)
  * Deletes all the data associated with a Web Application created by
  * Epiphany.
  *
- * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
+ * Returns: %TRUE if the web app was successfully deleted, %FALSE otherwise
  **/
 gboolean
 ephy_web_application_delete (const char      *id,
@@ -283,7 +283,7 @@ ephy_web_application_delete (const char      *id,
  * Deletes all the data associated with a Web Application created by
  * Epiphany.
  *
- * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
+ * Returns: %TRUE if the web app was successfully deleted, %FALSE otherwise
  **/
 gboolean
 ephy_web_application_delete_by_desktop_file_id (const char      *desktop_file_id,

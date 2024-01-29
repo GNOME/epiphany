@@ -168,7 +168,7 @@ get_download_time_property (JsonObject *obj,
     char *end = NULL;
     guint64 timestamp;
 
-    /* This can be a number thats a timestamp. */
+    /* This can be a number that's a timestamp. */
     timestamp = g_ascii_strtoull (string, &end, 10);
     if ((gsize)(end - string) == strlen (string))
       return g_date_time_new_from_unix_local (timestamp);

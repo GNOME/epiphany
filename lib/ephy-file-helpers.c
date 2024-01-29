@@ -314,7 +314,7 @@ ephy_profile_dir_is_default (void)
 /**
  * ephy_profile_dir_is_web_application:
  *
- * Returns whether the profile directory in use is a web appplication one.
+ * Returns whether the profile directory in use is a web application one.
  *
  * Returns: %TRUE if it is a web application profile dir, %FALSE for others
  */

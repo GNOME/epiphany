@@ -2838,7 +2838,7 @@ window_cmd_change_fullscreen_state (GSimpleAction *action,
 
   active = g_variant_get_boolean (state);
 
-  /* This is performed only here because we don't want it occuring when a window
+  /* This is performed only here because we don't want it occurring when a window
    * enters fullscreen mode for some other reason other than action activation.
    * E.g. we don't want it appearing for fullscreen video.
    */

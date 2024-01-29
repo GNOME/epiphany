@@ -1639,7 +1639,7 @@ ephy_location_entry_new (void)
  * ephy_location_entry_get_can_undo:
  * @entry: an #EphyLocationEntry widget
  *
- * Wheter @entry can restore the displayed user modified text to the unmodified
+ * Whether @entry can restore the displayed user modified text to the unmodified
  * previous text.
  *
  * Return value: TRUE or FALSE indicating if the text can be restored
@@ -1655,7 +1655,7 @@ ephy_location_entry_get_can_undo (EphyLocationEntry *entry)
  * ephy_location_entry_get_can_redo:
  * @entry: an #EphyLocationEntry widget
  *
- * Wheter @entry can restore the displayed text to the user modified version
+ * Whether @entry can restore the displayed text to the user modified version
  * before the undo.
  *
  * Return value: TRUE or FALSE indicating if the text can be restored
@@ -1723,7 +1723,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
  * ephy_location_entry_grab_focus:
  * @entry: an #EphyLocationEntry widget
  *
- * Set focus on @entry and select the text whithin. This is called when the
+ * Set focus on @entry and select the text within. This is called when the
  * user hits Control+L.
  *
  **/

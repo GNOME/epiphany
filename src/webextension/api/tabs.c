@@ -294,7 +294,7 @@ tabs_handler_insert_css (EphyWebExtensionSender *sender,
     return;
   }
 
-  /* FIXME: Supoprt allFrames and cssOrigin */
+  /* FIXME: Support allFrames and cssOrigin */
   css = ephy_web_extension_add_custom_css (sender->extension, code);
   webkit_user_content_manager_add_style_sheet (ucm, css);
 
