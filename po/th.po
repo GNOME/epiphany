@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-11-29 16:32+0000\n"
-"PO-Revision-Date: 2023-12-20 20:53+0700\n"
+"POT-Creation-Date: 2024-01-29 21:45+0000\n"
+"PO-Revision-Date: 2024-02-01 00:51+0700\n"
 "Last-Translator: Akom Chotiphantawanon <knight2000@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6 data/org.gnome.Epiphany.desktop.in.in:3
 #: embed/ephy-about-handler.c:205 embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:279
-#: src/ephy-main.c:432 src/window-commands.c:1063
+#: src/ephy-main.c:432 src/window-commands.c:1066
 msgid "Web"
 msgstr "เว็บ"
 
@@ -44,9 +44,10 @@ msgstr ""
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr ""
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:34 src/window-commands.c:1073
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1076
 msgid "The GNOME Project"
-msgstr "โครงการ GNOME"
+msgstr "The GNOME Project"
 
 #: data/org.gnome.Epiphany.desktop.in.in:4
 msgid "Web Browser"
@@ -865,7 +866,7 @@ msgstr "รุ่น %s"
 msgid "About Web"
 msgstr "เกี่ยวกับ \"เว็บ\""
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1065
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1068
 msgid "Epiphany Technology Preview"
 msgstr ""
 
@@ -962,8 +963,8 @@ msgstr "เริ่มดาวน์โหลด"
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117 src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331 src/window-commands.c:577
-#: src/window-commands.c:831 src/window-commands.c:1240 src/window-commands.c:1908
-#: src/window-commands.c:2811
+#: src/window-commands.c:831 src/window-commands.c:1243 src/window-commands.c:1911
+#: src/window-commands.c:2814
 msgid "_Cancel"
 msgstr "_ยกเลิก"
 
@@ -1570,21 +1571,15 @@ msgstr "โอ๊ะ! อาจจะมีปัญหา"
 
 #. Error details when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1688
-#, fuzzy, c-format
-#| msgid "Oops! This site might have caused the web browser to close unexpectedly"
+#, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
-msgstr "โอ๊ะ! เว็บไซต์นี้อาจทำให้เบราว์เซอร์ปิดตัวกะทันหันเมื่อครั้งก่อน"
+msgstr "หน้า %s อาจทำให้ “เว็บ” ปิดตัวกะทันหัน"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1695
-#, fuzzy, c-format
-#| msgid ""
-#| "<p>This site may have caused Web to close unexpectedly.</p><p>If this happens again, please report "
-#| "the problem to the <strong>%s</strong> developers.</p>"
+#, c-format
 msgid "If this happens again, please report the problem to the %s developers."
-msgstr ""
-"<p>เว็บไซต์นี้อาจทำให้เว็บเบราว์เซอร์ปิดตัวกะทันหัน</p><p>ถ้าเกิดเหตุการณ์นี้อีกครั้ง ก็กรุณารายงานปัญหาไปยังนักพัฒนา <strong>%s</"
-"strong></p>"
+msgstr "ถ้าเกิดเหตุการณ์นี้อีกครั้ง ก็กรุณารายงานปัญหาไปยังนักพัฒนา %s"
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1729
@@ -1894,7 +1889,7 @@ msgstr "รหัสผ่านในแบบฟอร์มใน %s"
 msgid "Failed to obtain storage credentials."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126 lib/sync/ephy-sync-service.c:1940
+#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126 lib/sync/ephy-sync-service.c:1942
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 
@@ -1910,57 +1905,57 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:1906 lib/sync/ephy-sync-service.c:1911
+#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:1918 lib/sync/ephy-sync-service.c:1926
+#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:1991
+#: lib/sync/ephy-sync-service.c:1993
 msgid "Failed to store sync secrets (is the secret service or secrets portal broken?): "
 msgstr ""
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2033
+#: lib/sync/ephy-sync-service.c:2035
 #, c-format
 msgid "The sync secrets of %s"
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2063
+#: lib/sync/ephy-sync-service.c:2065
 msgid "Failed to upload client record."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2266
+#: lib/sync/ephy-sync-service.c:2268
 msgid "Failed to upload crypto/keys record."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2378
+#: lib/sync/ephy-sync-service.c:2380
 #, fuzzy
 #| msgid "Failed to create directory “%s”."
 msgid "Failed to retrieve crypto keys."
 msgstr "ไม่สามารถสร้างไดเรกทอรี “%s”"
 
-#: lib/sync/ephy-sync-service.c:2432
+#: lib/sync/ephy-sync-service.c:2434
 msgid "Failed to upload meta/global record."
 msgstr ""
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2554
+#: lib/sync/ephy-sync-service.c:2556
 #, c-format
 msgid "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2565
+#: lib/sync/ephy-sync-service.c:2567
 msgid "Failed to verify storage version."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2623
+#: lib/sync/ephy-sync-service.c:2625
 msgid "Failed to upload device info"
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2699 lib/sync/ephy-sync-service.c:2782
+#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
 msgid "Failed to retrieve the Sync Key"
 msgstr ""
 
@@ -2083,7 +2078,7 @@ msgstr "ตรวจสอบเอกลักษณ์ของเว็บไ
 msgid "The identity of this website has not been verified."
 msgstr "เว็บไซต์นี้ยังไม่ผ่านการตรวจสอบเอกลักษณ์"
 
-#. Message on certificte dialog ertificate dialog
+#. Message on certificate dialog
 #: src/ephy-certificate-dialog.c:342
 msgid "No problems have been detected with your connection."
 msgstr "ไม่พบปัญหาใดๆ ที่เกี่ยวกับการเชื่อมต่อของคุณ"
@@ -2651,129 +2646,129 @@ msgstr "เปิดลิงก์ในห_น้าต่างใหม่"
 msgid "Open Link In Incognito Window"
 msgstr "หน้าต่างใหม่ไม่เปิดเผยตัว"
 
-#: src/ephy-window.c:2739
+#: src/ephy-window.c:2742
 msgid "_Ask Later"
 msgstr ""
 
-#: src/ephy-window.c:2740 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2743 src/resources/gtk/permission-popover.ui:51
 #, fuzzy
 #| msgid "Deny"
 msgid "_Deny"
 msgstr "ปฏิเสธ"
 
-#: src/ephy-window.c:2741 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2744 src/resources/gtk/permission-popover.ui:66
 #, fuzzy
 #| msgid "Allow"
 msgid "_Allow"
 msgstr "อนุญาต"
 
-#: src/ephy-window.c:2943 src/ephy-window.c:4383
+#: src/ephy-window.c:2946 src/ephy-window.c:4386
 #, fuzzy
 #| msgid "Web Website"
 msgid "Leave Website?"
 msgstr "เว็บไซต์ของโปรแกรมดูเว็บ"
 
-#: src/ephy-window.c:2944 src/ephy-window.c:4384 src/window-commands.c:1237
+#: src/ephy-window.c:2947 src/ephy-window.c:4387 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr ""
 
-#: src/ephy-window.c:2945 src/ephy-window.c:4385 src/window-commands.c:1241
+#: src/ephy-window.c:2948 src/ephy-window.c:4388 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr ""
 
-#: src/ephy-window.c:2966
+#: src/ephy-window.c:2969
 #, fuzzy
 #| msgid "Download completed"
 msgid "Download operation"
 msgstr "ดาวน์โหลดเสร็จแล้ว"
 
-#: src/ephy-window.c:2968
+#: src/ephy-window.c:2971
 #, fuzzy
 #| msgid "Details"
 msgid "Show details"
 msgstr "รายละเอียด"
 
-#: src/ephy-window.c:2970
+#: src/ephy-window.c:2973
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] ""
 
-#: src/ephy-window.c:3211
+#: src/ephy-window.c:3214
 msgid "Set as Default Browser?"
 msgstr ""
 
-#: src/ephy-window.c:3213
+#: src/ephy-window.c:3216
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 
-#: src/ephy-window.c:3215
+#: src/ephy-window.c:3218
 msgid "Use Epiphany Technology Preview as your default web browser and for opening external links"
 msgstr ""
 
-#: src/ephy-window.c:3219
+#: src/ephy-window.c:3222
 msgid "_Ask Again Later"
 msgstr ""
 
-#: src/ephy-window.c:3220
+#: src/ephy-window.c:3223
 #, fuzzy
 #| msgid "No"
 msgid "_No"
 msgstr "ไม่"
 
-#: src/ephy-window.c:3221
+#: src/ephy-window.c:3224
 msgid "_Yes"
 msgstr ""
 
-#: src/ephy-window.c:3672
+#: src/ephy-window.c:3675
 #, fuzzy
 #| msgid "Saved _passwords"
 msgid "Save password?"
 msgstr "_รหัสผ่านที่เก็บไว้"
 
-#: src/ephy-window.c:3673
+#: src/ephy-window.c:3676
 msgid "Passwords can be removed at any time in Preferences"
 msgstr ""
 
-#: src/ephy-window.c:3675
+#: src/ephy-window.c:3678
 #, fuzzy
 #| msgid "Not now"
 msgid "Not Now"
 msgstr "ยังไม่ทำตอนนี้"
 
-#: src/ephy-window.c:3676
+#: src/ephy-window.c:3679
 #, fuzzy
 #| msgid "_Never accept"
 msgid "Never Save"
 msgstr "ไ_ม่รับคุกกี้"
 
-#: src/ephy-window.c:3677
+#: src/ephy-window.c:3680
 msgid "Save"
 msgstr "บันทึก"
 
-#: src/ephy-window.c:4514
+#: src/ephy-window.c:4517
 #, fuzzy
 #| msgid "Close this tab"
 msgid "Close Multiple Tabs?"
 msgstr "ปิดแท็บนี้"
 
-#: src/ephy-window.c:4515
+#: src/ephy-window.c:4518
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 
-#: src/ephy-window.c:4516
+#: src/ephy-window.c:4519
 #, fuzzy
 #| msgid "Close tab"
 msgid "C_lose Tabs"
 msgstr "ปิดแท็บ"
 
-#: src/ephy-window.c:4609
+#: src/ephy-window.c:4612
 #, fuzzy
 #| msgid "New topic"
 msgid "New tab opened"
 msgstr "หมวดใหม่"
 
-#: src/ephy-window.c:4613
+#: src/ephy-window.c:4616
 msgid "Switch"
 msgstr ""
 
@@ -4415,13 +4410,13 @@ msgstr "ต้องการรหัสผ่าน"
 msgid "Import Passwords"
 msgstr "รหัสผ่าน"
 
-#: src/window-commands.c:1060
+#: src/window-commands.c:1063
 #, fuzzy
 #| msgid "Epiphany"
 msgid "Epiphany Canary"
 msgstr "Epiphany"
 
-#: src/window-commands.c:1083
+#: src/window-commands.c:1086
 msgid "translator-credits"
 msgstr ""
 "Isriya Paireepairit <isriyapaireepairit@hotmail.com>\n"
@@ -4430,64 +4425,64 @@ msgstr ""
 "ถ้ามีเวลาโปรดมาช่วยกันแปล :-)\n"
 "http://gnome-th.sf.net"
 
-#: src/window-commands.c:1236
+#: src/window-commands.c:1239
 #, fuzzy
 #| msgid "Web Website"
 msgid "Reload Website?"
 msgstr "เว็บไซต์ของโปรแกรมดูเว็บ"
 
-#: src/window-commands.c:1821
+#: src/window-commands.c:1824
 #, fuzzy, c-format
 #| msgid "The application '%s' is ready to be used"
 msgid "The application “%s” is ready to be used"
 msgstr "โปรแกรมเว็บ '%s' พร้อมใช้งานแล้ว"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1827
 #, fuzzy, c-format
 #| msgid "The application '%s' could not be created"
 msgid "The application “%s” could not be created: %s"
 msgstr "ไม่สามารถสร้างโปรแกรมเว็บ '%s'"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1834
+#: src/window-commands.c:1837
 msgid "Launch"
 msgstr "เรียกทำงาน"
 
-#: src/window-commands.c:1900
+#: src/window-commands.c:1903
 msgid "Replace Existing Web App?"
 msgstr ""
 
-#: src/window-commands.c:1904
+#: src/window-commands.c:1907
 #, fuzzy, c-format
 #| msgid "An application with the same name already exists. Replacing it will overwrite it."
 msgid "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "มีโปรแกรมเว็บชื่อเดียวกันอยู่ก่อนแล้ว การแทนที่จะเป็นการเขียนทับโปรแกรมเว็บดังกล่าว"
 
-#: src/window-commands.c:1909
+#: src/window-commands.c:1912
 #, fuzzy
 #| msgid "Replace"
 msgid "_Replace"
 msgstr "แทนที่"
 
-#: src/window-commands.c:2257
+#: src/window-commands.c:2260
 msgid "HTML"
 msgstr ""
 
-#: src/window-commands.c:2261
+#: src/window-commands.c:2264
 msgid "MHTML"
 msgstr ""
 
-#: src/window-commands.c:2307
+#: src/window-commands.c:2310
 msgid "PNG"
 msgstr ""
 
-#: src/window-commands.c:2806
+#: src/window-commands.c:2809
 #, fuzzy
 #| msgid "Enable caret browsing mode?"
 msgid "Enable Caret Browsing Mode?"
 msgstr "จะเปิดใช้โหมดการท่องดูแบบมีเคอร์เซอร์หรือไม่?"
 
-#: src/window-commands.c:2807
+#: src/window-commands.c:2810
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in web pages, "
 "allowing you to move around with your keyboard. Do you want to enable caret browsing?"
@@ -4495,7 +4490,7 @@ msgstr ""
 "การกดปุ่ม F7 จะเป็นการเปิดหรือปิดการท่องดูแบบมีเคอร์เซอร์ โดยจะวางเคอร์เซอร์ซึ่งเคลื่อนย้ายได้ลงในหน้าเว็บ "
 "ทำให้คุณสามารถเลื่อนอ่านไปมาด้วยแป้นพิมพ์ได้ คุณต้องการจะเปิดใช้การท่องดูแบบมีเคอร์เซอร์หรือไม่?"
 
-#: src/window-commands.c:2812
+#: src/window-commands.c:2815
 msgid "_Enable"
 msgstr "เ_ปิดใช้"
 
