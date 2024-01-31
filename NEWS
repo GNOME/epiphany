@@ -463,7 +463,7 @@ API key to enable this feature using the -Dgsb_api_key build option at your own
 risk. Most Linux distributions will be unable to do this without similarly
 violating Google's terms of service, since it would require some way to inject
 a secret into the build. Most distributions include a Google API key in Firefox
-or Chromium packaging in apparant violation of the new terms of service; such
+or Chromium packaging in apparent violation of the new terms of service; such
 distros may consider using the same key for Epiphany as well. Epiphany
 Technology Preview is built using a secret API key. Flathub builds will likely
 have Safe Browsing disabled.
@@ -976,7 +976,7 @@ Major changes from 3.32:
 - Always try saved HTTP auth credentials before prompting user
 - Use WebKit's code for processing punycode and IDN
 - Add swipe gesture to keyboard shortcuts dialog
-- Update reader mode to latest readibility.js
+- Update reader mode to latest readability.js
 - libdazzle is now required as a system dependency
 
 3.32.2 - May 2, 2019
@@ -1168,7 +1168,7 @@ Changes since 3.31.92:
 - Add Close Other Tabs tab bar context menu item (Kieran Elmes)
 - Replace Move Tab Left/Right with Close Tabs to Left/Right (Kieran Elmes)
 - Fix new tab improperly opened on Ctrl+L
-- Fix URL entry accidently loading the wrong page
+- Fix URL entry accidentally loading the wrong page
 
 3.31.1 - October 10, 2018
 =========================
@@ -2024,7 +2024,7 @@ Epiphany 3.12.1
 
  - Fix a crasher with password forms (#723909)
  - Fix Ctrl+L when completion menu is shown (#611435)
- - Fix leak in Downlodas button.
+ - Fix leak in Downloads button.
  - Do not clear typed address on first page load (#728143)
  - Updated translations.
 
@@ -2089,7 +2089,7 @@ Epiphany 3.11.4
 ===============
 
  - New history window (#721415)
- - Add one-process-per-tab multiprocess suport (#723302)
+ - Add one-process-per-tab multiprocess support (#723302)
  - Make sure popup windows respect window properties (#723238)
  - Use header bars in dialogs (#723803)
  - Do not open an additional empty window when started with arguments in private
@@ -2266,7 +2266,7 @@ Changes:
     and broken in WK2.
   - Load and save the session asynchronously. Should make the UI more
     responsive! (#681782)
-  - Remove spaces in Accept-Language header for compatiblity (#671652)
+  - Remove spaces in Accept-Language header for compatibility (#671652)
   - Smarter copy email address action (#688166)
   - A bunch of WebKit2 improvements. The WebKit2 version is now really
     close to feature-complete.
@@ -3401,7 +3401,7 @@ Changes:
 	  directory location
 	* Use the new gtk functions to persist and load the print settings and
 	  page setup. Migrate our old settings, if present.
-	* All tooltips are now creatd using the new GTK tooltips API.
+	* All tooltips are now created using the new GTK tooltips API.
 
 Bug fixes:
 	* #459552: Improve the restricted ports message 
@@ -3731,7 +3731,7 @@ Bug fixes:
 	* Fix crash when moving zoom widget on toolbar (#338682)
 
 	* Display the find bar for "Find Next" and "Find Previous"
-	  if it wasn't visible already. Entry focus is handlded
+	  if it wasn't visible already. Entry focus is handled
 	  with care so that use cases like incremental search work
 	  as expected. Fixes bug #333020.
 
@@ -3961,7 +3961,7 @@ Changes:
 	* Incorporate UI review recommendations for View > Toolbars menu
 	* Various improvements for XULRunner back-end
 Bug fixes:
-	* Use the same machanism for Ctrl-W as clicking the tab's close
+	* Use the same mechanism for Ctrl-W as clicking the tab's close
 	  button. Fixes bug #319530.
 		* Fix crash on switching to/from fullscreen mode. Bug #331462.
 		* Set the tooltip for bookmarks on the toolbar, using a
@@ -4311,7 +4311,7 @@ Changes:
 	* Use a gtk stock cursor instead of our own, un-themed one in toolbar editor
 	* Show drag icon with page title + URL when dragging from the drag handle
 	* Simplify context menu code [#320520]
-	* Fix error page title capitalisation, and chanage the icon on the netOffline error page
+	* Fix error page title capitalisation, and change the icon on the netOffline error page
 	* Remove spinner from fullscreen toolbars file
 	* Portability and gcc 2.95 fixes
 	* Get the window name from the popup-blocked event
@@ -4486,7 +4486,7 @@ Changes
 	* Don't require a HTML document to activate typeaheadfind [#326813]
 	* Truncate URI and title strings [#329160]
 	* Push a null JS context on the stack when we run a recursive
-	  mainloop; fixes the epiphany equivalend of camino bug
+	  mainloop; fixes the epiphany equivalent of camino bug
 	  https://bugzilla.mozilla.org/show_bug.cgi?id=179307
 	* Add prefs to activate password manager on xulrunner
 
@@ -4942,7 +4942,7 @@ Changes
 	* Fix crash when trying to download [#301093]
 	* Fix rare crash on 64-bit archs
 	* Some constification [#301065]
-	* Corectly restore width and height of restored popup windows [#155395]
+	* Correctly restore width and height of restored popup windows [#155395]
 	* Adapt to mozilla API change on trunk
 	* Fix for pkg-config problem [#300452]
 
@@ -5357,7 +5357,7 @@ Bug fixes
 	* Fix opening of content when not downloading automatically [#158466]
 	* Fix build without PSM
 	* Fix tabs menu ordering with tab-groups extension
-	* Fix some string comparision bugs in event context
+	* Fix some string comparison bugs in event context
 	* Fix out-of-srcdir build (Marco, Christian)
 	* Don't raise window on --new-tab [#158923]
 	* Fix a mem leak (Vincent Untz)
@@ -5656,7 +5656,7 @@ Epiphany 1.4.4
 Bug fixes
 
 	* Add a list of printers to the print dialog. Fix printing
-	  in several recent ditributions. (Marco)
+	  in several recent distributions. (Marco)
 	* Remove duplicate AC_PROG_INTLTOOL (Christian) [#155028]
 	* Fix a crash when rebuilding bookmarks menu (Christian) [#154805]
 
@@ -5844,7 +5844,7 @@ Bug Fixes
 	* Fix dragging of urls which gnome-vfs can't handle (Christian)
 	* Fix new tab positioning when opening tabs from drags (Christian)
 	* Make keyword search URL localisable (Christian) [#144909]
-	* Fix crash in ellisising label (Christian) [#149114]
+	* Fix crash in ellipsising label (Christian) [#149114]
 	* Sort topics by name in bookmark properties dialogue
 	  (Christian Neumair) [#149639]
 	* Fix some compiler warnings (Christian)
@@ -6181,7 +6181,7 @@ Bug fixes
 	* Make ephy-node refcount initialize to 1 and not 0 (Adam)
 	* Fix various filename encoding bugs (Christian)
 	* Don't quit the filechooser when selecting "No" from the confirm-
-	  overwrite dialoge (Christian) [#139400]
+	  overwrite dialogue (Christian) [#139400]
 	* Set the action's accel_path, fixes crash when dynamically assigning
 	  accels (Christian) [#139641]
 	* Fix saving of linked content. Don't create the directory; mozilla
@@ -6210,7 +6210,7 @@ Bug fixes
 	* Emit the "tab_removed" signal also for the window's last tab
 	  (Christian) [#142078]
 	* Fix stupid bug which prevented compilation with gcc 3.4 (Christian)
-	* Elimiate indeterminate progress (Christian) [#142303, #142305]
+	* Eliminate indeterminate progress (Christian) [#142303, #142305]
 	* Fix toolbar editor drag icon theming bug (Crispin Flowerday)
 	* Fix reload not to use forced reload by default (C. J. N. Breame) [#143365]
 
@@ -6331,7 +6331,7 @@ Bug fixes
 	* Escape markup in string in the duplicate bookmarks dialogue
 	  and topics menu (Christian)
 	* Escape markup in strings in the NSS dialogues (Crispin Flowerday)
-	* Work aroung mozilla bug #246392 which causes reload of framed pages to go
+	* Work around mozilla bug #246392 which causes reload of framed pages to go
 	  back to initial frameset (Christian, Crispin Flowerday) [#115800]
 	* Don't show redirected and non-toplevel pages in history (Christian) [#142143]
 	* Allow importing of Epiphany bookmarks format too (Christian) [#144699]
@@ -6762,7 +6762,7 @@ Bugfixes
 	* ephy-tab LOAD_PROGRESS property typo fix (Adam Hooper)
 	* Fix many, many memory leaks in 28 functions (Christian)
 	* Fix property getter of favicon "icon" property (Christian)
-	* Fix encoding converstion of "Untitled" filename suggestion (Christian)
+	* Fix encoding conversion of "Untitled" filename suggestion (Christian)
 	* Don't crash when reading RDF file fails on bookmark import (Christian)
 	* Use rdf:resource instead of rdf:about on bookmark export (Christian)
 	* Sync topic names in the bookmarks menu (Christian)
@@ -6979,7 +6979,7 @@ Bugfixes
 	* Destroy file chooser with its parent window; fixes crashes (Christian)
 	* Fix coordinates of under widgets popup in RTL mode (Christian)
 	* Do not try to pickup already set MOZILLA_FIVE_HOME,
-		  hopefully fix crashes oepning links from thunderbird (Marco)
+		  hopefully fix crashes opening links from thunderbird (Marco)
 	* Re-implement Pause/Resume in downloader (Xan)
 	* Correctly cancel the download instead of just
 		  cancelling the request. (Marco)
@@ -7087,7 +7087,7 @@ Interface improvements
 	* New hand cursor adapted from eog (Dave)
 	* Use hand cursor in toolbar editor (Marco)
 	* Made encodings dialogue auto-apply (Christian)
-	* Don't pollute statusbar with the "done" mesage (Dave)
+	* Don't pollute statusbar with the "done" message (Dave)
 	* Auto-close downloader when no more items
 	  left (Xan)
 	* Use new gtk+ file chooser (Christian)
@@ -7480,7 +7480,7 @@ Bugfixes
 	* Remove the autocompletion window timeout also when the window is
 	  still not visible (Marco)
 	* Add supported protocols to epiphany.application (Marco)
-	* Fix peristence of directory selection (Christian)
+	* Fix persistence of directory selection (Christian)
 	* Initialise completion visibility flag (Maroc)
 	* Fix check for return value of xmlSaveFileFormat (Christian)
 	* Specify UTF-8 encoding for the keyword: url (Christian)
@@ -7691,7 +7691,7 @@ Interface improvements
 	* Allow drag and drop of urls on the bookmarks toolbar (Xan Lopez)
 	* Disable smooth scroll and image autoresize (Marco)
 	* Remove useless icons from the print dialog (Marco)
-	* Fix incosistency between all topic on the toolbar and bookmarks menu (Marco)
+	* Fix inconsistency between all topic on the toolbar and bookmarks menu (Marco)
 	* If the page is about:blank, set title to "Blank page" (Christian Persch)
 	* More friendly description for cache preferences (Marco)
 	* Add a show in bookmarks toolbar item on the bookmarks editor
@@ -7753,7 +7753,7 @@ Code changes
 	* Remove last bits of nautilus theme support from the
 	  spinner code (Christian Persch)
 	* Use url/name to store topics and bookmarks in the toolbar
-	  configuration. This is more manteinable but toolbar
+	  configuration. This is more maintainable but toolbar
 	  settings are lost (Marco)
 	* Improve bookmarks rdf format (Marco, Edd Dumbill)
 	* Freeze all xml formats and update version to 1.0.
@@ -7781,7 +7781,7 @@ Interface improvements
 	  go button (Christian Persch)
 	* Show the document context menu on ctrl+f10 (Marco)
 	* Fast search for bookmarks and history.
-	  Pressing a key will make ephy select the first entry begining with
+	  Pressing a key will make ephy select the first entry beginning with
 		  that character (Xan Lopez)
 	* Shorten session history menu items (Christian Persch)
 	* Delete key remove personal data manager entries (Xan Lopez)
@@ -7861,7 +7861,7 @@ Code changes
 Interface improvements
 
 	* Better security state icons (suggested by Luca Ferretti, designed by Jimmac)
-	* Rename Appeareance preferences tab to be less generic (Marco)
+	* Rename Appearance preferences tab to be less generic (Marco)
 	* Remove memory cache prefs, now mozilla can deal with it automagically. (Marco)
 	* Delays bookmarks/history searches a bit after the user pressed key,
 	  so that it feel more responsive (Marco)
@@ -7937,7 +7937,7 @@ Epiphany 0.7
 Code changes
 
 	* Extend node api to allow to branch different databases, deobjectify
-		nodes for better perfomance, smarter id factory. (Marco)
+		nodes for better performance, smarter id factory. (Marco)
 	* Use stock icons instead of the files directly to set window
 		  border icons. (Dave Bordoley)
 	* Cleanup zoom code (Christian Persch)
@@ -7969,7 +7969,7 @@ Interface improvements
 		  Enable Image Auto-Resizing. (Dave Bordoley)
 	* Activate the menu on button press down (Dave Bordoley)
 	* Several interface fixes in print dialog (Piers Cornwell)
-	* Add accellerators on the encoding menus (Piers Cornwell)
+	* Add accelerators on the encoding menus (Piers Cornwell)
 
 Bugfixes
 	* Mark download time format strings for translation (Christian Neumair)
@@ -8027,7 +8027,7 @@ Interface improvements
 	* Confirmation dialog for clearing history (Jon Svendsen)
 	* Improve find dialog readability, avoid vertical resizing
 	  of it (Dave Bordoley, Xan Lopez)
-	* Use the term Adress instead of Location as discussed
+	* Use the term Address instead of Location as discussed
 	  with docs guys (Dave Bordoley)
 	* Show bookmarks icons in the toolbar only when there
 	  is a specific one (Dave Bordoley)
@@ -8166,7 +8166,7 @@ Code changes
 	   mozilla versions) (Marco)
 	* Fix embed persist lifetime issues to avoid leaks (Marco)
 	* Reimplement ephy-state using xml (Marco)
-	* Add to EphyNode the ability to specifiy reserved id for nodes,
+	* Add to EphyNode the ability to specify reserved id for nodes,
 	  useful for toplevel nodes (Marco)
 	* Rework drag and drop api to deal with more than the urls types (Marco)
 	* Autoupdate EggX. Use the toolbar editor stuff from libegg. (Marco)
