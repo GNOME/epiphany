@@ -59,7 +59,7 @@ struct _EphyEmbed {
   EphyFindToolbar *find_toolbar;
   GtkBox *top_widgets_vbox;
   WebKitWebView *web_view;
-  GSList *destroy_on_transition_list;
+  GSList *destroy_on_transition_list; /* unowned GtkWidgets */
   GtkWidget *overlay;
   GtkWidget *floating_bar;
   GtkWidget *progress;
@@ -70,8 +70,8 @@ struct _EphyEmbed {
   WebKitWebViewSessionState *delayed_state;
   guint delayed_request_source_id;
 
-  GSList *messages;
-  GSList *keys;
+  GSList *messages; /* owned EphyEmbedStatusbarMsgs */
+  GSList *keys;     /* owned strings */
 
   guint seq_context_id;
   guint seq_message_id;
@@ -134,7 +134,7 @@ static guint
 ephy_embed_statusbar_get_context_id (EphyEmbed  *embed,
                                      const char *context_description)
 {
-  char *string;
+  g_autofree char *string = NULL;
   guint id;
 
   g_assert (EPHY_IS_EMBED (embed));
@@ -147,9 +147,8 @@ ephy_embed_statusbar_get_context_id (EphyEmbed  *embed,
   if (id == 0) {
     id = embed->seq_context_id++;
     g_object_set_data_full (G_OBJECT (embed), string, GUINT_TO_POINTER (id), NULL);
-    embed->keys = g_slist_prepend (embed->keys, string);
-  } else
-    g_free (string);
+    embed->keys = g_slist_prepend (embed->keys, g_steal_pointer (&string));
+  }
 
   return id;
 }
@@ -377,30 +376,20 @@ ephy_embed_dispose (GObject *object)
 }
 
 static void
+statusbar_message_free (EphyEmbedStatusbarMsg *message)
+{
+  g_free (message->text);
+  g_free (message);
+}
+
+static void
 ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
-  GSList *list;
 
   g_slist_free (embed->destroy_on_transition_list);
-
-  for (list = embed->messages; list; list = list->next) {
-    EphyEmbedStatusbarMsg *msg;
-
-    msg = list->data;
-    g_free (msg->text);
-    g_free (msg);
-  }
-
-  g_slist_free (embed->messages);
-  embed->messages = NULL;
-
-  for (list = embed->keys; list; list = list->next)
-    g_free (list->data);
-
-  g_slist_free (embed->keys);
-  embed->keys = NULL;
-
+  g_slist_free_full (embed->messages, (GDestroyNotify)statusbar_message_free);
+  g_slist_free_full (embed->keys, g_free);
   g_free (embed->title);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
