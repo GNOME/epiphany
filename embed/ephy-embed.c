@@ -380,16 +380,8 @@ static void
 ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GSList *list;
 
-  g_signal_handlers_disconnect_by_func (shell, ephy_embed_restored_window_cb, embed);
-
-  list = embed->destroy_on_transition_list;
-  for (; list; list = list->next) {
-    GtkWidget *widget = GTK_WIDGET (list->data);
-    g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
-  }
   g_slist_free (embed->destroy_on_transition_list);
 
   for (list = embed->messages; list; list = list->next) {
@@ -725,8 +717,8 @@ ephy_embed_constructed (GObject *object)
   WebKitWebInspector *inspector;
   GtkEventController *controller;
 
-  g_signal_connect (shell, "window-restored",
-                    G_CALLBACK (ephy_embed_restored_window_cb), embed);
+  g_signal_connect_object (shell, "window-restored",
+                           G_CALLBACK (ephy_embed_restored_window_cb), embed, 0);
 
   g_signal_connect (embed, "map",
                     G_CALLBACK (ephy_embed_mapped_cb), NULL);
@@ -764,39 +756,41 @@ ephy_embed_constructed (GObject *object)
   }
 
   embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
-  g_signal_connect (embed->find_toolbar, "close",
-                    G_CALLBACK (ephy_embed_find_toolbar_close_cb),
-                    embed);
+  g_signal_connect_object (embed->find_toolbar, "close",
+                           G_CALLBACK (ephy_embed_find_toolbar_close_cb),
+                           embed, 0);
 
   gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->find_toolbar));
 
   if (embed->progress_bar_enabled)
-    embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
-                                                          G_CALLBACK (progress_update), object);
+    embed->progress_update_handler_id = g_signal_connect_object (embed->web_view, "notify::estimated-load-progress",
+                                                                 G_CALLBACK (progress_update), embed, 0);
 
   gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->top_widgets_vbox));
   gtk_box_append (GTK_BOX (embed), GTK_WIDGET (embed->overlay));
 
-  g_object_connect (embed->web_view,
-                    "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
-                    "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
-                    "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
-                    "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
-                    NULL);
+  g_signal_connect_object (embed->web_view, "notify::title",
+                           G_CALLBACK (web_view_title_changed_cb), embed, 0);
+  g_signal_connect_object (embed->web_view, "load-changed",
+                           G_CALLBACK (load_changed_cb), embed, 0);
+  g_signal_connect_object (embed->web_view, "enter-fullscreen",
+                           G_CALLBACK (entering_fullscreen_cb), embed, 0);
+  g_signal_connect_object (embed->web_view, "leave-fullscreen",
+                           G_CALLBACK (leaving_fullscreen_cb), embed, 0);
 
-  embed->status_handler_id = g_signal_connect (embed->web_view, "notify::status-message",
-                                               G_CALLBACK (status_message_notify_cb),
-                                               embed);
+  embed->status_handler_id = g_signal_connect_object (embed->web_view, "notify::status-message",
+                                                      G_CALLBACK (status_message_notify_cb),
+                                                      embed, 0);
 
   /* The inspector */
   inspector = webkit_web_view_get_inspector (embed->web_view);
 
-  g_signal_connect (inspector, "attach",
-                    G_CALLBACK (ephy_embed_attach_inspector_cb),
-                    embed);
-  g_signal_connect (inspector, "closed",
-                    G_CALLBACK (ephy_embed_close_inspector_cb),
-                    embed);
+  g_signal_connect_object (inspector, "attach",
+                           G_CALLBACK (ephy_embed_attach_inspector_cb),
+                           embed, 0);
+  g_signal_connect_object (inspector, "closed",
+                           G_CALLBACK (ephy_embed_close_inspector_cb),
+                           embed, 0);
 
   if (webkit_web_view_is_controlled_by_automation (embed->web_view)) {
     GtkWidget *banner;
@@ -880,7 +874,7 @@ ephy_embed_add_top_widget (EphyEmbed                *embed,
     list = g_slist_prepend (list, widget);
     embed->destroy_on_transition_list = list;
 
-    g_signal_connect (widget, "destroy", G_CALLBACK (remove_from_destroy_list_cb), embed);
+    g_signal_connect_object (widget, "destroy", G_CALLBACK (remove_from_destroy_list_cb), embed, 0);
   }
 
   gtk_box_prepend (embed->top_widgets_vbox, widget);
