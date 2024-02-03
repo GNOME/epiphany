@@ -43,6 +43,7 @@ libephymain_sources = [
   'ephy-mouse-gesture-controller.c',
   'ephy-permission-popover.c',
   'ephy-password-popover.c',
+  'ephy-privacy-report.c',
   'ephy-security-popover.c',
   'ephy-session.c',
   'ephy-shell.c',

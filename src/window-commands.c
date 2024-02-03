@@ -49,6 +49,7 @@
 #include "ephy-pixbuf-utils.h"
 #include "ephy-prefs-dialog.h"
 #include "ephy-prefs.h"
+#include "ephy-privacy-report.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -3227,4 +3228,14 @@ window_cmd_switch_new_tab (GSimpleAction *action,
   EphyWindow *window = user_data;
 
   ephy_window_switch_to_new_tab (window);
+}
+
+void
+window_cmd_privacy_report (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+
+  ephy_privacy_report_show (window);
 }

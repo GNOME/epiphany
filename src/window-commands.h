@@ -242,5 +242,8 @@ void window_cmd_import_passwords                (GSimpleAction *action,
 void window_cmd_switch_new_tab                  (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_privacy_report                  (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 
 G_END_DECLS
