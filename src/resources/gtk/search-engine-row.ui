@@ -5,7 +5,7 @@
     <child type="prefix">
       <object class="GtkCheckButton" id="radio_button">
         <property name="valign">center</property>
-        <property name="tooltip-text" translatable="yes">Selects the default search engine</property>
+        <property name="tooltip-text" translatable="yes">Selects Default Search Engine</property>
         <signal name="notify::active" handler="on_radio_button_active_changed_cb" object="EphySearchEngineRow" swapped="yes"/>
       </object>
     </child>
@@ -89,7 +89,7 @@
             <!-- Search engine address insight -->
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="yes">To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s.</property>
+                <property name="label" translatable="yes">To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s</property>
                 <property name="xalign">0</property>
                 <property name="wrap">True</property>
                 <style>
