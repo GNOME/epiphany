@@ -5,14 +5,14 @@
 # Gil Osher <dolfin@rpg.org.il>, 2004.
 # Yair Hershkovitz <yairhr@yahoo.com>, 2004.
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2012
-# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2023.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-12-20 13:54+0000\n"
-"PO-Revision-Date: 2023-12-25 11:52+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
+"POT-Creation-Date: 2024-02-07 17:00+0000\n"
+"PO-Revision-Date: 2024-02-07 20:29+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
@@ -54,6 +54,11 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:15
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr "הדפדפן מכונה לעתים קרובות בשם הקוד שלו, Epiphany."
+
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1076
+msgid "The GNOME Project"
+msgstr "מיזם GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in.in:4
 msgid "Web Browser"
@@ -1122,21 +1127,21 @@ msgid "Download finished"
 msgstr "הורדה הסתיימה"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:533
+#: embed/ephy-embed.c:514
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "‫%s ליציאה ממסך מלא"
 
-#: embed/ephy-embed.c:533
+#: embed/ephy-embed.c:514
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:533
+#: embed/ephy-embed.c:514
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:810
+#: embed/ephy-embed.c:793
 msgid "Web is being controlled by automation"
 msgstr "הדפדפן נשלט על ידי מערכת אוטומטית"
 
@@ -2137,7 +2142,7 @@ msgstr "הוספת דף לסימניות"
 msgid "Edit Bookmark"
 msgstr "עריכת סימניה"
 
-#: src/ephy-action-bar-start.c:568
+#: src/ephy-action-bar-start.c:561
 msgid "Stop"
 msgstr "עצירה"
 
@@ -2177,7 +2182,7 @@ msgstr "זהות אתר אינטרנט זה אומתה."
 msgid "The identity of this website has not been verified."
 msgstr "זהות אתר אינטרנט זה לא אומתה."
 
-#. Message on certificte dialog ertificate dialog
+#. Message on certificate dialog
 #: src/ephy-certificate-dialog.c:342
 msgid "No problems have been detected with your connection."
 msgstr "לא זוהו בעיות עם ההתחברות שלך."
@@ -2721,39 +2726,39 @@ msgstr "פתיחת הקישור בחלון חדש"
 msgid "Open Link In Incognito Window"
 msgstr "פתיחת הקישור בחלון גלישת סתר חדש"
 
-#: src/ephy-window.c:2739
+#: src/ephy-window.c:2742
 msgid "_Ask Later"
 msgstr "לשאול א_חר כך"
 
-#: src/ephy-window.c:2740 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2743 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_דחייה"
 
-#: src/ephy-window.c:2741 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2744 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_אישור"
 
-#: src/ephy-window.c:2943 src/ephy-window.c:4383
+#: src/ephy-window.c:2946 src/ephy-window.c:4386
 msgid "Leave Website?"
 msgstr "לעזוב את אתר האינטרנט?"
 
-#: src/ephy-window.c:2944 src/ephy-window.c:4384 src/window-commands.c:1240
+#: src/ephy-window.c:2947 src/ephy-window.c:4387 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "טופס ששינית טרם נשלח"
 
-#: src/ephy-window.c:2945 src/ephy-window.c:4385 src/window-commands.c:1244
+#: src/ephy-window.c:2948 src/ephy-window.c:4388 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_מחיקת הטופס"
 
-#: src/ephy-window.c:2966
+#: src/ephy-window.c:2969
 msgid "Download operation"
 msgstr "הורדה פעילה"
 
-#: src/ephy-window.c:2968
+#: src/ephy-window.c:2971
 msgid "Show details"
 msgstr "הצגת פרטים"
 
-#: src/ephy-window.c:2970
+#: src/ephy-window.c:2973
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2762,15 +2767,15 @@ msgstr[1] "שתי הורדות פעילות"
 msgstr[2] "‏%d הורדות פעילות"
 msgstr[3] "‫‏%d הורדות פעילות"
 
-#: src/ephy-window.c:3211
+#: src/ephy-window.c:3214
 msgid "Set as Default Browser?"
 msgstr "להגדיר כדפדפן ברירת המחדל שלך?"
 
-#: src/ephy-window.c:3213
+#: src/ephy-window.c:3216
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "להשתמש בדפדפן הזה כדפדפן ברירת המחדל שלך ולפתיחת קישורים חיצוניים"
 
-#: src/ephy-window.c:3215
+#: src/ephy-window.c:3218
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2778,56 +2783,56 @@ msgstr ""
 "להשתמש בטכנולוגיית התצוגה המקדימה של Epiphany כדפדפן בררת המחדל שלך ולפתיחת "
 "קישורים חיצוניים"
 
-#: src/ephy-window.c:3219
+#: src/ephy-window.c:3222
 msgid "_Ask Again Later"
 msgstr "לשאול _שוב אחר כך"
 
-#: src/ephy-window.c:3220
+#: src/ephy-window.c:3223
 msgid "_No"
 msgstr "_לא"
 
-#: src/ephy-window.c:3221
+#: src/ephy-window.c:3224
 msgid "_Yes"
 msgstr "_כן"
 
-#: src/ephy-window.c:3672
+#: src/ephy-window.c:3675
 msgid "Save password?"
 msgstr "לשמור ססמה?"
 
-#: src/ephy-window.c:3673
+#: src/ephy-window.c:3676
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "ניתן להסיר את הססמאות בכל עת דרך ההעדפות"
 
-#: src/ephy-window.c:3675
+#: src/ephy-window.c:3678
 msgid "Not Now"
 msgstr "לא כעת"
 
-#: src/ephy-window.c:3676
+#: src/ephy-window.c:3679
 msgid "Never Save"
 msgstr "לעולם לא לשמור"
 
-#: src/ephy-window.c:3677
+#: src/ephy-window.c:3680
 msgid "Save"
 msgstr "שמירה"
 
-#: src/ephy-window.c:4514
+#: src/ephy-window.c:4517
 msgid "Close Multiple Tabs?"
 msgstr "לסגור לשוניות רבות?"
 
-#: src/ephy-window.c:4515
+#: src/ephy-window.c:4518
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "סגירת החלון תגרום לסגירת כל הלשוניות הפתוחות"
 
-#: src/ephy-window.c:4516
+#: src/ephy-window.c:4519
 msgid "C_lose Tabs"
 msgstr "ס_גירת לשוניות"
 
 # msgctxt "shortcut window"
-#: src/ephy-window.c:4609
+#: src/ephy-window.c:4612
 msgid "New tab opened"
 msgstr "נפתחה לשונית חדשה"
 
-#: src/ephy-window.c:4613
+#: src/ephy-window.c:4616
 msgid "Switch"
 msgstr "מעבר"
 
@@ -2984,7 +2989,6 @@ msgid "Open File (manifest.json/xpi)"
 msgstr "פתיחת קובץ (‎manifest.json/xpi‎)"
 
 #: src/preferences/prefs-general-page.c:203
-#: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "הוספת שפה"
 
@@ -3110,8 +3114,8 @@ msgid "Search website data"
 msgstr "חיפוש מידע על אתר האינטרנט"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Website Data"
-msgstr "אין מידע על אתר האינטרנט"
+msgid "No Website Data Found"
+msgstr "לא נמצא מידע על אתר האינטרנט"
 
 #: src/resources/gtk/clear-data-view.ui:27
 msgid "Website data will be listed here"
@@ -3145,19 +3149,19 @@ msgid "Text Encoding"
 msgstr "קידוד הטקסט"
 
 #: src/resources/gtk/encoding-dialog.ui:30
-msgid "Use the encoding specified by the document"
+msgid "Use Encoding Specified by Document"
 msgstr "שימוש בקידוד המוגדר במסמך"
 
 #: src/resources/gtk/encoding-dialog.ui:62
-msgid "Recent encodings"
+msgid "Recent Encodings"
 msgstr "קידודים אחרונים"
 
 #: src/resources/gtk/encoding-dialog.ui:88
-msgid "Related encodings"
+msgid "Related Encodings"
 msgstr "קידודים קשורים"
 
 #: src/resources/gtk/encoding-dialog.ui:111
-msgid "Show all…"
+msgid "Show All…"
 msgstr "הצגת הכל…"
 
 #: src/resources/gtk/extension-view.ui:7
@@ -3260,8 +3264,8 @@ msgid "Search history"
 msgstr "חיפוש בהיסטוריה"
 
 #: src/resources/gtk/history-dialog.ui:118
-msgid "The History is Empty"
-msgstr "ההיסטוריה ריקה"
+msgid "No History Found"
+msgstr "לא נמצאו תוצאות"
 
 #: src/resources/gtk/history-dialog.ui:119
 msgid "Visited pages will be listed here"
@@ -3272,7 +3276,7 @@ msgid "_Open"
 msgstr "_פתיחה"
 
 #: src/resources/gtk/lang-row.ui:21
-msgid "Delete language"
+msgid "Delete Language"
 msgstr "מחיקת שפה"
 
 #: src/resources/gtk/location-entry.ui:12
@@ -3289,7 +3293,7 @@ msgid "Reader Mode"
 msgstr "מצב קריאה"
 
 #: src/resources/gtk/location-entry.ui:98
-msgid "View available passwords"
+msgid "View Available Passwords"
 msgstr "הצגת כל הססמאות הזמינות"
 
 #: src/resources/gtk/location-entry.ui:268
@@ -3438,8 +3442,8 @@ msgid "Fullscreen"
 msgstr "מסך מלא"
 
 #: src/resources/gtk/password-popover.ui:22
-msgid "Save login?"
-msgstr "לשמור את פרטי הגישה?"
+msgid "Save Login?"
+msgstr "לשמור את פרטי ההתחברות?"
 
 #: src/resources/gtk/password-popover.ui:42
 msgid ""
@@ -3457,7 +3461,7 @@ msgid "Passwords"
 msgstr "ססמאות"
 
 #: src/resources/gtk/passwords-view.ui:28
-msgid "Remove all passwords"
+msgid "Remove All Passwords"
 msgstr "מחיקת כל הססמאות"
 
 #: src/resources/gtk/passwords-view.ui:29
@@ -3465,8 +3469,8 @@ msgid "Search passwords"
 msgstr "חיפוש ססמאות"
 
 #: src/resources/gtk/passwords-view.ui:30
-msgid "There are no Passwords"
-msgstr "אין ססמאות"
+msgid "No Passwords Found"
+msgstr "לא נמצאו ססמאות"
 
 #: src/resources/gtk/passwords-view.ui:31
 msgid "Saved passwords will be listed here"
@@ -3493,15 +3497,15 @@ msgid "Use Custom Fonts"
 msgstr "שימוש בגופנים מותאמים"
 
 #: src/resources/gtk/prefs-appearance-page.ui:17
-msgid "Sans serif font"
+msgid "Sans Serif Font"
 msgstr "גופן ללא עיטורים"
 
 #: src/resources/gtk/prefs-appearance-page.ui:30
-msgid "Serif font"
+msgid "Serif Font"
 msgstr "גופן מעוטר"
 
 #: src/resources/gtk/prefs-appearance-page.ui:43
-msgid "Monospace font"
+msgid "Monospace Font"
 msgstr "גופן ברוחב אחיד"
 
 #: src/resources/gtk/prefs-appearance-page.ui:62
@@ -3547,8 +3551,8 @@ msgstr ""
 "mozilla.org</a>"
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
-msgid "No extensions installed"
-msgstr "לא מותקנות הרחבות"
+msgid "No Extensions Installed"
+msgstr "אין הרחבות מותקנות"
 
 #: src/resources/gtk/prefs-general-page.ui:6
 msgid "General"
@@ -3646,6 +3650,10 @@ msgstr "מפתח"
 msgid "Show D_eveloper Actions"
 msgstr "הצגת פעולות _מפתח"
 
+#: src/resources/gtk/prefs-lang-dialog.ui:8
+msgid "Add Language…"
+msgstr "הוספת שפה…"
+
 #: src/resources/gtk/prefs-lang-dialog.ui:45
 msgid "Choose a language:"
 msgstr "בחירת שפה:"
@@ -3663,8 +3671,8 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "מניעת _מעקב בצורה חכמה"
 
 #: src/resources/gtk/prefs-privacy-page.ui:18
-msgid "Allow websites to store cookies, databases, and local storage data."
-msgstr "לאפשר לאתרי אינטרנט לאחסן עוגיות, מסד נתונים ומידע מקומי."
+msgid "Allow websites to store cookies, databases, and local storage data"
+msgstr "לאפשר לאתרי אינטרנט לאחסן עוגיות, מסדי נתונים ומידע מקומי"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
 msgid "_Website Data Storage"
@@ -3675,8 +3683,8 @@ msgid "Search Suggestions"
 msgstr "הצעות חיפוש"
 
 #: src/resources/gtk/prefs-privacy-page.ui:30
-msgid "Enable search suggestions in the URL entry."
-msgstr "לאפשר הצעות חיפוש בשורת הכתובות."
+msgid "Enable search suggestions in the URL entry"
+msgstr "לאפשר הצעות חיפוש בשורת הכתובות"
 
 #: src/resources/gtk/prefs-privacy-page.ui:31
 msgid "_Google Search Suggestions"
@@ -3699,8 +3707,8 @@ msgid "_Remember Passwords"
 msgstr "שמירת _ססמאות"
 
 #: src/resources/gtk/search-engine-row.ui:8
-msgid "Selects the default search engine"
-msgstr "בחירת מנועה החיפוש לבררת מחדל"
+msgid "Selects Default Search Engine"
+msgstr "בחירת מנוע החיפוש לבררת מחדל"
 
 #: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
@@ -3717,10 +3725,10 @@ msgstr "קיצור"
 #: src/resources/gtk/search-engine-row.ui:92
 msgid ""
 "To determine the search address, perform a search using the search engine "
-"that you want to add and replace the search term with %s."
+"that you want to add and replace the search term with %s"
 msgstr ""
 "על מנת לקבוע כתובת לחיפוש, יש לבצע חיפוש באמצעות מנוע החיפוש שברצונך להוסיף, "
-"ולהחליף את ביטוי החיפוש עם %s."
+"ולהחליף את ביטוי החיפוש עם %s"
 
 #: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
@@ -3733,22 +3741,24 @@ msgstr "כללי"
 
 #: src/resources/gtk/shortcuts-dialog.ui:16
 msgctxt "shortcut window"
-msgid "New window"
+msgid "New Window"
 msgstr "חלון חדש"
 
 #: src/resources/gtk/shortcuts-dialog.ui:22
 msgctxt "shortcut window"
-msgid "New incognito window"
+msgid "New Incognito Window"
 msgstr "חלון גלישת סתר חדש"
 
 #: src/resources/gtk/shortcuts-dialog.ui:28
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Open file"
+msgid "Open File"
 msgstr "פתיחת קובץ"
 
 #: src/resources/gtk/shortcuts-dialog.ui:34
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Save page"
+msgid "Save Page"
 msgstr "שמירת העמוד"
 
 #: src/resources/gtk/shortcuts-dialog.ui:40
@@ -3757,8 +3767,9 @@ msgid "Take Screenshot"
 msgstr "צילום המסך"
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Print page"
+msgid "Print Page"
 msgstr "הדפסת העמוד"
 
 #: src/resources/gtk/shortcuts-dialog.ui:52
@@ -3772,8 +3783,9 @@ msgid "Help"
 msgstr "עזרה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:64
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Open menu"
+msgid "Open Menu"
 msgstr "פתיחת תפריט"
 
 #: src/resources/gtk/shortcuts-dialog.ui:70
@@ -3782,8 +3794,9 @@ msgid "Shortcuts"
 msgstr "צירופי מקשים"
 
 #: src/resources/gtk/shortcuts-dialog.ui:76
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Show downloads list"
+msgid "Show Downloads List"
 msgstr "הצגת רשימת הורדות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:86
@@ -3792,35 +3805,41 @@ msgid "Navigation"
 msgstr "ניווט"
 
 #: src/resources/gtk/shortcuts-dialog.ui:89
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Go to homepage"
+msgid "Go to Homepage"
 msgstr "מעבר לדף הבית"
 
 #: src/resources/gtk/shortcuts-dialog.ui:95
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Reload current page"
+msgid "Reload Current Page"
 msgstr "רענון הדף הנוכחי"
 
 #: src/resources/gtk/shortcuts-dialog.ui:101
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Reload bypassing cache"
+msgid "Reload Bypassing Cache"
 msgstr "רענון תוך עקיפת המטמון"
 
 #: src/resources/gtk/shortcuts-dialog.ui:107
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Stop loading current page"
+msgid "Stop Loading Current Page"
 msgstr "הפסקת טעינת הדף הנוכחי"
 
 #: src/resources/gtk/shortcuts-dialog.ui:113
 #: src/resources/gtk/shortcuts-dialog.ui:126
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Go back to the previous page"
+msgid "Go Back to Previous Page"
 msgstr "מעבר אל הדף הקודם"
 
 #: src/resources/gtk/shortcuts-dialog.ui:119
 #: src/resources/gtk/shortcuts-dialog.ui:132
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Go forward to the next page"
+msgid "Go Forward to Next Page"
 msgstr "מעבר אל הדף הבא"
 
 #: src/resources/gtk/shortcuts-dialog.ui:141
@@ -3830,47 +3849,49 @@ msgstr "לשוניות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:144
 msgctxt "shortcut window"
-msgid "New tab"
+msgid "New Tab"
 msgstr "לשונית חדשה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:150
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Close current tab"
+msgid "Close Current Tab"
 msgstr "סגירת הלשונית הנוכחית"
 
 #: src/resources/gtk/shortcuts-dialog.ui:156
 msgctxt "shortcut window"
-msgid "Reopen closed tab"
-msgstr "פתיחה מחודשת של לשונית שנסגרה"
+msgid "Reopen Closed Tab"
+msgstr "פתיחת לשונית שנסגרה מחדש"
 
 #: src/resources/gtk/shortcuts-dialog.ui:162
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Go to the next tab"
+msgid "Go to Next Tab"
 msgstr "מעבר אל הלשונית הבאה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
-msgid "Go to the previous tab"
+msgid "Go to Previous Tab"
 msgstr "מעבר אל הלשונית הקודמת"
 
 #: src/resources/gtk/shortcuts-dialog.ui:174
 msgctxt "shortcut window"
-msgid "Move current tab to the left"
-msgstr "העברת הלשונית הנוכחית שמאלה"
+msgid "Move Current Tab to the Left"
+msgstr "העברת הלשונית הנוכחית ימינה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:180
 msgctxt "shortcut window"
-msgid "Move current tab to the right"
-msgstr "העברת הלשונית הנוכחית ימינה"
+msgid "Move Current Tab to the Right"
+msgstr "העברת הלשונית הנוכחית שמאלה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
-msgid "Duplicate current tab"
+msgid "Duplicate Current Tab"
 msgstr "שכפול הלשונית הנוכחית"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
 msgctxt "shortcut window"
-msgid "View open tabs"
+msgid "View Open Tabs"
 msgstr "הצגת לשוניות פתוחות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:202
@@ -3890,37 +3911,37 @@ msgstr "העדפות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:217
 msgctxt "shortcut window"
-msgid "Bookmark current page"
-msgstr "הוספת סימנייה לדף הנוכחי"
+msgid "Bookmark Current Page"
+msgstr "הוספת הדף הנוכחי לסימניות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:223
 msgctxt "shortcut window"
-msgid "Show bookmarks list"
+msgid "Show Bookmarks List"
 msgstr "הצגת רשימת סימניות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:229
 msgctxt "shortcut window"
-msgid "Import bookmarks"
+msgid "Import Bookmarks"
 msgstr "יבוא סימניות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:235
 msgctxt "shortcut window"
-msgid "Export bookmarks"
+msgid "Export Bookmarks"
 msgstr "יצוא סימניות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:241
 msgctxt "shortcut window"
-msgid "Toggle caret browsing"
+msgid "Toggle Caret Browsing"
 msgstr "ניווט באמצעות הסמן"
 
 #: src/resources/gtk/shortcuts-dialog.ui:251
 msgctxt "shortcut window"
-msgid "Web app"
+msgid "Web App"
 msgstr "יישום רשת"
 
 #: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
-msgid "Install site as web app"
+msgid "Install Site as Web App"
 msgstr "התקנת אתר כיישום רשת"
 
 #: src/resources/gtk/shortcuts-dialog.ui:264
@@ -3930,17 +3951,17 @@ msgstr "תצוגה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
-msgid "Zoom in"
+msgid "Zoom In"
 msgstr "התקרבות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:273
 msgctxt "shortcut window"
-msgid "Zoom out"
+msgid "Zoom Out"
 msgstr "התרחקות"
 
 #: src/resources/gtk/shortcuts-dialog.ui:279
 msgctxt "shortcut window"
-msgid "Reset zoom"
+msgid "Reset Zoom"
 msgstr "איפוס התקריב"
 
 #: src/resources/gtk/shortcuts-dialog.ui:285
@@ -3950,17 +3971,18 @@ msgstr "מסך מלא"
 
 #: src/resources/gtk/shortcuts-dialog.ui:291
 msgctxt "shortcut window"
-msgid "View page source"
+msgid "View Page Source"
 msgstr "הצגת קוד המקור של הדף"
 
 #: src/resources/gtk/shortcuts-dialog.ui:297
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Toggle inspector"
+msgid "Toggle Inspector"
 msgstr "הצגת המנתח"
 
 #: src/resources/gtk/shortcuts-dialog.ui:303
 msgctxt "shortcut window"
-msgid "Toggle reader mode"
+msgid "Toggle Reader Mode"
 msgstr "מצב קריאה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:313
@@ -3995,17 +4017,19 @@ msgstr "ביצוע חוזר"
 
 #: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
-msgid "Select all"
-msgstr "בחירה בהכול"
+msgid "Select All"
+msgstr "בחירת הכול"
 
 #: src/resources/gtk/shortcuts-dialog.ui:352
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Select page URL"
+msgid "Select Page URL"
 msgstr "בחירת כתובת הדף"
 
 #: src/resources/gtk/shortcuts-dialog.ui:358
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Search with default search engine"
+msgid "Search With Default Search Engine"
 msgstr "חיפוש עם מנוע החיפוש כבררת מחדל"
 
 #: src/resources/gtk/shortcuts-dialog.ui:364
@@ -4014,13 +4038,15 @@ msgid "Find"
 msgstr "חיפוש"
 
 #: src/resources/gtk/shortcuts-dialog.ui:370
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Next find result"
+msgid "Next Find Result"
 msgstr "מעבר לתוצאה הבאה"
 
 #: src/resources/gtk/shortcuts-dialog.ui:376
+# msgctxt "shortcut window"
 msgctxt "shortcut window"
-msgid "Previous find result"
+msgid "Previous Find Result"
 msgstr "מעבר לתוצאה הקודמת"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:18
@@ -4056,12 +4082,12 @@ msgid "URL"
 msgstr "כתובת"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:81
-msgid "Add new URL"
+msgid "Add New URL"
 msgstr "הוספת כתובת חדשה"
 
 #
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:87
-msgid "Remove the selected URLs"
+msgid "Remove Selected URLs"
 msgstr "מחיקת הכתובות הנבחרות"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:94
@@ -4198,10 +4224,6 @@ msgstr "יבוא ססמאות"
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1076
-msgid "The GNOME Project"
-msgstr "מיזם GNOME"
-
 #: src/window-commands.c:1086
 msgid "translator-credits"
 msgstr ""
@@ -4273,6 +4295,55 @@ msgstr ""
 #: src/window-commands.c:2815
 msgid "_Enable"
 msgstr "ה_פעלה"
+
+#~ msgid "There is no Website Data"
+#~ msgstr "אין מידע על אתר האינטרנט"
+
+#~ msgid "The History is Empty"
+#~ msgstr "ההיסטוריה ריקה"
+
+#~ msgid "There are no Passwords"
+#~ msgstr "אין ססמאות"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New window"
+#~ msgstr "חלון חדש"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New incognito window"
+#~ msgstr "חלון גלישת סתר חדש"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New tab"
+#~ msgstr "לשונית חדשה"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Reopen closed tab"
+#~ msgstr "פתיחה מחודשת של לשונית שנסגרה"
+
+#~ msgctxt "shortcut window"
+#~ msgid "View open tabs"
+#~ msgstr "הצגת לשוניות פתוחות"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Import bookmarks"
+#~ msgstr "יבוא סימניות"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Web app"
+#~ msgstr "יישום רשת"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom in"
+#~ msgstr "התקרבות"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom out"
+#~ msgstr "התרחקות"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Select all"
+#~ msgstr "בחירה בהכול"
 
 #~ msgid "Enable safe browsing"
 #~ msgstr "Enable safe browsing"
