@@ -16,16 +16,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2022-08-05 20:20+0000\n"
-"PO-Revision-Date: 2022-09-13 22:51+0200\n"
-"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"POT-Creation-Date: 2023-04-05 08:59+0000\n"
+"PO-Revision-Date: 2024-02-10 01:54+0100\n"
+"Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:193
@@ -122,21 +122,21 @@ msgstr "Zavrženo. Místo toho prosím použijte search-engine-providers."
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q="
-"%s&cc=cz'>, 'bang': <'!b'>}\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?"
+"q=%s&cc=cz'>, 'bang': <'!b'>}\n"
 "\t\t\t\t]"
 
 #: data/org.gnome.epiphany.gschema.xml:61
@@ -152,9 +152,9 @@ msgid ""
 "the search engine."
 msgstr ""
 "Seznam vyhledávačů. Jedná se o pole proměnlivých slovníků, kdy každý slovník "
-"odpovídá jednomu vyhledávači a podporuje následující klíče: • „name“ je název "
-"vyhledávače; • „url“ je adresa URL pro vyhledávání, ve které je hledaný výraz "
-"zastoupen pomocí %s. • „bang“ je zkratka do daného vyhledávače"
+"odpovídá jednomu vyhledávači a podporuje následující klíče: • „name“ je "
+"název vyhledávače; • „url“ je adresa URL pro vyhledávání, ve které je "
+"hledaný výraz zastoupen pomocí %s. • „bang“ je zkratka do daného vyhledávače"
 
 #: data/org.gnome.epiphany.gschema.xml:72
 msgid "Enable Google Search Suggestions"
@@ -1072,7 +1072,7 @@ msgstr ""
 "Začněte s prohlížením a objeví se zde vaše nejnavštěvovanější webové stránky."
 
 #: embed/ephy-about-handler.c:467
-#: embed/web-process-extension/resources/js/overview.js:148
+#: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "Odstranit z přehledu"
 
@@ -2420,7 +2420,7 @@ msgid "Paste and _Go"
 msgstr "Vložit a pře_jít"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:934
+#: lib/widgets/ephy-location-entry.c:790 src/ephy-window.c:933
 msgid "_Undo"
 msgstr "_Zpět"
 
@@ -2678,7 +2678,7 @@ msgid "Web options"
 msgstr "Volby aplikace Web"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:90
+#: src/ephy-tab-view.c:637 src/resources/gtk/action-bar-start.ui:90
 msgid "Open a new tab"
 msgstr "Otevřít novou kartu"
 
@@ -2721,182 +2721,182 @@ msgstr "Odebrat vybrané webové rozšíření"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Otevření souboru (manifest.json/xpi)"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:934
 msgid "Re_do"
 msgstr "Zn_ovu"
 
 #. Edit.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:937
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:938
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:939
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:940
 msgid "_Paste Text Only"
 msgstr "Vložit _pouze text"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:941
 msgid "Select _All"
 msgstr "Vy_brat vše"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:943
 msgid "S_end Link by Email…"
 msgstr "Odeslat odkaz _e-mailem…"
 
-#: src/ephy-window.c:946
+#: src/ephy-window.c:945
 msgid "_Reload"
 msgstr "_Obnovit"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:946
 msgid "_Back"
 msgstr "_Zpět"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:947
 msgid "_Forward"
 msgstr "_Vpřed"
 
 #. Bookmarks
-#: src/ephy-window.c:951
+#: src/ephy-window.c:950
 msgid "Add Boo_kmark…"
 msgstr "Přid_at záložku…"
 
 #. Links.
-#: src/ephy-window.c:955
+#: src/ephy-window.c:954
 msgid "Open Link in New _Window"
 msgstr "Otevřít odkaz v novém _okně"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:955
 msgid "Open Link in New _Tab"
 msgstr "Otevřít odkaz v nové _kartě"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:956
 msgid "Open Link in I_ncognito Window"
 msgstr "Otevřít odkaz v a_nonymním okně"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:957
 msgid "_Save Link As…"
 msgstr "_Uložit odkaz jako…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:958
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:959
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovat e-mailovou adresu"
 
 #. Images.
-#: src/ephy-window.c:964
+#: src/ephy-window.c:963
 msgid "View _Image in New Tab"
 msgstr "Zobraz_it obrázek v nové kartě"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:964
 msgid "Copy I_mage Address"
 msgstr "Kopírovat adresu _obrázku"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:965
 msgid "_Save Image As…"
 msgstr "_Uložit obrázek jako…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:966
 msgid "Set as _Wallpaper"
 msgstr "Nastavit jako _tapetu plochy"
 
 #. Video.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:970
 msgid "Open Video in New _Window"
 msgstr "Otevřít video v novém _okně"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:971
 msgid "Open Video in New _Tab"
 msgstr "Otevřít video v nové kar_tě"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:972
 msgid "_Save Video As…"
 msgstr "_Uložit video jako…"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:973
 msgid "_Copy Video Address"
 msgstr "_Kopírovat adresu videa"
 
 #. Audio.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:977
 msgid "Open Audio in New _Window"
 msgstr "Otevřít zvuk v novém _okně"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:978
 msgid "Open Audio in New _Tab"
 msgstr "Otevřít zvuk v nové kar_tě"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:979
 msgid "_Save Audio As…"
 msgstr "_Uložit zvuk jako…"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:980
 msgid "_Copy Audio Address"
 msgstr "_Kopírovat adresu zvuku"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:986
 msgid "Save Pa_ge As…"
 msgstr "_Uložit stránku jako…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:987
 msgid "_Take Screenshot…"
 msgstr "Pořídi_t snímek obrazovky"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:988
 msgid "_Page Source"
 msgstr "Z_drojový kód stránky"
 
-#: src/ephy-window.c:1373
+#: src/ephy-window.c:1372
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Na webu vyhledat „%s“"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1401
 msgid "Open Link"
 msgstr "Otevřít odkaz"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1403
 msgid "Open Link In New Tab"
 msgstr "Otevřít odkaz v nové kartě"
 
-#: src/ephy-window.c:1406
+#: src/ephy-window.c:1405
 msgid "Open Link In New Window"
 msgstr "Otevřít odkaz v novém okně"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1407
 msgid "Open Link In Incognito Window"
 msgstr "Otevřít odkaz v anonymním okně"
 
-#: src/ephy-window.c:2854 src/ephy-window.c:4183
+#: src/ephy-window.c:2841 src/ephy-window.c:4157
 msgid "Do you want to leave this website?"
 msgstr "Opravdu chcete opustit tuto stránku www?"
 
-#: src/ephy-window.c:2855 src/ephy-window.c:4184 src/window-commands.c:1221
+#: src/ephy-window.c:2842 src/ephy-window.c:4158 src/window-commands.c:1221
 msgid "A form you modified has not been submitted."
 msgstr "Formulář, který jste upravili, nebyl odeslán."
 
-#: src/ephy-window.c:2856 src/ephy-window.c:4185 src/window-commands.c:1223
+#: src/ephy-window.c:2843 src/ephy-window.c:4159 src/window-commands.c:1223
 msgid "_Discard form"
 msgstr "Zaho_dit formulář"
 
-#: src/ephy-window.c:2877
+#: src/ephy-window.c:2864
 msgid "Download operation"
 msgstr "Operace stahování"
 
-#: src/ephy-window.c:2879
+#: src/ephy-window.c:2866
 msgid "Show details"
 msgstr "Zobrazit podrobnosti"
 
-#: src/ephy-window.c:2881
+#: src/ephy-window.c:2868
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2905,35 +2905,35 @@ msgstr[1] "%d aktivní stahování"
 msgstr[2] "%d aktivních stahování"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-window.c:3375
+#: src/ephy-window.c:3349
 msgid "View open tabs"
 msgstr "Zobrazit otevřené karty"
 
-#: src/ephy-window.c:3505
+#: src/ephy-window.c:3479
 msgid "Set Web as your default browser?"
 msgstr "Nastavit aplikaci Web jako výchozí prohlížeč?"
 
-#: src/ephy-window.c:3507
+#: src/ephy-window.c:3481
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Nastavit Epiphany Technology Preview jako výchozí prohlížeč?"
 
-#: src/ephy-window.c:3519
+#: src/ephy-window.c:3493
 msgid "_Yes"
 msgstr "_Ano"
 
-#: src/ephy-window.c:3520
+#: src/ephy-window.c:3494
 msgid "_No"
 msgstr "_Ne"
 
-#: src/ephy-window.c:4317
+#: src/ephy-window.c:4291
 msgid "There are multiple tabs open."
 msgstr "Je otevřeno více karet."
 
-#: src/ephy-window.c:4318
+#: src/ephy-window.c:4292
 msgid "If you close this window, all open tabs will be lost"
 msgstr "Pokud toto okno zavřete, všechny otevřené karty budou ztraceny"
 
-#: src/ephy-window.c:4319
+#: src/ephy-window.c:4293
 msgid "C_lose tabs"
 msgstr "Zavřít _karty"
 
@@ -3771,7 +3771,7 @@ msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s."
 msgstr ""
-"Pokdu potřebujete zjistit, jak vypadá adresa pro vyhledávání, vyhledejte "
+"Pokud potřebujete zjistit, jak vypadá adresa pro vyhledávání, vyhledejte "
 "jakýkoliv výraz vyhledávačem, který chcete přidat, a následně v adrese, "
 "kterou uvidíte v adresní liště, změňte hledaný výraz na %s."
 
@@ -3959,7 +3959,7 @@ msgstr "Exportovat záložky"
 #: src/resources/gtk/shortcuts-dialog.ui:274
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
-msgstr "Povolit režim prohlížení s kurzorem?"
+msgstr "Povolit režim prohlížení s kurzorem"
 
 #: src/resources/gtk/shortcuts-dialog.ui:285
 msgctxt "shortcut window"
