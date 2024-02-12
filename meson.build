@@ -83,7 +83,7 @@ conf.set('ADW_VERSION_MIN_REQUIRED', 'ADW_VERSION_1_4')
 conf.set('ADW_VERSION_MAX_ALLOWED', 'ADW_VERSION_1_4')
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
-gck_dep = dependency('gck-1')
+gck_dep = dependency('gck-2')
 gcr_dep = dependency('gcr-4', version: '>= 3.9.0')
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
 gio_dep = dependency('gio-2.0', version: glib_requirement)

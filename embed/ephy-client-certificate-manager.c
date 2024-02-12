@@ -159,7 +159,7 @@ object_details_cb (GObject      *source_object,
 
     uri_data.attributes = attributes;
     uri_data.token_info = gck_slot_get_token_info (gck_session_get_slot (self->session));
-    uri = gck_uri_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
+    uri = gck_uri_data_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
 
     cert = g_strconcat (uri, ";type=cert", NULL);
     priv = g_strconcat (uri, ";type=private", NULL);
@@ -233,10 +233,7 @@ logged_in_cb (GObject      *obj,
   GckSession *session = GCK_SESSION (obj);
   EphyClientCertificateManager *self = user_data;
   g_autoptr (GckEnumerator) enm = NULL;
-  /* FIXME: https://gitlab.gnome.org/GNOME/epiphany/-/issues/2281
-   * g_autoptr (GckAttributes) attributes = NULL;
-   **/
-  GckAttributes *attributes = NULL;
+  g_autoptr (GckAttributes) attributes = NULL;
 
   if (!gck_session_login_finish (session, res, &error)) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
@@ -357,7 +354,7 @@ certificate_selection_dialog_response_cb (AdwMessageDialog *dialog,
     return;
   }
 
-  gck_slot_open_session_async (slot, GCK_SESSION_READ_ONLY, self->cancellable, session_opened_cb, self);
+  gck_slot_open_session_async (slot, GCK_SESSION_READ_ONLY, NULL, self->cancellable, session_opened_cb, self);
 }
 
 static void
