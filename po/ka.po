@@ -1,14 +1,14 @@
 # Georgian translation for Epiphany.
 # Copyright (C) 2023 Epiphany's authors.
 # This file is distributed under the same license as the Epiphany package.
-# Ekaterine Papava <papava.e@gtu.ge>, 2023.
+# Ekaterine Papava <papava.e@gtu.ge>, 2023-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2023-10-12 12:10+0000\n"
-"PO-Revision-Date: 2023-10-12 15:34+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
+"POT-Creation-Date: 2024-02-11 23:30+0000\n"
+"PO-Revision-Date: 2024-02-12 11:43+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:279
-#: src/ephy-main.c:432 src/window-commands.c:1063
+#: src/ephy-main.c:432 src/window-commands.c:1066
 msgid "Web"
 msgstr "ვები"
 
@@ -40,9 +40,10 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:15
 msgid "Web is often referred to by its code name, Epiphany."
-msgstr ""
+msgstr "Web ხშირად მოიხსენიება თავისი კოდური სახელწოდებით, Epiphany."
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1073
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1076
 msgid "The GNOME Project"
 msgstr "პროექტი „GNOME“"
 
@@ -85,7 +86,7 @@ msgstr "ნაგულისხმევად არჩეული საძ�
 
 #: data/org.gnome.epiphany.gschema.xml:33
 msgid "Deprecated. Please use search-engine-providers instead."
-msgstr ""
+msgstr "მოძველებულია. გამოიყენეთ search-engine-providers."
 
 #. TRANSLATORS: These are the prepopulated search engines. You should
 #. add country-specific URL query parameters if appropriate or change
@@ -147,7 +148,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:85
 msgid "Whether to automatically restore the last session"
-msgstr ""
+msgstr "აღვადგინო თუ არა ბოლო სესია"
 
 #: data/org.gnome.epiphany.gschema.xml:86
 msgid ""
@@ -180,7 +181,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:100
 msgid "Whether to ask for setting browser as default"
-msgstr ""
+msgstr "ვიკითხო თუ არა ბრაუზერის ნაგულისხმევად დაყენებისას"
 
 #: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
@@ -199,7 +200,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "Active clear data items."
-msgstr ""
+msgstr "მონაცემის ელემენტების აქტიური გასუფტავება."
 
 #: data/org.gnome.epiphany.gschema.xml:111
 msgid ""
@@ -234,7 +235,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Keep window open when closing last tab"
-msgstr ""
+msgstr "ფანჯრის ღია დატოვება ბოლო ჩანართის დახურვის შემდეგ"
 
 #: data/org.gnome.epiphany.gschema.xml:128
 msgid "If enabled application window is kept open when closing the last tab."
@@ -382,7 +383,7 @@ msgstr "პაროლების დამახსოვრება"
 
 #: data/org.gnome.epiphany.gschema.xml:211
 msgid "Whether to store and prefill passwords in websites."
-msgstr ""
+msgstr "დავიმახსოვრო და წინასწარ შევავსო თუ არა ვებგვერდის პაროლები."
 
 #: data/org.gnome.epiphany.gschema.xml:215
 msgid "Enable site-specific quirks"
@@ -395,42 +396,32 @@ msgid ""
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:220
-msgid "Enable safe browsing"
-msgstr "უსაფრთხო ბრაუზინგის ჩართვა"
+msgid "Enable Intelligent Tracking Prevention (ITP)"
+msgstr "ჭკვიანი ტრეკინგის თავიდან აცილების (ITP) ჩართვა"
 
 #: data/org.gnome.epiphany.gschema.xml:221
-msgid ""
-"Whether to enable safe browsing. Safe browsing operates via Google Safe "
-"Browsing API v4."
-msgstr ""
+msgid "Whether to enable Intelligent Tracking Prevention."
+msgstr "ჩავრთო თუ არა ჭკვიანი ტრეკინგის თავიდან აცილება."
 
 #: data/org.gnome.epiphany.gschema.xml:225
-msgid "Enable Intelligent Tracking Prevention (ITP)"
-msgstr ""
+msgid "Allow websites to store local website data"
+msgstr "ვებგვერდებისთვის მონაცემების ლოკალურად დამახსოვრების უფლების მიცემა"
 
 #: data/org.gnome.epiphany.gschema.xml:226
-msgid "Whether to enable Intelligent Tracking Prevention."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:230
-msgid "Allow websites to store local website data"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:231
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Default zoom level for new pages"
 msgstr "ახალი გვერდების გადიდების ნაგულისხმები სიდიდე"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Enable autosearch"
 msgstr "ავტომატური ძებნის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -438,37 +429,37 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Enable mouse gestures"
 msgstr "თაგუნას ჟესტების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:240
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Last upload directory"
 msgstr "ბოლო ატვირთვის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:245
 msgid "Keep track of last upload directory"
-msgstr ""
+msgstr "დავიმახსოვრო თუ არა ბოლო ატვირთვის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last download directory"
 msgstr "ბოლო გადმოწერის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "Keep track of last download directory"
-msgstr ""
+msgstr "დავიმახსოვრო თუ არა ბოლო გადმოწერის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Hardware acceleration policy"
 msgstr "აპარატურული აჩქარების პოლიტიკა"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:255
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
@@ -476,295 +467,295 @@ msgid ""
 "could expose severe hardware-specific graphics driver bugs."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Always ask for download directory"
 msgstr "გადმოწერისას საქაღალდის ყოველთვის კითხვა"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:260
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid "Enable immediately switch to new open tab"
-msgstr ""
+msgstr "ახალ ჩანართზე დაუყოვნებლივი გადართვის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:265
 msgid "Whether to automatically switch to a new open tab."
-msgstr ""
+msgstr "გადავერთო თუ არა ავტომატურად ახალ გახსნილ ჩანართზე."
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Enable WebExtensions"
 msgstr "ვებგაფართოებების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:270
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid "Active WebExtensions"
 msgstr "ჩართული ვებგაფართოებები"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:275
 msgid "Indicates which WebExtensions are set to active."
-msgstr ""
+msgstr "მიუთითებს, რომელი ვებგაფართოებებია აქტიური."
 
-#: data/org.gnome.epiphany.gschema.xml:284
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid "Show developer actions"
 msgstr "პროგრამისტის ქმედებების ჩვენება"
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:291
+#: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:287
 msgid "The list of URLs that should be opened by the web application"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid "Show navigation buttons in WebApp"
-msgstr ""
+msgstr "ნავიგაციის ღილაკების ჩვენება WebApp-ში"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Whether to show buttons for navigation in WebApp."
-msgstr ""
+msgstr "ნავიგაციის ღილაკების ჩვენება WebApp-ში."
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "Run in background"
 msgstr "ფონურად გაშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:306
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid "WebApp is system-wide"
-msgstr ""
+msgstr "ვებაპი მთელი სისტემისთვისაა"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "If enabled, application cannot be edited or removed."
-msgstr ""
+msgstr "თუ ჩართულია, აპლიკაციას ვერ წაშლით ან ჩაასწორებთ."
 
-#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "The downloads folder"
 msgstr "გადმოწერების საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:314
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:321
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid "Window position"
 msgstr "ფანჯრის მდებარეობა"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:317
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "Window size"
 msgstr "ფანჯრის ზომა"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:331
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "Is maximized"
 msgstr "გაშლილია"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Disable forward and back buttons"
-msgstr ""
+msgstr "წინ და უკან ღილაკების გამორთვა"
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:366
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "Firefox Sync Token Server URL"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "URL to a custom Firefox Sync token server."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "Firefox Sync Accounts Server URL"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "Currently signed in sync user"
-msgstr ""
+msgstr "ამჟამად შესული სინქრონიზაციის მომხმარებელი"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid ""
-"The email linked to the Firefox Account used to sync data with Mozilla’s "
+"The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "Last sync timestamp"
 msgstr "ბლო სინქრონიზაციის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid "The UNIX time at which last sync was made in seconds."
-msgstr ""
+msgstr "UNIX-ის დრო, რომელზეც ბოლო სინქრონიზაცია განხორციელდა. წამებში."
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "Sync device ID"
 msgstr "სინქის მოწყობილობის ID"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "The sync device ID of the current device."
-msgstr ""
+msgstr "სინქრონიზაციის მოწყობილობის ID მიმდინარე მოწყობილობისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "Sync device name"
 msgstr "სინქის მოწყობილობის სახელი"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "The sync device name of the current device."
-msgstr ""
+msgstr "სინქრონიზაციის მოწყობილობის სახელი მიმდინარე მოწყობილობისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid "The sync frequency in minutes"
 msgstr "სინქრონიზაციის სიხშირე წუთებში"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "The number of minutes between two consecutive syncs."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "Sync data with Firefox"
-msgstr ""
+msgstr "მონაცემების სინქრონიზაცია Firefox-თან"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "Enable bookmarks sync"
 msgstr "სანიშნეების სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid "Bookmarks sync timestamp"
 msgstr "სანიშნეების სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:416
-#: data/org.gnome.epiphany.gschema.xml:431
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "Initial sync or normal sync"
-msgstr ""
+msgstr "საწყისი სინქრონიზაცია თუ ნორმალური"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid "Enable passwords sync"
 msgstr "პაროლების სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid "Passwords sync timestamp"
 msgstr "პაროლების სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:427
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:431
 msgid "Enable history sync"
 msgstr "ისტორიის სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid "History sync timestamp"
 msgstr "ისტორიის სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "The timestamp at which last history sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:442
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "Enable open tabs sync"
 msgstr "ღია ჩანართების სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:456
+#: data/org.gnome.epiphany.gschema.xml:451
 msgid "Open tabs sync timestamp"
 msgstr "ღია ჩანართების სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:457
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:468
+#: data/org.gnome.epiphany.gschema.xml:463
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:469
+#: data/org.gnome.epiphany.gschema.xml:464
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -772,12 +763,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -785,12 +776,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:474
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -798,12 +789,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -811,11 +802,11 @@ msgid ""
 "make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -823,12 +814,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -836,11 +827,11 @@ msgid ""
 "decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:498
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:499
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -861,75 +852,122 @@ msgstr "ვერისა %s"
 msgid "About Web"
 msgstr "ვების შესახებ"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1065
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1068
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany ის სატესტო ვერსია"
 
 #: embed/ephy-about-handler.c:210
 msgid "A simple, clean, beautiful view of the web"
-msgstr ""
+msgstr "ვების მარტივი, სუფთა და ლამაზი ხედი"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:269 embed/ephy-about-handler.c:270
-#: embed/ephy-about-handler.c:334 embed/ephy-about-handler.c:360
+#: embed/ephy-about-handler.c:273 embed/ephy-about-handler.c:275
+#: embed/ephy-about-handler.c:339 embed/ephy-about-handler.c:365
 msgid "Apps"
 msgstr "აპები"
 
-#: embed/ephy-about-handler.c:271
+#: embed/ephy-about-handler.c:276
 msgid "List of installed web apps"
 msgstr "დაყენებული ვებ აპების სია"
 
-#: embed/ephy-about-handler.c:319
+#: embed/ephy-about-handler.c:324
 msgid "Delete"
 msgstr "წაშლა"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:321
+#: embed/ephy-about-handler.c:326
 msgid "Installed on:"
 msgstr "დაყენების დრო:"
 
-#: embed/ephy-about-handler.c:360
+#: embed/ephy-about-handler.c:365
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
 msgstr ""
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:465
+#: embed/ephy-about-handler.c:470
 msgid "Welcome to Web"
 msgstr "მოგესალმებით ვებში"
 
-#: embed/ephy-about-handler.c:465
+#: embed/ephy-about-handler.c:470
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 
-#: embed/ephy-about-handler.c:499
+#: embed/ephy-about-handler.c:504
 #: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "მიმოხილვიდან წაშლა"
 
-#: embed/ephy-about-handler.c:589 embed/ephy-about-handler.c:590
+#: embed/ephy-about-handler.c:594 embed/ephy-about-handler.c:595
 msgid "Private Browsing"
 msgstr "ანონიმური ფანჯარა"
 
-#: embed/ephy-about-handler.c:591
+#: embed/ephy-about-handler.c:596
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
 "when you close the window. Files you download will be kept."
 msgstr ""
 
-#: embed/ephy-about-handler.c:595
+#: embed/ephy-about-handler.c:600
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 
-#: embed/ephy-about-handler.c:597
+#: embed/ephy-about-handler.c:602
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
 "that you visit, and advertisers on these websites may still be tracking you."
 msgstr ""
+
+#: embed/ephy-client-certificate-manager.c:295
+msgid "PIN required"
+msgstr "აუცილებელია PIN-კოდი"
+
+#: embed/ephy-client-certificate-manager.c:298
+#, c-format
+msgid "Please enter PIN for %s, to authenticate at %s:%d."
+msgstr ""
+
+#: embed/ephy-client-certificate-manager.c:306
+#: embed/ephy-client-certificate-manager.c:391 embed/ephy-download.c:762
+#: src/ephy-history-dialog.c:572 src/ephy-window.c:257
+#: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
+#: src/resources/gtk/firefox-sync-dialog.ui:117
+#: src/resources/gtk/history-dialog.ui:41
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
+#: src/window-commands.c:577 src/window-commands.c:831
+#: src/window-commands.c:1243 src/window-commands.c:1911
+#: src/window-commands.c:2814
+msgid "_Cancel"
+msgstr "_გაუქმება"
+
+#: embed/ephy-client-certificate-manager.c:307
+msgid "_Login"
+msgstr "_მომხმარებელი"
+
+#: embed/ephy-client-certificate-manager.c:377
+msgid "Select certificate"
+msgstr "აირჩიეთ სერტიფიკატი"
+
+#: embed/ephy-client-certificate-manager.c:380
+#, c-format
+msgid ""
+"The website %s:%d requests that you provide a certificate for authentication "
+"for %s."
+msgstr ""
+
+#: embed/ephy-client-certificate-manager.c:385
+#, c-format
+msgid ""
+"The website %s:%d requests that you provide a certificate for authentication."
+msgstr ""
+
+#: embed/ephy-client-certificate-manager.c:392 src/window-commands.c:335
+msgid "_Select"
+msgstr "_მონიშვნა"
 
 #: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:556
 msgid "Select a Directory"
@@ -942,18 +980,6 @@ msgstr "აირჩიეთ სამიზნე"
 #: embed/ephy-download.c:759
 msgid "Download Requested"
 msgstr "გადმოწერა მოთხოვნილია"
-
-#: embed/ephy-download.c:762 src/ephy-history-dialog.c:572
-#: src/ephy-window.c:258 src/preferences/extension-view.c:118
-#: src/preferences/passwords-view.c:183
-#: src/resources/gtk/firefox-sync-dialog.ui:117
-#: src/resources/gtk/history-dialog.ui:41
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
-#: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1240 src/window-commands.c:1941
-#: src/window-commands.c:2697
-msgid "_Cancel"
-msgstr "_გაუქმება"
 
 #: embed/ephy-download.c:763
 msgid "_Download"
@@ -988,25 +1014,25 @@ msgid "Download finished"
 msgstr "გადმოწერა დასრულდა"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:533
+#: embed/ephy-embed.c:514
 #, c-format
 msgid "Press %s to exit fullscreen"
-msgstr ""
+msgstr "სრული ეკრანის გავლისთვის დააწექით ღილაკს %s"
 
-#: embed/ephy-embed.c:533
+#: embed/ephy-embed.c:514
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:533
+#: embed/ephy-embed.c:514
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:810
+#: embed/ephy-embed.c:793
 msgid "Web is being controlled by automation"
-msgstr ""
+msgstr "ვები ავტომატიზაციით კონტროლდება"
 
-#: embed/ephy-embed-shell.c:713
+#: embed/ephy-embed-shell.c:640
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr ""
@@ -1014,7 +1040,7 @@ msgstr ""
 #: embed/ephy-embed-utils.c:70
 #, c-format
 msgid "Send an email message to “%s”"
-msgstr ""
+msgstr "ელფოსტის გაგზავნა \"%s\"-თან"
 
 #. TRANSLATORS: This string is part of the previous translatable string.
 #. * It is appended for each extraneous mailto: URI email address. For
@@ -1388,102 +1414,102 @@ msgstr "ტექსტი ვერ ვიპოვე"
 msgid "Search wrapped back to the top"
 msgstr ""
 
-#: embed/ephy-web-view.c:223 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:227 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "ყველა ფაილი"
 
-#: embed/ephy-web-view.c:232 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:236 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr "ყველა მხარდაჭერილი ტიპი"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:562
+#: embed/ephy-web-view.c:566
 msgid "This form is not secure ‒ passwords will not be kept private"
-msgstr ""
+msgstr "ეს ფორმა დაცული არაა - პაროლები საიდუმლო არ იქნება"
 
-#: embed/ephy-web-view.c:563 embed/ephy-web-view.c:3265
+#: embed/ephy-web-view.c:567 embed/ephy-web-view.c:3268
 msgid "_Dismiss"
 msgstr "_მოცილება"
 
-#: embed/ephy-web-view.c:780
+#: embed/ephy-web-view.c:741
 msgid "Web process crashed"
 msgstr "ვების პროცესი ავარიულად დასრულდა"
 
-#: embed/ephy-web-view.c:783
+#: embed/ephy-web-view.c:744
 msgid "Web process terminated due to exceeding memory limit"
-msgstr ""
+msgstr "Web-ის პროცესი დასრულდა მეხსიერების ზღვრების გადაჭარბების გამო"
 
-#: embed/ephy-web-view.c:786
+#: embed/ephy-web-view.c:747
 msgid "Web process terminated by API request"
-msgstr ""
+msgstr "Web-ის პროცესი შეწყვეტილია API მოთხოვნის მიერ"
 
-#: embed/ephy-web-view.c:827
+#: embed/ephy-web-view.c:788
 msgid "Page Unresponsive"
 msgstr "გვერდი არ პასუხობს"
 
-#: embed/ephy-web-view.c:831
+#: embed/ephy-web-view.c:792
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "მიმდინარე გვერდი \"%s\" არ პასუხობს"
 
-#: embed/ephy-web-view.c:835
+#: embed/ephy-web-view.c:796
 msgid "_Wait"
 msgstr "_მოცდა"
 
-#: embed/ephy-web-view.c:836
+#: embed/ephy-web-view.c:797
 msgid "Force _Stop"
 msgstr "ძალით _გაჩერება"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1086
+#: embed/ephy-web-view.c:1047
 #, c-format
 msgid "Loading “%s”…"
 msgstr "%s-ის ჩატვირთვა…"
 
-#: embed/ephy-web-view.c:1088 embed/ephy-web-view.c:1094
+#: embed/ephy-web-view.c:1049 embed/ephy-web-view.c:1055
 msgid "Loading…"
 msgstr "იტვირთება…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1427
+#: embed/ephy-web-view.c:1533
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1432
+#: embed/ephy-web-view.c:1538
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1437
+#: embed/ephy-web-view.c:1543
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1442
+#: embed/ephy-web-view.c:1548
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1447
+#: embed/ephy-web-view.c:1553
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1452
+#: embed/ephy-web-view.c:1558
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1457
+#: embed/ephy-web-view.c:1563
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1491,31 +1517,31 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1522 embed/ephy-web-view.c:1578
+#: embed/ephy-web-view.c:1628 embed/ephy-web-view.c:1684
 #, c-format
 msgid "Problem Loading Page"
 msgstr "გვერდის ჩატვირთვის პრობლემა"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1525
+#: embed/ephy-web-view.c:1631
 msgid "Unable to display this website"
 msgstr "ამ ვებგვერდის ჩვენება შეუძლებელია"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1530
+#: embed/ephy-web-view.c:1636
 #, c-format
 msgid "The site at %s seems to be unavailable."
-msgstr ""
+msgstr "ვებგვერდის მისამართზე %s მიუწვდომელია."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1534
+#: embed/ephy-web-view.c:1640
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
 msgstr ""
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1544
+#: embed/ephy-web-view.c:1650
 #, c-format
 msgid "The precise error was: %s"
 msgstr "ზუსტი შეცდომა: %s"
@@ -1525,85 +1551,85 @@ msgstr "ზუსტი შეცდომა: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1549 embed/ephy-web-view.c:1602
-#: embed/ephy-web-view.c:1638 embed/ephy-web-view.c:1674
+#: embed/ephy-web-view.c:1655 embed/ephy-web-view.c:1708
+#: embed/ephy-web-view.c:1744 embed/ephy-web-view.c:1780
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:170
 msgid "Reload"
 msgstr "თავიდან ჩატვირთვა"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1553 embed/ephy-web-view.c:1606
-#: embed/ephy-web-view.c:1642 embed/ephy-web-view.c:1678
+#: embed/ephy-web-view.c:1659 embed/ephy-web-view.c:1712
+#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1784
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "მარჯ"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1581
+#: embed/ephy-web-view.c:1687
 msgid "Oops! There may be a problem"
-msgstr ""
+msgstr "ვაი! მგონი სადღაც პრობლემაა"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1586
+#: embed/ephy-web-view.c:1692
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1593
+#: embed/ephy-web-view.c:1699
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1627
+#: embed/ephy-web-view.c:1733
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "გვერდის ჩვენების პრობლემა"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1630
+#: embed/ephy-web-view.c:1736
 msgid "Oops!"
 msgstr "უფს!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1633
+#: embed/ephy-web-view.c:1739
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1769
 #, c-format
 msgid "Unresponsive Page"
 msgstr "გვერდი არ პასუხობს"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1666
+#: embed/ephy-web-view.c:1772
 msgid "Uh-oh!"
 msgstr "რაღაც გაფუჭდა!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1669
+#: embed/ephy-web-view.c:1775
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
 msgstr ""
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1705
+#: embed/ephy-web-view.c:1811
 #, c-format
 msgid "Security Violation"
 msgstr "უსაფრთხოების დარღვევა"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1708
+#: embed/ephy-web-view.c:1814
 msgid "This Connection is Not Secure"
 msgstr "შეერთება დაუცველია"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1713
+#: embed/ephy-web-view.c:1819
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1611,111 +1637,53 @@ msgid ""
 msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
-#. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1723 embed/ephy-web-view.c:1811
-#: embed/ephy-web-view.c:1861
+#: embed/ephy-web-view.c:1829 embed/ephy-web-view.c:1879
 msgid "Go Back"
 msgstr "უკან დაბრუნება"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
-#. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1726 embed/ephy-web-view.c:1814
-#: embed/ephy-web-view.c:1864
+#: embed/ephy-web-view.c:1832 embed/ephy-web-view.c:1882
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1729 embed/ephy-web-view.c:1817
+#: embed/ephy-web-view.c:1835
 msgid "Accept Risk and Proceed"
 msgstr "დაეთანხმეთ რისკს და გააგრძელეთ"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1733 embed/ephy-web-view.c:1821
+#: embed/ephy-web-view.c:1839
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "პეტა"
 
-#. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1761
-#, c-format
-msgid "Security Warning"
-msgstr "უსაფრთხოების შეტყობინება"
-
-#. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1764
-msgid "Unsafe website detected!"
-msgstr ""
-
-#: embed/ephy-web-view.c:1772
-#, c-format
-msgid ""
-"Visiting %s may harm your computer. This page appears to contain malicious "
-"code that could be downloaded to your computer without your consent."
-msgstr ""
-
-#: embed/ephy-web-view.c:1776
-#, c-format
-msgid ""
-"You can learn more about harmful web content including viruses and other "
-"malicious code and how to protect your computer at %s."
-msgstr ""
-
-#: embed/ephy-web-view.c:1783
-#, c-format
-msgid ""
-"Attackers on %s may trick you into doing something dangerous like installing "
-"software or revealing your personal information (for example, passwords, "
-"phone numbers, or credit cards)."
-msgstr ""
-
-#: embed/ephy-web-view.c:1788
-#, c-format
-msgid ""
-"You can find out more about social engineering (phishing) at %s or from %s."
-msgstr ""
-
-#: embed/ephy-web-view.c:1797
-#, c-format
-msgid ""
-"%s may contain harmful programs. Attackers might attempt to trick you into "
-"installing programs that harm your browsing experience (for example, by "
-"changing your homepage or showing extra ads on sites you visit)."
-msgstr ""
-
-#: embed/ephy-web-view.c:1802
-#, c-format
-msgid "You can learn more about unwanted software at %s."
-msgstr ""
-
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1847
+#: embed/ephy-web-view.c:1862 embed/ephy-web-view.c:1865
 #, c-format
 msgid "File not found"
 msgstr "ფაილი ვერ მოიძებნა"
 
-#: embed/ephy-web-view.c:1852
+#: embed/ephy-web-view.c:1870
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ვერ ვიპოვე."
 
-#: embed/ephy-web-view.c:1854
+#: embed/ephy-web-view.c:1872
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
 "check if it has been moved, renamed, or deleted."
 msgstr ""
 
-#: embed/ephy-web-view.c:1917
+#: embed/ephy-web-view.c:1935
 msgid "None specified"
 msgstr "მითითებული არაა"
 
-#: embed/ephy-web-view.c:2048
+#: embed/ephy-web-view.c:2049
 msgid "Technical information"
 msgstr "ტექნიკური ინფორმაცია"
 
@@ -1756,7 +1724,7 @@ msgstr ""
 #: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
-msgstr ""
+msgstr "ფაილი \"%s\" არსებობს. სხვაგან გადაიტანეთ."
 
 #: lib/ephy-file-helpers.c:566
 #, c-format
@@ -1778,7 +1746,7 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 #: lib/ephy-sync-utils.c:322
 #, c-format
 msgid "%s’s GNOME Web on %s"
-msgstr ""
+msgstr "%s’s GNOME Web %s-ზე"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:236
@@ -1852,12 +1820,12 @@ msgstr ""
 #: lib/ephy-web-app-utils.c:348
 #, c-format
 msgid "Failed to install desktop file %s: "
-msgstr ""
+msgstr "სამუშაო მაგიდის ფაილის %s დაყენება ჩავარდა: "
 
 #: lib/ephy-web-app-utils.c:387
 #, c-format
 msgid "Profile directory %s already exists"
-msgstr ""
+msgstr "პროფილის საქაღალდე %s უკვე არსებობს"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
@@ -1867,18 +1835,21 @@ msgstr "საქაღალდის შექმნის შეცდომ�
 #: lib/ephy-web-app-utils.c:406
 #, c-format
 msgid "Failed to create .app file: %s"
-msgstr ""
+msgstr ".app ფაილის შექმნა ჩავარდა: %s"
 
 #: lib/sync/ephy-password-import.c:133
 #, c-format
 msgid "Cannot create SQLite connection. Close browser and try again."
 msgstr ""
+"SQLite მიერთების შექმნა შეუძლებელია. დახურეთ ბრაუზერი და თავიდან სცადეთ."
 
 #: lib/sync/ephy-password-import.c:142 lib/sync/ephy-password-import.c:152
 #, c-format
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
 msgstr ""
+"ბრაუზერის პაროლების ბაზის გახსნა შეუძლებელია. დახურეთ ბრაუზერი და თავიდან "
+"სცადეთ."
 
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
@@ -1893,19 +1864,19 @@ msgstr ""
 #: lib/sync/ephy-password-manager.c:454
 #, c-format
 msgid "Password in a form in %s"
-msgstr ""
+msgstr "პაროლი ფორმაში %s-ში"
 
 #: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain storage credentials."
-msgstr ""
+msgstr "საცავის ავტორიზაცის დეტალების მიღება ჩავარდა."
 
 #: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1940
+#: lib/sync/ephy-sync-service.c:1942
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 
 #: lib/sync/ephy-sync-service.c:1116
-msgid "The password of your Firefox account seems to have been changed."
+msgid "The password of your Mozilla account seems to have been changed."
 msgstr ""
 
 #: lib/sync/ephy-sync-service.c:1117
@@ -1918,52 +1889,58 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "ხელმოწერილი სერტიფიკატის მიღების შეცდომა."
 
-#: lib/sync/ephy-sync-service.c:1906 lib/sync/ephy-sync-service.c:1911
+#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:1918 lib/sync/ephy-sync-service.c:1926
+#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
 msgid "The sync secrets for the current sync user are invalid."
+msgstr "სინქრონიზაციის საიდუმლოები მიმდინარე მომხმარებლისთვის არასწორია."
+
+#: lib/sync/ephy-sync-service.c:1993
+msgid ""
+"Failed to store sync secrets (is the secret service or secrets portal "
+"broken?): "
 msgstr ""
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2034
+#: lib/sync/ephy-sync-service.c:2035
 #, c-format
 msgid "The sync secrets of %s"
-msgstr ""
+msgstr "%s-ის სინქრონიზაციის საიდუმლოები"
 
-#: lib/sync/ephy-sync-service.c:2064
+#: lib/sync/ephy-sync-service.c:2065
 msgid "Failed to upload client record."
 msgstr "კლიენტის ჩანაწერის ატვირთვის შეცდომა."
 
-#: lib/sync/ephy-sync-service.c:2267
+#: lib/sync/ephy-sync-service.c:2268
 msgid "Failed to upload crypto/keys record."
 msgstr "კრიპტოს/გასაღების ჩანაწერის ატვირთვის შეცდომა."
 
-#: lib/sync/ephy-sync-service.c:2379
+#: lib/sync/ephy-sync-service.c:2380
 msgid "Failed to retrieve crypto keys."
 msgstr "კრიპტოს გასაღებების მიღების შეცდომა."
 
-#: lib/sync/ephy-sync-service.c:2433
+#: lib/sync/ephy-sync-service.c:2434
 msgid "Failed to upload meta/global record."
 msgstr "მეტა/გლობალური ჩანაწერის ატვირთვის შეცდომა."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2555
+#: lib/sync/ephy-sync-service.c:2556
 #, c-format
 msgid ""
-"Your Firefox Account uses storage version %d. Web only supports version %d."
+"Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 
-#: lib/sync/ephy-sync-service.c:2566
+#: lib/sync/ephy-sync-service.c:2567
 msgid "Failed to verify storage version."
 msgstr "საცავის ვერსის გადამოწმების შეცდომა."
 
-#: lib/sync/ephy-sync-service.c:2624
+#: lib/sync/ephy-sync-service.c:2625
 msgid "Failed to upload device info"
 msgstr "მოწყობილობის ინფორმაციის ატვირთვის შეცდომა"
 
-#: lib/sync/ephy-sync-service.c:2700 lib/sync/ephy-sync-service.c:2783
+#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
 msgid "Failed to retrieve the Sync Key"
 msgstr "სინქრონიზაციის გასაღების მიღების შეცდომა"
 
@@ -1991,26 +1968,26 @@ msgstr ""
 #: src/bookmarks/ephy-bookmarks-import.c:292
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
-msgstr ""
+msgstr "Firefox-ის სანიშნეების მიღება შეუძლებელია!"
 
 #: src/bookmarks/ephy-bookmarks-import.c:459
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
-msgstr ""
+msgstr "HTML სანიშნეების ბაზის გახსნა შეუძლებელია: %s"
 
 #: src/bookmarks/ephy-bookmarks-import.c:470
 msgid "HTML bookmarks database could not be read."
-msgstr ""
+msgstr "HTML სანიშნეების ბაზიდან წაკითხვა შეუძლებელია."
 
 #: src/bookmarks/ephy-bookmarks-import.c:491
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
-msgstr ""
+msgstr "HTML სანიშნეების ბაზის დამუშავება შეუძლებელია: %s"
 
 #: src/bookmarks/ephy-bookmarks-import.c:644
 #, c-format
 msgid "Bookmarks file could not be parsed:"
-msgstr ""
+msgstr "სანიშნეების ფაილის დამუშავება შეუძლებელია:"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
@@ -2042,13 +2019,13 @@ msgstr "მიმდინარე გვერდის ჩანიშვნ�
 msgid "Edit Bookmark"
 msgstr "სანიშნის ჩასწორება"
 
-#: src/ephy-action-bar-start.c:568
+#: src/ephy-action-bar-start.c:561
 msgid "Stop"
 msgstr "შეჩერება"
 
 #: src/ephy-certificate-dialog.c:269
 msgid "The certificate does not match this website"
-msgstr ""
+msgstr "სერტიფიკატი ამ ვებგვერდს არ ემთხვევა"
 
 #: src/ephy-certificate-dialog.c:272
 msgid "The certificate has expired"
@@ -2056,7 +2033,7 @@ msgstr "სერტიფიკატი ვადაგასულია"
 
 #: src/ephy-certificate-dialog.c:275
 msgid "The signing certificate authority is not known"
-msgstr ""
+msgstr "ხელმოწერის სერტიფიკატის მფლობელი უცნობია"
 
 #: src/ephy-certificate-dialog.c:278
 msgid "The certificate contains errors"
@@ -2068,7 +2045,7 @@ msgstr "სერტიფიკატი გაუქმებულია"
 
 #: src/ephy-certificate-dialog.c:284
 msgid "The certificate is signed using a weak signature algorithm"
-msgstr ""
+msgstr "ხელმოსაწერად გატეხილი ალგორითმი გამოიყენება"
 
 #: src/ephy-certificate-dialog.c:287
 msgid "The certificate activation time is still in the future"
@@ -2082,7 +2059,7 @@ msgstr "ამ გვერდის იდენტიფიკაცია გ
 msgid "The identity of this website has not been verified."
 msgstr "ამ ვებგვერდის სერტიფიკატი არ გადამოწმებულა."
 
-#. Message on certificte dialog ertificate dialog
+#. Message on certificate dialog
 #: src/ephy-certificate-dialog.c:342
 msgid "No problems have been detected with your connection."
 msgstr ""
@@ -2092,6 +2069,7 @@ msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
 msgstr ""
+"ეს სერტიფიკატი სწორია. მაგრამ ამ გვერდის რესურსები დაუცველადაა გამოგზავნილი."
 
 #: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:139
 #: src/resources/gtk/passwords-view.ui:27
@@ -2195,7 +2173,7 @@ msgstr "მიმდინარე გვერდის ჩატვირთ�
 
 #: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1023
 msgid "It is not possible to modify history when in incognito mode."
-msgstr ""
+msgstr "ინკოგნიტო რეჟიმში ისტორიის შეცვლა შეუძლებელია."
 
 #: src/ephy-history-dialog.c:486
 msgid "Remove the selected pages from history"
@@ -2214,6 +2192,8 @@ msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
+"ბრაუზერის ისტორიის გასუფთავება ყველა ისტორიის ბმულის სამუდამოდ წაშლას "
+"გამოიწვევს."
 
 #: src/ephy-history-dialog.c:573 src/resources/gtk/location-entry.ui:296
 msgid "Cl_ear"
@@ -2250,7 +2230,7 @@ msgstr "წვდომის მოთხოვნა"
 
 #: src/ephy-main.c:112
 msgid "Open a new browser window instead of a new tab"
-msgstr ""
+msgstr "ახალი ფანჯრების მაგიერ ახალ ჩანართების გახსნა"
 
 #: src/ephy-main.c:114
 msgid "Load the given session state file"
@@ -2296,7 +2276,7 @@ msgstr "ვების მორგება"
 #: src/ephy-permission-popover.c:273
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
-msgstr ""
+msgstr "გვერდს მისამართზე \"%s\" სურს, გაფრთხილებები გამოგიგზავნოთ"
 
 #. Translators: Geolocation policy for a specific site.
 #: src/ephy-permission-popover.c:278
@@ -2307,7 +2287,7 @@ msgstr "მდებარეობასთან წვდომის მო�
 #: src/ephy-permission-popover.c:280
 #, c-format
 msgid "The page at “%s” would like to know your location"
-msgstr ""
+msgstr "გვერდს მისამართზე \"%s\" სურს, თქვენი მდებარეობა გაიგოს"
 
 #. Translators: Microphone policy for a specific site.
 #: src/ephy-permission-popover.c:285
@@ -2318,7 +2298,7 @@ msgstr "მიკროფონთან წვდომის მოთხო�
 #: src/ephy-permission-popover.c:287
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
-msgstr ""
+msgstr "ვებგვერდს მისამართზე “%s” სურს, თქვენი მიკროფონი გამოიყენოს"
 
 #. Translators: Webcam policy for a specific site.
 #: src/ephy-permission-popover.c:292
@@ -2329,7 +2309,7 @@ msgstr "ვებკამერასთან წვდომის მოთ�
 #: src/ephy-permission-popover.c:294
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
-msgstr ""
+msgstr "ვებგვერდს მისამართზე “%s” სურს, თქვენი ვებკამერა გამოიყენოს"
 
 #. Translators: Webcam and microphone policy for a specific site.
 #: src/ephy-permission-popover.c:299
@@ -2341,6 +2321,7 @@ msgstr "ვებკამერასთან და მიკროფონ�
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr ""
+"ვებგვერდს მისამართზე “%s” სურს, თქვენი მიკროფონი და ვებკამერა გამოიყენოს"
 
 #. Translators: Storage access policy for a specific site.
 #: src/ephy-permission-popover.c:308
@@ -2364,7 +2345,7 @@ msgstr "ბუფერთან წვდომის მოთხოვნა"
 #: src/ephy-permission-popover.c:317
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
-msgstr ""
+msgstr "ვებგვერდს მისამართზე “%s” თქვენს ბუფერთან წვდომა სურს"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2450,267 +2431,267 @@ msgid "Open a new tab"
 msgstr "ახალ ჩანართის გახსნა"
 
 #. Undo, redo.
-#: src/ephy-window.c:904 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:903 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_დაბრუნება"
 
-#: src/ephy-window.c:905
+#: src/ephy-window.c:904
 msgid "Re_do"
 msgstr "_გამეორება"
 
 #. Edit.
-#: src/ephy-window.c:908 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:907 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "ამო_ჭრა"
 
-#: src/ephy-window.c:909 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:908 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_ასლი"
 
-#: src/ephy-window.c:910 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:909 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "_ჩასმა"
 
-#: src/ephy-window.c:911
+#: src/ephy-window.c:910
 msgid "_Paste Text Only"
 msgstr "_მხოლოდ ტექსტის ჩასმა"
 
-#: src/ephy-window.c:912 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:911 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "მონიშნე _ყველა"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:913
 msgid "S_end Link by Email…"
 msgstr "ბმულის ელფოსტით _გაგზავნა…"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:915
 msgid "_Reload"
 msgstr "_გადატვირთვა"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:916
 msgid "_Back"
 msgstr "უკან"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:917
 msgid "_Forward"
 msgstr "_გადაგზავნა"
 
 #. Bookmarks
-#: src/ephy-window.c:921
+#: src/ephy-window.c:920
 msgid "Add Boo_kmark…"
 msgstr "სან_იშნის დამატება…"
 
 #. Links.
-#: src/ephy-window.c:925
+#: src/ephy-window.c:924
 msgid "Open Link in New _Window"
 msgstr "ბმულის ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:925
 msgid "Open Link in New _Tab"
 msgstr "ბმულის ახალ ჩ_ანართში გახსნა"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:926
 msgid "Open Link in I_ncognito Window"
 msgstr "ბმულის _ინკოგნიტო ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:927
 msgid "_Save Link As…"
 msgstr "_ბმულის შენახვა, როგორც…"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:928
 msgid "_Copy Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:929
 msgid "_Copy E-mail Address"
 msgstr "_დააკოპირე ელ-ფოსტის მისამართი"
 
 #. Images.
-#: src/ephy-window.c:934
+#: src/ephy-window.c:933
 msgid "View _Image in New Tab"
 msgstr "_გამოსახულების ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:934
 msgid "Copy I_mage Address"
 msgstr "_გამოსახულების ბმულის კოპირება"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:935
 msgid "_Save Image As…"
 msgstr "_გამოსახულების შენახვა, როგორც…"
 
-#: src/ephy-window.c:937
+#: src/ephy-window.c:936
 msgid "Set as _Wallpaper"
 msgstr "ფონის სურათად _დაყენება"
 
 #. Video.
-#: src/ephy-window.c:941
+#: src/ephy-window.c:940
 msgid "Open Video in New _Window"
 msgstr "ვიდეოს ახალ ფანჯარაში _გახსნა"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:941
 msgid "Open Video in New _Tab"
 msgstr "_ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:942
 msgid "_Save Video As…"
 msgstr "ვიდეოს შენახვა, როგორც…"
 
-#: src/ephy-window.c:944
+#: src/ephy-window.c:943
 msgid "_Copy Video Address"
 msgstr "ვიდეოს მისამართის _კოპირება"
 
 #. Audio.
-#: src/ephy-window.c:948
+#: src/ephy-window.c:947
 msgid "Open Audio in New _Window"
 msgstr "აუდიოს ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:948
 msgid "Open Audio in New _Tab"
 msgstr "აუდიოს ახალ _ჩანართში გახსნა"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:949
 msgid "_Save Audio As…"
 msgstr "აუდიოს _შენახვა, როგორც…"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:950
 msgid "_Copy Audio Address"
 msgstr "აუდიოს მისამართის _კოპირება"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:956
 msgid "Save Pa_ge As…"
 msgstr "_გვერდის შენახვა, როგორც…"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:957
 msgid "_Take Screenshot…"
 msgstr "_ეკრანის ანაბეჭდის გადაღება…"
 
-#: src/ephy-window.c:959
+#: src/ephy-window.c:958
 msgid "_Page Source"
 msgstr "_გვერდის წყარო"
 
-#: src/ephy-window.c:1333
+#: src/ephy-window.c:1332
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "\"%s\"-ის ვებში მოძებნა"
 
-#: src/ephy-window.c:1362
+#: src/ephy-window.c:1361
 msgid "Open Link"
 msgstr "ბმულის გახსნა"
 
-#: src/ephy-window.c:1364
+#: src/ephy-window.c:1363
 msgid "Open Link In New Tab"
 msgstr "ბმულის ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:1366
+#: src/ephy-window.c:1365
 msgid "Open Link In New Window"
 msgstr "ბმულის ახალ ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:1368
+#: src/ephy-window.c:1367
 msgid "Open Link In Incognito Window"
 msgstr "ბმულის პირად ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:2816
+#: src/ephy-window.c:2742
 msgid "_Ask Later"
 msgstr "მოგვიანებით _მკითხე"
 
-#: src/ephy-window.c:2817 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2743 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_უარყოფა"
 
-#: src/ephy-window.c:2818 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2744 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_დაშვება"
 
-#: src/ephy-window.c:3020 src/ephy-window.c:4460
+#: src/ephy-window.c:2946 src/ephy-window.c:4386
 msgid "Leave Website?"
 msgstr "დატოვებთ ვებგვერდს?"
 
-#: src/ephy-window.c:3021 src/ephy-window.c:4461 src/window-commands.c:1237
+#: src/ephy-window.c:2947 src/ephy-window.c:4387 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "ფორმა შეიცვალა და არ გადაცემულა"
 
-#: src/ephy-window.c:3022 src/ephy-window.c:4462 src/window-commands.c:1241
+#: src/ephy-window.c:2948 src/ephy-window.c:4388 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_ფორმის მოცილება"
 
-#: src/ephy-window.c:3043
+#: src/ephy-window.c:2969
 msgid "Download operation"
 msgstr "გადმოწერის ოპერაცია"
 
-#: src/ephy-window.c:3045
+#: src/ephy-window.c:2971
 msgid "Show details"
 msgstr "დეტალების ჩვენება"
 
-#: src/ephy-window.c:3047
+#: src/ephy-window.c:2973
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "აქტიურია %d გადმოწერის ოპერაცია"
 msgstr[1] "აქტიურია %d გადმოწერის ოპერაცია"
 
-#: src/ephy-window.c:3288
+#: src/ephy-window.c:3214
 msgid "Set as Default Browser?"
 msgstr "დავაყენო ნაგულისხმევ ბრაუზერად?"
 
-#: src/ephy-window.c:3290
+#: src/ephy-window.c:3216
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 
-#: src/ephy-window.c:3292
+#: src/ephy-window.c:3218
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr ""
 
-#: src/ephy-window.c:3296
+#: src/ephy-window.c:3222
 msgid "_Ask Again Later"
 msgstr "_მოგვიანებით თავიდან მკითხე"
 
-#: src/ephy-window.c:3297
+#: src/ephy-window.c:3223
 msgid "_No"
 msgstr "_არა"
 
-#: src/ephy-window.c:3298
+#: src/ephy-window.c:3224
 msgid "_Yes"
 msgstr "_დიახ"
 
-#: src/ephy-window.c:3749
+#: src/ephy-window.c:3675
 msgid "Save password?"
 msgstr "შევინახო პაროლი?"
 
-#: src/ephy-window.c:3750
+#: src/ephy-window.c:3676
 msgid "Passwords can be removed at any time in Preferences"
 msgstr ""
 
-#: src/ephy-window.c:3752
+#: src/ephy-window.c:3678
 msgid "Not Now"
 msgstr "არა ახლა"
 
-#: src/ephy-window.c:3753
+#: src/ephy-window.c:3679
 msgid "Never Save"
 msgstr "არასოდეს შეინახო"
 
-#: src/ephy-window.c:3754
+#: src/ephy-window.c:3680
 msgid "Save"
 msgstr "შენახვა"
 
-#: src/ephy-window.c:4591
+#: src/ephy-window.c:4517
 msgid "Close Multiple Tabs?"
 msgstr "დახურავთ ბევრ ჩანართს ერთდროულად?"
 
-#: src/ephy-window.c:4592
+#: src/ephy-window.c:4518
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 
-#: src/ephy-window.c:4593
+#: src/ephy-window.c:4519
 msgid "C_lose Tabs"
 msgstr "_ჩანართების დახურვა"
 
-#: src/ephy-window.c:4686
+#: src/ephy-window.c:4612
 msgid "New tab opened"
 msgstr "ახალი ჩანართი გაიხსნა"
 
-#: src/ephy-window.c:4690
+#: src/ephy-window.c:4616
 msgid "Switch"
 msgstr "გადართვა"
 
@@ -2804,7 +2785,7 @@ msgstr "გაფართოების წაშლა"
 
 #: src/preferences/extension-view.c:115
 msgid "Do you really want to remove this extension?"
-msgstr ""
+msgstr "მართლა გნებავთ ამ გაფართოების წაშლა?"
 
 #: src/preferences/extension-view.c:119
 #: src/resources/gtk/bookmark-properties.ui:106
@@ -2866,7 +2847,6 @@ msgid "Open File (manifest.json/xpi)"
 msgstr "ფაილის გახსნა (manifest.json/xpi)"
 
 #: src/preferences/prefs-general-page.c:203
-#: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "ენის დამატება"
 
@@ -2882,23 +2862,23 @@ msgstr[1] "სისტემური ენა (%s)"
 msgid "Supported Image Files"
 msgstr "გამოსახულების მხარდაჭერილი ფაილები"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1802
+#: src/profile-migrator/ephy-profile-migrator.c:1810
 msgid "Executes only the n-th migration step"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1804
+#: src/profile-migrator/ephy-profile-migrator.c:1812
 msgid "Specifies the required version for the migrator"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1806
+#: src/profile-migrator/ephy-profile-migrator.c:1814
 msgid "Specifies the profile where the migrator should run"
 msgstr ""
 
-#: src/profile-migrator/ephy-profile-migrator.c:1827
+#: src/profile-migrator/ephy-profile-migrator.c:1835
 msgid "Web profile migrator"
 msgstr "პროფილების გადატანის დამხმარე"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1828
+#: src/profile-migrator/ephy-profile-migrator.c:1836
 msgid "Web profile migrator options"
 msgstr "პროფილების გადატანის დამხმარის მორგება"
 
@@ -2989,8 +2969,8 @@ msgid "Search website data"
 msgstr "ვებგვერდის მონაცემების მოძებნა"
 
 #: src/resources/gtk/clear-data-view.ui:26
-msgid "There is no Website Data"
-msgstr "ვებგვერდების მონაცემების გარეშე"
+msgid "No Website Data Found"
+msgstr "ვებგვერდის მონაცემები ვერ ვიპოვე"
 
 #: src/resources/gtk/clear-data-view.ui:27
 msgid "Website data will be listed here"
@@ -3024,19 +3004,19 @@ msgid "Text Encoding"
 msgstr "ტექსტის კოდირება"
 
 #: src/resources/gtk/encoding-dialog.ui:30
-msgid "Use the encoding specified by the document"
+msgid "Use Encoding Specified by Document"
 msgstr ""
 
 #: src/resources/gtk/encoding-dialog.ui:62
-msgid "Recent encodings"
+msgid "Recent Encodings"
 msgstr "უახლესი კოდირებები"
 
 #: src/resources/gtk/encoding-dialog.ui:88
-msgid "Related encodings"
+msgid "Related Encodings"
 msgstr "მსგავსი კოდირებები"
 
 #: src/resources/gtk/encoding-dialog.ui:111
-msgid "Show all…"
+msgid "Show All…"
 msgstr "ყველას ჩვენება…"
 
 #: src/resources/gtk/extension-view.ui:7
@@ -3065,13 +3045,13 @@ msgstr "ახლავე _სინქრონიზაცია"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:32
 msgid ""
-"Sign in with your Firefox account to sync your data with GNOME Web and "
+"Sign in with your Mozilla account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
 "endorsed by Mozilla."
 msgstr ""
 
 #: src/resources/gtk/firefox-sync-dialog.ui:49
-msgid "Firefox Account"
+msgid "Mozilla Account"
 msgstr "Firefox -ის ანგარიში"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:52
@@ -3136,24 +3116,24 @@ msgid "Search history"
 msgstr "ძებნის ისტორია"
 
 #: src/resources/gtk/history-dialog.ui:118
-msgid "The History is Empty"
-msgstr "ისტორია ცარიელია"
+msgid "No History Found"
+msgstr "ისტორიის გარეშე"
 
 #: src/resources/gtk/history-dialog.ui:119
 msgid "Visited pages will be listed here"
-msgstr ""
+msgstr "ნანახი გვერდები აქ გამოჩნდება"
 
 #: src/resources/gtk/history-dialog.ui:165
 msgid "_Open"
 msgstr "_გახსნა"
 
 #: src/resources/gtk/lang-row.ui:21
-msgid "Delete language"
+msgid "Delete Language"
 msgstr "ენის წაშლა"
 
 #: src/resources/gtk/location-entry.ui:12
 msgid "Search for websites, bookmarks, and open tabs"
-msgstr ""
+msgstr "მოძებნეთ ვებგვერდები, სანიშნეები და ღია ჩანართები"
 
 #: src/resources/gtk/location-entry.ui:67
 msgid "Website Security Status and Permissions"
@@ -3165,7 +3145,7 @@ msgid "Reader Mode"
 msgstr "კითხვის რეჟიმი"
 
 #: src/resources/gtk/location-entry.ui:98
-msgid "View available passwords"
+msgid "View Available Passwords"
 msgstr "ხელმისაწვდომი პაროლების ჩვენება"
 
 #: src/resources/gtk/location-entry.ui:268
@@ -3314,7 +3294,7 @@ msgid "Fullscreen"
 msgstr "მთელ ეკრანზე"
 
 #: src/resources/gtk/password-popover.ui:22
-msgid "Save login?"
+msgid "Save Login?"
 msgstr "შევინახო დეტალები?"
 
 #: src/resources/gtk/password-popover.ui:42
@@ -3328,12 +3308,12 @@ msgid "_Never Save"
 msgstr "ა_რასოდეს შეინახო"
 
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:68
+#: src/resources/gtk/prefs-privacy-page.ui:57
 msgid "Passwords"
 msgstr "პაროლები"
 
 #: src/resources/gtk/passwords-view.ui:28
-msgid "Remove all passwords"
+msgid "Remove All Passwords"
 msgstr "ყველა პაროლის წაშლა"
 
 #: src/resources/gtk/passwords-view.ui:29
@@ -3341,8 +3321,8 @@ msgid "Search passwords"
 msgstr "პაროლების ძებნა"
 
 #: src/resources/gtk/passwords-view.ui:30
-msgid "There are no Passwords"
-msgstr "პაროლები დამახსოვრებული არაა"
+msgid "No Passwords Found"
+msgstr "პაროლები ვერ ვიპოვე"
 
 #: src/resources/gtk/passwords-view.ui:31
 msgid "Saved passwords will be listed here"
@@ -3369,15 +3349,15 @@ msgid "Use Custom Fonts"
 msgstr "ფონტის ხელით მითითება"
 
 #: src/resources/gtk/prefs-appearance-page.ui:17
-msgid "Sans serif font"
+msgid "Sans Serif Font"
 msgstr "Sans serif ფონტი"
 
 #: src/resources/gtk/prefs-appearance-page.ui:30
-msgid "Serif font"
+msgid "Serif Font"
 msgstr "Serif ფონტი"
 
 #: src/resources/gtk/prefs-appearance-page.ui:43
-msgid "Monospace font"
+msgid "Monospace Font"
 msgstr "ერთსიგანიან ფონტი"
 
 #: src/resources/gtk/prefs-appearance-page.ui:62
@@ -3400,7 +3380,7 @@ msgstr "მომხმარებლის CSS-ის გამოყენე
 msgid "Use Custom JavaScript"
 msgstr "მომხმარებლის JavaScript-ის გამოყენება"
 
-#: src/resources/gtk/prefs-appearance-page.ui:126
+#: src/resources/gtk/prefs-appearance-page.ui:125
 msgid "Default Zoom Level"
 msgstr "გადიდების ნაგულისხმევი დონე"
 
@@ -3420,7 +3400,7 @@ msgid ""
 msgstr ""
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
-msgid "No extensions installed"
+msgid "No Extensions Installed"
 msgstr "გაფართოებები დაყენებული არაა"
 
 #: src/resources/gtk/prefs-general-page.ui:6
@@ -3519,6 +3499,10 @@ msgstr "პროგრამისტი"
 msgid "Show D_eveloper Actions"
 msgstr ""
 
+#: src/resources/gtk/prefs-lang-dialog.ui:8
+msgid "Add Language…"
+msgstr "ენის დამატება…"
+
 #: src/resources/gtk/prefs-lang-dialog.ui:45
 msgid "Choose a language:"
 msgstr "აირჩიეთ ენა:"
@@ -3528,60 +3512,52 @@ msgid "Privacy"
 msgstr "პირადი ინფორმაცია"
 
 #: src/resources/gtk/prefs-privacy-page.ui:9
-msgid "Web Safety"
-msgstr "ვებ-უსაფრთხოება"
-
-#: src/resources/gtk/prefs-privacy-page.ui:12
-msgid "Block Dangerous Web_sites"
-msgstr "საშიში _საიტების დაბლოკვა"
-
-#: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "Web Tracking"
 msgstr "ვებ-ტრეკინგი"
 
-#: src/resources/gtk/prefs-privacy-page.ui:23
+#: src/resources/gtk/prefs-privacy-page.ui:12
 msgid "Intelligent _Tracking Prevention"
+msgstr "ჭკვიანი _ტრეკინგის თავიდან აცილება"
+
+#: src/resources/gtk/prefs-privacy-page.ui:18
+msgid "Allow websites to store cookies, databases, and local storage data"
 msgstr ""
 
-#: src/resources/gtk/prefs-privacy-page.ui:29
-msgid "Allow websites to store cookies, databases, and local storage data."
-msgstr ""
-
-#: src/resources/gtk/prefs-privacy-page.ui:30
+#: src/resources/gtk/prefs-privacy-page.ui:19
 msgid "_Website Data Storage"
 msgstr "_ვებსაიტების მონაცემების საცავი"
 
-#: src/resources/gtk/prefs-privacy-page.ui:38
+#: src/resources/gtk/prefs-privacy-page.ui:27
 msgid "Search Suggestions"
 msgstr "ძებნის მინიშნებები"
 
-#: src/resources/gtk/prefs-privacy-page.ui:41
-msgid "Enable search suggestions in the URL entry."
-msgstr ""
+#: src/resources/gtk/prefs-privacy-page.ui:30
+msgid "Enable search suggestions in the URL entry"
+msgstr "Google Search-ის შეთავაზებების ჩართვა"
 
-#: src/resources/gtk/prefs-privacy-page.ui:42
+#: src/resources/gtk/prefs-privacy-page.ui:31
 msgid "_Google Search Suggestions"
 msgstr "Google Search-ის შეთავაზებები"
 
-#: src/resources/gtk/prefs-privacy-page.ui:50
+#: src/resources/gtk/prefs-privacy-page.ui:39
 msgid "Personal Data"
 msgstr "პირადი მონაცემებები"
 
-#: src/resources/gtk/prefs-privacy-page.ui:54
+#: src/resources/gtk/prefs-privacy-page.ui:43
 msgid "Clear Website _Data"
 msgstr "ვებგვერდის მონაცემების _გასუფთავება"
 
-#: src/resources/gtk/prefs-privacy-page.ui:72
+#: src/resources/gtk/prefs-privacy-page.ui:61
 msgid "_Passwords"
 msgstr "_პაროლები"
 
-#: src/resources/gtk/prefs-privacy-page.ui:84
+#: src/resources/gtk/prefs-privacy-page.ui:73
 msgid "_Remember Passwords"
 msgstr "_პაროლების დამახსოვრება"
 
 #: src/resources/gtk/search-engine-row.ui:8
-msgid "Selects the default search engine"
-msgstr ""
+msgid "Selects Default Search Engine"
+msgstr "აირჩევს ნაგულისხმევ საძიებო სისტემას"
 
 #: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
@@ -3598,7 +3574,7 @@ msgstr "მალსახმობი"
 #: src/resources/gtk/search-engine-row.ui:92
 msgid ""
 "To determine the search address, perform a search using the search engine "
-"that you want to add and replace the search term with %s."
+"that you want to add and replace the search term with %s"
 msgstr ""
 
 #: src/resources/gtk/search-engine-row.ui:110
@@ -3612,22 +3588,22 @@ msgstr "ზოგადი"
 
 #: src/resources/gtk/shortcuts-dialog.ui:16
 msgctxt "shortcut window"
-msgid "New window"
+msgid "New Window"
 msgstr "ახალი ფანჯარა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:22
 msgctxt "shortcut window"
-msgid "New incognito window"
+msgid "New Incognito Window"
 msgstr "ახალი ინკოგნიტო ფანჯარა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:28
 msgctxt "shortcut window"
-msgid "Open file"
+msgid "Open File"
 msgstr "ფაილის გახსნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:34
 msgctxt "shortcut window"
-msgid "Save page"
+msgid "Save Page"
 msgstr "გვერდის შენახვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:40
@@ -3637,7 +3613,7 @@ msgstr "ეკრანის ანაბეჭდის გადაღებ�
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
 msgctxt "shortcut window"
-msgid "Print page"
+msgid "Print Page"
 msgstr "გვერდის დაბეჭდვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:52
@@ -3652,7 +3628,7 @@ msgstr "დახმარება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:64
 msgctxt "shortcut window"
-msgid "Open menu"
+msgid "Open Menu"
 msgstr "მენიუს გახსნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:70
@@ -3662,7 +3638,7 @@ msgstr "მალსახმობები"
 
 #: src/resources/gtk/shortcuts-dialog.ui:76
 msgctxt "shortcut window"
-msgid "Show downloads list"
+msgid "Show Downloads List"
 msgstr "გადმოწერების სიის ჩვენება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:86
@@ -3672,35 +3648,35 @@ msgstr "ნავიგაცია"
 
 #: src/resources/gtk/shortcuts-dialog.ui:89
 msgctxt "shortcut window"
-msgid "Go to homepage"
-msgstr "დაბრუნდით მთავარ გვერდზე"
+msgid "Go to Homepage"
+msgstr "საწყის გვერდზე გადასვლა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:95
 msgctxt "shortcut window"
-msgid "Reload current page"
+msgid "Reload Current Page"
 msgstr "მიმდინარე გვერდის თავიდან ჩატვირთვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:101
 msgctxt "shortcut window"
-msgid "Reload bypassing cache"
+msgid "Reload Bypassing Cache"
 msgstr "თავიდან ჩატვირთვა ქეშის გვერდის ავლით"
 
 #: src/resources/gtk/shortcuts-dialog.ui:107
 msgctxt "shortcut window"
-msgid "Stop loading current page"
+msgid "Stop Loading Current Page"
 msgstr "მიმდინარე გვერდის ჩატვირთვის შეწყვეტა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:113
 #: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
-msgid "Go back to the previous page"
+msgid "Go Back to Previous Page"
 msgstr "წინა გვერდზე დაბრუნება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:119
 #: src/resources/gtk/shortcuts-dialog.ui:132
 msgctxt "shortcut window"
-msgid "Go forward to the next page"
-msgstr "შემდეგ გვერდზე გადასვლა"
+msgid "Go Forward to Next Page"
+msgstr "შემდეგ გვერდზე, წინ, გადასვლა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:141
 msgctxt "shortcut window"
@@ -3709,47 +3685,47 @@ msgstr "დაფები"
 
 #: src/resources/gtk/shortcuts-dialog.ui:144
 msgctxt "shortcut window"
-msgid "New tab"
-msgstr "ახალი _დაფა"
+msgid "New Tab"
+msgstr "ახალი ჩანართი"
 
 #: src/resources/gtk/shortcuts-dialog.ui:150
 msgctxt "shortcut window"
-msgid "Close current tab"
+msgid "Close Current Tab"
 msgstr "მიმდინარე ჩანართის დახურვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:156
 msgctxt "shortcut window"
-msgid "Reopen closed tab"
-msgstr "დახურული ჩანართის აღდგენა"
+msgid "Reopen Closed Tab"
+msgstr "დახურული ჩანართის _აღდგენა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:162
 msgctxt "shortcut window"
-msgid "Go to the next tab"
+msgid "Go to Next Tab"
 msgstr "შემდეგი ჩანართზე გადასვლა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
-msgid "Go to the previous tab"
+msgid "Go to Previous Tab"
 msgstr "წინა ჩანართზე გადასვლა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:174
 msgctxt "shortcut window"
-msgid "Move current tab to the left"
+msgid "Move Current Tab to the Left"
 msgstr "მიმდინარე ჩანართის მარცხნივ გაწევა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:180
 msgctxt "shortcut window"
-msgid "Move current tab to the right"
+msgid "Move Current Tab to the Right"
 msgstr "მიმდინარე ჩანართის მარჯვნივ გაწევა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
-msgid "Duplicate current tab"
+msgid "Duplicate Current Tab"
 msgstr "მიმდინარე ჩანართის დუბლირება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
 msgctxt "shortcut window"
-msgid "View open tabs"
+msgid "View Open Tabs"
 msgstr "ღია ჩანართების ნახვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:202
@@ -3769,37 +3745,37 @@ msgstr "მორგება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:217
 msgctxt "shortcut window"
-msgid "Bookmark current page"
+msgid "Bookmark Current Page"
 msgstr "მიმდინარე გვერდის ჩანიშვნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:223
 msgctxt "shortcut window"
-msgid "Show bookmarks list"
+msgid "Show Bookmarks List"
 msgstr "სანიშნების ჩვენება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:229
 msgctxt "shortcut window"
-msgid "Import bookmarks"
-msgstr "სანიშნების შემოტანა"
+msgid "Import Bookmarks"
+msgstr "სანიშნეების შემოტანა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:235
 msgctxt "shortcut window"
-msgid "Export bookmarks"
-msgstr "სანიშნების გატანა"
+msgid "Export Bookmarks"
+msgstr "სანიშნეების გატანა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:241
 msgctxt "shortcut window"
-msgid "Toggle caret browsing"
+msgid "Toggle Caret Browsing"
 msgstr "კარეტით ნავიგაციის ჩართვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:251
 msgctxt "shortcut window"
-msgid "Web app"
+msgid "Web App"
 msgstr "ვებ აპლიკაცია"
 
 #: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
-msgid "Install site as web app"
+msgid "Install Site as Web App"
 msgstr "საიტის ვებ-აპის მსგავსად დაყენება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:264
@@ -3809,18 +3785,18 @@ msgstr "ხედო"
 
 #: src/resources/gtk/shortcuts-dialog.ui:267
 msgctxt "shortcut window"
-msgid "Zoom in"
+msgid "Zoom In"
 msgstr "გადიდება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:273
 msgctxt "shortcut window"
-msgid "Zoom out"
+msgid "Zoom Out"
 msgstr "დაპატარავება"
 
 #: src/resources/gtk/shortcuts-dialog.ui:279
 msgctxt "shortcut window"
-msgid "Reset zoom"
-msgstr "გადიდების საწყისი პარამეტრები"
+msgid "Reset Zoom"
+msgstr "გადიდების ჩამოყრა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:285
 msgctxt "shortcut window"
@@ -3829,17 +3805,17 @@ msgstr "მთელ ეკრანზე"
 
 #: src/resources/gtk/shortcuts-dialog.ui:291
 msgctxt "shortcut window"
-msgid "View page source"
+msgid "View Page Source"
 msgstr "გვერდის წყაროს ნახვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
-msgid "Toggle inspector"
+msgid "Toggle Inspector"
 msgstr "ინსპექტორის გადართვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:303
 msgctxt "shortcut window"
-msgid "Toggle reader mode"
+msgid "Toggle Reader Mode"
 msgstr "კითხვის რეჟიმის გადართვა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:313
@@ -3874,18 +3850,18 @@ msgstr "ბრძანების აღდგენა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:346
 msgctxt "shortcut window"
-msgid "Select all"
+msgid "Select All"
 msgstr "ყველას მონიშვნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:352
 msgctxt "shortcut window"
-msgid "Select page URL"
+msgid "Select Page URL"
 msgstr "გვერდის ბმულის მონიშვნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:358
 msgctxt "shortcut window"
-msgid "Search with default search engine"
-msgstr "ნაგულისხმებ საძიებო სისტემაში მოძებნა"
+msgid "Search With Default Search Engine"
+msgstr "ძებნა ნაგულისხმევი საძიებო სისტემით"
 
 #: src/resources/gtk/shortcuts-dialog.ui:364
 msgctxt "shortcut window"
@@ -3894,12 +3870,12 @@ msgstr "ძებნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:370
 msgctxt "shortcut window"
-msgid "Next find result"
+msgid "Next Find Result"
 msgstr "შემდეგი შედეგის მოძებნა"
 
 #: src/resources/gtk/shortcuts-dialog.ui:376
 msgctxt "shortcut window"
-msgid "Previous find result"
+msgid "Previous Find Result"
 msgstr "წინა შედეგის მოძებნა"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:18
@@ -3930,11 +3906,11 @@ msgid "URL"
 msgstr "ბმული"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:81
-msgid "Add new URL"
+msgid "Add New URL"
 msgstr "ახალი ბმულის დამატება"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:87
-msgid "Remove the selected URLs"
+msgid "Remove Selected URLs"
 msgstr "მონიშნული ბმულების წაშლა"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:94
@@ -3957,7 +3933,7 @@ msgstr "ლოკალური ჩანართები"
 
 #: src/webapp-provider/ephy-webapp-provider.c:120
 msgid "The install_token is required for the Install() method"
-msgstr ""
+msgstr "მეთოდისთვის install() install_token აუცილებელია"
 
 #: src/webapp-provider/ephy-webapp-provider.c:126
 #, c-format
@@ -4033,10 +4009,6 @@ msgstr "სანიშნეების შემოტანა წარმ�
 msgid "Select Profile"
 msgstr "აირჩიეთ პროფილი"
 
-#: src/window-commands.c:335
-msgid "_Select"
-msgstr "_მონიშვნა"
-
 #: src/window-commands.c:396 src/window-commands.c:443
 #: src/window-commands.c:673
 msgid "Choose File"
@@ -4067,73 +4039,135 @@ msgstr "პაროლების შემოტანა წარმატ�
 msgid "Import Passwords"
 msgstr "პაროლების შემოტანა"
 
-#: src/window-commands.c:1060
+#: src/window-commands.c:1063
 msgid "Epiphany Canary"
 msgstr "ბრაუზერი Epiphany Canary"
 
-#: src/window-commands.c:1083
+#: src/window-commands.c:1086
 msgid "translator-credits"
 msgstr "თემური დოღონაძე"
 
-#: src/window-commands.c:1236
+#: src/window-commands.c:1239
 msgid "Reload Website?"
 msgstr "გადავტვირთო ვებგვერდი?"
 
-#: src/window-commands.c:1854
+#: src/window-commands.c:1824
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "აპლიკაცია \"%s\" გამოსაყენებლად მზადაა"
 
-#: src/window-commands.c:1857
+#: src/window-commands.c:1827
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "აპლიკაციის '%s' შექმნა შეუძლებელია: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1867
+#: src/window-commands.c:1837
 msgid "Launch"
 msgstr "გაშვება"
 
-#: src/window-commands.c:1933
+#: src/window-commands.c:1903
 msgid "Replace Existing Web App?"
 msgstr "ჩავანაცვლო არსებული ვებ-აპი?"
 
-#: src/window-commands.c:1937
+#: src/window-commands.c:1907
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 
-#: src/window-commands.c:1942
+#: src/window-commands.c:1912
 msgid "_Replace"
 msgstr "_შეცვლა"
 
-#: src/window-commands.c:2143
+#: src/window-commands.c:2260
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2147
+#: src/window-commands.c:2264
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2193
+#: src/window-commands.c:2310
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2692
+#: src/window-commands.c:2809
 msgid "Enable Caret Browsing Mode?"
 msgstr "ჩავრთო კარეტით ნავიგაციის რეჟიმი?"
 
-#: src/window-commands.c:2693
+#: src/window-commands.c:2810
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
 "want to enable caret browsing?"
 msgstr ""
 
-#: src/window-commands.c:2698
+#: src/window-commands.c:2815
 msgid "_Enable"
 msgstr "_ჩართვა"
+
+#~ msgid "Enable safe browsing"
+#~ msgstr "უსაფრთხო ბრაუზინგის ჩართვა"
+
+#, c-format
+#~ msgid "Security Warning"
+#~ msgstr "უსაფრთხოების შეტყობინება"
+
+#~ msgid "There is no Website Data"
+#~ msgstr "ვებგვერდების მონაცემების გარეშე"
+
+#~ msgid "The History is Empty"
+#~ msgstr "ისტორია ცარიელია"
+
+#~ msgid "There are no Passwords"
+#~ msgstr "პაროლები დამახსოვრებული არაა"
+
+#~ msgid "Web Safety"
+#~ msgstr "ვებ-უსაფრთხოება"
+
+#~ msgid "Block Dangerous Web_sites"
+#~ msgstr "საშიში _საიტების დაბლოკვა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New window"
+#~ msgstr "ახალი ფანჯარა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New incognito window"
+#~ msgstr "ახალი ინკოგნიტო ფანჯარა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New tab"
+#~ msgstr "ახალი _დაფა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Reopen closed tab"
+#~ msgstr "დახურული ჩანართის აღდგენა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "View open tabs"
+#~ msgstr "ღია ჩანართების ნახვა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Import bookmarks"
+#~ msgstr "სანიშნების შემოტანა"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Web app"
+#~ msgstr "ვებ აპლიკაცია"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom in"
+#~ msgstr "გადიდება"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom out"
+#~ msgstr "დაპატარავება"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Select all"
+#~ msgstr "ყველას მონიშვნა"
 
 #~ msgid "Close"
 #~ msgstr "დახურვა"
