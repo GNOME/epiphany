@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-02-11 23:30+0000\n"
-"PO-Revision-Date: 2024-02-15 03:33+0100\n"
+"POT-Creation-Date: 2024-02-15 02:34+0000\n"
+"PO-Revision-Date: 2024-02-20 09:22+0100\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -620,6 +620,8 @@ msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
+"Indica se mostrar as accións de desenvolvedor do menú contextual. Isto "
+"permitelle usar as accións de Orixe da páxina e Inspeccionar elemento"
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
@@ -739,15 +741,11 @@ msgid "Currently signed in sync user"
 msgstr "Actualmente rexistrado como usuario de sincronización"
 
 #: data/org.gnome.epiphany.gschema.xml:372
-#, fuzzy
-#| msgid ""
-#| "The email linked to the Firefox Account used to sync data with Mozilla’s "
-#| "servers."
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
-"O correo electrónico ligado á conta de Firefox usado para sincronizar datos "
+"O correo electrónico ligado á conta de Mozilla usado para sincronizar datos "
 "cos servidores de Mozilla."
 
 #: data/org.gnome.epiphany.gschema.xml:376
@@ -1124,18 +1122,18 @@ msgstr ""
 "web que visita ou anunciantes destes sitios web poderían facerlle un "
 "seguimento."
 
-#: embed/ephy-client-certificate-manager.c:295
+#: embed/ephy-client-certificate-manager.c:292
 msgid "PIN required"
 msgstr "Requírese o PIN"
 
-#: embed/ephy-client-certificate-manager.c:298
+#: embed/ephy-client-certificate-manager.c:295
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Escriba o PIN para %s para autenticarse en %s:%d."
 
-#: embed/ephy-client-certificate-manager.c:306
-#: embed/ephy-client-certificate-manager.c:391 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:257
+#: embed/ephy-client-certificate-manager.c:303
+#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
+#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
@@ -1146,28 +1144,31 @@ msgstr "Escriba o PIN para %s para autenticarse en %s:%d."
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: embed/ephy-client-certificate-manager.c:307
+#: embed/ephy-client-certificate-manager.c:304
 msgid "_Login"
 msgstr "_Iniciar sesión"
 
-#: embed/ephy-client-certificate-manager.c:377
+#: embed/ephy-client-certificate-manager.c:374
 msgid "Select certificate"
 msgstr "Seleccionar certificado"
 
-#: embed/ephy-client-certificate-manager.c:380
+#: embed/ephy-client-certificate-manager.c:377
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr ""
+"O sitio web %s:%d solicita que lle fornezas un certificado para autenticase "
+"en %s."
 
-#: embed/ephy-client-certificate-manager.c:385
+#: embed/ephy-client-certificate-manager.c:382
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr ""
+"O sitio web %s:%d solicita que lle fornezas un certificado para autenticarse."
 
-#: embed/ephy-client-certificate-manager.c:392 src/window-commands.c:335
+#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:335
 msgid "_Select"
 msgstr "_Seleccionar"
 
@@ -2141,6 +2142,8 @@ msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr ""
+"Produciuse un erro ao almacenar os segredos de sincronización (está roto o "
+"servizo ou portal de segredos?): "
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:2035
@@ -2685,214 +2688,214 @@ msgid "Open a new tab"
 msgstr "Abrir unha lapela nova"
 
 #. Undo, redo.
-#: src/ephy-window.c:903 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_Desfacer"
 
-#: src/ephy-window.c:904
+#: src/ephy-window.c:951
 msgid "Re_do"
 msgstr "Re_facer"
 
 #. Edit.
-#: src/ephy-window.c:907 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: src/ephy-window.c:908 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:909 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/ephy-window.c:910
+#: src/ephy-window.c:957
 msgid "_Paste Text Only"
 msgstr "_Pegar só texto"
 
-#: src/ephy-window.c:911 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: src/ephy-window.c:913
+#: src/ephy-window.c:960
 msgid "S_end Link by Email…"
 msgstr "_Enviar a ligazón por correo electrónico…"
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:962
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:963
 msgid "_Back"
 msgstr "_Atrás"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:964
 msgid "_Forward"
 msgstr "_Adiante"
 
 #. Bookmarks
-#: src/ephy-window.c:920
+#: src/ephy-window.c:967
 msgid "Add Boo_kmark…"
 msgstr "Engadir mar_cador…"
 
 #. Links.
-#: src/ephy-window.c:924
+#: src/ephy-window.c:971
 msgid "Open Link in New _Window"
 msgstr "Abrir a ligazón nunha xanela _nova"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:972
 msgid "Open Link in New _Tab"
 msgstr "Abrir ligazón nunha _lapela nova"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:973
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir a ligazón nunha xanela de i_ncógnito"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:974
 msgid "_Save Link As…"
 msgstr "_Gardar a ligazón como…"
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:975
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:976
 msgid "_Copy E-mail Address"
 msgstr "_Copiar enderezo de correo"
 
 #. Images.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:980
 msgid "View _Image in New Tab"
 msgstr "Ver _imaxe nunha lapela nova"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:981
 msgid "Copy I_mage Address"
 msgstr "Copiar o enderezo da i_maxe"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:982
 msgid "_Save Image As…"
 msgstr "_Gardar a imaxe como…"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:983
 msgid "Set as _Wallpaper"
 msgstr "Definir como _fondo do escritorio"
 
 #. Video.
-#: src/ephy-window.c:940
+#: src/ephy-window.c:987
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo nunha nova _xanela"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:988
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo nunha _lapela nova"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:989
 msgid "_Save Video As…"
 msgstr "_Gardar vídeo como…"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:990
 msgid "_Copy Video Address"
 msgstr "_Copiar enderezo do vídeo"
 
 #. Audio.
-#: src/ephy-window.c:947
+#: src/ephy-window.c:994
 msgid "Open Audio in New _Window"
 msgstr "Abrir audio nunha _xanela nova"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:995
 msgid "Open Audio in New _Tab"
 msgstr "Abrir audio nunha _lapela nova"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:996
 msgid "_Save Audio As…"
 msgstr "_Gardar audio como…"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:997
 msgid "_Copy Audio Address"
 msgstr "_Copiar enderezo do audio"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:1003
 msgid "Save Pa_ge As…"
 msgstr "Gardar _páxina como…"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:1004
 msgid "_Take Screenshot…"
 msgstr "Facer _captura de pantalla…"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:1005
 msgid "_Page Source"
 msgstr "Código da _páxina"
 
-#: src/ephy-window.c:1332
+#: src/ephy-window.c:1379
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Busca no web por «%s»"
 
-#: src/ephy-window.c:1361
+#: src/ephy-window.c:1408
 msgid "Open Link"
 msgstr "Abrir ligazón"
 
-#: src/ephy-window.c:1363
+#: src/ephy-window.c:1410
 msgid "Open Link In New Tab"
 msgstr "Abrir ligazón nunha nova lapela"
 
-#: src/ephy-window.c:1365
+#: src/ephy-window.c:1412
 msgid "Open Link In New Window"
 msgstr "Abrir ligazón na nova xanela"
 
-#: src/ephy-window.c:1367
+#: src/ephy-window.c:1414
 msgid "Open Link In Incognito Window"
 msgstr "Abrir a ligazón nunha xanela de incógnito"
 
-#: src/ephy-window.c:2742
+#: src/ephy-window.c:2789
 msgid "_Ask Later"
 msgstr "_Preguntar máis tarde"
 
-#: src/ephy-window.c:2743 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Denegar"
 
-#: src/ephy-window.c:2744 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Permitir"
 
-#: src/ephy-window.c:2946 src/ephy-window.c:4386
+#: src/ephy-window.c:2993 src/ephy-window.c:4427
 msgid "Leave Website?"
 msgstr "Desexa abandonar o sitio web?"
 
-#: src/ephy-window.c:2947 src/ephy-window.c:4387 src/window-commands.c:1240
+#: src/ephy-window.c:2994 src/ephy-window.c:4428 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Modificouse un formulario que non foi remitido"
 
-#: src/ephy-window.c:2948 src/ephy-window.c:4388 src/window-commands.c:1244
+#: src/ephy-window.c:2995 src/ephy-window.c:4429 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Descartar formulario"
 
-#: src/ephy-window.c:2969
+#: src/ephy-window.c:3016
 msgid "Download operation"
 msgstr "Operación de descarga"
 
-#: src/ephy-window.c:2971
+#: src/ephy-window.c:3018
 msgid "Show details"
 msgstr "Mostrar detalles"
 
-#: src/ephy-window.c:2973
+#: src/ephy-window.c:3020
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operación de descarga activa"
 msgstr[1] "%d operacións de descarga activas"
 
-#: src/ephy-window.c:3214
+#: src/ephy-window.c:3261
 msgid "Set as Default Browser?"
 msgstr "Desexa estabelecer como o navegador predeterminado?"
 
-#: src/ephy-window.c:3216
+#: src/ephy-window.c:3263
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Usar Web como navegador web predeterminado e para abrir ligazóns externas"
 
-#: src/ephy-window.c:3218
+#: src/ephy-window.c:3265
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2900,55 +2903,55 @@ msgstr ""
 "Usar a Viste previa da Tecnoloxía experimental de Epiphany como o seu "
 "navegador predeterminado e para abrir ligazóns externas"
 
-#: src/ephy-window.c:3222
+#: src/ephy-window.c:3269
 msgid "_Ask Again Later"
 msgstr "_Preguntar máis tarde de novo"
 
-#: src/ephy-window.c:3223
+#: src/ephy-window.c:3270
 msgid "_No"
 msgstr "_Non"
 
-#: src/ephy-window.c:3224
+#: src/ephy-window.c:3271
 msgid "_Yes"
 msgstr "_Si"
 
-#: src/ephy-window.c:3675
+#: src/ephy-window.c:3722
 msgid "Save password?"
 msgstr "Desexa gardar o contrasinal?"
 
-#: src/ephy-window.c:3676
+#: src/ephy-window.c:3723
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Os contrasinais poden eliminarse en calquera momento en Preferencias"
 
-#: src/ephy-window.c:3678
+#: src/ephy-window.c:3725
 msgid "Not Now"
 msgstr "Agora non"
 
-#: src/ephy-window.c:3679
+#: src/ephy-window.c:3726
 msgid "Never Save"
 msgstr "Non gardar nunca"
 
-#: src/ephy-window.c:3680
+#: src/ephy-window.c:3727
 msgid "Save"
 msgstr "Gardar"
 
-#: src/ephy-window.c:4517
+#: src/ephy-window.c:4558
 msgid "Close Multiple Tabs?"
 msgstr "Desexa pechar varias lapelas?"
 
-#: src/ephy-window.c:4518
+#: src/ephy-window.c:4559
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Se pecha esta xanela, perderanse todas as lapelas abertas"
 
-#: src/ephy-window.c:4519
+#: src/ephy-window.c:4560
 msgid "C_lose Tabs"
 msgstr "P_echar lapelas"
 
-#: src/ephy-window.c:4612
+#: src/ephy-window.c:4653
 msgid "New tab opened"
 msgstr "Lapela nova aberta"
 
-#: src/ephy-window.c:4616
+#: src/ephy-window.c:4657
 msgid "Switch"
 msgstr "Cambiar"
 
@@ -3230,10 +3233,8 @@ msgid "Search website data"
 msgstr "Buscar datos do sitio web"
 
 #: src/resources/gtk/clear-data-view.ui:26
-#, fuzzy
-#| msgid "Website Data"
 msgid "No Website Data Found"
-msgstr "Datos do sitio web"
+msgstr "Non se atoparon datos do sitio web"
 
 #: src/resources/gtk/clear-data-view.ui:27
 msgid "Website data will be listed here"
@@ -3269,8 +3270,6 @@ msgid "Text Encoding"
 msgstr "Codificación do texto"
 
 #: src/resources/gtk/encoding-dialog.ui:30
-#, fuzzy
-#| msgid "Use the encoding specified by the document"
 msgid "Use Encoding Specified by Document"
 msgstr "Usar a codificación especificada polo documento"
 
@@ -3311,17 +3310,12 @@ msgid "Sync _Now"
 msgstr "Sincronizar _agora"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:32
-#, fuzzy
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with GNOME Web and "
-#| "Firefox on other computers. GNOME Web is not Firefox and is not produced "
-#| "or endorsed by Mozilla."
 msgid ""
 "Sign in with your Mozilla account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
 "endorsed by Mozilla."
 msgstr ""
-"Inicie a sesión na súa conta de Firefox para sincronizar os seus datos de "
+"Inicie a sesión na súa conta de Mozilla para sincronizar os seus datos de "
 "GNOME Web e Firefox con outros computadores. GNOME Web non é Firefox e non é "
 "producido nin apoiado por Mozilla."
 
@@ -4335,7 +4329,7 @@ msgstr "Epiphany Canary"
 
 #: src/window-commands.c:1086
 msgid "translator-credits"
-msgstr "Fran Diéguez <frandieguez@gnome.org>, 2010-2023"
+msgstr "Fran Diéguez <frandieguez@gnome.org>, 2010-2024"
 
 #: src/window-commands.c:1239
 msgid "Reload Website?"
