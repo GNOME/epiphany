@@ -4246,13 +4246,16 @@ ephy_window_location_search (EphyWindow *window)
   EphySearchEngineManager *search_engine_manager = ephy_embed_shell_get_search_engine_manager (embed_shell);
   EphySearchEngine *default_engine = ephy_search_engine_manager_get_default_engine (search_engine_manager);
   const char *bang = ephy_search_engine_get_bang (default_engine);
-  char *entry_text = g_strconcat (bang, " ", NULL);
+  g_autofree char *entry_text = g_strconcat (bang, " ", NULL);
 
   gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (location_entry));
   gtk_editable_set_text (GTK_EDITABLE (location_entry), entry_text);
   gtk_editable_set_position (GTK_EDITABLE (location_entry), strlen (entry_text));
 
-  g_free (entry_text);
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget))
+    ephy_location_entry_grab_focus_without_selecting (EPHY_LOCATION_ENTRY (title_widget));
 }
 
 /**
