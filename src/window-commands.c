@@ -2484,14 +2484,27 @@ window_cmd_delete (GSimpleAction *action,
   }
 }
 
+static void
+dismiss_page_popover (EphyWindow *window)
+{
+  EphyHeaderBar *header_bar;
+  GtkMenuButton *button;
+
+  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  button = GTK_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
+  gtk_menu_button_popdown (button);
+}
+
 void
 window_cmd_print (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  EphyWindow *window = user_data;
+  EphyWindow *window = EPHY_WINDOW (user_data);
   EphyEmbed *embed;
   EphyWebView *view;
+
+  dismiss_page_popover (window);
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
@@ -2506,8 +2519,10 @@ window_cmd_find (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-  EphyWindow *window = user_data;
+  EphyWindow *window = EPHY_WINDOW (user_data);
   EphyFindToolbar *toolbar;
+
+  dismiss_page_popover (window);
 
   toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
   ephy_find_toolbar_open (toolbar);
@@ -2835,6 +2850,8 @@ window_cmd_change_fullscreen_state (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   gboolean active;
+
+  dismiss_page_popover (window);
 
   active = g_variant_get_boolean (state);
 
