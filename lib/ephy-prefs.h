@@ -107,6 +107,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS         "enable-webextensions"
 #define EPHY_PREFS_WEB_WEBEXTENSIONS_ACTIVE         "webextensions-active"
 #define EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS       "show-developer-actions"
+#define EPHY_PREFS_WEB_ENABLE_NAVIGATION_GESTURES   "enable-navigation-gestures"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,

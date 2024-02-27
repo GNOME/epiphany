@@ -556,8 +556,7 @@ ephy_embed_prefs_init (gpointer user_data)
 {
   guint i;
 
-  webkit_settings = webkit_settings_new_with_settings ("enable-back-forward-navigation-gestures", TRUE,
-                                                       "enable-dns-prefetching", TRUE,
+  webkit_settings = webkit_settings_new_with_settings ("enable-dns-prefetching", TRUE,
                                                        "enable-media-stream", TRUE,
                                                        "enable-smooth-scrolling", TRUE,
                                                        "javascript-can-open-windows-automatically", TRUE,
@@ -600,6 +599,11 @@ ephy_embed_prefs_init (gpointer user_data)
                    EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
                    webkit_settings, "enable-site-specific-quirks",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_NAVIGATION_GESTURES,
+                   webkit_settings, "enable-back-forward-navigation-gestures",
+                   G_SETTINGS_BIND_GET);
+
   return webkit_settings;
 }
 
