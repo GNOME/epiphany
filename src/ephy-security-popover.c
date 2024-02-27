@@ -362,7 +362,7 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-static gboolean
+static void
 on_ad_combobox_changed (GtkComboBox         *widget,
                         EphySecurityPopover *popover)
 {
@@ -375,7 +375,7 @@ on_ad_combobox_changed (GtkComboBox         *widget,
 
   origin = ephy_uri_to_security_origin (popover->address);
   if (!origin)
-    return FALSE;
+    return;
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
 
@@ -387,7 +387,7 @@ on_ad_combobox_changed (GtkComboBox         *widget,
                                            origin,
                                            permission);
 
-  return FALSE;
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -423,6 +423,8 @@ handle_permission_combobox_changed (EphySecurityPopover *popover,
                                            permission_type,
                                            origin,
                                            permission);
+
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
