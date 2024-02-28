@@ -3056,7 +3056,7 @@ window_cmd_new_tab_from_clipboard (GSimpleAction *action,
   EphyWindow *ephy_window = EPHY_WINDOW (user_data);
   GdkClipboard *clipboard;
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (ephy_window));
+  clipboard = gdk_display_get_primary_clipboard (gtk_widget_get_display (GTK_WIDGET (ephy_window)));
   gdk_clipboard_read_text_async (clipboard,
                                  NULL,
                                  (GAsyncReadyCallback)clipboard_text_received_cb,
