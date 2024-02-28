@@ -175,6 +175,15 @@ figure img {
   display: block;
 }
 
+@media (prefers-color-scheme: dark) {
+p > img:only-child,
+p > a:only-child > img:only-child,
+.wp-caption img,
+figure img {
+  filter: brightness(0.8) contrast(1.2);
+}
+}
+
 .caption,
 .wp-caption-text,
 caption,
