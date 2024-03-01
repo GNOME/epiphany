@@ -117,7 +117,7 @@
             <property name="max-content-height">400</property>
             <property name="propagate-natural-height">True</property>
             <property name="child">
-              <object class="GtkListView">
+              <object class="GtkListView" id="suggestions_view">
                 <signal name="activate" handler="suggestion_activated_cb" swapped="yes"/>
                 <property name="model">
                   <object class="GtkSingleSelection" id="suggestions_model">

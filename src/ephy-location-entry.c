@@ -67,6 +67,7 @@ struct _EphyLocationEntry {
 
   GtkWidget *suggestions_popover;
   GtkWidget *scrolled_window;
+  GtkWidget *suggestions_view;
   GtkSingleSelection *suggestions_model;
 
   GtkWidget *context_menu;
@@ -507,6 +508,7 @@ key_pressed_cb (EphyLocationEntry     *entry,
   }
 
   gtk_single_selection_set_selected (entry->suggestions_model, selected);
+  gtk_list_view_scroll_to (GTK_LIST_VIEW (entry->suggestions_view), selected, GTK_LIST_SCROLL_NONE, NULL);
   update_selected_url (entry);
   return TRUE;
 }
@@ -1411,6 +1413,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_model);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_view);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, context_menu);
 
   gtk_widget_class_bind_template_callback (widget_class, editable_changed_cb);
