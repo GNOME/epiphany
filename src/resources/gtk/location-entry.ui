@@ -94,6 +94,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkButton" id="clear_button">
+        <property name="tooltip-text" translatable="yes">Clear</property>
+        <property name="valign">center</property>
+        <property name="visible">False</property>
+        <property name="icon-name">edit-clear-symbolic</property>
+        <signal name="clicked" handler="clear_button_clicked_cb" swapped="yes"/>
+        <style>
+          <class name="entry-icon"/>
+          <class name="end"/>
+        </style>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuButton" id="password_button">
         <property name="tooltip-text" translatable="yes">View Available Passwords</property>
         <property name="valign">center</property>
