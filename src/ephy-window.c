@@ -4073,7 +4073,12 @@ ephy_window_constructed (GObject *object)
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
 
   ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
-  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_BOTTOM_URL_BAR))
+    ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
+  else
+    ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
+
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar);
 
