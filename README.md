@@ -147,7 +147,7 @@ web inspector, are welcome so long as they are non-obtrusive.
 
 ## Website
 
-[Epiphany has a website,](https://wiki.gnome.org/Apps/Web) though there is not
+[Epiphany has a website,](https://apps.gnome.org/Epiphany) though there is not
 very much content there.
 
 ## Contact Us

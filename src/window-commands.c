@@ -1077,7 +1077,7 @@ window_cmd_show_about (GSimpleAction *action,
 
   adw_about_window_set_debug_info (dialog, debug_info);
   adw_about_window_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
-  adw_about_window_set_website (dialog, "https://wiki.gnome.org/Apps/Web");
+  adw_about_window_set_website (dialog, "https://apps.gnome.org/Epiphany");
   adw_about_window_set_application_icon (dialog, APPLICATION_ID);
 
   adw_about_window_set_developers (dialog, (const char **)authors);
