@@ -877,7 +877,7 @@ delete_selected_cb (EphyHistoryDialog *self)
 }
 
 static gboolean
-find_shortuct_cb (EphyHistoryDialog *self)
+find_shortcut_cb (EphyHistoryDialog *self)
 {
   gboolean search;
 
@@ -982,7 +982,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
                                 (GtkShortcutFunc)delete_selected_cb,
                                 NULL);
   gtk_widget_class_add_binding (widget_class, GDK_KEY_F, GDK_CONTROL_MASK,
-                                (GtkShortcutFunc)find_shortuct_cb,
+                                (GtkShortcutFunc)find_shortcut_cb,
                                 NULL);
 }
 
