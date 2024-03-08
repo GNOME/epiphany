@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-02-11 23:30+0000\n"
-"PO-Revision-Date: 2024-02-27 00:30+0200\n"
+"POT-Creation-Date: 2024-03-07 01:49+0000\n"
+"PO-Revision-Date: 2024-03-08 21:09+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -516,19 +516,19 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:244
 msgid "Last upload directory"
-msgstr "Pēdējā augšupielādes direktorija"
+msgstr "Pēdējais augšupielādes direktorijs"
 
 #: data/org.gnome.epiphany.gschema.xml:245
 msgid "Keep track of last upload directory"
-msgstr "Atcerēties, kura bija pēdējā augšupielādes direktorija"
+msgstr "Atcerēties, kurš bija pēdējais augšupielādes direktorijs"
 
 #: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last download directory"
-msgstr "Pēdējā lejupielādes direktorija"
+msgstr "Pēdējais lejupielādes direktorijs"
 
 #: data/org.gnome.epiphany.gschema.xml:250
 msgid "Keep track of last download directory"
-msgstr "Atcerēties, kura bija pēdējā lejupielādes direktorija"
+msgstr "Atcerēties, kurš bija pēdējais lejupielādes direktorijs"
 
 #: data/org.gnome.epiphany.gschema.xml:254
 msgid "Hardware acceleration policy"
@@ -553,7 +553,7 @@ msgstr "Vienmēr prasīt lejupielādes direktoriju"
 
 #: data/org.gnome.epiphany.gschema.xml:260
 msgid "Whether to present a directory chooser dialog for every download."
-msgstr "Vai rādīt direktorijas izvēles dialoglodziņu katrai lejupielādei"
+msgstr "Vai rādīt direktorija izvēles dialoglodziņu katrai lejupielādei"
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "Enable immediately switch to new open tab"
@@ -584,7 +584,6 @@ msgid "Indicates which WebExtensions are set to active."
 msgstr "Norāda, kuri WebExtensions paplašinājumi ir aktīvi."
 
 #: data/org.gnome.epiphany.gschema.xml:279
-#| msgid "Download operation"
 msgid "Show developer actions"
 msgstr "Rādīt izstrādātāja darbības"
 
@@ -593,8 +592,8 @@ msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
-"Vai attīstītājam rādīt izstrādātāja konteksta izvēlnes darbības. Tas ļauj"
-" izmantot darbības “Lapas pirmkods” un “Izpētīt elementu”."
+"Vai attīstītājam rādīt izstrādātāja konteksta izvēlnes darbības. Tas ļauj "
+"izmantot darbības “Lapas pirmkods” un “Izpētīt elementu”."
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
@@ -710,9 +709,6 @@ msgid "Currently signed in sync user"
 msgstr "Pašlaik ierakstījies kā sinhronizēšanas lietotājs"
 
 #: data/org.gnome.epiphany.gschema.xml:372
-#| msgid ""
-#| "The email linked to the Firefox Account used to sync data with Mozilla’s "
-#| "servers."
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
@@ -1073,52 +1069,50 @@ msgstr ""
 "darbā. Interneta pakalpojumu sniedzējs, valdība vai tīmekļa vietnes, kuras "
 "apmeklējat, vēl aizvien varēs jūs izsekot."
 
-#: embed/ephy-client-certificate-manager.c:295
-#| msgid "A name is required"
+#: embed/ephy-client-certificate-manager.c:292
 msgid "PIN required"
 msgstr "Nepieciešams PIN"
 
-#: embed/ephy-client-certificate-manager.c:298
+#: embed/ephy-client-certificate-manager.c:295
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Lūdzu, ievadiet %s PIN, lai autentificētos pie %s:%d."
 
-#: embed/ephy-client-certificate-manager.c:306
-#: embed/ephy-client-certificate-manager.c:391 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:257
+#: embed/ephy-client-certificate-manager.c:303
+#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
+#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
 #: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2814
+#: src/window-commands.c:2829
 msgid "_Cancel"
 msgstr "At_celt"
 
-#: embed/ephy-client-certificate-manager.c:307
+#: embed/ephy-client-certificate-manager.c:304
 msgid "_Login"
 msgstr "_Ierakstīties"
 
-#: embed/ephy-client-certificate-manager.c:377
-#| msgid "Select Profile"
+#: embed/ephy-client-certificate-manager.c:374
 msgid "Select certificate"
 msgstr "Izvēlieties sertifikātu"
 
-#: embed/ephy-client-certificate-manager.c:380
+#: embed/ephy-client-certificate-manager.c:377
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr "Tīmekļa vietne %s:%d pieprasa autentifikācijas sertifikātu vietnei %s."
 
-#: embed/ephy-client-certificate-manager.c:385
+#: embed/ephy-client-certificate-manager.c:382
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "Tīmekļa vietne %s:%d pieprasa autentifikācijas sertifikātu."
 
-#: embed/ephy-client-certificate-manager.c:392 src/window-commands.c:335
+#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:335
 msgid "_Select"
 msgstr "Atla_sīt"
 
@@ -1999,7 +1993,7 @@ msgstr "Neizdevās instalēt darbvirsmas datni %s: "
 #: lib/ephy-web-app-utils.c:387
 #, c-format
 msgid "Profile directory %s already exists"
-msgstr "Profila direktorija %s jau eksistē"
+msgstr "Profila direktorijs %s jau eksistē"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
@@ -2051,7 +2045,6 @@ msgstr ""
 "Lai turpinātu sinhronizēšanu, ejiet uz Firefox Sync un vēlreiz ierakstieties."
 
 #: lib/sync/ephy-sync-service.c:1116
-#| msgid "The password of your Firefox account seems to have been changed."
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "Izskatās, ka jūsu Mozilla konta parole ir mainīta."
 
@@ -2081,8 +2074,8 @@ msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr ""
-"Neizdevās saglabāt sinhronizēšanas noslēpumus (noslēpumu pakalpojums vai"
-" noslēpumu portāls ir salūzis?): "
+"Neizdevās saglabāt sinhronizēšanas noslēpumus (noslēpumu pakalpojums vai "
+"noslēpumu portāls ir salūzis?): "
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:2035
@@ -2109,9 +2102,6 @@ msgstr "Neizdevās augšupielādēt meta/globālo ierakstu."
 #. Translators: the %d is the storage version, the \n is a newline character.
 #: lib/sync/ephy-sync-service.c:2556
 #, c-format
-#| msgid ""
-#| "Your Firefox Account uses storage version %d. Web only supports version "
-#| "%d."
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
@@ -2199,12 +2189,12 @@ msgid "Save Media As"
 msgstr "Saglabāt mediju kā"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1758
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
 msgid "Bookmark Page"
 msgstr "Pievienot grāmatzīmēm"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1766
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
 msgid "Edit Bookmark"
 msgstr "Rediģēt grāmatzīmi"
 
@@ -2399,27 +2389,27 @@ msgid "Remove all history"
 msgstr "Izņemt visu vēsturi"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1802 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "Paziņojumu pieprasījums"
 
-#: src/ephy-location-entry.c:1806
+#: src/ephy-location-entry.c:1809
 msgid "Camera Request"
 msgstr "Kameras pieprasījums"
 
-#: src/ephy-location-entry.c:1810
+#: src/ephy-location-entry.c:1813
 msgid "Microphone Request"
 msgstr "Mikrofona pieprasījums"
 
-#: src/ephy-location-entry.c:1814
+#: src/ephy-location-entry.c:1817
 msgid "Location Request"
 msgstr "Atrašanās vietas pieprasījums"
 
-#: src/ephy-location-entry.c:1818
+#: src/ephy-location-entry.c:1821
 msgid "Webcam and Microphone Request"
 msgstr "Tīmekļa kameras un mikrofona pieprasījums"
 
-#: src/ephy-location-entry.c:1822
+#: src/ephy-location-entry.c:1825
 msgid "Permission Request"
 msgstr "Atļauju pieprasījums"
 
@@ -2453,7 +2443,7 @@ msgstr "Palaist privātu instanci WebDriver kontrolei"
 
 #: src/ephy-main.c:125
 msgid "Custom profile directory for private instance"
-msgstr "Pielāgota profila direktorija privātajai instancei"
+msgstr "Pielāgots profila direktorijs privātajai instancei"
 
 #: src/ephy-main.c:125
 msgid "DIR"
@@ -2577,51 +2567,51 @@ msgstr "Jūsu savienojums izskatās drošs."
 msgid "_View Certificate…"
 msgstr "_Skatīt sertifikātu…"
 
-#: src/ephy-security-popover.c:492
+#: src/ephy-security-popover.c:494
 msgid "Allow"
 msgstr "Atļaut"
 
-#: src/ephy-security-popover.c:493
+#: src/ephy-security-popover.c:495
 msgid "Deny"
 msgstr "Liegt"
 
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-popover.c:498
 msgid "Ask"
 msgstr "Jautāt"
 
-#: src/ephy-security-popover.c:514
+#: src/ephy-security-popover.c:516
 msgid "Permissions"
 msgstr "Atļaujas"
 
-#: src/ephy-security-popover.c:556
+#: src/ephy-security-popover.c:558
 msgid "Advertisements"
 msgstr "Reklāmas"
 
-#: src/ephy-security-popover.c:557
+#: src/ephy-security-popover.c:559
 msgid "Notifications"
 msgstr "Paziņojumi"
 
-#: src/ephy-security-popover.c:558
+#: src/ephy-security-popover.c:560
 msgid "Password saving"
 msgstr "Paroļu saglabāšana"
 
-#: src/ephy-security-popover.c:559
+#: src/ephy-security-popover.c:561
 msgid "Location access"
 msgstr "Atrašanās vietas pieeja"
 
-#: src/ephy-security-popover.c:560
+#: src/ephy-security-popover.c:562
 msgid "Microphone access"
 msgstr "Piekļuve mikrofonam"
 
-#: src/ephy-security-popover.c:561
+#: src/ephy-security-popover.c:563
 msgid "Webcam access"
 msgstr "Piekļuve tīmekļa kamerai"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Media autoplay"
 msgstr "Mediju automātiskā atskaņošana"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Without Sound"
 msgstr "Ar skaņu"
 
@@ -2631,198 +2621,198 @@ msgid "Open a new tab"
 msgstr "Atvērt jaunu cilni"
 
 #. Undo, redo.
-#: src/ephy-window.c:903 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_Atsaukt"
 
-#: src/ephy-window.c:904
+#: src/ephy-window.c:951
 msgid "Re_do"
 msgstr "Atat_saukt"
 
 #. Edit.
-#: src/ephy-window.c:907 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "Iz_griezt"
 
-#: src/ephy-window.c:908 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: src/ephy-window.c:909 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: src/ephy-window.c:910
+#: src/ephy-window.c:957
 msgid "_Paste Text Only"
 msgstr "_Ielīmēt tikai tekstu"
 
-#: src/ephy-window.c:911 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "_Atlasīt visu"
 
-#: src/ephy-window.c:913
+#: src/ephy-window.c:960
 msgid "S_end Link by Email…"
 msgstr "Sūtīt saiti pa e-pastu..."
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:962
 msgid "_Reload"
 msgstr "_Pārlādēt"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:963
 msgid "_Back"
 msgstr "_Atpakaļ"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:964
 msgid "_Forward"
 msgstr "Uz _priekšu"
 
 #. Bookmarks
-#: src/ephy-window.c:920
+#: src/ephy-window.c:967
 msgid "Add Boo_kmark…"
 msgstr "Pievienot grāmat_zīmi..."
 
 #. Links.
-#: src/ephy-window.c:924
+#: src/ephy-window.c:971
 msgid "Open Link in New _Window"
 msgstr "Atvērt saiti jaunā _logā"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:972
 msgid "Open Link in New _Tab"
 msgstr "Atvērt saiti jaunā _cilnē"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:973
 msgid "Open Link in I_ncognito Window"
 msgstr "Atvērt saiti inkognito _logā"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:974
 msgid "_Save Link As…"
 msgstr "_Saglabāt saiti kā..."
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:975
 msgid "_Copy Link Address"
 msgstr "_Kopēt saites adresi"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:976
 msgid "_Copy E-mail Address"
 msgstr "_Kopēt e-pasta adresi"
 
 #. Images.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:980
 msgid "View _Image in New Tab"
 msgstr "Skatīt _attēlu jaunā cilnē"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:981
 msgid "Copy I_mage Address"
 msgstr "Kopēt a_ttēla adresi"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:982
 msgid "_Save Image As…"
 msgstr "_Saglabāt attēlu kā..."
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:983
 msgid "Set as _Wallpaper"
 msgstr "Iestatīt kā _ekrāntapeti"
 
 #. Video.
-#: src/ephy-window.c:940
+#: src/ephy-window.c:987
 msgid "Open Video in New _Window"
 msgstr "Atvērt video jaunā _logā"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:988
 msgid "Open Video in New _Tab"
 msgstr "Atvērt video jaunā _cilnē"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:989
 msgid "_Save Video As…"
 msgstr "_Saglabāt video kā…"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:990
 msgid "_Copy Video Address"
 msgstr "_Kopēt video adresi"
 
 #. Audio.
-#: src/ephy-window.c:947
+#: src/ephy-window.c:994
 msgid "Open Audio in New _Window"
 msgstr "Atvērt audio jaunā _logā"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:995
 msgid "Open Audio in New _Tab"
 msgstr "Atvērt audio jaunā _cilnē"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:996
 msgid "_Save Audio As…"
 msgstr "_Saglabāt audio kā…"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:997
 msgid "_Copy Audio Address"
 msgstr "_Kopēt audio adresi"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:1003
 msgid "Save Pa_ge As…"
 msgstr "Sa_glabāt lapu kā..."
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:1004
 msgid "_Take Screenshot…"
 msgstr "Uzņemt ekrānat_tēlu…"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:1005
 msgid "_Page Source"
 msgstr "_Lapas pirmkods"
 
-#: src/ephy-window.c:1332
+#: src/ephy-window.c:1379
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Meklēt “%s” tīmeklī"
 
-#: src/ephy-window.c:1361
+#: src/ephy-window.c:1408
 msgid "Open Link"
 msgstr "Atvērt saiti"
 
-#: src/ephy-window.c:1363
+#: src/ephy-window.c:1410
 msgid "Open Link In New Tab"
 msgstr "Atvērt saiti jaunā cilnē"
 
-#: src/ephy-window.c:1365
+#: src/ephy-window.c:1412
 msgid "Open Link In New Window"
 msgstr "Atvērt saiti jaunā logā"
 
-#: src/ephy-window.c:1367
+#: src/ephy-window.c:1414
 msgid "Open Link In Incognito Window"
 msgstr "Atvērt saiti inkognito logā"
 
-#: src/ephy-window.c:2742
+#: src/ephy-window.c:2789
 msgid "_Ask Later"
 msgstr "_Jautāt vēlāk"
 
-#: src/ephy-window.c:2743 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Liegt"
 
-#: src/ephy-window.c:2744 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Atļaut"
 
-#: src/ephy-window.c:2946 src/ephy-window.c:4386
+#: src/ephy-window.c:2993 src/ephy-window.c:4430
 msgid "Leave Website?"
 msgstr "Pamest tīmekļa vietni?"
 
-#: src/ephy-window.c:2947 src/ephy-window.c:4387 src/window-commands.c:1240
+#: src/ephy-window.c:2994 src/ephy-window.c:4431 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Forma, tika mainīta, bet netika nosūtīta"
 
-#: src/ephy-window.c:2948 src/ephy-window.c:4388 src/window-commands.c:1244
+#: src/ephy-window.c:2995 src/ephy-window.c:4432 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Atmest formu"
 
-#: src/ephy-window.c:2969
+#: src/ephy-window.c:3016
 msgid "Download operation"
 msgstr "Lejupielādēšana"
 
-#: src/ephy-window.c:2971
+#: src/ephy-window.c:3018
 msgid "Show details"
 msgstr "Rādīt sīkāku informāciju"
 
-#: src/ephy-window.c:2973
+#: src/ephy-window.c:3020
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2830,15 +2820,15 @@ msgstr[0] "Aktīva %d lejupielādes darbība"
 msgstr[1] "Aktīvas %d lejupielādes darbības"
 msgstr[2] "Aktīvas %d lejupielādes darbības"
 
-#: src/ephy-window.c:3214
+#: src/ephy-window.c:3261
 msgid "Set as Default Browser?"
 msgstr "Vai iestatīt kā noklusējuma pārlūku?"
 
-#: src/ephy-window.c:3216
+#: src/ephy-window.c:3263
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Izmantot Tīmekli kā jūsu noklusējuma pārlūku un ārējo saišu atvēršanai"
 
-#: src/ephy-window.c:3218
+#: src/ephy-window.c:3265
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2846,55 +2836,55 @@ msgstr ""
 "Lietot Epiphany tehnoloģiju priekšskatījumu kā jūsu noklusējuma tīmekļā "
 "pārlūku un ārējo saišu atvēršanai?"
 
-#: src/ephy-window.c:3222
+#: src/ephy-window.c:3269
 msgid "_Ask Again Later"
 msgstr "_Atkal jautāt vēlāk"
 
-#: src/ephy-window.c:3223
+#: src/ephy-window.c:3270
 msgid "_No"
 msgstr "_Nē"
 
-#: src/ephy-window.c:3224
+#: src/ephy-window.c:3271
 msgid "_Yes"
 msgstr "_Jā"
 
-#: src/ephy-window.c:3675
+#: src/ephy-window.c:3722
 msgid "Save password?"
 msgstr "Saglabāt paroli?"
 
-#: src/ephy-window.c:3676
+#: src/ephy-window.c:3723
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Paroles var izdzēst iestatījumos jebkurā laikā"
 
-#: src/ephy-window.c:3678
+#: src/ephy-window.c:3725
 msgid "Not Now"
 msgstr "Ne tagad"
 
-#: src/ephy-window.c:3679
+#: src/ephy-window.c:3726
 msgid "Never Save"
 msgstr "Nekad nesaglabāt"
 
-#: src/ephy-window.c:3680
+#: src/ephy-window.c:3727
 msgid "Save"
 msgstr "Saglabāt"
 
-#: src/ephy-window.c:4517
+#: src/ephy-window.c:4561
 msgid "Close Multiple Tabs?"
 msgstr "Aizvērt vairākas cilnes?"
 
-#: src/ephy-window.c:4518
+#: src/ephy-window.c:4562
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Ja šis logs tiks aizvērts, visas atvērtās cilnes tiks zaudētas"
 
-#: src/ephy-window.c:4519
+#: src/ephy-window.c:4563
 msgid "C_lose Tabs"
 msgstr "Aizvērt ci_lnes"
 
-#: src/ephy-window.c:4612
+#: src/ephy-window.c:4656
 msgid "New tab opened"
 msgstr "Jauna cilne ir atvērta"
 
-#: src/ephy-window.c:4616
+#: src/ephy-window.c:4660
 msgid "Switch"
 msgstr "Pārslēgties"
 
@@ -3175,7 +3165,6 @@ msgid "Search website data"
 msgstr "Meklēt tīmekļa vietnes datus"
 
 #: src/resources/gtk/clear-data-view.ui:26
-#| msgid "Website Data"
 msgid "No Website Data Found"
 msgstr "Nav atrastu tīmekļa vietnes datu"
 
@@ -3213,22 +3202,18 @@ msgid "Text Encoding"
 msgstr "Teksta kodējums"
 
 #: src/resources/gtk/encoding-dialog.ui:30
-#| msgid "Use the encoding specified by the document"
 msgid "Use Encoding Specified by Document"
 msgstr "Lietot dokumenta norādīto kodējumu"
 
 #: src/resources/gtk/encoding-dialog.ui:62
-#| msgid "Recent encodings"
 msgid "Recent Encodings"
 msgstr "Nesenie kodējumi"
 
 #: src/resources/gtk/encoding-dialog.ui:88
-#| msgid "Related encodings"
 msgid "Related Encodings"
 msgstr "Saistītie kodējumi"
 
 #: src/resources/gtk/encoding-dialog.ui:111
-#| msgid "Show all…"
 msgid "Show All…"
 msgstr "Rādīt visu…"
 
@@ -3257,10 +3242,6 @@ msgid "Sync _Now"
 msgstr "Sinhro_nizēt tagad"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:32
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with GNOME Web and "
-#| "Firefox on other computers. GNOME Web is not Firefox and is not produced "
-#| "or endorsed by Mozilla."
 msgid ""
 "Sign in with your Mozilla account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
@@ -3271,7 +3252,6 @@ msgstr ""
 "veidojusi, ne atbalstījusi."
 
 #: src/resources/gtk/firefox-sync-dialog.ui:49
-#| msgid "Firefox Account"
 msgid "Mozilla Account"
 msgstr "Mozilla konts"
 
@@ -3337,7 +3317,6 @@ msgid "Search history"
 msgstr "Meklēšanas vēsture"
 
 #: src/resources/gtk/history-dialog.ui:118
-#| msgid "No Results Found"
 msgid "No History Found"
 msgstr "Nav atrasta vēsture"
 
@@ -3350,7 +3329,6 @@ msgid "_Open"
 msgstr "_Atvērt"
 
 #: src/resources/gtk/lang-row.ui:21
-#| msgid "Delete language"
 msgid "Delete Language"
 msgstr "Dzēst valodu"
 
@@ -3368,7 +3346,6 @@ msgid "Reader Mode"
 msgstr "Lasīšanas režīms"
 
 #: src/resources/gtk/location-entry.ui:98
-#| msgid "View available passwords"
 msgid "View Available Passwords"
 msgstr "Skatīt pieejamās paroles"
 
@@ -3518,7 +3495,6 @@ msgid "Fullscreen"
 msgstr "Pilnekrāns"
 
 #: src/resources/gtk/password-popover.ui:22
-#| msgid "Save login?"
 msgid "Save Login?"
 msgstr "Saglabāt lietotāju?"
 
@@ -3540,7 +3516,6 @@ msgid "Passwords"
 msgstr "Paroles"
 
 #: src/resources/gtk/passwords-view.ui:28
-#| msgid "Remove all passwords"
 msgid "Remove All Passwords"
 msgstr "Izņemt visas paroles"
 
@@ -3549,7 +3524,6 @@ msgid "Search passwords"
 msgstr "Meklēt parolēs"
 
 #: src/resources/gtk/passwords-view.ui:30
-#| msgid "Passwords"
 msgid "No Passwords Found"
 msgstr "Nav atrastu paroļu"
 
@@ -3578,17 +3552,14 @@ msgid "Use Custom Fonts"
 msgstr "Lietot pielāgotus fontus"
 
 #: src/resources/gtk/prefs-appearance-page.ui:17
-#| msgid "Sans serif font"
 msgid "Sans Serif Font"
 msgstr "Bezrēdzes fonts"
 
 #: src/resources/gtk/prefs-appearance-page.ui:30
-#| msgid "Serif font"
 msgid "Serif Font"
 msgstr "Rēdzes fonts"
 
 #: src/resources/gtk/prefs-appearance-page.ui:43
-#| msgid "Monospace font"
 msgid "Monospace Font"
 msgstr "Fiksēta platuma fonts"
 
@@ -3635,7 +3606,6 @@ msgstr ""
 "mozilla.org\">addons.mozilla.org</a>"
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
-#| msgid "No extensions installed"
 msgid "No Extensions Installed"
 msgstr "Nav instalētu paplašinājumu"
 
@@ -3728,7 +3698,6 @@ msgid "_Spell Checking"
 msgstr "_Pareizrakstības pārbaude"
 
 #: src/resources/gtk/prefs-general-page.ui:238
-#| msgid "Past developers:"
 msgid "Developer"
 msgstr "Izstrādātājs"
 
@@ -3737,7 +3706,6 @@ msgid "Show D_eveloper Actions"
 msgstr "Rādīt _izstrādātāja darbības"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:8
-#| msgid "Add Language"
 msgid "Add Language…"
 msgstr "Pievienot valodu…"
 
@@ -3758,7 +3726,6 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "Viedā _izsekošanas novēršana"
 
 #: src/resources/gtk/prefs-privacy-page.ui:18
-#| msgid "Allow websites to store cookies, databases, and local storage data."
 msgid "Allow websites to store cookies, databases, and local storage data"
 msgstr ""
 "Ļaut tīmekļa vietnēm glabāt sīkdatnes, datubāzes un lokālās krātuves datus"
@@ -3772,7 +3739,6 @@ msgid "Search Suggestions"
 msgstr "Meklēšanas ieteikumi"
 
 #: src/resources/gtk/prefs-privacy-page.ui:30
-#| msgid "Enable search suggestions in the URL entry."
 msgid "Enable search suggestions in the URL entry"
 msgstr "Ieslēgt meklēšanas ieteikumus URL ierakstā"
 
@@ -3797,7 +3763,6 @@ msgid "_Remember Passwords"
 msgstr "Atce_rēties paroles"
 
 #: src/resources/gtk/search-engine-row.ui:8
-#| msgid "Selects the default search engine"
 msgid "Selects Default Search Engine"
 msgstr "Izvēlas noklusējuma meklēšanas dzini"
 
@@ -3814,9 +3779,6 @@ msgid "Shortcut"
 msgstr "Īsinājumtaustiņš"
 
 #: src/resources/gtk/search-engine-row.ui:92
-#| msgid ""
-#| "To determine the search address, perform a search using the search engine "
-#| "that you want to add and replace the search term with %s."
 msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s"
@@ -3834,27 +3796,21 @@ msgid "General"
 msgstr "Vispārīgi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:16
-#| msgid "New Window"
 msgctxt "shortcut window"
 msgid "New Window"
 msgstr "Jauns logs"
 
 #: src/resources/gtk/shortcuts-dialog.ui:22
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New Incognito Window"
 msgstr "Jauns inkognito logs"
 
 #: src/resources/gtk/shortcuts-dialog.ui:28
-#| msgctxt "shortcut window"
-#| msgid "Open file"
 msgctxt "shortcut window"
 msgid "Open File"
 msgstr "Atvērt datni"
 
 #: src/resources/gtk/shortcuts-dialog.ui:34
-#| msgctxt "shortcut window"
-#| msgid "Save page"
 msgctxt "shortcut window"
 msgid "Save Page"
 msgstr "Saglabāt lapu"
@@ -3865,8 +3821,6 @@ msgid "Take Screenshot"
 msgstr "Uzņemt ekrānattēlu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
-#| msgctxt "shortcut window"
-#| msgid "Print page"
 msgctxt "shortcut window"
 msgid "Print Page"
 msgstr "Drukāt lapu"
@@ -3882,8 +3836,6 @@ msgid "Help"
 msgstr "Palīdzība"
 
 #: src/resources/gtk/shortcuts-dialog.ui:64
-#| msgctxt "shortcut window"
-#| msgid "Open menu"
 msgctxt "shortcut window"
 msgid "Open Menu"
 msgstr "Atvērt izvēlni"
@@ -3894,8 +3846,6 @@ msgid "Shortcuts"
 msgstr "Saīsnes"
 
 #: src/resources/gtk/shortcuts-dialog.ui:76
-#| msgctxt "shortcut window"
-#| msgid "Show downloads list"
 msgctxt "shortcut window"
 msgid "Show Downloads List"
 msgstr "Rādīt lejupielāžu sarakstu"
@@ -3906,45 +3856,33 @@ msgid "Navigation"
 msgstr "Navigācija"
 
 #: src/resources/gtk/shortcuts-dialog.ui:89
-#| msgctxt "shortcut window"
-#| msgid "Go to homepage"
 msgctxt "shortcut window"
 msgid "Go to Homepage"
 msgstr "Iet uz mājaslapu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:95
-#| msgctxt "shortcut window"
-#| msgid "Reload current page"
 msgctxt "shortcut window"
 msgid "Reload Current Page"
 msgstr "Pārlādēt šo lapu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:101
-#| msgctxt "shortcut window"
-#| msgid "Reload bypassing cache"
 msgctxt "shortcut window"
 msgid "Reload Bypassing Cache"
 msgstr "Pārlādēt kešatmiņu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:107
-#| msgctxt "shortcut window"
-#| msgid "Stop loading current page"
 msgctxt "shortcut window"
 msgid "Stop Loading Current Page"
 msgstr "Apturēt šīs lapas ielādi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:113
 #: src/resources/gtk/shortcuts-dialog.ui:126
-#| msgctxt "shortcut window"
-#| msgid "Go back to the previous page"
 msgctxt "shortcut window"
 msgid "Go Back to Previous Page"
 msgstr "Iet atpakaļ uz iepriekšējo lappusi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:119
 #: src/resources/gtk/shortcuts-dialog.ui:132
-#| msgctxt "shortcut window"
-#| msgid "Go forward to the next page"
 msgctxt "shortcut window"
 msgid "Go Forward to Next Page"
 msgstr "Iet uz nākamo lappusi"
@@ -3955,61 +3893,46 @@ msgid "Tabs"
 msgstr "Cilnes"
 
 #: src/resources/gtk/shortcuts-dialog.ui:144
-#| msgid "New Tab"
 msgctxt "shortcut window"
 msgid "New Tab"
 msgstr "Jauna cilne"
 
 #: src/resources/gtk/shortcuts-dialog.ui:150
-#| msgctxt "shortcut window"
-#| msgid "Close current tab"
 msgctxt "shortcut window"
 msgid "Close Current Tab"
 msgstr "Aizvērt šo cilni"
 
 #: src/resources/gtk/shortcuts-dialog.ui:156
-#| msgid "Reopen Closed _Tab"
 msgctxt "shortcut window"
 msgid "Reopen Closed Tab"
 msgstr "Atkārtoti atvērt aizvērtu cilni"
 
 #: src/resources/gtk/shortcuts-dialog.ui:162
-#| msgctxt "shortcut window"
-#| msgid "Go to the next tab"
 msgctxt "shortcut window"
 msgid "Go to Next Tab"
 msgstr "Iet uz nākamo cilni"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
-#| msgctxt "shortcut window"
-#| msgid "Go to the previous tab"
 msgctxt "shortcut window"
 msgid "Go to Previous Tab"
 msgstr "Iet uz iepriekšējo cilni"
 
 #: src/resources/gtk/shortcuts-dialog.ui:174
-#| msgctxt "shortcut window"
-#| msgid "Move current tab to the left"
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Left"
 msgstr "Pārvietot pašreizējo cilni pa kreisi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:180
-#| msgctxt "shortcut window"
-#| msgid "Move current tab to the right"
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Right"
 msgstr "Pārvietot pašreizējo cilni pa labi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:186
-#| msgctxt "shortcut window"
-#| msgid "Duplicate current tab"
 msgctxt "shortcut window"
 msgid "Duplicate Current Tab"
 msgstr "Dublēt pašreizējo cilni"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
-#| msgid "View Open Tabs"
 msgctxt "shortcut window"
 msgid "View Open Tabs"
 msgstr "Skatīt atvērtās cilnes"
@@ -4030,48 +3953,36 @@ msgid "Preferences"
 msgstr "Iestatījumi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:217
-#| msgctxt "shortcut window"
-#| msgid "Bookmark current page"
 msgctxt "shortcut window"
 msgid "Bookmark Current Page"
 msgstr "Pievienot lapu grāmatzīmēm"
 
 #: src/resources/gtk/shortcuts-dialog.ui:223
-#| msgctxt "shortcut window"
-#| msgid "Show bookmarks list"
 msgctxt "shortcut window"
 msgid "Show Bookmarks List"
 msgstr "Rādīt grāmatzīmju sarastu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:229
-#| msgid "Import Bookmarks"
 msgctxt "shortcut window"
 msgid "Import Bookmarks"
 msgstr "Importēt grāmatzīmes"
 
 #: src/resources/gtk/shortcuts-dialog.ui:235
-#| msgctxt "shortcut window"
-#| msgid "Export bookmarks"
 msgctxt "shortcut window"
 msgid "Export Bookmarks"
 msgstr "Eksportēt grāmatzīmes"
 
 #: src/resources/gtk/shortcuts-dialog.ui:241
-#| msgctxt "shortcut window"
-#| msgid "Toggle caret browsing"
 msgctxt "shortcut window"
 msgid "Toggle Caret Browsing"
 msgstr "Pārslēgt kursora pārlūkošanu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:251
-#| msgid "Web App"
 msgctxt "shortcut window"
 msgid "Web App"
 msgstr "Tīmekļa lietotne"
 
 #: src/resources/gtk/shortcuts-dialog.ui:254
-#| msgctxt "shortcut window"
-#| msgid "Install site as web app"
 msgctxt "shortcut window"
 msgid "Install Site as Web App"
 msgstr "Instalēt vietni kā tīmekļa lietotni"
@@ -4082,22 +3993,16 @@ msgid "View"
 msgstr "Skats"
 
 #: src/resources/gtk/shortcuts-dialog.ui:267
-#| msgctxt "tooltip"
-#| msgid "Zoom In"
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Tuvināt"
 
 #: src/resources/gtk/shortcuts-dialog.ui:273
-#| msgctxt "tooltip"
-#| msgid "Zoom Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Tālināt"
 
 #: src/resources/gtk/shortcuts-dialog.ui:279
-#| msgctxt "shortcut window"
-#| msgid "Reset zoom"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Atstatīt mērogu"
@@ -4108,22 +4013,16 @@ msgid "Fullscreen"
 msgstr "Pilnekrāns"
 
 #: src/resources/gtk/shortcuts-dialog.ui:291
-#| msgctxt "shortcut window"
-#| msgid "View page source"
 msgctxt "shortcut window"
 msgid "View Page Source"
 msgstr "Skatīt lapas pirmkodu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:297
-#| msgctxt "shortcut window"
-#| msgid "Toggle inspector"
 msgctxt "shortcut window"
 msgid "Toggle Inspector"
 msgstr "Pārslēgt inspektoru"
 
 #: src/resources/gtk/shortcuts-dialog.ui:303
-#| msgctxt "shortcut window"
-#| msgid "Toggle reader mode"
 msgctxt "shortcut window"
 msgid "Toggle Reader Mode"
 msgstr "Pārslēgt lasīšanas režīmu"
@@ -4159,21 +4058,16 @@ msgid "Redo"
 msgstr "Atatsaukt"
 
 #: src/resources/gtk/shortcuts-dialog.ui:346
-#| msgid "Select _All"
 msgctxt "shortcut window"
 msgid "Select All"
 msgstr "Atlasīt visu"
 
 #: src/resources/gtk/shortcuts-dialog.ui:352
-#| msgctxt "shortcut window"
-#| msgid "Select page URL"
 msgctxt "shortcut window"
 msgid "Select Page URL"
 msgstr "Izvēlieties lappuses URL"
 
 #: src/resources/gtk/shortcuts-dialog.ui:358
-#| msgctxt "shortcut window"
-#| msgid "Search with default search engine"
 msgctxt "shortcut window"
 msgid "Search With Default Search Engine"
 msgstr "Meklēt ar noklusējuma meklēšanas dzini"
@@ -4184,15 +4078,11 @@ msgid "Find"
 msgstr "Meklēt"
 
 #: src/resources/gtk/shortcuts-dialog.ui:370
-#| msgctxt "shortcut window"
-#| msgid "Next find result"
 msgctxt "shortcut window"
 msgid "Next Find Result"
 msgstr "Nākamais meklēšanas rezultāts"
 
 #: src/resources/gtk/shortcuts-dialog.ui:376
-#| msgctxt "shortcut window"
-#| msgid "Previous find result"
 msgctxt "shortcut window"
 msgid "Previous Find Result"
 msgstr "Iepriekšējais meklēšanas rezultāts"
@@ -4230,12 +4120,10 @@ msgid "URL"
 msgstr "URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:81
-#| msgid "Add new URL"
 msgid "Add New URL"
 msgstr "Pievienot jaunu URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:87
-#| msgid "Remove the selected URLs"
 msgid "Remove Selected URLs"
 msgstr "Izņemt atlasītās URL"
 
@@ -4421,11 +4309,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2809
+#: src/window-commands.c:2824
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ieslēgt kursora pārlūkošanas režīmu?"
 
-#: src/window-commands.c:2810
+#: src/window-commands.c:2825
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4435,7 +4323,7 @@ msgstr ""
 "lapās novieto kursoru, kuru var pārvietot ar tastatūru. Vai vēlaties aktivēt "
 "kursora pārlūkošanu?"
 
-#: src/window-commands.c:2815
+#: src/window-commands.c:2830
 msgid "_Enable"
 msgstr "I_eslēgt"
 
