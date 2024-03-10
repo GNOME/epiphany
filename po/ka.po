@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-07 01:49+0000\n"
-"PO-Revision-Date: 2024-03-08 21:51+0100\n"
+"POT-Creation-Date: 2024-03-08 20:53+0000\n"
+"PO-Revision-Date: 2024-03-10 08:23+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -115,6 +115,14 @@ msgid ""
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
+"[\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
+"'bang': <'!b'>}\n"
+"\t\t\t\t]"
 
 #: data/org.gnome.epiphany.gschema.xml:61
 msgid "List of the search engines."
@@ -136,6 +144,8 @@ msgstr "Google Search-ის შეთავაზებების ჩარ�
 #: data/org.gnome.epiphany.gschema.xml:73
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr ""
+"ნაჩვენები იქნება თუ არა Google-ის ძებნის მინიშნება ბმულის ჩანაწერის "
+"მინიშნებაში."
 
 #: data/org.gnome.epiphany.gschema.xml:77
 msgid "Force new windows to be opened in tabs"
@@ -144,7 +154,7 @@ msgstr "ახალი ფანჯრის ჩანართებში ნ
 #: data/org.gnome.epiphany.gschema.xml:78
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
-msgstr ""
+msgstr "ახალი ფანჯრის მოთხოვნების ახალი ფანჯრის მაგიერ ჩანართებში გახსნა."
 
 #: data/org.gnome.epiphany.gschema.xml:85
 msgid "Whether to automatically restore the last session"
@@ -162,12 +172,16 @@ msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
+"დაყოვნდება თუ არა იმ ჩანართების ჩატვირთვა, რომლებიც სესიის აღდგენისას "
+"მაშინვე ხილული არაა"
 
 #: data/org.gnome.epiphany.gschema.xml:91
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr ""
+"როცა ეს პარამეტრი დაყენებულია ჭეშმარიტზე, სესიის აღდგენისას ბრაუზერი არ "
+"ჩატვირთავს ჩანართებს, სანამ მომხმარებელი ზედ არ გადაერთვება."
 
 #: data/org.gnome.epiphany.gschema.xml:95
 msgid "List of adblock filters"
@@ -178,6 +192,8 @@ msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
 msgstr ""
+"ბმულების სია შემცველობის გაფილტვრის წესებით JSON ფორმატში, "
+"რეკლამთმბლოკისთვის."
 
 #: data/org.gnome.epiphany.gschema.xml:100
 msgid "Whether to ask for setting browser as default"
@@ -188,6 +204,8 @@ msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
 msgstr ""
+"როცა ეს პარამეტრი დაყენებულია ჭეშმარიტზე, ბრაუზერი გკითხავთ, გახდეს თუ არა "
+"ნაგულისხმევი ბრაუზერი, თუ ის უკვე არაა."
 
 #: data/org.gnome.epiphany.gschema.xml:105
 msgid "Start in incognito mode"
@@ -197,6 +215,8 @@ msgstr "ინკოგნიტო რეჟიმში გაშვება"
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
+"როცა ეს პარამეტრი დაყენებულია ჭეშმარიტზე, ბრაუზერი ყოველთვის კონფიდენციალურ "
+"რეჟიმში გაეშვება"
 
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "Active clear data items."
@@ -214,6 +234,7 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:117
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
+"ჩანართის ზომის გაზრდა, რომ ჩანართების პანელზე არსებული ადგილი დაიკავოს."
 
 #: data/org.gnome.epiphany.gschema.xml:118
 msgid ""
@@ -240,6 +261,7 @@ msgstr "ფანჯრის ღია დატოვება ბოლო �
 #: data/org.gnome.epiphany.gschema.xml:128
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
+"თუ ჩართულია, აპლიკაციის ფანჯარა ბოლო ჩანართის დახურვის შემდეგაც ღია დარჩება."
 
 #: data/org.gnome.epiphany.gschema.xml:134
 msgid "Reader mode article font style."
@@ -250,6 +272,8 @@ msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
+"აირჩიეთ სტილი მთავარი სხეულის ტექსტისთვის სტატიებისთვის წაკითხვის რეჟიმში. "
+"შესაძლო მნიშვნელობებია \"sans\" და \"serif\"."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Reader mode color scheme."
@@ -284,6 +308,8 @@ msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
+"მნიშვნელობა, რომელიც გამოიყენება sans-serif ფონტის გადასაფარად, როცა "
+"დაყენებულია use-gnome-fonts."
 
 #: data/org.gnome.epiphany.gschema.xml:160
 msgid "Custom serif font"
@@ -294,6 +320,8 @@ msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr ""
+"მნიშვნელობა, რომელიც გამოიყენება serif ფონტის გადასაფარად, როცა დაყენებულია "
+"use-gnome-fonts."
 
 #: data/org.gnome.epiphany.gschema.xml:165
 msgid "Custom monospace font"
@@ -304,6 +332,8 @@ msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
+"მნიშვნელობა, რომელიც გამოიყენება ერთსიგანიანი ფონტის გადასაფარად, როცა "
+"დაყენებულია use-gnome-fonts."
 
 #: data/org.gnome.epiphany.gschema.xml:170
 msgid "Use a custom CSS"
@@ -337,6 +367,7 @@ msgstr "ნაგულისხმები კოდირება"
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
+"ნაგულისხმევი კოდირება. მისაღებია მნიშვნელობები, რომლებიც WebKitGTK-ს ესმის."
 
 #: data/org.gnome.epiphany.gschema.xml:190
 #: src/resources/gtk/prefs-general-page.ui:215
@@ -347,6 +378,8 @@ msgstr "ენები"
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
+"რჩეული ენები. ლოკალის კოდების მასივი, ან \"system\", რომ მიმდინარე ლოკალი "
+"გამოვიყენო."
 
 #: data/org.gnome.epiphany.gschema.xml:195
 msgid "Allow popups"
@@ -356,6 +389,8 @@ msgstr "მხტუნარების დაშვება"
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
+"საიტებისთვის JavaScript-ით ახალი ფანჯრების გახსნის უფლების მიცემა (თუ "
+"JavaScript ჩართულია)."
 
 #: data/org.gnome.epiphany.gschema.xml:200
 msgid "User agent"
@@ -366,6 +401,8 @@ msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr ""
+"სტრიქონი, რომელიც გამოყენებული იქნება მომხმარებლის აგენტად, ბრაუზერის "
+"იდენტიფიკაციისთვის ვებსერვერებზე."
 
 #: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable adblock"
@@ -473,7 +510,7 @@ msgstr "გადმოწერისას საქაღალდის ყ�
 
 #: data/org.gnome.epiphany.gschema.xml:260
 msgid "Whether to present a directory chooser dialog for every download."
-msgstr ""
+msgstr "საქაღალდის ამრჩევის ჩვენება თითოეული გადმოწერისთვის."
 
 #: data/org.gnome.epiphany.gschema.xml:264
 msgid "Enable immediately switch to new open tab"
@@ -492,6 +529,8 @@ msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
+"ჩაირთვება თუ არა WebExtensions. ის ბრაუზერთაშორისი სისტემაა "
+"გაფართოებებისთვის."
 
 #: data/org.gnome.epiphany.gschema.xml:274
 msgid "Active WebExtensions"
@@ -510,6 +549,8 @@ msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
+"ნაჩვენები იქნება თუ არა პროგრამისტის კონტექსტური მენიუს ქმედებები. ეს "
+"საშუალებას მოგცემთ, გვერდის კოდის ნახვა ან ელემენტის ინსპექტირება გამოიყენოთ."
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
@@ -555,6 +596,9 @@ msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
+"საქაღალდის ბილიკი სადაც ფაილები გადმოიწერება. ან \"გადმოწერები\", რომ "
+"ნაგულისხმევი გადმოწერების საქაღალდე გამოვიყენო, ან \"სამუშაო მაგიდა\", "
+"სამუშაო მაგიდის საქაღალდის გამოსაყენებლად."
 
 #: data/org.gnome.epiphany.gschema.xml:316
 msgid "Window position"
@@ -585,6 +629,8 @@ msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
+"გაიშლება თუ არა მთელ ეკრანზე ახალი ფანჯარა, რომლის წინა სესიიდან აღდგენაც არ "
+"ხდება."
 
 #: data/org.gnome.epiphany.gschema.xml:342
 msgid "Disable forward and back buttons"
@@ -595,6 +641,8 @@ msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
+"თუ დაყენებულია \"ჭეშმარიტზე\", წინ და უკან გადასვლის ღილაკები გათიშულია, "
+"რითიც მომხმარებლებს უახლოეს ისტორიასთან წვდომას უკრძალავს"
 
 #: data/org.gnome.epiphany.gschema.xml:361
 msgid "Firefox Sync Token Server URL"
@@ -1015,12 +1063,16 @@ msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr ""
+"ვებგვერდი მისამართზე %s:%d მოითხოვს, რომ მიაწოდოთ სერტიფიკატი %s-ის "
+"ავტორიზაციისთვის."
 
 #: embed/ephy-client-certificate-manager.c:382
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr ""
+"ვებგვერდი მისამართზე %s:%d მოითხოვს, რომ მიაწოდოთ სერტიფიკატი "
+"ავთენტიკაციისთვის."
 
 #: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:335
 msgid "_Select"
@@ -1540,17 +1592,21 @@ msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr ""
+"ეს ვებგვერდის იდენტიფიკატორი მეტისმეტად ძველია, რომ ვენდო. შეამოწმეთ თარიღი "
+"თქვენი კომპიუტერის კალენდარში."
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1543
 msgid "This website’s identification was not issued by a trusted organization."
-msgstr ""
+msgstr "ამ ვებგვერდის იდენტიფიკატორი სანდო ორგანიზაციის მიერ არაა გამოცემული."
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1548
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
+"ამ ვებგვერდის იდენტიფიკატორის დამუშავება შეუძლებელია. შეიძლება, ის "
+"დაზიანებულია."
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1553
@@ -1558,6 +1614,8 @@ msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr ""
+"ამ ვებგვერდის იდენტიფიკატორი გაუქმდა სანდო ორგანიზაციის მიერ, რომელმაც ის "
+"გამოსცა."
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1558
@@ -1565,6 +1623,8 @@ msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr ""
+"ამ ვებგვერდის იდენტიფიკატორი სანდო არაა, რადგან ის ძალიან სუსტ დაშიფვრას "
+"იყენებს."
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1563
@@ -1572,6 +1632,8 @@ msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
 msgstr ""
+"ამ ვებგვერდის იდენტიფიკატორი, მხოლოდ, მომავალშია სწორი. შეამოწმეთ თარიღი "
+"თქვენი კომპიუტერის კალენდარში."
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
@@ -1597,6 +1659,8 @@ msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
 msgstr ""
+"ის, შეიძლება, დროებით ხელმიუწვდომელია, ან გადატანილია ახალ მისამართზე. "
+"შეიძლება, დაგჭირდეთ გადაამოწმოთ, მუშაობს თუა რა თქვენი ინტერნეტკავშირი."
 
 #. Technical details when a site cannot be loaded due to a network error.
 #: embed/ephy-web-view.c:1650
@@ -1631,13 +1695,13 @@ msgstr "ვაი! მგონი სადღაც პრობლემა�
 #: embed/ephy-web-view.c:1692
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
-msgstr ""
+msgstr "შეიძლება, ვებგვერდმა %s Web-ს ავარიულად დახურვა აიძულა."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1699
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
-msgstr ""
+msgstr "თუ ეს განმეორდება, მისწერეთ ამის შესახებ %s-ის პროგრამისტებს."
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1733
@@ -1674,6 +1738,8 @@ msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
 msgstr ""
+"ეს გვერდი მეტისმეტად დიდი ხანია, ხმას არ იღებს. ჩატვირთეთ ის თავიდან, ან "
+"სხვა ვებგვერდზე გადადით."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:1811
@@ -1693,6 +1759,8 @@ msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
 "alter information going to or from this site."
 msgstr ""
+"ეს არ წააგავს ნამდვილ %s-ს. შეიძლება, შემტევები ცდილობენ, მოიპარონ ან "
+"შეცვალონ საიტისკენ ან საიტიდან მომავალი ინფორმაცია."
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
@@ -1873,7 +1941,7 @@ msgstr "უცნობი"
 #: lib/ephy-web-app-utils.c:325
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
-msgstr ""
+msgstr "ჩავარდა მიღება სამუშაო მაგიდის ფაილის სახელისა ვებაპისთვის ID-ით %s"
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
@@ -1915,7 +1983,7 @@ msgstr ""
 #: lib/sync/ephy-password-manager.c:450
 #, c-format
 msgid "Password for %s in a form in %s"
-msgstr ""
+msgstr "პაროლი %s-სთვის ვებგვერდისთვის %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
@@ -1931,17 +1999,18 @@ msgstr "საცავის ავტორიზაცის დეტალ�
 #: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
 #: lib/sync/ephy-sync-service.c:1942
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
-msgstr ""
+msgstr "შედით Firefox Sync-ში კიდევ ერთხელ, რომ გააგრძელოთ სინქრონიზაცია."
 
 #: lib/sync/ephy-sync-service.c:1116
 msgid "The password of your Mozilla account seems to have been changed."
-msgstr ""
+msgstr "როგორც ჩანს, თქვენი Mozilla-ის ანგარიშის პაროლი შეიცვალა."
 
 #: lib/sync/ephy-sync-service.c:1117
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
 msgstr ""
+"გადადით Firefox Sync-ზე და შედით ახალი პაროლით, რომ გააგრძელოთ სინქრონიზაცია."
 
 #: lib/sync/ephy-sync-service.c:1125
 msgid "Failed to obtain signed certificate."
@@ -1960,6 +2029,8 @@ msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr ""
+"სინქრონიზაციის საიდუმლოების შენახვა ჩავარდა (ეს საიდუმლო სერვისია თუ "
+"საიდუმლოების პორტალი გაფუჭებულია?): "
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:2035
@@ -1989,6 +2060,8 @@ msgstr "მეტა/გლობალური ჩანაწერის ა
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
+"თქვენი Mozilla_ის ანგარიში იყენებს საცავს ვერსიით %d. Web-ს, მხოლოდ, %d "
+"ვერსიის მხარდაჭერა გააჩნია."
 
 #: lib/sync/ephy-sync-service.c:2567
 msgid "Failed to verify storage version."
@@ -2009,18 +2082,20 @@ msgstr "სანიშნის თვისებები"
 #: src/bookmarks/ephy-bookmarks-import.c:127
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
-msgstr ""
+msgstr "ფაილი Epiphany-ის სწორი სანიშნეს ფაილი არაა: აკლია ჭდეების ცხრილი"
 
 #: src/bookmarks/ephy-bookmarks-import.c:145
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
-msgstr ""
+msgstr "ფაილი Epiphany-ის სწორი სანიშნეს ფაილი არაა: აკლია სანიშნეების ცხრილი"
 
 #: src/bookmarks/ephy-bookmarks-import.c:247
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
+"Firefox-ის სანიშნეების მონაცემთა ბაზის გახსნა შეუძლებელია. დახურეთ Firefox "
+"და თავიდან სცადეთ."
 
 #: src/bookmarks/ephy-bookmarks-import.c:260
 #: src/bookmarks/ephy-bookmarks-import.c:292
@@ -2300,19 +2375,20 @@ msgstr "ფაილი"
 
 #: src/ephy-main.c:116
 msgid "Start an instance with user data read-only"
-msgstr ""
+msgstr "მხოლოდ-კითხვადი მომხმარებლის მონაცემების მქონე გაშვებული ასლის შექმნა"
 
 #: src/ephy-main.c:118
 msgid "Start a private instance with separate user data"
 msgstr ""
+"განცალკევებული მომხმარებლის მონაცემების მქონე პირადი გაშვებული ასლის შექმნა"
 
 #: src/ephy-main.c:121
 msgid "Start a private instance in web application mode"
-msgstr ""
+msgstr "პირადი გაშვებული ასლის შექმნა ვებ-აპლიკაციის რეჟიმში"
 
 #: src/ephy-main.c:123
 msgid "Start a private instance for WebDriver control"
-msgstr ""
+msgstr "პირადი გაშვევბული ასლის შექმნა WebDriver-ის სამართავად"
 
 #: src/ephy-main.c:125
 msgid "Custom profile directory for private instance"
@@ -2424,7 +2500,7 @@ msgstr ""
 #. Label in certificate popover when site sends mixed content.
 #: src/ephy-security-popover.c:199
 msgid "This web site did not properly secure your connection."
-msgstr ""
+msgstr "ეს ვებგვერდი თქვენს მიერთებას სწორად არ იცავს."
 
 #. Label in certificate popover on secure sites.
 #: src/ephy-security-popover.c:204
@@ -2693,7 +2769,7 @@ msgstr "დავაყენო ნაგულისხმევ ბრაუ�
 
 #: src/ephy-window.c:3263
 msgid "Use Web as your default web browser and for opening external links"
-msgstr ""
+msgstr "Web-ის გამოყენება ნაგულისხმებ ბრაუზერად და გარე ბმულების გასახსნელად"
 
 #: src/ephy-window.c:3265
 msgid ""
@@ -2719,7 +2795,7 @@ msgstr "შევინახო პაროლი?"
 
 #: src/ephy-window.c:3723
 msgid "Passwords can be removed at any time in Preferences"
-msgstr ""
+msgstr "პაროლების წაშლა ნებისმიერ დროს შეგიძლიათ მორგების ფანჯრიდან"
 
 #: src/ephy-window.c:3725
 msgid "Not Now"
@@ -2800,11 +2876,11 @@ msgstr "მისამართი http:// ან https://-ით უნდა 
 #: src/preferences/ephy-search-engine-row.c:131
 #, c-format
 msgid "Address must contain the search term represented by %s"
-msgstr ""
+msgstr "მისამართი უნდა შეიცავდეს ძებნის პირობას, რომელსაც წარმოადგენს %s"
 
 #: src/preferences/ephy-search-engine-row.c:134
 msgid "Address should not contain the search term several times"
-msgstr ""
+msgstr "მისამართი ძებნის პირობას რამდენჯერმე არ უნდა შეიცავდეს"
 
 #: src/preferences/ephy-search-engine-row.c:140
 msgid "Address is not a valid URI"
@@ -2816,6 +2892,8 @@ msgid ""
 "Address is not a valid URL. The address should look like https://www.example."
 "com/search?q=%s"
 msgstr ""
+"მისამართი სწორი URL არაა. მისამართი უნდა გამოიყურებოდეს ასე: https://www."
+"example.com/search?q=%s"
 
 #: src/preferences/ephy-search-engine-row.c:188
 msgid "This shortcut is already used."
@@ -2828,6 +2906,7 @@ msgstr "ძებნის მალსახმობები არ შეი
 #: src/preferences/ephy-search-engine-row.c:198
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr ""
+"ძებნის მალსახმობები უნდა იწყებოდეს ისეთი სიმბოლოებით, როგორიცაა !, # ან @."
 
 #: src/preferences/ephy-search-engine-row.c:331
 msgid "A name is required"
@@ -2856,7 +2935,7 @@ msgstr "წავშალო ყველა პაროლი?"
 
 #: src/preferences/passwords-view.c:180
 msgid "This will clear all locally stored passwords, and can not be undone."
-msgstr ""
+msgstr "ეს გაასუფთავებს ყველა შენახულ პაროლს და ეს ქმედება შეუქცევადია."
 
 #: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:154
 #: src/resources/gtk/location-entry.ui:290
@@ -2922,15 +3001,15 @@ msgstr "გამოსახულების მხარდაჭერი�
 
 #: src/profile-migrator/ephy-profile-migrator.c:1810
 msgid "Executes only the n-th migration step"
-msgstr ""
+msgstr "შეასრულებს, მხოლოდ, მე-n-ე მიგრაციის ნაბიჯს"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1812
 msgid "Specifies the required version for the migrator"
-msgstr ""
+msgstr "მიუთითებს აუცილებელ ვერსიას მიგრატორისთვის"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1814
 msgid "Specifies the profile where the migrator should run"
-msgstr ""
+msgstr "მიუთითებს პროფილს, სადაც მიგრატორი უნდა გაეშვას"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1835
 msgid "Web profile migrator"
@@ -3043,6 +3122,7 @@ msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
 msgstr ""
+"ეს ქმედება შეუქცევადია. მონაცემები, რომელსაც არჩევთ, სამუდამოდ წაიშლება."
 
 #: src/resources/gtk/data-view.ui:14 src/resources/gtk/history-dialog.ui:29
 #: src/resources/gtk/history-dialog.ui:48
@@ -3063,7 +3143,7 @@ msgstr "ტექსტის კოდირება"
 
 #: src/resources/gtk/encoding-dialog.ui:30
 msgid "Use Encoding Specified by Document"
-msgstr ""
+msgstr "დოკუმენტის მიერ მითითებული კოდირება"
 
 #: src/resources/gtk/encoding-dialog.ui:62
 msgid "Recent Encodings"
@@ -3448,7 +3528,7 @@ msgstr "ახალი გაფართოების დამატებ�
 
 #: src/resources/gtk/prefs-extensions-page.ui:13
 msgid "Extensions must be installed manually from their files"
-msgstr ""
+msgstr "გაფართოებები ხელით, მათი ფაილებიდან უნდა დააყენოთ"
 
 #: src/resources/gtk/prefs-extensions-page.ui:27
 msgid ""
@@ -3580,6 +3660,8 @@ msgstr "ჭკვიანი _ტრეკინგის თავიდან
 #: src/resources/gtk/prefs-privacy-page.ui:18
 msgid "Allow websites to store cookies, databases, and local storage data"
 msgstr ""
+"ვებგვერდებისთვის ქუქიების, ბაზებისა და ლოკალური საცავის მონაცემების შენახვის "
+"უფლების დართვა"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
 msgid "_Website Data Storage"
@@ -4010,7 +4092,7 @@ msgstr "დაყენება ჩავარდა ვებაპლიკ�
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
 msgid "The desktop file ID passed ‘%s’ was not valid"
-msgstr ""
+msgstr "გადაცემული სამუშაო მაგიდის ფაილის ID '%s' არასწორი იყო"
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
@@ -4132,7 +4214,7 @@ msgstr "ჩავანაცვლო არსებული ვებ-აპ
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
-msgstr ""
+msgstr "აპლიკაცია სახელით \"%s\" უკვე არსებობს. ჩანაცვლება მას თავზე გადააწერს"
 
 #: src/window-commands.c:1912
 msgid "_Replace"
