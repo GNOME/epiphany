@@ -862,7 +862,6 @@ static const GActionEntry window_entries [] = {
 
   { "select-all", window_cmd_select_all },
 
-  { "send-to", window_cmd_send_to },
   { "location", window_cmd_go_location },
   { "location-search", window_cmd_location_search },
   { "home", window_cmd_go_home },
@@ -912,6 +911,7 @@ static const GActionEntry popup_entries [] = {
   { "download-link-as", context_cmd_download_link_as },
   { "copy-link-address", context_cmd_copy_link_address },
   { "copy-email-address", context_cmd_copy_link_address },
+  { "send-via-email", context_cmd_send_via_email },
 
   /* Images. */
 
@@ -957,7 +957,7 @@ const struct {
   { "paste-as-plain-text", N_("_Paste Text Only") },
   { "select-all", N_("Select _All") },
 
-  { "send-to", N_("S_end Link by Email…") },
+  { "send-via-email", N_("S_end Link by Email…") },
 
   { "reload", N_("_Reload") },
   { "navigation-back", N_("_Back") },
@@ -1032,7 +1032,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
     "save-as", "save-as-application", "screenshot", "print",
     "find", "find-prev", "find-next",
     "bookmark-page", "encoding", "page-source",
-    "send-to",
+    "send-via-email",
     NULL
   };
 
@@ -1647,6 +1647,8 @@ populate_context_menu (WebKitWebView       *web_view,
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "copy-link-address", window);
     }
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "send-via-email", window);
   } else if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
     GList *l;
     gboolean has_guesses = FALSE;
@@ -1798,8 +1800,8 @@ populate_context_menu (WebKitWebView       *web_view,
     if (is_document && !is_image && !is_media) {
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
-      add_action_to_context_menu (context_menu, window_action_group,
-                                  "send-to", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "send-via-email", window);
     }
 
     webkit_context_menu_append (context_menu,

@@ -41,6 +41,9 @@ void context_cmd_view_source              (GSimpleAction *action,
 void context_cmd_copy_link_address        (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
+void context_cmd_send_via_email           (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
 void context_cmd_copy_link_location       (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);

@@ -2719,37 +2719,6 @@ window_cmd_select_all (GSimpleAction *action,
 }
 
 void
-window_cmd_send_to (GSimpleAction *action,
-                    GVariant      *parameter,
-                    gpointer       user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyEmbed *embed;
-  g_autofree char *command = NULL;
-  g_autofree char *subject = NULL;
-  g_autofree char *body = NULL;
-  const char *location, *title;
-  g_autoptr (GtkUriLauncher) launcher = NULL;
-
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
-
-  location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-  title = ephy_embed_get_title (embed);
-
-  subject = g_uri_escape_string (title, NULL, TRUE);
-  body = g_uri_escape_string (location, NULL, TRUE);
-
-  command = g_strconcat ("mailto:",
-                         "?Subject=", subject,
-                         "&Body=", body, NULL);
-
-  launcher = gtk_uri_launcher_new (command);
-  gtk_uri_launcher_launch (launcher, GTK_WINDOW (window), NULL, NULL, NULL);
-}
-
-void
 window_cmd_go_location (GSimpleAction *action,
                         GVariant      *parameter,
                         gpointer       user_data)

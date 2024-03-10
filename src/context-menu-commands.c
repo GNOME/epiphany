@@ -135,6 +135,61 @@ context_cmd_copy_link_address (GSimpleAction *action,
   }
 }
 
+static void
+uri_launched_cb (GObject      *source,
+                 GAsyncResult *result,
+                 gpointer      user_data)
+{
+  GtkUriLauncher *launcher = GTK_URI_LAUNCHER (source);
+  gboolean ret;
+  g_autoptr (GError) error = NULL;
+
+  ret = gtk_uri_launcher_launch_finish (launcher, result, &error);
+  if (!ret)
+    g_warning ("Failed to launch %s: %s", gtk_uri_launcher_get_uri (launcher), error->message);
+}
+
+void
+context_cmd_send_via_email (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  WebKitHitTestResult *hit_test_result;
+  guint context;
+  const char *label, *address;
+  g_autofree char *subject = NULL;
+  g_autofree char *body = NULL;
+  g_autofree char *command = NULL;
+  g_autoptr (GtkUriLauncher) launcher = NULL;
+
+  hit_test_result = ephy_window_get_context_event (window);
+  g_assert (hit_test_result != NULL);
+
+  context = webkit_hit_test_result_get_context (hit_test_result);
+
+  if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) {
+    label = webkit_hit_test_result_get_link_label (hit_test_result);
+    address = webkit_hit_test_result_get_link_uri (hit_test_result);
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+    g_assert (embed != NULL);
+
+    label = ephy_embed_get_title (embed);
+    address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+  }
+
+  subject = g_uri_escape_string (label, NULL, TRUE);
+  body = g_uri_escape_string (address, NULL, TRUE);
+
+  command = g_strconcat ("mailto:", "?Subject=", subject, "&Body=", body, NULL);
+
+  launcher = gtk_uri_launcher_new (command);
+  gtk_uri_launcher_launch (launcher, GTK_WINDOW (window), NULL, uri_launched_cb, NULL);
+}
+
 typedef struct {
   char *title;
   EphyWindow *window;

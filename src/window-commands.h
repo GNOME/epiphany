@@ -164,9 +164,6 @@ void window_cmd_toggle_inspector                (GSimpleAction *action,
 void window_cmd_select_all                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
-void window_cmd_send_to                         (GSimpleAction *action,
-                                                 GVariant      *parameter,
-                                                 gpointer       user_data);
 void window_cmd_go_location                     (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
