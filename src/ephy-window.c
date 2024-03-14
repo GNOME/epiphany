@@ -1032,7 +1032,6 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
     "save-as", "save-as-application", "screenshot", "print",
     "find", "find-prev", "find-next",
     "bookmark-page", "encoding", "page-source",
-    "send-via-email",
     NULL
   };
 
@@ -1050,6 +1049,10 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   action_group = ephy_window_get_action_group (window, "popup");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "context-bookmark-page");
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                        flags, set);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "send-via-email");
   ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         flags, set);
 
