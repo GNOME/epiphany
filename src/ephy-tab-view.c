@@ -149,7 +149,10 @@ static void
 ephy_tab_view_init (EphyTabView *self)
 {
   self->tab_view = ADW_TAB_VIEW (adw_tab_view_new ());
-
+  /* https://gitlab.gnome.org/GNOME/epiphany/-/issues/2296 */
+  adw_tab_view_remove_shortcuts (self->tab_view,
+                                 ADW_TAB_VIEW_SHORTCUT_CONTROL_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_END |
+                                 ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_END);
   adw_bin_set_child (ADW_BIN (self), GTK_WIDGET (self->tab_view));
 
   g_signal_connect_object (self->tab_view,
