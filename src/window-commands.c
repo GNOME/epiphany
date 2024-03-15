@@ -2007,11 +2007,12 @@ download_manifest_finished_cb (WebKitDownload            *download,
   icon = ephy_json_array_get_object (icons, pos);
   str = ephy_json_object_get_string (icon, "src");
 
-  if (ephy_embed_utils_address_has_web_scheme (str)) {
+  if (ephy_embed_utils_address_has_web_scheme (str))
     uri = g_strdup (str);
-  } else {
+  else if (g_str_has_suffix (uri, "/"))
+    uri = g_strdup_printf ("%s%s", data->url, str);
+  else
     uri = g_strdup_printf ("%s/%s", data->url, str);
-  }
 
   display = ephy_json_object_get_string (manifest_object, "display");
   if (g_strcmp0 (display, "standalone") == 0 || g_strcmp0 (display, "fullscreen") == 0)
