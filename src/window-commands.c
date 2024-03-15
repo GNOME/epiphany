@@ -1698,6 +1698,7 @@ static void
 download_icon_and_set_image (EphyApplicationDialogData *data)
 {
   g_autofree char *destination = NULL;
+  g_autofree char *filename = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   data->download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell),
@@ -1710,6 +1711,10 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
   /* FIXME: it's probably better to just do this in a clean way
    * instead of using this workaround. */
   g_object_set_data (G_OBJECT (data->download), "ephy-download-set", GINT_TO_POINTER (TRUE));
+
+  filename = ephy_file_tmp_filename (".ephy-web-app-icon-XXXXXX", NULL);
+  destination = g_build_filename (ephy_file_tmp_dir (), filename, NULL);
+  webkit_download_set_destination (data->download, destination);
 
   g_signal_connect (data->download, "finished",
                     G_CALLBACK (download_finished_cb), data);
