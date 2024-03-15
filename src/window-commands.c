@@ -1881,7 +1881,8 @@ prepare_install_cb (GObject      *object,
   ret = xdp_portal_dynamic_launcher_prepare_install_finish (portal, result, &error);
   if (ret == NULL) {
     /* This might just mean the user canceled the operation */
-    g_warning ("Failed to install web app, PrepareInstall() failed: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to install web app, PrepareInstall() failed: %s", error->message);
     ephy_application_dialog_data_free (data);
     return;
   }
