@@ -1689,6 +1689,7 @@ download_failed_cb (WebKitDownload            *download,
                     GError                    *error,
                     EphyApplicationDialogData *data)
 {
+  g_warning ("Failed to download web app icon: %s", error->message);
   g_signal_handlers_disconnect_by_func (download, download_finished_cb, data);
   /* Something happened, default to a page snapshot. */
   set_image_from_favicon (data);
