@@ -9,7 +9,7 @@
 # Christian Neumair <chris@gnome-de.org>, 2003, 2004.
 # Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008.
 # Nathan-J. Hirschauer <nathanhirschauer@verfriemelt.org>, 2009.
-# Christian Kirbach <Christian.Kirbach@gmail.com>, 2009, 2012.
+# Christian Kirbach <Christian.Kirbach@gmail.com>, 2009-2024.
 # Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>, 2012.
 # Bernd Homuth <dev@hmt.im>, 2015, 2016.
 # Franco Della-Monica <franco.della.monica@gmail.com>, 2016.
@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-02-13 12:04+0000\n"
-"PO-Revision-Date: 2024-02-14 12:46+0100\n"
-"Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
+"POT-Creation-Date: 2024-03-15 15:49+0000\n"
+"PO-Revision-Date: 2024-03-16 10:37+0100\n"
+"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -130,19 +130,19 @@ msgstr "Veraltet. Bitte nutzen Sie stattdessen »search-engine-providers«."
 #: data/org.gnome.epiphany.gschema.xml:53
 msgid ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
 msgstr ""
 "[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
-"%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
-"%s'>, 'bang': <'!g'>},\n"
+"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+"q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
 "'bang': <'!b'>}\n"
 "\t\t\t\t]"
@@ -633,6 +633,9 @@ msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
+"Legt fest, ob die Aktionen im Entwickler-Kontextmenü angezeigt werden "
+"sollen. Dies ermöglicht die Verwendung des Seitenquelltexts und der Aktionen "
+"zum Inspizieren von Elementen."
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
@@ -1159,7 +1162,7 @@ msgstr ""
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
 #: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2814
+#: src/window-commands.c:2798
 msgid "_Cancel"
 msgstr "A_bbrechen"
 
@@ -2169,6 +2172,8 @@ msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr ""
+"Speichern der Abgleich-Passwörter ist fehlgeschlagen (ist der Passwortdienst "
+"oder das Passwortportal defekt?): "
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:2035
@@ -2272,25 +2277,25 @@ msgstr "Favoriten"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: src/context-menu-commands.c:239
+#: src/context-menu-commands.c:294
 msgid "Save Link As"
 msgstr "Verweis speichern unter"
 
-#: src/context-menu-commands.c:247
+#: src/context-menu-commands.c:302
 msgid "Save Image As"
 msgstr "Bild speichern unter"
 
-#: src/context-menu-commands.c:255
+#: src/context-menu-commands.c:310
 msgid "Save Media As"
 msgstr "Medien speichern unter"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1758
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
 msgid "Bookmark Page"
 msgstr "Lesezeichen für diese Seite erstellen"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1766
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
 msgid "Edit Bookmark"
 msgstr "Lesezeichen bearbeiten"
 
@@ -2480,27 +2485,27 @@ msgid "Remove all history"
 msgstr "Gesamte Chronik entfernen"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1802 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "Benachrichtigungsanfrage"
 
-#: src/ephy-location-entry.c:1806
+#: src/ephy-location-entry.c:1809
 msgid "Camera Request"
 msgstr "Kameraanfrage"
 
-#: src/ephy-location-entry.c:1810
+#: src/ephy-location-entry.c:1813
 msgid "Microphone Request"
 msgstr "Mikrofonanfrage"
 
-#: src/ephy-location-entry.c:1814
+#: src/ephy-location-entry.c:1817
 msgid "Location Request"
 msgstr "Standortanfrage"
 
-#: src/ephy-location-entry.c:1818
+#: src/ephy-location-entry.c:1821
 msgid "Webcam and Microphone Request"
 msgstr "Webcam- und Mikrofonanfrage"
 
-#: src/ephy-location-entry.c:1822
+#: src/ephy-location-entry.c:1825
 msgid "Permission Request"
 msgstr "Berechtigungsanfrage"
 
@@ -2661,51 +2666,51 @@ msgstr "Ihre Verbindung scheint sicher zu sein."
 msgid "_View Certificate…"
 msgstr "Zertifikat _ansehen …"
 
-#: src/ephy-security-popover.c:492
+#: src/ephy-security-popover.c:494
 msgid "Allow"
 msgstr "Erlauben"
 
-#: src/ephy-security-popover.c:493
+#: src/ephy-security-popover.c:495
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-popover.c:498
 msgid "Ask"
 msgstr "Nachfragen"
 
-#: src/ephy-security-popover.c:514
+#: src/ephy-security-popover.c:516
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: src/ephy-security-popover.c:556
+#: src/ephy-security-popover.c:558
 msgid "Advertisements"
 msgstr "Werbung"
 
-#: src/ephy-security-popover.c:557
+#: src/ephy-security-popover.c:559
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/ephy-security-popover.c:558
+#: src/ephy-security-popover.c:560
 msgid "Password saving"
 msgstr "Passwortspeicherung"
 
-#: src/ephy-security-popover.c:559
+#: src/ephy-security-popover.c:561
 msgid "Location access"
 msgstr "Standortzugriff"
 
-#: src/ephy-security-popover.c:560
+#: src/ephy-security-popover.c:562
 msgid "Microphone access"
 msgstr "Mikrofonzugriff"
 
-#: src/ephy-security-popover.c:561
+#: src/ephy-security-popover.c:563
 msgid "Webcam access"
 msgstr "Kamerazugriff"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Media autoplay"
 msgstr "Automatische Medien-Wiedergabe"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Without Sound"
 msgstr "Ohne Ton"
 
@@ -2853,75 +2858,75 @@ msgstr "_Bildschirmfoto aufnehmen …"
 msgid "_Page Source"
 msgstr "_Quelltext der Seite"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1382
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Nach »%s« im Internet suchen"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1411
 msgid "Open Link"
 msgstr "Verweis öffnen"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1413
 msgid "Open Link In New Tab"
 msgstr "Verweis in neuem Reiter öffnen"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1415
 msgid "Open Link In New Window"
 msgstr "Verweis in neuem Fenster öffnen"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1417
 msgid "Open Link In Incognito Window"
 msgstr "Verweis in Inkognito-Fenster öffnen"
 
-#: src/ephy-window.c:2789
+#: src/ephy-window.c:2794
 msgid "_Ask Later"
 msgstr "S_päter fragen"
 
-#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2795 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Ablehnen"
 
-#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2796 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Erlauben"
 
-#: src/ephy-window.c:2993 src/ephy-window.c:4427
+#: src/ephy-window.c:2998 src/ephy-window.c:4435
 msgid "Leave Website?"
 msgstr "Webseite verlassen?"
 
-#: src/ephy-window.c:2994 src/ephy-window.c:4428 src/window-commands.c:1240
+#: src/ephy-window.c:2999 src/ephy-window.c:4436 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Ein Formular wurde verändert und noch nicht abgeschickt"
 
-#: src/ephy-window.c:2995 src/ephy-window.c:4429 src/window-commands.c:1244
+#: src/ephy-window.c:3000 src/ephy-window.c:4437 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "Formulareingaben _verwerfen"
 
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3021
 msgid "Download operation"
 msgstr "Download-Operation"
 
-#: src/ephy-window.c:3018
+#: src/ephy-window.c:3023
 msgid "Show details"
 msgstr "Details anzeigen"
 
-#: src/ephy-window.c:3020
+#: src/ephy-window.c:3025
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d Download-Operation aktiv"
 msgstr[1] "%d Download-Operationen aktiv"
 
-#: src/ephy-window.c:3261
+#: src/ephy-window.c:3266
 msgid "Set as Default Browser?"
 msgstr "Als Standardbrowser festlegen?"
 
-#: src/ephy-window.c:3263
+#: src/ephy-window.c:3268
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Web als Standardbrowser und zum Öffnen externer Verweise verwenden"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3270
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2929,56 +2934,56 @@ msgstr ""
 "Epiphany-Technologievorschau als Standardbrowser und zum Öffnen externer "
 "Verweise verwenden"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3274
 msgid "_Ask Again Later"
 msgstr "S_päter erneut fragen"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3275
 msgid "_No"
 msgstr "_Nein"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3276
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3727
 msgid "Save password?"
 msgstr "Passwort speichern?"
 
-#: src/ephy-window.c:3723
+#: src/ephy-window.c:3728
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Passwörter können jederzeit in den Einstellungen entfernt werden"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3730
 msgid "Not Now"
 msgstr "Jetzt nicht"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3731
 msgid "Never Save"
 msgstr "Nie speichern"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3732
 msgid "Save"
 msgstr "Speichern"
 
-#: src/ephy-window.c:4558
+#: src/ephy-window.c:4566
 msgid "Close Multiple Tabs?"
 msgstr "Mehrere Reiter sc_hließen?"
 
-#: src/ephy-window.c:4559
+#: src/ephy-window.c:4567
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 "Wenn dieses Fenster geschlossen wird, gehen alle geöffneten Reiter verloren"
 
-#: src/ephy-window.c:4560
+#: src/ephy-window.c:4568
 msgid "C_lose Tabs"
 msgstr "Reiter s_chließen"
 
-#: src/ephy-window.c:4653
+#: src/ephy-window.c:4661
 msgid "New tab opened"
 msgstr "Neuer Reiter geöffnet"
 
-#: src/ephy-window.c:4657
+#: src/ephy-window.c:4665
 msgid "Switch"
 msgstr "Wechseln"
 
@@ -4423,11 +4428,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2809
+#: src/window-commands.c:2793
 msgid "Enable Caret Browsing Mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: src/window-commands.c:2810
+#: src/window-commands.c:2794
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4438,7 +4443,7 @@ msgstr ""
 "der Tastatur steuern können. Wollen Sie die Eingabemarke-Navigation "
 "einschalten?"
 
-#: src/window-commands.c:2815
+#: src/window-commands.c:2799
 msgid "_Enable"
 msgstr "_Aktivieren"
 
