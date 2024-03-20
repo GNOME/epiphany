@@ -77,9 +77,24 @@ package provides the required pkg-config file.
 
 ### Rebuilding Dependencies
 
-If you need to rebuild dependencies, the recommended solution is to use JHBuild.
-See [the development page](https://wiki.gnome.org/Apps/Web/Development#Step_3:_Developing_Dependencies_with_Epiphany)
-for more information.
+Newcomers should try to avoid bugs that require making changes in WebKit or
+other dependencies of Epiphany. Once you've contributed a few easier patches to
+Epiphany and are ready to start making code changes in WebKit or other
+dependencies, then your development setup becomes a bit more complicated. You
+are welcome to use whatever method you prefer for development, but the
+recommended method is to use either [Toolbox](https://containertoolbx.org/) or
+[JHBuild](https://gnome.pages.gitlab.gnome.org/jhbuild/index.html). Here is an
+example of how to build your own WebKit using JHBuild, assuming your JHBuild
+installation prefix is `$HOME/jhbuild install/`:
+
+```
+$ git clone https://github.com/WebKit/WebKit.git WebKit
+$ mkdir -p WebKit/WebKitBuild/GNOME
+$ cd WebKit/WebKitBuild/GNOME
+$ jhbuild run cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPORT=GTK -DDEVELOPER_MODE=ON -DCMAKE_INSTALL_PREFIX=$HOME/jhbuild/install/ -DCMAKE_INSTALL_LIBDIR=lib -GNinja ../..
+$ jhbuild run ninja
+$ jhbuild run cmake -P cmake_install.cmake
+```
 
 ## Manifesto
 

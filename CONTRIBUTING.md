@@ -41,7 +41,7 @@ report the issue on WebKit Bugzilla instead.
 If Epiphany crashed, then we really need a backtrace taken in gdb with `bt full`
 in order to solve the problem. Be sure to install the necessary debuginfo
 packages for all frames that appear in the crashing thread.
-[Learn how to include a good backtrace.](https://wiki.gnome.org/Community/GettingInTouch/Bugzilla/GettingTraces)
+[Learn how to include a good backtrace.](https://handbook.gnome.org/issues/stack-traces.html)
 
 If you see the message "Oops! Something went wrong while displaying this page,"
 that means WebKit has crashed. Please follow the steps above to take a quality
