@@ -2261,30 +2261,33 @@ decide_policy_cb (WebKitWebView            *web_view,
                   WebKitPolicyDecisionType  decision_type,
                   EphyWindow               *window)
 {
-  EphyFiltersManager *filters_manager;
-
   /* Response policy decisions are handled in EphyWebView instead. */
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
       decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
     return FALSE;
 
-  filters_manager = ephy_embed_shell_get_filters_manager (ephy_embed_shell_get_default ());
-  if (!ephy_filters_manager_get_is_initialized (filters_manager)) {
-    /* Queue request while filters initialization is in progress. */
-    VerifyUrlAsyncData *async_data = verify_url_async_data_new (window,
-                                                                web_view,
-                                                                decision,
-                                                                decision_type);
-    window->pending_decisions = g_list_append (window->pending_decisions,
-                                               async_data);
-    if (!window->filters_initialized_id) {
-      window->filters_initialized_id =
-        g_signal_connect_object (filters_manager,
-                                 "notify::is-initialized",
-                                 G_CALLBACK (filters_initialized_cb),
-                                 window, 0);
+  /* We don't want to allow HTTP requests before the adblocker is ready, except
+   * for internal Epiphany pages, which should never be delayed.
+   */
+  if (!g_str_has_prefix (webkit_web_view_get_uri (web_view), "ephy-about:")) {
+    EphyFiltersManager *filters_manager = ephy_embed_shell_get_filters_manager (ephy_embed_shell_get_default ());
+    if (!ephy_filters_manager_get_is_initialized (filters_manager)) {
+      /* Queue request while filters initialization is in progress. */
+      VerifyUrlAsyncData *async_data = verify_url_async_data_new (window,
+                                                                  web_view,
+                                                                  decision,
+                                                                  decision_type);
+      window->pending_decisions = g_list_append (window->pending_decisions,
+                                                 async_data);
+      if (!window->filters_initialized_id) {
+        window->filters_initialized_id =
+          g_signal_connect_object (filters_manager,
+                                   "notify::is-initialized",
+                                   G_CALLBACK (filters_initialized_cb),
+                                   window, 0);
+      }
+      return TRUE;
     }
-    return TRUE;
   }
 
   return decide_navigation_policy (web_view, decision, decision_type, window);
