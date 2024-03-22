@@ -3416,7 +3416,7 @@ ephy_window_show (GtkWidget *widget)
   else {
     if (!window->has_default_size) {
       g_settings_get (EPHY_SETTINGS_STATE,
-                      "window-size", "(ii)",
+                      EPHY_PREFS_STATE_WINDOW_SIZE, "(ii)",
                       &window->current_width,
                       &window->current_height);
 
@@ -3437,34 +3437,6 @@ ephy_window_show (GtkWidget *widget)
       !is_browser_default () &&
       !ephy_profile_dir_is_web_application ())
     add_default_browser_question (window);
-}
-
-static gboolean
-ephy_window_should_save_state (EphyWindow *window)
-{
-  if (window->is_popup)
-    return FALSE;
-
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-    return TRUE;
-
-  return ephy_profile_dir_is_default ();
-}
-
-static void
-ephy_window_hide (GtkWidget *widget)
-{
-  EphyWindow *window = EPHY_WINDOW (widget);
-
-  if (ephy_window_should_save_state (window)) {
-    g_settings_set (EPHY_SETTINGS_STATE,
-                    "window-size", "(ii)",
-                    window->current_width,
-                    window->current_height);
-    g_settings_set_boolean (EPHY_SETTINGS_STATE, "is-maximized", window->is_maximized);
-  }
-
-  GTK_WIDGET_CLASS (ephy_window_parent_class)->hide (widget);
 }
 
 static void
@@ -3517,11 +3489,36 @@ ephy_window_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (ephy_window_parent_class)->unrealize (widget);
 }
 
+static gboolean
+should_save_window_state (EphyWindow *window)
+{
+  if (window->is_popup)
+    return FALSE;
+
+  if (ephy_profile_dir_is_default () ||
+      ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    /* The goal here is to save the window size in GSettings if it is the final
+     * window. At this point, it's already being destroyed and isn't included in
+     * the count of active windows. */
+    return ephy_shell_get_n_windows (ephy_shell_get_default ()) == 0;
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_window_finalize (GObject *object)
 {
   EphyWindow *window = EPHY_WINDOW (object);
   EphyShell *shell = ephy_shell_get_default ();
+
+  if (should_save_window_state (window)) {
+    g_settings_set (EPHY_SETTINGS_STATE,
+                    EPHY_PREFS_STATE_WINDOW_SIZE, "(ii)",
+                    window->current_width,
+                    window->current_height);
+    g_settings_set_boolean (EPHY_SETTINGS_STATE, "is-maximized", window->is_maximized);
+  }
 
   G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
@@ -3529,7 +3526,7 @@ ephy_window_finalize (GObject *object)
 
   ephy_shell_unregister_window (shell, window);
 
-  LOG ("EphyWindow finalised %p", object);
+  LOG ("EphyWindow finalized %p", object);
 }
 
 static void
@@ -4074,7 +4071,6 @@ ephy_window_class_init (EphyWindowClass *klass)
   object_class->set_property = ephy_window_set_property;
 
   widget_class->show = ephy_window_show;
-  widget_class->hide = ephy_window_hide;
   widget_class->realize = ephy_window_realize;
   widget_class->unrealize = ephy_window_unrealize;
 
