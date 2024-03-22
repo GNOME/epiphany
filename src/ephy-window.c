@@ -3325,12 +3325,12 @@ ephy_window_dispose (GObject *object)
 
     g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
-    g_hash_table_unref (window->action_labels);
+    g_clear_pointer (&window->action_labels, g_hash_table_unref);
+    g_clear_pointer (&window->action_groups, g_hash_table_unref);
 
     g_hash_table_foreach (window->active_permission_popovers,
                           (GHFunc)free_permission_popovers, NULL);
-
-    g_hash_table_unref (window->active_permission_popovers);
+    g_clear_pointer (&window->active_permission_popovers, g_hash_table_unref);
   }
 
   G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
@@ -3524,8 +3524,6 @@ ephy_window_finalize (GObject *object)
   EphyShell *shell = ephy_shell_get_default ();
 
   G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
-
-  g_hash_table_unref (window->action_groups);
 
   ephy_shell_unregister_window (shell, window);
 
