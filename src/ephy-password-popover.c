@@ -80,6 +80,14 @@ on_password_never (EphyPasswordPopover *self,
 }
 
 static void
+on_password_not_now (EphyPasswordPopover *self,
+                     GtkButton           *button)
+{
+  gtk_popover_popdown (GTK_POPOVER (self));
+  g_signal_emit (self, signals[RESPONSE], 0);
+}
+
+static void
 on_password_save (EphyPasswordPopover *self,
                   GtkButton           *button)
 {
@@ -193,6 +201,7 @@ ephy_password_popover_class_init (EphyPasswordPopoverClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_password_save);
+  gtk_widget_class_bind_template_callback (widget_class, on_password_not_now);
   gtk_widget_class_bind_template_callback (widget_class, on_password_never);
 }
 
