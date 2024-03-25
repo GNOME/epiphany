@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-11 15:50+0000\n"
-"PO-Revision-Date: 2024-03-19 08:53+0100\n"
+"POT-Creation-Date: 2024-03-19 07:54+0000\n"
+"PO-Revision-Date: 2024-03-25 07:59+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -472,6 +472,8 @@ msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
+"ჩავრთო თუ არა უსაფრთხო ბრაუზერის რეჟიმი. უსაფრთხო ბრაუზერი Google Safe "
+"Browsing API v4-ით მუშაობს."
 
 #: data/org.gnome.epiphany.gschema.xml:225
 msgid "Enable Intelligent Tracking Prevention (ITP)"
@@ -712,6 +714,8 @@ msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
+"ელფოსტა, რომელიც მიმაგრებულია Firefox-ის ანგარიშზე, რომელიც Mozilla-ის "
+"სერვერებთან მონაცემების სინქრონიზაციისთვის გამოიყენება."
 
 #: data/org.gnome.epiphany.gschema.xml:376
 msgid "Last sync timestamp"
@@ -975,6 +979,10 @@ msgid ""
 "while “allow” and “deny” tell it to allow / deny all requests to autoplay "
 "media respectively."
 msgstr ""
+"ეს პარამეტრი გამოიყენება ჩასაწერად, აქვს თუა რა მითითებულ ჰოსტს მინიჭებული "
+"ავტომატური დაკვრის უფლება. \"გადაუწყვეტელი\" ნაგულისხმევი მნიშვნელობა "
+"ნიშნავს, რომ ავტოდაკვრა დადუმებით მოხდება მაშინ როცა \"allow\" და \"deny\" "
+"შესაბამისად უშვებს ან კრძალავს მედიის ავტოდაკვრას."
 
 #: embed/ephy-about-handler.c:117 embed/ephy-about-handler.c:119
 msgid "Memory usage"
@@ -1817,6 +1825,9 @@ msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
 "code that could be downloaded to your computer without your consent."
 msgstr ""
+"%s-ზე შესვლამ, შეიძლება, თქვენს კომპიუტერს ავნოს. როგორც ჩანს, ეს გვერდი "
+"შეიცავს მავნე კოდს, რომელიც თქვენს კომპიუტერზე თქვენი ჩარევის გარეშე "
+"შეიძლება. მოხვდეს."
 
 #: embed/ephy-web-view.c:1776
 #, c-format
@@ -1824,6 +1835,8 @@ msgid ""
 "You can learn more about harmful web content including viruses and other "
 "malicious code and how to protect your computer at %s."
 msgstr ""
+"შეგიძლიათ გაიგოთ მეტი მავნე ვებ-შემცველობის შესახებ ვირუსებისა და სხვა მავნე "
+"კოდის შესახებ და როგორ დაიცვათ თქვენი კომპიუტერი მისამართზე %s."
 
 #: embed/ephy-web-view.c:1783
 #, c-format
@@ -1832,12 +1845,16 @@ msgid ""
 "software or revealing your personal information (for example, passwords, "
 "phone numbers, or credit cards)."
 msgstr ""
+"ბოროტმოქმედებმა %s-ზე შეიძლება შეგიტყუონ, რამე საშიში გააკეთოთ, როგორიცაა "
+"პროგრამის დაყენება ან თქვენი პირადი ინფორმაცია (მაგ: პაროლები, ტელეფონის "
+"ნომრები და საკრედიტო ბარათები) გამოავლინოს."
 
 #: embed/ephy-web-view.c:1788
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
+"სოციალური ინჟინერიის (ფიშინგის) შესახებ მეტი შეგიძლიათ, გაიგოთ %s ან %s-დან."
 
 #: embed/ephy-web-view.c:1797
 #, c-format
@@ -1846,11 +1863,15 @@ msgid ""
 "installing programs that harm your browsing experience (for example, by "
 "changing your homepage or showing extra ads on sites you visit)."
 msgstr ""
+"%s შეიძლება მავნე პროგრამებს შეიცავდეს. შემტევებმა შეიძლება სცადონ, "
+"მოტყუებით დაგაყენებინონ პროგრამები, რომლებიც ბრაუზინგში ხელს შეგიშლიან "
+"(მაგალითად, საწყისი გვერდის შეცვლით ან დამატებითი რეკლამის ჩვენები "
+"გვერდებზე, სადაც შეხვალთ)."
 
 #: embed/ephy-web-view.c:1802
 #, c-format
 msgid "You can learn more about unwanted software at %s."
-msgstr ""
+msgstr "მავნე პროგრამების შესახებ შეგიძლიათ გაიგოთ მეტი მისამართზე %s."
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
@@ -2071,7 +2092,7 @@ msgstr "შედით Firefox Sync-ში კიდევ ერთხელ, 
 
 #: lib/sync/ephy-sync-service.c:1116
 msgid "The password of your Firefox account seems to have been changed."
-msgstr ""
+msgstr "როგორც ჩანს, თქვენი Firefox-ის ანგარიშის პაროლი შეიცვალა."
 
 #: lib/sync/ephy-sync-service.c:1117
 msgid ""
@@ -2120,6 +2141,8 @@ msgstr "მეტა/გლობალური ჩანაწერის ა
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
+"თქვენი Firefox-ის ანგარიში იყენებს საცავს ვერსიით %d. Web-ს, მხოლოდ, %d "
+"ვერსიის მხარდაჭერა გააჩნია."
 
 #: lib/sync/ephy-sync-service.c:2564
 msgid "Failed to verify storage version."
@@ -3211,7 +3234,7 @@ msgstr "ტექსტის კოდირება"
 
 #: src/resources/gtk/encoding-dialog.ui:30
 msgid "Use the encoding specified by the document"
-msgstr ""
+msgstr "დოკუმენტის მიერ მითითებული კოდირება"
 
 #: src/resources/gtk/encoding-dialog.ui:62
 msgid "Recent encodings"
@@ -3255,6 +3278,9 @@ msgid ""
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
 "endorsed by Mozilla."
 msgstr ""
+"შედით თქვენი Firefox-ის ანგარიშით თქვენი მონაცემების GNOME Web-ის და Firefox-"
+"ის მონაცემების სხვა კომპიუტერებზე სინქრონიზაციისთვის. GNOME Web არ "
+"წარმოადგენს Firefox-ს და არც Mozilla-ის პროდუქტი არაა."
 
 #: src/resources/gtk/firefox-sync-dialog.ui:49
 msgid "Firefox Account"
@@ -3729,6 +3755,8 @@ msgstr "ჭკვიანი _ტრეკინგის თავიდან
 #: src/resources/gtk/prefs-privacy-page.ui:29
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr ""
+"ვებგვერდებისთვის ქუქიების, ბაზებისა და ლოკალური საცავის მონაცემების შენახვის "
+"უფლების დართვა."
 
 #: src/resources/gtk/prefs-privacy-page.ui:30
 msgid "_Website Data Storage"
@@ -3740,7 +3768,7 @@ msgstr "ძებნის მინიშნებები"
 
 #: src/resources/gtk/prefs-privacy-page.ui:41
 msgid "Enable search suggestions in the URL entry."
-msgstr ""
+msgstr "ძებნის შეთავაზებების ჩართვა URL-ის შეყვანისას."
 
 #: src/resources/gtk/prefs-privacy-page.ui:42
 msgid "_Google Search Suggestions"
@@ -3783,6 +3811,8 @@ msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s."
 msgstr ""
+"იმისათვის, რომ დაადგინოთ ძებნის მისამართი, მოძებნეთ იმ საძიებო სისტემით, "
+"რომელიც გნებავთ, რომ დაამატოთ და შეცვალეთ ძიების პირობა სტრიქონით %s."
 
 #: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
@@ -4319,6 +4349,9 @@ msgid ""
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
 "want to enable caret browsing?"
 msgstr ""
+"F7-ის დაჭერა კარეტით მუშაობას ჩართავს ან გამორთავს. ეს ფუნქცია მოძრავ "
+"კურსორს სვამს ვებგვერდებზე და გადაადგილება კურსორით შეგიძლიათ. გნებავთ "
+"ჩართოთ კარეტით მუშაობა?"
 
 #: src/window-commands.c:2702
 msgid "_Enable"
