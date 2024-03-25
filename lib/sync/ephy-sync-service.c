@@ -1885,48 +1885,42 @@ sync_frequency_changed_cb (GSettings       *settings,
 }
 
 static void
-load_secrets_cb (GObject         *source_object,
-                 GAsyncResult    *result,
-                 EphySyncService *self)
+sync_error (const char *message)
 {
-  SecretValue *value = NULL;
-  JsonNode *node = NULL;
+  ephy_notification_show (ephy_notification_new (message, _("Please visit Firefox Sync and sign in again to continue syncing.")));
+
+  /* Reset the sync user so that it will be considered signed out
+   * when the preferences dialog is opened. */
+  ephy_sync_utils_set_sync_user (NULL);
+  ephy_sync_utils_set_sync_time (0);
+  ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
+  ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
+  ephy_sync_utils_set_history_sync_is_initial (TRUE);
+}
+
+static void
+retrieve_secret_cb (GObject         *source_object,
+                    GAsyncResult    *result,
+                    EphySyncService *self)
+{
+  g_autoptr (SecretRetrievable) retrievable = SECRET_RETRIEVABLE (source_object); /* owned because we took a ref in load_secrets_cb() */
+  g_autoptr (SecretValue) value = NULL;
+  g_autoptr (JsonNode) node = NULL;
+  g_autoptr (GError) error = NULL;
   JsonObject *object;
-  GList *res = NULL;
-  GError *error = NULL;
-  const char *message;
-  const char *suggestion;
 
-  res = secret_password_search_finish (result, &error);
-  if (error) {
-    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-      g_error_free (error);
-      goto out_no_error;
-    }
-    g_warning ("Failed to search for sync secrets: %s", error->message);
-    g_error_free (error);
-    message = _("Could not find the sync secrets for the current sync user.");
-    goto out_error;
-  }
-
-  if (!(res && res->data)) {
-    message = _("Could not find the sync secrets for the current sync user.");
-    goto out_error;
-  }
-
-  value = secret_item_get_secret ((SecretItem *)res->data);
+  value = secret_retrievable_retrieve_secret_finish (retrievable, result, &error);
   if (!value) {
-    g_warning ("Failed to retrieve the value of the sync secrets");
-    message = _("The sync secrets for the current sync user are invalid.");
-    goto out_error;
+    g_warning ("Failed to retrieve the value of the sync secrets: %s", error->message);
+    sync_error (_("The sync secrets for the current sync user are invalid."));
+    return;
   }
 
   node = json_from_string (secret_value_get_text (value), &error);
   if (error) {
     g_warning ("Sync secrets are not a valid JSON: %s", error->message);
-    g_error_free (error);
-    message = _("The sync secrets for the current sync user are invalid.");
-    goto out_error;
+    sync_error (_("The sync secrets for the current sync user are invalid."));
+    return;
   }
 
   /* Set secrets and start periodical sync. */
@@ -1936,25 +1930,34 @@ load_secrets_cb (GObject         *source_object,
                                   json_object_get_string_member (object, l->data));
 
   g_signal_emit (self, signals[LOAD_FINISHED], 0);
-  goto out_no_error;
+}
 
-out_error:
-  suggestion = _("Please visit Firefox Sync and sign in again to continue syncing.");
-  ephy_notification_show (ephy_notification_new (message, suggestion));
-  /* Reset the sync user so that it will be considered signed-out
-   * when the preferences dialog is opened. */
-  ephy_sync_utils_set_sync_user (NULL);
-  ephy_sync_utils_set_sync_time (0);
-  ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
-  ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
-  ephy_sync_utils_set_history_sync_is_initial (TRUE);
-out_no_error:
-  if (value)
-    secret_value_unref (value);
-  if (res)
-    g_list_free_full (res, g_object_unref);
-  if (node)
-    json_node_unref (node);
+static void
+load_secrets_cb (GObject         *source_object,
+                 GAsyncResult    *result,
+                 EphySyncService *self)
+{
+  g_autolist (SecretRetrievable) retrievables = NULL;
+  g_autoptr (GError) error = NULL;
+
+  retrievables = secret_password_search_finish (result, &error);
+  if (error) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+    g_warning ("Failed to search for sync secrets: %s", error->message);
+    sync_error (_("Could not find the sync secrets for the current sync user."));
+    return;
+  }
+
+  if (!(retrievables && retrievables->data)) {
+    sync_error (_("Could not find the sync secrets for the current sync user."));
+    return;
+  }
+
+  secret_retrievable_retrieve_secret (g_object_ref ((SecretRetrievable *)retrievables->data),
+                                      self->cancellable,
+                                      (GAsyncReadyCallback)retrieve_secret_cb,
+                                      self);
 }
 
 static void
