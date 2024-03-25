@@ -28,7 +28,8 @@
 struct _EphyOpenTabsManager {
   GObject parent_instance;
 
-  EphyTabsCatalog *catalog;
+  EphyTabsCatalog *catalog; /* unowned,
+                             * because the EphyTabsCatalog is the EphyShell, which owns us. */
 
   /* A list of EphyOpenTabsRecord objects describing the open tabs
    * of other sync clients. This is updated at every sync. */
@@ -59,9 +60,7 @@ ephy_open_tabs_manager_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_TABS_CATALOG:
-      if (self->catalog)
-        g_object_unref (self->catalog);
-      self->catalog = g_object_ref (g_value_get_object (value));
+      self->catalog = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
