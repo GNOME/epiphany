@@ -29,9 +29,7 @@ struct _EphyOpenTabsManager {
   GObject parent_instance;
 
   EphyTabsCatalog *catalog; /* unowned,
-                             * because the EphyTabsCatalog is the EphyShell,
-                             * which owns the EphySyncService,
-                             * which owns us. */
+                             * because the EphyTabsCatalog is the EphyShell, which owns us. */
 
   /* A list of EphyOpenTabsRecord objects describing the open tabs
    * of other sync clients. This is updated at every sync. */
