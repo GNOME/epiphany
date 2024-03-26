@@ -1914,12 +1914,14 @@ retrieve_secret_cb (GObject         *source_object,
   if (!value) {
     message = g_strdup_printf (_("The sync secrets for the current sync user are invalid: %s"), error->message);
     sync_error (message);
+    return;
   }
 
   node = json_from_string (secret_value_get_text (value), &error);
   if (error) {
     message = g_strdup_printf (_("The sync secrets for the current sync user are not valid JSON: %s"), error->message);
     sync_error (message);
+    return;
   }
 
   /* Set secrets and start periodical sync. */
