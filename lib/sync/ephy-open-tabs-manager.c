@@ -95,23 +95,12 @@ ephy_open_tabs_manager_finalize (GObject *object)
 }
 
 static void
-ephy_open_tabs_manager_dispose (GObject *object)
-{
-  EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
-
-  g_clear_object (&self->catalog);
-
-  G_OBJECT_CLASS (ephy_open_tabs_manager_parent_class)->dispose (object);
-}
-
-static void
 ephy_open_tabs_manager_class_init (EphyOpenTabsManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_open_tabs_manager_set_property;
   object_class->get_property = ephy_open_tabs_manager_get_property;
-  object_class->dispose = ephy_open_tabs_manager_dispose;
   object_class->finalize = ephy_open_tabs_manager_finalize;
 
   obj_properties[PROP_TABS_CATALOG] =
