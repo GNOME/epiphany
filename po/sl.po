@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-19 18:48+0000\n"
-"PO-Revision-Date: 2024-03-24 16:54+0100\n"
+"POT-Creation-Date: 2024-03-27 22:09+0000\n"
+"PO-Revision-Date: 2024-03-30 16:04+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1114,8 +1114,8 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2799
+#: src/window-commands.c:1243 src/window-commands.c:1918
+#: src/window-commands.c:2806
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -2149,7 +2149,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Pridobivanje poveril shrambe je spodletelo."
 
 #: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:1890
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Obiščite spletišče Firefox Sync, in se prijavite za nadaljevanje "
@@ -2171,17 +2171,32 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Pridobivanje podpisanega potrdila je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
+#: lib/sync/ephy-sync-service.c:1915
+#, c-format
+msgid "The sync secrets for the current sync user are invalid: %s"
+msgstr ""
+"Usklajevalni žetoni za trenutno prijavljenega uporabnika niso veljavni: %s"
+
+#: lib/sync/ephy-sync-service.c:1922
+#, c-format
+msgid "The sync secrets for the current sync user are not valid JSON: %s"
+msgstr ""
+"Usklajevalni žetoni za trenutno prijavljenega uporabnika niso veljaven JSON: "
+"%s"
+
+#: lib/sync/ephy-sync-service.c:1949
+#, c-format
+msgid "Could not find the sync secrets for the current sync user: %s"
+msgstr ""
+"Ni mogoče najti usklajevalnih žetonov za trenutno prijavljenega uporabnika: "
+"%s"
+
+#: lib/sync/ephy-sync-service.c:1955
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Ni mogoče najti usklajevalnih žetonov za trenutno prijavljenega uporabnika."
 
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
-msgid "The sync secrets for the current sync user are invalid."
-msgstr ""
-"Usklajevalni žetoni za trenutno prijavljenega uporabnika niso veljavni."
-
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1999
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2190,44 +2205,44 @@ msgstr ""
 "je spletno mesto okvarjeno):"
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2041
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Usklajevalni žetoni za %s"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2071
 msgid "Failed to upload client record."
 msgstr "Pošiljanje zapisa odjemalca je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2274
 msgid "Failed to upload crypto/keys record."
 msgstr "Pošiljanje zapisa šifrirnih ključev je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2386
 msgid "Failed to retrieve crypto keys."
 msgstr "Pridobivanje šifrirnih ključev je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2440
 msgid "Failed to upload meta/global record."
 msgstr "Pošiljanje zapisa splošnih in meta podatkov je spodletelo."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2562
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Račun Mozilla uporablja različico shrambe %d, program Splet pa podpira le %d."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2573
 msgid "Failed to verify storage version."
 msgstr "Overjanje različice shrambe je spodletela."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2631
 msgid "Failed to upload device info"
 msgstr "Pošiljanje podrobnosti o napravi je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2707 lib/sync/ephy-sync-service.c:2790
 msgid "Failed to retrieve the Sync Key"
 msgstr "Pridobivanje usklajevalnega ključa je spodletelo."
 
@@ -2935,39 +2950,39 @@ msgstr "Odpri povezavo v novem oknu"
 msgid "Open Link In Incognito Window"
 msgstr "Odpri povezavo v zasebnem oknu"
 
-#: src/ephy-window.c:2794
+#: src/ephy-window.c:2797
 msgid "_Ask Later"
 msgstr "_Vprašaj kasneje"
 
-#: src/ephy-window.c:2795 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2798 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Zavrni"
 
-#: src/ephy-window.c:2796 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2799 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Dovoli"
 
-#: src/ephy-window.c:2998 src/ephy-window.c:4435
+#: src/ephy-window.c:3001 src/ephy-window.c:4432
 msgid "Leave Website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:2999 src/ephy-window.c:4436 src/window-commands.c:1240
+#: src/ephy-window.c:3002 src/ephy-window.c:4433 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Podatki obrazca so spremenjeni in niso bili poslani."
 
-#: src/ephy-window.c:3000 src/ephy-window.c:4437 src/window-commands.c:1244
+#: src/ephy-window.c:3003 src/ephy-window.c:4434 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Zavrzi obrazec"
 
-#: src/ephy-window.c:3021
+#: src/ephy-window.c:3024
 msgid "Download operation"
 msgstr "Opravilo prejemanja"
 
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3026
 msgid "Show details"
 msgstr "Pokaži podrobnosti"
 
-#: src/ephy-window.c:3025
+#: src/ephy-window.c:3028
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2976,15 +2991,15 @@ msgstr[1] "V teku je %d prejemanje"
 msgstr[2] "V teku je %d prejemanji"
 msgstr[3] "V teku je %d prejemanja"
 
-#: src/ephy-window.c:3266
+#: src/ephy-window.c:3269
 msgid "Set as Default Browser?"
 msgstr "Ali želite nastaviti program kot privzeti brskalnik?"
 
-#: src/ephy-window.c:3268
+#: src/ephy-window.c:3271
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Uporabite Splet kot privzeti brskalnik za odpiranje zunanjih povezav"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3273
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2992,57 +3007,57 @@ msgstr ""
 "Uporabi preizkusno različico brskalnika Epiphany kot privzet spletni "
 "brskalnik in za odpiranje zunanjih povezav"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3277
 msgid "_Ask Again Later"
 msgstr "_Vprašaj ponovno kasneje"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3278
 msgid "_No"
 msgstr "_Ne"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3279
 msgid "_Yes"
 msgstr "_Da"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3725
 msgid "Save password?"
 msgstr "Ali želite shraniti gesla?"
 
-#: src/ephy-window.c:3728
+#: src/ephy-window.c:3726
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Gesla je mogoče kadarkoli odstraniti med nastavitvami"
 
-#: src/ephy-window.c:3730
+#: src/ephy-window.c:3728
 msgid "Not Now"
 msgstr "Ne zdaj"
 
-#: src/ephy-window.c:3731
+#: src/ephy-window.c:3729
 msgid "Never Save"
 msgstr "Nikoli ne shrani"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3730
 msgid "Save"
 msgstr "Shrani"
 
-#: src/ephy-window.c:4566
+#: src/ephy-window.c:4563
 msgid "Close Multiple Tabs?"
 msgstr "Ali res želite zapreti več zavihkov?"
 
-#: src/ephy-window.c:4567
+#: src/ephy-window.c:4564
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Če okno zaprete, bodo izgubljeni vsi odprti zavihki."
 
-#: src/ephy-window.c:4568
+#: src/ephy-window.c:4565
 msgid "C_lose Tabs"
 msgstr "Zapri _zavihke"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4658
 msgid "New tab opened"
 msgstr "Odprt je nov zavihek"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4662
 msgid "Switch"
 msgstr "Preklopi"
 
@@ -3464,7 +3479,7 @@ msgstr "Ime naprave"
 
 # G:1 K:0 O:0
 #: src/resources/gtk/firefox-sync-dialog.ui:126
-#: src/resources/gtk/password-popover.ui:79
+#: src/resources/gtk/password-popover.ui:94
 msgid "_Save"
 msgstr "_Shrani"
 
@@ -3690,6 +3705,10 @@ msgstr ""
 #: src/resources/gtk/password-popover.ui:64
 msgid "_Never Save"
 msgstr "_Nikoli ne shrani"
+
+#: src/resources/gtk/password-popover.ui:79
+msgid "N_ot Now"
+msgstr "Ne z_daj"
 
 #: src/resources/gtk/passwords-view.ui:25
 #: src/resources/gtk/prefs-privacy-page.ui:57
@@ -4485,54 +4504,54 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Ali želite ponovno naložiti spletišče?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Program »%s« je pripravljen za uporabo"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1833
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Spletnega programa »%s« ni mogoče ustvariti: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1843
 msgid "Launch"
 msgstr "Zaženi"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1910
 msgid "Replace Existing Web App?"
 msgstr "Ali želite zamenjati obstoječi spletni program?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1914
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "Program z imenom »%s« že obstaja. Z zamenjavo bo predhodni program prepisan."
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1919
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: src/window-commands.c:2261
+#: src/window-commands.c:2268
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2265
+#: src/window-commands.c:2272
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2311
+#: src/window-commands.c:2318
 msgid "PNG"
 msgstr "PNG"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:2794
+#: src/window-commands.c:2801
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: src/window-commands.c:2795
+#: src/window-commands.c:2802
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4543,6 +4562,6 @@ msgstr ""
 "katero se je mogoče premikati po strani s pomočjo tipkovnice. Ali želite "
 "omogočiti kazalni način brskanja?"
 
-#: src/window-commands.c:2800
+#: src/window-commands.c:2807
 msgid "_Enable"
 msgstr "_Omogoči"
