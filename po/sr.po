@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-15 15:49+0000\n"
-"PO-Revision-Date: 2024-03-23 15:21+0100\n"
+"POT-Creation-Date: 2024-03-27 22:09+0000\n"
+"PO-Revision-Date: 2024-04-06 18:16+0200\n"
 "Last-Translator: Душан Медић <dusan@medic.rs>\n"
 "Language-Team: Serbian <gnome-sr@googlegroups.com>\n"
 "Language: sr\n"
@@ -24,6 +24,11 @@ msgstr ""
 "n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Project-Style: gnome\n"
 "X-Generator: Gtranslator 45.3\n"
+"X-DL-Lang: sr\n"
+"X-DL-Module: epiphany\n"
+"X-DL-Branch: master\n"
+"X-DL-Domain: po\n"
+"X-DL-State: None\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
@@ -66,12 +71,10 @@ msgstr "Веб прегледач"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
-#, fuzzy
-#| msgid "web;browser;internet;"
 msgid "web;browser;internet;epiphany;"
 msgstr ""
-"веб;прегледник;прегледач;интернет;браузер;veb;preglednik;pregledač;internet;"
-"brauzer;web;internet;browser;"
+"веб;прегледник;прегледач;интернет;браузер;епифани;спознаја;veb;preglednik;"
+"pregledač;internet;brauzer;epifani;spoznaja;web;internet;browser;epiphany"
 
 #: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
@@ -1041,15 +1044,11 @@ msgid "Installed on:"
 msgstr "Инсталиран је:"
 
 #: embed/ephy-about-handler.c:365
-#, fuzzy
-#| msgid ""
-#| "You can add your favorite website by clicking <b>Install Site as Web "
-#| "Application…</b> within the page menu."
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
 msgstr ""
-"Можете додати вашу омиљену веб страницу избором <b>Инсталирај сајт као веб "
+"Можете додати вашу омиљену веб страницу избором <b>Инсталирај као веб "
 "програм…</b> из менија унутар ове странице."
 
 #. Displayed when opening the browser for the first time.
@@ -1114,8 +1113,8 @@ msgstr "Молим унесите ПИН за %s, за пријаву на %s:%d
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2798
+#: src/window-commands.c:1243 src/window-commands.c:1916
+#: src/window-commands.c:2804
 msgid "_Cancel"
 msgstr "_Откажи"
 
@@ -1146,15 +1145,13 @@ msgstr "_Изабери"
 
 #: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:556
 msgid "Select a Directory"
-msgstr "Изабери директоријум"
+msgstr "Изаберите директоријум"
 
 #: embed/ephy-download.c:716
 msgid "Select the Destination"
-msgstr "Изабери одредиште"
+msgstr "Изаберите одредиште"
 
 #: embed/ephy-download.c:759
-#, fuzzy
-#| msgid "Download requested"
 msgid "Download Requested"
 msgstr "Преузимање је затражено"
 
@@ -1206,10 +1203,8 @@ msgstr "F11"
 
 #. Translators: this means WebDriver control.
 #: embed/ephy-embed.c:793
-#, fuzzy
-#| msgid "Web is being controlled by automation."
 msgid "Web is being controlled by automation"
-msgstr "Аутоматизација управља програмом Веб."
+msgstr "Аутоматизација управља програмом Веб"
 
 #: embed/ephy-embed-shell.c:640
 #, c-format
@@ -2070,7 +2065,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Не могу да добијем овлашћења за приступ складишту."
 
 #: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:1890
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Посетите Фајерфоксово усаглашавање и поново се пријавите да наставите "
@@ -2092,15 +2087,15 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Не могу да добијем потписани сертификат."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
-msgid "Could not find the sync secrets for the current sync user."
-msgstr "Не могу да нађем овлашћења за усаглашавања тренутног корисника."
-
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
+#: lib/sync/ephy-sync-service.c:1915 lib/sync/ephy-sync-service.c:1922
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Овлашћења за усаглашавања тренутног корисника су неисправна."
 
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1948 lib/sync/ephy-sync-service.c:1953
+msgid "Could not find the sync secrets for the current sync user."
+msgstr "Не могу да нађем овлашћења за усаглашавања тренутног корисника."
+
+#: lib/sync/ephy-sync-service.c:1996
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2109,44 +2104,44 @@ msgstr ""
 "сломљен?):"
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2038
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Овлашћења за усаглашавања корисника %s"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2068
 msgid "Failed to upload client record."
 msgstr "Не могу да пошаљем запис о клијенту."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2271
 msgid "Failed to upload crypto/keys record."
 msgstr "Не могу да пошаљем запис шифрарника/кључева."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2383
 msgid "Failed to retrieve crypto keys."
 msgstr "Не могу да преузмем шифрарник кључева."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2437
 msgid "Failed to upload meta/global record."
 msgstr "Не могу да пошаљем мета/глобалне податке."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2559
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Ваш Мозила налог користи верзију складишта %d. Веб подржава само верзију %d."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2570
 msgid "Failed to verify storage version."
 msgstr "Не могу да проверим верзију складишта."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2628
 msgid "Failed to upload device info"
 msgstr "Не могу да пошаљем податке о уређају"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2704 lib/sync/ephy-sync-service.c:2787
 msgid "Failed to retrieve the Sync Key"
 msgstr "Не могу да преузмем кључеве за усклађивање"
 
@@ -2432,33 +2427,27 @@ msgstr "Уклони читав историјат"
 #. Translators: Notification policy for a specific site.
 #: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
 msgid "Notification Request"
-msgstr "Захтев за слање обавештења"
+msgstr "Захтев за обавештења"
 
 #: src/ephy-location-entry.c:1809
 msgid "Camera Request"
-msgstr "Приступ камери"
+msgstr "Захтев за камеру"
 
 #: src/ephy-location-entry.c:1813
-#, fuzzy
-#| msgid "Microphone access"
 msgid "Microphone Request"
-msgstr "Приступ микрофону"
+msgstr "Захтев за микрофон"
 
 #: src/ephy-location-entry.c:1817
-#, fuzzy
-#| msgid "Location access"
 msgid "Location Request"
-msgstr "Приступ локацији"
+msgstr "Захтев за локацију"
 
 #: src/ephy-location-entry.c:1821
 msgid "Webcam and Microphone Request"
-msgstr "Приступ камери и микрофону"
+msgstr "Захтев за камеру и микрофон"
 
 #: src/ephy-location-entry.c:1825
-#, fuzzy
-#| msgid "Permissions"
 msgid "Permission Request"
-msgstr "Дозволе"
+msgstr "Захтев за дозволу"
 
 #: src/ephy-main.c:112
 msgid "Open a new browser window instead of a new tab"
@@ -2509,51 +2498,42 @@ msgstr "Опције Веба"
 
 #. Translators: Notification policy for a specific site.
 #: src/ephy-permission-popover.c:273
-#, fuzzy, c-format
-#| msgid "The page at %s wants to show desktop notifications."
+#, c-format
 msgid "The page at “%s” would like to send you notifications"
-msgstr "Страница %s жели да прикаже поруку у виду обавештења на радној површи."
+msgstr "Страница „%s“ жели да вам шање обавештења"
 
 #. Translators: Geolocation policy for a specific site.
 #: src/ephy-permission-popover.c:278
-#, fuzzy
-#| msgid "Location access"
 msgid "Location Access Request"
-msgstr "Приступ локацији"
+msgstr "Захтев за приступ локацији"
 
 #. Translators: Geolocation policy for a specific site.
 #: src/ephy-permission-popover.c:280
-#, fuzzy, c-format
-#| msgid "The page at %s wants to know your location."
+#, c-format
 msgid "The page at “%s” would like to know your location"
-msgstr "Страница %s жели да сазна где се тренутно налазите."
+msgstr "Страница „%s“ жели да сазна где се тренутно налазите"
 
 #. Translators: Microphone policy for a specific site.
 #: src/ephy-permission-popover.c:285
-#, fuzzy
-#| msgid "Microphone access"
 msgid "Microphone Access Request"
-msgstr "Приступ микрофону"
+msgstr "Захтев за приступ микрофону"
 
 #. Translators: Microphone policy for a specific site.
 #: src/ephy-permission-popover.c:287
-#, fuzzy, c-format
-#| msgid "The page at %s wants to use your microphone."
+#, c-format
 msgid "The page at “%s” would like to use your microphone"
-msgstr "Страница %s жели да користи ваш микрофон."
+msgstr "Страница „%s“ жели да користи ваш микрофон"
 
 #. Translators: Webcam policy for a specific site.
 #: src/ephy-permission-popover.c:292
-#, fuzzy
-#| msgid "Webcam access"
 msgid "Webcam Access Request"
-msgstr "Приступ камери"
+msgstr "Захтев за приступ камери"
 
 #. Translators: Webcam policy for a specific site.
 #: src/ephy-permission-popover.c:294
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
-msgstr "Страница %s жели да користи вашу камеру."
+msgstr "Страница „%s“ жели да користи вашу камеру"
 
 #. Translators: Webcam and microphone policy for a specific site.
 #: src/ephy-permission-popover.c:299
@@ -2562,10 +2542,9 @@ msgstr "Захтев за приступ камери и микрофону"
 
 #. Translators: Webcam and microphone policy for a specific site.
 #: src/ephy-permission-popover.c:301
-#, fuzzy, c-format
-#| msgid "The page at %s wants to use your webcam and microphone."
+#, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
-msgstr "Страница %s жели да користи вашу веб камеру и микрофон."
+msgstr "Страница „%s“ жели да користи вашу камеру и микрофон"
 
 #. Translators: Storage access policy for a specific site.
 #: src/ephy-permission-popover.c:308
@@ -2843,43 +2822,39 @@ msgstr "Отвори везу у новом прозору"
 msgid "Open Link In Incognito Window"
 msgstr "Отвори везу у тајном прозору"
 
-#: src/ephy-window.c:2794
+#: src/ephy-window.c:2797
 msgid "_Ask Later"
 msgstr "_Питај кацније"
 
-#: src/ephy-window.c:2795 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2798 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Забрани"
 
-#: src/ephy-window.c:2796 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2799 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Прихвати"
 
-#: src/ephy-window.c:2998 src/ephy-window.c:4435
+#: src/ephy-window.c:3001 src/ephy-window.c:4434
 msgid "Leave Website?"
 msgstr "Напусти веб страницу?"
 
-#: src/ephy-window.c:2999 src/ephy-window.c:4436 src/window-commands.c:1240
-#, fuzzy
-#| msgid "A form you modified has not been submitted."
+#: src/ephy-window.c:3002 src/ephy-window.c:4435 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
-msgstr "Образац који сте изменили није предат."
+msgstr "Образац који сте изменили није послат"
 
-#: src/ephy-window.c:3000 src/ephy-window.c:4437 src/window-commands.c:1244
-#, fuzzy
-#| msgid "_Discard form"
+#: src/ephy-window.c:3003 src/ephy-window.c:4436 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Одбаци образац"
 
-#: src/ephy-window.c:3021
+#: src/ephy-window.c:3024
 msgid "Download operation"
 msgstr "Преузимања"
 
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3026
 msgid "Show details"
 msgstr "Прикажи детаље"
 
-#: src/ephy-window.c:3025
+#: src/ephy-window.c:3028
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2888,29 +2863,29 @@ msgstr[1] "У току су %d преузимања"
 msgstr[2] "У току је %d преузимања"
 msgstr[3] "Преузимање је у току"
 
-#: src/ephy-window.c:3266
+#: src/ephy-window.c:3269
 msgid "Set as Default Browser?"
 msgstr "Постави као подразумевани прегледник?"
 
-#: src/ephy-window.c:3268
+#: src/ephy-window.c:3271
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Користи Веб као подразумевани прегледник и за отварање екстерних веза"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3273
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr "Користи Веб као подразумевани прегледник и за отварање екстерних веза"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3277
 msgid "_Ask Again Later"
 msgstr "_Питај касније"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3278
 msgid "_No"
 msgstr "_Не"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3279
 msgid "_Yes"
 msgstr "_Да"
 
@@ -2934,25 +2909,23 @@ msgstr "Никад не чувај"
 msgid "Save"
 msgstr "Сачувај"
 
-#: src/ephy-window.c:4566
+#: src/ephy-window.c:4565
 msgid "Close Multiple Tabs?"
 msgstr "Затвори остале језичке?"
 
-#: src/ephy-window.c:4567
-#, fuzzy
-#| msgid "If you close this window, all open tabs will be lost"
+#: src/ephy-window.c:4566
 msgid "If this window is closed, all open tabs will be lost"
-msgstr "Уколико затворите овај прозор, сви језичци ће бити изгубљени"
+msgstr "Уколико затворите овај прозор, сви отворени језичци ће бити изгубљени"
 
-#: src/ephy-window.c:4568
+#: src/ephy-window.c:4567
 msgid "C_lose Tabs"
 msgstr "Ц_затворите језичке"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4660
 msgid "New tab opened"
 msgstr "Нови језичак отворен"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4664
 msgid "Switch"
 msgstr "Пребаци"
 
@@ -3155,17 +3128,13 @@ msgid "Extensions"
 msgstr "Проширења"
 
 #: src/resources/gtk/action-bar-end.ui:100
-#, fuzzy
-#| msgid "View open tabs"
 msgid "View Open Tabs"
-msgstr "Прегледајте отворене језичке"
+msgstr "Прикажи отворене језичке"
 
 #. Translators: tooltip for the bookmarks popover button
 #: src/resources/gtk/action-bar-end.ui:118
-#, fuzzy
-#| msgid "Bookmark"
 msgid "Bookmarks"
-msgstr "Обележивач"
+msgstr "Обележивачи"
 
 #. Translators: tooltip for the back button
 #: src/resources/gtk/action-bar-start.ui:17
@@ -3219,10 +3188,8 @@ msgid "No Bookmarks"
 msgstr "Без обележивач"
 
 #: src/resources/gtk/bookmarks-popover.ui:139
-#, fuzzy
-#| msgid "Bookmark some webpages to view them here."
 msgid "Bookmarked pages will appear here"
-msgstr "Обележите неке веб странице да их видите овде."
+msgstr "Обележене странице ће бити приказане овде"
 
 #: src/resources/gtk/clear-data-view.ui:22
 msgid "Website Data"
@@ -3278,24 +3245,18 @@ msgid "Text Encoding"
 msgstr "Кодирање текста"
 
 #: src/resources/gtk/encoding-dialog.ui:30
-#, fuzzy
-#| msgid "Use the encoding specified by the document"
 msgid "Use Encoding Specified by Document"
-msgstr "Користи кодирање које је назначио документ"
+msgstr "Користи кодирање које је одредио документ"
 
 #: src/resources/gtk/encoding-dialog.ui:62
-#, fuzzy
-#| msgid "Recent encodings"
 msgid "Recent Encodings"
-msgstr "Скорашњи кодни распореди"
+msgstr "Скорашња кодирања"
 
 #: src/resources/gtk/encoding-dialog.ui:88
 msgid "Related Encodings"
 msgstr "Сродни кодни распореди"
 
 #: src/resources/gtk/encoding-dialog.ui:111
-#, fuzzy
-#| msgid "Show all…"
 msgid "Show All…"
 msgstr "Прикажи све…"
 
@@ -3367,10 +3328,8 @@ msgid "Sync Open _Tabs"
 msgstr "Усаглашавање отворених _језичака"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:94
-#, fuzzy
-#| msgid "Synced Tabs"
 msgid "S_ynced Tabs"
-msgstr "Усаглашени језичци"
+msgstr "У_саглашени језичци"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:104
 msgid "Frequency"
@@ -3414,8 +3373,6 @@ msgid "_Open"
 msgstr "_Отвори"
 
 #: src/resources/gtk/lang-row.ui:21
-#, fuzzy
-#| msgid "Delete language"
 msgid "Delete Language"
 msgstr "Обриши језик"
 
@@ -3504,10 +3461,8 @@ msgid "Reopen Closed _Tab"
 msgstr "Поново отвори затворени _језичак"
 
 #: src/resources/gtk/page-menu-popover.ui:35
-#, fuzzy
-#| msgid "History"
 msgid "Histo_ry"
-msgstr "Историјат"
+msgstr "_Историјат"
 
 #: src/resources/gtk/page-menu-popover.ui:41
 msgid "Firefox _Sync"
@@ -3530,20 +3485,16 @@ msgid "Import _Passwords…"
 msgstr "Увези _лозинке…"
 
 #: src/resources/gtk/page-menu-popover.ui:67
-#, fuzzy
-#| msgid "Install Site as Web _Application…"
 msgid "Install as _Web App…"
-msgstr "Инсталирај сајт као _веб програм…"
+msgstr "Инсталирај као _веб програм…"
 
 #: src/resources/gtk/page-menu-popover.ui:71
 msgid "Manag_e Web Apps"
-msgstr "Уреди Веб програме"
+msgstr "У_реди веб програме"
 
 #: src/resources/gtk/page-menu-popover.ui:77
-#, fuzzy
-#| msgid "Text Encoding"
 msgid "Text Enco_ding…"
-msgstr "Кодирање текста"
+msgstr "К_одирање текста…"
 
 #: src/resources/gtk/page-menu-popover.ui:83
 msgid "Pr_eferences"
@@ -3609,8 +3560,6 @@ msgid "Passwords"
 msgstr "Лозинке"
 
 #: src/resources/gtk/passwords-view.ui:28
-#, fuzzy
-#| msgid "Remove all passwords"
 msgid "Remove All Passwords"
 msgstr "Уклони све лозинке"
 
@@ -3647,20 +3596,14 @@ msgid "Use Custom Fonts"
 msgstr "Користи произвољне фонтове"
 
 #: src/resources/gtk/prefs-appearance-page.ui:17
-#, fuzzy
-#| msgid "Sans serif font"
 msgid "Sans Serif Font"
-msgstr "Безсерифни фонт"
+msgstr "Санс серифни фонт"
 
 #: src/resources/gtk/prefs-appearance-page.ui:30
-#, fuzzy
-#| msgid "Serif font"
 msgid "Serif Font"
 msgstr "Серифни фонт"
 
 #: src/resources/gtk/prefs-appearance-page.ui:43
-#, fuzzy
-#| msgid "Monospace font"
 msgid "Monospace Font"
 msgstr "Фонт утврђене ширине"
 
@@ -3715,10 +3658,8 @@ msgid "General"
 msgstr "Опште"
 
 #: src/resources/gtk/prefs-general-page.ui:9
-#, fuzzy
-#| msgid "Web Application"
 msgid "Web App"
-msgstr "Веб програм"
+msgstr "Веб апликација"
 
 #: src/resources/gtk/prefs-general-page.ui:13
 msgid "_Icon"
@@ -3829,11 +3770,10 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "Паме_тно спречавање праћења"
 
 #: src/resources/gtk/prefs-privacy-page.ui:18
-#, fuzzy
-#| msgid "Allow websites to store cookies, databases, and local storage data."
 msgid "Allow websites to store cookies, databases, and local storage data"
 msgstr ""
-"Дозволи веб страницама да чувају колачиће, базе података и локалне податке."
+"Дозволи веб страницама да чувају колачиће, базе података и да чувају податке "
+"локално"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
 msgid "_Website Data Storage"
@@ -3844,10 +3784,8 @@ msgid "Search Suggestions"
 msgstr "Предлози претраге"
 
 #: src/resources/gtk/prefs-privacy-page.ui:30
-#, fuzzy
-#| msgid "Enable search suggestions in the URL entry."
 msgid "Enable search suggestions in the URL entry"
-msgstr "Укључите предлоге претраге у уносу адресе."
+msgstr "Укључите предлоге претраге у поље за унос адресе"
 
 #: src/resources/gtk/prefs-privacy-page.ui:31
 msgid "_Google Search Suggestions"
@@ -3886,16 +3824,12 @@ msgid "Shortcut"
 msgstr "Пречица"
 
 #: src/resources/gtk/search-engine-row.ui:92
-#, fuzzy
-#| msgid ""
-#| "To determine the search address, perform a search using the search engine "
-#| "that you want to add and replace the search term with %s."
 msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s"
 msgstr ""
-"Да бисте утврдили адресу претраге, извршите претрагу користећи погон "
-"претраге који желите да додате и замените термин претраге са „%s“."
+"Да бисте утврдили адресу претраге, извршите претрагу користећи жељни "
+"претраживач и замените термин претраге са „%s“"
 
 #: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
@@ -3907,31 +3841,21 @@ msgid "General"
 msgstr "Опште"
 
 #: src/resources/gtk/shortcuts-dialog.ui:16
-#, fuzzy
-#| msgid "New Window"
 msgctxt "shortcut window"
 msgid "New Window"
 msgstr "Нови прозор"
 
 #: src/resources/gtk/shortcuts-dialog.ui:22
-#, fuzzy
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New Incognito Window"
 msgstr "Нови тајни прозор"
 
 #: src/resources/gtk/shortcuts-dialog.ui:28
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Open file"
 msgctxt "shortcut window"
 msgid "Open File"
 msgstr "Отвори датотеку"
 
 #: src/resources/gtk/shortcuts-dialog.ui:34
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save page"
 msgctxt "shortcut window"
 msgid "Save Page"
 msgstr "Сачувај страницу"
@@ -3939,12 +3863,9 @@ msgstr "Сачувај страницу"
 #: src/resources/gtk/shortcuts-dialog.ui:40
 msgctxt "shortcut window"
 msgid "Take Screenshot"
-msgstr "Снимање екрана"
+msgstr "Направи снимак екрана"
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Print page"
 msgctxt "shortcut window"
 msgid "Print Page"
 msgstr "Штампај страницу"
@@ -3970,9 +3891,6 @@ msgid "Shortcuts"
 msgstr "Пречице"
 
 #: src/resources/gtk/shortcuts-dialog.ui:76
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Show downloads list"
 msgctxt "shortcut window"
 msgid "Show Downloads List"
 msgstr "Прикажи списак преузимања"
@@ -3983,52 +3901,36 @@ msgid "Navigation"
 msgstr "Навигација"
 
 #: src/resources/gtk/shortcuts-dialog.ui:89
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Go to homepage"
 msgctxt "shortcut window"
 msgid "Go to Homepage"
 msgstr "Иди на почетну страницу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:95
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Reload current page"
 msgctxt "shortcut window"
 msgid "Reload Current Page"
 msgstr "Освежи тренутну страницу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:101
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Reload bypassing cache"
 msgctxt "shortcut window"
 msgid "Reload Bypassing Cache"
 msgstr "Поново учитај заобилазећи кеш"
 
 #: src/resources/gtk/shortcuts-dialog.ui:107
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Stop loading current page"
 msgctxt "shortcut window"
 msgid "Stop Loading Current Page"
 msgstr "Заустави учитавање странице"
 
 #: src/resources/gtk/shortcuts-dialog.ui:113
 #: src/resources/gtk/shortcuts-dialog.ui:126
-#, fuzzy
-#| msgid "Go back to the previous page"
 msgctxt "shortcut window"
 msgid "Go Back to Previous Page"
-msgstr "Идите на претходну страницу"
+msgstr "Иди на претходну страницу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:119
 #: src/resources/gtk/shortcuts-dialog.ui:132
-#, fuzzy
-#| msgid "Go forward to the next page"
 msgctxt "shortcut window"
 msgid "Go Forward to Next Page"
-msgstr "Идите на наредну страницу"
+msgstr "Иди на наредну страницу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:141
 msgctxt "shortcut window"
@@ -4036,16 +3938,11 @@ msgid "Tabs"
 msgstr "Језичци"
 
 #: src/resources/gtk/shortcuts-dialog.ui:144
-#, fuzzy
-#| msgid "New Tab"
 msgctxt "shortcut window"
 msgid "New Tab"
 msgstr "Нови језичак"
 
 #: src/resources/gtk/shortcuts-dialog.ui:150
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Close current tab"
 msgctxt "shortcut window"
 msgid "Close Current Tab"
 msgstr "Затворите тренутни језичак"
@@ -4056,36 +3953,24 @@ msgid "Reopen Closed Tab"
 msgstr "Поново отвори затворени језичак"
 
 #: src/resources/gtk/shortcuts-dialog.ui:162
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Go to the next tab"
 msgctxt "shortcut window"
 msgid "Go to Next Tab"
 msgstr "Иди на наредни језичак"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Go to the previous tab"
 msgctxt "shortcut window"
 msgid "Go to Previous Tab"
 msgstr "Иди на претходни језичак"
 
 #: src/resources/gtk/shortcuts-dialog.ui:174
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move current tab to the left"
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Left"
-msgstr "Помери тренутни језичак лево"
+msgstr "Помери тренутни језичак улево"
 
 #: src/resources/gtk/shortcuts-dialog.ui:180
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move current tab to the right"
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Right"
-msgstr "Помери тренутни језичак десно"
+msgstr "Помери тренутни језичак удесно"
 
 #: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
@@ -4093,11 +3978,9 @@ msgid "Duplicate Current Tab"
 msgstr "Дуплирајте тренутни језичак"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
-#, fuzzy
-#| msgid "View open tabs"
 msgctxt "shortcut window"
 msgid "View Open Tabs"
-msgstr "Прегледајте отворене језичке"
+msgstr "Прикажи отворене језичке"
 
 #: src/resources/gtk/shortcuts-dialog.ui:202
 msgctxt "shortcut window"
@@ -4115,50 +3998,34 @@ msgid "Preferences"
 msgstr "Поставке"
 
 #: src/resources/gtk/shortcuts-dialog.ui:217
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Bookmark current page"
 msgctxt "shortcut window"
 msgid "Bookmark Current Page"
 msgstr "Обележи тренутну страницу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:223
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Show bookmarks list"
 msgctxt "shortcut window"
 msgid "Show Bookmarks List"
 msgstr "Прикажи списак обележивача"
 
 #: src/resources/gtk/shortcuts-dialog.ui:229
-#, fuzzy
-#| msgid "Import Bookmarks"
 msgctxt "shortcut window"
 msgid "Import Bookmarks"
 msgstr "Увези обележиваче"
 
 #: src/resources/gtk/shortcuts-dialog.ui:235
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Export bookmarks"
 msgctxt "shortcut window"
 msgid "Export Bookmarks"
-msgstr "Извоз обележивача"
+msgstr "Извези обележиваче"
 
 #: src/resources/gtk/shortcuts-dialog.ui:241
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle caret browsing"
 msgctxt "shortcut window"
 msgid "Toggle Caret Browsing"
 msgstr "Укључи разгледање са показивачем"
 
 #: src/resources/gtk/shortcuts-dialog.ui:251
-#, fuzzy
-#| msgid "Web Application"
 msgctxt "shortcut window"
 msgid "Web App"
-msgstr "Веб програм"
+msgstr "Веб апликација"
 
 #: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
@@ -4171,26 +4038,19 @@ msgid "View"
 msgstr "Преглед"
 
 #: src/resources/gtk/shortcuts-dialog.ui:267
-#, fuzzy
-#| msgid "Zoom In"
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Увећај"
 
 #: src/resources/gtk/shortcuts-dialog.ui:273
-#, fuzzy
-#| msgid "Zoom Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Умањи"
 
 #: src/resources/gtk/shortcuts-dialog.ui:279
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Reset zoom"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
-msgstr "Поништи увећање приказа"
+msgstr "Поништи увећање"
 
 #: src/resources/gtk/shortcuts-dialog.ui:285
 msgctxt "shortcut window"
@@ -4198,9 +4058,6 @@ msgid "Fullscreen"
 msgstr "Постави преко целог екрана"
 
 #: src/resources/gtk/shortcuts-dialog.ui:291
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "View page source"
 msgctxt "shortcut window"
 msgid "View Page Source"
 msgstr "Прикажи изворни код странице"
@@ -4211,8 +4068,6 @@ msgid "Toggle Inspector"
 msgstr "Укључуње инспектора"
 
 #: src/resources/gtk/shortcuts-dialog.ui:303
-#, fuzzy
-#| msgid "Toggle reader mode"
 msgctxt "shortcut window"
 msgid "Toggle Reader Mode"
 msgstr "Режим за читање"
@@ -4253,20 +4108,14 @@ msgid "Select All"
 msgstr "Изабери све"
 
 #: src/resources/gtk/shortcuts-dialog.ui:352
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Select page URL"
 msgctxt "shortcut window"
 msgid "Select Page URL"
 msgstr "Изабери адресу странице"
 
 #: src/resources/gtk/shortcuts-dialog.ui:358
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Search with default search engine"
 msgctxt "shortcut window"
 msgid "Search With Default Search Engine"
-msgstr "Потражи преко подразумеваног претраживача"
+msgstr "Потражи подразумеваним претраживачем"
 
 #: src/resources/gtk/shortcuts-dialog.ui:364
 msgctxt "shortcut window"
@@ -4274,17 +4123,11 @@ msgid "Find"
 msgstr "Проналажење"
 
 #: src/resources/gtk/shortcuts-dialog.ui:370
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Next find result"
 msgctxt "shortcut window"
 msgid "Next Find Result"
 msgstr "Наредни резултат претраге"
 
 #: src/resources/gtk/shortcuts-dialog.ui:376
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Previous find result"
 msgctxt "shortcut window"
 msgid "Previous Find Result"
 msgstr "Претходни резултат претраге"
@@ -4324,14 +4167,10 @@ msgid "URL"
 msgstr "Адреса"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:81
-#, fuzzy
-#| msgid "Add new URL"
 msgid "Add New URL"
-msgstr "Додајте нову адресу"
+msgstr "Додај нову адресу"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:87
-#, fuzzy
-#| msgid "Remove the selected URLs"
 msgid "Remove Selected URLs"
 msgstr "Уклони изабране адресе"
 
@@ -4480,26 +4319,26 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Поново учитај?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Програм „%s“ је спреман за употребу"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Не могу да направим програм „%s“: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "Покрени"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1908
 msgid "Replace Existing Web App?"
 msgstr "Замени постојећу веб апликацију?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1912
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -4507,27 +4346,27 @@ msgstr ""
 "Програм под називом “%s” већ постоји. Ако га замените, преписаћете његов "
 "садржај."
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1917
 msgid "_Replace"
 msgstr "_Замени"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2266
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2270
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2316
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2793
+#: src/window-commands.c:2799
 msgid "Enable Caret Browsing Mode?"
 msgstr "Укључи преглед са показивачем?"
 
-#: src/window-commands.c:2794
+#: src/window-commands.c:2800
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4538,9 +4377,34 @@ msgstr ""
 "листате садржај помоћу тастатуре. Да ли желите да укључите прегледање са "
 "показивачем?"
 
-#: src/window-commands.c:2799
+#: src/window-commands.c:2805
 msgid "_Enable"
 msgstr "_Укључи"
+
+#~ msgid "Enable navigation gestures"
+#~ msgstr "Омогући гестове за навигацију"
+
+#~ msgid "Whether to enable back and forward navigation gestures."
+#~ msgstr "Да ли су омогућени гестови за навигацију напред и назад."
+
+#, c-format
+#~ msgid "The sync secrets for the current sync user are not valid JSON: %s"
+#~ msgstr ""
+#~ "Овлашћења за усаглашавања тренутног корисника нису у исправном ЈСОН "
+#~ "облику: %s"
+
+#, c-format
+#~ msgid "Could not find the sync secrets for the current sync user: %s"
+#~ msgstr "Не могу да нађем овлашћења за усаглашавања тренутног корисника: %s"
+
+#~ msgid "Clear"
+#~ msgstr "Очисти"
+
+#~ msgid "N_ot Now"
+#~ msgstr "Не _сада"
+
+#~ msgid "Touch _Navigation Gestures"
+#~ msgstr "Гестови навигације _додиром"
 
 #~ msgid "Web browser for GNOME"
 #~ msgstr "Веб прегледач за Гном"
@@ -5887,9 +5751,6 @@ msgstr "_Укључи"
 
 #~ msgid "Load Anyway"
 #~ msgstr "Ипак учитај"
-
-#~ msgid "Clear"
-#~ msgstr "Очисти"
 
 #~ msgid "Remove"
 #~ msgstr "Уклони"
