@@ -3284,7 +3284,9 @@ add_default_browser_question (EphyWindow *window)
   g_signal_connect (dialog, "response::yes", G_CALLBACK (set_as_default_browser), NULL);
   g_signal_connect (dialog, "response::no", G_CALLBACK (ignore_default_browser), NULL);
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  /* Ensure the main window is already mapped as otherwise the dialog
+   * might show below the main window */
+  g_idle_add_once ((GSourceOnceFunc)gtk_window_present, dialog);
 }
 
 static gboolean
