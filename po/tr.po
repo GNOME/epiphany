@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-15 15:48+0000\n"
-"PO-Revision-Date: 2024-03-16 08:37+0300\n"
+"POT-Creation-Date: 2024-04-06 16:17+0000\n"
+"PO-Revision-Date: 2024-04-09 02:39+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -538,16 +538,12 @@ msgstr ""
 "etkinleştirilir."
 
 #: data/org.gnome.epiphany.gschema.xml:244
-#, fuzzy
-#| msgid "Enable mouse gestures"
 msgid "Enable navigation gestures"
-msgstr "Fare hareketlerini etkinleştir"
+msgstr "Gezinme hareketlerini etkinleştir"
 
 #: data/org.gnome.epiphany.gschema.xml:245
-#, fuzzy
-#| msgid "Whether to show buttons for navigation in WebApp."
 msgid "Whether to enable back and forward navigation gestures."
-msgstr "WebApp’te gezinim düğmelerinin gösterilip gösterilmeyeceği."
+msgstr "Geri ve ileri gezinme hareketlerinin etkinleştirilme durumu."
 
 #: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last upload directory"
@@ -1130,8 +1126,8 @@ msgstr "%2$s:%3$d üstünde kimlik doğrulama için lütfen %1$s PIN’ini girin
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2798
+#: src/window-commands.c:1243 src/window-commands.c:1918
+#: src/window-commands.c:2806
 msgid "_Cancel"
 msgstr "İ_ptal"
 
@@ -2084,7 +2080,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Depo kimlik bilgileri alınamadı."
 
 #: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:1890
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Eşzamanlamayı sürdürmek için lütfen Firefox Sync’e gidin ve yeniden oturum "
@@ -2106,16 +2102,30 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "İmzalı sertifika alınamadı."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
+#: lib/sync/ephy-sync-service.c:1915
+#, c-format
+msgid "The sync secrets for the current sync user are invalid: %s"
+msgstr "Geçerli eşzamanlama kullanıcısı için eşzamanlama gizleri geçersiz: %s"
+
+#: lib/sync/ephy-sync-service.c:1922
+#, c-format
+msgid "The sync secrets for the current sync user are not valid JSON: %s"
+msgstr ""
+"Geçerli eşzamanlama kullanıcısının eşzamanlama gizleri geçerli bir JSON "
+"değil: %s"
+
+#: lib/sync/ephy-sync-service.c:1949
+#, c-format
+msgid "Could not find the sync secrets for the current sync user: %s"
+msgstr ""
+"Geçerli eşzamanlama kullanıcısı için eşzamanlama gizleri bulunamadı: %s"
+
+#: lib/sync/ephy-sync-service.c:1955
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Giriş yapmış geçerli kullanıcı için eşzamanlama anahtarları bulunamadı."
 
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
-msgid "The sync secrets for the current sync user are invalid."
-msgstr "Şu anki kullanıcının eşzamanlama anahtarı geçersiz."
-
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1999
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2123,29 +2133,29 @@ msgstr ""
 "Eşzamanlama gizleri saklanamadı (giz hizmeti ya da giz kapısı arızalı mı?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2041
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s kullanıcısının eşzamanlama anahtarları"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2071
 msgid "Failed to upload client record."
 msgstr "İstemci kaydı yüklenemedi."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2274
 msgid "Failed to upload crypto/keys record."
 msgstr "Şifreleme/anahtar kaydını yüklenemedi."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2386
 msgid "Failed to retrieve crypto keys."
 msgstr "Şifreleme anahtarı alınamadı."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2440
 msgid "Failed to upload meta/global record."
 msgstr "Üst/genel kayıtları yüklenemedi."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2562
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2153,15 +2163,15 @@ msgstr ""
 "Mozilla hesabınız %d depo sürümünü kullanıyor. Web yalnızca %d sürümünü "
 "destekliyor."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2573
 msgid "Failed to verify storage version."
 msgstr "Depo sürümü doğrulanamadı."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2631
 msgid "Failed to upload device info"
 msgstr "Aygıt bilgisi yüklenemedi"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2707 lib/sync/ephy-sync-service.c:2790
 msgid "Failed to retrieve the Sync Key"
 msgstr "Eşzamanlama anahtarı alınamadı"
 
@@ -2650,7 +2660,7 @@ msgid "Without Sound"
 msgstr "Sessiz"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:647
+#: src/ephy-tab-view.c:650
 msgid "Open a new tab"
 msgstr "Yeni sekme aç"
 
@@ -2814,54 +2824,54 @@ msgstr "Bağlantıyı Yeni Pencerede Aç"
 msgid "Open Link In Incognito Window"
 msgstr "Bağlantıyı Gizli Tarama Penceresinde Aç"
 
-#: src/ephy-window.c:2794
+#: src/ephy-window.c:2797
 msgid "_Ask Later"
 msgstr "_Sonra Sor"
 
-#: src/ephy-window.c:2795 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2798 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Reddet"
 
-#: src/ephy-window.c:2796 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2799 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_İzin Ver"
 
-#: src/ephy-window.c:2998 src/ephy-window.c:4435
+#: src/ephy-window.c:3001 src/ephy-window.c:4432
 msgid "Leave Website?"
 msgstr "Web Sitesinden Çıkılsın Mı?"
 
-#: src/ephy-window.c:2999 src/ephy-window.c:4436 src/window-commands.c:1240
+#: src/ephy-window.c:3002 src/ephy-window.c:4433 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Bir form değiştirildi ve gönderilmedi"
 
-#: src/ephy-window.c:3000 src/ephy-window.c:4437 src/window-commands.c:1244
+#: src/ephy-window.c:3003 src/ephy-window.c:4434 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "Formu _Gözden Çıkar"
 
-#: src/ephy-window.c:3021
+#: src/ephy-window.c:3024
 msgid "Download operation"
 msgstr "İndirme işlemi"
 
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3026
 msgid "Show details"
 msgstr "Ayrıntıları göster"
 
-#: src/ephy-window.c:3025
+#: src/ephy-window.c:3028
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d indirme işlemi etkin"
 
-#: src/ephy-window.c:3266
+#: src/ephy-window.c:3269
 msgid "Set as Default Browser?"
 msgstr "Öntanımlı Tarayıcı Olarak Ayarlansın Mı?"
 
-#: src/ephy-window.c:3268
+#: src/ephy-window.c:3271
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Dış bağlantıları açmak için Webʼi öntanımlı web tarayıcısı olarak kullan"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3273
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2869,55 +2879,55 @@ msgstr ""
 "Dış bağlantıları açmak için Epiphany Teknoloji Ön İzlemesi’ni öntanımlı web "
 "tarayıcısı olarak kullan"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3277
 msgid "_Ask Again Later"
 msgstr "Sonra _Yeniden Sor"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3278
 msgid "_No"
 msgstr "_Hayır"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3279
 msgid "_Yes"
 msgstr "_Evet"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3725
 msgid "Save password?"
 msgstr "Parola kaydedilsin mi?"
 
-#: src/ephy-window.c:3728
+#: src/ephy-window.c:3726
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Parolalar istendiğinde Tercihlerʼden kaldırılabilir"
 
-#: src/ephy-window.c:3730
+#: src/ephy-window.c:3728
 msgid "Not Now"
 msgstr "Şimdi Değil"
 
-#: src/ephy-window.c:3731
+#: src/ephy-window.c:3729
 msgid "Never Save"
 msgstr "Asla Kaydetme"
 
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3730
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/ephy-window.c:4566
+#: src/ephy-window.c:4563
 msgid "Close Multiple Tabs?"
 msgstr "Birden Çok Sekme Kapatılsın Mı?"
 
-#: src/ephy-window.c:4567
+#: src/ephy-window.c:4564
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Bu pencere kapatılırsa tüm açık sekmeler yitirilecektir"
 
-#: src/ephy-window.c:4568
+#: src/ephy-window.c:4565
 msgid "C_lose Tabs"
 msgstr "Sek_meleri Kapat"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4658
 msgid "New tab opened"
 msgstr "Yeni sekme açıldı"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4662
 msgid "Switch"
 msgstr "Geç"
 
@@ -3328,7 +3338,7 @@ msgid "Device name"
 msgstr "Aygıt adı"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:126
-#: src/resources/gtk/password-popover.ui:79
+#: src/resources/gtk/password-popover.ui:94
 msgid "_Save"
 msgstr "_Kaydet"
 
@@ -3378,10 +3388,8 @@ msgid "Reader Mode"
 msgstr "Okuyucu Kipi"
 
 #: src/resources/gtk/location-entry.ui:98
-#, fuzzy
-#| msgid "_Clear All"
 msgid "Clear"
-msgstr "Tümünü Temiz_le"
+msgstr "Temizle"
 
 #: src/resources/gtk/location-entry.ui:111
 msgid "View Available Passwords"
@@ -3547,6 +3555,10 @@ msgstr ""
 #: src/resources/gtk/password-popover.ui:64
 msgid "_Never Save"
 msgstr "_Asla Kaydetme"
+
+#: src/resources/gtk/password-popover.ui:79
+msgid "N_ot Now"
+msgstr "Şimdi _Değil"
 
 #: src/resources/gtk/passwords-view.ui:25
 #: src/resources/gtk/prefs-privacy-page.ui:57
@@ -3734,7 +3746,7 @@ msgstr "Hızla Yeni Sekmelere _Geç"
 
 #: src/resources/gtk/prefs-general-page.ui:213
 msgid "Touch _Navigation Gestures"
-msgstr ""
+msgstr "Dokunma _Gezinme Hareketleri"
 
 #: src/resources/gtk/prefs-general-page.ui:236
 msgid "_Spell Checking"
@@ -4315,26 +4327,26 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Web Sitesi Yeniden Yüklensin Mi?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "“%s” uygulaması kullanılmaya hazır"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1833
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "“%s” uygulaması oluşturulamadı: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1843
 msgid "Launch"
 msgstr "Başlat"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1910
 msgid "Replace Existing Web App?"
 msgstr "Var Olan Web Uygulaması Değiştirilsin Mi?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1914
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -4342,27 +4354,27 @@ msgstr ""
 "“%s” adlı uygulama zaten var. Değiştirme işlemi var olan uygulamanın üzerine "
 "yazacaktır"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1919
 msgid "_Replace"
 msgstr "_Değiştir"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2268
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2272
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2318
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2793
+#: src/window-commands.c:2801
 msgid "Enable Caret Browsing Mode?"
 msgstr "Karet Tarama Kipi Etkinleştirilsin Mi?"
 
-#: src/window-commands.c:2794
+#: src/window-commands.c:2802
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4372,6 +4384,6 @@ msgstr ""
 "web sayfalarına taşınabilir imleç yerleştirir, klavyenizle sayfada "
 "gezinmenizi sağlar. Karet taramayı etkinleştirmek ister misiniz?"
 
-#: src/window-commands.c:2799
+#: src/window-commands.c:2807
 msgid "_Enable"
 msgstr "_Etkinleştir"
