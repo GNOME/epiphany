@@ -849,12 +849,11 @@ session_seems_reasonable (GList *windows)
     for (GList *t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
       const char *url = ((SessionTab *)t->data)->url;
       g_autoptr (GUri) uri = NULL;
-      gboolean sane = FALSE;
 
       /* NULL URLs are possible when an invalid URL is opened by JS.
        * E.g. <script>win = window.open("blah", "WIN");</script>
        */
-      if (url == NULL)
+      if (!url)
         continue;
 
       /* Blank URLs can occur in some situations. Just ignore these, as they
@@ -874,13 +873,11 @@ session_seems_reasonable (GList *windows)
             strcmp (g_uri_get_scheme (uri), "file") == 0 ||
             strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
             strcmp (g_uri_get_scheme (uri), "view-source") == 0)
-          sane = TRUE;
+          continue;
       }
 
-      if (!sane) {
-        g_critical ("Refusing to save session due to invalid URL %s", url);
-        return FALSE;
-      }
+      g_critical ("Refusing to save session due to invalid URL %s", url);
+      return FALSE;
     }
   }
 
