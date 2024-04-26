@@ -1009,7 +1009,7 @@ ephy_session_save_timeout_cb (EphySession *session)
     return G_SOURCE_REMOVE;
   }
 
-  LOG ("ephy_sesion_save");
+  LOG ("ephy_session_save");
 
   if (ephy_shell_get_n_windows (shell) == 0) {
     session_delete (session);
@@ -1645,7 +1645,7 @@ ephy_session_load (EphySession         *session,
   g_assert (EPHY_IS_SESSION (session));
   g_assert (filename);
 
-  LOG ("ephy_sesion_load %s", filename);
+  LOG ("ephy_session_load %s", filename);
 
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
