@@ -677,11 +677,35 @@ save_data_free (SaveData *data)
   g_free (data);
 }
 
+static gboolean
+should_save_url (const char *url)
+{
+  /* NULL URLs are possible when an invalid URL is opened by JS.
+   * E.g. <script>win = window.open("blah", "WIN");</script>
+   */
+  if (!url)
+    return FALSE;
+
+  /* Blank URLs can occur in some situations. Just ignore these, as they
+   * are harmless and not an indicator of a corrupted session.
+   */
+  if (strcmp (url, "") == 0)
+    return FALSE;
+
+  if (g_str_has_prefix (url, "blob:") || g_str_has_prefix (url, "data:"))
+    return FALSE;
+
+  return TRUE;
+}
+
 static int
 write_tab (xmlTextWriterPtr  writer,
            SessionTab       *tab)
 {
   int ret;
+
+  if (!should_save_url (tab->url))
+    return 0;
 
   ret = xmlTextWriterStartElement (writer, (xmlChar *)"embed");
   if (ret < 0)
@@ -851,16 +875,7 @@ session_seems_reasonable (GList *windows)
       g_autoptr (GUri) uri = NULL;
       gboolean sane = FALSE;
 
-      /* NULL URLs are possible when an invalid URL is opened by JS.
-       * E.g. <script>win = window.open("blah", "WIN");</script>
-       */
-      if (url == NULL)
-        continue;
-
-      /* Blank URLs can occur in some situations. Just ignore these, as they
-       * are harmless and not an indicator of a corrupted session.
-       */
-      if (strcmp (url, "") == 0)
+      if (!should_save_url (url))
         continue;
 
       /* Ignore fake about "URLs." */
@@ -870,8 +885,6 @@ session_seems_reasonable (GList *windows)
       uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, NULL);
       if (uri) {
         if (g_uri_get_host (uri) != NULL ||
-            strcmp (g_uri_get_scheme (uri), "blob") == 0 ||
-            strcmp (g_uri_get_scheme (uri), "data") == 0 ||
             strcmp (g_uri_get_scheme (uri), "file") == 0 ||
             strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
             strcmp (g_uri_get_scheme (uri), "view-source") == 0)
