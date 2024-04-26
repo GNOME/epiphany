@@ -845,6 +845,21 @@ save_session_in_thread_finished_cb (GObject      *source_object,
 static gboolean
 session_seems_reasonable (GList *windows)
 {
+  /* The goal here is to check for a *corrupted* session. It's perfectly fine
+   * for the session to contain URLs that cannot actually be saved, including
+   * data, blob, empty, and NULL URLs.
+   *
+   * The most common indicator of session corruption is if it contains an
+   * HTTP/HTTPS URL with no host component, so that's what we're really checking
+   * for here.
+   *
+   * Of course the session is not supposed to become corrupted in the first
+   * place, but it's been known to happen if WebKit or Epiphany is seriously
+   * broken for some reason. If we have never successfully loaded any page, or
+   * any web view has a bad URL, then something has probably gone wrong inside
+   * WebKit. Do not clobber an existing good session file with our new bogus
+   * state. Bug #768250.
+   */
   for (GList *w = windows; w != NULL; w = w->next) {
     for (GList *t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
       const char *url = ((SessionTab *)t->data)->url;
@@ -988,13 +1003,6 @@ ephy_session_save_timeout_cb (EphySession *session)
   if (!session->loaded_page)
     return G_SOURCE_REMOVE;
 
-  /* If we have never successfully loaded any page, or any web view has an
-   * insane URL, then something has probably gone wrong inside WebKit. For
-   * instance, if the web process is nonfunctional, the UI process could have
-   * an invalid URI property. Yes, this would be a WebKit bug, but Epiphany
-   * should be robust to such issues. Do not clobber an existing good session
-   * file with our new bogus state. Bug #768250.
-   */
   data = save_data_new (session);
   if (!session_seems_reasonable (data->windows)) {
     save_data_free (data);
