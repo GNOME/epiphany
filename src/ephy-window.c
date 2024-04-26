@@ -2261,6 +2261,8 @@ decide_policy_cb (WebKitWebView            *web_view,
                   WebKitPolicyDecisionType  decision_type,
                   EphyWindow               *window)
 {
+  const char *uri;
+
   /* Response policy decisions are handled in EphyWebView instead. */
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
       decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
@@ -2269,7 +2271,8 @@ decide_policy_cb (WebKitWebView            *web_view,
   /* We don't want to allow HTTP requests before the adblocker is ready, except
    * for internal Epiphany pages, which should never be delayed.
    */
-  if (!g_str_has_prefix (webkit_web_view_get_uri (web_view), "ephy-about:")) {
+  uri = webkit_web_view_get_uri (web_view);
+  if (uri && !g_str_has_prefix (uri, "ephy-about:")) {
     EphyFiltersManager *filters_manager = ephy_embed_shell_get_filters_manager (ephy_embed_shell_get_default ());
     if (!ephy_filters_manager_get_is_initialized (filters_manager)) {
       /* Queue request while filters initialization is in progress. */
