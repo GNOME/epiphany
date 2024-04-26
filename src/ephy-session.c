@@ -869,6 +869,7 @@ session_seems_reasonable (GList *windows)
       uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, NULL);
       if (uri) {
         if (g_uri_get_host (uri) != NULL ||
+            strcmp (g_uri_get_scheme (uri), "blob") == 0 ||
             strcmp (g_uri_get_scheme (uri), "data") == 0 ||
             strcmp (g_uri_get_scheme (uri), "file") == 0 ||
             strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
