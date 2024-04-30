@@ -38,16 +38,11 @@
       <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Personal Data</property>
         <child>
-          <object class="AdwActionRow">
-            <property name="activatable">True</property>
+          <object class="AdwButtonRow">
             <property name="title" translatable="yes">Clear Website _Data</property>
+            <property name="end-icon-name">go-next-symbolic</property>
             <property name="use_underline">True</property>
             <signal name="activated" handler="on_clear_data_row_activated"/>
-            <child>
-              <object class="GtkImage">
-                <property name="icon_name">go-next-symbolic</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>

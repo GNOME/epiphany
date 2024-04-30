@@ -197,13 +197,10 @@ language_editor_add_activated (GtkWidget *listbox,
 static void
 language_editor_add_function_buttons (PrefsGeneralPage *general_page)
 {
-  GtkWidget *row;
-  GtkWidget *label;
+  GtkWidget *row = adw_button_row_new ();
 
-  row = gtk_list_box_row_new ();
-  label = gtk_label_new (_("Add Language"));
-  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
-  gtk_widget_set_size_request (row, -1, 50);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), _("Add Language"));
+  adw_button_row_set_start_icon_name (ADW_BUTTON_ROW (row), "list-add-symbolic");
 
   gtk_list_box_append (GTK_LIST_BOX (general_page->lang_listbox), row);
 

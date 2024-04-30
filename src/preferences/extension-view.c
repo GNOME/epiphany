@@ -103,9 +103,9 @@ on_remove_confirmed (EphyExtensionView *self)
 }
 
 static void
-on_remove_button_clicked (GtkWidget *box,
-                          GtkWidget *row,
-                          gpointer   user_data)
+on_remove_row_activated (GtkWidget *box,
+                         GtkWidget *row,
+                         gpointer   user_data)
 {
   EphyExtensionView *self = EPHY_EXTENSION_VIEW (user_data);
   GtkWidget *dialog;
@@ -242,7 +242,7 @@ ephy_extension_view_class_init (EphyExtensionViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, homepage_row);
   gtk_widget_class_bind_template_child (widget_class, EphyExtensionView, enabled_row);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_remove_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_homepage_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_toggle_extension_enabled);
 }

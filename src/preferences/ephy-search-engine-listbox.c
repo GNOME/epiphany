@@ -300,13 +300,11 @@ on_add_search_engine_row_clicked_cb (EphySearchEngineListBox *self,
 static GtkWidget *
 create_add_search_engine_row ()
 {
-  GtkWidget *row = gtk_list_box_row_new ();
-  GtkWidget *label = gtk_label_new_with_mnemonic (_("A_dd Search Engine…"));
+  GtkWidget *row = adw_button_row_new ();
 
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), true);
-  gtk_widget_set_size_request (row, -1, 50);
-
-  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), _("A_dd Search Engine"));
+  adw_preferences_row_set_use_underline (ADW_PREFERENCES_ROW (row), true);
+  adw_button_row_set_start_icon_name (ADW_BUTTON_ROW (row), "list-add-symbolic");
 
   return row;
 }
