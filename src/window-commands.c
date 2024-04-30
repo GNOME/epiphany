@@ -1981,6 +1981,11 @@ download_manifest_finished_cb (WebKitDownload            *download,
   manifest_object = json_node_get_object (root);
 
   icons = ephy_json_object_get_array (manifest_object, "icons");
+  if (!icons) {
+    start_fallback (data);
+    return;
+  }
+
   for (guint i = 0; i < json_array_get_length (icons); i++) {
     g_auto (GStrv) size = NULL;
     const char *sizes;
@@ -2009,7 +2014,16 @@ download_manifest_finished_cb (WebKitDownload            *download,
   }
 
   icon = ephy_json_array_get_object (icons, pos);
+  if (!icon) {
+    start_fallback (data);
+    return;
+  }
+
   str = ephy_json_object_get_string (icon, "src");
+  if (!str) {
+    start_fallback (data);
+    return;
+  }
 
   if (ephy_embed_utils_address_has_web_scheme (str))
     uri = g_strdup (str);
