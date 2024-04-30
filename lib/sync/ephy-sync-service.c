@@ -922,6 +922,17 @@ ephy_sync_service_report_sign_in_error (EphySyncService *self,
   self->is_signing_in = FALSE;
 }
 
+static JsonNode *
+json_from_response_body (GBytes  *bytes,
+                         GError **error)
+{
+  gconstpointer data = g_bytes_get_data (bytes, NULL);
+  if (data)
+    return json_from_string (data, error);
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, _("Response body is empty, do you need to install glib-networking?"));
+  return NULL;
+}
+
 static void
 get_storage_credentials_cb (SoupSession *session,
                             SoupMessage *msg,
@@ -948,7 +959,7 @@ get_storage_credentials_cb (SoupSession *session,
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
     goto out_error;
   }
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
@@ -1078,7 +1089,7 @@ get_signed_certificate_cb (SoupSession *session,
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
@@ -1345,7 +1356,7 @@ download_synchronizable_cb (SoupSession *session,
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
     goto out;
   }
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON");
     goto out;
@@ -1637,7 +1648,7 @@ start_batch_upload_cb (SoupSession *session,
     goto out;
   }
 
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out;
@@ -1734,7 +1745,7 @@ sync_collection_cb (SoupSession *session,
                collection, status_code, (const char *)g_bytes_get_data (response_body, NULL));
     goto out_error;
   }
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
@@ -2348,7 +2359,7 @@ get_crypto_keys_cb (SoupSession *session,
     goto out_error;
   }
 
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
@@ -2608,7 +2619,7 @@ upload_fxa_device_cb (SoupSession *session,
     goto out_error;
   }
 
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
@@ -2746,7 +2757,7 @@ get_account_keys_cb (SoupSession *session,
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
-  node = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
