@@ -2028,7 +2028,7 @@ download_manifest_finished_cb (WebKitDownload            *download,
 
   if (ephy_embed_utils_address_has_web_scheme (str))
     uri = g_strdup (str);
-  else if (g_str_has_suffix (uri, "/"))
+  else if (g_str_has_suffix (data->url, "/"))
     uri = g_strdup_printf ("%s%s", data->url, str);
   else
     uri = g_strdup_printf ("%s/%s", data->url, str);
