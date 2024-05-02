@@ -133,14 +133,27 @@
             <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkActionBar" id="regular_action_bar">
-                <child type="end">
-                  <object class="GtkButton" id="clear_all_button">
-                    <property name="use-underline">True</property>
-                    <property name="label" translatable="yes">_Clear All</property>
-                    <signal name="clicked" handler="on_clear_all_button_clicked"/>
+                <child type="center">
+                  <object class="GtkListBox">
+                    <property name="selection-mode">none</property>
+                    <property name="margin-top">9</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin-start">6</property>
                     <style>
-                      <class name="destructive-action"/>
+                      <class name="boxed-list"/>
                     </style>
+                    <child>
+                      <object class="AdwButtonRow" id="clear_all_row">
+                        <property name="title" translatable="yes">_Clear History…</property>
+                        <property name="use-underline">True</property>
+                        <property name="hexpand">True</property>
+                        <signal name="activated" handler="on_clear_all_row_activated"/>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -149,9 +162,12 @@
               <object class="GtkActionBar" id="selection_action_bar">
                 <child type="end">
                   <object class="GtkButton" id="selection_delete_button">
+                    <property name="label" translatable="yes">_Delete</property>
                     <property name="sensitive">False</property>
                     <property name="use_underline">True</property>
-                    <property name="label" translatable="yes">_Delete</property>
+                    <property name="margin-end">15</property>
+                    <property name="margin-top">15</property>
+                    <property name="margin-bottom">15</property>
                     <signal name="clicked" handler="on_selection_delete_button_clicked"/>
                     <style>
                       <class name="destructive-action"/>
@@ -160,9 +176,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="selection_open_button">
+                    <property name="label" translatable="yes">_Open</property>
                     <property name="sensitive">False</property>
                     <property name="use_underline">True</property>
-                    <property name="label" translatable="yes">_Open</property>
+                    <property name="margin-start">15</property>
+                    <property name="margin-top">15</property>
+                    <property name="margin-bottom">15</property>
                     <signal name="clicked" handler="on_selection_open_button_clicked"/>
                   </object>
                 </child>
