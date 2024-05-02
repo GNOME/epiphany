@@ -929,7 +929,7 @@ json_from_response_body (GBytes  *bytes,
   gconstpointer data = g_bytes_get_data (bytes, NULL);
   if (data)
     return json_from_string (data, error);
-  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, _("Response body is empty, do you need to install glib-networking?"));
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "Response body is empty, do you need to install glib-networking?";
   return NULL;
 }
 
