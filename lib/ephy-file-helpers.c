@@ -754,7 +754,7 @@ ephy_file_delete_dir_recursively (const char  *directory,
 
         g_set_error (error, G_IO_ERROR,
                      g_io_error_from_errno (errsv),
-                     "Error removing file %s: %s",
+                     _("Error removing file %s: %s"),
                      file_path, g_strerror (errsv));
         failed = TRUE;
       }
@@ -772,7 +772,7 @@ ephy_file_delete_dir_recursively (const char  *directory,
 
       g_set_error (error, G_IO_ERROR,
                    g_io_error_from_errno (errsv),
-                   "Error removing directory %s: %s",
+                   _("Error removing directory %s: %s"),
                    directory, g_strerror (errsv));
       failed = TRUE;
     }
