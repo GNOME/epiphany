@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-05-02 21:01+0000\n"
-"PO-Revision-Date: 2024-05-02 23:07+0200\n"
+"POT-Creation-Date: 2024-05-03 11:37+0000\n"
+"PO-Revision-Date: 2024-05-03 14:23+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1108,7 +1108,7 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
+#: src/ephy-history-dialog.c:571 src/ephy-window.c:254
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
@@ -2387,8 +2387,7 @@ msgstr ""
 "Potrdilo je veljavno, vendar pa so viri s te strani poslani brez varnostne "
 "zaščite."
 
-#: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:139
-#: src/resources/gtk/passwords-view.ui:27
+#: src/ephy-downloads-popover.c:211 src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Počisti _vse"
 
@@ -2501,9 +2500,9 @@ msgstr "Glavni meni"
 msgid "Stop loading the current page"
 msgstr "Zaustavi nalaganje trenutne strani"
 
-#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1023
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "Ni mogoče spremeniti zgodovine v načinu brez beleženja podatkov."
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1022
+msgid "Unavailable in Incognito Mode"
+msgstr "Ni na voljo v zasebnem načinu"
 
 # G:0 K:1 O:3
 #: src/ephy-history-dialog.c:486
@@ -2521,19 +2520,15 @@ msgid "Clear Browsing History?"
 msgstr "Ali želite počistiti zgodovino brskanja?"
 
 #: src/ephy-history-dialog.c:568
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
-msgstr ""
-"Čiščenje zgodovine brskanja bo povzročilo, da bodo vsi zaznamki iz zgodovine "
-"trajno izbrisani."
+msgid "All links will be permanently deleted"
+msgstr "Vse povezave bodo trajno izbrisane"
 
-#: src/ephy-history-dialog.c:573 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:572 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "P_očisti"
 
-#: src/ephy-history-dialog.c:1026
-msgid "Remove all history"
+#: src/ephy-history-dialog.c:1025
+msgid "Remove All History"
 msgstr "Odstrani celotno zgodovino"
 
 #. Translators: Notification policy for a specific site.
@@ -3174,7 +3169,7 @@ msgstr ""
 "S tem boste počistili vsa krajevno shranjena gesla. Opravila ni mogoče "
 "razveljaviti."
 
-#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:154
+#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:165
 #: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "_Izbriši"
@@ -3517,7 +3512,12 @@ msgstr "Ni zadetkov zgodovine"
 msgid "Visited pages will be listed here"
 msgstr "Obiskane strani bodo izpisane na tem mestu"
 
-#: src/resources/gtk/history-dialog.ui:165
+# G:1 K:0 O:0
+#: src/resources/gtk/history-dialog.ui:148
+msgid "_Clear History…"
+msgstr "Počisti _zgodovino …"
+
+#: src/resources/gtk/history-dialog.ui:179
 msgid "_Open"
 msgstr "_Odpri"
 
