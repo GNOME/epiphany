@@ -1021,32 +1021,32 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
 
   manifest = ephy_web_extension_get_resource (self, "manifest.json", &length);
   if (!manifest) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "manifest.json not found");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("manifest.json not found"));
     return FALSE;
   }
 
   parser = json_parser_new ();
   if (!json_parser_load_from_data (parser, (const char *)manifest, length, &local_error)) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Failed to parse manifest.json: %s", local_error->message);
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("Failed to parse manifest.json: %s"), local_error->message);
     return FALSE;
   }
 
   root = json_parser_get_root (parser);
   if (!root || json_node_get_node_type (root) != JSON_NODE_OBJECT) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "manifest.json invalid");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("manifest.json invalid"));
     return FALSE;
   }
 
   root_object = json_node_get_object (root);
   if (!root_object) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "manifest.json invalid");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("manifest.json invalid"));
     return FALSE;
   }
 
   self->manifest = g_strndup ((char *)manifest, length);
   self->manifest_version = ephy_json_object_get_int (root_object, "manifest_version");
   if (self->manifest_version != 2) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Only manifest_version 2 is supported");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("Only manifest_version 2 is supported"));
     return FALSE;
   }
 
@@ -1063,7 +1063,7 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
     self->content_security_policy = g_strdup ("script-src 'self'; object-src 'self';");
 
   if (!*self->version || !*self->name) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, "Missing name or version");
+    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("Missing name or version"));
     return FALSE;
   }
 
