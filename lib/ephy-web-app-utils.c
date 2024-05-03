@@ -788,23 +788,22 @@ ephy_web_application_free_application_list (GList *list)
  * when running under Flatpak, because we return it over D-Bus in the
  * WebAppProvider service.
  *
- * Returns: (transfer-full): a %NULL-terminated array of strings
+ * Returns: (transfer-full): a %NULL-terminated array of strings, which may be empty
  **/
 char **
 ephy_web_application_get_desktop_id_list (void)
 {
   g_autoptr (GFileEnumerator) children = NULL;
   g_autoptr (GFile) parent_directory = NULL;
-  GPtrArray *desktop_file_ids;
+  g_autoptr (GPtrArray) desktop_file_ids = g_ptr_array_new_with_free_func (g_free);
 
   parent_directory = g_file_new_for_path (g_get_user_data_dir ());
   children = g_file_enumerate_children (parent_directory,
                                         "standard::name",
                                         0, NULL, NULL);
   if (!children)
-    return NULL;
+    goto out;
 
-  desktop_file_ids = g_ptr_array_new_with_free_func (g_free);
   for (;;) {
     g_autoptr (GFileInfo) info = g_file_enumerator_next_file (children, NULL, NULL);
     const char *name;
@@ -820,9 +819,10 @@ ephy_web_application_get_desktop_id_list (void)
     }
   }
 
+out:
   g_ptr_array_add (desktop_file_ids, NULL);
 
-  return (char **)g_ptr_array_free (desktop_file_ids, FALSE);
+  return (char **)g_ptr_array_free (g_steal_pointer (&desktop_file_ids), FALSE);
 }
 
 /**
