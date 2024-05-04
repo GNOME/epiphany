@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-05-03 13:14+0000\n"
-"PO-Revision-Date: 2024-05-04 04:40+0330\n"
+"POT-Creation-Date: 2024-05-04 01:12+0000\n"
+"PO-Revision-Date: 2024-05-04 04:46+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6 data/org.gnome.Epiphany.desktop.in.in:3
 #: embed/ephy-about-handler.c:205 embed/ephy-about-handler.c:237 src/ephy-main.c:103
-#: src/ephy-main.c:279 src/ephy-main.c:432 src/window-commands.c:1066
+#: src/ephy-main.c:279 src/ephy-main.c:432 src/window-commands.c:1063
 msgid "Web"
 msgstr "وب"
 
@@ -51,7 +51,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "وب اغلب با نام رمزی‌اش، اپیفنی مورد اشاره قرار می‌گیرد."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1076
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1073
 msgid "The GNOME Project"
 msgstr "پروژهٔ گنوم"
 
@@ -377,7 +377,7 @@ msgstr "کدگذاری پیش‌گزیده"
 msgid "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "رمزگذاری پیش‌گزیده. مقدارهای مجاز، آن‌هاییند که WebKitGTK می‌تواند بفهمد."
 
-#: data/org.gnome.epiphany.gschema.xml:190 src/resources/gtk/prefs-general-page.ui:215
+#: data/org.gnome.epiphany.gschema.xml:190 src/resources/gtk/prefs-general-page.ui:221
 msgid "Languages"
 msgstr "زبان‌ها"
 
@@ -482,26 +482,34 @@ msgstr ""
 "موشی + ژست‌ها فعّال می‌شوند."
 
 #: data/org.gnome.epiphany.gschema.xml:244
+msgid "Enable navigation gestures"
+msgstr "به کار انداختن حرکت‌های ناوبری"
+
+#: data/org.gnome.epiphany.gschema.xml:245
+msgid "Whether to enable back and forward navigation gestures."
+msgstr "این که حرکت‌های ناوبری بازگشت و پیش روی به کار بیفتند یا نه."
+
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last upload directory"
 msgstr "آخرین شاخهٔ بارگذاری"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "Keep track of last upload directory"
 msgstr "نگه داشتن آمار آخرین شاخهٔ بارگذاری"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Last download directory"
 msgstr "آخرین شاخهٔ بارگیری"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:255
 msgid "Keep track of last download directory"
 msgstr "نگه داشتن آمار آخرین شاخهٔ بارگیری"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Hardware acceleration policy"
 msgstr "سیاست شتاب‌دهی سخت‌افزاری"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:260
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and “never”. "
 "Hardware acceleration may be required to achieve acceptable performance on embedded "
@@ -513,46 +521,46 @@ msgstr ""
 "باشد: ولی نیازمندی‌های استفادهٔ حافظه را افزایش داده و می‌تواند مشکلات راه‌انداز گرافیکی "
 "وابسته به سخت‌افزار شدیدی بروز دهد."
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid "Always ask for download directory"
 msgstr "همیشه شاخهٔ بارگیری پرسیده شود"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:265
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "این که برای هر بارگیری یک گفت‌وگوی گزینش شاخه نشان داده شود."
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Enable immediately switch to new open tab"
 msgstr "به کار انداختن تعویض خودکار به زبانهٔ تازه‌گشوده"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:270
 msgid "Whether to automatically switch to a new open tab."
 msgstr "این که به صورت خودکار به زبانه‌ای تازه‌گشوده تعویض شود یا نه."
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid "Enable WebExtensions"
 msgstr "به کار انداختن افزونه‌های وب"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:275
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
 "این که افزونه‌ّای وب به کار بیفتند. افزونهٔ وب سامانه‌ای مستقل از مرورگر برای افزونه‌هاست."
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid "Active WebExtensions"
 msgstr "افزونه‌های وب فعّال"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Indicates which WebExtensions are set to active."
 msgstr "نشان می‌دهد کدام افزونه‌های وب به فعّال تنظیم شده‌اند."
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:284
 msgid "Show developer actions"
 msgstr "نمایش کنش‌های توسعه‌دهنده"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page Source "
 "and Inspect Element actions."
@@ -560,44 +568,44 @@ msgstr ""
 "این که کنش‌های فهرست بافتاری توسعه‌دهنده نشان داده شود یا نه. این کار اجازهٔ استفاده از "
 "کنش‌های بازرسی عنصر و مبدأ صفحه را می‌دهد."
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid "Web application additional URLs"
 msgstr "نشانی‌های اضافی کارهٔ وب"
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "The list of URLs that should be opened by the web application"
 msgstr "سیاههٔ نشانی‌هایی که باید با کارهٔ وب گشوده شوند"
 
-#: data/org.gnome.epiphany.gschema.xml:291
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "Show navigation buttons in WebApp"
 msgstr "نمایش دکمه‌های ناوبری در کاره‌ٔ وب"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "این که دکمه‌های ناوبری در کارهٔ وب نشان داده شوند."
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid "Run in background"
 msgstr "اجرا در پس‌زمینه"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid ""
 "If enabled, application continues running in the background after closing the window."
 msgstr "اگر به کار بیفتد برنامه پس از بستن پنجره در پس‌زمینه به اجرا ادامه می‌دهد."
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:306
 msgid "WebApp is system-wide"
 msgstr "کارهٔ وب بر کل سامانه گسترده است"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "If enabled, application cannot be edited or removed."
 msgstr "اگر به کار بیفتد برنامه نمی‌تواند ویرایش یا برداشته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The downloads folder"
 msgstr "پوشهٔ بارگیری‌ها"
 
-#: data/org.gnome.epiphany.gschema.xml:309
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the default "
 "downloads folder, or “Desktop” to use the desktop folder."
@@ -605,39 +613,39 @@ msgstr ""
 "مسیر شاخهٔ بارگیری پرونده‌ها؛ یا Downloads برای استفاده از شاخهٔ پیش‌گزیدهٔ بارگیری‌ها، یا "
 "Desktop برای استفاده از شاخهٔ میزکار."
 
-#: data/org.gnome.epiphany.gschema.xml:316
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "Window position"
 msgstr "موقعیت پنجره"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid ""
 "The position to use for a new window that is not restored from a previous session."
 msgstr "موقعیت استفاده شده برای پنجرهٔ جدیدی که از نشست پیشین بازگردانده نشده."
 
-#: data/org.gnome.epiphany.gschema.xml:321
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "Window size"
 msgstr "اندازهٔ پنجره"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "The size to use for a new window that is not restored from a previous session."
 msgstr "اندازهٔ استفاده شده برای پنجرهٔ جدیدی که از نشست پیشین بازگردانده نشده."
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:331
 msgid "Is maximized"
 msgstr "بیشینه است"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
 "این که پنجره‌ای جدید که از نشستی پیشین بازگردانده نشده باید از ابتدا بیشینه باشد."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Disable forward and back buttons"
 msgstr "از کار انداختن دکمه‌های پیشروی و بازگشت"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users from "
 "accessing immediate browser history"
@@ -645,167 +653,167 @@ msgstr ""
 "اگر روی true تنظیم شود دکمه‌های پیس‌روی و بازگشت از کار افتاده تا از دسترسی کاربران به "
 "تاریخچهٔ مرور لحظه‌ای پیش‌گیری شود"
 
-#: data/org.gnome.epiphany.gschema.xml:361
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "Firefox Sync Token Server URL"
 msgstr "نشانی کارساز ژتون هم‌گام سازی فایرفاکس"
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "URL to a custom Firefox Sync token server."
 msgstr "نشانی یک کارساز سفارشی هم‌گام سازی فایرفاکس."
 
-#: data/org.gnome.epiphany.gschema.xml:366
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "Firefox Sync Accounts Server URL"
 msgstr "نشانی کارساز حساب‌های هم‌گام سازی فایرفاکس"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "نشانی یک کارساز سفارشی حساب‌های هم‌گام سازی فایرفاکس."
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "Currently signed in sync user"
 msgstr "اکنون وارد هم‌گام سازی کاربر شده"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s servers."
 msgstr ""
 "رایانامهٔ پیوسته به حساب موزیلایی که برای هم‌گام سازی با کارسازهای موزیلا استفاده "
 "می‌شود."
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "Last sync timestamp"
 msgstr "آخرین برچسب‌زمانی همگام‌سازی"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "زمان یونیکسی آخرین هم‌گام سازی به ثانیه."
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "Sync device ID"
 msgstr "نام افزارهٔ همگام‌سازی"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "The sync device ID of the current device."
 msgstr "شناسهٔ افزارهٔ همگام‌سازی افزارهٔ کنونی."
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid "Sync device name"
 msgstr "نام افزارهٔ همگام‌سازی"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "The sync device name of the current device."
 msgstr "نام افزارهٔ همگام‌سازی افزارهٔ کنونی."
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "The sync frequency in minutes"
 msgstr "بسامد هم‌گام سازی به دقیقه"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "The number of minutes between two consecutive syncs."
 msgstr "تعداد دقایق بین دو هم‌گام سازی پیاپی."
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "Sync data with Firefox"
 msgstr "هم‌گام سازی داده‌ها با فایرفاکس"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE otherwise."
 msgstr ""
 "در صورتی که مجموعه‌های افی باید با مجموعه‌های فایرفاکس هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid "Enable bookmarks sync"
 msgstr "به کار انداختن همگام‌سازی نشانک"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "در صورتی که مجموعه‌های نشانک باید هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid "Bookmarks sync timestamp"
 msgstr "برچسب‌زمانی همگام‌سازی نشانک‌ها"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "برچسب زمانی که آخرین هم‌گام سازی نشانک‌ها انجام شده."
 
-#: data/org.gnome.epiphany.gschema.xml:411 data/org.gnome.epiphany.gschema.xml:426
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:416 data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "Initial sync or normal sync"
 msgstr "هم‌گام سازی نخستین یا معمولی"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE otherwise."
 msgstr ""
 "در صورتی که لازم است مجموعه‌های نشانک برای نخستین بار هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid "Enable passwords sync"
 msgstr "به کار انداختن همگام‌سازی گذرواژه"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "در صورتی که مجموعه‌های گذرواژه باید هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid "Passwords sync timestamp"
 msgstr "برچسب‌زمانی همگام‌سازی گذرواژه‌ها"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:427
 msgid "The timestamp at which last passwords sync was made."
 msgstr "برچسب زمانی که آخرین هم‌گام سازی گذرواژه‌ها انجام شده."
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE otherwise."
 msgstr ""
 "در صورتی که لازم است مجموعه‌های گذرواژه برای نخستین بار هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid "Enable history sync"
 msgstr "به کار انداختن همگام‌سازی تاریخچه"
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "در صورتی که مجموعه‌های تاریخچه باید هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "History sync timestamp"
 msgstr "برچسب‌زمانی همگام‌سازی تاریخچه"
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:442
 msgid "The timestamp at which last history sync was made."
 msgstr "برچسب زمانی که آخرین هم‌گام سازی تاریخچه انجام شده."
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE otherwise."
 msgstr ""
 "در صورتی که لازم است مجموعه‌های تاریخچه برای نخستین بار هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:451
 msgid "Enable open tabs sync"
 msgstr "به کار انداختن همگام‌سازی زبانه‌های باز"
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "در صورتی که مجموعه‌های زبانه‌های باز باید هم‌گام شوند TRUE وگرنه FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:456
 msgid "Open tabs sync timestamp"
 msgstr "برچسب‌زمانی همگام‌سازی زبانه‌های باز"
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "برچسب زمانی که آخرین هم‌گام سازی زبانه‌های باز انجام شده."
 
-#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ صدابَر برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:464
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid ""
 "This option is used to save whether a given host has been given permission to access "
 "the user’s microphone. The “undecided” default means the browser needs to ask the "
@@ -816,11 +824,11 @@ msgstr ""
 "نه استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow "
 "و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:468
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid "Decision to apply when geolocation permission is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ موقعیت مکانی برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:469
+#: data/org.gnome.epiphany.gschema.xml:474
 msgid ""
 "This option is used to save whether a given host has been given permission to access "
 "the user’s location. The “undecided” default means the browser needs to ask the user "
@@ -831,11 +839,11 @@ msgstr ""
 "نه استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow "
 "و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid "Decision to apply when notification permission is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ آگاهی برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
 "This option is used to save whether a given host has been given permission to show "
 "notifications. The “undecided” default means the browser needs to ask the user for "
@@ -846,11 +854,11 @@ msgstr ""
 "استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow و "
 "deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid "Decision to apply when save password permission is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ ذخیرهٔ گذراژه برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "This option is used to save whether a given host has been given permission to save "
 "passwords. The “undecided” default means the browser needs to ask the user for "
@@ -861,11 +869,11 @@ msgstr ""
 "استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow و "
 "deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ دوربین برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "This option is used to save whether a given host has been given permission to access "
 "the user’s webcam. The “undecided” default means the browser needs to ask the user "
@@ -876,11 +884,11 @@ msgstr ""
 "نه استفاده می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow "
 "و deny می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid "Decision to apply when advertisement permission is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ تبلیغ برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "This option is used to save whether a given host has been given permission to allow "
 "advertisements. The “undecided” default means the browser global setting is used, "
@@ -890,11 +898,11 @@ msgstr ""
 "می‌شود. پیش‌گزیدهٔ undecided یعنی مرورگر باید برای اجازه درخواست کند و allow و deny "
 "می‌گوید که در صورت درخواست، تصمیم به صورت خودکار گرفته شود."
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:498
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr "تصمیم اعمال شده هنگام درخواست اجازهٔ پخش خودکار برای این میزبان"
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:499
 msgid ""
 "This option is used to save whether a given host has been given permission to "
 "autoplay. The “undecided” default means to allow autoplay of muted media, while "
@@ -918,7 +926,7 @@ msgstr "نسخه %s"
 msgid "About Web"
 msgstr "دربارهٔ وب"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1068
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1065
 msgid "Epiphany Technology Preview"
 msgstr "پیش‌نمایش فنی اپیفنی"
 
@@ -1009,12 +1017,12 @@ msgstr "لطفاً پینی برای هویت‌سنجی %s روی %s وارد �
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
+#: src/ephy-history-dialog.c:571 src/ephy-window.c:254
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117 src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
-#: src/window-commands.c:577 src/window-commands.c:831 src/window-commands.c:1243
-#: src/window-commands.c:1916 src/window-commands.c:2818
+#: src/window-commands.c:577 src/window-commands.c:831 src/window-commands.c:1240
+#: src/window-commands.c:1917 src/window-commands.c:2819
 msgid "_Cancel"
 msgstr "_لغو"
 
@@ -1041,7 +1049,7 @@ msgstr "پایگاه وب %s: %Id درخواست که گواهینامهٔ هو�
 msgid "_Select"
 msgstr "_گزینش"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:556
+#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "گزینش یک شاخه"
 
@@ -1974,57 +1982,68 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "شکست در گرفتن اعتبارنامهٔ امضاشده."
 
-#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
-msgid "The sync secrets for the current sync user are invalid."
-msgstr "رمزهای همگام‌سازی برای کاربر کنونی همگام‌سازی نامعتبرند."
+#: lib/sync/ephy-sync-service.c:1926
+#, c-format
+msgid "The sync secrets for the current sync user are invalid: %s"
+msgstr "رمزهای همگام‌سازی برای کاربر کنونی همگام‌سازی نامعتبرند: %s"
 
-#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
+#: lib/sync/ephy-sync-service.c:1933
+#, c-format
+msgid "The sync secrets for the current sync user are not valid JSON: %s"
+msgstr "رمزهای همگام‌سازی برای کاربر کنونی همگام‌سازی JSON معتبری نیستند: %s"
+
+#: lib/sync/ephy-sync-service.c:1960
+#, c-format
+msgid "Could not find the sync secrets for the current sync user: %s"
+msgstr "نتواسنت رمزهای همگام‌سازی را برای کاربر کنونی همگام‌سازی بیابد: %s"
+
+#: lib/sync/ephy-sync-service.c:1966
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "نمی‌توان رمزهای همگام‌سازی را برای کاربر کنونی یافت."
 
-#: lib/sync/ephy-sync-service.c:2007
+#: lib/sync/ephy-sync-service.c:2010
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal broken?): "
 msgstr "شکست در ذخیرهٔ رمزهای هم‌رسانی (آیا خدمت یا درگاه رمز خراب است؟): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2049
+#: lib/sync/ephy-sync-service.c:2052
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "رمزهای همگام‌سازی %s"
 
-#: lib/sync/ephy-sync-service.c:2079
+#: lib/sync/ephy-sync-service.c:2082
 msgid "Failed to upload client record."
 msgstr "شکست در بازگذاری رکورد کارخواه."
 
-#: lib/sync/ephy-sync-service.c:2282
+#: lib/sync/ephy-sync-service.c:2285
 msgid "Failed to upload crypto/keys record."
 msgstr "شکست در بارگذاری رکورد crypto/keys."
 
-#: lib/sync/ephy-sync-service.c:2394
+#: lib/sync/ephy-sync-service.c:2397
 msgid "Failed to retrieve crypto keys."
 msgstr "شکست در دیافت کلیدهای رمزنگاری."
 
-#: lib/sync/ephy-sync-service.c:2448
+#: lib/sync/ephy-sync-service.c:2451
 msgid "Failed to upload meta/global record."
 msgstr "شکست در بارگذاری رکورد meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2570
+#: lib/sync/ephy-sync-service.c:2573
 #, c-format
 msgid "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 "حساب موزیلایتان از نگارش %Id استفاده می‌کند. وب فقط از نگارش %Id پشتیبانی می‌کند."
 
-#: lib/sync/ephy-sync-service.c:2581
+#: lib/sync/ephy-sync-service.c:2584
 msgid "Failed to verify storage version."
 msgstr "شکست در تأیید نگارش ذخیره‌سازی."
 
-#: lib/sync/ephy-sync-service.c:2639
+#: lib/sync/ephy-sync-service.c:2642
 msgid "Failed to upload device info"
 msgstr "شکست در بارگذاری اطّلاعات افزاره"
 
-#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
+#: lib/sync/ephy-sync-service.c:2718 lib/sync/ephy-sync-service.c:2801
 msgid "Failed to retrieve the Sync Key"
 msgstr "شکست در دیافت کلید همگام‌سازی"
 
@@ -2093,12 +2112,12 @@ msgid "Save Media As"
 msgstr "ذخیرهٔ رسانه به عنوان"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1788
 msgid "Bookmark Page"
 msgstr "نشانک‌گذاری صفحه"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1796
 msgid "Edit Bookmark"
 msgstr "ویرایش نشانک"
 
@@ -2152,8 +2171,7 @@ msgid ""
 "This certificate is valid. However, resources on this page were sent insecurely."
 msgstr "این گواهی معتبر است. هرچند، منابع روی این صفحه به صورت امن ارسال نشده‌اند."
 
-#: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:139
-#: src/resources/gtk/passwords-view.ui:27
+#: src/ephy-downloads-popover.c:211 src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "_‌پاک کردن همه"
 
@@ -2252,9 +2270,9 @@ msgstr "فهرست اصلی"
 msgid "Stop loading the current page"
 msgstr "توقف بار کردن صفحهٔ کنونی"
 
-#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1023
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "در حالت ناشناس نمی‌توان تاریخچه را دستکاری کرد."
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1022
+msgid "Unavailable in Incognito Mode"
+msgstr "ناموجود در حالت _ناشناس"
 
 #: src/ephy-history-dialog.c:486
 msgid "Remove the selected pages from history"
@@ -2269,40 +2287,39 @@ msgid "Clear Browsing History?"
 msgstr "پاک سازی تاریخچهٔ مرور؟"
 
 #: src/ephy-history-dialog.c:568
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently deleted."
-msgstr "پاک کردن تاریخچهٔ مرور سبب خواهد شد همهٔ پیوندهای تاریخچه برای همیشه حذف شوند."
+msgid "All links will be permanently deleted"
+msgstr "همهٔ پیوندها برای همیشه حذف خواهند شد"
 
-#: src/ephy-history-dialog.c:573 src/resources/gtk/location-entry.ui:296
+#: src/ephy-history-dialog.c:572 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "_پاک کردن"
 
-#: src/ephy-history-dialog.c:1026
-msgid "Remove all history"
-msgstr "برداشتن تمام تاریخچه"
+#: src/ephy-history-dialog.c:1025
+msgid "Remove All History"
+msgstr "برداشتن همهٔ تاریخچه"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1832 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "درخواست آگاهی"
 
-#: src/ephy-location-entry.c:1809
+#: src/ephy-location-entry.c:1836
 msgid "Camera Request"
 msgstr "درخواست دوربین"
 
-#: src/ephy-location-entry.c:1813
+#: src/ephy-location-entry.c:1840
 msgid "Microphone Request"
 msgstr "درخواست میکروفون"
 
-#: src/ephy-location-entry.c:1817
+#: src/ephy-location-entry.c:1844
 msgid "Location Request"
 msgstr "درخواست مکان"
 
-#: src/ephy-location-entry.c:1821
+#: src/ephy-location-entry.c:1848
 msgid "Webcam and Microphone Request"
 msgstr "درخواست وبکم و میکروفون"
 
-#: src/ephy-location-entry.c:1825
+#: src/ephy-location-entry.c:1852
 msgid "Permission Request"
 msgstr "درخواست اجازه"
 
@@ -2509,12 +2526,12 @@ msgid "Without Sound"
 msgstr "بدون صدا"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:647
+#: src/ephy-tab-view.c:650
 msgid "Open a new tab"
 msgstr "گشودن زبانه‌ای جدید"
 
 #. Undo, redo.
-#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "بر_گردان"
 
@@ -2523,15 +2540,15 @@ msgid "Re_do"
 msgstr "دو_باره"
 
 #. Edit.
-#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "_بریدن"
 
-#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "_جای‌گذاری"
 
@@ -2539,7 +2556,7 @@ msgstr "_جای‌گذاری"
 msgid "_Paste Text Only"
 msgstr "فقط _چسباندن متن"
 
-#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:313
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -2685,15 +2702,15 @@ msgstr "_رد"
 msgid "_Allow"
 msgstr "_اجازه"
 
-#: src/ephy-window.c:3004 src/ephy-window.c:4439
+#: src/ephy-window.c:3004 src/ephy-window.c:4437
 msgid "Leave Website?"
 msgstr "ترک پایگاه؟"
 
-#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4438 src/window-commands.c:1237
 msgid "A form was modified and has not been submitted"
 msgstr "فرمی تغییر داده و ثبت نشده"
 
-#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4439 src/window-commands.c:1241
 msgid "_Discard Form"
 msgstr "_دور انداختن فرم"
 
@@ -2739,43 +2756,43 @@ msgstr "_خیر"
 msgid "_Yes"
 msgstr "_بله"
 
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3730
 msgid "Save password?"
 msgstr "ذخیرهٔ گذرواژه؟"
 
-#: src/ephy-window.c:3733
+#: src/ephy-window.c:3731
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "گذرواژه‌ها می‌توانند هر زمان در ترجیحات برداشته شوند"
 
-#: src/ephy-window.c:3735
+#: src/ephy-window.c:3733
 msgid "Not Now"
 msgstr "اکنون نه"
 
-#: src/ephy-window.c:3736
+#: src/ephy-window.c:3734
 msgid "Never Save"
 msgstr "هرگز ذخیره نشود"
 
-#: src/ephy-window.c:3737
+#: src/ephy-window.c:3735
 msgid "Save"
 msgstr "ذخیره"
 
-#: src/ephy-window.c:4570
+#: src/ephy-window.c:4568
 msgid "Close Multiple Tabs?"
 msgstr "بستن چندین زبانه؟"
 
-#: src/ephy-window.c:4571
+#: src/ephy-window.c:4569
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "اگر این پنجره بسته شود، تمامی زبانه‌های باز از دست می‌روند"
 
-#: src/ephy-window.c:4572
+#: src/ephy-window.c:4570
 msgid "C_lose Tabs"
 msgstr "_بستن زبانه‌ها"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4663
 msgid "New tab opened"
 msgstr "زبانهٔ جدید گشوده شد"
 
-#: src/ephy-window.c:4669
+#: src/ephy-window.c:4667
 msgid "Switch"
 msgstr "تعویض"
 
@@ -2811,9 +2828,9 @@ msgstr "داده‌های جلوگیری از ردیابی هوشمند"
 msgid "New search engine"
 msgstr "موتور جست‌وجوی جدید"
 
-#: src/preferences/ephy-search-engine-listbox.c:304
-msgid "A_dd Search Engine…"
-msgstr "افزودن _موتور جست‌وجو…"
+#: src/preferences/ephy-search-engine-listbox.c:305
+msgid "A_dd Search Engine"
+msgstr "افزودن _موتور جست‌وجو"
 
 #: src/preferences/ephy-search-engine-row.c:114
 msgid "This field is required"
@@ -2863,7 +2880,7 @@ msgstr "نامی لازم است"
 msgid "This search engine already exists"
 msgstr "این موتور جست‌وجو از پیش موجود است"
 
-#: src/preferences/extension-view.c:114 src/resources/gtk/extension-view.ui:95
+#: src/preferences/extension-view.c:114
 msgid "Remove Extension"
 msgstr "برداشتن افزونه"
 
@@ -2884,8 +2901,8 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "این کار همهٔ گذرواژه‌های ذخیره‌شده به صورت محلّی را پاک‌سازی کرده و قابل بازگردانی نیست."
 
-#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:154
-#: src/resources/gtk/location-entry.ui:290
+#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:165
+#: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2930,18 +2947,18 @@ msgstr "تاریک"
 msgid "Open File (manifest.json/xpi)"
 msgstr "گشودن پرونده (manifest.json/xpi)"
 
-#: src/preferences/prefs-general-page.c:203
+#: src/preferences/prefs-general-page.c:202 src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "اضافه کردن زبان"
 
-#: src/preferences/prefs-general-page.c:365 src/preferences/prefs-general-page.c:521
+#: src/preferences/prefs-general-page.c:363 src/preferences/prefs-general-page.c:519
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "زبان سیستم (%s)"
 msgstr[1] "زبان‌های سیستم (%s)"
 
-#: src/preferences/prefs-general-page.c:730
+#: src/preferences/prefs-general-page.c:728
 msgid "Supported Image Files"
 msgstr "پرونده‌های تصویری پشتیبانی‌شده"
 
@@ -3118,6 +3135,10 @@ msgstr "نگارش"
 msgid "Enabled"
 msgstr "فعال شده"
 
+#: src/resources/gtk/extension-view.ui:87
+msgid "Remove Extension…"
+msgstr "برداشتن افزونه…"
+
 #: src/resources/gtk/firefox-sync-dialog.ui:9
 msgid "Firefox Sync"
 msgstr "همگام‌سازی فایرفاکس"
@@ -3179,7 +3200,7 @@ msgid "Device name"
 msgstr "نام دستگاه"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:126
-#: src/resources/gtk/password-popover.ui:79
+#: src/resources/gtk/password-popover.ui:94
 msgid "_Save"
 msgstr "_ذخیره"
 
@@ -3207,7 +3228,11 @@ msgstr "هیچ تاریخچه‌ای پیدا نشد"
 msgid "Visited pages will be listed here"
 msgstr "صفحه‌های مشاهده‌شده این‌جا سیاهه خواهند شد"
 
-#: src/resources/gtk/history-dialog.ui:165
+#: src/resources/gtk/history-dialog.ui:148
+msgid "_Clear History…"
+msgstr "_پاک‌سازی تاریخچه…"
+
+#: src/resources/gtk/history-dialog.ui:179
 msgid "_Open"
 msgstr "_گشودن"
 
@@ -3228,14 +3253,18 @@ msgid "Reader Mode"
 msgstr "حالت خواندن"
 
 #: src/resources/gtk/location-entry.ui:98
+msgid "Clear"
+msgstr "پاک‌سازی"
+
+#: src/resources/gtk/location-entry.ui:111
 msgid "View Available Passwords"
 msgstr "دیدن گذرواژه‌های موجود"
 
-#: src/resources/gtk/location-entry.ui:268
+#: src/resources/gtk/location-entry.ui:281
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
-#: src/resources/gtk/location-entry.ui:286
+#: src/resources/gtk/location-entry.ui:299
 msgid "Paste and _Go"
 msgstr "جای‌گذاری و _گشودن"
 
@@ -3387,7 +3416,11 @@ msgstr ""
 msgid "_Never Save"
 msgstr "_هرگز ذخیره نشود"
 
-#: src/resources/gtk/passwords-view.ui:25 src/resources/gtk/prefs-privacy-page.ui:57
+#: src/resources/gtk/password-popover.ui:79
+msgid "N_ot Now"
+msgstr "ا_کنون نه"
+
+#: src/resources/gtk/passwords-view.ui:25 src/resources/gtk/prefs-privacy-page.ui:52
 msgid "Passwords"
 msgstr "گذرواژه‌ها"
 
@@ -3567,25 +3600,25 @@ msgstr "_حرکت‌های موشی"
 msgid "S_witch Immediately to New Tabs"
 msgstr "_تعویض فوری به زبانه‌های جدید"
 
-#: src/resources/gtk/prefs-general-page.ui:230
+#: src/resources/gtk/prefs-general-page.ui:213
+msgid "Touch _Navigation Gestures"
+msgstr "حرکت‌های _ناوبری لمسی"
+
+#: src/resources/gtk/prefs-general-page.ui:236
 msgid "_Spell Checking"
 msgstr "_خطایاب املایی"
 
-#: src/resources/gtk/prefs-general-page.ui:238
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "Developer"
 msgstr "توسعه‌دهنده"
 
-#: src/resources/gtk/prefs-general-page.ui:241
+#: src/resources/gtk/prefs-general-page.ui:247
 msgid "Show D_eveloper Actions"
 msgstr "نمایش کنش‌های _توسعه‌دهنده"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:8
-msgid "Add Language…"
-msgstr "همهٔ زبان‌ها…"
-
 #: src/resources/gtk/prefs-lang-dialog.ui:45
-msgid "Choose a language:"
-msgstr "گزینش یک زبان:"
+msgid "Choose a language"
+msgstr "گزینش زبان"
 
 #: src/resources/gtk/prefs-privacy-page.ui:6
 msgid "Privacy"
@@ -3623,15 +3656,15 @@ msgstr "_پیشنهادهای جست‌وجوی گوگل"
 msgid "Personal Data"
 msgstr "داده‌های شخصی"
 
-#: src/resources/gtk/prefs-privacy-page.ui:43
+#: src/resources/gtk/prefs-privacy-page.ui:42
 msgid "Clear Website _Data"
 msgstr "_پاک‌سازی داده‌های پایگاه وب"
 
-#: src/resources/gtk/prefs-privacy-page.ui:61
+#: src/resources/gtk/prefs-privacy-page.ui:56
 msgid "_Passwords"
 msgstr "_گذرواژه‌ها"
 
-#: src/resources/gtk/prefs-privacy-page.ui:73
+#: src/resources/gtk/prefs-privacy-page.ui:68
 msgid "_Remember Passwords"
 msgstr "_به خاطر سپردن گذرواژه‌ها"
 
@@ -4120,11 +4153,11 @@ msgstr "گذرواژه‌ها با موفّقیت درون‌ریزی شدند!"
 msgid "Import Passwords"
 msgstr "درون‌ریزی گذرواژه‌ها"
 
-#: src/window-commands.c:1063
+#: src/window-commands.c:1060
 msgid "Epiphany Canary"
 msgstr "اپیفنی قناری"
 
-#: src/window-commands.c:1086
+#: src/window-commands.c:1083
 msgid "translator-credits"
 msgstr ""
 "آرش موسوی <mousavi.arash@gmail.com>\n"
@@ -4135,7 +4168,7 @@ msgstr ""
 "مهیار مقیمی <mahyar.moqimi@gmail.com>\n"
 "هادی زاهدیان <zahedianhadi@gmail.com>"
 
-#: src/window-commands.c:1239
+#: src/window-commands.c:1236
 msgid "Reload Website?"
 msgstr "بازخوانی پایگاه؟"
 
@@ -4154,36 +4187,36 @@ msgstr "برنامهٔ «%s» نتوانست ایجاد شود: %s"
 msgid "Launch"
 msgstr "راه‌اندازی"
 
-#: src/window-commands.c:1908
+#: src/window-commands.c:1909
 msgid "Replace Existing Web App?"
 msgstr "جایگزینی کارهٔ وب موجود؟"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1913
 #, c-format
 msgid "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "برنامه‌ای با نام «%s» از پیش موجود است. جای‌گزینیش موجب پایمالیش خواهد شد"
 
-#: src/window-commands.c:1917
+#: src/window-commands.c:1918
 msgid "_Replace"
 msgstr "_جای‌گزینی"
 
-#: src/window-commands.c:2280
+#: src/window-commands.c:2281
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2284
+#: src/window-commands.c:2285
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2330
+#: src/window-commands.c:2331
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2813
+#: src/window-commands.c:2814
 msgid "Enable Caret Browsing Mode?"
 msgstr "به‌کار انداختن حالت مرور با کرت؟"
 
-#: src/window-commands.c:2814
+#: src/window-commands.c:2815
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in "
 "web pages, allowing you to move around with your keyboard. Do you want to enable "
@@ -4193,9 +4226,21 @@ msgstr ""
 "در صفحهٔ وب می‌گذارد، تا به شما اجازه دهد بوسیلهٔ صفحهٔ کلید خود در صفحه جابجا شوید. آیا "
 "مایلید مرور با مکان‌نما را روشن کنید؟"
 
-#: src/window-commands.c:2819
+#: src/window-commands.c:2820
 msgid "_Enable"
 msgstr "_به کار انداختن"
+
+#~ msgid "It is not possible to modify history when in incognito mode."
+#~ msgstr "در حالت ناشناس نمی‌توان تاریخچه را دستکاری کرد."
+
+#~ msgid ""
+#~ "Clearing the browsing history will cause all history links to be permanently "
+#~ "deleted."
+#~ msgstr ""
+#~ "پاک کردن تاریخچهٔ مرور سبب خواهد شد همهٔ پیوندهای تاریخچه برای همیشه حذف شوند."
+
+#~ msgid "Add Language…"
+#~ msgstr "همهٔ زبان‌ها…"
 
 #~ msgid "There is no Website Data"
 #~ msgstr "هیچ دادهٔ پایگاه وبی وجود ندارد"
@@ -4685,9 +4730,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Whether the dialog has search results"
 #~ msgstr "این که گفت‌وگو نتایج جست‌وجو دارد یا خیر"
-
-#~ msgid "Can clear"
-#~ msgstr "توانایی پاک‌سازی"
 
 #~ msgid "Whether the data can be cleared"
 #~ msgstr "این که داده می‌تواند پاک‌سازی شود یا خیر"
@@ -5499,9 +5541,6 @@ msgstr "_به کار انداختن"
 
 #~ msgid "Select all history links or text"
 #~ msgstr "انتخاب همه‌ی پیوندهای تاریخچه یا متن"
-
-#~ msgid "Clear _History"
-#~ msgstr "پاک کردن _تاریخچه"
 
 #~ msgid "Clear your browsing history"
 #~ msgstr "پاک کردن تاریخچه‌ی مرور شما"
