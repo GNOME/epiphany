@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-03 19:05+0000\n"
-"PO-Revision-Date: 2024-03-06 20:48-0500\n"
+"POT-Creation-Date: 2024-05-03 11:37+0000\n"
+"PO-Revision-Date: 2024-05-04 08:16-0400\n"
 "Last-Translator: Eni <enigma@petalmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -37,7 +37,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:279
-#: src/ephy-main.c:432 src/window-commands.c:1066
+#: src/ephy-main.c:432 src/window-commands.c:1063
 msgid "Web"
 msgstr "浏览器"
 
@@ -61,7 +61,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "人们一般用 GNOME 浏览器的代号将其称为 Epiphany。"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1076
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1073
 msgid "The GNOME Project"
 msgstr "GNOME 项目"
 
@@ -384,7 +384,7 @@ msgid ""
 msgstr "默认编码。只接受 WebKitGTK 能理解的值。"
 
 #: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:215
+#: src/resources/gtk/prefs-general-page.ui:221
 msgid "Languages"
 msgstr "语言"
 
@@ -494,26 +494,34 @@ msgstr ""
 "作激活。"
 
 #: data/org.gnome.epiphany.gschema.xml:244
+msgid "Enable navigation gestures"
+msgstr "启用导航手势"
+
+#: data/org.gnome.epiphany.gschema.xml:245
+msgid "Whether to enable back and forward navigation gestures."
+msgstr "是否在启用前进和后退导航手势。"
+
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "Last upload directory"
 msgstr "上次上传的目录"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "Keep track of last upload directory"
 msgstr "记录上次上传的目录"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Last download directory"
 msgstr "上次下载的目录"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:255
 msgid "Keep track of last download directory"
 msgstr "记录上次下载的目录"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Hardware acceleration policy"
 msgstr "硬件加速策略"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:260
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
@@ -524,89 +532,89 @@ msgstr ""
 "和“never”（从不）。为了在嵌入式设备上获得可接受的性能，可能需要硬件加速，但会"
 "增加内存使用需求，并可能暴露严重的硬件特定图形驱动程序错误。"
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid "Always ask for download directory"
 msgstr "总是询问下载目录"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:265
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "是否为每次下载任务提供目录选择器对话框。"
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Enable immediately switch to new open tab"
 msgstr "启用立即切换到新打开的标签页"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:270
 msgid "Whether to automatically switch to a new open tab."
 msgstr "是否自动切换到新的标签页。"
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid "Enable WebExtensions"
 msgstr "启用 WebExtensions"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:275
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr "是否启用 WebExtensions。WebExtensions 是一种跨平台的扩展程序。"
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:279
 msgid "Active WebExtensions"
 msgstr "已启用的 WebExtensions"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Indicates which WebExtensions are set to active."
 msgstr "指示哪个 WebExtensions 被启用。"
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:284
 msgid "Show developer actions"
 msgstr "显示开发者操作"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr "是否显示开发者上下文菜单操作。这将允许使用“页面源”和“检查元素”操作。"
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid "Web application additional URLs"
 msgstr "网页应用程序的附加 URL"
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "The list of URLs that should be opened by the web application"
 msgstr "可以使用网页应用程序打开的 URL 列表"
 
-#: data/org.gnome.epiphany.gschema.xml:291
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "Show navigation buttons in WebApp"
 msgstr "网页应用中显示导航按钮"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "是否在网页应用中显示导航按钮。"
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid "Run in background"
 msgstr "在后台运行"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr "如果启用，应用程序将在关闭窗口后在后台继续运行。"
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:306
 msgid "WebApp is system-wide"
 msgstr "网页应用是系统级的"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:307
 msgid "If enabled, application cannot be edited or removed."
 msgstr "如果启用，应用将不能被编辑或删除。"
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:313
 msgid "The downloads folder"
 msgstr "下载文件夹"
 
-#: data/org.gnome.epiphany.gschema.xml:309
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -614,207 +622,207 @@ msgstr ""
 "文件将被下载到的文件夹；“Downloads”表示使用默认文件夹，“Desktop”表示使用桌面"
 "文件夹。"
 
-#: data/org.gnome.epiphany.gschema.xml:316
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "Window position"
 msgstr "窗口位置"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:322
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "新会话窗口使用的屏幕位置。"
 
-#: data/org.gnome.epiphany.gschema.xml:321
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "Window size"
 msgstr "窗口大小"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "新会话窗口使用的窗口大小。"
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:331
 msgid "Is maximized"
 msgstr "最大化"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr "新会话窗口打开时是否应当自动最大化。"
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Disable forward and back buttons"
 msgstr "禁用前进及后退按钮"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr "如果设为“true”，则禁用前进及后退按钮，以阻止用户直接访问最近的浏览历史"
 
-#: data/org.gnome.epiphany.gschema.xml:361
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "Firefox Sync Token Server URL"
 msgstr "Firefox 同步令牌服务器 URL"
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "URL to a custom Firefox Sync token server."
 msgstr "自定义 Firefox 同步令牌服务器的 URL。"
 
-#: data/org.gnome.epiphany.gschema.xml:366
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Firefox 同步账户服务器 URL"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "自定义 Firefox 同步账户服务器的 URL。"
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "Currently signed in sync user"
 msgstr "当前已登录到同步服务的用户"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:377
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
 msgstr "链接到 Mozilla 账号的电子邮件地址，用于与 Mozilla 服务器同步数据。"
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "Last sync timestamp"
 msgstr "最近一次同步的时间戳"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "最近一次同步的 UNIX 时间，按秒计。"
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "Sync device ID"
 msgstr "同步设备 ID"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "The sync device ID of the current device."
 msgstr "当前设备的同步 ID。"
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid "Sync device name"
 msgstr "同步设备名称"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "The sync device name of the current device."
 msgstr "当前设备的同步设备名称。"
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "The sync frequency in minutes"
 msgstr "按分钟计的同步频率"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "The number of minutes between two consecutive syncs."
 msgstr "连续两次同步之间间隔的分钟数。"
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "Sync data with Firefox"
 msgstr "与 Firefox 同步数据"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr "如需要与 Firefox 同步数据则设为 TRUE，否则为 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid "Enable bookmarks sync"
 msgstr "启用书签同步"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "如需要同步书签则设为 TRUE，否则为 FLASE。"
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid "Bookmarks sync timestamp"
 msgstr "书签同步时间戳"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "最近一次同步书签的时间戳。"
 
-#: data/org.gnome.epiphany.gschema.xml:411
-#: data/org.gnome.epiphany.gschema.xml:426
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "Initial sync or normal sync"
 msgstr "初次同步或常规同步"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "如需要初次同步书签则设为 TRUE，否则为 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid "Enable passwords sync"
 msgstr "启用密码同步"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "如需要同步密码则设为 TRUE，否则为 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid "Passwords sync timestamp"
 msgstr "密码同步时间戳"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:427
 msgid "The timestamp at which last passwords sync was made."
 msgstr "最近一次同步密码的时间戳。"
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "如需要初次同步密码则设为 TRUE，否则为 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid "Enable history sync"
 msgstr "启用历史记录同步"
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "如需要同步历史记录则设为 TRUE，否则为 FLASE。"
 
-#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "History sync timestamp"
 msgstr "历史记录同步时间戳"
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:442
 msgid "The timestamp at which last history sync was made."
 msgstr "最近一次同步历史记录的时间戳。"
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "如需要初次同步历史记录则设为 TRUE，否则为 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:451
 msgid "Enable open tabs sync"
 msgstr "启用标签页同步"
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "如需要同步标签页则设为 TRUE，否则为 FALSE。"
 
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:456
 msgid "Open tabs sync timestamp"
 msgstr "标签页同步时间戳"
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "最近一次同步标签页的时间戳。"
 
-#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "主机请求使用麦克风权限时的决定"
 
-#: data/org.gnome.epiphany.gschema.xml:464
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -824,12 +832,12 @@ msgstr ""
 "该选项用于保存在主机未获得使用用户麦克风权限时的选择。默认值“undecided”意味着"
 "浏览器需要询问用户并请求权限，“allow”和“deny”则指示浏览器自动提交决定。"
 
-#: data/org.gnome.epiphany.gschema.xml:468
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "主机请求使用地理位置权限时的决定"
 
-#: data/org.gnome.epiphany.gschema.xml:469
+#: data/org.gnome.epiphany.gschema.xml:474
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -839,12 +847,12 @@ msgstr ""
 "该选项用于保存在主机未获得使用用户位置权限时的选择。默认值“undecided”意味着浏"
 "览器需要询问用户并请求权限，“allow”和“deny”则指示浏览器自动提交决定。"
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "主机请求使用通知权限时的决定"
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -854,12 +862,12 @@ msgstr ""
 "该选项用于保存在主机未获得显示通知时权限的选择。默认值“undecided”意味着浏览器"
 "需要询问用户并请求权限，“allow”和“deny”则指示浏览器自动提交决定。"
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "主机请求使用保存密码权限时的决定"
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -869,11 +877,11 @@ msgstr ""
 "该选项用于保存在主机未获得保存用户密码权限时的选择。默认值“undecided”意味着浏"
 "览器需要询问用户并请求权限，“allow”和“deny”则指示浏览器自动提交决定。"
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "主机请求使用摄像头权限时的决定"
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -883,12 +891,12 @@ msgstr ""
 "该选项用于保存在主机未获得使用用户摄像头权限时的选择。默认值“undecided”意味着"
 "浏览器需要询问用户并请求权限，“allow”和“deny”则指示浏览器自动提交决定。"
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "网站请求使用通知权限时"
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -898,11 +906,11 @@ msgstr ""
 "该选项用于设置指定网站申请通知权限时的行为。默认值“undecided”意味着浏览器需要"
 "询问用户并请求权限，“allow”和“deny”则指示浏览器自动提交决定。"
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:498
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr "网站请求使用自动播放权限时"
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:499
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -925,7 +933,7 @@ msgstr "版本 %s"
 msgid "About Web"
 msgstr "关于浏览器"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1068
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1065
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany 技术预览"
 
@@ -1010,14 +1018,14 @@ msgstr "请输入PIN码进行 %s，以便在 %s:%d 进行身份验证。"
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
+#: src/ephy-history-dialog.c:571 src/ephy-window.c:254
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2829
+#: src/window-commands.c:1240 src/window-commands.c:1917
+#: src/window-commands.c:2819
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -1046,7 +1054,7 @@ msgstr "网站 %s:%d 要求您提供用于身份验证的证书。"
 msgid "_Select"
 msgstr "选中(_S)"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:556
+#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "选择目录"
 
@@ -1945,81 +1953,96 @@ msgstr "%s 的用户密码，用于 %s 中表格内"
 msgid "Password in a form in %s"
 msgstr "%s 中表单里的密码"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr "响应正文为空，您是否需要安装 glib-networking？"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "无法获取存储凭据。"
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr "请访问 Firefox 同步并重新登录以继续同步进程。"
 
-#: lib/sync/ephy-sync-service.c:1116
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "您 Mozilla 账号的密码似乎被更改。"
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
 msgstr "请访问 Firefox 同步并使用新密码登录以继续同步进程。"
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "无法获取已签名的证书。"
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
+#: lib/sync/ephy-sync-service.c:1926
+#, c-format
+msgid "The sync secrets for the current sync user are invalid: %s"
+msgstr "当前同步用户的密钥无效：%s"
+
+#: lib/sync/ephy-sync-service.c:1933
+#, c-format
+msgid "The sync secrets for the current sync user are not valid JSON: %s"
+msgstr "当前同步用户的同步密钥不是有效的 JSON：%s"
+
+#: lib/sync/ephy-sync-service.c:1960
+#, c-format
+msgid "Could not find the sync secrets for the current sync user: %s"
+msgstr "找不到当前同步用户的密钥：%s"
+
+#: lib/sync/ephy-sync-service.c:1966
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "找不到当前同步用户的密钥。"
 
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
-msgid "The sync secrets for the current sync user are invalid."
-msgstr "当前同步用户的密钥无效。"
-
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:2010
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr "无法存储同步机密（机密服务或机密门户是否已损坏？）："
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2052
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s 的同步密钥"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2082
 msgid "Failed to upload client record."
 msgstr "无法上传客户端记录。"
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2285
 msgid "Failed to upload crypto/keys record."
 msgstr "无法上传密文/密钥记录。"
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2397
 msgid "Failed to retrieve crypto keys."
 msgstr "无法获取密文密钥。"
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2451
 msgid "Failed to upload meta/global record."
 msgstr "无法上传元/全局记录。"
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2573
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr "您 Mozilla 账号使用的存储版本为 %d。该浏览器只支持 %d。"
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2584
 msgid "Failed to verify storage version."
 msgstr "无法验证存储版本。"
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2642
 msgid "Failed to upload device info"
 msgstr "无法上传设备信息"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2718 lib/sync/ephy-sync-service.c:2801
 msgid "Failed to retrieve the Sync Key"
 msgstr "无法获取同步密钥"
 
@@ -2076,25 +2099,25 @@ msgstr "收藏夹"
 msgid "Mobile"
 msgstr "移动设备"
 
-#: src/context-menu-commands.c:239
+#: src/context-menu-commands.c:294
 msgid "Save Link As"
 msgstr "链接另存为"
 
-#: src/context-menu-commands.c:247
+#: src/context-menu-commands.c:302
 msgid "Save Image As"
 msgstr "图像另存为"
 
-#: src/context-menu-commands.c:255
+#: src/context-menu-commands.c:310
 msgid "Save Media As"
 msgstr "媒体另存为"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1788
 msgid "Bookmark Page"
 msgstr "书签页"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1796
 msgid "Edit Bookmark"
 msgstr "编辑书签"
 
@@ -2149,8 +2172,7 @@ msgid ""
 "insecurely."
 msgstr "这个证书确实是有效的。但是这个页面上的资源使用的不是安全连接。"
 
-#: src/ephy-downloads-popover.c:211 src/resources/gtk/history-dialog.ui:139
-#: src/resources/gtk/passwords-view.ui:27
+#: src/ephy-downloads-popover.c:211 src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "清空所有(_C)"
 
@@ -2242,9 +2264,9 @@ msgstr "主菜单"
 msgid "Stop loading the current page"
 msgstr "停止加载当前页面"
 
-#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1023
-msgid "It is not possible to modify history when in incognito mode."
-msgstr "在隐身模式下不能更改历史记录。"
+#: src/ephy-history-dialog.c:142 src/ephy-history-dialog.c:1022
+msgid "Unavailable in Incognito Mode"
+msgstr "无痕模式下不可用"
 
 #: src/ephy-history-dialog.c:486
 msgid "Remove the selected pages from history"
@@ -2259,41 +2281,39 @@ msgid "Clear Browsing History?"
 msgstr "清除浏览历史吗？"
 
 #: src/ephy-history-dialog.c:568
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
-msgstr "清除浏览历史将导致所有的历史链接被永久删除。"
+msgid "All links will be permanently deleted"
+msgstr "所有链接将被永久删除"
 
-#: src/ephy-history-dialog.c:573 src/resources/gtk/location-entry.ui:296
+#: src/ephy-history-dialog.c:572 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
-#: src/ephy-history-dialog.c:1026
-msgid "Remove all history"
+#: src/ephy-history-dialog.c:1025
+msgid "Remove All History"
 msgstr "移除所有历史"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1832 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "通知请求"
 
-#: src/ephy-location-entry.c:1809
+#: src/ephy-location-entry.c:1836
 msgid "Camera Request"
 msgstr "相机请求"
 
-#: src/ephy-location-entry.c:1813
+#: src/ephy-location-entry.c:1840
 msgid "Microphone Request"
 msgstr "麦克风请求"
 
-#: src/ephy-location-entry.c:1817
+#: src/ephy-location-entry.c:1844
 msgid "Location Request"
 msgstr "位置信息请求"
 
-#: src/ephy-location-entry.c:1821
+#: src/ephy-location-entry.c:1848
 msgid "Webcam and Microphone Request"
 msgstr "摄像头和麦克风请求"
 
-#: src/ephy-location-entry.c:1825
+#: src/ephy-location-entry.c:1852
 msgid "Permission Request"
 msgstr "权限请求"
 
@@ -2497,12 +2517,12 @@ msgid "Without Sound"
 msgstr "无声音"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:647
+#: src/ephy-tab-view.c:650
 msgid "Open a new tab"
 msgstr "打开新标签页"
 
 #. Undo, redo.
-#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "撤消(_U)"
 
@@ -2511,15 +2531,15 @@ msgid "Re_do"
 msgstr "重做(_D)"
 
 #. Edit.
-#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
@@ -2527,7 +2547,7 @@ msgstr "粘贴(_P)"
 msgid "_Paste Text Only"
 msgstr "仅粘贴文本(_P)"
 
-#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:313
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -2640,128 +2660,128 @@ msgstr "截图(_T)…"
 msgid "_Page Source"
 msgstr "页面源代码(_P)"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1382
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "上网搜索“%s”"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1411
 msgid "Open Link"
 msgstr "打开链接"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1413
 msgid "Open Link In New Tab"
 msgstr "在新标签页中打开链接"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1415
 msgid "Open Link In New Window"
 msgstr "在新窗口中打开链接"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1417
 msgid "Open Link In Incognito Window"
 msgstr "在无痕窗口中打开链接"
 
-#: src/ephy-window.c:2789
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "稍后询问(_A)"
 
-#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "拒绝(_D)"
 
-#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "允许(_A)"
 
-#: src/ephy-window.c:2993 src/ephy-window.c:4430
+#: src/ephy-window.c:3004 src/ephy-window.c:4437
 msgid "Leave Website?"
 msgstr "离开网站？"
 
-#: src/ephy-window.c:2994 src/ephy-window.c:4431 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4438 src/window-commands.c:1237
 msgid "A form was modified and has not been submitted"
 msgstr "一个表格已被修改，但还没有提交"
 
-#: src/ephy-window.c:2995 src/ephy-window.c:4432 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4439 src/window-commands.c:1241
 msgid "_Discard Form"
 msgstr "丢弃表单(_D)"
 
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "下载操作"
 
-#: src/ephy-window.c:3018
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "显示细节"
 
-#: src/ephy-window.c:3020
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "有 %d 个项目正在下载"
 
-#: src/ephy-window.c:3261
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "是否设置为默认浏览器？"
 
-#: src/ephy-window.c:3263
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "使用浏览器作为您的默认网络浏览器并用于打开外部链接"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr "使用 Epiphany 技术预览版作为您的默认网络浏览器，并用于打开外部链接"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "稍后再次询问(_A)"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "否(_N)"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "是(_Y)"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3730
 msgid "Save password?"
 msgstr "保存密码？"
 
-#: src/ephy-window.c:3723
+#: src/ephy-window.c:3731
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "密码可以在任何时候从首选项中删除"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3733
 msgid "Not Now"
 msgstr "暂不"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3734
 msgid "Never Save"
 msgstr "从不保存"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3735
 msgid "Save"
 msgstr "保存"
 
-#: src/ephy-window.c:4561
+#: src/ephy-window.c:4568
 msgid "Close Multiple Tabs?"
 msgstr "关闭多个标签页？"
 
-#: src/ephy-window.c:4562
+#: src/ephy-window.c:4569
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "如果你关闭该窗口，所有其中的标签页都将被关闭"
 
-#: src/ephy-window.c:4563
+#: src/ephy-window.c:4570
 msgid "C_lose Tabs"
 msgstr "关闭多个标签页(_L)"
 
-#: src/ephy-window.c:4656
+#: src/ephy-window.c:4663
 msgid "New tab opened"
 msgstr "打开的新标签页"
 
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4667
 msgid "Switch"
 msgstr "开关"
 
@@ -2797,8 +2817,8 @@ msgstr "智能跟踪预防数据"
 msgid "New search engine"
 msgstr "新建搜索引擎"
 
-#: src/preferences/ephy-search-engine-listbox.c:304
-msgid "A_dd Search Engine…"
+#: src/preferences/ephy-search-engine-listbox.c:305
+msgid "A_dd Search Engine"
 msgstr "添加搜索引擎(_D)"
 
 #: src/preferences/ephy-search-engine-row.c:114
@@ -2849,7 +2869,7 @@ msgstr "请填写名字"
 msgid "This search engine already exists"
 msgstr "该搜索引擎已存在"
 
-#: src/preferences/extension-view.c:114 src/resources/gtk/extension-view.ui:95
+#: src/preferences/extension-view.c:114
 msgid "Remove Extension"
 msgstr "移除扩展"
 
@@ -2870,8 +2890,8 @@ msgstr "删除所有密码？"
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "这将清除所有本地保存的密码，且本操作无法恢复。"
 
-#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:154
-#: src/resources/gtk/location-entry.ui:290
+#: src/preferences/passwords-view.c:184 src/resources/gtk/history-dialog.ui:165
+#: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -2916,18 +2936,19 @@ msgstr "暗色"
 msgid "Open File (manifest.json/xpi)"
 msgstr "打开文件 (manifest.json/xpi)"
 
-#: src/preferences/prefs-general-page.c:203
+#: src/preferences/prefs-general-page.c:202
+#: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language"
 msgstr "添加语言"
 
-#: src/preferences/prefs-general-page.c:365
-#: src/preferences/prefs-general-page.c:521
+#: src/preferences/prefs-general-page.c:363
+#: src/preferences/prefs-general-page.c:519
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "系统语言 (%s)"
 
-#: src/preferences/prefs-general-page.c:730
+#: src/preferences/prefs-general-page.c:728
 msgid "Supported Image Files"
 msgstr "支持的图像文件"
 
@@ -3104,6 +3125,10 @@ msgstr "版本"
 msgid "Enabled"
 msgstr "已启用"
 
+#: src/resources/gtk/extension-view.ui:87
+msgid "Remove Extension…"
+msgstr "移除扩展…"
+
 #: src/resources/gtk/firefox-sync-dialog.ui:9
 msgid "Firefox Sync"
 msgstr "Firefox 同步"
@@ -3166,7 +3191,7 @@ msgid "Device name"
 msgstr "设备名称"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:126
-#: src/resources/gtk/password-popover.ui:79
+#: src/resources/gtk/password-popover.ui:94
 msgid "_Save"
 msgstr "保存(_S)"
 
@@ -3194,7 +3219,11 @@ msgstr "未找到历史记录"
 msgid "Visited pages will be listed here"
 msgstr "曾访问的网页将在此列出"
 
-#: src/resources/gtk/history-dialog.ui:165
+#: src/resources/gtk/history-dialog.ui:148
+msgid "_Clear History…"
+msgstr "清除历史(_H)…"
+
+#: src/resources/gtk/history-dialog.ui:179
 msgid "_Open"
 msgstr "打开(_O)"
 
@@ -3216,14 +3245,18 @@ msgid "Reader Mode"
 msgstr "阅读模式"
 
 #: src/resources/gtk/location-entry.ui:98
+msgid "Clear"
+msgstr "清除"
+
+#: src/resources/gtk/location-entry.ui:111
 msgid "View Available Passwords"
 msgstr "查看可用的密码"
 
-#: src/resources/gtk/location-entry.ui:268
+#: src/resources/gtk/location-entry.ui:281
 msgid "_Redo"
 msgstr "重做(_R)"
 
-#: src/resources/gtk/location-entry.ui:286
+#: src/resources/gtk/location-entry.ui:299
 msgid "Paste and _Go"
 msgstr "粘贴并前往(_G)"
 
@@ -3378,8 +3411,12 @@ msgstr "密码只保存在您的设备上且任何时候可以在首选项中删
 msgid "_Never Save"
 msgstr "从不保存(_N)"
 
+#: src/resources/gtk/password-popover.ui:79
+msgid "N_ot Now"
+msgstr "暂不(_O)"
+
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:57
+#: src/resources/gtk/prefs-privacy-page.ui:52
 msgid "Passwords"
 msgstr "密码"
 
@@ -3559,25 +3596,25 @@ msgstr "鼠标手势(_G)"
 msgid "S_witch Immediately to New Tabs"
 msgstr "立即切换到新标签页(_W)"
 
-#: src/resources/gtk/prefs-general-page.ui:230
+#: src/resources/gtk/prefs-general-page.ui:213
+msgid "Touch _Navigation Gestures"
+msgstr "触摸导航手势(_N)"
+
+#: src/resources/gtk/prefs-general-page.ui:236
 msgid "_Spell Checking"
 msgstr "拼写检查(_S)"
 
-#: src/resources/gtk/prefs-general-page.ui:238
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "Developer"
 msgstr "开发者"
 
-#: src/resources/gtk/prefs-general-page.ui:241
+#: src/resources/gtk/prefs-general-page.ui:247
 msgid "Show D_eveloper Actions"
 msgstr "显示开发者操作(_E)"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:8
-msgid "Add Language…"
-msgstr "添加语言…"
-
 #: src/resources/gtk/prefs-lang-dialog.ui:45
-msgid "Choose a language:"
-msgstr "选择语言："
+msgid "Choose a language"
+msgstr "选择语言"
 
 #: src/resources/gtk/prefs-privacy-page.ui:6
 msgid "Privacy"
@@ -3615,15 +3652,15 @@ msgstr "谷歌搜索建议(_G)"
 msgid "Personal Data"
 msgstr "个人数据"
 
-#: src/resources/gtk/prefs-privacy-page.ui:43
+#: src/resources/gtk/prefs-privacy-page.ui:42
 msgid "Clear Website _Data"
 msgstr "清除网站数据(_D)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:61
+#: src/resources/gtk/prefs-privacy-page.ui:56
 msgid "_Passwords"
 msgstr "密码(_P)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:73
+#: src/resources/gtk/prefs-privacy-page.ui:68
 msgid "_Remember Passwords"
 msgstr "记住密码(_R)"
 
@@ -4117,11 +4154,11 @@ msgstr "成功导入密码数据！"
 msgid "Import Passwords"
 msgstr "导入密码"
 
-#: src/window-commands.c:1063
+#: src/window-commands.c:1060
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1086
+#: src/window-commands.c:1083
 msgid "translator-credits"
 msgstr ""
 "Funda Wang <fundawang@linux.net.cn>, 2003, 2006\n"
@@ -4141,56 +4178,56 @@ msgstr ""
 "Nanling <neithern@outlook.com>,2023\n"
 "Eni <enigma@petalmail.com>,2023"
 
-#: src/window-commands.c:1239
+#: src/window-commands.c:1236
 msgid "Reload Website?"
 msgstr "重新加载网站？"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "应用程序“%s”已就绪"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "无法创建应用程序“%s”：%s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "启动"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1909
 msgid "Replace Existing Web App?"
 msgstr "替换现有的网页应用？"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1913
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "一个名为 %s 的应用程序已经存在，替换它将覆盖它"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1918
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2281
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2285
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2331
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2824
+#: src/window-commands.c:2814
 msgid "Enable Caret Browsing Mode?"
 msgstr "启用光标导航吗？"
 
-#: src/window-commands.c:2825
+#: src/window-commands.c:2815
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4199,9 +4236,20 @@ msgstr ""
 "按 F7 键可以启用或停用光标导航功能。此功能在网页中放置一个可移动光标，从而允"
 "许您使用键盘在页面内导航。您是否要启用光标导航？"
 
-#: src/window-commands.c:2830
+#: src/window-commands.c:2820
 msgid "_Enable"
 msgstr "启用(_E)"
+
+#~ msgid "It is not possible to modify history when in incognito mode."
+#~ msgstr "在隐身模式下不能更改历史记录。"
+
+#~ msgid ""
+#~ "Clearing the browsing history will cause all history links to be "
+#~ "permanently deleted."
+#~ msgstr "清除浏览历史将导致所有的历史链接被永久删除。"
+
+#~ msgid "Add Language…"
+#~ msgstr "添加语言…"
 
 #~ msgid "Enable safe browsing"
 #~ msgstr "启用安全浏览"
@@ -5485,9 +5533,6 @@ msgstr "启用(_E)"
 #~ "这些来自于上一个版本的密码被一个主密码锁定了。如果您想导入它们，请在下面输"
 #~ "入您的主密码。"
 
-#~ msgid "Clear"
-#~ msgstr "清除"
-
 #~ msgid "Encodings"
 #~ msgstr "编码"
 
@@ -5584,9 +5629,6 @@ msgstr "启用(_E)"
 
 #~ msgid "Select all history links or text"
 #~ msgstr "选中全部历史链接或文字"
-
-#~ msgid "Clear _History"
-#~ msgstr "清除历史(_H)"
 
 #~ msgid "Clear your browsing history"
 #~ msgstr "清除您的浏览历史"
