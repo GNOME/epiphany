@@ -433,13 +433,11 @@ out:
 
 static void
 sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
-                              JSCValue                 *value,
-                              EphyFirefoxSyncDialog    *sync_page)
+                              JSCValue                 *value)
 {
   EphyShell *shell;
   EphyEmbed *embed;
   GtkWindow *window;
-  GtkRoot *prefs_dialog;
   char *url;
 
   url = jsc_value_to_string (value);
@@ -450,10 +448,6 @@ sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
     embed = ephy_shell_new_tab (shell, EPHY_WINDOW (window),
                                 NULL, EPHY_NEW_TAB_JUMP);
     ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
-
-    /* Close the preferences dialog. */
-    prefs_dialog = gtk_widget_get_root (GTK_WIDGET (sync_page));
-    gtk_window_destroy (GTK_WINDOW (prefs_dialog));
 
     g_free (url);
   }
@@ -498,7 +492,7 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
     g_signal_connect (sync_dialog->fxa_manager,
                       "script-message-received::openWebmailClickHandler",
                       G_CALLBACK (sync_open_webmail_clicked_cb),
-                      sync_dialog);
+                      NULL);
     webkit_user_content_manager_register_script_message_handler (sync_dialog->fxa_manager,
                                                                  "toChromeMessageHandler",
                                                                  NULL);

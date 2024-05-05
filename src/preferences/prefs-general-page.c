@@ -177,12 +177,12 @@ language_editor_add_activated (GtkWidget *listbox,
   general_page = EPHY_PREFS_GENERAL_PAGE (gtk_widget_get_ancestor (listbox, EPHY_TYPE_PREFS_GENERAL_PAGE));
 
   if (general_page->add_lang_dialog == NULL) {
-    GtkWindow *prefs_dialog;
+    GtkWindow *window;
     GtkWindow **add_lang_dialog;
 
-    prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
+    window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
     general_page->add_lang_dialog = setup_add_language_dialog (general_page);
-    gtk_window_set_transient_for (GTK_WINDOW (general_page->add_lang_dialog), prefs_dialog);
+    gtk_window_set_transient_for (GTK_WINDOW (general_page->add_lang_dialog), window);
 
     add_lang_dialog = &general_page->add_lang_dialog;
 
@@ -889,12 +889,12 @@ on_manage_webapp_additional_urls_row_activated (GtkWidget        *button,
                                                 PrefsGeneralPage *general_page)
 {
   EphyWebappAdditionalURLsDialog *urls_dialog;
-  GtkWindow *prefs_dialog;
+  GtkWindow *window;
 
   urls_dialog = ephy_webapp_additional_urls_dialog_new ();
-  prefs_dialog = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
+  window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
 
-  gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), prefs_dialog);
+  gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), window);
   gtk_window_set_modal (GTK_WINDOW (urls_dialog), TRUE);
   gtk_window_present (GTK_WINDOW (urls_dialog));
 }

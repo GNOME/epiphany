@@ -912,15 +912,11 @@ window_cmd_show_preferences (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
-  GtkWindow *dialog;
+  AdwDialog *dialog;
 
-  dialog = GTK_WINDOW (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  dialog = ADW_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
 
-  if (GTK_WINDOW (user_data) != gtk_window_get_transient_for (dialog))
-    gtk_window_set_transient_for (dialog,
-                                  GTK_WINDOW (user_data));
-
-  gtk_window_present (dialog);
+  adw_dialog_present (dialog, user_data);
 }
 
 static void
