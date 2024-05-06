@@ -59,7 +59,6 @@ struct _EphyLocationEntry {
   GtkWidget *text;
   GtkWidget *progress;
   GtkWidget *security_button;
-  GtkWidget *clear_button;
   GtkWidget *password_button;
   GtkWidget *bookmark_button;
   GtkWidget *reader_mode_button;
@@ -80,7 +79,6 @@ struct _EphyLocationEntry {
   gdouble progress_fraction;
 
   gboolean reader_mode_active;
-  gboolean reader_mode_available;
   gboolean show_suggestions;
 
   guint dns_prefetch_handle_id;
@@ -603,13 +601,6 @@ update_entry_style (EphyLocationEntry *self,
   const char *base_domain;
   char *sub_string;
 
-  gtk_widget_set_visible (self->clear_button, focus);
-
-  if (focus)
-    gtk_widget_set_visible (self->reader_mode_button, FALSE);
-  else
-    gtk_widget_set_visible (self->reader_mode_button, self->reader_mode_available);
-
   attrs = pango_attr_list_new ();
 
   if (focus)
@@ -738,12 +729,6 @@ reader_mode_clicked_cb (EphyLocationEntry *entry)
 
   g_signal_emit (G_OBJECT (entry), signals[READER_MODE_CHANGED], 0,
                  entry->reader_mode_active);
-}
-
-static void
-clear_button_clicked_cb (EphyLocationEntry *self)
-{
-  gtk_editable_set_text (GTK_EDITABLE (self), "");
 }
 
 static void
@@ -1013,13 +998,6 @@ ephy_location_entry_measure (GtkWidget      *widget,
       nat += child_nat;
     }
 
-    if (gtk_widget_should_layout (entry->clear_button)) {
-      gtk_widget_measure (entry->clear_button, orientation, for_size,
-                          &child_min, &child_nat, NULL, NULL);
-      min += child_min;
-      nat += child_nat;
-    }
-
     /* Since progress bar spans the whole width, we MAX() it instead of adding */
     gtk_widget_measure (entry->progress, orientation, for_size,
                         &child_min, &child_nat, NULL, NULL);
@@ -1100,8 +1078,6 @@ ephy_location_entry_size_allocate (GtkWidget *widget,
   allocate_icon (widget, height, baseline, entry->bookmark_button,
                  GTK_PACK_END, &icon_left_pos, &icon_right_pos);
   allocate_icon (widget, height, baseline, entry->reader_mode_button,
-                 GTK_PACK_END, &icon_left_pos, &icon_right_pos);
-  allocate_icon (widget, height, baseline, entry->clear_button,
                  GTK_PACK_END, &icon_left_pos, &icon_right_pos);
 
   for (l = entry->page_actions; l; l = l->next) {
@@ -1278,7 +1254,6 @@ ephy_location_entry_dispose (GObject *object)
   gtk_widget_unparent (entry->password_button);
   gtk_widget_unparent (entry->bookmark_button);
   gtk_widget_unparent (entry->reader_mode_button);
-  gtk_widget_unparent (entry->clear_button);
   gtk_widget_unparent (entry->suggestions_popover);
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
@@ -1435,7 +1410,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, password_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, bookmark_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, clear_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_model);
@@ -1462,7 +1436,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, item_released_cb);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_secondary_icon);
-  gtk_widget_class_bind_template_callback (widget_class, clear_button_clicked_cb);
 
   gtk_widget_class_set_css_name (widget_class, "entry");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
@@ -1936,10 +1909,7 @@ void
 ephy_location_entry_set_reader_mode_visible (EphyLocationEntry *entry,
                                              gboolean           visible)
 {
-  entry->reader_mode_available = visible;
-
-  if (!gtk_widget_has_focus (entry->text))
-    gtk_widget_set_visible (entry->reader_mode_button, visible);
+  gtk_widget_set_visible (entry->reader_mode_button, visible);
 }
 
 void
