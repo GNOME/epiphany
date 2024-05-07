@@ -839,13 +839,29 @@ ephy_web_extension_parse_command_key (const char *suggested_key)
         g_debug ("Command key has invalid_key: %s", key);
         return NULL;
       }
-      g_string_append (accelerator, key);
+      if (strcmp (key, "Space") == 0)
+        g_string_append (accelerator, "space");
+      else if (strcmp (key, "Period") == 0)
+        g_string_append (accelerator, "period");
+      else if (strcmp (key, "Comma") == 0)
+        g_string_append (accelerator, "comma");
+      else if (strcmp (key, "PageUp") == 0)
+        g_string_append (accelerator, "Page_Up");
+      else if (strcmp (key, "PageDown") == 0)
+        g_string_append (accelerator, "Page_Down");
+      else
+        g_string_append (accelerator, key);
       has_key = TRUE;
     }
   }
 
   if (!has_modifier && !has_key) {
     g_debug ("Command key requires a modifier and a key: %s", suggested_key);
+    return NULL;
+  }
+
+  if (!gtk_accelerator_parse (accelerator->str, NULL, NULL)) {
+    g_warning ("Transformed WebExtensions accelerator %s into %s, but this is not a valid GTK accelerator", suggested_key, accelerator->str);
     return NULL;
   }
 

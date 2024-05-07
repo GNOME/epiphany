@@ -190,4 +190,14 @@ if get_option('unit_tests').enabled()
        web_view_test,
        env: envs
   )
+
+  web_extension_test = executable('test-ephy-web-extension',
+    'ephy-web-extension-test.c',
+    dependencies: ephymain_dep,
+    c_args: test_cargs
+  )
+  test('Web extension test',
+        web_extension_test,
+        env: envs
+  )
 endif
