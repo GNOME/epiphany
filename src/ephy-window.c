@@ -2596,7 +2596,7 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "close");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !!page);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !page || !pinned);
 
   muted = view && webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
