@@ -818,19 +818,22 @@ ephy_web_extension_parse_command_key (const char *suggested_key)
     const char *key = keys[i];
     /* First two are potentially modifiers. We should check for duplicates but its probably harmless. */
     if (i == 0 || i == 1) {
-      if (strcmp (key, "Ctrl") == 0 || strcmp (key, "Alt") == 0 || (i == 1 && strcmp (key, "Shift") == 0))
+      if (strcmp (key, "Ctrl") == 0 || strcmp (key, "Alt") == 0 || (i == 1 && strcmp (key, "Shift") == 0)) {
         g_string_append_printf (accelerator, "<%s>", key);
-      else if (strcmp (key, "Command") == 0 || strcmp (key, "MacCtrl") == 0)
+        has_modifier = TRUE;
+        continue;
+      } else if (strcmp (key, "Command") == 0 || strcmp (key, "MacCtrl") == 0) {
         g_string_append (accelerator, "<Ctrl>");
-      else {
+        has_modifier = TRUE;
+        continue;
+      } else if (i == 0 || !is_valid_key (key)) {
         g_debug ("Invalid modifier at index %u: %s", i, key);
         return NULL;
       }
-      has_modifier = TRUE;
-      continue;
     }
+
     /* Second two are potentially keys. */
-    else if (i == 1 || i == 2) {
+    if (i == 1 || i == 2) {
       if (has_key) {
         g_debug ("Command key has two keys: %s", suggested_key);
         return NULL;
