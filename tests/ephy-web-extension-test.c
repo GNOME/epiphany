@@ -22,13 +22,33 @@
 
 #include "ephy-web-extension.h"
 
+static const struct {
+  const char *before;
+  const char *after;
+} parse_command_tests[] = {
+  { "Alt+Shift+Space", "<Alt><Shift>space" },
+  { "Command+Period", "<Ctrl>period" },
+  { "MacCtrl+Shift+Comma", "<Ctrl><Shift>comma" },
+  { "Ctrl+Alt+PageUp", "<Ctrl><Alt>Page_Up" },
+  { "Alt+Shift+PageDown", "<Alt><Shift>Page_Down" },
+  { "Command+F5", "<Ctrl>F5" },
+  { "Alt+7", "<Alt>7" },
+  { "MacCtrl+G", "<Ctrl>G" },
+  { "Ctrl+Shift+Z", "<Ctrl><Shift>Z" },
+  { "Ctrl+Home", "<Ctrl>Home" },
+  { "MediaNextTrack", "XF86AudioNext" },
+  { "MediaPlayPause", "XF86AudioPlay" },
+  { "MediaPrevTrack", "XF86AudioPrev" },
+  { "MediaStop", "XF86AudioStop" }
+};
+
 static void
 test_ephy_invalid_command_parse (void)
 {
-  g_autofree char *result = NULL;
-
-  result = ephy_web_extension_parse_command_key ("Alt+Shift+Space");
-  g_assert_cmpstr (result, ==, "<Alt><Shift>space");
+  for (gulong i = 0; i < G_N_ELEMENTS (parse_command_tests); i++) {
+    g_autofree char *result = ephy_web_extension_parse_command_key (parse_command_tests[i].before);
+    g_assert_cmpstr (result, ==, parse_command_tests[i].after);
+  }
 }
 
 int
