@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-15 15:49+0000\n"
-"PO-Revision-Date: 2024-03-16 10:37+0100\n"
-"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
+"POT-Creation-Date: 2024-05-03 13:14+0000\n"
+"PO-Revision-Date: 2024-05-08 23:26+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1161,8 +1161,8 @@ msgstr ""
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2798
+#: src/window-commands.c:1243 src/window-commands.c:1916
+#: src/window-commands.c:2818
 msgid "_Cancel"
 msgstr "A_bbrechen"
 
@@ -2128,22 +2128,28 @@ msgstr "Passwort für %s auf %s"
 msgid "Password in a form in %s"
 msgstr "Passwort in einem Eingabefeld auf %s"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr ""
+"Der Rumpf der Antwort ist leer. Muss eventuell glib-networking installiert "
+"werden?"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "Speicherzugangsdaten konnten nicht geholt werden."
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Bitte öffnen Sie Firefox Sync und melden Sie sich erneut an, um den "
 "Abgleichvorgang fortzusetzen."
 
-#: lib/sync/ephy-sync-service.c:1116
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "Das Passwort Ihres Mozilla-Kontos scheint geändert worden zu sein."
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2151,23 +2157,23 @@ msgstr ""
 "Bitte öffnen Sie Firefox Sync und melden Sie sich mit dem neuen Passwort an, "
 "um den Abgleichvorgang fortzusetzen."
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "Signiertes Zertifikat konnte nicht geholt werden."
 
+#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
+msgid "The sync secrets for the current sync user are invalid."
+msgstr "Die Sync-Anmeldedaten für den aktuellen Sync-Benutzer sind ungültig."
+
 # »Sync« ist hier ein Eigenname:
 # https://www.mozilla.org/de/firefox/sync/
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
+#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Sync-Token für den aktuell angemeldeten Benutzer konnten nicht gefunden "
 "werden."
 
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
-msgid "The sync secrets for the current sync user are invalid."
-msgstr "Die Sync-Anmeldedaten für den aktuellen Sync-Benutzer sind ungültig."
-
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:2007
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2176,29 +2182,29 @@ msgstr ""
 "oder das Passwortportal defekt?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2049
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Die Sync-Token von %s"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2079
 msgid "Failed to upload client record."
 msgstr "Client-Datensatz konnte nicht übertragen werden."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2282
 msgid "Failed to upload crypto/keys record."
 msgstr "Crypto/keys-Datensatz konnte nicht übertragen werden."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2394
 msgid "Failed to retrieve crypto keys."
 msgstr "Krypto-Schlüssel konnten nicht geholt werden."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2448
 msgid "Failed to upload meta/global record."
 msgstr "Meta/global-Datensatz konnte nicht übertragen werden."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2570
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2206,15 +2212,15 @@ msgstr ""
 "Ihr Mozilla-Konto verwendet die Speicherversion %d. Web unterstützt nur "
 "Version %d."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2581
 msgid "Failed to verify storage version."
 msgstr "Speicherversion konnte nicht überprüft werden."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2639
 msgid "Failed to upload device info"
 msgstr "Geräteinformation konnte nicht übertragen werden"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
 msgid "Failed to retrieve the Sync Key"
 msgstr "Der Sync-Schlüssel konnte nicht geholt werden"
 
@@ -2879,54 +2885,54 @@ msgstr "Verweis in neuem Fenster öffnen"
 msgid "Open Link In Incognito Window"
 msgstr "Verweis in Inkognito-Fenster öffnen"
 
-#: src/ephy-window.c:2794
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "S_päter fragen"
 
-#: src/ephy-window.c:2795 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Ablehnen"
 
-#: src/ephy-window.c:2796 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Erlauben"
 
-#: src/ephy-window.c:2998 src/ephy-window.c:4435
+#: src/ephy-window.c:3004 src/ephy-window.c:4439
 msgid "Leave Website?"
 msgstr "Webseite verlassen?"
 
-#: src/ephy-window.c:2999 src/ephy-window.c:4436 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Ein Formular wurde verändert und noch nicht abgeschickt"
 
-#: src/ephy-window.c:3000 src/ephy-window.c:4437 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "Formulareingaben _verwerfen"
 
-#: src/ephy-window.c:3021
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Download-Operation"
 
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Details anzeigen"
 
-#: src/ephy-window.c:3025
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d Download-Operation aktiv"
 msgstr[1] "%d Download-Operationen aktiv"
 
-#: src/ephy-window.c:3266
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "Als Standardbrowser festlegen?"
 
-#: src/ephy-window.c:3268
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Web als Standardbrowser und zum Öffnen externer Verweise verwenden"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2934,56 +2940,56 @@ msgstr ""
 "Epiphany-Technologievorschau als Standardbrowser und zum Öffnen externer "
 "Verweise verwenden"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "S_päter erneut fragen"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "_Nein"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3732
 msgid "Save password?"
 msgstr "Passwort speichern?"
 
-#: src/ephy-window.c:3728
+#: src/ephy-window.c:3733
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Passwörter können jederzeit in den Einstellungen entfernt werden"
 
-#: src/ephy-window.c:3730
+#: src/ephy-window.c:3735
 msgid "Not Now"
 msgstr "Jetzt nicht"
 
-#: src/ephy-window.c:3731
+#: src/ephy-window.c:3736
 msgid "Never Save"
 msgstr "Nie speichern"
 
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3737
 msgid "Save"
 msgstr "Speichern"
 
-#: src/ephy-window.c:4566
+#: src/ephy-window.c:4570
 msgid "Close Multiple Tabs?"
 msgstr "Mehrere Reiter sc_hließen?"
 
-#: src/ephy-window.c:4567
+#: src/ephy-window.c:4571
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 "Wenn dieses Fenster geschlossen wird, gehen alle geöffneten Reiter verloren"
 
-#: src/ephy-window.c:4568
+#: src/ephy-window.c:4572
 msgid "C_lose Tabs"
 msgstr "Reiter s_chließen"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4665
 msgid "New tab opened"
 msgstr "Neuer Reiter geöffnet"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4669
 msgid "Switch"
 msgstr "Wechseln"
 
@@ -4385,26 +4391,26 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Webseite neu laden?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Die Anwendung »%s« ist bereit zur Benutzung"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Die Anwendung »%s« konnte nicht erzeugt werden: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "Starten"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1908
 msgid "Replace Existing Web App?"
 msgstr "Existierende Web-Anwendung ersetzen?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1912
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -4412,27 +4418,27 @@ msgstr ""
 "Eine Anwendung mit dem Namen »%s« ist bereits vorhanden. Sie zu ersetzen "
 "wird sie überschreiben"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1917
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2280
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2284
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2330
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2793
+#: src/window-commands.c:2813
 msgid "Enable Caret Browsing Mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: src/window-commands.c:2794
+#: src/window-commands.c:2814
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4443,7 +4449,7 @@ msgstr ""
 "der Tastatur steuern können. Wollen Sie die Eingabemarke-Navigation "
 "einschalten?"
 
-#: src/window-commands.c:2799
+#: src/window-commands.c:2819
 msgid "_Enable"
 msgstr "_Aktivieren"
 
