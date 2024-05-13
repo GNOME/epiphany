@@ -80,7 +80,6 @@ struct _EphyLocationEntry {
   gdouble progress_fraction;
 
   gboolean reader_mode_active;
-  gboolean reader_mode_available;
   gboolean show_suggestions;
 
   guint dns_prefetch_handle_id;
@@ -604,11 +603,6 @@ update_entry_style (EphyLocationEntry *self,
   char *sub_string;
 
   gtk_widget_set_visible (self->clear_button, focus);
-
-  if (focus)
-    gtk_widget_set_visible (self->reader_mode_button, FALSE);
-  else
-    gtk_widget_set_visible (self->reader_mode_button, self->reader_mode_available);
 
   attrs = pango_attr_list_new ();
 
@@ -1936,10 +1930,7 @@ void
 ephy_location_entry_set_reader_mode_visible (EphyLocationEntry *entry,
                                              gboolean           visible)
 {
-  entry->reader_mode_available = visible;
-
-  if (!gtk_widget_has_focus (entry->text))
-    gtk_widget_set_visible (entry->reader_mode_button, visible);
+  gtk_widget_set_visible (entry->reader_mode_button, visible);
 }
 
 void
