@@ -96,7 +96,12 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
     EphyNotification *child_notification = EPHY_NOTIFICATION (child);
 
     if (ephy_notification_is_duplicate (child_notification, EPHY_NOTIFICATION (notification))) {
-      gtk_box_remove (GTK_BOX (self->box), notification);
+      /* Don't need the newly-created EphyNotification. Goodbye!
+       *
+       * Since we will not add it to the widget hierarchy, we have to sink its floating ref.
+       */
+      g_object_ref_sink (G_OBJECT (notification));
+      g_object_unref (G_OBJECT (notification));
       return;
     }
   }
