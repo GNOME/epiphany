@@ -594,28 +594,6 @@ launch_application (GAppInfo *app,
   return res;
 }
 
-static gboolean
-launch_via_uri_handler (GFile *file)
-{
-  const char *uri;
-  GdkDisplay *display;
-  GdkAppLaunchContext *context;
-  g_autoptr (GError) error = NULL;
-
-  display = gdk_display_get_default ();
-  context = gdk_display_get_app_launch_context (display);
-
-  uri = g_file_get_uri (file);
-
-  g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
-  if (error) {
-    g_warning ("Failed to launch handler for URI %s: %s", uri, error->message);
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
 /**
  * ephy_file_launch_handler:
  * @file: a #GFile to pass as argument
@@ -639,8 +617,11 @@ ephy_file_launch_handler (GFile *file)
    * focus stealing prevention. There's no other way to open a file
    * under sandbox, and focus stealing prevention becomes the
    * responsibility of the portal in this case anyway. */
-  if (ephy_is_running_inside_sandbox ())
-    return launch_via_uri_handler (file);
+  if (ephy_is_running_inside_sandbox ()) {
+    g_autofree char *uri = g_file_get_uri (file);
+    ephy_open_uri_via_flatpak_portal (uri);
+    return TRUE;
+  }
 
   app = g_file_query_default_handler (file, NULL, &error);
   if (!app) {
