@@ -149,7 +149,7 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
 
   user_style_sheet_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
   if (!user_style_sheet_monitor) {
-    g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
+    g_warning ("Could not create a file monitor for %s: %s", g_file_get_uri (file), error->message);
     g_error_free (error);
   } else {
     g_signal_connect (user_style_sheet_monitor, "changed", G_CALLBACK (user_style_sheet_file_changed), NULL);
@@ -256,7 +256,7 @@ webkit_pref_callback_user_javascript (GSettings  *settings,
 
   user_javascript_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
   if (!user_javascript_monitor)
-    g_warning ("Could not create a file monitor for %s: %s\n", g_file_get_uri (file), error->message);
+    g_warning ("Could not create a file monitor for %s: %s", g_file_get_uri (file), error->message);
   else
     g_signal_connect (user_javascript_monitor, "changed", G_CALLBACK (user_javascript_file_changed), NULL);
 }

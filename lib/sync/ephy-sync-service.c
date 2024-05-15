@@ -1017,7 +1017,7 @@ get_storage_credentials_ready_cb (SoupSession  *session,
 
   bytes = soup_session_send_and_read_finish (session, result, &error);
   if (!bytes)
-    g_warning ("Failed to send store credentials request: %s\n", error->message);
+    g_warning ("Failed to send store credentials request: %s", error->message);
 
   msg = soup_session_get_async_result_message (session, result);
   g_object_set_data_full (G_OBJECT (msg),

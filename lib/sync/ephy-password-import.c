@@ -70,7 +70,7 @@ get_libsecret_phrase (ChromeType type)
     return NULL;
 
   if (error) {
-    g_warning ("Could not read secret phrase: %s\n", error->message);
+    g_warning ("Could not read secret phrase: %s", error->message);
 
     return NULL;
   }

@@ -153,7 +153,7 @@ gnome_parse_locale (const char *locale,
 
         if (!g_regex_match (re, locale, 0, &match_info) ||
             g_match_info_is_partial_match (match_info)) {
-                g_warning ("locale '%s' isn't valid\n", locale);
+                g_warning ("locale '%s' isn't valid", locale);
                 goto out;
         }
 
@@ -995,12 +995,12 @@ languages_variant_init (const char *variant)
                 res = g_markup_parse_context_parse (ctx, buf, buf_len, &error);
 
                 if (! res) {
-                        g_warning ("Failed to parse '%s': %s\n",
+                        g_warning ("Failed to parse '%s': %s",
                                    filename,
                                    error->message);
                 }
         } else {
-                g_warning ("Failed to load '%s': %s\n",
+                g_warning ("Failed to load '%s': %s",
                            filename,
                            error->message);
         }
@@ -1049,12 +1049,12 @@ territories_init (void)
                 res = g_markup_parse_context_parse (ctx, buf, buf_len, &error);
 
                 if (! res) {
-                        g_warning ("Failed to parse '%s': %s\n",
+                        g_warning ("Failed to parse '%s': %s",
                                    ISO_CODES_DATADIR "/iso_3166.xml",
                                    error->message);
                 }
         } else {
-                g_warning ("Failed to load '%s': %s\n",
+                g_warning ("Failed to load '%s': %s",
                            ISO_CODES_DATADIR "/iso_3166.xml",
                            error->message);
         }

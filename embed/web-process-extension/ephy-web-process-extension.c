@@ -550,7 +550,7 @@ web_view_query_usernames_ready_cb (WebKitWebPage            *web_page,
   reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
   if (error) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Error getting usernames from WebView: %s\n", error->message);
+      g_warning ("Error getting usernames from WebView: %s", error->message);
     g_free (data);
     return;
   }
@@ -622,7 +622,7 @@ web_view_query_password_ready_cb (WebKitWebPage            *web_page,
   reply = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
   if (error) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Error getting password from WebView: %s\n", error->message);
+      g_warning ("Error getting password from WebView: %s", error->message);
     g_free (data);
     return;
   }
