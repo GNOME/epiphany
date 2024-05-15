@@ -574,15 +574,16 @@ ephy_ensure_dir_exists (const char  *dir,
 }
 
 static gboolean
-launch_application (GAppInfo *app,
-                    GList    *files)
+launch_application (GAppInfo   *app,
+                    GList      *files,
+                    GdkDisplay *display)
 {
   g_autoptr (GdkAppLaunchContext) context = NULL;
   g_autoptr (GError) error = NULL;
-  GdkDisplay *display;
   gboolean res;
 
-  display = gdk_display_get_default ();
+  if (!display)
+    display = gdk_display_get_default ();
 
   context = gdk_display_get_app_launch_context (display);
 
@@ -605,7 +606,8 @@ launch_application (GAppInfo *app,
  **/
 gboolean
 ephy_file_launch_uri_handler (GFile      *file,
-                              const char *mime_type)
+                              const char *mime_type,
+                              GdkDisplay *display)
 {
   GAppInfo *app = NULL;
   gboolean ret = FALSE;
@@ -637,49 +639,17 @@ ephy_file_launch_uri_handler (GFile      *file,
   }
 
   list = g_list_append (list, file);
-  ret = launch_application (app, list);
+  ret = launch_application (app, list, display);
 
   return ret;
-}
-
-static gboolean
-open_in_default_handler (const char *uri,
-                         const char *mime_type,
-                         GdkDisplay *display)
-{
-  g_autoptr (GdkAppLaunchContext) context = NULL;
-  g_autoptr (GAppInfo) appinfo = NULL;
-  g_autoptr (GError) error = NULL;
-  GList uris;
-
-  context = gdk_display_get_app_launch_context (display ? display : gdk_display_get_default ());
-
-  appinfo = g_app_info_get_default_for_type (mime_type, TRUE);
-  if (!appinfo) {
-    g_warning ("Failed to get default app for MIME type: %s", mime_type);
-    return FALSE;
-  }
-
-  uris.data = (gpointer)uri;
-  uris.next = uris.prev = NULL;
-
-  if (!g_app_info_launch_uris (appinfo, &uris, G_APP_LAUNCH_CONTEXT (context), &error)) {
-    g_warning ("Failed to launch %s: %s", uri, error->message);
-    return FALSE;
-  }
-
-  return TRUE;
 }
 
 gboolean
 ephy_file_open_uri_in_default_browser (const char *uri,
                                        GdkDisplay *display)
 {
-  if (ephy_is_running_inside_sandbox ()) {
-    ephy_open_uri_via_flatpak_portal (uri);
-    return TRUE;
-  }
-  return open_in_default_handler (uri, "x-scheme-handler/http", display);
+  g_autoptr (GFile) file = g_file_new_for_uri (uri);
+  return ephy_file_launch_uri_handler (file, "x-scheme-handler/http", display);
 }
 
 /**
@@ -695,14 +665,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
 gboolean
 ephy_file_browse_to (GFile *file)
 {
-  g_autofree char *uri = g_file_get_uri (file);
-
-  if (ephy_is_running_inside_sandbox ()) {
-    ephy_open_directory_via_flatpak_portal (uri);
-    return TRUE;
-  }
-
-  return open_in_default_handler (uri, "inode/directory", NULL);
+  return ephy_file_launch_uri_handler (file, "inode/directory", NULL);
 }
 
 /**

@@ -155,7 +155,7 @@ css_file_created_cb (GObject      *source,
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else
-    ephy_file_launch_uri_handler (file, "text/css");
+    ephy_file_launch_uri_handler (file, "text/css", NULL);
 }
 
 static void
@@ -184,7 +184,7 @@ js_file_created_cb (GObject      *source,
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
   else
-    ephy_file_launch_uri_handler (file, "text/javascript");
+    ephy_file_launch_uri_handler (file, "text/javascript", NULL);
 }
 
 static void
