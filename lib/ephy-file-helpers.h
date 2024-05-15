@@ -62,7 +62,8 @@ char       *       ephy_file_tmp_filename                   (const char         
                                                              const char            *extension);
 gboolean           ephy_ensure_dir_exists                   (const char            *dir,
                                                              GError               **error);
-gboolean           ephy_file_launch_handler                 (GFile                 *file);
+gboolean           ephy_file_launch_uri_handler             (GFile                 *file,
+                                                             const char            *mime_type);
 gboolean           ephy_file_delete_dir_recursively         (const char            *directory,
                                                              GError               **error);
 char       *       ephy_sanitize_filename                   (char                  *filename);
