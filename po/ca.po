@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-02-11 23:30+0000\n"
-"PO-Revision-Date: 2024-02-23 18:43+0100\n"
+"POT-Creation-Date: 2024-05-03 13:14+0000\n"
+"PO-Revision-Date: 2024-05-14 22:18+0200\n"
 "Last-Translator: Quique Serrano <qserrano@outlook.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-DamnedLies-Scope: partial\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
@@ -1115,37 +1115,37 @@ msgstr ""
 "els llocs web que visiteu i els anunciants d'aquests llocs web encara us "
 "poden rastrejar."
 
-#: embed/ephy-client-certificate-manager.c:295
+#: embed/ephy-client-certificate-manager.c:292
 msgid "PIN required"
 msgstr "PIN obligatori"
 
-#: embed/ephy-client-certificate-manager.c:298
+#: embed/ephy-client-certificate-manager.c:295
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Introduïu el PIN per a %s, per a autenticar-vos a %s:%d."
 
-#: embed/ephy-client-certificate-manager.c:306
-#: embed/ephy-client-certificate-manager.c:391 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:257
+#: embed/ephy-client-certificate-manager.c:303
+#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
+#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2814
+#: src/window-commands.c:1243 src/window-commands.c:1916
+#: src/window-commands.c:2818
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
-#: embed/ephy-client-certificate-manager.c:307
+#: embed/ephy-client-certificate-manager.c:304
 msgid "_Login"
 msgstr "_Inici de sessió"
 
-#: embed/ephy-client-certificate-manager.c:377
+#: embed/ephy-client-certificate-manager.c:374
 msgid "Select certificate"
 msgstr "Selecciona un certificat"
 
-#: embed/ephy-client-certificate-manager.c:380
+#: embed/ephy-client-certificate-manager.c:377
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
@@ -1154,7 +1154,7 @@ msgstr ""
 "El lloc web %s:%d sol·licita que proporcioneu un certificat per a "
 "l'autenticació de %s."
 
-#: embed/ephy-client-certificate-manager.c:385
+#: embed/ephy-client-certificate-manager.c:382
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
@@ -1162,7 +1162,7 @@ msgstr ""
 "El lloc web %s:%d sol·licita que  proporcioneu un certificat per a "
 "l'autenticació."
 
-#: embed/ephy-client-certificate-manager.c:392 src/window-commands.c:335
+#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:335
 msgid "_Select"
 msgstr "_Selecciona"
 
@@ -2093,22 +2093,27 @@ msgstr "Contrasenya per a %s en un formulari a %s"
 msgid "Password in a form in %s"
 msgstr "Contrasenya en un formulari a %s"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr ""
+"El cos de la resposta està buit, necessiteu instal·lar glib-networking?"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "No s'han pogut obtenir les credencials per l'emmagatzematge."
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Aneu a la Sincronització de Firefox i inicieu la sessió de nou per a seguir "
 "sincronitzant."
 
-#: lib/sync/ephy-sync-service.c:1116
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "La contrasenya del vostre compte de Mozilla sembla haver canviat."
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2116,23 +2121,23 @@ msgstr ""
 "Aneu a la Sincronització de Firefox i inicieu la sessió amb la nova "
 "contrasenya per a seguir sincronitzant."
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "No s'ha pogut obtenir un certificat signat."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
-msgid "Could not find the sync secrets for the current sync user."
-msgstr ""
-"No s'han pogut trobar els secrets de sincronització per l'usuari "
-"sincronitzat actualment."
-
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
+#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Els secrets de sincronització per l'usuari sincronitzat actualment no són "
 "vàlids."
 
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
+msgid "Could not find the sync secrets for the current sync user."
+msgstr ""
+"No s'han pogut trobar els secrets de sincronització per l'usuari "
+"sincronitzat actualment."
+
+#: lib/sync/ephy-sync-service.c:2007
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2141,29 +2146,29 @@ msgstr ""
 "servei secret o el portal de secrets?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2049
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Els secrets de sincronització de %s"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2079
 msgid "Failed to upload client record."
 msgstr "No s'han pogut pujar les dades del client."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2282
 msgid "Failed to upload crypto/keys record."
 msgstr "No s'han pogut pujar la dada xifrada/claus."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2394
 msgid "Failed to retrieve crypto keys."
 msgstr "No s'han pogut recuperar les claus xifrades."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2448
 msgid "Failed to upload meta/global record."
 msgstr "Error en pujar dades meta/globals."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2570
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2171,15 +2176,15 @@ msgstr ""
 "El vostre compte de Mozilla utilitza la versió d'emmagatzematge %d. El Web "
 "només suporta la versió %d."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2581
 msgid "Failed to verify storage version."
 msgstr "No s'han pogut verificar la versió d'emmagatzematge."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2639
 msgid "Failed to upload device info"
 msgstr "No s'han pogut pujar la informació del dispositiu"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
 msgid "Failed to retrieve the Sync Key"
 msgstr "No s'han pogut recuperar la clau de sincronització"
 
@@ -2242,25 +2247,25 @@ msgstr "Preferits"
 msgid "Mobile"
 msgstr "Mòbil"
 
-#: src/context-menu-commands.c:239
+#: src/context-menu-commands.c:294
 msgid "Save Link As"
 msgstr "Anomena i desa l'enllaç"
 
-#: src/context-menu-commands.c:247
+#: src/context-menu-commands.c:302
 msgid "Save Image As"
 msgstr "Anomena i desa la imatge"
 
-#: src/context-menu-commands.c:255
+#: src/context-menu-commands.c:310
 msgid "Save Media As"
 msgstr "Anomena i desa el multimèdia"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1758
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
 msgid "Bookmark Page"
 msgstr "Afegeix la pàgina a les adreces d'interès"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1766
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
 msgid "Edit Bookmark"
 msgstr "Edita l'adreça d'interès"
 
@@ -2450,27 +2455,27 @@ msgid "Remove all history"
 msgstr "Suprimeix tot l'historial"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1802 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "Sol·licitud de notificació"
 
-#: src/ephy-location-entry.c:1806
+#: src/ephy-location-entry.c:1809
 msgid "Camera Request"
 msgstr "Sol·licitud de càmera"
 
-#: src/ephy-location-entry.c:1810
+#: src/ephy-location-entry.c:1813
 msgid "Microphone Request"
 msgstr "Sol·licitud de micròfon"
 
-#: src/ephy-location-entry.c:1814
+#: src/ephy-location-entry.c:1817
 msgid "Location Request"
 msgstr "Sol·licitud d'ubicació"
 
-#: src/ephy-location-entry.c:1818
+#: src/ephy-location-entry.c:1821
 msgid "Webcam and Microphone Request"
 msgstr "Sol·licitud de càmera web i micròfon"
 
-#: src/ephy-location-entry.c:1822
+#: src/ephy-location-entry.c:1825
 msgid "Permission Request"
 msgstr "Sol·licitud de permís"
 
@@ -2629,51 +2634,51 @@ msgstr "La vostra connexió sembla ser segura."
 msgid "_View Certificate…"
 msgstr "_Mostra el certificat…"
 
-#: src/ephy-security-popover.c:492
+#: src/ephy-security-popover.c:494
 msgid "Allow"
 msgstr "Permet"
 
-#: src/ephy-security-popover.c:493
+#: src/ephy-security-popover.c:495
 msgid "Deny"
 msgstr "Denega"
 
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-popover.c:498
 msgid "Ask"
 msgstr "Pregunta"
 
-#: src/ephy-security-popover.c:514
+#: src/ephy-security-popover.c:516
 msgid "Permissions"
 msgstr "Permisos"
 
-#: src/ephy-security-popover.c:556
+#: src/ephy-security-popover.c:558
 msgid "Advertisements"
 msgstr "Anuncis"
 
-#: src/ephy-security-popover.c:557
+#: src/ephy-security-popover.c:559
 msgid "Notifications"
 msgstr "Notificacions"
 
-#: src/ephy-security-popover.c:558
+#: src/ephy-security-popover.c:560
 msgid "Password saving"
 msgstr "Desa la contrasenya"
 
-#: src/ephy-security-popover.c:559
+#: src/ephy-security-popover.c:561
 msgid "Location access"
 msgstr "Accés a la ubicació"
 
-#: src/ephy-security-popover.c:560
+#: src/ephy-security-popover.c:562
 msgid "Microphone access"
 msgstr "Accés al micròfon"
 
-#: src/ephy-security-popover.c:561
+#: src/ephy-security-popover.c:563
 msgid "Webcam access"
 msgstr "Accés a la càmera web"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Media autoplay"
 msgstr "Reproducció automàtica"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Without Sound"
 msgstr "Sense so"
 
@@ -2683,215 +2688,215 @@ msgid "Open a new tab"
 msgstr "Obre una pestanya nova"
 
 #. Undo, redo.
-#: src/ephy-window.c:903 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: src/ephy-window.c:904
+#: src/ephy-window.c:951
 msgid "Re_do"
 msgstr "_Refés"
 
 #. Edit.
-#: src/ephy-window.c:907 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "_Retalla"
 
-#: src/ephy-window.c:908 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_Copia"
 
-#: src/ephy-window.c:909 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: src/ephy-window.c:910
+#: src/ephy-window.c:957
 msgid "_Paste Text Only"
 msgstr "_Enganxa només text"
 
-#: src/ephy-window.c:911 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "_Selecciona-ho tot"
 
-#: src/ephy-window.c:913
+#: src/ephy-window.c:960
 msgid "S_end Link by Email…"
 msgstr "Envia l'_enllaç per correu electrònic…"
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:962
 msgid "_Reload"
 msgstr "_Torna a carregar"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:963
 msgid "_Back"
 msgstr "E_nrere"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:964
 msgid "_Forward"
 msgstr "Se_güent"
 
 #. Bookmarks
-#: src/ephy-window.c:920
+#: src/ephy-window.c:967
 msgid "Add Boo_kmark…"
 msgstr "Afege_ix una adreça d'interès…"
 
 #. Links.
-#: src/ephy-window.c:924
+#: src/ephy-window.c:971
 msgid "Open Link in New _Window"
 msgstr "Obre l'enllaç en una _finestra nova"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:972
 msgid "Open Link in New _Tab"
 msgstr "Obre l'enllaç en una _pestanya nova"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:973
 msgid "Open Link in I_ncognito Window"
 msgstr "Obre l'enllaç en una finestra _incògnita"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:974
 msgid "_Save Link As…"
 msgstr "De_sa l'enllaç com a…"
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:975
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:976
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça del correu"
 
 #. Images.
-#: src/ephy-window.c:933
+#: src/ephy-window.c:980
 msgid "View _Image in New Tab"
 msgstr "Mostra la _imatge en una pestanya nova"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:981
 msgid "Copy I_mage Address"
 msgstr "Copia l'adreça de la _imatge"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:982
 msgid "_Save Image As…"
 msgstr "_Desa la imatge com a…"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:983
 msgid "Set as _Wallpaper"
 msgstr "Estableix com _fons de pantalla"
 
 #. Video.
-#: src/ephy-window.c:940
+#: src/ephy-window.c:987
 msgid "Open Video in New _Window"
 msgstr "Obre el vídeo en una _finestra nova"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:988
 msgid "Open Video in New _Tab"
 msgstr "Obre el vídeo en una _pestanya nova"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:989
 msgid "_Save Video As…"
 msgstr "De_sa el vídeo com a…"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:990
 msgid "_Copy Video Address"
 msgstr "_Copia l'adreça del vídeo"
 
 #. Audio.
-#: src/ephy-window.c:947
+#: src/ephy-window.c:994
 msgid "Open Audio in New _Window"
 msgstr "Obre l'àudio en una _finestra nova"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:995
 msgid "Open Audio in New _Tab"
 msgstr "Obre l'àudio en una _pestanya nova"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:996
 msgid "_Save Audio As…"
 msgstr "De_sa l'àudio com a…"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:997
 msgid "_Copy Audio Address"
 msgstr "_Copia l'adreça de l'àudio"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:1003
 msgid "Save Pa_ge As…"
 msgstr "Anomena i de_sa la pàgina…"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:1004
 msgid "_Take Screenshot…"
 msgstr "_Pren una captura de pantalla…"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:1005
 msgid "_Page Source"
 msgstr "Codi font de la _pàgina"
 
-#: src/ephy-window.c:1332
+#: src/ephy-window.c:1382
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Cerca al web «%s»"
 
-#: src/ephy-window.c:1361
+#: src/ephy-window.c:1411
 msgid "Open Link"
 msgstr "Obre l'enllaç"
 
-#: src/ephy-window.c:1363
+#: src/ephy-window.c:1413
 msgid "Open Link In New Tab"
 msgstr "Obre l'enllaç en una pestanya nova"
 
-#: src/ephy-window.c:1365
+#: src/ephy-window.c:1415
 msgid "Open Link In New Window"
 msgstr "Obre l'enllaç en una finestra nova"
 
-#: src/ephy-window.c:1367
+#: src/ephy-window.c:1417
 msgid "Open Link In Incognito Window"
 msgstr "Obre l'enllaç en una d'incògnit nova"
 
-#: src/ephy-window.c:2742
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "_Pregunta-ho més tard"
 
-#: src/ephy-window.c:2743 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Denega"
 
-#: src/ephy-window.c:2744 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Permet"
 
-#: src/ephy-window.c:2946 src/ephy-window.c:4386
+#: src/ephy-window.c:3004 src/ephy-window.c:4439
 msgid "Leave Website?"
 msgstr "Voleu sortir del lloc web?"
 
-#: src/ephy-window.c:2947 src/ephy-window.c:4387 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Un formulari modificat no ha estat enviat"
 
-#: src/ephy-window.c:2948 src/ephy-window.c:4388 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Descarta el formulari"
 
-#: src/ephy-window.c:2969
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Operació de baixada"
 
-#: src/ephy-window.c:2971
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Mostra els detalls"
 
-#: src/ephy-window.c:2973
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operació de baixada activa"
 msgstr[1] "%d operacions de baixada actives"
 
-#: src/ephy-window.c:3214
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "Configurar-ho com el navegador per defecte?"
 
-#: src/ephy-window.c:3216
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Utilitzeu el Web com a navegador web per defecte i per a obrir enllaços "
 "externs"
 
-#: src/ephy-window.c:3218
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2899,56 +2904,56 @@ msgstr ""
 "Utilitzeu la versió preliminar de la tecnologia Epiphany com a navegador web "
 "predeterminat i per a obrir enllaços externs"
 
-#: src/ephy-window.c:3222
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "_Pregunta-ho més tard"
 
-#: src/ephy-window.c:3223
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "_No"
 
-#: src/ephy-window.c:3224
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3675
+#: src/ephy-window.c:3732
 msgid "Save password?"
 msgstr "Voleu desar la contrasenya?"
 
-#: src/ephy-window.c:3676
+#: src/ephy-window.c:3733
 msgid "Passwords can be removed at any time in Preferences"
 msgstr ""
 "Les contrasenyes es poden suprimir en qualsevol moment a les preferències"
 
-#: src/ephy-window.c:3678
+#: src/ephy-window.c:3735
 msgid "Not Now"
 msgstr "_Ara no"
 
-#: src/ephy-window.c:3679
+#: src/ephy-window.c:3736
 msgid "Never Save"
 msgstr "No ho desis mai"
 
-#: src/ephy-window.c:3680
+#: src/ephy-window.c:3737
 msgid "Save"
 msgstr "Desa"
 
-#: src/ephy-window.c:4517
+#: src/ephy-window.c:4570
 msgid "Close Multiple Tabs?"
 msgstr "Voleu tancar múltiples pestanyes?"
 
-#: src/ephy-window.c:4518
+#: src/ephy-window.c:4571
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Si tanqueu aquesta finestra, totes les pestanyes obertes es perdran"
 
-#: src/ephy-window.c:4519
+#: src/ephy-window.c:4572
 msgid "C_lose Tabs"
 msgstr "_Tanca les pestanyes"
 
-#: src/ephy-window.c:4612
+#: src/ephy-window.c:4665
 msgid "New tab opened"
 msgstr "S'ha obert una pestanya nova"
 
-#: src/ephy-window.c:4616
+#: src/ephy-window.c:4669
 msgid "Switch"
 msgstr "Commuta"
 
@@ -3772,7 +3777,7 @@ msgstr "Mostra les accions per a _desenvolupadors"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:8
 msgid "Add Language…"
-msgstr "Afegeix llengua..."
+msgstr "Afegeix una llengua…"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:45
 msgid "Choose a language:"
@@ -4336,53 +4341,53 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Voleu tornar a carregar el lloc web?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "L'aplicació «%s» està llesta per a ser usada"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "No s'ha pogut crear l'aplicació «%s»: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "Llança"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1908
 msgid "Replace Existing Web App?"
 msgstr "Substitueix l'aplicació web existent?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1912
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "Ja existeix una aplicació anomenada «%s», en substituir-la se sobreescriurà"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1917
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2280
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2284
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2330
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2809
+#: src/window-commands.c:2813
 msgid "Enable Caret Browsing Mode?"
 msgstr "Habilita el mode de navegació amb el cursor?"
 
-#: src/window-commands.c:2810
+#: src/window-commands.c:2814
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4392,7 +4397,7 @@ msgstr ""
 "característica col·loca un cursor mòbil a les pàgines web que us permet "
 "moure's amb el vostre teclat. Voleu habilitar la navegació amb el cursor?"
 
-#: src/window-commands.c:2815
+#: src/window-commands.c:2819
 msgid "_Enable"
 msgstr "_Habilita"
 
