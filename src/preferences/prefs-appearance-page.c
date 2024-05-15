@@ -24,7 +24,6 @@
 
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
-#include "ephy-flatpak-utils.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -155,14 +154,8 @@ css_file_created_cb (GObject      *source,
   stream = g_file_create_finish (file, result, &error);
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
-  else {
-    if (ephy_is_running_inside_sandbox ()) {
-      g_autofree char *uri = g_file_get_uri (file);
-      ephy_open_uri_via_flatpak_portal (uri);
-    } else {
-      ephy_file_launch_handler (file);
-    }
-  }
+  else
+    ephy_file_launch_handler (file);
 }
 
 static void
@@ -190,14 +183,8 @@ js_file_created_cb (GObject      *source,
   stream = g_file_create_finish (file, result, &error);
   if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
-  else {
-    if (ephy_is_running_inside_sandbox ()) {
-      g_autofree char *uri = g_file_get_uri (file);
-      ephy_open_uri_via_flatpak_portal (uri);
-    } else {
-      ephy_file_launch_handler (file);
-    }
-  }
+  else
+    ephy_file_launch_handler (file);
 }
 
 static void
