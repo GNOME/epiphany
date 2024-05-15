@@ -690,7 +690,7 @@ downloads_handler_showdefaultfolder (EphyWebExtensionSender *sender,
                                      GTask                  *task)
 {
   g_autoptr (GFile) default_folder = g_file_new_for_path (ephy_file_get_downloads_dir ());
-  ephy_file_browse_to (default_folder);
+  ephy_file_browse_to (default_folder, gtk_widget_get_display (GTK_WIDGET (sender->view)));
   g_task_return_pointer (task, NULL, NULL);
 }
 

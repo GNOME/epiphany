@@ -431,13 +431,13 @@ ephy_download_do_download_action (EphyDownload           *download,
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
       /* Must not use this action type under sandbox! */
-      ret = ephy_file_browse_to (destination);
+      ret = ephy_file_browse_to (destination, NULL);
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
       ret = ephy_file_launch_uri_handler (destination, NULL, NULL);
       if (!ret)
-        ret = ephy_file_browse_to (destination);
+        ret = ephy_file_browse_to (destination, NULL);
       break;
     case EPHY_DOWNLOAD_ACTION_NONE:
       LOG ("ephy_download_do_download_action: none");

@@ -72,7 +72,8 @@ void               ephy_open_default_instance_window        (void);
 void               ephy_open_incognito_window               (const char            *uri);
 gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
                                                              GdkDisplay            *display);
-gboolean           ephy_file_browse_to                      (GFile                 *file);
+gboolean           ephy_file_browse_to                      (GFile                 *file,
+                                                             GdkDisplay            *display);
 void               ephy_copy_directory                      (const char            *source,
                                                              const char            *target);
 XdpPortal  *       ephy_get_portal                          (void);

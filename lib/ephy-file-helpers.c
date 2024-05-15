@@ -582,8 +582,15 @@ launch_application (GAppInfo   *app,
   g_autoptr (GError) error = NULL;
   gboolean res;
 
-  if (!display)
-    display = gdk_display_get_default ();
+  if (!display) {
+    GApplication *application = g_application_get_default ();
+    GtkWindow *window = gtk_application_get_active_window (GTK_APPLICATION (application));
+
+    if (window)
+      display = gtk_widget_get_display (GTK_WIDGET (window));
+    if (!display)
+      display = gdk_display_get_default ();
+  }
 
   context = gdk_display_get_app_launch_context (display);
 
@@ -655,6 +662,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
 /**
  * ephy_file_browse_to:
  * @file: a #GFile
+ * @display: #GdkDisplay to use for launch context
  *
  * Launches the default application for browsing directories to point to
  * @file. E.g. nautilus will jump to @file within its directory and
@@ -663,9 +671,10 @@ ephy_file_open_uri_in_default_browser (const char *uri,
  * Returns: %TRUE if the launch succeeded
  **/
 gboolean
-ephy_file_browse_to (GFile *file)
+ephy_file_browse_to (GFile      *file,
+                     GdkDisplay *display)
 {
-  return ephy_file_launch_uri_handler (file, "inode/directory", NULL);
+  return ephy_file_launch_uri_handler (file, "inode/directory", display);
 }
 
 /**

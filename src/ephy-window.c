@@ -2141,8 +2141,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
       if (ephy_web_application_is_uri_allowed (uri)) {
         gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
       } else {
-        ephy_file_open_uri_in_default_browser (uri,
-                                               gdk_surface_get_display (gtk_native_get_surface (GTK_NATIVE (window))));
+        ephy_file_open_uri_in_default_browser (uri, gtk_widget_get_display (GTK_WIDGET (window)));
         webkit_policy_decision_ignore (decision);
 
         gtk_window_destroy (GTK_WINDOW (window));
@@ -2156,8 +2155,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
       if (ephy_web_application_is_uri_allowed (uri))
         return accept_navigation_policy_decision (window, decision, uri);
 
-      ephy_file_open_uri_in_default_browser (uri,
-                                             gdk_surface_get_display (gtk_native_get_surface (GTK_NATIVE (window))));
+      ephy_file_open_uri_in_default_browser (uri, gtk_widget_get_display (GTK_WIDGET (window)));
       webkit_policy_decision_ignore (decision);
 
       return TRUE;

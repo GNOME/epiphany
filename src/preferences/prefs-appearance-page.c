@@ -50,6 +50,8 @@ struct _PrefsAppearancePage {
   GtkWidget *js_row;
   GtkWidget *js_edit_button;
   GtkWidget *default_zoom_row;
+
+  GCancellable *cancellable;
 };
 
 G_DEFINE_FINAL_TYPE (PrefsAppearancePage, prefs_appearance_page, ADW_TYPE_PREFERENCES_PAGE)
@@ -150,12 +152,19 @@ css_file_created_cb (GObject      *source,
   g_autoptr (GFile) file = G_FILE (source);
   g_autoptr (GFileOutputStream) stream = NULL;
   g_autoptr (GError) error = NULL;
+  PrefsAppearancePage *page = user_data;
 
   stream = g_file_create_finish (file, result, &error);
-  if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
-    g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
-  else
-    ephy_file_launch_uri_handler (file, "text/css", NULL);
+  if (!stream) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+      g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
+      return;
+    }
+  }
+
+  ephy_file_launch_uri_handler (file, "text/css", gtk_widget_get_display (GTK_WIDGET (page)));
 }
 
 static void
@@ -168,7 +177,7 @@ css_edit_button_clicked_cb (GtkWidget           *button,
                                                     USER_STYLESHEET_FILENAME,
                                                     NULL));
 
-  g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
+  g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, appearance_page->cancellable, css_file_created_cb, appearance_page);
 }
 
 static void
@@ -179,12 +188,19 @@ js_file_created_cb (GObject      *source,
   g_autoptr (GFile) file = G_FILE (source);
   g_autoptr (GFileOutputStream) stream = NULL;
   g_autoptr (GError) error = NULL;
+  PrefsAppearancePage *page = user_data;
 
   stream = g_file_create_finish (file, result, &error);
-  if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
-    g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
-  else
-    ephy_file_launch_uri_handler (file, "text/javascript", NULL);
+  if (!stream) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+      g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
+      return;
+    }
+  }
+
+  ephy_file_launch_uri_handler (file, "text/javascript", gtk_widget_get_display (GTK_WIDGET (page)));
 }
 
 static void
@@ -197,7 +213,7 @@ js_edit_button_clicked_cb (GtkWidget           *button,
                                                    USER_JAVASCRIPT_FILENAME,
                                                    NULL));
 
-  g_file_create_async (g_steal_pointer (&js_file), G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, js_file_created_cb, NULL);
+  g_file_create_async (g_steal_pointer (&js_file), G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, appearance_page->cancellable, js_file_created_cb, appearance_page);
 }
 
 static gboolean
@@ -325,9 +341,25 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
 }
 
 static void
+prefs_appearance_page_dispose (GObject *object)
+{
+  PrefsAppearancePage *page = EPHY_PREFS_APPEARANCE_PAGE (object);
+
+  if (page->cancellable) {
+    g_cancellable_cancel (page->cancellable);
+    g_clear_object (&page->cancellable);
+  }
+
+  G_OBJECT_CLASS (prefs_appearance_page_parent_class)->dispose (object);
+}
+
+static void
 prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = prefs_appearance_page_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-appearance-page.ui");
@@ -368,4 +400,6 @@ prefs_appearance_page_init (PrefsAppearancePage *appearance_page)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   setup_appearance_page (appearance_page);
+
+  appearance_page->cancellable = g_cancellable_new ();
 }
