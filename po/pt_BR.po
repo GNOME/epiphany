@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-27 17:27+0000\n"
-"PO-Revision-Date: 2024-03-27 15:35-0300\n"
+"POT-Creation-Date: 2024-05-03 13:14+0000\n"
+"PO-Revision-Date: 2024-05-14 20:17-0300\n"
 "Last-Translator: Leônidas Araújo <leorusvellt@hotmail.com>\n"
 "Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
 "Language: pt_BR\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: pt_BR\n"
 "X-DL-Module: epiphany\n"
@@ -1154,7 +1154,7 @@ msgstr "Insira o PIN de %s para autenticar em %s:%d."
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
 #: src/window-commands.c:1243 src/window-commands.c:1916
-#: src/window-commands.c:2804
+#: src/window-commands.c:2818
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2109,22 +2109,27 @@ msgstr "Senha para %s em um formulário em %s"
 msgid "Password in a form in %s"
 msgstr "Senha em um formulário em %s"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr ""
+"O corpo da resposta está vazio. Você precisa instalar o glib-networking?"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "Falha ao obter credenciais de armazenamento."
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1890
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Visite o Firefox Sync e autentique-se novamente para continuar a "
 "sincronização."
 
-#: lib/sync/ephy-sync-service.c:1116
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "A senha da sua conta Mozilla parece ter sido alterada."
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2132,23 +2137,23 @@ msgstr ""
 "Visite o Firefox Sync e autentique-se com a nova senha para continuar a "
 "sincronização."
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "Falha a obter certificado assinado."
 
-#: lib/sync/ephy-sync-service.c:1915 lib/sync/ephy-sync-service.c:1922
+#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Os segredos de sincronização para o usuário de sincronização atual são "
 "inválidos."
 
-#: lib/sync/ephy-sync-service.c:1948 lib/sync/ephy-sync-service.c:1953
+#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Não foi possível localizar os segredos de sincronização para o usuário de "
 "sincronização atual."
 
-#: lib/sync/ephy-sync-service.c:1996
+#: lib/sync/ephy-sync-service.c:2007
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2157,29 +2162,29 @@ msgstr ""
 "segredos está corrompido?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2038
+#: lib/sync/ephy-sync-service.c:2049
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Os segredos de sincronização de %s"
 
-#: lib/sync/ephy-sync-service.c:2068
+#: lib/sync/ephy-sync-service.c:2079
 msgid "Failed to upload client record."
 msgstr "Falha ao atualizar o registro cliente."
 
-#: lib/sync/ephy-sync-service.c:2271
+#: lib/sync/ephy-sync-service.c:2282
 msgid "Failed to upload crypto/keys record."
 msgstr "Falha ao atualizar o registro cripto/chaves."
 
-#: lib/sync/ephy-sync-service.c:2383
+#: lib/sync/ephy-sync-service.c:2394
 msgid "Failed to retrieve crypto keys."
 msgstr "Falha ao obter chaves criptográficas."
 
-#: lib/sync/ephy-sync-service.c:2437
+#: lib/sync/ephy-sync-service.c:2448
 msgid "Failed to upload meta/global record."
 msgstr "Falha ao enviar registro meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2559
+#: lib/sync/ephy-sync-service.c:2570
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2187,15 +2192,15 @@ msgstr ""
 "Sua conta Mozilla usa a versão de armazenamento %d. A Web suporta apenas a "
 "versão %d."
 
-#: lib/sync/ephy-sync-service.c:2570
+#: lib/sync/ephy-sync-service.c:2581
 msgid "Failed to verify storage version."
 msgstr "Falha ao verificar a versão de armazenamento."
 
-#: lib/sync/ephy-sync-service.c:2628
+#: lib/sync/ephy-sync-service.c:2639
 msgid "Failed to upload device info"
 msgstr "Falha ao atualizar a informação do dispositivo"
 
-#: lib/sync/ephy-sync-service.c:2704 lib/sync/ephy-sync-service.c:2787
+#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
 msgid "Failed to retrieve the Sync Key"
 msgstr "Falha ao obter a chave Sync"
 
@@ -2859,54 +2864,54 @@ msgstr "Abrir link em nova janela"
 msgid "Open Link In Incognito Window"
 msgstr "Abrir link em janela anônima"
 
-#: src/ephy-window.c:2797
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "Pergunte m_ais tarde"
 
-#: src/ephy-window.c:2798 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Negar"
 
-#: src/ephy-window.c:2799 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Permitir"
 
-#: src/ephy-window.c:3001 src/ephy-window.c:4434
+#: src/ephy-window.c:3004 src/ephy-window.c:4439
 msgid "Leave Website?"
 msgstr "Sair do site?"
 
-#: src/ephy-window.c:3002 src/ephy-window.c:4435 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Um formulário foi modificado e não foi enviado"
 
-#: src/ephy-window.c:3003 src/ephy-window.c:4436 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Descartar formulário"
 
-#: src/ephy-window.c:3024
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Operação de download"
 
-#: src/ephy-window.c:3026
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Mostrar detalhes"
 
-#: src/ephy-window.c:3028
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operação de download ativa"
 msgstr[1] "%d operações de download ativas"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "Definir como navegador padrão?"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Use o Web como seu navegador padrão e para abrir links externos"
 
-#: src/ephy-window.c:3273
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2914,55 +2919,55 @@ msgstr ""
 "Use o Epiphany Technology Preview como seu navegador padrão e para abrir "
 "links externos"
 
-#: src/ephy-window.c:3277
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "Pergunte nov_amente mais tarde"
 
-#: src/ephy-window.c:3278
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "_Não"
 
-#: src/ephy-window.c:3279
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "_Sim"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3732
 msgid "Save password?"
 msgstr "Salvar senha?"
 
-#: src/ephy-window.c:3728
+#: src/ephy-window.c:3733
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "As senhas podem ser removidas a qualquer momento em Preferências"
 
-#: src/ephy-window.c:3730
+#: src/ephy-window.c:3735
 msgid "Not Now"
 msgstr "Agora não"
 
-#: src/ephy-window.c:3731
+#: src/ephy-window.c:3736
 msgid "Never Save"
 msgstr "Nunca salvar"
 
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3737
 msgid "Save"
 msgstr "Salvar"
 
-#: src/ephy-window.c:4565
+#: src/ephy-window.c:4570
 msgid "Close Multiple Tabs?"
 msgstr "Fechar várias abas?"
 
-#: src/ephy-window.c:4566
+#: src/ephy-window.c:4571
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Se esta janela for fechada, todas as abas abertas serão perdidas"
 
-#: src/ephy-window.c:4567
+#: src/ephy-window.c:4572
 msgid "C_lose Tabs"
 msgstr "Fe_char abas"
 
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4665
 msgid "New tab opened"
 msgstr "Nova aba aberta"
 
-#: src/ephy-window.c:4664
+#: src/ephy-window.c:4669
 msgid "Switch"
 msgstr "Trocar"
 
@@ -4407,23 +4412,23 @@ msgstr ""
 msgid "_Replace"
 msgstr "Substitui_r"
 
-#: src/window-commands.c:2266
+#: src/window-commands.c:2280
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2270
+#: src/window-commands.c:2284
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2316
+#: src/window-commands.c:2330
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2799
+#: src/window-commands.c:2813
 msgid "Enable Caret Browsing Mode?"
 msgstr "Habilitar modo de navegação com cursor?"
 
-#: src/window-commands.c:2800
+#: src/window-commands.c:2814
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4434,7 +4439,7 @@ msgstr ""
 "lhe navegar nelas com o seu teclado. Você deseja habilitar o modo de "
 "navegação com cursor?"
 
-#: src/window-commands.c:2805
+#: src/window-commands.c:2819
 msgid "_Enable"
 msgstr "_Habilitar"
 
