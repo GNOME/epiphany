@@ -620,13 +620,14 @@ launch_via_uri_handler (GFile *file)
  * ephy_file_launch_handler:
  * @file: a #GFile to pass as argument
  *
- * Launches @file with its default handler application, if @mime_type is %NULL
- * then @file will be queried for its type.
+ * If @mime_type is %NULL, launches @file with its default handler application.
+ * Otherwise, launches @file will the default handler for @mime_type.
  *
  * Returns: %TRUE on success
  **/
 gboolean
-ephy_file_launch_handler (GFile *file)
+ephy_file_launch_uri_handler (GFile      *file,
+                              const char *mime_type)
 {
   GAppInfo *app = NULL;
   gboolean ret = FALSE;
@@ -642,7 +643,11 @@ ephy_file_launch_handler (GFile *file)
   if (ephy_is_running_inside_sandbox ())
     return launch_via_uri_handler (file);
 
-  app = g_file_query_default_handler (file, NULL, &error);
+  if (mime_type)
+    app = g_app_info_get_default_for_type (mime_type, TRUE);
+  if (!app)
+    app = g_file_query_default_handler (file, NULL, &error);
+
   if (!app) {
     g_autofree char *path = g_file_get_path (file);
     g_warning ("No available application to open %s: %s", path, error->message);

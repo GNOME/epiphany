@@ -160,7 +160,7 @@ css_file_created_cb (GObject      *source,
       g_autofree char *uri = g_file_get_uri (file);
       ephy_open_uri_via_flatpak_portal (uri);
     } else {
-      ephy_file_launch_handler (file);
+      ephy_file_launch_uri_handler (file, "text/css");
     }
   }
 }
@@ -195,7 +195,7 @@ js_file_created_cb (GObject      *source,
       g_autofree char *uri = g_file_get_uri (file);
       ephy_open_uri_via_flatpak_portal (uri);
     } else {
-      ephy_file_launch_handler (file);
+      ephy_file_launch_uri_handler (file, "text/javascript");
     }
   }
 }

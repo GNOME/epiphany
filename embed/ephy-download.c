@@ -435,7 +435,7 @@ ephy_download_do_download_action (EphyDownload           *download,
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
-      ret = ephy_file_launch_handler (destination);
+      ret = ephy_file_launch_uri_handler (destination, NULL);
       if (!ret)
         ret = ephy_file_browse_to (destination);
       break;
