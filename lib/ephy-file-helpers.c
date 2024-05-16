@@ -629,10 +629,10 @@ gboolean
 ephy_file_launch_uri_handler (GFile      *file,
                               const char *mime_type)
 {
-  GAppInfo *app = NULL;
-  gboolean ret = FALSE;
+  g_autoptr (GAppInfo) app = NULL;
   g_autoptr (GList) list = NULL;
   g_autoptr (GError) error = NULL;
+  gboolean ret = FALSE;
 
   g_assert (file != NULL);
 
