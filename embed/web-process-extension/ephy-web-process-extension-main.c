@@ -43,6 +43,8 @@ webkit_web_process_extension_initialize_with_user_data (WebKitWebProcessExtensio
   gboolean is_webextension;
   g_autoptr (GError) error = NULL;
 
+  g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
+
   g_variant_get (user_data, "(&sm&sbbb&s)", &guid, &profile_dir, &should_remember_passwords, &private_profile, &is_webextension, &webextension_translations);
 
   if (!ephy_file_helpers_init (profile_dir, 0, &error))
