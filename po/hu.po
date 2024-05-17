@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-03-07 01:49+0000\n"
-"PO-Revision-Date: 2024-03-10 17:12+0100\n"
+"POT-Creation-Date: 2024-05-03 13:14+0000\n"
+"PO-Revision-Date: 2024-05-18 01:54+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -594,7 +594,6 @@ msgid "Indicates which WebExtensions are set to active."
 msgstr "Azt jelzi, hogy mely webkiterjesztések vannak aktívra állítva."
 
 #: data/org.gnome.epiphany.gschema.xml:279
-#| msgid "Download operation"
 msgid "Show developer actions"
 msgstr "Fejlesztői műveletek megjelenítése"
 
@@ -603,8 +602,8 @@ msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
-"Megjelenjenek-e a fejlesztői helyi menü műveletei. Ez lehetővé teszi az Oldal"
-" forrása és az Elem vizsgálata műveletek használatát."
+"Megjelenjenek-e a fejlesztői helyi menü műveletei. Ez lehetővé teszi az "
+"Oldal forrása és az Elem vizsgálata műveletek használatát."
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
@@ -727,15 +726,12 @@ msgid "Currently signed in sync user"
 msgstr "Jelenleg bejelentkezett Sync felhasználó"
 
 #: data/org.gnome.epiphany.gschema.xml:372
-#| msgid ""
-#| "The email linked to the Firefox Account used to sync data with Mozilla’s "
-#| "servers."
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
-"A Mozilla-fiókkal összekötött e-mail-cím, amelyet a Mozilla kiszolgálóival"
-" történő adatszinkronizációhoz használ."
+"A Mozilla-fiókkal összekötött e-mail-cím, amelyet a Mozilla kiszolgálóival "
+"történő adatszinkronizációhoz használ."
 
 #: data/org.gnome.epiphany.gschema.xml:376
 msgid "Last sync timestamp"
@@ -1093,7 +1089,6 @@ msgstr ""
 "az éppen megtekintett webhelyek és az azokon hirdetők továbbra is követhetik."
 
 #: embed/ephy-client-certificate-manager.c:292
-#| msgid "A name is required"
 msgid "PIN required"
 msgstr "PIN-kód szükséges"
 
@@ -1110,8 +1105,8 @@ msgstr "Adja meg a(z) %s PIN-kódját a(z) %s:%d hitelesítéséhez."
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2829
+#: src/window-commands.c:1243 src/window-commands.c:1916
+#: src/window-commands.c:2818
 msgid "_Cancel"
 msgstr "Mé_gse"
 
@@ -1120,7 +1115,6 @@ msgid "_Login"
 msgstr "_Bejelenkezés"
 
 #: embed/ephy-client-certificate-manager.c:374
-#| msgid "Select Profile"
 msgid "Select certificate"
 msgstr "Tanúsítvány kiválasztása"
 
@@ -1130,8 +1124,8 @@ msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr ""
-"A(z) %s:%d webhely azt kéri, hogy adjon meg egy tanúsítványt a(z) %s"
-" hitelesítéséhez."
+"A(z) %s:%d webhely azt kéri, hogy adjon meg egy tanúsítványt a(z) %s "
+"hitelesítéséhez."
 
 #: embed/ephy-client-certificate-manager.c:382
 #, c-format
@@ -2069,23 +2063,27 @@ msgstr "%s jelszava az űrlapon a(z) %s helyen"
 msgid "Password in a form in %s"
 msgstr "Jelszó egy űrlapon a(z) %s helyen"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr ""
+"A válasz törzse üres, telepítenie kell a glib-networking programkönyvtárat?"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "A tárolási engedélyek megszerzése meghiúsult."
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Keresse fel a Firefox Syncet, és jelentkezzen be újra a szinkronizáció "
 "folytatásához."
 
-#: lib/sync/ephy-sync-service.c:1116
-#| msgid "The password of your Firefox account seems to have been changed."
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "Úgy tűnik, hogy a Mozilla-fiókjának megváltozott a jelszava."
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2093,69 +2091,66 @@ msgstr ""
 "Keresse fel a Firefox Syncet, és jelentkezzen be az új jelszavával a "
 "szinkronizáció folytatásához."
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "Nem sikerült aláírt tanúsítványt szerezni."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
-msgid "Could not find the sync secrets for the current sync user."
-msgstr "A jelenlegi felhasználó szinkronizációs titka nem található."
-
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
+#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "A jelenlegi felhasználó szinkronizációs titka érvénytelen."
 
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
+msgid "Could not find the sync secrets for the current sync user."
+msgstr "A jelenlegi felhasználó szinkronizációs titka nem található."
+
+#: lib/sync/ephy-sync-service.c:2007
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr ""
-"Nem sikerült eltárolni a szinkronizációs titkokat (a titokszolgáltató vagy a"
-" titkok portálja elromlott?): "
+"Nem sikerült eltárolni a szinkronizációs titkokat (a titokszolgáltató vagy a "
+"titkok portálja elromlott?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2049
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s szinkronizációs titka"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2079
 msgid "Failed to upload client record."
 msgstr "Nem sikerült az ügyfél rekord feltöltése."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2282
 msgid "Failed to upload crypto/keys record."
 msgstr "Nem sikerült a titkosítási/kulcs rekord feltöltése."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2394
 msgid "Failed to retrieve crypto keys."
 msgstr "Nem sikerült a titkosítási kulcsok fogadása."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2448
 msgid "Failed to upload meta/global record."
 msgstr "Nem sikerült a meta/globális rekord feltöltése."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2570
 #, c-format
-#| msgid ""
-#| "Your Firefox Account uses storage version %d. Web only supports version "
-#| "%d."
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
-"A Mozilla-fiók %d tárolóverziót használt. A Web csak a(z) %d verziót"
-" támogatja."
+"A Mozilla-fiók %d tárolóverziót használt. A Web csak a(z) %d verziót "
+"támogatja."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2581
 msgid "Failed to verify storage version."
 msgstr "Nem sikerült a tároló verzió ellenőrzése."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2639
 msgid "Failed to upload device info"
 msgstr "Nem sikerült az eszközinformációk feltöltése"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
 msgid "Failed to retrieve the Sync Key"
 msgstr "Nem sikerült a Sync kulcs lekérése"
 
@@ -2216,15 +2211,15 @@ msgstr "Kedvencek"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: src/context-menu-commands.c:239
+#: src/context-menu-commands.c:294
 msgid "Save Link As"
 msgstr "Hivatkozás mentése másként"
 
-#: src/context-menu-commands.c:247
+#: src/context-menu-commands.c:302
 msgid "Save Image As"
 msgstr "Kép mentése másként"
 
-#: src/context-menu-commands.c:255
+#: src/context-menu-commands.c:310
 msgid "Save Media As"
 msgstr "Média mentése másként"
 
@@ -2799,79 +2794,79 @@ msgstr "_Képernyőkép készítése…"
 msgid "_Page Source"
 msgstr "Oldal fo_rrása"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1382
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "„%s” keresése a világhálón"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1411
 msgid "Open Link"
 msgstr "Hivatkozás megnyitása"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1413
 msgid "Open Link In New Tab"
 msgstr "Hivatkozás megnyitása új lapon"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1415
 msgid "Open Link In New Window"
 msgstr "Hivatkozás megnyitása új ablakban"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1417
 msgid "Open Link In Incognito Window"
 msgstr "Hivatkozás megnyitása inkognitó ablakban"
 
-#: src/ephy-window.c:2789
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "_Kérdezzen később"
 
 # FF-másolás :)
-#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Elutasítás"
 
 # FF-másolás :)
-#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Engedélyezés"
 
-#: src/ephy-window.c:2993 src/ephy-window.c:4430
+#: src/ephy-window.c:3004 src/ephy-window.c:4439
 msgid "Leave Website?"
 msgstr "Elhagyja a webhelyet?"
 
-#: src/ephy-window.c:2994 src/ephy-window.c:4431 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Egy űrlap módosítva lett és nem került elküldésre"
 
-#: src/ephy-window.c:2995 src/ephy-window.c:4432 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "Űrlap _elvetése"
 
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Letöltési művelet"
 
-#: src/ephy-window.c:3018
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Részletek megjelenítése"
 
-#: src/ephy-window.c:3020
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d letöltési művelet aktív"
 msgstr[1] "%d letöltési művelet aktív"
 
-#: src/ephy-window.c:3261
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "Beállítja alapértelmezett böngészőként?"
 
-#: src/ephy-window.c:3263
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "A Web használata alapértelmezett webböngészőként és külső hivatkozások "
 "megnyitásához"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2879,55 +2874,55 @@ msgstr ""
 "Az Epiphany technológiai előzetesének használata alapértelmezett "
 "webböngészőként és külső hivatkozások megnyitásához"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "_Kérdezzen később újra"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "_Nem"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "_Igen"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3732
 msgid "Save password?"
 msgstr "Menti a jelszót?"
 
-#: src/ephy-window.c:3723
+#: src/ephy-window.c:3733
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "A jelszavak bármikor eltávolíthatók a beállításokban"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3735
 msgid "Not Now"
 msgstr "Most nem"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3736
 msgid "Never Save"
 msgstr "Soha ne mentse"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3737
 msgid "Save"
 msgstr "Mentés"
 
-#: src/ephy-window.c:4561
+#: src/ephy-window.c:4570
 msgid "Close Multiple Tabs?"
 msgstr "Bezár több lapot?"
 
-#: src/ephy-window.c:4562
+#: src/ephy-window.c:4571
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Ha ez az ablak bezárásra kerül, akkor az összes nyitott lap elvész"
 
-#: src/ephy-window.c:4563
+#: src/ephy-window.c:4572
 msgid "C_lose Tabs"
 msgstr "Lapok _bezárása"
 
-#: src/ephy-window.c:4656
+#: src/ephy-window.c:4665
 msgid "New tab opened"
 msgstr "Új lap nyílt"
 
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4669
 msgid "Switch"
 msgstr "Átváltás"
 
@@ -3209,7 +3204,6 @@ msgid "Search website data"
 msgstr "Webhelyadatok keresése"
 
 #: src/resources/gtk/clear-data-view.ui:26
-#| msgid "Website Data"
 msgid "No Website Data Found"
 msgstr "Nem találhatók webhelyadatok"
 
@@ -3247,22 +3241,18 @@ msgid "Text Encoding"
 msgstr "Kódolás"
 
 #: src/resources/gtk/encoding-dialog.ui:30
-#| msgid "Use the encoding specified by the document"
 msgid "Use Encoding Specified by Document"
 msgstr "A dokumentum által megadott kódolás használata"
 
 #: src/resources/gtk/encoding-dialog.ui:62
-#| msgid "Recent encodings"
 msgid "Recent Encodings"
 msgstr "Nemrég használt kódolások"
 
 #: src/resources/gtk/encoding-dialog.ui:88
-#| msgid "Related encodings"
 msgid "Related Encodings"
 msgstr "Kapcsolódó kódolások"
 
 #: src/resources/gtk/encoding-dialog.ui:111
-#| msgid "Show all…"
 msgid "Show All…"
 msgstr "Összes megjelenítése…"
 
@@ -3291,10 +3281,6 @@ msgid "Sync _Now"
 msgstr "Szinkronizálás _most"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:32
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with GNOME Web and "
-#| "Firefox on other computers. GNOME Web is not Firefox and is not produced "
-#| "or endorsed by Mozilla."
 msgid ""
 "Sign in with your Mozilla account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
@@ -3305,7 +3291,6 @@ msgstr ""
 "Firefox, nem a Mozilla készíti és nem is támogatja."
 
 #: src/resources/gtk/firefox-sync-dialog.ui:49
-#| msgid "Firefox Account"
 msgid "Mozilla Account"
 msgstr "Mozilla-fiók"
 
@@ -3371,7 +3356,6 @@ msgid "Search history"
 msgstr "Keresési előzmények"
 
 #: src/resources/gtk/history-dialog.ui:118
-#| msgid "No Results Found"
 msgid "No History Found"
 msgstr "Nem találhatók előzmények"
 
@@ -3384,7 +3368,6 @@ msgid "_Open"
 msgstr "_Megnyitás"
 
 #: src/resources/gtk/lang-row.ui:21
-#| msgid "Delete language"
 msgid "Delete Language"
 msgstr "Nyelv törlése"
 
@@ -3402,7 +3385,6 @@ msgid "Reader Mode"
 msgstr "Olvasó mód"
 
 #: src/resources/gtk/location-entry.ui:98
-#| msgid "View available passwords"
 msgid "View Available Passwords"
 msgstr "Elérhető jelszavak megtekintése"
 
@@ -3552,7 +3534,6 @@ msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
 #: src/resources/gtk/password-popover.ui:22
-#| msgid "Save login?"
 msgid "Save Login?"
 msgstr "Elmenti a bejelentkezést?"
 
@@ -3574,7 +3555,6 @@ msgid "Passwords"
 msgstr "Jelszavak"
 
 #: src/resources/gtk/passwords-view.ui:28
-#| msgid "Remove all passwords"
 msgid "Remove All Passwords"
 msgstr "Az összes jelszó eltávolítása"
 
@@ -3583,7 +3563,6 @@ msgid "Search passwords"
 msgstr "Jelszavak keresése"
 
 #: src/resources/gtk/passwords-view.ui:30
-#| msgid "Passwords"
 msgid "No Passwords Found"
 msgstr "Nem találhatók jelszavak"
 
@@ -3612,17 +3591,14 @@ msgid "Use Custom Fonts"
 msgstr "Egyéni betűkészletek használata"
 
 #: src/resources/gtk/prefs-appearance-page.ui:17
-#| msgid "Sans serif font"
 msgid "Sans Serif Font"
 msgstr "Talpatlan betűkészlet"
 
 #: src/resources/gtk/prefs-appearance-page.ui:30
-#| msgid "Serif font"
 msgid "Serif Font"
 msgstr "Talpas betűkészlet"
 
 #: src/resources/gtk/prefs-appearance-page.ui:43
-#| msgid "Monospace font"
 msgid "Monospace Font"
 msgstr "Rögzített szélességű betűkészlet"
 
@@ -3669,7 +3645,6 @@ msgstr ""
 "href=\"https://addons.mozilla.org\">addons.mozilla.org</a> oldalt."
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
-#| msgid "No extensions installed"
 msgid "No Extensions Installed"
 msgstr "Nincsenek kiterjesztések telepítve"
 
@@ -3770,7 +3745,6 @@ msgid "Show D_eveloper Actions"
 msgstr "F_ejlesztői műveletek megjelenítése"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:8
-#| msgid "Add Language"
 msgid "Add Language…"
 msgstr "Nyelv hozzáadása…"
 
@@ -3791,11 +3765,10 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "Intelligens _követésmegelőzés"
 
 #: src/resources/gtk/prefs-privacy-page.ui:18
-#| msgid "Allow websites to store cookies, databases, and local storage data."
 msgid "Allow websites to store cookies, databases, and local storage data"
 msgstr ""
-"Sütik, adatbázisok és helyi webhelyadatok tárolásának engedélyezése a"
-" webhelyek számára"
+"Sütik, adatbázisok és helyi webhelyadatok tárolásának engedélyezése a "
+"webhelyek számára"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
 msgid "_Website Data Storage"
@@ -3806,7 +3779,6 @@ msgid "Search Suggestions"
 msgstr "Keresési javaslatok"
 
 #: src/resources/gtk/prefs-privacy-page.ui:30
-#| msgid "Enable search suggestions in the URL entry."
 msgid "Enable search suggestions in the URL entry"
 msgstr "Keresési javaslatok engedélyezése az URL mezőben"
 
@@ -3831,7 +3803,6 @@ msgid "_Remember Passwords"
 msgstr "Jelszavak _megjegyzése"
 
 #: src/resources/gtk/search-engine-row.ui:8
-#| msgid "Selects the default search engine"
 msgid "Selects Default Search Engine"
 msgstr "Kiválasztja az alapértelmezett keresőmotort"
 
@@ -3848,15 +3819,12 @@ msgid "Shortcut"
 msgstr "Gyorsbillentyű"
 
 #: src/resources/gtk/search-engine-row.ui:92
-#| msgid ""
-#| "To determine the search address, perform a search using the search engine "
-#| "that you want to add and replace the search term with %s."
 msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s"
 msgstr ""
-"A keresési cím meghatározásához végezzen egy keresést a hozzáadandó"
-" keresőmotorral, és cserélje erre a keresési kifejezést: %s"
+"A keresési cím meghatározásához végezzen egy keresést a hozzáadandó "
+"keresőmotorral, és cserélje erre a keresési kifejezést: %s"
 
 #: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
@@ -3868,27 +3836,21 @@ msgid "General"
 msgstr "Általános"
 
 #: src/resources/gtk/shortcuts-dialog.ui:16
-#| msgid "New Window"
 msgctxt "shortcut window"
 msgid "New Window"
 msgstr "Új ablak"
 
 #: src/resources/gtk/shortcuts-dialog.ui:22
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New Incognito Window"
 msgstr "Új inkognitóablak"
 
 #: src/resources/gtk/shortcuts-dialog.ui:28
-#| msgctxt "shortcut window"
-#| msgid "Open file"
 msgctxt "shortcut window"
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:34
-#| msgctxt "shortcut window"
-#| msgid "Save page"
 msgctxt "shortcut window"
 msgid "Save Page"
 msgstr "Oldal mentése"
@@ -3899,8 +3861,6 @@ msgid "Take Screenshot"
 msgstr "Képernyőkép készítése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
-#| msgctxt "shortcut window"
-#| msgid "Print page"
 msgctxt "shortcut window"
 msgid "Print Page"
 msgstr "Oldal nyomtatása"
@@ -3916,8 +3876,6 @@ msgid "Help"
 msgstr "Súgó"
 
 #: src/resources/gtk/shortcuts-dialog.ui:64
-#| msgctxt "shortcut window"
-#| msgid "Open menu"
 msgctxt "shortcut window"
 msgid "Open Menu"
 msgstr "Menü megnyitása"
@@ -3928,8 +3886,6 @@ msgid "Shortcuts"
 msgstr "Gyorsbillentyűk"
 
 #: src/resources/gtk/shortcuts-dialog.ui:76
-#| msgctxt "shortcut window"
-#| msgid "Show downloads list"
 msgctxt "shortcut window"
 msgid "Show Downloads List"
 msgstr "Letöltések listájának megjelenítése"
@@ -3940,45 +3896,33 @@ msgid "Navigation"
 msgstr "Navigáció"
 
 #: src/resources/gtk/shortcuts-dialog.ui:89
-#| msgctxt "shortcut window"
-#| msgid "Go to homepage"
 msgctxt "shortcut window"
 msgid "Go to Homepage"
 msgstr "Ugrás a kezdőoldalra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:95
-#| msgctxt "shortcut window"
-#| msgid "Reload current page"
 msgctxt "shortcut window"
 msgid "Reload Current Page"
 msgstr "Jelenlegi oldal újratöltése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:101
-#| msgctxt "shortcut window"
-#| msgid "Reload bypassing cache"
 msgctxt "shortcut window"
 msgid "Reload Bypassing Cache"
 msgstr "Kikerülő gyorsítótár újratöltése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:107
-#| msgctxt "shortcut window"
-#| msgid "Stop loading current page"
 msgctxt "shortcut window"
 msgid "Stop Loading Current Page"
 msgstr "Jelenlegi oldal betöltésének leállítása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:113
 #: src/resources/gtk/shortcuts-dialog.ui:126
-#| msgctxt "shortcut window"
-#| msgid "Go back to the previous page"
 msgctxt "shortcut window"
 msgid "Go Back to Previous Page"
 msgstr "Ugrás vissza az előző oldalra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:119
 #: src/resources/gtk/shortcuts-dialog.ui:132
-#| msgctxt "shortcut window"
-#| msgid "Go forward to the next page"
 msgctxt "shortcut window"
 msgid "Go Forward to Next Page"
 msgstr "Ugrás előre a következő oldalra"
@@ -3989,61 +3933,46 @@ msgid "Tabs"
 msgstr "Lapok"
 
 #: src/resources/gtk/shortcuts-dialog.ui:144
-#| msgid "New Tab"
 msgctxt "shortcut window"
 msgid "New Tab"
 msgstr "Új lap"
 
 #: src/resources/gtk/shortcuts-dialog.ui:150
-#| msgctxt "shortcut window"
-#| msgid "Close current tab"
 msgctxt "shortcut window"
 msgid "Close Current Tab"
 msgstr "Jelenlegi lap bezárása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:156
-#| msgid "Reopen Closed _Tab"
 msgctxt "shortcut window"
 msgid "Reopen Closed Tab"
 msgstr "Bezárt lap újranyitása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:162
-#| msgctxt "shortcut window"
-#| msgid "Go to the next tab"
 msgctxt "shortcut window"
 msgid "Go to Next Tab"
 msgstr "Ugrás a következő lapra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
-#| msgctxt "shortcut window"
-#| msgid "Go to the previous tab"
 msgctxt "shortcut window"
 msgid "Go to Previous Tab"
 msgstr "Ugrás az előző lapra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:174
-#| msgctxt "shortcut window"
-#| msgid "Move current tab to the left"
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Left"
 msgstr "Jelenlegi lap mozgatása balra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:180
-#| msgctxt "shortcut window"
-#| msgid "Move current tab to the right"
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Right"
 msgstr "Jelenlegi lap mozgatása jobbra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:186
-#| msgctxt "shortcut window"
-#| msgid "Duplicate current tab"
 msgctxt "shortcut window"
 msgid "Duplicate Current Tab"
 msgstr "Jelenlegi lap megkettőzése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
-#| msgid "View Open Tabs"
 msgctxt "shortcut window"
 msgid "View Open Tabs"
 msgstr "Nyitott lapok megtekintése"
@@ -4064,48 +3993,36 @@ msgid "Preferences"
 msgstr "Beállítások"
 
 #: src/resources/gtk/shortcuts-dialog.ui:217
-#| msgctxt "shortcut window"
-#| msgid "Bookmark current page"
 msgctxt "shortcut window"
 msgid "Bookmark Current Page"
 msgstr "Jelenlegi oldal könyvjelzőzése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:223
-#| msgctxt "shortcut window"
-#| msgid "Show bookmarks list"
 msgctxt "shortcut window"
 msgid "Show Bookmarks List"
 msgstr "Könyvjelzők listájának megjelenítése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:229
-#| msgid "Import Bookmarks"
 msgctxt "shortcut window"
 msgid "Import Bookmarks"
 msgstr "Könyvjelzők importálása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:235
-#| msgctxt "shortcut window"
-#| msgid "Export bookmarks"
 msgctxt "shortcut window"
 msgid "Export Bookmarks"
 msgstr "Könyvjelzők exportálása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:241
-#| msgctxt "shortcut window"
-#| msgid "Toggle caret browsing"
 msgctxt "shortcut window"
 msgid "Toggle Caret Browsing"
 msgstr "Kurzoros böngészés be- vagy kikapcsolása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:251
-#| msgid "Web App"
 msgctxt "shortcut window"
 msgid "Web App"
 msgstr "Webalkalmazás"
 
 #: src/resources/gtk/shortcuts-dialog.ui:254
-#| msgctxt "shortcut window"
-#| msgid "Install site as web app"
 msgctxt "shortcut window"
 msgid "Install Site as Web App"
 msgstr "Oldal telepítése webalkalmazásként"
@@ -4116,22 +4033,16 @@ msgid "View"
 msgstr "Nézet"
 
 #: src/resources/gtk/shortcuts-dialog.ui:267
-#| msgctxt "tooltip"
-#| msgid "Zoom In"
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Nagyítás"
 
 #: src/resources/gtk/shortcuts-dialog.ui:273
-#| msgctxt "tooltip"
-#| msgid "Zoom Out"
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Kicsinyítés"
 
 #: src/resources/gtk/shortcuts-dialog.ui:279
-#| msgctxt "shortcut window"
-#| msgid "Reset zoom"
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Nagyítás visszaállítása"
@@ -4142,22 +4053,16 @@ msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
 #: src/resources/gtk/shortcuts-dialog.ui:291
-#| msgctxt "shortcut window"
-#| msgid "View page source"
 msgctxt "shortcut window"
 msgid "View Page Source"
 msgstr "Oldal forrásának megtekintése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:297
-#| msgctxt "shortcut window"
-#| msgid "Toggle inspector"
 msgctxt "shortcut window"
 msgid "Toggle Inspector"
 msgstr "Vizsgáló be- vagy kikapcsolása"
 
 #: src/resources/gtk/shortcuts-dialog.ui:303
-#| msgctxt "shortcut window"
-#| msgid "Toggle reader mode"
 msgctxt "shortcut window"
 msgid "Toggle Reader Mode"
 msgstr "Olvasó mód ki- vagy bekapcsolása"
@@ -4193,21 +4098,16 @@ msgid "Redo"
 msgstr "Újra"
 
 #: src/resources/gtk/shortcuts-dialog.ui:346
-#| msgid "Select _All"
 msgctxt "shortcut window"
 msgid "Select All"
 msgstr "Összes kijelölése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:352
-#| msgctxt "shortcut window"
-#| msgid "Select page URL"
 msgctxt "shortcut window"
 msgid "Select Page URL"
 msgstr "Oldal URL-ének kijelölése"
 
 #: src/resources/gtk/shortcuts-dialog.ui:358
-#| msgctxt "shortcut window"
-#| msgid "Search with default search engine"
 msgctxt "shortcut window"
 msgid "Search With Default Search Engine"
 msgstr "Keresés az alapértelmezett keresőmotorral"
@@ -4218,15 +4118,11 @@ msgid "Find"
 msgstr "Keresés"
 
 #: src/resources/gtk/shortcuts-dialog.ui:370
-#| msgctxt "shortcut window"
-#| msgid "Next find result"
 msgctxt "shortcut window"
 msgid "Next Find Result"
 msgstr "Következő találat"
 
 #: src/resources/gtk/shortcuts-dialog.ui:376
-#| msgctxt "shortcut window"
-#| msgid "Previous find result"
 msgctxt "shortcut window"
 msgid "Previous Find Result"
 msgstr "Előző találat"
@@ -4265,12 +4161,10 @@ msgid "URL"
 msgstr "URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:81
-#| msgid "Add new URL"
 msgid "Add New URL"
 msgstr "Új URL hozzáadása"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:87
-#| msgid "Remove the selected URLs"
 msgid "Remove Selected URLs"
 msgstr "Kijelölt URL-ek eltávolítása"
 
@@ -4418,52 +4312,52 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Újratölti a webhelyet?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "A(z) „%s” alkalmazás használatra kész"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "A(z) „%s” alkalmazás nem hozható létre: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "Indítás"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1908
 msgid "Replace Existing Web App?"
 msgstr "Lecseréli a meglévő webalkalmazást?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1912
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Már létezik egy „%s” nevű alkalmazás, a cseréje felül fogja írni"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1917
 msgid "_Replace"
 msgstr "_Csere"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2280
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2284
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2330
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2824
+#: src/window-commands.c:2813
 msgid "Enable Caret Browsing Mode?"
 msgstr "Engedélyezi a kurzoros böngészési módot?"
 
-#: src/window-commands.c:2825
+#: src/window-commands.c:2814
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4473,6 +4367,6 @@ msgstr ""
 "szolgáltatás egy mozgatható kurzort helyez el a weboldalakon, lehetővé téve "
 "a billentyűzettel való mozgást. Be szeretné kapcsolni a kurzoros böngészést?"
 
-#: src/window-commands.c:2830
+#: src/window-commands.c:2819
 msgid "_Enable"
 msgstr "_Engedélyezés"
