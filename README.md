@@ -18,13 +18,18 @@ is via [Flatpak](https://www.flatpak.org/). You may:
    if you are adventurous and want to help test tomorrow's Epiphany today. It
    is **not stable**.
 
- * [Download Epiphany
-   Canary](https://nightly.gnome.org/repo/appstream/org.gnome.Epiphany.Canary.flatpakref)
-   if you are even more adventurous and want to help test the most recent
-   development versions of WebKitGTK and Epiphany. This flavor of Epiphany is
-   more likely to be **very unstable** because the code being built comes
-   directly from WebKit's git main branch and Epiphany's git master branch.
- 
+ * Download Epiphany Canary if you are even more adventurous and want to help
+   test the most recent development versions of WebKitGTK and Epiphany. This
+   flavor of Epiphany is more likely to be **very unstable** because the code
+   being built comes directly from WebKit's git main branch and Epiphany's git
+   master branch. Epiphany Canary can be installed by executing the following
+   flatpak commands in a terminal:
+
+   ```shell
+   flatpak --user remote-add --if-not-exists webkit https://software.igalia.com/flatpak-refs/webkit-sdk.flatpakrepo
+   flatpak --user install https://nightly.gnome.org/repo/appstream/org.gnome.Epiphany.Canary.flatpakref
+   ```
+
 Epiphany is probably also available via your operating system's package manager,
 but such packages are often outdated and insecure. Flatpak is the best
 application distribution mechanism for Linux.
