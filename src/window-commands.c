@@ -882,14 +882,11 @@ window_cmd_show_history (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
 {
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
-  dialog = ephy_shell_get_history_dialog (ephy_shell_get_default ());
+  dialog = ADW_DIALOG (ephy_shell_get_history_dialog (ephy_shell_get_default ()));
 
-  if (GTK_WINDOW (user_data) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
-    gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                                  GTK_WINDOW (user_data));
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, user_data);
 }
 
 void

@@ -46,7 +46,7 @@
 #define NUM_FETCH_LIMIT 15
 
 struct _EphyHistoryDialog {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   EphySnapshotService *snapshot_service;
   EphyHistoryService *history_service;
@@ -90,7 +90,7 @@ struct _EphyHistoryDialog {
   gboolean has_search_results;
 };
 
-G_DEFINE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_DIALOG)
 
 enum {
   PROP_0,
@@ -558,30 +558,6 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
   ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
 }
 
-static GtkWidget *
-confirmation_dialog_construct (EphyHistoryDialog *self)
-{
-  GtkWidget *dialog;
-
-  dialog = adw_message_dialog_new (GTK_WINDOW (self),
-                                   _("Clear Browsing History?"),
-                                   _("All links will be permanently deleted"));
-
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "clear", _("Cl_ear"),
-                                    NULL);
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
-                                              "clear",
-                                              ADW_RESPONSE_DESTRUCTIVE);
-
-  g_signal_connect_swapped (dialog, "response::clear",
-                            G_CALLBACK (confirmation_dialog_response_cb),
-                            self);
-
-  return dialog;
-}
-
 static void
 on_search_entry_changed (GtkSearchEntry    *search_entry,
                          EphyHistoryDialog *self)
@@ -792,16 +768,24 @@ static void
 on_clear_all_row_activated (GtkButton         *button,
                             EphyHistoryDialog *self)
 {
-  if (!self->confirmation_dialog) {
-    GtkWidget **confirmation_dialog;
+  AdwDialog *dialog;
 
-    self->confirmation_dialog = confirmation_dialog_construct (self);
-    confirmation_dialog = &self->confirmation_dialog;
-    g_object_add_weak_pointer (G_OBJECT (self->confirmation_dialog),
-                               (gpointer *)confirmation_dialog);
-  }
+  dialog = adw_alert_dialog_new (_("Clear Browsing History?"),
+                                 _("All links will be permanently deleted"));
 
-  gtk_widget_set_visible (self->confirmation_dialog, TRUE);
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "clear", _("Cl_ear"),
+                                  NULL);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+                                            "clear",
+                                            ADW_RESPONSE_DESTRUCTIVE);
+
+  g_signal_connect_swapped (dialog, "response::clear",
+                            G_CALLBACK (confirmation_dialog_response_cb),
+                            self);
+
+  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self))));
 }
 
 static void
@@ -839,7 +823,7 @@ shift_activate_cb (EphyHistoryDialog *self)
   if (!self->selection_active)
     return GDK_EVENT_PROPAGATE;
 
-  focused_widget = gtk_window_get_focus (GTK_WINDOW (self));
+  focused_widget = adw_dialog_get_focus (ADW_DIALOG (self));
 
   if (GTK_IS_LIST_BOX_ROW (focused_widget)) {
     g_signal_emit_by_name (self->listbox, "row-activated", focused_widget, self);
@@ -848,17 +832,6 @@ shift_activate_cb (EphyHistoryDialog *self)
   }
 
   return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-escape_cb (EphyHistoryDialog *self)
-{
-  if (self->selection_active)
-    set_selection_active (self, FALSE);
-  else
-    gtk_window_close (GTK_WINDOW (self));
-
-  return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -971,9 +944,6 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
                                 (GtkShortcutFunc)shift_activate_cb,
                                 NULL);
 
-  gtk_widget_class_add_binding (widget_class, GDK_KEY_Escape, 0,
-                                (GtkShortcutFunc)escape_cb,
-                                NULL);
   gtk_widget_class_add_binding (widget_class, GDK_KEY_Delete, 0,
                                 (GtkShortcutFunc)delete_selected_cb,
                                 NULL);
