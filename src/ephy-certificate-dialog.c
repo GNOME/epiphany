@@ -50,7 +50,7 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 struct _EphyCertificateDialog {
-  AdwWindow parent_object;
+  AdwDialog parent_object;
 
   GtkWidget *icon;
   GtkWidget *title;
@@ -61,7 +61,7 @@ struct _EphyCertificateDialog {
   EphySecurityLevel security_level;
 };
 
-G_DEFINE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, ADW_TYPE_DIALOG)
 
 static char *
 bytes_to_display (GBytes *bytes)
@@ -178,17 +178,18 @@ create_section (GcrCertificateSection *section)
 }
 
 static void
-reveal_clicked_cb (GtkWidget *button,
-                   GtkWidget *secondary_info)
+reveal_button_row_activated_cb (GtkWidget *button,
+                                GtkWidget *secondary_info)
 {
-  gtk_widget_set_visible (button, FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (gtk_widget_get_ancestor (button, ADW_TYPE_PREFERENCES_GROUP)), FALSE);
   gtk_widget_set_visible (secondary_info, TRUE);
 }
 
 static GtkWidget *
 create_page (GcrCertificate *certificate)
 {
-  GtkWidget *box, *primary_info, *secondary_info, *reveal_button;
+  GtkWidget *box, *primary_info, *secondary_info, *preferences_group;
+  GtkWidget *reveal_button_row;
   GList *elements, *l;
   GtkSizeGroup *size_group;
 
@@ -197,9 +198,15 @@ create_page (GcrCertificate *certificate)
   primary_info = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_box_append (GTK_BOX (box), primary_info);
 
-  reveal_button = gtk_button_new_from_icon_name ("view-more-horizontal-symbolic");
-  gtk_widget_set_halign (reveal_button, GTK_ALIGN_CENTER);
-  gtk_box_append (GTK_BOX (box), reveal_button);
+  reveal_button_row = adw_button_row_new ();
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (reveal_button_row), _("Show More"));
+  adw_button_row_set_end_icon_name (ADW_BUTTON_ROW (reveal_button_row), "view-more-horizontal-symbolic");
+  adw_preferences_row_set_use_underline (ADW_PREFERENCES_ROW (reveal_button_row), true);
+
+  preferences_group = adw_preferences_group_new ();
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (preferences_group), GTK_WIDGET (reveal_button_row));
+
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (preferences_group));
 
   secondary_info = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_widget_set_visible (secondary_info, FALSE);
@@ -223,8 +230,8 @@ create_page (GcrCertificate *certificate)
 
   g_list_free_full (elements, (GDestroyNotify)g_object_unref);
 
-  g_signal_connect (reveal_button, "clicked",
-                    G_CALLBACK (reveal_clicked_cb), secondary_info);
+  g_signal_connect (reveal_button_row, "activated",
+                    G_CALLBACK (reveal_button_row_activated_cb), secondary_info);
 
   return box;
 }
@@ -236,7 +243,7 @@ ephy_certificate_dialog_set_address (EphyCertificateDialog *dialog,
   g_autoptr (GUri) uri = NULL;
 
   uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
-  gtk_window_set_title (GTK_WINDOW (dialog), g_uri_get_host (uri));
+  adw_dialog_set_title (ADW_DIALOG (dialog), g_uri_get_host (uri));
 }
 
 static void
@@ -385,7 +392,6 @@ static void
 ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_certificate_dialog_constructed;
   object_class->set_property = ephy_certificate_dialog_set_property;
@@ -437,8 +443,6 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 static void
@@ -449,7 +453,8 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   GtkWidget *clamp;
   GtkWidget *toolbar_view;
 
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
+  adw_dialog_set_content_height (ADW_DIALOG (dialog), 500);
+  adw_dialog_set_content_width (ADW_DIALOG (dialog), 450);
 
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
@@ -463,7 +468,6 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   dialog->title = gtk_label_new (NULL);
   gtk_label_set_use_markup (GTK_LABEL (dialog->title), TRUE);
   gtk_label_set_wrap (GTK_LABEL (dialog->title), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (dialog->title), TRUE);
   gtk_label_set_xalign (GTK_LABEL (dialog->title), 0.0);
   gtk_grid_attach_next_to (GTK_GRID (grid), dialog->title,
                            dialog->icon, GTK_POS_RIGHT,
@@ -471,7 +475,6 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 
   dialog->text = gtk_label_new (NULL);
   gtk_label_set_wrap (GTK_LABEL (dialog->text), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (dialog->text), TRUE);
   gtk_label_set_xalign (GTK_LABEL (dialog->text), 0.0);
   gtk_label_set_yalign (GTK_LABEL (dialog->text), 0.0);
   gtk_grid_attach_next_to (GTK_GRID (grid), dialog->text,
@@ -499,31 +502,26 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
                                 adw_header_bar_new ());
   adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view),
                                 scrolled_window);
-  adw_window_set_content (ADW_WINDOW (dialog), toolbar_view);
+  adw_dialog_set_child (ADW_DIALOG (dialog), toolbar_view);
 }
 
-GtkWidget *
-ephy_certificate_dialog_new (GtkWindow            *parent,
-                             const char           *address,
+AdwDialog *
+ephy_certificate_dialog_new (const char           *address,
                              GTlsCertificate      *certificate,
                              GTlsCertificateFlags  tls_errors,
                              EphySecurityLevel     security_level)
 {
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
   g_assert (address != NULL);
   g_assert (G_IS_TLS_CERTIFICATE (certificate));
 
-  dialog = GTK_WIDGET (g_object_new (EPHY_TYPE_CERTIFICATE_DIALOG,
+  dialog = ADW_DIALOG (g_object_new (EPHY_TYPE_CERTIFICATE_DIALOG,
                                      "address", address,
                                      "certificate", certificate,
                                      "security-level", security_level,
                                      "tls-errors", tls_errors,
-                                     "modal", TRUE,
-                                     "width-request", 500,
                                      NULL));
-  if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
   return dialog;
 }

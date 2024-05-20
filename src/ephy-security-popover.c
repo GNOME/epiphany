@@ -220,17 +220,15 @@ certificate_button_clicked_cb (GtkButton *button,
                                gpointer   user_data)
 {
   EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (user_data);
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
-  dialog = ephy_certificate_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (popover))),
-                                        popover->address,
+  dialog = ephy_certificate_dialog_new (popover->address,
                                         popover->certificate,
                                         popover->tls_errors,
                                         popover->security_level);
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
+  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (popover))));
   gtk_popover_popdown (GTK_POPOVER (popover));
-  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
