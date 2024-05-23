@@ -96,59 +96,36 @@ static GtkWidget *
 create_section_row (GcrCertificateField *field,
                     GtkSizeGroup        *size_group)
 {
-  GtkWidget *row, *box, *label, *value;
+  GtkWidget *row;
   GValue val = G_VALUE_INIT;
   GType value_type;
 
   g_return_val_if_fail (GCR_IS_CERTIFICATE_FIELD (field), NULL);
 
-  row = gtk_list_box_row_new ();
-  gtk_widget_set_focusable (row, FALSE);
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_widget_set_margin_start (box, 12);
-  gtk_widget_set_margin_end (box, 12);
-  gtk_widget_set_margin_top (box, 12);
-  gtk_widget_set_margin_bottom (box, 12);
-  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
-
-  label = gtk_label_new (gcr_certificate_field_get_label (field));
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_label_set_yalign (GTK_LABEL (label), 0.0);
-  gtk_box_append (GTK_BOX (box), label);
-
-  value = gtk_label_new (NULL);
-  gtk_label_set_xalign (GTK_LABEL (value), 1.0);
-  gtk_label_set_yalign (GTK_LABEL (value), 0.0);
-  gtk_label_set_selectable (GTK_LABEL (value), TRUE);
-  gtk_label_set_wrap (GTK_LABEL (value), TRUE);
-  gtk_label_set_wrap_mode (GTK_LABEL (value), PANGO_WRAP_WORD_CHAR);
-  gtk_widget_set_hexpand (value, TRUE);
-  gtk_box_append (GTK_BOX (box), value);
+  row = adw_action_row_new ();
+  gtk_widget_add_css_class (row, "property");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), gcr_certificate_field_get_label (field));
+  adw_action_row_set_subtitle_selectable (ADW_ACTION_ROW (row), true);
 
   value_type = gcr_certificate_field_get_value_type (field);
   g_value_init (&val, value_type);
   gcr_certificate_field_get_value (field, &val);
 
   if (g_type_is_a (value_type, G_TYPE_STRING)) {
-    gtk_label_set_label (GTK_LABEL (value), g_value_get_string (&val));
+    adw_action_row_set_subtitle (ADW_ACTION_ROW (row), g_value_get_string (&val));
   } else if (g_type_is_a (value_type, G_TYPE_STRV)) {
     g_autofree char *lbl = g_strjoinv ("\n", (GStrv)g_value_get_boxed (&val));
 
-    gtk_label_set_label (GTK_LABEL (value), lbl);
-    gtk_label_set_justify (GTK_LABEL (value), GTK_JUSTIFY_RIGHT);
+    adw_action_row_set_subtitle (ADW_ACTION_ROW (row), lbl);
   } else if (g_type_is_a (value_type, G_TYPE_BYTES)) {
     GBytes *bytes = g_value_get_boxed (&val);
     g_autofree char *lbl = bytes_to_display (bytes);
 
-    gtk_label_set_label (GTK_LABEL (value), lbl);
-    gtk_widget_add_css_class (value, "monospace");
+    adw_action_row_set_subtitle (ADW_ACTION_ROW (row), lbl);
+    gtk_widget_add_css_class (row, "monospace");
   }
 
   g_value_unset (&val);
-
-  gtk_size_group_add_widget (size_group, label);
 
   return row;
 }
