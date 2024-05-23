@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-02-22 19:39+0000\n"
-"PO-Revision-Date: 2024-02-23 11:53+0000\n"
+"POT-Creation-Date: 2024-05-03 13:14+0000\n"
+"PO-Revision-Date: 2024-05-03 18:19+0100\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English - United Kingdom <en@li.org>\n"
 "Language: en_GB\n"
@@ -1095,8 +1095,8 @@ msgstr "Please enter PIN for %s, to authenticate at %s:%d."
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2814
+#: src/window-commands.c:1243 src/window-commands.c:1916
+#: src/window-commands.c:2818
 msgid "_Cancel"
 msgstr "_Cancel"
 
@@ -2044,20 +2044,24 @@ msgstr "Password for %s in a form in %s"
 msgid "Password in a form in %s"
 msgstr "Password in a form in %s"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr "Response body is empty, do you need to install glib-networking?"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "Failed to obtain storage credentials."
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr "Please visit Firefox Sync and sign in again to continue syncing."
 
-#: lib/sync/ephy-sync-service.c:1116
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "The password of your Mozilla account seems to have been changed."
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2065,19 +2069,19 @@ msgstr ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "Failed to obtain signed certificate."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
-msgid "Could not find the sync secrets for the current sync user."
-msgstr "Could not find the sync secrets for the current sync user."
-
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
+#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "The sync secrets for the current sync user are invalid."
 
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
+msgid "Could not find the sync secrets for the current sync user."
+msgstr "Could not find the sync secrets for the current sync user."
+
+#: lib/sync/ephy-sync-service.c:2007
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2086,44 +2090,44 @@ msgstr ""
 "broken?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2049
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "The sync secrets of %s"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2079
 msgid "Failed to upload client record."
 msgstr "Failed to upload client record."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2282
 msgid "Failed to upload crypto/keys record."
 msgstr "Failed to upload crypto/keys record."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2394
 msgid "Failed to retrieve crypto keys."
 msgstr "Failed to retrieve crypto keys."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2448
 msgid "Failed to upload meta/global record."
 msgstr "Failed to upload meta/global record."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2570
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2581
 msgid "Failed to verify storage version."
 msgstr "Failed to verify storage version."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2639
 msgid "Failed to upload device info"
 msgstr "Failed to upload device info"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
 msgid "Failed to retrieve the Sync Key"
 msgstr "Failed to retrieve the Sync Key"
 
@@ -2181,25 +2185,25 @@ msgstr "Favourites"
 msgid "Mobile"
 msgstr "Mobile"
 
-#: src/context-menu-commands.c:239
+#: src/context-menu-commands.c:294
 msgid "Save Link As"
 msgstr "Save Link As"
 
-#: src/context-menu-commands.c:247
+#: src/context-menu-commands.c:302
 msgid "Save Image As"
 msgstr "Save Image As"
 
-#: src/context-menu-commands.c:255
+#: src/context-menu-commands.c:310
 msgid "Save Media As"
 msgstr "Save Media As"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1758
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
 msgid "Bookmark Page"
 msgstr "Bookmark Page"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1766
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
 msgid "Edit Bookmark"
 msgstr "Edit Bookmark"
 
@@ -2389,27 +2393,27 @@ msgid "Remove all history"
 msgstr "Remove all history"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1802 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "Notification Request"
 
-#: src/ephy-location-entry.c:1806
+#: src/ephy-location-entry.c:1809
 msgid "Camera Request"
 msgstr "Camera Request"
 
-#: src/ephy-location-entry.c:1810
+#: src/ephy-location-entry.c:1813
 msgid "Microphone Request"
 msgstr "Microphone Request"
 
-#: src/ephy-location-entry.c:1814
+#: src/ephy-location-entry.c:1817
 msgid "Location Request"
 msgstr "Location Request"
 
-#: src/ephy-location-entry.c:1818
+#: src/ephy-location-entry.c:1821
 msgid "Webcam and Microphone Request"
 msgstr "Webcam and Microphone Request"
 
-#: src/ephy-location-entry.c:1822
+#: src/ephy-location-entry.c:1825
 msgid "Permission Request"
 msgstr "Permission Request"
 
@@ -2567,51 +2571,51 @@ msgstr "Your connection seems to be secure."
 msgid "_View Certificate…"
 msgstr "_View Certificate…"
 
-#: src/ephy-security-popover.c:492
+#: src/ephy-security-popover.c:494
 msgid "Allow"
 msgstr "Allow"
 
-#: src/ephy-security-popover.c:493
+#: src/ephy-security-popover.c:495
 msgid "Deny"
 msgstr "Deny"
 
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-popover.c:498
 msgid "Ask"
 msgstr "Ask"
 
-#: src/ephy-security-popover.c:514
+#: src/ephy-security-popover.c:516
 msgid "Permissions"
 msgstr "Permissions"
 
-#: src/ephy-security-popover.c:556
+#: src/ephy-security-popover.c:558
 msgid "Advertisements"
 msgstr "Advertisements"
 
-#: src/ephy-security-popover.c:557
+#: src/ephy-security-popover.c:559
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/ephy-security-popover.c:558
+#: src/ephy-security-popover.c:560
 msgid "Password saving"
 msgstr "Password saving"
 
-#: src/ephy-security-popover.c:559
+#: src/ephy-security-popover.c:561
 msgid "Location access"
 msgstr "Location access"
 
-#: src/ephy-security-popover.c:560
+#: src/ephy-security-popover.c:562
 msgid "Microphone access"
 msgstr "Microphone access"
 
-#: src/ephy-security-popover.c:561
+#: src/ephy-security-popover.c:563
 msgid "Webcam access"
 msgstr "Webcam access"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Media autoplay"
 msgstr "Media autoplay"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Without Sound"
 msgstr "Without Sound"
 
@@ -2759,75 +2763,75 @@ msgstr "_Take Screenshot…"
 msgid "_Page Source"
 msgstr "_Page Source"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1382
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Search the Web for “%s”"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1411
 msgid "Open Link"
 msgstr "Open Link"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1413
 msgid "Open Link In New Tab"
 msgstr "Open Link In New Tab"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1415
 msgid "Open Link In New Window"
 msgstr "Open Link In New Window"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1417
 msgid "Open Link In Incognito Window"
 msgstr "Open Link In Incognito Window"
 
-#: src/ephy-window.c:2789
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "_Ask Later"
 
-#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Deny"
 
-#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Allow"
 
-#: src/ephy-window.c:2993 src/ephy-window.c:4427
+#: src/ephy-window.c:3004 src/ephy-window.c:4439
 msgid "Leave Website?"
 msgstr "Leave Website?"
 
-#: src/ephy-window.c:2994 src/ephy-window.c:4428 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "A form was modified and has not been submitted"
 
-#: src/ephy-window.c:2995 src/ephy-window.c:4429 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Discard Form"
 
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Download operation"
 
-#: src/ephy-window.c:3018
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Show details"
 
-#: src/ephy-window.c:3020
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d download operation active"
 msgstr[1] "%d download operations active"
 
-#: src/ephy-window.c:3261
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "Set as Default Browser?"
 
-#: src/ephy-window.c:3263
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Use Web as your default web browser and for opening external links"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2835,55 +2839,55 @@ msgstr ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "_Ask Again Later"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "_No"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "_Yes"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3732
 msgid "Save password?"
 msgstr "Save password?"
 
-#: src/ephy-window.c:3723
+#: src/ephy-window.c:3733
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Passwords can be removed at any time in Preferences"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3735
 msgid "Not Now"
 msgstr "Not Now"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3736
 msgid "Never Save"
 msgstr "Never Save"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3737
 msgid "Save"
 msgstr "Save"
 
-#: src/ephy-window.c:4558
+#: src/ephy-window.c:4570
 msgid "Close Multiple Tabs?"
 msgstr "Close Multiple Tabs?"
 
-#: src/ephy-window.c:4559
+#: src/ephy-window.c:4571
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "If this window is closed, all open tabs will be lost"
 
-#: src/ephy-window.c:4560
+#: src/ephy-window.c:4572
 msgid "C_lose Tabs"
 msgstr "C_lose Tabs"
 
-#: src/ephy-window.c:4653
+#: src/ephy-window.c:4665
 msgid "New tab opened"
 msgstr "New tab opened"
 
-#: src/ephy-window.c:4657
+#: src/ephy-window.c:4669
 msgid "Switch"
 msgstr "Switch"
 
@@ -4271,53 +4275,53 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Reload Website?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "The application “%s” is ready to be used"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "The application “%s” could not be created: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "Launch"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1908
 msgid "Replace Existing Web App?"
 msgstr "Replace Existing Web App?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1912
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "An application named “%s” already exists, replacing it will overwrite it"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1917
 msgid "_Replace"
 msgstr "_Replace"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2280
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2284
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2330
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2809
+#: src/window-commands.c:2813
 msgid "Enable Caret Browsing Mode?"
 msgstr "Enable Caret Browsing Mode?"
 
-#: src/window-commands.c:2810
+#: src/window-commands.c:2814
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4327,7 +4331,7 @@ msgstr ""
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
 "want to enable caret browsing?"
 
-#: src/window-commands.c:2815
+#: src/window-commands.c:2819
 msgid "_Enable"
 msgstr "_Enable"
 
