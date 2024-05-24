@@ -1491,22 +1491,26 @@ ephy_web_view_set_placeholder (EphyWebView *view,
                                const char  *uri,
                                const char  *title)
 {
+  char *effective_uri;
   char *html;
 
   g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (uri);
 
   /* We want only the actual load to be the one recorded in history, but
    * doing a load here is the simplest way to replace the loading
    * spinner with the favicon. */
   ephy_web_view_freeze_history (view);
 
+  effective_uri = ephy_embed_utils_normalize_address (uri);
   html = g_markup_printf_escaped ("<head><title>%s</title></head>", title);
 
-  webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html, uri, NULL);
+  webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html, effective_uri, NULL);
 
+  ephy_web_view_set_address (view, effective_uri);
+
+  g_free (effective_uri);
   g_free (html);
-
-  ephy_web_view_set_address (view, uri);
 }
 
 static char *
