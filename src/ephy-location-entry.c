@@ -617,20 +617,26 @@ animate_focus (EphyLocationEntry *self,
                gboolean           focus)
 {
   AdwAnimationTarget *target;
+  float value_from;
+
+  value_from = gtk_editable_get_alignment (GTK_EDITABLE (self));
+
+  /* Shift value_from a little towards the end so hiding the scheme doesn't make it flicker */
+  /* https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1493#note_2125479 */
+  if (!focus && value_from < 0.1)
+    value_from = 0.1;
 
   if (self->focus_animation) {
     adw_animation_pause (self->focus_animation);
 
-    adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->focus_animation),
-                                        gtk_editable_get_alignment (GTK_EDITABLE (self)));
-
+    adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->focus_animation), value_from);
     adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->focus_animation),
                                       focus ? 0.0 : 0.5);
   } else {
     target = adw_property_animation_target_new (G_OBJECT (self), "xalign");
 
     self->focus_animation = adw_timed_animation_new (GTK_WIDGET (self),
-                                                     gtk_editable_get_alignment (GTK_EDITABLE (self)),
+                                                     value_from,
                                                      focus ? 0.0 : 0.5,
                                                      250,
                                                      target);
@@ -648,11 +654,16 @@ update_entry_style (EphyLocationEntry *self,
   PangoAttrList *attrs;
   PangoAttribute *color_normal;
   PangoAttribute *color_dimmed;
+  PangoAttribute *start_hidden;
+  PangoAttribute *end_hidden;
   g_autoptr (GUri) uri = NULL;
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self));
   const char *host;
   const char *base_domain;
+  const char *scheme;
   char *sub_string;
+  g_autofree char *port_str = NULL;
+  gint port;
 
   gtk_widget_set_visible (self->clear_button, focus);
 
@@ -677,6 +688,9 @@ update_entry_style (EphyLocationEntry *self,
   if (!sub_string)
     goto out;
 
+  scheme = g_uri_get_scheme (uri);
+  port = g_uri_get_port (uri);
+
   /* Complete text is dimmed */
   color_dimmed = pango_attr_foreground_alpha_new (32768);
   pango_attr_list_insert (attrs, color_dimmed);
@@ -686,6 +700,23 @@ update_entry_style (EphyLocationEntry *self,
   color_normal->start_index = sub_string - text;
   color_normal->end_index = color_normal->start_index + strlen (base_domain);
   pango_attr_list_insert (attrs, color_normal);
+
+  /* Scheme is hidden */
+  start_hidden = pango_attr_size_new (0);
+  start_hidden->start_index = 0;
+  start_hidden->end_index = start_hidden->start_index + strlen (scheme) + strlen ("://");
+  pango_attr_list_insert (attrs, start_hidden);
+
+  /* Everything after the port is hidden */
+  end_hidden = pango_attr_size_new (0);
+  end_hidden->start_index = color_normal->end_index;
+  end_hidden->end_index = strlen (text);
+  pango_attr_list_insert (attrs, end_hidden);
+
+  if (port != -1) {
+    port_str = g_strdup_printf (":%i", port);
+    end_hidden->start_index = end_hidden->start_index + strlen (port_str);
+  }
 
 out:
   gtk_text_set_attributes (GTK_TEXT (self->text), attrs);
@@ -702,7 +733,10 @@ focus_enter_cb (EphyLocationEntry *entry)
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
-  animate_focus (entry, FALSE);
+  /* Don't animate if the toplevel lost global input focus */
+  if (!gtk_widget_is_focus (GTK_WIDGET (entry->text)))
+    animate_focus (entry, FALSE);
+
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
   set_show_suggestions (entry, FALSE);
