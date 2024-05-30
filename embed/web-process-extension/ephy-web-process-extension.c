@@ -164,8 +164,6 @@ web_page_context_menu (WebKitWebPage          *web_page,
 {
   EphyWebProcessExtension *extension;
   g_autofree char *string = NULL;
-  gboolean is_editable;
-  gboolean is_password;
   GVariantBuilder builder;
   WebKitFrame *frame;
   g_autoptr (JSCContext) js_context = NULL;
@@ -181,19 +179,9 @@ web_page_context_menu (WebKitWebPage          *web_page,
   js_value = jsc_context_evaluate (js_context, "window.getSelection().toString();", -1);
   if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
     string = jsc_value_to_string (js_value);
-  g_object_unref (js_value);
-
-  js_value = jsc_context_evaluate (js_context, "contextMenuElementIsEditable;", -1);
-  is_editable = jsc_value_to_boolean (js_value);
-  g_object_unref (js_value);
-
-  js_value = jsc_context_evaluate (js_context, "contextMenuElementIsPassword;", -1);
-  is_password = jsc_value_to_boolean (js_value);
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
   g_variant_builder_add (&builder, "{sv}", "SelectedText", g_variant_new_string (string ? g_strstrip (string) : ""));
-  g_variant_builder_add (&builder, "{sv}", "IsEditable", g_variant_new_boolean (is_editable));
-  g_variant_builder_add (&builder, "{sv}", "IsPassword", g_variant_new_boolean (is_password));
   webkit_context_menu_set_user_data (context_menu,
                                      g_variant_builder_end (&builder));
 
