@@ -734,6 +734,11 @@ Ephy.FormManager = class FormManager
         // case just pick the first field.
         let passwordNodeIndex = 0;
         if (!forAutofill && passwordNodes.length !== 1) {
+            for (let node of passwordNodes) {
+                if (node.element.getAttribute('autocomplete').includes('new-password'))
+                    return { 'usernameNode' : usernameNode, 'passwordNode' : node };
+            }
+
             // Get values of all password fields.
             const passwords = [];
             for (let i = passwordNodes.length - 1; i >= 0; i--)
