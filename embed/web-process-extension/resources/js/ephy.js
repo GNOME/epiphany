@@ -953,12 +953,3 @@ Ephy.FormManager = class FormManager
         }
     }
 };
-
-let contextMenuElementIsEditable = false;
-let contextMenuElementIsPassword = false;
-
-window.document.addEventListener('contextmenu', (event) => {
-    // isContentEditable is always false, in practice this seems functional enough.
-    contextMenuElementIsEditable = event.target.tagName.toLowerCase() === 'input';
-    contextMenuElementIsPassword = event.target.type === 'password';
-});
