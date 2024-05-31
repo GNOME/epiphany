@@ -107,6 +107,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS         "enable-webextensions"
 #define EPHY_PREFS_WEB_WEBEXTENSIONS_ACTIVE         "webextensions-active"
 #define EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS       "show-developer-actions"
+#define EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL         "always-show-full-url"
 #define EPHY_PREFS_WEB_ENABLE_NAVIGATION_GESTURES   "enable-navigation-gestures"
 
 static const char * const ephy_prefs_web_schema[] = {
@@ -137,6 +138,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB,
   EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,
   EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS,
+  EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL,
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
