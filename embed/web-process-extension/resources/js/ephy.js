@@ -298,14 +298,14 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
     }
 };
 
-Ephy.formControlsAssociated = function(pageID, frameID, forms, serializer)
+Ephy.formControlsAssociated = function(pageID, frameID, elements, serializer)
 {
     Ephy.formManagers = [];
 
-    for (let i = 0; i < forms.length; i++) {
-        if (!(forms[i] instanceof HTMLFormElement))
+    for (let i = 0; i < elements.length; i++) {
+        if (!(elements[i] instanceof HTMLFormElement))
             continue;
-        const formManager = new Ephy.FormManager(pageID, frameID, forms[i]);
+        const formManager = new Ephy.FormManager(pageID, frameID, elements[i]);
         formManager.handlePasswordForms(serializer);
         formManager.preFillForms();
         Ephy.formManagers.push(formManager);
