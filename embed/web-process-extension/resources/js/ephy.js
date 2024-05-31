@@ -700,6 +700,70 @@ Ephy.FormManager = class FormManager
         return element.getAttribute('autocomplete').includes('new-password');
     }
 
+    // FIXME: This code a bad version of Ephy.PreFillUserMenu. The code
+    // duplication should be reconciled somehow.
+    _newPasswordElementFocused(event)
+    {
+        const mainDiv = document.createElement('div');
+        mainDiv.id = 'ephy-generate-secure-password-container';
+
+        const passwordElement = event.target;
+        const elementRect = event.target.getBoundingClientRect();
+
+        // 2147483647 is the maximum value browsers will take for z-index.
+        // See http://stackoverflow.com/questions/8565821/css-max-z-index-value
+        mainDiv.style.cssText = 'position: absolute;' +
+            'z-index: 2147483647;' +
+            'cursor: default;' +
+            'background-color: white;' +
+            'box-shadow: 5px 5px 5px rgba(0,0,0,0.2);' +
+            'border-top: 0px;' +
+            'border-radius: 8px;' +
+            'padding: 12px 0px;' +
+            '-webkit-user-modify: read-only ! important;';
+        mainDiv.style.width = 200; //this._userElement.offsetWidth + 'px';
+        mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
+        mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
+
+        // FIXME: Probably shouldn't use a list here to create only a single element.
+        const ul = document.createElement('ul');
+        ul.style.cssText = 'margin: 0; padding: 0;';
+        ul.tabindex = -1;
+        mainDiv.appendChild(ul);
+
+        this._selected = null;
+
+        const li = document.createElement('li');
+        li.style.cssText = 'list-style-type: none ! important;' +
+            'background-image: none ! important;' +
+            'padding: 3px 6px ! important;' +
+            'color: black;' +
+            'margin: 0px;';
+        // FIXME: selection colors.
+        li.tabindex = -1;
+        ul.appendChild(li);
+
+        const anchor = document.createElement('a');
+        anchor.style.cssText = 'font-weight: normal ! important;' +
+            'font-family: sans ! important;' +
+            'text-decoration: none ! important;' +
+            'color: black;' +
+            '-webkit-user-modify: read-only ! important;';
+        // FIXME: selection colors.
+        anchor.textContent = Ephy._("Generate a Secure Password");
+        li.appendChild(anchor);
+
+        // FIXME: Handle keyboard input too
+        li.addEventListener('mousedown', event => {
+            passwordElement.value = Ephy.generateSecurePassword();
+		    const menu = document.getElementById('ephy-generate-secure-password-container');
+		    if (menu)
+		        menu.parentNode.removeChild(menu);
+        }, true);
+
+        document.body.appendChild(mainDiv);
+    }
+
     _containsPasswordElement()
     {
         for (let i = 0; i < this._form.elements.length; i++) {
@@ -775,6 +839,14 @@ Ephy.FormManager = class FormManager
                 }
             }
         }
+
+       if (forAutofill) {
+           for (let node of passwordNodes) {
+               if (Ephy.FormManager._isNewPasswordElement(node.element))
+                   node.element.addEventListener('focus', this._newPasswordElementFocused.bind(this), true);
+               break;
+           }
+       }
 
         // Choose password field that contains the password that we want to store
         // To do that, we compare the field values. We can only do this when user

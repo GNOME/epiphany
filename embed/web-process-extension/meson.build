@@ -25,6 +25,7 @@ web_process_extension_deps = [
   config_h,
   ephymisc_dep,
   ephysync_dep,
+  pwquality_dep,
   webkitgtk_web_extension_dep
 ]
 
