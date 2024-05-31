@@ -1,6 +1,6 @@
 include:
   - remote: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
-  - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/3d80a75e1284935e69219bfa80bc6064c6786819/templates/alpine.yml'
+  - remote: 'https://gitlab.freedesktop.org/freedesktop/ci-templates/-/raw/b61a03cabbf308e81289f7aaaf0b5a80a34ffb99/templates/fedora.yml'
 
 cache:
   paths:
@@ -29,36 +29,33 @@ stages:
 # Use freedesktop-ci-templates for code style check and eslint.
 # Everything else uses flatpak-ci-initiative
 
-.alpine.container.common:
+.fedora.container.common:
   variables:
-    FDO_DISTRIBUTION_TAG: '2022-07-29.1'
+    FDO_DISTRIBUTION_TAG: '2024-06-05.3'
     FDO_DISTRIBUTION_VERSION: 'latest'
 
-build.container.alpine@x86_64:
+build.container.fedora@x86_64:
   extends:
-  - '.fdo.container-build@alpine'
-  - '.alpine.container.common'
+  - '.fdo.container-build@fedora'
+  - '.fedora.container.common'
   stage: 'prepare'
   variables:
     GIT_STRATEGY: none
     FDO_EXPIRES_AFTER: 8w
     FDO_DISTRIBUTION_PACKAGES: >-
-      bash
-      nodejs
       npm
-      python3
       uncrustify
     FDO_DISTRIBUTION_EXEC: >-
-      npm install -g eslint
+      npm install -g eslint @eslint/js
   rules:
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 check-code-style:
   extends:
-    - '.fdo.distribution-image@alpine'
-    - '.alpine.container.common'
+    - '.fdo.distribution-image@fedora'
+    - '.fedora.container.common'
   stage: 'test'
-  needs: [ 'build.container.alpine@x86_64' ]
+  needs: [ 'build.container.fedora@x86_64' ]
   interruptible: true
   script:
     - bash data/check-code-style
@@ -71,10 +68,10 @@ check-code-style:
 
 eslint:
   extends:
-    - '.fdo.distribution-image@alpine'
-    - '.alpine.container.common'
+    - '.fdo.distribution-image@fedora'
+    - '.fedora.container.common'
   stage: 'test'
-  needs: [ 'build.container.alpine@x86_64' ]
+  needs: [ 'build.container.fedora@x86_64' ]
   interruptible: true
   script:
     - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
