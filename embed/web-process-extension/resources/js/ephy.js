@@ -131,47 +131,51 @@ Ephy.getWebAppIcon = function(baseURL)
 
 Ephy.PreFillUserMenu = class PreFillUserMenu
 {
+    #manager;
+    #formAuth;
+    #userElement;
+    #users;
+    #passwordElement;
+    #selected = null;
+    #wasEdited = false;
+
     constructor(manager, formAuth, users)
     {
-        this._manager = manager;
-        this._formAuth = formAuth;
-        this._userElement = formAuth.usernameNode;
-        this._users = users;
-        this._passwordElement = formAuth.passwordNode;
-        this._selected = null;
-        this._wasEdited = false;
+        this.#manager = manager;
+        this.#formAuth = formAuth;
+        this.#userElement = formAuth.usernameNode;
+        this.#users = users;
+        this.#passwordElement = formAuth.passwordNode;
 
-        this._userElement.addEventListener('input', this._onInput.bind(this), true);
-        this._userElement.addEventListener('mouseup', this._onMouseUp.bind(this), false);
-        this._userElement.addEventListener('keydown', this._onKeyDown.bind(this), false);
-        this._userElement.addEventListener('change', this._removeMenu, false);
-        this._userElement.addEventListener('blur', this._removeMenu, false);
+        this.#userElement.addEventListener('input', this.#onInput.bind(this), true);
+        this.#userElement.addEventListener('mouseup', this.#onMouseUp.bind(this), false);
+        this.#userElement.addEventListener('keydown', this.#onKeyDown.bind(this), false);
+        this.#userElement.addEventListener('change', this.#removeMenu, false);
+        this.#userElement.addEventListener('blur', this.#removeMenu, false);
     }
 
-    // Private
-
-    _onInput(event)
+    #onInput(event)
     {
-        if (this._manager.isAutoFilling(this._userElement))
+        if (this.#manager.isAutoFilling(this.#userElement))
             return;
 
-        this._wasEdited = true;
-        this._removeMenu();
-        this._showMenu(false);
+        this.#wasEdited = true;
+        this.#removeMenu();
+        this.#showMenu(false);
     }
 
-    _onMouseUp(event)
+    #onMouseUp(event)
     {
         if (document.getElementById('ephy-user-choices-container'))
             return;
 
-        this._showMenu(!this._wasEdited);
+        this.#showMenu(!this.#wasEdited);
     }
 
-    _onKeyDown(event)
+    #onKeyDown(event)
     {
         if (event.key === 'Escape') {
-            this._removeMenu();
+            this.#removeMenu();
             return;
         }
 
@@ -180,34 +184,34 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
         const container = document.getElementById('ephy-user-choices-container');
         if (!container) {
-            this._showMenu(!this._wasEdited);
+            this.#showMenu(!this.#wasEdited);
             return;
         }
 
         let newSelect = null;
-        if (this._selected)
-            newSelect = event.key !== 'ArrowUp' ? this._selected.previousSibling : this._selected.nextSibling;
+        if (this.#selected)
+            newSelect = event.key !== 'ArrowUp' ? this.#selected.previousSibling : this.#selected.nextSibling;
 
         if (!newSelect)
             newSelect = event.key !== 'ArrowUp' ? container.firstElementChild.lastElementChild : container.firstElementChild.firstElementChild;
 
         if (newSelect) {
-            this._selected = newSelect;
-            this._userElement.value = this._selected.firstElementChild.textContent;
-            this._usernameSelected();
+            this.#selected = newSelect;
+            this.#userElement.value = this.#selected.firstElementChild.textContent;
+            this.#usernameSelected();
         } else {
-            this._passwordElement.value = '';
+            this.#passwordElement.value = '';
         }
 
         event.preventDefault();
     }
 
-    _showMenu(showAll)
+    #showMenu(showAll)
     {
         const mainDiv = document.createElement('div');
         mainDiv.id = 'ephy-user-choices-container';
 
-        const elementRect = this._userElement.getBoundingClientRect();
+        const elementRect = this.#userElement.getBoundingClientRect();
 
         // 2147483647 is the maximum value browsers will take for z-index.
         // See http://stackoverflow.com/questions/8565821/css-max-z-index-value
@@ -220,7 +224,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             'border-radius: 8px;' +
             'padding: 12px 0px;' +
             '-webkit-user-modify: read-only ! important;';
-        mainDiv.style.width = this._userElement.offsetWidth + 'px';
+        mainDiv.style.width = this.#userElement.offsetWidth + 'px';
         mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
         mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
 
@@ -229,9 +233,9 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         ul.tabindex = -1;
         mainDiv.appendChild(ul);
 
-        this._selected = null;
-        for (const user of this._users) {
-            if (!showAll && !user.startsWith(this._userElement.value))
+        this.#selected = null;
+        for (const user of this.#users) {
+            if (!showAll && !user.startsWith(this.#userElement.value))
                 continue;
 
             const li = document.createElement('li');
@@ -244,8 +248,8 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             li.tabindex = -1;
             ul.appendChild(li);
 
-            if (user === this._userElement.value)
-                this._selected = li;
+            if (user === this.#userElement.value)
+                this.#selected = li;
 
             const anchor = document.createElement('a');
             anchor.style.cssText = 'font-weight: normal ! important;' +
@@ -258,31 +262,31 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
             li.appendChild(anchor);
 
             li.addEventListener('mousedown', event => {
-                this._userElement.value = user;
-                this._selected = li;
-                this._removeMenu();
-                this._usernameSelected();
+                this.#userElement.value = user;
+                this.#selected = li;
+                this.#removeMenu();
+                this.#usernameSelected();
             }, true);
         }
 
         document.body.appendChild(mainDiv);
 
-        if (!this._selected)
-            this._passwordElement.value = '';
+        if (!this.#selected)
+            this.#passwordElement.value = '';
     }
 
-    _removeMenu()
+    #removeMenu()
     {
         const menu = document.getElementById('ephy-user-choices-container');
         if (menu)
             menu.parentNode.removeChild(menu);
     }
 
-    _usernameSelected()
+    #usernameSelected()
     {
-        this._formAuth.username = this._userElement.value;
-        this._passwordElement.value = '';
-        this._manager.preFill(this._formAuth);
+        this.#formAuth.username = this.#userElement.value;
+        this.#passwordElement.value = '';
+        this.#manager.preFill(this.#formAuth);
     }
 };
 
@@ -296,7 +300,7 @@ Ephy.formControlsAssociated = function(pageID, frameID, elements, serializer)
 
         const formManager = new Ephy.FormManager(pageID, frameID, element, serializer);
         formManager.preFillForms();
-        Ephy.FormManager._managers.push(formManager);
+        Ephy.FormManager.managers.push(formManager);
 
         formElements.push(element);
     }
@@ -339,7 +343,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 {
     // FIXME: Find out: is it really possible to have multiple frames with same window object???
     let formManager = null;
-    for (const manager of Ephy.FormManager._managers) {
+    for (const manager of Ephy.FormManager.managers) {
         if (manager.frameID() === frameID && manager.form() === form) {
             formManager = manager;
             break;
@@ -348,7 +352,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 
     if (!formManager) {
         formManager = new Ephy.FormManager(pageID, frameID, form);
-        Ephy.FormManager._managers.push(formManager);
+        Ephy.FormManager.managers.push(formManager);
     }
 
     formManager.handleFormSubmission();
@@ -388,27 +392,31 @@ Ephy.isSandboxedWebContent = function()
 
 Ephy.PasswordManager = class PasswordManager
 {
+    #pageID;
+    #frameID;
+    #pendingPromises = [];
+    #promiseCounter = 0;
+
     constructor(pageID, frameID)
     {
-        this._pageID = pageID;
-        this._frameID = frameID;
-        this._pendingPromises = [];
-        this._promiseCounter = 0;
+        this.#pageID = pageID;
+        this.#frameID = frameID;
     }
 
-    _takePendingPromise(id)
+    #takePendingPromise(id)
     {
-        const element = this._pendingPromises.find(element => element.promiseID === id);
+        const element = this.#pendingPromises.find(element => element.promiseID === id);
         if (element)
-            this._pendingPromises = this._pendingPromises.filter(element => element.promiseID !== id);
+            this.#pendingPromises = this.#pendingPromises.filter(element => element.promiseID !== id);
         return element;
     }
 
-    _onQueryResponse(username, password, id)
+    // Called by ephy-web-process-extension.c
+    onQueryResponse(username, password, id)
     {
         Ephy.log(`Received password query response for username=${username}`);
 
-        const element = this._takePendingPromise(id);
+        const element = this.#takePendingPromise(id);
         if (element) {
             if (password)
                 element.resolver({username, password});
@@ -427,9 +435,9 @@ Ephy.PasswordManager = class PasswordManager
         Ephy.log(`Querying passwords for origin=${origin}, targetOrigin=${targetOrigin}, username=${username}, usernameField=${usernameField}, passwordField=${passwordField}`);
 
         return new Promise((resolver, reject) => {
-            const promiseID = this._promiseCounter++;
-            Ephy.queryPassword(origin, targetOrigin, username, usernameField, passwordField, promiseID, this._pageID, this._frameID);
-            this._pendingPromises.push({promiseID, resolver});
+            const promiseID = this.#promiseCounter++;
+            Ephy.queryPassword(origin, targetOrigin, username, usernameField, passwordField, promiseID, this.#pageID, this.#frameID);
+            this.#pendingPromises.push({promiseID, resolver});
         });
     }
 
@@ -444,7 +452,7 @@ Ephy.PasswordManager = class PasswordManager
 
         window.webkit.messageHandlers.passwordManagerSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
-            pageID: this._pageID
+            pageID: this.#pageID
         });
     }
 
@@ -459,15 +467,16 @@ Ephy.PasswordManager = class PasswordManager
 
         window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
             origin, targetOrigin, username, password, usernameField, passwordField, isNew,
-            pageID: this._pageID
+            pageID: this.#pageID
         });
     }
 
-    _onQueryUsernamesResponse(users, id)
+    // Called by ephy-web-process-extension.c
+    onQueryUsernamesResponse(users, id)
     {
         Ephy.log(`Received query usernames response with users=${users}`);
 
-        const element = this._takePendingPromise(id);
+        const element = this.#takePendingPromise(id);
         if (element)
             element.resolver(users);
     }
@@ -482,53 +491,55 @@ Ephy.PasswordManager = class PasswordManager
         Ephy.log(`Requesting usernames for origin=${origin}`);
 
         return new Promise((resolver, reject) => {
-            const promiseID = this._promiseCounter++;
-            Ephy.queryUsernames(origin, promiseID, this._pageID, this._frameID);
-            this._pendingPromises.push({promiseID, resolver});
+            const promiseID = this.#promiseCounter++;
+            Ephy.queryUsernames(origin, promiseID, this.#pageID, this.#frameID);
+            this.#pendingPromises.push({promiseID, resolver});
         });
     }
 };
 
 Ephy.FormManager = class FormManager
 {
-    static _managers = [];
+    static managers = [];
+
+    #pageID;
+    #frameID;
+    #form;
+    #passwordFormMessageSerializer;
+    #preFillUserMenu = null;
+    #elementBeingAutoFilled = null;
+    #submissionHandled = false;
 
     constructor(pageID, frameID, form, serializer)
     {
-        this._pageID = pageID;
-        this._frameID = frameID;
-        this._form = form;
-        this._passwordFormMessageSerializer = null;
-        this._preFillUserMenu = null;
-        this._elementBeingAutoFilled = null;
-        this._submissionHandled = false;
-        this._passwordFormMessageSerializer = serializer;
+        this.#pageID = pageID;
+        this.#frameID = frameID;
+        this.#form = form;
+        this.#passwordFormMessageSerializer = serializer;
 
-        this._form.addEventListener('focus', this._formFocused.bind(this), true);
+        this.#form.addEventListener('focus', this.#formFocused.bind(this), true);
 
-        Ephy.FormManager._managers.push(this);
+        Ephy.FormManager.managers.push(this);
     }
-
-    // Public
 
     static managerForForm(element)
     {
-        return Ephy.FormManager._managers.find((manager) => manager._form === element);
+        return Ephy.FormManager.managers.find((manager) => manager.#form === element);
     }
 
     frameID()
     {
-        return this._frameID;
+        return this.#frameID;
     }
 
     form()
     {
-        return this._form;
+        return this.#form;
     }
 
     isAutoFilling(element)
     {
-        return this._elementBeingAutoFilled === element;
+        return this.#elementBeingAutoFilled === element;
     }
 
     preFillForms()
@@ -536,7 +547,7 @@ Ephy.FormManager = class FormManager
         if (!Ephy.shouldRememberPasswords())
             return;
 
-        const formAuth = this._generateFormAuth(true);
+        const formAuth = this.#generateFormAuth(true);
         if (!formAuth) {
             Ephy.log('No pre-fillable/hookable form found');
             return;
@@ -548,7 +559,7 @@ Ephy.FormManager = class FormManager
             Ephy.passwordManager.queryUsernames(formAuth.origin).then(users => {
                 if (users.length > 1) {
                     Ephy.log('More than one saved username, hooking menu for choosing which one to select');
-                    this._preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth, users);
+                    this.#preFillUserMenu = new Ephy.PreFillUserMenu(this, formAuth, users);
                 } else if (users.length === 1) {
                     formAuth.username = users[0];
                 }
@@ -578,15 +589,15 @@ Ephy.FormManager = class FormManager
                 Ephy.log('Found: user ' + authInfo.username + ' pass (hidden)');
 
                 if (formAuth.usernameNode && authInfo.username) {
-                    this._elementBeingAutoFilled = formAuth.usernameNode;
+                    this.#elementBeingAutoFilled = formAuth.usernameNode;
                     Ephy.autoFill(formAuth.usernameNode, authInfo.username);
-                    this._elementBeingAutoFilled = null;
+                    this.#elementBeingAutoFilled = null;
                 }
 
                 if (authInfo.password) {
-                    this._elementBeingAutoFilled = formAuth.passwordNode;
+                    this.#elementBeingAutoFilled = formAuth.passwordNode;
                     Ephy.autoFill(formAuth.passwordNode, authInfo.password);
-                    this._elementBeingAutoFilled = null;
+                    this.#elementBeingAutoFilled = null;
                 }
             }
         );
@@ -597,12 +608,12 @@ Ephy.FormManager = class FormManager
         if (!Ephy.shouldRememberPasswords())
             return;
 
-        if (this._submissionHandled)
+        if (this.#submissionHandled)
             return;
 
-        this._submissionHandled = true;
+        this.#submissionHandled = true;
 
-        const formAuth = this._generateFormAuth(false);
+        const formAuth = this.#generateFormAuth(false);
         if (!formAuth || !formAuth.password)
             return;
 
@@ -655,11 +666,9 @@ Ephy.FormManager = class FormManager
         );
     }
 
-    // Private
-
-    _getFormAction()
+    #getFormAction()
     {
-        // We used to naively access this._form.action to get the action
+        // We used to naively access this.#form.action to get the action
         // attribute of the form, which works 99% of the time, but fails if any
         // input element of the form is named "action". We don't want to get
         // that by mistake, so we can't rely on the JavaScript property. See:
@@ -676,18 +685,18 @@ Ephy.FormManager = class FormManager
         // consider that for autofill purposes. It's OK because the target URL
         // we save into the password manager is only a heuristic.
 
-        const action = this._form.getAttribute('action');
+        const action = this.#form.getAttribute('action');
         return action ? new URL(action, window.location) : null;
     }
 
-    static _isNewPasswordElement(element)
+    static #isNewPasswordElement(element)
     {
         return element.getAttribute('autocomplete').includes('new-password');
     }
 
-    _containsPasswordElement()
+    #containsPasswordElement()
     {
-        for (const element of this._form.elements) {
+        for (const element of this.#form.elements) {
             if (element instanceof HTMLInputElement) {
                 if (element.type === 'password' || element.type === 'adminpw')
                     return true;
@@ -696,13 +705,13 @@ Ephy.FormManager = class FormManager
         return false;
     }
 
-    _formFocused(event)
+    #formFocused(event)
     {
-        if (!this._containsPasswordElement())
+        if (!this.#containsPasswordElement())
             return;
 
         let isFormActionInsecure = false;
-        const actionURL = this._getFormAction();
+        const actionURL = this.#getFormAction();
         if (actionURL) {
             if (actionURL.protocol === 'http:') {
                 // We trust localhost to be local since glib!616.
@@ -713,14 +722,14 @@ Ephy.FormManager = class FormManager
                 }
             }
         }
-        window.webkit.messageHandlers.passwordFormFocused.postMessage(this._passwordFormMessageSerializer(this._pageID, isFormActionInsecure));
+        window.webkit.messageHandlers.passwordFormFocused.postMessage(this.#passwordFormMessageSerializer(this.#pageID, isFormActionInsecure));
     }
 
-    _findPasswordFields()
+    #findPasswordFields()
     {
         const passwordFields = [];
-        for (let i = 0; i < this._form.elements.length; i++) {
-            const element = this._form.elements[i];
+        for (let i = 0; i < this.#form.elements.length; i++) {
+            const element = this.#form.elements[i];
             if (element instanceof HTMLInputElement && element.type === 'password') {
                 // We only want to process forms with 1-3 fields. A common
                 // case is to have a "change password" form with 3 fields:
@@ -738,9 +747,9 @@ Ephy.FormManager = class FormManager
     // forAutofill is true if we are loading the page and autofilling saved
     // passwords, and false if we are submitting the page and prompting the
     // user to save submitted passwords.
-    _findFormAuthElements(forAutofill)
+    #findFormAuthElements(forAutofill)
     {
-        const passwordNodes = this._findPasswordFields();
+        const passwordNodes = this.#findPasswordFields();
         if (!passwordNodes || !passwordNodes.length)
             return null;
 
@@ -749,7 +758,7 @@ Ephy.FormManager = class FormManager
         let usernameNode = null;
         const firstPasswordNodeData = passwordNodes[0];
         for (let i = firstPasswordNodeData.index; i >= 0; i--) {
-            const element = this._form.elements[i];
+            const element = this.#form.elements[i];
             if (element instanceof HTMLInputElement) {
                 if (element.type === 'text' || element.type === 'email' ||
                     element.type === 'tel' || element.type === 'url' ||
@@ -767,7 +776,7 @@ Ephy.FormManager = class FormManager
         let passwordNodeIndex = 0;
         if (!forAutofill && passwordNodes.length !== 1) {
             for (const node of passwordNodes) {
-                if (Ephy.FormManager._isNewPasswordElement(node.element))
+                if (Ephy.FormManager.#isNewPasswordElement(node.element))
                     return { 'usernameNode' : usernameNode, 'passwordNode' : node };
             }
 
@@ -824,14 +833,14 @@ Ephy.FormManager = class FormManager
         return { 'usernameNode' : usernameNode, 'passwordNode' : passwordNode };
     }
 
-    _generateFormAuth(forAutofill) {
-        const formAuth = this._findFormAuthElements(forAutofill);
+    #generateFormAuth(forAutofill) {
+        const formAuth = this.#findFormAuthElements(forAutofill);
         if (formAuth === null)
             return null;
 
         formAuth.origin = new URL(String(window.location)).origin;
         try {
-            formAuth.targetOrigin = this._getFormAction().origin;
+            formAuth.targetOrigin = this.#getFormAction().origin;
         } catch {
             formAuth.targetOrigin = formAuth.origin;
         }

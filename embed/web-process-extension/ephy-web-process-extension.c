@@ -566,7 +566,7 @@ web_view_query_usernames_ready_cb (WebKitWebPage            *web_page,
   if (password_manager) {
     g_autoptr (JSCValue) ret = NULL;
 
-    ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
+    ret = jsc_value_object_invoke_method (password_manager, "onQueryUsernamesResponse",
                                           G_TYPE_STRV, usernames,
                                           G_TYPE_UINT64, data->promise_id,
                                           G_TYPE_NONE);
@@ -638,7 +638,7 @@ web_view_query_password_ready_cb (WebKitWebPage            *web_page,
   if (password_manager) {
     g_autoptr (JSCValue) ret = NULL;
 
-    ret = jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
+    ret = jsc_value_object_invoke_method (password_manager, "onQueryResponse",
                                           G_TYPE_STRING, username,
                                           G_TYPE_STRING, password,
                                           G_TYPE_UINT64, data->promise_id,

@@ -6,28 +6,26 @@
 window.browser = {};
 
 class EphyEventListener {
-    constructor () {
-        this._listeners = [];
-    }
+    #listeners = [];
 
     addListener (cb) {
-        this._listeners.push({callback: cb});
+        this.#listeners.push({callback: cb});
     }
 
     removeListener (cb) {
-        this._listeners = this._listeners.filter(l => l.callback !== cb);
+        this.#listeners = this.#listeners.filter(l => l.callback !== cb);
     }
 
     hasListener (cb) {
-        return !!this._listeners.find(l => l.callback === cb);
+        return !!this.#listeners.find(l => l.callback === cb);
     }
 
-    _emit (...data) {
-        for (const listener of this._listeners)
+    #emit (...data) {
+        for (const listener of this.#listeners)
             listener.callback (...data);
     }
 
-    _emit_with_reply (message, sender, message_guid) {
+    #emit_with_reply (message, sender, message_guid) {
         let handled = false;
         const reply_callback = function (reply_message) {
             ephy_message ('runtime._sendMessageReply', [message_guid, reply_message]).catch(error_message => {
@@ -35,7 +33,7 @@ class EphyEventListener {
             });
         };
 
-        for (const listener of this._listeners) {
+        for (const listener of this.#listeners) {
             const ret = listener.callback (message, sender, reply_callback);
             if (typeof ret === 'object' && typeof ret.then === 'function') {
                 /* FIXME: I'm very unsure about this behavior. Extensions such as Dark Reader

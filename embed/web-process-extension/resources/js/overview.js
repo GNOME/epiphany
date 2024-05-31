@@ -4,29 +4,31 @@
 
 Ephy.Overview = class Overview
 {
+    #model;
+    #items = [];
+    #pendingThumbnailChanges = [];
+    #pendingTitleChanges = [];
+    #onURLsChangedFunction;
+    #onThumbnailChangedFunction;
+    #onTitleChangedFunction;
+
     constructor(model)
     {
-        this._model = model;
-        this._items = [];
-
-        this._pendingThumbnailChanges = [];
-        this._pendingTitleChanges = [];
+        this.#model = model;
 
         // Event handlers are weak references in EphyWebOverviewModel, we need to keep
         // a strong reference to them while Ephy.Overview is alive.
-        this._onURLsChangedFunction = this._onURLsChanged.bind(this);
-        this._model.onurlschanged = this._onURLsChangedFunction;
-        this._onThumbnailChangedFunction = this._onThumbnailChanged.bind(this);
-        this._model.onthumbnailchanged = this._onThumbnailChangedFunction;
-        this._onTitleChangedFunction = this._onTitleChanged.bind(this);
-        this._model.ontitlechanged = this._onTitleChangedFunction;
-        document.addEventListener('DOMContentLoaded', this._initialize.bind(this), false);
-        document.addEventListener('keypress', this._onKeyPress.bind(this), false);
+        this.#onURLsChangedFunction = this.#onURLsChanged.bind(this);
+        this.#model.onurlschanged = this.#onURLsChangedFunction;
+        this.#onThumbnailChangedFunction = this.#onThumbnailChanged.bind(this);
+        this.#model.onthumbnailchanged = this.#onThumbnailChangedFunction;
+        this.#onTitleChangedFunction = this.#onTitleChanged.bind(this);
+        this.#model.ontitlechanged = this.#onTitleChangedFunction;
+        document.addEventListener('DOMContentLoaded', this.#initialize.bind(this), false);
+        document.addEventListener('keypress', this.#onKeyPress.bind(this), false);
     }
 
-    // Private
-
-    _initialize()
+    #initialize()
     {
         const anchors = document.getElementsByTagName('a');
         if (anchors.length === 0)
@@ -41,7 +43,7 @@ Ephy.Overview = class Overview
 
             const closeButton = anchor.getElementsByClassName('overview-close-button')[0];
             closeButton.onclick = (event) => {
-                this._removeItem(anchor);
+                this.#removeItem(anchor);
                 event.preventDefault();
             };
 
@@ -49,58 +51,58 @@ Ephy.Overview = class Overview
             // aren't, so update the model with the thumbnail if there's one.
             const thumbnailPath = item.thumbnailPath();
             if (thumbnailPath)
-                this._model.setThumbnail(item.url(), thumbnailPath);
+                this.#model.setThumbnail(item.url(), thumbnailPath);
             else
-                item.setThumbnailPath(this._model.getThumbnail(item.url()));
+                item.setThumbnailPath(this.#model.getThumbnail(item.url()));
 
-            this._items.push(item);
+            this.#items.push(item);
         }
 
-        const items = this._model.urls;
-        if (items.length > this._items.length)
-            this._onURLsChanged(items);
+        const items = this.#model.urls;
+        if (items.length > this.#items.length)
+            this.#onURLsChanged(items);
 
-        for (const thumbnailChange of this._pendingThumbnailChanges)
-            this._onThumbnailChanged(thumbnailChange.url, thumbnailChange.path);
-        this._pendingThumbnailChanges = [];
+        for (const thumbnailChange of this.#pendingThumbnailChanges)
+            this.#onThumbnailChanged(thumbnailChange.url, thumbnailChange.path);
+        this.#pendingThumbnailChanges = [];
 
-        for (const titleChange of this._pendingTitleChanges)
-            this._onTitleChanged(titleChange.url, titleChange.title);
-        this._pendingTitleChanges = [];
-        this._addPlaceholders();
+        for (const titleChange of this.#pendingTitleChanges)
+            this.#onTitleChanged(titleChange.url, titleChange.title);
+        this.#pendingTitleChanges = [];
+        this.#addPlaceholders();
     }
 
-    _onKeyPress(event)
+    #onKeyPress(event)
     {
         if (event.which !== 127)
             return;
 
         const item = document.activeElement;
         if (item.classList.contains('overview-item')) {
-            this._removeItem(item);
+            this.#removeItem(item);
             event.preventDefault();
         }
     }
 
-    _addPlaceholders() {
+    #addPlaceholders() {
         const parentNode = document.getElementById('most-visited-grid');
         const anchors = document.getElementsByTagName('a');
 
         for (let i = anchors.length; i < 9; i++) {
             const anchor = document.createElement('a');
             anchor.className = 'overview-item';
-            const span_thumbnail = document.createElement('span');
-            span_thumbnail.className = 'overview-thumbnail';
-            anchor.appendChild(span_thumbnail);
-            const span_title = document.createElement('span');
-            span_title.className = 'overview-title';
-            anchor.appendChild(span_title);
+            const spanThumbnail = document.createElement('span');
+            spanThumbnail.className = 'overview-thumbnail';
+            anchor.appendChild(spanThumbnail);
+            const spanTitle = document.createElement('span');
+            spanTitle.className = 'overview-title';
+            anchor.appendChild(spanTitle);
 
             parentNode.appendChild(anchor);
         }
       }
 
-    _removePlaceholders() {
+    #removePlaceholders() {
         const anchors = document.getElementsByTagName('a');
 
         for (const anchor of anchors) {
@@ -109,24 +111,24 @@ Ephy.Overview = class Overview
         }
     }
 
-    _removeItem(item)
+    #removeItem(item)
     {
         item.classList.add('overview-removed');
         // Animation takes 0.25s, remove the item after 0.5s to ensure the animation finished.
         setTimeout(() => {
             item.parentNode.removeChild(item);
-            for (let i = 0; i < this._items.length; i++) {
-                if (this._items[i].url() === item.href) {
-                    this._items.splice(i, 1);
+            for (let i = 0; i < this.#items.length; i++) {
+                if (this.#items[i].url() === item.href) {
+                    this.#items.splice(i, 1);
                     break;
                 }
             }
-            this._addPlaceholders();
+            this.#addPlaceholders();
             window.webkit.messageHandlers.overview.postMessage(item.href);
         }, 500);  // This value needs to be synced with the one in about.css
     }
 
-    _onURLsChanged(urls)
+    #onURLsChanged(urls)
     {
         const overview = document.getElementById('overview');
         const grid = document.getElementById('most-visited-grid');
@@ -136,13 +138,13 @@ Ephy.Overview = class Overview
             overview.classList.remove('overview-empty');
         }
 
-        this._removePlaceholders();
+        this.#removePlaceholders();
         for (let i = 0; i < urls.length; i++) {
             const url = urls[i];
 
             let item;
-            if (this._items[i]) {
-                item = this._items[i];
+            if (this.#items[i]) {
+                item = this.#items[i];
             } else {
                 Ephy.log('create an item for the url ' + url.url);
                 const anchor = document.createElement('a');
@@ -150,7 +152,7 @@ Ephy.Overview = class Overview
                 const closeButton = document.createElement('div');
                 closeButton.title = Ephy._('Remove from overview');
                 closeButton.onclick = (event) => {
-                    this._removeItem(anchor);
+                    this.#removeItem(anchor);
                     event.preventDefault();
                 };
                 closeButton.innerHTML = '';
@@ -164,29 +166,29 @@ Ephy.Overview = class Overview
                 anchor.appendChild(titleSpan);
                 document.getElementById('most-visited-grid').appendChild(anchor);
                 item = new Ephy.Overview.Item(anchor);
-                this._items.push(item);
+                this.#items.push(item);
             }
 
             item.setURL(url.url);
             item.setTitle(url.title);
-            item.setThumbnailPath(this._model.getThumbnail(url.url));
+            item.setThumbnailPath(this.#model.getThumbnail(url.url));
         }
 
-        while (this._items.length > urls.length) {
-            const item = this._items.pop();
+        while (this.#items.length > urls.length) {
+            const item = this.#items.pop();
             item.detachFromParent();
         }
     }
 
-    _onThumbnailChanged(url, path)
+    #onThumbnailChanged(url, path)
     {
-        if (this._items.length === 0) {
-            this._pendingThumbnailChanges.push({ url: url, path: path });
+        if (this.#items.length === 0) {
+            this.#pendingThumbnailChanges.push({ url: url, path: path });
             return;
         }
 
-        for (let i = 0; i < this._items.length; i++) {
-            const item = this._items[i];
+        for (let i = 0; i < this.#items.length; i++) {
+            const item = this.#items[i];
             if (item.url() === url) {
                 item.setThumbnailPath(path);
                 return;
@@ -194,15 +196,15 @@ Ephy.Overview = class Overview
         }
     }
 
-    _onTitleChanged(url, title)
+    #onTitleChanged(url, title)
     {
-        if (this._items.length === 0) {
-            this._pendingTitleChanges.push({ url: url, title: title });
+        if (this.#items.length === 0) {
+            this.#pendingTitleChanges.push({ url: url, title: title });
             return;
         }
 
-        for (let i = 0; i < this._items.length; i++) {
-            const item = this._items[i];
+        for (let i = 0; i < this.#items.length; i++) {
+            const item = this.#items[i];
             if (item.url() === url) {
                 item.setTitle(title);
                 return;
@@ -213,50 +215,49 @@ Ephy.Overview = class Overview
 
 Ephy.Overview.Item = class OverviewItem
 {
+    #item;
+    #title = null;
+    #thumbnail = null;
+
     constructor(item)
     {
-        this._item = item;
-        this._title = null;
-        this._thumbnail = null;
+        this.#item = item;
 
-        for (let i = 0; i < this._item.childNodes.length; i++) {
-            const child = this._item.childNodes[i];
+        for (const child of this.#item.childNodes) {
             if (!(child instanceof Element))
                 continue;
 
             if (child.classList.contains('overview-title'))
-                this._title = child;
+                this.#title = child;
             else if (child.classList.contains('overview-thumbnail'))
-                this._thumbnail = child;
+                this.#thumbnail = child;
         }
     }
 
-    // Public
-
     url()
     {
-        return this._item.href;
+        return this.#item.href;
     }
 
     setURL(url)
     {
-        this._item.href = url;
+        this.#item.href = url;
     }
 
     title()
     {
-        return this._item.title;
+        return this.#item.title;
     }
 
     setTitle(title)
     {
-        this._item.title = title;
-        this._title.textContent = title;
+        this.#item.title = title;
+        this.#title.textContent = title;
     }
 
     thumbnailPath()
     {
-        const background = this._thumbnail.style.getPropertyValue('background');
+        const background = this.#thumbnail.style.getPropertyValue('background');
         if (!background)
             return null;
 
@@ -269,18 +270,18 @@ Ephy.Overview.Item = class OverviewItem
     setThumbnailPath(path)
     {
         if (path) {
-            this._thumbnail.style.backgroundImage = 'url(file://' + path + ')';
-            this._thumbnail.style.backgroundSize = '100%';
-            this._thumbnail.style.backgroundPosition = 'top';
+            this.#thumbnail.style.backgroundImage = 'url(file://' + path + ')';
+            this.#thumbnail.style.backgroundSize = '100%';
+            this.#thumbnail.style.backgroundPosition = 'top';
         } else {
-            this._thumbnail.style.backgroundImage = '';
-            this._thumbnail.style.backgroundSize = 'auto';
-            this._thumbnail.style.backgroundPosition = 'center';
+            this.#thumbnail.style.backgroundImage = '';
+            this.#thumbnail.style.backgroundSize = 'auto';
+            this.#thumbnail.style.backgroundPosition = 'center';
         }
     }
 
     detachFromParent()
     {
-        this._item.parentNode.removeChild(this._item);
+        this.#item.parentNode.removeChild(this.#item);
     }
 };
