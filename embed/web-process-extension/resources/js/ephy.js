@@ -7,11 +7,7 @@ var Ephy = {};
 
 Ephy.getAppleMobileWebAppCapable = function()
 {
-    const metas = document.getElementsByTagName('meta');
-
-    for (let i = 0; i < metas.length; i++) {
-        const meta = metas[i];
-
+    for (const meta of document.getElementsByTagName('meta')) {
         // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
         if (meta.name === 'apple-mobile-web-app-capable' && meta.getAttribute('content') === 'yes')
             return true;
@@ -28,10 +24,7 @@ Ephy.getWebAppManifestURL = function()
 
 Ephy.getWebAppTitle = function()
 {
-    const metas = document.getElementsByTagName('meta');
-
-    for (let i = 0; i < metas.length; i++) {
-        const meta = metas[i];
+    for (const meta of document.getElementsByTagName('meta')) {
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name#standard_metadata_names_defined_in_the_html_specification
         if (meta.name === 'application-name')
             return meta.content;
@@ -73,9 +66,7 @@ Ephy.getWebAppIcon = function(baseURL)
     const links = document.getElementsByTagName('link');
     const metas = document.getElementsByTagName('meta');
 
-    for (let i = 0; i < links.length; i++) {
-        const link = links[i];
-
+    for (const link of links) {
         if (link.rel === 'icon' || link.rel === 'shortcut icon' || link.rel === 'icon shortcut' || link.rel === 'shortcut-icon' || link.rel === 'apple-touch-icon' || link.rel === 'apple-touch-icon-precomposed') {
             const sizes = link.getAttribute('sizes');
 
@@ -92,8 +83,8 @@ Ephy.getWebAppIcon = function(baseURL)
             }
 
             const sizesList = sizes.split(' ');
-            for (let j = 0; j < sizesList.length; j++) {
-                const size = sizesList[j].toLowerCase().split('x');
+            for (let size of sizesList) {
+                size = size.toLowerCase().split('x');
 
                 // Only accept square icons.
                 if (size.length !== 2 || size[0] !== size[1])
@@ -113,9 +104,7 @@ Ephy.getWebAppIcon = function(baseURL)
     if (largestIconSize !== 0 && htmlIconURL)
         return { 'url' : new URL(htmlIconURL, baseURL).href, 'color' : null };
 
-    for (let i = 0; i < metas.length; i++) {
-        const meta = metas[i];
-
+    for (const meta of metas) {
         if (meta.name === 'msapplication-TileImage')
             msIconURL = meta.content;
         else if (meta.name === 'msapplication-TileColor')
@@ -241,8 +230,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
         mainDiv.appendChild(ul);
 
         this._selected = null;
-        for (let i = 0; i < this._users.length; i++) {
-            const user = this._users[i];
+        for (const user of this._users) {
             if (!showAll && !user.startsWith(this._userElement.value))
                 continue;
 
@@ -302,7 +290,7 @@ Ephy.formControlsAssociated = function(pageID, frameID, elements, serializer)
 {
     let formElements = [];
 
-    for (let element of elements) {
+    for (const element of elements) {
         if (!(element instanceof HTMLFormElement))
             continue;
 
@@ -323,13 +311,13 @@ Ephy.formControlsAssociated = function(pageID, frameID, elements, serializer)
     // WebKit may batch updates together before eventually firing the form
     // controls associated event later on, so possibly there could be multiple
     // forms here, and both scenarios could be happening at the same time.
-    for (let element of elements) {
+    for (const element of elements) {
         if (element instanceof HTMLFormElement)
             continue;
 
         // We want to find each parent form element and process it only once.
         // Anything in formElements has already been processed.
-        let formElement = element.closest('form');
+        const formElement = element.closest('form');
         if (formElement && !formElements.includes(formElement)) {
             if (!formElement instanceof HTMLFormElement) {
                 Ephy.log('Attempted to find parent HTMLFormElement, but found something else instead; this is probably an Epiphany bug');
@@ -337,7 +325,7 @@ Ephy.formControlsAssociated = function(pageID, frameID, elements, serializer)
             }
             formElements.push(formElement);
 
-            let manager = Ephy.FormManager.managerForForm(formElement);
+            const manager = Ephy.FormManager.managerForForm(formElement);
             if (!manager) {
                 Ephy.log('Missing form manager for a form element that should have one already; this is probably an Epiphany bug');
                 continue;
@@ -351,8 +339,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 {
     // FIXME: Find out: is it really possible to have multiple frames with same window object???
     let formManager = null;
-    for (let i = 0; i < Ephy.FormManager._managers.length; i++) {
-        const manager = Ephy.FormManager._managers[i];
+    for (const manager of Ephy.FormManager._managers) {
         if (manager.frameID() === frameID && manager.form() === form) {
             formManager = manager;
             break;
@@ -369,11 +356,9 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 
 Ephy.hasModifiedForms = function()
 {
-    for (let i = 0; i < document.forms.length; i++) {
-        const form = document.forms[i];
+    for (const form of document.forms) {
         let modifiedInputElement = false;
-        for (let j = 0; j < form.elements.length; j++) {
-            const element = form.elements[j];
+        for (const element of form.elements) {
             if (!Ephy.isEdited(element))
                 continue;
 
@@ -702,8 +687,7 @@ Ephy.FormManager = class FormManager
 
     _containsPasswordElement()
     {
-        for (let i = 0; i < this._form.elements.length; i++) {
-            const element = this._form.elements[i];
+        for (const element of this._form.elements) {
             if (element instanceof HTMLInputElement) {
                 if (element.type === 'password' || element.type === 'adminpw')
                     return true;
@@ -782,7 +766,7 @@ Ephy.FormManager = class FormManager
         // case just pick the first field.
         let passwordNodeIndex = 0;
         if (!forAutofill && passwordNodes.length !== 1) {
-            for (let node of passwordNodes) {
+            for (const node of passwordNodes) {
                 if (Ephy.FormManager._isNewPasswordElement(node.element))
                     return { 'usernameNode' : usernameNode, 'passwordNode' : node };
             }
