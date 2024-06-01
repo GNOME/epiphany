@@ -1074,7 +1074,7 @@ window_cmd_show_about (GSimpleAction *action,
   adw_about_dialog_set_designers (dialog, (const char **)artists);
   adw_about_dialog_set_documenters (dialog, (const char **)documenters);
   adw_about_dialog_set_translator_credits (dialog, _("translator-credits"));
-  adw_about_dialog_set_issue_url (dialog, "https://gitlab.gnome.org/GNOME/epiphany/-/issues/new");
+  adw_about_dialog_set_issue_url (dialog, "https://gitlab.gnome.org/GNOME/epiphany/-/issues/");
 
   adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
 
