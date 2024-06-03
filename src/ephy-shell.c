@@ -405,6 +405,7 @@ static GActionEntry app_mode_app_entries[] = {
   { "run-in-background", NULL, NULL, "false", NULL},
 };
 
+#if 0
 static void
 register_synchronizable_managers (EphyShell       *shell,
                                   EphySyncService *service)
@@ -472,6 +473,7 @@ sync_secrets_load_finished_cb (EphySyncService *service,
   register_synchronizable_managers (shell, service);
   ephy_sync_service_start_sync (service);
 }
+#endif
 
 static void
 set_accel_for_action (EphyShell   *shell,
@@ -1155,6 +1157,9 @@ ephy_shell_get_sync_service (EphyShell *shell)
 {
   g_assert (EPHY_IS_SHELL (shell));
 
+#if 0
+  /* Firefox Sync is disabled due to: https://gitlab.gnome.org/GNOME/epiphany/-/issues/2337 */
+
   if (shell->sync_service == NULL) {
     shell->sync_service = ephy_sync_service_new (TRUE);
 
@@ -1167,6 +1172,7 @@ ephy_shell_get_sync_service (EphyShell *shell)
                              G_CALLBACK (sync_secrets_load_finished_cb),
                              shell, 0);
   }
+#endif
 
   return shell->sync_service;
 }
