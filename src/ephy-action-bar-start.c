@@ -206,12 +206,14 @@ build_history_row (EphyActionBarStart        *action_bar_start,
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   const char *uri;
+  g_autofree char *title = NULL;
   WebKitFaviconDatabase *database;
   GtkWidget *row, *box, *icon, *label;
   GtkEventController *controller;
   GtkGesture *gesture;
 
   uri = webkit_back_forward_list_item_get_uri (item);
+  title = g_strdup (webkit_back_forward_list_item_get_title (item));
 
   row = gtk_list_box_row_new ();
 
@@ -222,7 +224,7 @@ build_history_row (EphyActionBarStart        *action_bar_start,
   gtk_image_set_pixel_size (GTK_IMAGE (icon), 16);
   gtk_box_append (GTK_BOX (box), icon);
 
-  label = gtk_label_new (uri);
+  label = gtk_label_new (NULL);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (GTK_LABEL (label), MAX_LABEL_LENGTH);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
@@ -232,6 +234,11 @@ build_history_row (EphyActionBarStart        *action_bar_start,
 
   g_object_set_data_full (G_OBJECT (row), HISTORY_ITEM_DATA_KEY,
                           g_object_ref (item), g_object_unref);
+
+  if (title && *title)
+    gtk_label_set_label (GTK_LABEL (label), title);
+  else
+    gtk_label_set_label (GTK_LABEL (label), uri);
 
   database = ephy_embed_shell_get_favicon_database (shell);
   webkit_favicon_database_get_favicon (database, uri,
