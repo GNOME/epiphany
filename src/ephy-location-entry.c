@@ -742,6 +742,7 @@ focus_leave_cb (EphyLocationEntry *entry)
   if (gtk_widget_is_focus (GTK_WIDGET (entry->text)))
     return;
 
+  ephy_location_entry_reset (entry);
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
 
