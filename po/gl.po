@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-02-15 02:34+0000\n"
-"PO-Revision-Date: 2024-02-20 09:22+0100\n"
+"POT-Creation-Date: 2024-06-07 02:23+0000\n"
+"PO-Revision-Date: 2024-06-11 22:58+0200\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: epiphany\n"
@@ -331,10 +331,10 @@ msgid ""
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
 "Selecciona o estilo das cores para os artigos mostrados no modo lectura. Os "
-"valores posíbeis son «light» (texto escuro sobre fondo claro) e "
-"«dark» (texto claro sobre fondo escuro). Esta configuración ignórase nos "
-"sistemas que fornecen unha preferencia de estilo escuro a nivel de sistema, "
-"como en GNOME 42 ou superior."
+"valores posíbeis son «light» (texto escuro sobre fondo claro) e «dark» "
+"(texto claro sobre fondo escuro). Esta configuración ignórase nos sistemas "
+"que fornecen unha preferencia de estilo escuro a nivel de sistema, como en "
+"GNOME 42 ou superior."
 
 #: data/org.gnome.epiphany.gschema.xml:146
 msgid "Minimum font size"
@@ -621,7 +621,7 @@ msgid ""
 "Source and Inspect Element actions."
 msgstr ""
 "Indica se mostrar as accións de desenvolvedor do menú contextual. Isto "
-"permitelle usar as accións de Orixe da páxina e Inspeccionar elemento"
+"permítelle usar as accións de Orixe da páxina e Inspeccionar elemento."
 
 #: data/org.gnome.epiphany.gschema.xml:286
 msgid "Web application additional URLs"
@@ -1139,8 +1139,8 @@ msgstr "Escriba o PIN para %s para autenticarse en %s:%d."
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1911
-#: src/window-commands.c:2814
+#: src/window-commands.c:1243 src/window-commands.c:1916
+#: src/window-commands.c:2818
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2098,22 +2098,26 @@ msgstr "Os contrasinais para %s nun formulario en %s"
 msgid "Password in a form in %s"
 msgstr "O contrasinal nun formulario en %s"
 
-#: lib/sync/ephy-sync-service.c:979
+#: lib/sync/ephy-sync-service.c:932
+msgid "Response body is empty, do you need to install glib-networking?"
+msgstr "O corpo da resposta está baleiro, precisa instalar glib-networking?"
+
+#: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
 msgstr "Produciuse un fallo ao obter as credenciais de almacenamento."
 
-#: lib/sync/ephy-sync-service.c:980 lib/sync/ephy-sync-service.c:1126
-#: lib/sync/ephy-sync-service.c:1942
+#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
+#: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Visite Firefox Sync e inicie sesión de novo para continuar coa "
 "sincronización."
 
-#: lib/sync/ephy-sync-service.c:1116
+#: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
 msgstr "O contrasinal da súa conta de Mozilla semella que cambiou."
 
-#: lib/sync/ephy-sync-service.c:1117
+#: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
@@ -2121,23 +2125,23 @@ msgstr ""
 "Visite Firefox Sync e inicie sesión co novo contrasinal para continuar a "
 "sincronización."
 
-#: lib/sync/ephy-sync-service.c:1125
+#: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
 msgstr "Produciuse un fallo ao obter o certificado asinado."
 
-#: lib/sync/ephy-sync-service.c:1908 lib/sync/ephy-sync-service.c:1913
-msgid "Could not find the sync secrets for the current sync user."
-msgstr ""
-"Non foi posíbel atopar os tokens de sincronización para o usuario na sesión "
-"actual."
-
-#: lib/sync/ephy-sync-service.c:1920 lib/sync/ephy-sync-service.c:1928
+#: lib/sync/ephy-sync-service.c:1926 lib/sync/ephy-sync-service.c:1933
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Os segredos de sincronización para o usuario de sincronización actual non "
 "son válidos."
 
-#: lib/sync/ephy-sync-service.c:1993
+#: lib/sync/ephy-sync-service.c:1959 lib/sync/ephy-sync-service.c:1964
+msgid "Could not find the sync secrets for the current sync user."
+msgstr ""
+"Non foi posíbel atopar os tokens de sincronización para o usuario na sesión "
+"actual."
+
+#: lib/sync/ephy-sync-service.c:2007
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2146,29 +2150,29 @@ msgstr ""
 "servizo ou portal de segredos?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2035
+#: lib/sync/ephy-sync-service.c:2049
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Os segredos de sincronización de %s"
 
-#: lib/sync/ephy-sync-service.c:2065
+#: lib/sync/ephy-sync-service.c:2079
 msgid "Failed to upload client record."
 msgstr "Produciuse un fallo ao subir o rexistro do cliente."
 
-#: lib/sync/ephy-sync-service.c:2268
+#: lib/sync/ephy-sync-service.c:2282
 msgid "Failed to upload crypto/keys record."
 msgstr "Produciuse un fallo ao actualizar o rexistro crypto/keys."
 
-#: lib/sync/ephy-sync-service.c:2380
+#: lib/sync/ephy-sync-service.c:2394
 msgid "Failed to retrieve crypto keys."
 msgstr "Produciuse un fallo ao obter as chaves de crypto."
 
-#: lib/sync/ephy-sync-service.c:2434
+#: lib/sync/ephy-sync-service.c:2448
 msgid "Failed to upload meta/global record."
 msgstr "Produciuse un fallo ao subir o rexistro meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2556
+#: lib/sync/ephy-sync-service.c:2570
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2176,15 +2180,15 @@ msgstr ""
 "A súa conta de Mozilla usa a versión %d de almacenamento. Web só é "
 "compatíbel coa versión %d."
 
-#: lib/sync/ephy-sync-service.c:2567
+#: lib/sync/ephy-sync-service.c:2581
 msgid "Failed to verify storage version."
 msgstr "Produciuse un fallo ao verificar a versión do almacenamento."
 
-#: lib/sync/ephy-sync-service.c:2625
+#: lib/sync/ephy-sync-service.c:2639
 msgid "Failed to upload device info"
 msgstr "Produciuse un fallo ao subir a información do dispositivo"
 
-#: lib/sync/ephy-sync-service.c:2701 lib/sync/ephy-sync-service.c:2784
+#: lib/sync/ephy-sync-service.c:2715 lib/sync/ephy-sync-service.c:2798
 msgid "Failed to retrieve the Sync Key"
 msgstr "Produciuse un fallo ao obter a chave de sincronización"
 
@@ -2247,25 +2251,25 @@ msgstr "Favoritos"
 msgid "Mobile"
 msgstr "Móbil"
 
-#: src/context-menu-commands.c:239
+#: src/context-menu-commands.c:294
 msgid "Save Link As"
 msgstr "Gardar a ligazón como"
 
-#: src/context-menu-commands.c:247
+#: src/context-menu-commands.c:302
 msgid "Save Image As"
 msgstr "Gardar a imaxe como"
 
-#: src/context-menu-commands.c:255
+#: src/context-menu-commands.c:310
 msgid "Save Media As"
 msgstr "Gardar multimedia como"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1758
+#: src/ephy-action-bar-end.c:395 src/ephy-location-entry.c:1761
 msgid "Bookmark Page"
 msgstr "Marcar páxina"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1766
+#: src/ephy-action-bar-end.c:403 src/ephy-location-entry.c:1769
 msgid "Edit Bookmark"
 msgstr "Editar marcador"
 
@@ -2455,27 +2459,27 @@ msgid "Remove all history"
 msgstr "Eliminar todo o historial"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1802 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1805 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "Solicitude de notificacións"
 
-#: src/ephy-location-entry.c:1806
+#: src/ephy-location-entry.c:1809
 msgid "Camera Request"
 msgstr "Solicitude de cámara"
 
-#: src/ephy-location-entry.c:1810
+#: src/ephy-location-entry.c:1813
 msgid "Microphone Request"
 msgstr "Solicitude de micrófono"
 
-#: src/ephy-location-entry.c:1814
+#: src/ephy-location-entry.c:1817
 msgid "Location Request"
 msgstr "Solicitude de localización"
 
-#: src/ephy-location-entry.c:1818
+#: src/ephy-location-entry.c:1821
 msgid "Webcam and Microphone Request"
 msgstr "Solicitude de cámara web e micrófono"
 
-#: src/ephy-location-entry.c:1822
+#: src/ephy-location-entry.c:1825
 msgid "Permission Request"
 msgstr "Solicitude de permiso"
 
@@ -2634,51 +2638,51 @@ msgstr "A súa conexión semella ser segura."
 msgid "_View Certificate…"
 msgstr "_Ver certificado…"
 
-#: src/ephy-security-popover.c:492
+#: src/ephy-security-popover.c:494
 msgid "Allow"
 msgstr "Permitir"
 
-#: src/ephy-security-popover.c:493
+#: src/ephy-security-popover.c:495
 msgid "Deny"
 msgstr "Denegar"
 
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-popover.c:498
 msgid "Ask"
 msgstr "Preguntar"
 
-#: src/ephy-security-popover.c:514
+#: src/ephy-security-popover.c:516
 msgid "Permissions"
 msgstr "Permisos"
 
-#: src/ephy-security-popover.c:556
+#: src/ephy-security-popover.c:558
 msgid "Advertisements"
 msgstr "Publicidades"
 
-#: src/ephy-security-popover.c:557
+#: src/ephy-security-popover.c:559
 msgid "Notifications"
 msgstr "Notificacións"
 
-#: src/ephy-security-popover.c:558
+#: src/ephy-security-popover.c:560
 msgid "Password saving"
 msgstr "Gardado de contrasinais"
 
-#: src/ephy-security-popover.c:559
+#: src/ephy-security-popover.c:561
 msgid "Location access"
 msgstr "Acceso á localización"
 
-#: src/ephy-security-popover.c:560
+#: src/ephy-security-popover.c:562
 msgid "Microphone access"
 msgstr "Acceso ao micrófono"
 
-#: src/ephy-security-popover.c:561
+#: src/ephy-security-popover.c:563
 msgid "Webcam access"
 msgstr "Acceso á cámara web"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Media autoplay"
 msgstr "Autoreproducir multimedia"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-popover.c:564
 msgid "Without Sound"
 msgstr "Sen son"
 
@@ -2826,76 +2830,76 @@ msgstr "Facer _captura de pantalla…"
 msgid "_Page Source"
 msgstr "Código da _páxina"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1382
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Busca no web por «%s»"
 
-#: src/ephy-window.c:1408
+#: src/ephy-window.c:1411
 msgid "Open Link"
 msgstr "Abrir ligazón"
 
-#: src/ephy-window.c:1410
+#: src/ephy-window.c:1413
 msgid "Open Link In New Tab"
 msgstr "Abrir ligazón nunha nova lapela"
 
-#: src/ephy-window.c:1412
+#: src/ephy-window.c:1415
 msgid "Open Link In New Window"
 msgstr "Abrir ligazón na nova xanela"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1417
 msgid "Open Link In Incognito Window"
 msgstr "Abrir a ligazón nunha xanela de incógnito"
 
-#: src/ephy-window.c:2789
+#: src/ephy-window.c:2800
 msgid "_Ask Later"
 msgstr "_Preguntar máis tarde"
 
-#: src/ephy-window.c:2790 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Denegar"
 
-#: src/ephy-window.c:2791 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Permitir"
 
-#: src/ephy-window.c:2993 src/ephy-window.c:4427
+#: src/ephy-window.c:3004 src/ephy-window.c:4439
 msgid "Leave Website?"
 msgstr "Desexa abandonar o sitio web?"
 
-#: src/ephy-window.c:2994 src/ephy-window.c:4428 src/window-commands.c:1240
+#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Modificouse un formulario que non foi remitido"
 
-#: src/ephy-window.c:2995 src/ephy-window.c:4429 src/window-commands.c:1244
+#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Descartar formulario"
 
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3027
 msgid "Download operation"
 msgstr "Operación de descarga"
 
-#: src/ephy-window.c:3018
+#: src/ephy-window.c:3029
 msgid "Show details"
 msgstr "Mostrar detalles"
 
-#: src/ephy-window.c:3020
+#: src/ephy-window.c:3031
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operación de descarga activa"
 msgstr[1] "%d operacións de descarga activas"
 
-#: src/ephy-window.c:3261
+#: src/ephy-window.c:3272
 msgid "Set as Default Browser?"
 msgstr "Desexa estabelecer como o navegador predeterminado?"
 
-#: src/ephy-window.c:3263
+#: src/ephy-window.c:3274
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Usar Web como navegador web predeterminado e para abrir ligazóns externas"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3276
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2903,55 +2907,55 @@ msgstr ""
 "Usar a Viste previa da Tecnoloxía experimental de Epiphany como o seu "
 "navegador predeterminado e para abrir ligazóns externas"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3280
 msgid "_Ask Again Later"
 msgstr "_Preguntar máis tarde de novo"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3281
 msgid "_No"
 msgstr "_Non"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3282
 msgid "_Yes"
 msgstr "_Si"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3732
 msgid "Save password?"
 msgstr "Desexa gardar o contrasinal?"
 
-#: src/ephy-window.c:3723
+#: src/ephy-window.c:3733
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Os contrasinais poden eliminarse en calquera momento en Preferencias"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3735
 msgid "Not Now"
 msgstr "Agora non"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3736
 msgid "Never Save"
 msgstr "Non gardar nunca"
 
-#: src/ephy-window.c:3727
+#: src/ephy-window.c:3737
 msgid "Save"
 msgstr "Gardar"
 
-#: src/ephy-window.c:4558
+#: src/ephy-window.c:4570
 msgid "Close Multiple Tabs?"
 msgstr "Desexa pechar varias lapelas?"
 
-#: src/ephy-window.c:4559
+#: src/ephy-window.c:4571
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Se pecha esta xanela, perderanse todas as lapelas abertas"
 
-#: src/ephy-window.c:4560
+#: src/ephy-window.c:4572
 msgid "C_lose Tabs"
 msgstr "P_echar lapelas"
 
-#: src/ephy-window.c:4653
+#: src/ephy-window.c:4665
 msgid "New tab opened"
 msgstr "Lapela nova aberta"
 
-#: src/ephy-window.c:4657
+#: src/ephy-window.c:4669
 msgid "Switch"
 msgstr "Cambiar"
 
@@ -4335,52 +4339,52 @@ msgstr "Fran Diéguez <frandieguez@gnome.org>, 2010-2024"
 msgid "Reload Website?"
 msgstr "Desexa recargar o sitio web?"
 
-#: src/window-commands.c:1824
+#: src/window-commands.c:1829
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "A aplicación «%s» está lista para usarse"
 
-#: src/window-commands.c:1827
+#: src/window-commands.c:1832
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Non foi posíbel crear a aplicación «%s»: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1837
+#: src/window-commands.c:1842
 msgid "Launch"
 msgstr "Iniciar"
 
-#: src/window-commands.c:1903
+#: src/window-commands.c:1908
 msgid "Replace Existing Web App?"
 msgstr "Desexa substituír a aplicación web existente?"
 
-#: src/window-commands.c:1907
+#: src/window-commands.c:1912
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Xa existe unha aplicación co nome «%s», ao substituíla sobrescribirase"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1917
 msgid "_Replace"
 msgstr "_Substituír"
 
-#: src/window-commands.c:2260
+#: src/window-commands.c:2280
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2264
+#: src/window-commands.c:2284
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2310
+#: src/window-commands.c:2330
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2809
+#: src/window-commands.c:2813
 msgid "Enable Caret Browsing Mode?"
 msgstr "Desexa activar o modo de navegación co cursor?"
 
-#: src/window-commands.c:2810
+#: src/window-commands.c:2814
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4391,7 +4395,7 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: src/window-commands.c:2815
+#: src/window-commands.c:2819
 msgid "_Enable"
 msgstr "_Activar"
 
