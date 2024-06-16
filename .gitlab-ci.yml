@@ -48,8 +48,6 @@ build.container.alpine@x86_64:
       npm
       python3
       uncrustify
-    FDO_DISTRIBUTION_EXEC: >-
-      npm install -g eslint
   rules:
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
@@ -77,7 +75,9 @@ eslint:
   needs: [ 'build.container.alpine@x86_64' ]
   interruptible: true
   script:
-    - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
+    - cd embed/web-process-extension/resources/js/
+    - npm install
+    - eslint -o eslint-report.txt --no-color || { cat $ESLINT_LOG; false; }
   artifacts:
     paths:
       - ${ESLINT_LOG}
