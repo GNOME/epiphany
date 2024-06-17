@@ -1,8 +1,5 @@
 'use strict';
 
-/* exported ephy_message */
-/* global ephy_send_message */
-
 window.browser = {};
 
 class EphyEventListener {

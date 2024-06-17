@@ -63,24 +63,6 @@ check-code-style:
   script:
     - bash data/check-code-style
   artifacts:
-    paths:
-      - ${ESLINT_LOG}
-    when: on_failure
-  rules:
-    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
-
-eslint:
-  extends:
-    - '.fdo.distribution-image@alpine'
-    - '.alpine.container.common'
-  stage: 'test'
-  needs: [ 'build.container.alpine@x86_64' ]
-  interruptible: true
-  script:
-    - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
-  artifacts:
-    paths:
-      - ${ESLINT_LOG}
     when: on_failure
   rules:
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/

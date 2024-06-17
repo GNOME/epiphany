@@ -1,8 +1,5 @@
 'use strict';
 
-/* exported pageActionOnClicked, browserActionClicked, browserActionClicked, tabsOnUpdated */
-/* global ephy_message EphyEventListener */
-
 // Browser async API
 window.browser.alarms = {
     clear: function (...args) { return ephy_message ('alarms.clear', args); },
