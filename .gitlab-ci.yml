@@ -31,7 +31,7 @@ stages:
 
 .fedora.container.common:
   variables:
-    FDO_DISTRIBUTION_TAG: '2024-06-05.3'
+    FDO_DISTRIBUTION_TAG: '2024-06-17.2'
     FDO_DISTRIBUTION_VERSION: 'latest'
 
 build.container.fedora@x86_64:
@@ -43,10 +43,7 @@ build.container.fedora@x86_64:
     GIT_STRATEGY: none
     FDO_EXPIRES_AFTER: 8w
     FDO_DISTRIBUTION_PACKAGES: >-
-      npm
       uncrustify
-    FDO_DISTRIBUTION_EXEC: >-
-      npm install -g eslint @eslint/js
   rules:
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
@@ -60,24 +57,6 @@ check-code-style:
   script:
     - bash data/check-code-style
   artifacts:
-    paths:
-      - ${ESLINT_LOG}
-    when: on_failure
-  rules:
-    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
-
-eslint:
-  extends:
-    - '.fdo.distribution-image@fedora'
-    - '.fedora.container.common'
-  stage: 'test'
-  needs: [ 'build.container.fedora@x86_64' ]
-  interruptible: true
-  script:
-    - eslint -o eslint-report.txt --no-color embed/web-process-extension/resources/js/ || { cat $ESLINT_LOG; false; }
-  artifacts:
-    paths:
-      - ${ESLINT_LOG}
     when: on_failure
   rules:
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/

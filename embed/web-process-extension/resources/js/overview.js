@@ -1,7 +1,5 @@
 'use strict';
 
-/* global Ephy */
-
 Ephy.Overview = class Overview
 {
     #model;

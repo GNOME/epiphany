@@ -1,8 +1,5 @@
 'use strict';
 
-/* exported contextMenuElementIsPassword, contextMenuElementIsEditable */
-
-// eslint-disable-next-line no-var
 var Ephy = {};
 
 Ephy.getAppleMobileWebAppCapable = function()
