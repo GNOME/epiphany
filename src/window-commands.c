@@ -323,18 +323,19 @@ show_firefox_profile_selector (GtkWindow *parent,
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (selector, controller);
 
-  header_bar = gtk_header_bar_new ();
-  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar), FALSE);
+  header_bar = adw_header_bar_new ();
+  adw_header_bar_set_show_start_title_buttons (ADW_HEADER_BAR (header_bar), FALSE);
+  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar), FALSE);
   gtk_window_set_titlebar (GTK_WINDOW (selector), header_bar);
 
   button = gtk_button_new_with_mnemonic (_("_Cancel"));
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "window.close");
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+  adw_header_bar_pack_start (ADW_HEADER_BAR (header_bar), button);
 
   button = gtk_button_new_with_mnemonic (_("_Select"));
   gtk_widget_add_css_class (button, "suggested-action");
   gtk_window_set_default_widget (GTK_WINDOW (selector), button);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar), button);
 
   list_box = gtk_list_box_new ();
   gtk_widget_set_margin_top (list_box, 5);
