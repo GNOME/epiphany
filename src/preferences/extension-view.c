@@ -108,26 +108,25 @@ on_remove_row_activated (GtkWidget *box,
                          gpointer   user_data)
 {
   EphyExtensionView *self = EPHY_EXTENSION_VIEW (user_data);
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                                   _("Remove Extension"),
-                                   _("Do you really want to remove this extension?"));
+  dialog = adw_alert_dialog_new (_("Remove Extension"),
+                                 _("Do you really want to remove this extension?"));
 
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "remove", _("_Remove"),
-                                    NULL);
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "remove", _("_Remove"),
+                                  NULL);
 
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog), "remove",
-                                              ADW_RESPONSE_DESTRUCTIVE);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "remove",
+                                            ADW_RESPONSE_DESTRUCTIVE);
 
-  adw_message_dialog_set_default_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
-  adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
+  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
 
   g_signal_connect_swapped (dialog, "response::remove", G_CALLBACK (on_remove_confirmed), self);
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self))));
 }
 
 static void

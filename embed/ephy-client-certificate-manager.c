@@ -248,12 +248,12 @@ logged_in_cb (GObject      *obj,
 }
 
 static void
-certificate_pin_response (AdwMessageDialog *dialog,
-                          char             *response,
-                          gpointer          user_data)
+certificate_pin_response (AdwAlertDialog *dialog,
+                          char           *response,
+                          gpointer        user_data)
 {
   EphyClientCertificateManager *self = user_data;
-  GtkWidget *entry = adw_message_dialog_get_extra_child (dialog);
+  GtkWidget *entry = adw_alert_dialog_get_extra_child (dialog);
   const char *password = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (strcmp (response, "cancel") == 0) {
@@ -276,7 +276,7 @@ session_opened_cb (GObject      *obj,
   g_autoptr (GError) error = NULL;
   g_autoptr (GList) modules = NULL;
   g_autoptr (GList) slots = NULL;
-  GtkWidget *dialog;
+  AdwDialog *dialog;
   GtkWidget *entry;
   g_autofree char *body = NULL;
   GckTokenInfo *info;
@@ -289,7 +289,7 @@ session_opened_cb (GObject      *obj,
     return;
   }
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self->web_view))), _("PIN required"), NULL);
+  dialog = adw_alert_dialog_new (_("PIN required"), NULL);
 
   info = gck_slot_get_token_info (slot);
   body = g_strdup_printf (_("Please enter PIN for %s, to authenticate at %s:%d."),
@@ -297,38 +297,38 @@ session_opened_cb (GObject      *obj,
                           webkit_authentication_request_get_host (self->request),
                           webkit_authentication_request_get_port (self->request));
 
-  adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (dialog), "%s", body);
+  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog), "%s", body);
 
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "login", _("_Login"),
-                                    NULL);
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "login", _("_Login"),
+                                  NULL);
 
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog), "login", ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "login", ADW_RESPONSE_SUGGESTED);
 
-  adw_message_dialog_set_default_response (ADW_MESSAGE_DIALOG (dialog), "login");
-  adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "login");
+  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
 
   entry = adw_password_entry_row_new ();
   gtk_text_set_activates_default (GTK_TEXT (gtk_editable_get_delegate (GTK_EDITABLE (entry))), TRUE);
 
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (entry), "PIN");
-  adw_message_dialog_set_extra_child (ADW_MESSAGE_DIALOG (dialog), entry);
+  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), entry);
 
   g_signal_connect (dialog, "response", G_CALLBACK (certificate_pin_response), self);
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self->web_view))));
 }
 
 static void
-certificate_selection_dialog_response_cb (AdwMessageDialog *dialog,
-                                          char             *response,
-                                          gpointer          user_data)
+certificate_selection_dialog_response_cb (AdwAlertDialog *dialog,
+                                          char           *response,
+                                          gpointer        user_data)
 {
   EphyClientCertificateManager *self = user_data;
   g_autoptr (GError) error = NULL;
   GckSlot *slot = NULL;
-  GtkWidget *listbox = adw_message_dialog_get_extra_child (dialog);
+  GtkWidget *listbox = adw_alert_dialog_get_extra_child (dialog);
   GtkListBoxRow *row;
   const char *label;
 
@@ -360,7 +360,7 @@ certificate_selection_dialog_response_cb (AdwMessageDialog *dialog,
 static void
 certificate_selection_dialog (EphyClientCertificateManager *self)
 {
-  GtkWidget *dialog;
+  AdwDialog *dialog;
   GtkWidget *listbox;
   g_autofree char *body = NULL;
   const char *realm = webkit_authentication_request_get_realm (self->request);
@@ -371,7 +371,7 @@ certificate_selection_dialog (EphyClientCertificateManager *self)
     return;
   }
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self->web_view))), _("Select certificate"), NULL);
+  dialog = adw_alert_dialog_new (_("Select certificate"), NULL);
 
   if (strlen (realm) > 0)
     body = g_strdup_printf (_("The website %s:%d requests that you provide a certificate for authentication for %s."),
@@ -383,16 +383,16 @@ certificate_selection_dialog (EphyClientCertificateManager *self)
                             webkit_authentication_request_get_host (self->request),
                             webkit_authentication_request_get_port (self->request));
 
-  adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (dialog), "%s", body);
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "select", _("_Select"),
-                                    NULL);
+  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog), "%s", body);
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "select", _("_Select"),
+                                  NULL);
 
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog), "select", ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "select", ADW_RESPONSE_SUGGESTED);
 
-  adw_message_dialog_set_default_response (ADW_MESSAGE_DIALOG (dialog), "select");
-  adw_message_dialog_set_close_response (ADW_MESSAGE_DIALOG (dialog), "cancel");
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "select");
+  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
 
   listbox = gtk_list_box_new ();
   gtk_widget_add_css_class (listbox, "content");
@@ -407,11 +407,11 @@ certificate_selection_dialog (EphyClientCertificateManager *self)
     gtk_list_box_append (GTK_LIST_BOX (listbox), row);
   }
 
-  adw_message_dialog_set_extra_child (ADW_MESSAGE_DIALOG (dialog), listbox);
+  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), listbox);
 
   g_signal_connect (dialog, "response", G_CALLBACK (certificate_selection_dialog_response_cb), self);
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self->web_view))));
 }
 
 static void

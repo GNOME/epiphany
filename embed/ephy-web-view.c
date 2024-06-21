@@ -759,9 +759,9 @@ static gboolean
 unresponsive_process_timeout_cb (gpointer user_data);
 
 static void
-on_unresponsive_dialog_response (AdwMessageDialog *dialog,
-                                 const char       *response,
-                                 EphyWebView      *web_view)
+on_unresponsive_dialog_response (AdwAlertDialog *dialog,
+                                 const char     *response,
+                                 EphyWebView    *web_view)
 {
   if (!strcmp (response, "stop"))
     webkit_web_view_terminate_web_process (WEBKIT_WEB_VIEW (web_view));
@@ -784,21 +784,19 @@ unresponsive_process_timeout_cb (gpointer user_data)
     return G_SOURCE_CONTINUE;
 
   web_view->unresponsive_process_dialog =
-    GTK_WINDOW (adw_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view))),
-                                        _("Page Unresponsive"),
-                                        NULL));
+    GTK_WINDOW (adw_alert_dialog_new (_("Page Unresponsive"), NULL));
 
-  adw_message_dialog_format_body (ADW_MESSAGE_DIALOG (web_view->unresponsive_process_dialog),
-                                  _("The current page “%s” is not responding"),
-                                  ephy_web_view_get_address (web_view));
+  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (web_view->unresponsive_process_dialog),
+                                _("The current page “%s” is not responding"),
+                                ephy_web_view_get_address (web_view));
 
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (web_view->unresponsive_process_dialog),
-                                    "wait", _("_Wait"),
-                                    "stop", _("Force _Stop"),
-                                    NULL);
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (web_view->unresponsive_process_dialog),
+                                  "wait", _("_Wait"),
+                                  "stop", _("Force _Stop"),
+                                  NULL);
 
   g_signal_connect (web_view->unresponsive_process_dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view);
-  gtk_window_present (web_view->unresponsive_process_dialog);
+  adw_dialog_present (ADW_DIALOG (web_view->unresponsive_process_dialog), GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (web_view))));
 
   web_view->unresponsive_process_timeout_id = 0;
 
