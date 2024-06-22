@@ -1512,6 +1512,7 @@ populate_context_menu (WebKitWebView       *web_view,
   WebKitContextMenuItem *toggle_loop_item = NULL;
   WebKitContextMenuItem *fullscreen_item = NULL;
   WebKitContextMenuItem *paste_as_plain_text_item = NULL;
+  WebKitContextMenuItem *delete_item = NULL;
   GActionGroup *window_action_group;
   GActionGroup *toolbar_action_group;
   GActionGroup *popup_action_group;
@@ -1550,6 +1551,7 @@ populate_context_menu (WebKitWebView       *web_view,
     input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
     insert_emoji_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INSERT_EMOJI);
     spelling_guess_items = find_spelling_guess_context_menu_items (context_menu);
+    delete_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_DELETE);
   }
 
   if (webkit_hit_test_result_context_is_media (hit_test_result)) {
@@ -1691,6 +1693,7 @@ populate_context_menu (WebKitWebView       *web_view,
     if (paste_as_plain_text_item)
       add_action_to_context_menu (context_menu, window_action_group,
                                   "paste-as-plain-text", window);
+    add_item_to_context_menu (context_menu, delete_item);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
