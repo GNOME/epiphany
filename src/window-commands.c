@@ -63,6 +63,7 @@
 #include <string.h>
 #include <webkit/webkit.h>
 #include <libportal-gtk4/portal-gtk4.h>
+#include <adwaita.h>
 
 #define DEFAULT_ICON_SIZE 192
 #define FAVICON_SIZE 16
@@ -1021,11 +1022,21 @@ window_cmd_show_about (GSimpleAction *action,
   g_key_file_free (key_file);
 
   debug_info = g_strdup_printf ("WebKitGTK %d.%d.%d" WEBKIT_REVISION "\n"
-                                "%s",
+                                "%s\n"
+                                "GTK %d.%d.%d\n"
+                                "Libadwaita %d.%d.%d\n"
+                                "Distributor: %s",
                                 webkit_get_major_version (),
                                 webkit_get_minor_version (),
                                 webkit_get_micro_version (),
-                                gst_version_string ());
+                                gst_version_string (),
+                                gtk_get_major_version (),
+                                gtk_get_minor_version (),
+                                gtk_get_micro_version (),
+                                adw_get_major_version (),
+                                adw_get_minor_version (),
+                                adw_get_micro_version (),
+                                DISTRIBUTOR_NAME);
 
   length = g_strv_length (orig_authors) +
            g_strv_length (maintainers) +
