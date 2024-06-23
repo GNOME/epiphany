@@ -168,10 +168,6 @@ void                       ephy_web_view_save                     (EphyWebView  
 void                       ephy_web_view_load_homepage            (EphyWebView               *view);
 void                       ephy_web_view_load_new_tab_page        (EphyWebView               *view);
 
-char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
-                                                                   const char                *title,
-                                                                   GdkPixbuf                 *icon);
-
 void                       ephy_web_view_toggle_reader_mode       (EphyWebView               *view,
                                                                    gboolean                   active);
 
