@@ -66,10 +66,8 @@ struct _EphyHistoryDialog {
   GtkWidget *loading_spinner;
   GtkWidget *empty_history_message;
   GtkWidget *no_search_results_message;
-  GtkWidget *action_bars_stack;
-  GtkWidget *regular_action_bar;
-  GtkWidget *clear_all_row;
-  GtkWidget *selection_action_bar;
+  GtkWidget *clear_button;
+  GtkWidget *action_bar_revealer;
   GtkWidget *selection_delete_button;
   GtkWidget *selection_open_button;
 
@@ -108,7 +106,6 @@ update_ui_state (EphyHistoryDialog *self)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkStack *header_bars_stack = GTK_STACK (self->header_bars_stack);
   GtkStack *history_presentation_stack = GTK_STACK (self->history_presentation_stack);
-  GtkStack *action_bars_stack = GTK_STACK (self->action_bars_stack);
   gboolean has_data = self->has_data;
   gboolean incognito_mode = (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
@@ -132,10 +129,10 @@ update_ui_state (EphyHistoryDialog *self)
 
   if (self->selection_active) {
     gtk_stack_set_visible_child (header_bars_stack, self->selection_header_bar);
-    gtk_stack_set_visible_child (action_bars_stack, self->selection_action_bar);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), TRUE);
   } else {
     gtk_stack_set_visible_child (header_bars_stack, self->window_header_bar);
-    gtk_stack_set_visible_child (action_bars_stack, self->regular_action_bar);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), FALSE);
   }
 
   if (incognito_mode) {
@@ -145,7 +142,7 @@ update_ui_state (EphyHistoryDialog *self)
 
   gtk_widget_set_sensitive (self->search_button, has_data);
   gtk_widget_set_sensitive (self->selection_button, has_data);
-  gtk_widget_set_sensitive (self->clear_all_row, has_data && self->can_clear);
+  gtk_widget_set_sensitive (self->clear_button, has_data && self->can_clear);
   gtk_widget_set_sensitive (self->selection_open_button, !self->is_selection_empty);
   gtk_widget_set_sensitive (self->selection_delete_button, !self->is_selection_empty && !incognito_mode);
 }
@@ -765,8 +762,8 @@ on_edge_reached (GtkScrolledWindow *scrolled,
 }
 
 static void
-on_clear_all_row_activated (GtkButton         *button,
-                            EphyHistoryDialog *self)
+on_clear_button_clicked (GtkButton         *button,
+                         EphyHistoryDialog *self)
 {
   AdwDialog *dialog;
 
@@ -912,10 +909,8 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, loading_spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, empty_history_message);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, no_search_results_message);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, action_bars_stack);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, regular_action_bar);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, clear_all_row);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, selection_action_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, clear_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, action_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, selection_delete_button);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, selection_open_button);
 
@@ -927,7 +922,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_selection_cancel_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_edge_reached);
-  gtk_widget_class_bind_template_callback (widget_class, on_clear_all_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_selection_delete_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_selection_open_button_clicked);
 
@@ -996,7 +991,7 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
     set_can_clear (self, TRUE);
   }
 
-  gtk_widget_set_tooltip_text (self->clear_all_row, tooltip);
+  gtk_widget_set_tooltip_text (self->clear_button, tooltip);
   set_is_loading (self, TRUE);
 
   adw_status_page_set_icon_name (ADW_STATUS_PAGE (self->empty_history_message),
