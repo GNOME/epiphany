@@ -200,6 +200,7 @@ main (int   argc,
   int status;
   EphyFileHelpersFlags flags;
   GDesktopAppInfo *desktop_info = NULL;
+  EphyWebApplication *web_application = NULL;
 
 #if DEVELOPER_MODE
   g_setenv ("GSETTINGS_SCHEMA_DIR", BUILD_ROOT "/data", FALSE);
@@ -416,9 +417,11 @@ main (int   argc,
     mode = EPHY_EMBED_SHELL_MODE_APPLICATION;
 
     if (desktop_info) {
+      /* FIXME: Set web_application. */
       ephy_web_application_setup_from_desktop_file (desktop_info);
       g_object_unref (desktop_info);
     } else {
+      web_application = ephy_web_application_for_profile_directory (profile_directory, EPHY_WEB_APP_NO_TMP_ICON);
       ephy_web_application_setup_from_profile_directory (profile_directory);
     }
   } else if (profile_directory) {
@@ -438,7 +441,7 @@ main (int   argc,
 
   maximize_fd_limit ();
 
-  _ephy_shell_create_instance (mode);
+  _ephy_shell_create_instance (mode, web_application);
 
   if (search_term) {
     int current_len = arguments ? g_strv_length (arguments) : 0;

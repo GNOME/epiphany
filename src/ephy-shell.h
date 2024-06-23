@@ -124,7 +124,8 @@ EphyShellStartupContext *ephy_shell_startup_context_new     (EphyStartupMode    
                                                              char                    **arguments,
                                                              guint32                   user_time);
 
-void                     _ephy_shell_create_instance        (EphyEmbedShellMode mode);
+void                     _ephy_shell_create_instance        (EphyEmbedShellMode mode,
+                                                             EphyWebApplication *web_application);
 
 void                     ephy_shell_send_notification       (EphyShell        *shell,
                                                              gchar            *id,

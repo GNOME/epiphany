@@ -320,7 +320,7 @@ main (int   argc,
     return -1;
   }
 
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST, NULL);
   g_application_register (G_APPLICATION (ephy_shell_get_default ()), NULL, NULL);
 
   g_test_add_func ("/src/ephy-shell/basic_embeds",

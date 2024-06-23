@@ -69,6 +69,7 @@ typedef struct {
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
   GCancellable *cancellable;
+  EphyWebApplication *web_application;
 } EphyEmbedShellPrivate;
 
 enum {
@@ -85,6 +86,7 @@ static guint signals[LAST_SIGNAL];
 enum {
   PROP_0,
   PROP_MODE,
+  PROP_WEB_APPLICATION,
   N_PROPERTIES
 };
 
@@ -868,6 +870,9 @@ ephy_embed_shell_set_property (GObject      *object,
     case PROP_MODE:
       priv->mode = g_value_get_enum (value);
       break;
+    case PROP_WEB_APPLICATION:
+      priv->web_application = g_value_dup_boxed (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -884,6 +889,9 @@ ephy_embed_shell_get_property (GObject    *object,
   switch (prop_id) {
     case PROP_MODE:
       g_value_set_enum (value, priv->mode);
+      break;
+    case PROP_WEB_APPLICATION:
+      g_value_set_boxed (value, priv->web_application);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -937,6 +945,12 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                        EPHY_TYPE_EMBED_SHELL_MODE,
                        EPHY_EMBED_SHELL_MODE_BROWSER,
                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  object_properties[PROP_WEB_APPLICATION] =
+    g_param_spec_boxed ("web-application",
+                  NULL, NULL,
+           EPHY_TYPE_WEB_APPLICATION,
+                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
@@ -1223,6 +1237,14 @@ ephy_embed_shell_get_favicon_database (EphyEmbedShell *shell)
 
   manager = webkit_network_session_get_website_data_manager (priv->network_session);
   return webkit_website_data_manager_get_favicon_database (manager);
+}
+
+EphyWebApplication *
+ephy_embed_shell_get_current_web_application (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->web_application;
 }
 
 void

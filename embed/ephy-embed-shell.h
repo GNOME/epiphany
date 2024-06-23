@@ -30,6 +30,7 @@
 #include "ephy-password-manager.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-web-app-utils.h"
 
 G_BEGIN_DECLS
 
@@ -60,6 +61,7 @@ EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 const char        *ephy_embed_shell_get_guid                   (EphyEmbedShell   *shell);
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 WebKitNetworkSession *ephy_embed_shell_get_network_session     (EphyEmbedShell   *shell);
+EphyWebApplication *ephy_embed_shell_get_current_web_application (EphyEmbedShell   *shell);
 EphyHistoryService
                   *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 EphyEncodings     *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);

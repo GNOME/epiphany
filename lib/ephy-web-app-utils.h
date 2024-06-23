@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "glib-object.h"
 #include <gio/gdesktopappinfo.h>
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -109,6 +110,8 @@ EphyWebApplication *ephy_web_application_for_profile_directory (const char      
 
 void                ephy_web_application_free (EphyWebApplication *app);
 
+EphyWebApplication *ephy_web_application_copy (EphyWebApplication *app);
+
 gboolean            ephy_web_application_exists (const char *id);
 
 GList              *ephy_web_application_get_application_list (void);
@@ -137,6 +140,9 @@ gboolean            ephy_guri_is_same_origin (GUri *a_uri, GUri *b_uri);
 gboolean            ephy_uri_is_same_origin (const char *a_url, const char *b_url);
 
 gboolean            ephy_web_application_will_handle_all_uris (const GStrv uris);
+
+#define EPHY_TYPE_WEB_APPLICATION ephy_web_application_get_type ()
+GType ephy_web_application_get_type (void) G_GNUC_CONST;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (EphyWebApplication, ephy_web_application_free)
 

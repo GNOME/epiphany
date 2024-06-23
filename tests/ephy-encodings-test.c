@@ -91,7 +91,7 @@ main (int   argc,
     return -1;
   }
 
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST, NULL);
   g_assert_nonnull (ephy_shell_get_default ());
 
   g_test_add_func ("/src/ephy-encodings/create",

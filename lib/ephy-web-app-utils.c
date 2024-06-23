@@ -62,6 +62,8 @@ GQuark webapp_error_quark (void);
 G_DEFINE_QUARK (webapp - error - quark, webapp_error)
 #define WEBAPP_ERROR webapp_error_quark ()
 
+G_DEFINE_BOXED_TYPE (EphyWebApplication, ephy_web_application, ephy_web_application_copy, ephy_web_application_free)
+
 #define EPHY_WEBAPP_KEY_SCOPE "X-Epiphany-PWA-Scope"
 
 typedef enum {
@@ -562,6 +564,22 @@ ephy_web_application_launch (const char *id)
     g_warning ("Failed to launch app '%s': %s", desktop_basename, error->message);
 }
 
+EphyWebApplication *
+ephy_web_application_copy (EphyWebApplication *app)
+{
+  EphyWebApplication *new_app = g_new0 (EphyWebApplication, 1);
+
+  new_app->id = g_strdup (app->id);
+  new_app->name = g_strdup (app->name);
+  new_app->icon_path = g_strdup (app->icon_path);
+  new_app->tmp_icon_path = g_strdup (app->tmp_icon_path);
+  new_app->url = g_strdup (app->url);
+  new_app->desktop_file = g_strdup (app->desktop_file);
+  new_app->desktop_path = g_strdup (app->desktop_path);
+
+  return new_app;
+}
+
 void
 ephy_web_application_free (EphyWebApplication *app)
 {
@@ -860,7 +878,7 @@ ephy_web_application_launch_by_url (const char *url)
     if (!appinfo)
       continue;
 
-    if (!g_app_info_launch_uris(G_APP_INFO (appinfo), uris, NULL, &error)) {
+    if (!g_app_info_launch_uris (G_APP_INFO (appinfo), uris, NULL, &error)) {
       g_warning ("Failed to launch web application: %s", error->message);
       continue;
     }

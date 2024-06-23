@@ -475,7 +475,7 @@ main (int   argc,
     return -1;
   }
 
-  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST, NULL);
 
   server = soup_server_new (NULL, NULL);
   soup_server_add_handler (server, NULL, server_callback, NULL, NULL);

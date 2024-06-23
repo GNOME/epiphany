@@ -1347,7 +1347,7 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 }
 
 void
-_ephy_shell_create_instance (EphyEmbedShellMode mode)
+_ephy_shell_create_instance (EphyEmbedShellMode mode, EphyWebApplication *application)
 {
   const char *id = NULL;
 
@@ -1367,6 +1367,7 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
                                          "application-id", id,
                                          "mode", mode,
                                          "resource-base-path", "/org/gnome/Epiphany",
+                                         "web-application", application,
                                          NULL));
   /* FIXME weak ref */
   g_assert (ephy_shell != NULL);
