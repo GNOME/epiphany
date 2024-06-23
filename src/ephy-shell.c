@@ -166,7 +166,7 @@ ephy_shell_startup_continue (EphyShell               *shell,
     }
   }
 
-  if (!uris && ctx->arguments)
+  if (!uris)
     uris = g_strdupv ((char**)ctx->arguments);
 
   if (ctx->session_filename != NULL) {
@@ -185,24 +185,27 @@ ephy_shell_startup_continue (EphyShell               *shell,
 
     ephy_shell_open_uris (shell, g_steal_pointer (&uris), ctx->startup_mode, ctx->user_time);
     g_free (homepage_url);
-  } else if (active_window && (!uris || mode == EPHY_EMBED_SHELL_MODE_APPLICATION)) {
+  } else if (active_window && !uris) {
     /* If the application already has an active window and: */
-    /*   Option 1: the --new-window option was not passed */
-    /*   Option 2: mode is application */
+    /* the --new-window option was not passed */
     /* then we should just present it */
     /* This can happen for example if the user starts a long download and then */
     /* closes the browser or the web app is running in background .*/
     /* The window will still remain active and presenting it will have a */
     /* session-resumed feel for the user. */
     gtk_window_present (active_window);
-  } else if (uris || !session) {
+  } else if (uris || (!session && mode != EPHY_EMBED_SHELL_MODE_APPLICATION)) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
     ephy_shell_open_uris (shell, g_steal_pointer (&uris),
                           ctx->startup_mode, ctx->user_time);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
     EphyWindow *window = ephy_window_new ();
-    ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
+
+    if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+      ephy_link_open (EPHY_LINK (window), ephy_embed_shell_get_current_web_application(EPHY_EMBED_SHELL (shell))->url, NULL, 0);
+    else
+      ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
   }
 
   shell->startup_finished = TRUE;
@@ -708,7 +711,8 @@ ephy_shell_activate (GApplication *application)
     g_clear_pointer (&shell->open_notification_id, g_free);
   }
 
-  if (ephy_web_application_will_handle_all_uris(shell->local_startup_context->arguments)) {
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_BROWSER &&
+      ephy_web_application_will_handle_all_uris(shell->local_startup_context->arguments)) {
     /* We don't need to create any session, we only exist to launch applications. */
     ephy_shell_startup_continue (shell, shell->local_startup_context);
   } else if (shell->remote_startup_context == NULL) {

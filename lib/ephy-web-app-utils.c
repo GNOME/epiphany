@@ -65,6 +65,7 @@ G_DEFINE_QUARK (webapp - error - quark, webapp_error)
 G_DEFINE_BOXED_TYPE (EphyWebApplication, ephy_web_application, ephy_web_application_copy, ephy_web_application_free)
 
 #define EPHY_WEBAPP_KEY_SCOPE "X-Epiphany-PWA-Scope"
+#define EPHY_WEBAPP_KEY_URL "X-Epiphany-PWA-URL"
 
 typedef enum {
   WEBAPP_ERROR_FAILED = 1001,
@@ -332,9 +333,8 @@ create_desktop_file (const char  *id,
   }
 
   file = g_key_file_new ();
-  exec_string = g_strdup_printf (BINDIR "/epiphany --application-mode \"--profile=%s\" %s %%u",
-                                 profile_dir,
-                                 address);
+  exec_string = g_strdup_printf (BINDIR "/epiphany --application-mode \"--profile=%s\" %%u",
+                                 profile_dir);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
   g_key_file_set_value (file, "Desktop Entry", "StartupNotify", "true");
   g_key_file_set_value (file, "Desktop Entry", "Terminal", "false");
@@ -347,6 +347,7 @@ create_desktop_file (const char  *id,
   g_key_file_set_value (file, "Desktop Entry", "X-Purism-FormFactor", "Workstation;Mobile;");
 
   g_key_file_set_string (file, "Desktop Entry", EPHY_WEBAPP_KEY_SCOPE, scope);
+  g_key_file_set_string (file, "Desktop Entry", EPHY_WEBAPP_KEY_URL, address);
 
   desktop_entry = g_key_file_to_data (file, NULL, NULL);
 
@@ -662,23 +663,27 @@ ephy_web_application_get_tmp_icon_path (const char  *desktop_path,
 }
 
 static char *
-extract_url_from_exec (const char *exec)
+extract_url_from_keyfile (GKeyFile *key_file)
 {
   g_auto (GStrv) argv = NULL;
-  int offset = 1;
   int argc;
+  char *url;
+  g_autofree char *exec = NULL;
 
+  /* New files contain an entry for the URL, old ones we must extract it from the exec line. */
+
+  url = g_key_file_get_string (key_file, "Desktop Entry", EPHY_WEBAPP_KEY_URL, NULL);
+  if (url)
+    return url;
+
+  exec = g_key_file_get_string (key_file, "Desktop Entry", "Exec", NULL);
   if (!exec)
     return NULL;
 
   if (!g_shell_parse_argv (exec, &argc, &argv, NULL))
     return NULL;
 
-  /* New files end in '%u', old ones in the url. */
-  if (g_strcmp0 (argv[argc - 1], "%u") == 0)
-    offset = 2;
-
-  return g_strdup (argv[argc - offset]);
+  return g_strdup (argv[argc - 1]);
 }
 
 EphyWebApplication *
@@ -718,7 +723,7 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
         g_warning ("Failed to get tmp icon path for app %s: %s", app->id, error->message);
     }
 
-    app->url = extract_url_from_exec (g_key_file_get_string (key_file, "Desktop Entry", "Exec", NULL));
+    app->url = extract_url_from_keyfile (key_file);
 
     file = g_file_new_for_path (profile_dir);
 
@@ -737,7 +742,11 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
     return NULL;
   }
 
-  desktop_info = g_desktop_app_info_new_from_filename (app->desktop_path);
+  key_file = g_key_file_new ();
+  if (!g_key_file_load_from_file(key_file, app->desktop_path, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL))
+    return NULL;
+
+  desktop_info = g_desktop_app_info_new_from_keyfile (key_file);
   if (!desktop_info) {
     g_clear_pointer (&app, ephy_web_application_free); /* avoid a scan-build warning */
     return NULL;
@@ -745,7 +754,7 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
 
   app->name = g_strdup (g_app_info_get_name (G_APP_INFO (desktop_info)));
   app->icon_path = g_desktop_app_info_get_string (desktop_info, "Icon");
-  app->url = extract_url_from_exec (g_app_info_get_commandline (G_APP_INFO (desktop_info)));
+  app->url = extract_url_from_keyfile (key_file);
   file = g_file_new_for_path (app->desktop_path);
 
   /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
