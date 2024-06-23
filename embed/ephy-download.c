@@ -342,6 +342,23 @@ ephy_download_get_destination (EphyDownload *download)
 }
 
 /**
+ * ephy_download_get_uri:
+ * @download: an #EphyDownload
+ *
+ * Gets the uri for the download.
+ *
+ * Returns: (transfer none): download uri
+ **/
+const char *
+ephy_download_get_uri (EphyDownload *download)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  return webkit_uri_request_get_uri (webkit_download_get_request (download->download));
+}
+
+
+/**
  * ephy_download_get_action:
  * @download: an #EphyDownload
  *

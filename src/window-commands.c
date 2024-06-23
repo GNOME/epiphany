@@ -1396,6 +1396,7 @@ typedef struct {
   char *chosen_name;
   char *app_id;
   char *token;
+  char *scope;
   GVariant *icon_v;
   GdkRGBA icon_rgba;
   GdkPixbuf *framed_pixbuf;
@@ -1476,6 +1477,7 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
   g_free (data->chosen_name);
   g_free (data->token);
   g_free (data->app_id);
+  g_free(data->scope);
   g_free (data);
 }
 
@@ -1815,6 +1817,7 @@ save_as_application_proceed (EphyApplicationDialogData *data)
   success = ephy_web_application_create (data->app_id,
                                          data->url,
                                          data->token,
+                                         data->scope,
                                          data->webapp_options,
                                          &error);
 
@@ -1946,6 +1949,72 @@ start_fallback (EphyApplicationDialogData *data)
   ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
 }
 
+static GUri *
+get_manifest_start_uri (JsonObject *manifest_object, const char *manifest_url, const char *document_url)
+{
+  // https://w3c.github.io/manifest/#start_url-member
+  const char *manifest_start_url;
+  g_autoptr (GUri) document_uri = NULL;
+  g_autoptr (GUri) start_uri = NULL;
+  g_autoptr (GUri) manifest_uri = NULL;
+
+  document_uri = g_uri_parse (document_url, G_URI_FLAGS_NONE, NULL);
+  g_assert (document_uri);
+
+  manifest_start_url = ephy_json_object_get_string(manifest_object, "start_url");
+  if (!manifest_start_url || !*manifest_start_url)
+    return g_steal_pointer (&document_uri);
+
+  if (!(manifest_uri = g_uri_parse (manifest_url, G_URI_FLAGS_NONE, NULL)))
+    return g_steal_pointer (&document_uri);
+
+  if (!(start_uri = g_uri_parse_relative (manifest_uri, manifest_start_url, G_URI_FLAGS_NONE, NULL)))
+    return g_steal_pointer (&document_uri);
+
+  if (!ephy_guri_is_same_origin(start_uri, manifest_uri))
+    return g_steal_pointer (&document_uri);
+
+  return g_steal_pointer (&start_uri);
+}
+
+static char *
+get_manifest_scope (JsonObject *manifest_object, const char *manifest_url, const char *document_url)
+{
+  /* This is an annoying amount of URI parsing but it is straight from the spec:
+     https://w3c.github.io/manifest/#scope-member */
+  const char *start_url;
+  g_autoptr (GUri) parsed_start_url = NULL;
+  g_autoptr (GUri) start_uri = NULL;
+  g_autofree char *manifest_scope = NULL;
+  const char *scope_property;
+  g_autoptr (GUri) manifest_uri = NULL;
+  g_autoptr (GUri) parsed_json_scope = NULL;
+  g_autofree char *json_scope = NULL;
+
+  parsed_start_url = get_manifest_start_uri (manifest_object, manifest_url, document_url);
+  if (!(start_uri = g_uri_parse_relative (parsed_start_url, ".", G_URI_FLAGS_NONE, NULL)))
+    return NULL;
+
+  manifest_scope = g_uri_to_string (start_uri);
+  scope_property = ephy_json_object_get_string (manifest_object, "scope");
+  if (!scope_property || !*scope_property)
+    return g_steal_pointer (&manifest_scope);
+
+  if (!(manifest_uri = g_uri_parse (manifest_url, G_URI_FLAGS_NONE, NULL)))
+    return g_steal_pointer (&manifest_scope);
+
+  if (!(parsed_json_scope = g_uri_parse_relative (manifest_uri, scope_property, G_URI_FLAGS_NONE, NULL)))
+    return g_steal_pointer (&manifest_scope);
+
+  json_scope = g_uri_to_string_partial (parsed_json_scope, G_URI_HIDE_FRAGMENT | G_URI_HIDE_QUERY);
+  if (!ephy_web_application_scope_matches_url (json_scope, manifest_scope)) {
+    g_debug ("PWA manifest contains invalid scope: '%s' is not within scope of '%s'", json_scope, manifest_scope);
+    return g_steal_pointer (&manifest_scope);
+  }
+
+  return g_steal_pointer (&json_scope);
+}
+
 static void
 download_manifest_finished_cb (WebKitDownload            *download,
                                EphyApplicationDialogData *data)
@@ -2038,6 +2107,8 @@ download_manifest_finished_cb (WebKitDownload            *download,
   data->icon_href = g_steal_pointer (&uri);
 
   download_icon_and_set_image (data);
+
+  data->scope = get_manifest_scope (manifest_object, ephy_download_get_uri (EPHY_DOWNLOAD (download)), data->url);
 
   if (json_object_has_member (manifest_object, "short_name"))
     title = json_object_get_string_member (manifest_object, "short_name");

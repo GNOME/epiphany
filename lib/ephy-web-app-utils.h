@@ -34,6 +34,7 @@ typedef struct {
   char *url;
   char *desktop_file; /* only used for legacy apps */
   char *desktop_path;
+  char *scope;
   guint64 install_date_uint64;
 } EphyWebApplication;
 
@@ -75,6 +76,7 @@ const char         *ephy_web_application_get_gapplication_id_from_profile_direct
 gboolean            ephy_web_application_create (const char                 *id,
                                                  const char                 *address,
                                                  const char                 *install_token,
+                                                 const char                 *scope,
                                                  EphyWebApplicationOptions   options,
                                                  GError                    **error);
 
@@ -125,6 +127,16 @@ gboolean            ephy_web_application_is_uri_allowed (const char *uri);
 gboolean            ephy_web_application_save (EphyWebApplication *app);
 
 gboolean            ephy_web_application_is_system (EphyWebApplication *app);
+
+gboolean            ephy_web_application_scope_matches_url (const char *url, const char *scope);
+
+gboolean            ephy_web_application_launch_by_url (const char *url);
+
+gboolean            ephy_guri_is_same_origin (GUri *a_uri, GUri *b_uri);
+
+gboolean            ephy_uri_is_same_origin (const char *a_url, const char *b_url);
+
+gboolean            ephy_web_application_will_handle_all_uris (const GStrv uris);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (EphyWebApplication, ephy_web_application_free)
 

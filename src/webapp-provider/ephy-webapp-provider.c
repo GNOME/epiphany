@@ -137,6 +137,7 @@ handle_install (EphyWebAppProvider        *skeleton,
 
   if (!ephy_web_application_create (id, url,
                                     install_token,
+                                    NULL, /* FIXME: Support passing a scope. */
                                     EPHY_WEB_APPLICATION_NONE,
                                     &local_error)) {
     g_dbus_method_invocation_return_error (invocation, EPHY_WEBAPP_PROVIDER_ERROR,

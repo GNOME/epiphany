@@ -52,6 +52,7 @@ void          ephy_download_set_destination       (EphyDownload *download,
 WebKitDownload *ephy_download_get_webkit_download (EphyDownload *download);
 
 const char   *ephy_download_get_destination       (EphyDownload *download);
+const char   *ephy_download_get_uri               (EphyDownload *download);
 const char   *ephy_download_get_content_type      (EphyDownload *download);
 
 EphyDownloadActionType ephy_download_get_action   (EphyDownload *download);

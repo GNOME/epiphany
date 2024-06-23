@@ -128,6 +128,23 @@ ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
   g_free (ctx);
 }
 
+static GStrv
+handle_webapp_uris (char **uris)
+{
+  g_autoptr (GStrvBuilder) remaining_uris = g_strv_builder_new ();
+
+  for (uint i = 0; uris[i]; i++) {
+    const char *uri = uris[i];
+
+    if (uri && *uri && ephy_web_application_launch_by_url (uri))
+      continue;
+
+    g_strv_builder_add (remaining_uris, uri);
+  }
+
+  return g_strv_builder_end (remaining_uris);
+}
+
 static void
 ephy_shell_startup_continue (EphyShell               *shell,
                              EphyShellStartupContext *ctx)
@@ -136,8 +153,21 @@ ephy_shell_startup_continue (EphyShell               *shell,
   gboolean new_window_option = (ctx->startup_mode == EPHY_STARTUP_NEW_WINDOW);
   GtkWindow *active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
   EphyEmbedShellMode mode;
+  g_auto (GStrv) uris = NULL;
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
+
+  if (mode == EPHY_EMBED_SHELL_MODE_BROWSER && ctx->arguments) {
+    uris = handle_webapp_uris (ctx->arguments);
+
+    if (!g_strv_length (uris)) {
+      shell->startup_finished = TRUE;
+      return;
+    }
+  }
+
+  if (!uris && ctx->arguments)
+    uris = g_strdupv ((char**)ctx->arguments);
 
   if (ctx->session_filename != NULL) {
     g_assert (session != NULL);
@@ -146,18 +176,16 @@ ephy_shell_startup_continue (EphyShell               *shell,
   } else if (new_window_option && shell->remote_startup_context) {
     char *homepage_url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
     const char *default_uris[] = { homepage_url, NULL };
-    const char **uris = NULL;
 
-    if (ctx->arguments)
-      uris = (const char **)ctx->arguments;
-    else
+    if (!uris) {
       /* If there are no URLs passed in arguments but the --new-window option */
       /* has been used, then use the default_uris list to open the homepage */
-      uris = default_uris;
+      uris = g_strdupv ((char**)default_uris);
+    }
 
-    ephy_shell_open_uris (shell, uris, ctx->startup_mode, ctx->user_time);
+    ephy_shell_open_uris (shell, g_steal_pointer (&uris), ctx->startup_mode, ctx->user_time);
     g_free (homepage_url);
-  } else if (active_window && (!ctx->arguments || mode == EPHY_EMBED_SHELL_MODE_APPLICATION)) {
+  } else if (active_window && (!uris || mode == EPHY_EMBED_SHELL_MODE_APPLICATION)) {
     /* If the application already has an active window and: */
     /*   Option 1: the --new-window option was not passed */
     /*   Option 2: mode is application */
@@ -167,10 +195,10 @@ ephy_shell_startup_continue (EphyShell               *shell,
     /* The window will still remain active and presenting it will have a */
     /* session-resumed feel for the user. */
     gtk_window_present (active_window);
-  } else if (ctx->arguments || !session) {
+  } else if (uris || !session) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
-    ephy_shell_open_uris (shell, (const char **)ctx->arguments,
+    ephy_shell_open_uris (shell, g_steal_pointer (&uris),
                           ctx->startup_mode, ctx->user_time);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
     EphyWindow *window = ephy_window_new ();
@@ -680,7 +708,10 @@ ephy_shell_activate (GApplication *application)
     g_clear_pointer (&shell->open_notification_id, g_free);
   }
 
-  if (shell->remote_startup_context == NULL) {
+  if (ephy_web_application_will_handle_all_uris(shell->local_startup_context->arguments)) {
+    /* We don't need to create any session, we only exist to launch applications. */
+    ephy_shell_startup_continue (shell, shell->local_startup_context);
+  } else if (shell->remote_startup_context == NULL) {
     EphySession *session = ephy_shell_get_session (shell);
 
     /* We are activating the primary instance for the first time. If we
@@ -1425,7 +1456,7 @@ typedef struct {
 
 static OpenURIsData *
 open_uris_data_new (EphyShell        *shell,
-                    const char      **uris,
+                    GStrv             uris,
                     EphyStartupMode   startup_mode,
                     guint32           user_time)
 {
@@ -1436,7 +1467,7 @@ open_uris_data_new (EphyShell        *shell,
   data = g_new0 (OpenURIsData, 1);
   data->shell = shell;
   data->session = session ? g_object_ref (session) : NULL;
-  data->uris = g_strdupv ((char **)uris);
+  data->uris = uris;
   data->user_time = user_time;
 
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -1542,7 +1573,7 @@ ephy_shell_open_uris_idle_done (OpenURIsData *data)
 
 void
 ephy_shell_open_uris (EphyShell        *shell,
-                      const char      **uris,
+                      GStrv             uris,
                       EphyStartupMode   startup_mode,
                       guint32           user_time)
 {

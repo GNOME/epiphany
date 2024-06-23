@@ -113,7 +113,7 @@ gboolean                 ephy_shell_close_all_windows       (EphyShell        *s
 void                     ephy_shell_try_quit                (EphyShell        *shell);
 
 void                     ephy_shell_open_uris               (EphyShell        *shell,
-                                                             const char      **uris,
+                                                             GStrv             uris,
                                                              EphyStartupMode   startup_mode,
                                                              guint32           user_time);
 
