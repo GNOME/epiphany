@@ -17,6 +17,7 @@ else
 endif
 
 prefix = get_option('prefix')
+bindir = join_paths(prefix, get_option('bindir'))
 datadir = join_paths(prefix, get_option('datadir'))
 desktopdir = join_paths(datadir, 'applications')
 libdir = join_paths(prefix, get_option('libdir'))
@@ -48,6 +49,7 @@ conf.set_quoted('DISTRIBUTOR_NAME', distributor_name)
 conf.set_quoted('EPHY_WEB_PROCESS_EXTENSIONS_DIR', webprocessextensionsdir)
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf.set_quoted('ISO_CODES_PREFIX', iso_codes_prefix)
+conf.set_quoted('BINDIR', bindir)
 conf.set_quoted('LIBLOCALEDIR', liblocaledir)
 conf.set_quoted('LOCALEDIR', localedir)
 conf.set_quoted('PKGLIBEXECDIR', pkglibexecdir)

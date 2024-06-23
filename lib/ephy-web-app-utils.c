@@ -327,7 +327,7 @@ create_desktop_file (const char  *id,
   }
 
   file = g_key_file_new ();
-  exec_string = g_strdup_printf ("epiphany --application-mode \"--profile=%s\" %s",
+  exec_string = g_strdup_printf (BINDIR "/epiphany --application-mode \"--profile=%s\" %s",
                                  profile_dir,
                                  address);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
