@@ -2021,6 +2021,8 @@ download_manifest_finished_cb (WebKitDownload            *download,
 {
   g_autoptr (GError) error = NULL;
   g_autoptr (JsonParser) parser = json_parser_new ();
+  g_autoptr (GUri) icon_uri = NULL;
+  g_autoptr (GUri) manifest_uri;
   JsonNode *root;
   JsonObject *manifest_object;
   JsonArray *icons;
@@ -2029,9 +2031,16 @@ download_manifest_finished_cb (WebKitDownload            *download,
   const char *title = NULL;
   const char *str;
   const char *display;
+  const char *manifest_url;
   gint pos = 0;
   gint max_width = 0;
-  g_autofree char *uri = NULL;
+
+  manifest_url = ephy_download_get_uri (EPHY_DOWNLOAD (download));
+  manifest_uri = g_uri_parse (manifest_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
+  if (!manifest_uri) {
+    start_fallback (data);
+    return;
+  }
 
   filename = g_filename_from_uri (ephy_download_get_destination (EPHY_DOWNLOAD (download)), NULL, NULL);
   json_parser_load_from_file (parser, ephy_download_get_destination (EPHY_DOWNLOAD (download)), &error);
@@ -2089,12 +2098,13 @@ download_manifest_finished_cb (WebKitDownload            *download,
     return;
   }
 
-  if (ephy_embed_utils_address_has_web_scheme (str))
-    uri = g_strdup (str);
-  else if (g_str_has_suffix (data->url, "/"))
-    uri = g_strdup_printf ("%s%s", data->url, str);
-  else
-    uri = g_strdup_printf ("%s/%s", data->url, str);
+  icon_uri = g_uri_parse_relative (manifest_uri, str, G_URI_FLAGS_PARSE_RELAXED, NULL);
+  if (!icon_uri) {
+    start_fallback (data);
+    return;
+  }
+
+  data->icon_href = g_uri_to_string (icon_uri);
 
   display = ephy_json_object_get_string (manifest_object, "display");
   if (g_strcmp0 (display, "standalone") == 0 || g_strcmp0 (display, "fullscreen") == 0)
@@ -2104,11 +2114,9 @@ download_manifest_finished_cb (WebKitDownload            *download,
 
   data->webapp_options_set = TRUE;
 
-  data->icon_href = g_steal_pointer (&uri);
-
   download_icon_and_set_image (data);
 
-  data->scope = get_manifest_scope (manifest_object, ephy_download_get_uri (EPHY_DOWNLOAD (download)), data->url);
+  data->scope = get_manifest_scope (manifest_object, manifest_url, data->url);
 
   if (json_object_has_member (manifest_object, "short_name"))
     title = json_object_get_string_member (manifest_object, "short_name");
