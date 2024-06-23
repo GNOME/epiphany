@@ -2162,6 +2162,13 @@ decide_navigation_policy (WebKitWebView            *web_view,
     }
   }
 
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_BROWSER) {
+    if (ephy_web_application_launch_by_url (uri)) {
+      webkit_policy_decision_ignore (decision);
+      return TRUE;
+    }
+  }
+
   if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED) {
     gint button;
     gint state;
