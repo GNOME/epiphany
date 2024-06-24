@@ -78,11 +78,11 @@ ephy_title_box_constructed (GObject *object)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_add_css_class (hbox, "subtitle");
   gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE_FILL);
   gtk_box_append (GTK_BOX (vbox), hbox);
 
   title_box->security_button = gtk_menu_button_new ();
-  gtk_widget_set_valign (title_box->security_button, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (title_box->security_button, GTK_ALIGN_BASELINE_FILL);
   gtk_box_append (GTK_BOX (hbox), title_box->security_button);
   gtk_widget_add_css_class (title_box->security_button, "entry-icon");
   gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (title_box->security_button),
@@ -91,7 +91,7 @@ ephy_title_box_constructed (GObject *object)
                                          NULL);
 
   title_box->subtitle = gtk_label_new (NULL);
-  gtk_widget_set_valign (title_box->subtitle, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (title_box->subtitle, GTK_ALIGN_BASELINE_FILL);
   gtk_label_set_single_line_mode (GTK_LABEL (title_box->subtitle), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_box->subtitle), PANGO_ELLIPSIZE_END);
   gtk_label_set_selectable (GTK_LABEL (title_box->subtitle), TRUE);
