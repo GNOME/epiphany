@@ -294,15 +294,18 @@ update_suggestions_popover (EphyLocationEntry *entry)
   if (entry->show_suggestions && n_items > 0) {
     if (entry->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW) {
       GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (entry));
-      double offset;
+      graphene_point_t entry_origin = GRAPHENE_POINT_INIT_ZERO;
+      graphene_point_t root_position;
+      gboolean ret;
 
-      gtk_widget_translate_coordinates (GTK_WIDGET (entry),
-                                        GTK_WIDGET (root),
-                                        0, 0,
-                                        &offset, NULL);
+      ret = gtk_widget_compute_point (GTK_WIDGET (entry),
+                                      GTK_WIDGET (root),
+                                      &entry_origin,
+                                      &root_position);
+      g_assert (ret);
 
       gtk_widget_set_halign (entry->suggestions_popover, GTK_ALIGN_START);
-      gtk_popover_set_offset (GTK_POPOVER (entry->suggestions_popover), -offset, 0);
+      gtk_popover_set_offset (GTK_POPOVER (entry->suggestions_popover), -root_position.x, 0);
     } else {
       gtk_widget_set_halign (entry->suggestions_popover, GTK_ALIGN_FILL);
       gtk_popover_set_offset (GTK_POPOVER (entry->suggestions_popover), 0, 0);
