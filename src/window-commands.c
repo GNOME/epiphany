@@ -2148,6 +2148,9 @@ get_suggested_filename (EphyEmbed  *embed,
   view = ephy_embed_get_web_view (embed);
   web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
   response = webkit_web_resource_get_response (web_resource);
+  if (!response)
+    return g_strdup (file_extension);
+
   mimetype = webkit_uri_response_get_mime_type (response);
   uri = g_uri_parse (webkit_web_resource_get_uri (web_resource), G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   page_title = ephy_embed_get_title (embed);
