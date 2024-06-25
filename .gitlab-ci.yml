@@ -101,17 +101,20 @@ flatpak:
   extends:
     - '.flatpak'
     - '.flatpak rules'
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-46'
   needs: []
 
 flatpak aarch64:
   extends:
     - '.flatpak@aarch64'
     - '.flatpak rules'
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-46'
   needs: []
 
 scanbuild:
   extends: '.flatpak'
   needs: []
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-46'
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
   script:
