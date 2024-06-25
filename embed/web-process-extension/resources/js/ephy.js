@@ -300,15 +300,50 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
 Ephy.formControlsAssociated = function(pageID, frameID, elements, serializer)
 {
-    Ephy.formManagers = [];
+    let formElements = [];
 
-    for (let i = 0; i < elements.length; i++) {
-        if (!(elements[i] instanceof HTMLFormElement))
+    for (let element of elements) {
+        if (!(element instanceof HTMLFormElement))
             continue;
-        const formManager = new Ephy.FormManager(pageID, frameID, elements[i]);
-        formManager.handlePasswordForms(serializer);
+
+        const formManager = new Ephy.FormManager(pageID, frameID, element, serializer);
         formManager.preFillForms();
-        Ephy.formManagers.push(formManager);
+        Ephy.FormManager._managers.push(formManager);
+
+        formElements.push(element);
+    }
+
+    // This function is called in two scenarios:
+    //
+    // 1) Form is created. One of the elements will be an HTMLFormElement. We
+    //    would have found it above and created a FormManager.
+    // 2) Elements are moved between existing forms. The FormManager should
+    //    already exist from a previous call to this function.
+    //
+    // WebKit may batch updates together before eventually firing the form
+    // controls associated event later on, so possibly there could be multiple
+    // forms here, and both scenarios could be happening at the same time.
+    for (let element of elements) {
+        if (element instanceof HTMLFormElement)
+            continue;
+
+        // We want to find each parent form element and process it only once.
+        // Anything in formElements has already been processed.
+        let formElement = element.closest('form');
+        if (formElement && !formElements.includes(formElement)) {
+            if (!formElement instanceof HTMLFormElement) {
+                Ephy.log('Attempted to find parent HTMLFormElement, but found something else instead; this is probably an Epiphany bug');
+                continue;
+            }
+            formElements.push(formElement);
+
+            let manager = Ephy.FormManager.managerForForm(formElement);
+            if (!manager) {
+                Ephy.log('Missing form manager for a form element that should have one already; this is probably an Epiphany bug');
+                continue;
+            }
+            manager.preFillForms();
+        }
     }
 };
 
@@ -316,8 +351,8 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 {
     // FIXME: Find out: is it really possible to have multiple frames with same window object???
     let formManager = null;
-    for (let i = 0; i < Ephy.formManagers.length; i++) {
-        const manager = Ephy.formManagers[i];
+    for (let i = 0; i < Ephy.FormManager._managers.length; i++) {
+        const manager = Ephy.FormManager._managers[i];
         if (manager.frameID() === frameID && manager.form() === form) {
             formManager = manager;
             break;
@@ -326,7 +361,7 @@ Ephy.handleFormSubmission = function(pageID, frameID, form)
 
     if (!formManager) {
         formManager = new Ephy.FormManager(pageID, frameID, form);
-        Ephy.formManagers.push(formManager);
+        Ephy.FormManager._managers.push(formManager);
     }
 
     formManager.handleFormSubmission();
@@ -471,7 +506,9 @@ Ephy.PasswordManager = class PasswordManager
 
 Ephy.FormManager = class FormManager
 {
-    constructor(pageID, frameID, form)
+    static _managers = [];
+
+    constructor(pageID, frameID, form, serializer)
     {
         this._pageID = pageID;
         this._frameID = frameID;
@@ -480,9 +517,19 @@ Ephy.FormManager = class FormManager
         this._preFillUserMenu = null;
         this._elementBeingAutoFilled = null;
         this._submissionHandled = false;
+        this._passwordFormMessageSerializer = serializer;
+
+        this._form.addEventListener('focus', this._formFocused.bind(this), true);
+
+        Ephy.FormManager._managers.push(this);
     }
 
     // Public
+
+    static managerForForm(element)
+    {
+        return Ephy.FormManager._managers.find((manager) => manager._form === element);
+    }
 
     frameID()
     {
@@ -492,16 +539,6 @@ Ephy.FormManager = class FormManager
     form()
     {
         return this._form;
-    }
-
-    handlePasswordForms(serializer)
-    {
-        if (!this._containsPasswordElement())
-            return;
-
-        Ephy.log('Password form element detected, hooking password form focused callback');
-        this._passwordFormMessageSerializer = serializer;
-        this._form.addEventListener('focus', this._passwordFormFocused.bind(this), true);
     }
 
     isAutoFilling(element)
@@ -635,18 +672,6 @@ Ephy.FormManager = class FormManager
 
     // Private
 
-    _containsPasswordElement()
-    {
-        for (let i = 0; i < this._form.elements.length; i++) {
-            const element = this._form.elements[i];
-            if (element instanceof HTMLInputElement) {
-                if (element.type === 'password' || element.type === 'adminpw')
-                    return true;
-            }
-        }
-        return false;
-    }
-
     _getFormAction()
     {
         // We used to naively access this._form.action to get the action
@@ -670,8 +695,28 @@ Ephy.FormManager = class FormManager
         return action ? new URL(action, window.location) : null;
     }
 
-    _passwordFormFocused(event)
+    static _isNewPasswordElement(element)
     {
+        return element.getAttribute('autocomplete').includes('new-password');
+    }
+
+    _containsPasswordElement()
+    {
+        for (let i = 0; i < this._form.elements.length; i++) {
+            const element = this._form.elements[i];
+            if (element instanceof HTMLInputElement) {
+                if (element.type === 'password' || element.type === 'adminpw')
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    _formFocused(event)
+    {
+        if (!this._containsPasswordElement())
+            return;
+
         let isFormActionInsecure = false;
         const actionURL = this._getFormAction();
         if (actionURL) {
@@ -706,6 +751,9 @@ Ephy.FormManager = class FormManager
         return passwordFields;
     }
 
+    // forAutofill is true if we are loading the page and autofilling saved
+    // passwords, and false if we are submitting the page and prompting the
+    // user to save submitted passwords.
     _findFormAuthElements(forAutofill)
     {
         const passwordNodes = this._findPasswordFields();
@@ -735,7 +783,7 @@ Ephy.FormManager = class FormManager
         let passwordNodeIndex = 0;
         if (!forAutofill && passwordNodes.length !== 1) {
             for (let node of passwordNodes) {
-                if (node.element.getAttribute('autocomplete').includes('new-password'))
+                if (Ephy.FormManager._isNewPasswordElement(node.element))
                     return { 'usernameNode' : usernameNode, 'passwordNode' : node };
             }
 
