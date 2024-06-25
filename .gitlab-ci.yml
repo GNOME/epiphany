@@ -114,7 +114,6 @@ canary:
   image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master'
   stage: 'test'
   interruptible: true
-  allow_failure: true
   tags:
     - flatpak
   variables:
