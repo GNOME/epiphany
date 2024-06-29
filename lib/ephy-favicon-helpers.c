@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-favicon-helpers.h"
 
+#include "ephy-pixbuf-utils.h"
+
 #include <gdk/gdk.h>
 #include <glib.h>
 
@@ -45,6 +47,6 @@ ephy_favicon_get_from_texture_scaled (GdkTexture *texture,
   if (favicon_width == width && favicon_height == height)
     return G_ICON (g_object_ref (texture));
 
-  pixbuf = gdk_pixbuf_get_from_texture (texture);
+  pixbuf = ephy_texture_to_pixbuf (texture);
   return G_ICON (gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR));
 }

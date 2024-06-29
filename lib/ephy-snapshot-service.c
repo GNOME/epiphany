@@ -22,6 +22,7 @@
 #include "ephy-snapshot-service.h"
 
 #include "ephy-file-helpers.h"
+#include "ephy-pixbuf-utils.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdio.h>
@@ -223,7 +224,7 @@ ephy_snapshot_service_prepare_snapshot (GdkTexture *texture)
   if (!orig_width || !orig_height)
     return NULL;
 
-  snapshot = gdk_pixbuf_get_from_texture (texture);
+  snapshot = ephy_texture_to_pixbuf (texture);
 
   if (orig_width < EPHY_THUMBNAIL_WIDTH ||
       orig_height < EPHY_THUMBNAIL_HEIGHT) {

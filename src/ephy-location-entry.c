@@ -29,6 +29,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-pixbuf-utils.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-signal-accumulator.h"
@@ -555,7 +556,7 @@ get_suggestion_icon (GtkListItem *item,
     width = cairo_image_surface_get_width (surface);
     height = cairo_image_surface_get_height (surface);
 
-    return G_ICON (gdk_pixbuf_get_from_surface (surface, 0, 0, width, height));
+    return G_ICON (ephy_get_pixbuf_from_surface (surface, 0, 0, width, height));
   }
 
   if (icon)
@@ -583,7 +584,7 @@ get_suggestion_secondary_icon (GtkListItem *item,
     width = cairo_image_surface_get_width (surface);
     height = cairo_image_surface_get_height (surface);
 
-    return G_ICON (gdk_pixbuf_get_from_surface (surface, 0, 0, width, height));
+    return G_ICON (ephy_get_pixbuf_from_surface (surface, 0, 0, width, height));
   }
 
   if (icon)

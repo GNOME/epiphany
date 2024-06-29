@@ -19,12 +19,12 @@
  */
 
 #include "config.h"
+#include "pageaction.h"
 
+#include "ephy-pixbuf-utils.h"
 #include "ephy-shell.h"
 #include "ephy-web-extension.h"
 #include "ephy-window.h"
-
-#include "pageaction.h"
 
 static GtkWidget *
 get_action_for_tab_id (EphyWebExtension *extension,
@@ -55,6 +55,7 @@ pageaction_handler_seticon (EphyWebExtensionSender *sender,
   const char *path;
   GtkWidget *action, *child;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GdkTexture) texture = NULL;
 
   if (!details) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Missing details object");
@@ -78,11 +79,13 @@ pageaction_handler_seticon (EphyWebExtensionSender *sender,
   path = ephy_json_object_get_string (details, "path");
   if (path)
     pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path, -1);
+  if (pixbuf)
+    texture = ephy_texture_new_for_pixbuf (pixbuf);
 
   /* action can be a GtkButton or GtkMenuButton. They both have a "child" property */
   g_object_get (action, "child", &child, NULL);
 
-  gtk_image_set_from_pixbuf (GTK_IMAGE (child), pixbuf);
+  gtk_image_set_from_paintable (GTK_IMAGE (child), GDK_PAINTABLE (texture));
   g_task_return_pointer (task, NULL, NULL);
 }
 

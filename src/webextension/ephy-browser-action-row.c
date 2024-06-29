@@ -20,9 +20,10 @@
  */
 
 #include "config.h"
-
 #include "ephy-browser-action-row.h"
+
 #include "ephy-indicator-bin-private.h"
+#include "ephy-pixbuf-utils.h"
 
 struct _EphyBrowserActionRow {
   GtkListBoxRow parent_instance;
@@ -104,11 +105,15 @@ static void
 ephy_browser_action_row_constructed (GObject *object)
 {
   EphyBrowserActionRow *self = EPHY_BROWSER_ACTION_ROW (object);
+  g_autoptr (GdkTexture) texture = NULL;
+  GdkPixbuf *pixbuf;
 
   gtk_label_set_label (GTK_LABEL (self->title_label),
                        ephy_browser_action_get_title (self->browser_action));
-  gtk_image_set_from_pixbuf (GTK_IMAGE (self->browser_action_image),
-                             ephy_browser_action_get_pixbuf (self->browser_action, 16));
+
+  pixbuf = ephy_browser_action_get_pixbuf (self->browser_action, 16);
+  texture = ephy_texture_new_for_pixbuf (pixbuf);
+  gtk_image_set_from_paintable (GTK_IMAGE (self->browser_action_image), GDK_PAINTABLE (texture));
 
   ephy_indicator_bin_set_badge (EPHY_INDICATOR_BIN (self->badge), ephy_browser_action_get_badge_text (EPHY_BROWSER_ACTION (self->browser_action)));
   g_signal_connect (EPHY_BROWSER_ACTION (self->browser_action), "notify::badge-text", G_CALLBACK (on_badge_text), self);

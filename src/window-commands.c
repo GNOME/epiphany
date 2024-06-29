@@ -45,6 +45,7 @@
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-password-import.h"
+#include "ephy-pixbuf-utils.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
@@ -1547,7 +1548,7 @@ scaled_pixbuf_from_icon (GIcon *icon,
   if (GDK_IS_PIXBUF (icon))
     pixbuf = GDK_PIXBUF (g_object_ref (icon));
   else if (GDK_IS_TEXTURE (icon))
-    pixbuf = gdk_pixbuf_get_from_texture (GDK_TEXTURE (icon));
+    pixbuf = ephy_texture_to_pixbuf (GDK_TEXTURE (icon));
   else
     g_assert_not_reached ();
 
@@ -1618,7 +1619,7 @@ frame_pixbuf (GIcon   *icon,
     cairo_fill (cr);
   }
 
-  framed = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+  framed = ephy_get_pixbuf_from_surface (surface, 0, 0, width, height);
   cairo_destroy (cr);
   cairo_surface_destroy (surface);
 

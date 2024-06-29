@@ -23,6 +23,7 @@
 
 #include "prefs-extensions-page.h"
 
+#include "ephy-pixbuf-utils.h"
 #include "ephy-web-extension.h"
 #include "ephy-web-extension-manager.h"
 
@@ -126,7 +127,12 @@ create_row (PrefsExtensionsPage *self,
 
   /* Images */
   icon = ephy_web_extension_get_icon (web_extension, 32);
-  image = icon ? gtk_image_new_from_pixbuf (icon) : gtk_image_new_from_icon_name ("application-x-addon-symbolic");
+  if (icon) {
+    g_autoptr (GdkTexture) texture = ephy_texture_new_for_pixbuf (icon);
+    image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
+  } else {
+    image = gtk_image_new_from_icon_name ("application-x-addon-symbolic");
+  }
   gtk_image_set_pixel_size (GTK_IMAGE (image), 32);
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), image);
 
