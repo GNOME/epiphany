@@ -363,6 +363,11 @@ tags_list_box_sort_func (GtkListBoxRow *row1,
       && g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
     return ephy_bookmark_tags_compare (title1, title2);
 
+  if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0
+      && g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0)
+    return ephy_bookmark_bookmarks_compare_func (ephy_bookmark_row_get_bookmark (EPHY_BOOKMARK_ROW (row1)),
+                                                 ephy_bookmark_row_get_bookmark (EPHY_BOOKMARK_ROW (row2)));
+
   if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
     return -1;
   if (g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)

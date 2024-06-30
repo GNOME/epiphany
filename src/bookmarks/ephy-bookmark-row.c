@@ -235,6 +235,12 @@ ephy_bookmark_row_constructed (GObject *object)
                                NULL,
                                self, NULL);
 
+  g_signal_connect_object (self->bookmark,
+                           "notify::title",
+                           G_CALLBACK (gtk_list_box_row_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
                    self->properties_button,

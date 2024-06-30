@@ -241,6 +241,12 @@ bookmark_title_changed_cb (EphyBookmark         *bookmark,
                            GParamSpec           *pspec,
                            EphyBookmarksManager *self)
 {
+  guint n = g_list_model_get_n_items (G_LIST_MODEL (self));
+
+  /* Update list */
+  g_sequence_sort (self->bookmarks, (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func, bookmark);
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, n, n);
+
   g_signal_emit (self, signals[BOOKMARK_TITLE_CHANGED], 0, bookmark);
 }
 
@@ -298,26 +304,6 @@ ephy_bookmarks_manager_unwatch_bookmark (EphyBookmarksManager *self,
   g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_removed_cb, self);
 }
 
-static GSequenceIter *
-ephy_bookmarks_search_and_insert_bookmark (GSequence    *bookmarks,
-                                           EphyBookmark *bookmark)
-{
-  GSequenceIter *iter;
-  GSequenceIter *prev_iter;
-
-  iter = g_sequence_search (bookmarks, bookmark,
-                            (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func,
-                            NULL);
-
-  prev_iter = g_sequence_iter_prev (iter);
-  if (g_sequence_iter_is_end (prev_iter)
-      || ephy_bookmark_bookmarks_compare_func (g_sequence_get (prev_iter), bookmark) != 0) {
-    return g_sequence_insert_before (iter, bookmark);
-  }
-
-  return NULL;
-}
-
 static void
 ephy_bookmarks_manager_add_bookmark_internal (EphyBookmarksManager *self,
                                               EphyBookmark         *bookmark,
@@ -329,8 +315,9 @@ ephy_bookmarks_manager_add_bookmark_internal (EphyBookmarksManager *self,
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
 
-  iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks,
-                                                    g_object_ref (bookmark));
+  iter = g_sequence_insert_sorted (self->bookmarks, g_object_ref (bookmark),
+                                   (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func,
+                                   NULL);
   if (iter) {
     /* Update list */
     position = g_sequence_iter_get_position (iter);
