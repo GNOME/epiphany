@@ -45,4 +45,6 @@ void		ephy_profiler_start	(const char *name,
 
 void		ephy_profiler_stop	(const char *name);
 
+void		ephy_debug_set_fatal_criticals ();
+
 G_END_DECLS

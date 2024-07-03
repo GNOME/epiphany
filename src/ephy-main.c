@@ -217,7 +217,7 @@ main (int   argc,
    */
   LIBXML_TEST_VERSION;
 
-  g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
+  ephy_debug_set_fatal_criticals ();
 
   /* If we're given -remote arguments, translate them */
   if (argc >= 2 && strcmp (argv[1], "-remote") == 0) {

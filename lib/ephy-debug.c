@@ -205,6 +205,18 @@ ephy_profiler_free (EphyProfiler *profiler)
 }
 
 /**
+ * ephy_debug_set_fatal_critcals:
+ *
+ * Sets criticals to fatal unless otherwise specified by `G_DEBUG`.
+ **/
+void
+ephy_debug_set_fatal_criticals ()
+{
+  if (!g_getenv ("G_DEBUG"))
+    g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
+}
+
+/**
  * ephy_profiler_start:
  * @name: name of this new profiler
  * @module: Epiphany module to profile
