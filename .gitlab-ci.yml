@@ -92,7 +92,7 @@ scanbuild:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
   script:
     - flatpak-builder --user --disable-rofiles-fuse --stop-at=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH}
-    - flatpak build flatpak_app bash -c "source /usr/lib/sdk/llvm16/enable.sh; meson --prefix=/app ${CONFIG_OPTS} _build; SCANBUILD=$(pwd)/.run-scan-build ninja -C _build scan-build"
+    - flatpak build flatpak_app bash -c "source /usr/lib/sdk/llvm18/enable.sh; meson --prefix=/app ${CONFIG_OPTS} _build; SCANBUILD=$(pwd)/.run-scan-build ninja -C _build scan-build"
   artifacts:
     when: on_failure
     paths:
