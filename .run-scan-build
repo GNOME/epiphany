@@ -2,4 +2,10 @@
 
 set -e
 
-scan-build -v --status-bugs -disable-checker unix.Malloc "$@"
+# Skip scanning of generated code, since we cannot easily suppress false positives.
+DIR=dirname
+if [ $(find "_build" -name "$@") ]; then
+    cc "$@"
+else
+    scan-build -v --status-bugs -disable-checker unix.Malloc "$@"
+fi
