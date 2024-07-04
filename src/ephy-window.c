@@ -1502,7 +1502,6 @@ populate_context_menu (WebKitWebView       *web_view,
                        EphyWindow          *window)
 {
   EphyWebExtensionManager *extension_manager = ephy_web_extension_manager_get_default ();
-  WebKitSettings *settings = NULL;
   WebKitContextMenuItem *input_methods_item = NULL;
   WebKitContextMenuItem *insert_emoji_item = NULL;
   WebKitContextMenuItem *copy_image_item = NULL;
@@ -1817,8 +1816,7 @@ populate_context_menu (WebKitWebView       *web_view,
     add_action_to_context_menu (context_menu, window_action_group,
                                 "screenshot", window);
 
-    settings = webkit_web_view_get_settings (web_view);
-    if (webkit_settings_get_enable_developer_extras (settings)) {
+    if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS)) {
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
       uri = webkit_web_view_get_uri (web_view);
