@@ -1119,7 +1119,7 @@ ephy_location_entry_size_allocate (GtkWidget *widget,
                                  gtk_widget_get_width (root), -1);
   else
     gtk_widget_set_size_request (entry->suggestions_popover,
-                                 gtk_widget_get_allocated_width (widget), -1);
+                                 gtk_widget_get_width (widget), -1);
 
   gtk_widget_queue_resize (entry->suggestions_popover);
 
