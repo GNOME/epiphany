@@ -464,8 +464,8 @@ int
 ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmark1,
                                       EphyBookmark *bookmark2)
 {
-  const char *title1;
-  const char *title2;
+  g_autofree char *title1 = NULL;
+  g_autofree char *title2 = NULL;
   int title_result;
   const char *url1;
   const char *url2;
@@ -475,8 +475,8 @@ ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmark1,
   g_assert (EPHY_IS_BOOKMARK (bookmark1));
   g_assert (EPHY_IS_BOOKMARK (bookmark2));
 
-  title1 = ephy_bookmark_get_title (bookmark1);
-  title2 = ephy_bookmark_get_title (bookmark2);
+  title1 = g_utf8_casefold (ephy_bookmark_get_title (bookmark1), -1);
+  title2 = g_utf8_casefold (ephy_bookmark_get_title (bookmark2), -1);
   title_result = g_strcmp0 (title1, title2);
   if (title_result != 0)
     return title_result;
@@ -497,11 +497,14 @@ ephy_bookmark_tags_compare (const char *tag1,
                             const char *tag2)
 {
   int result;
+  int result_casefolded;
 
   g_assert (tag1 != NULL);
   g_assert (tag2 != NULL);
 
   result = g_strcmp0 (tag1, tag2);
+  result_casefolded = g_strcmp0 (g_utf8_casefold (tag1, -1),
+                                 g_utf8_casefold (tag2, -1));
 
   if (result == 0)
     return 0;
@@ -511,7 +514,10 @@ ephy_bookmark_tags_compare (const char *tag1,
   if (g_strcmp0 (tag2, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
     return 1;
 
-  return result;
+  if (result_casefolded == 0)
+    return result;
+
+  return result_casefolded;
 }
 
 char *
