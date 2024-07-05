@@ -355,7 +355,7 @@ main (int   argc,
     g_error ("Fatal initialization error: %s", error->message);
   }
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_START_IN_INCOGNITO_MODE)) {
+  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_START_IN_INCOGNITO_MODE) && !application_mode) {
     incognito_mode = TRUE;
   }
 
