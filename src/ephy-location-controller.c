@@ -211,6 +211,9 @@ get_location_cb (EphyLocationEntry      *entry,
   const char *address;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (controller->window));
+  if (!embed)
+    return NULL;
+
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
   return ephy_embed_utils_is_no_show_address (address) ? NULL : ephy_uri_decode (address);
