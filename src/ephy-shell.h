@@ -78,7 +78,6 @@ typedef struct {
   EphyStartupMode startup_mode;
   char *session_filename;
   char **arguments;
-  guint32 user_time;
 } EphyShellStartupContext;
 
 EphyShell               *ephy_shell_get_default             (void);
@@ -93,8 +92,7 @@ EphyEmbed               *ephy_shell_new_tab_full            (EphyShell        *s
                                                              WebKitWebView    *related_view,
                                                              EphyWindow       *parent_window,
                                                              EphyEmbed        *previous_embed,
-                                                             EphyNewTabFlags   flags,
-                                                             guint32           user_time);
+                                                             EphyNewTabFlags   flags);
 
 EphySession             *ephy_shell_get_session             (EphyShell        *shell);
 GNetworkMonitor         *ephy_shell_get_net_monitor         (EphyShell        *shell);
@@ -114,15 +112,13 @@ void                     ephy_shell_try_quit                (EphyShell        *s
 
 void                     ephy_shell_open_uris               (EphyShell        *shell,
                                                              const char      **uris,
-                                                             EphyStartupMode   startup_mode,
-                                                             guint32           user_time);
+                                                             EphyStartupMode   startup_mode);
 
 void                     ephy_shell_set_startup_context     (EphyShell                *shell,
                                                              EphyShellStartupContext  *ctx);
 EphyShellStartupContext *ephy_shell_startup_context_new     (EphyStartupMode           startup_mode,
                                                              char                     *session_filename,
-                                                             char                    **arguments,
-                                                             guint32                   user_time);
+                                                             char                    **arguments);
 
 void                     _ephy_shell_create_instance        (EphyEmbedShellMode mode);
 

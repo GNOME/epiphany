@@ -95,7 +95,6 @@ G_DEFINE_FINAL_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
  * @startup_mode: An #EphyStartupMode (new tab or new window)
  * @session_filename: A session to restore.
  * @arguments: A %NULL-terminated array of URLs and file URIs to be opened.
- * @user_time: The user time when the EphyShell startup was invoked.
  *
  * Creates a new startup context. All string parameters, including
  * @arguments, are copied.
@@ -105,15 +104,13 @@ G_DEFINE_FINAL_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 EphyShellStartupContext *
 ephy_shell_startup_context_new (EphyStartupMode   startup_mode,
                                 char             *session_filename,
-                                char            **arguments,
-                                guint32           user_time)
+                                char            **arguments)
 {
   EphyShellStartupContext *ctx = g_new0 (EphyShellStartupContext, 1);
 
   ctx->startup_mode = startup_mode;
   ctx->session_filename = g_strdup (session_filename);
   ctx->arguments = g_strdupv (arguments);
-  ctx->user_time = user_time;
 
   return ctx;
 }
@@ -141,8 +138,7 @@ ephy_shell_startup_continue (EphyShell               *shell,
 
   if (ctx->session_filename != NULL) {
     g_assert (session != NULL);
-    ephy_session_load (session, (const char *)ctx->session_filename,
-                       ctx->user_time, NULL, NULL, NULL);
+    ephy_session_load (session, (const char *)ctx->session_filename, NULL, NULL, NULL);
   } else if (new_window_option && shell->remote_startup_context) {
     char *homepage_url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
     const char *default_uris[] = { homepage_url, NULL };
@@ -155,7 +151,7 @@ ephy_shell_startup_continue (EphyShell               *shell,
       /* has been used, then use the default_uris list to open the homepage */
       uris = default_uris;
 
-    ephy_shell_open_uris (shell, uris, ctx->startup_mode, ctx->user_time);
+    ephy_shell_open_uris (shell, uris, ctx->startup_mode);
     g_free (homepage_url);
   } else if (active_window && (!ctx->arguments || mode == EPHY_EMBED_SHELL_MODE_APPLICATION)) {
     /* If the application already has an active window and: */
@@ -170,8 +166,7 @@ ephy_shell_startup_continue (EphyShell               *shell,
   } else if (ctx->arguments || !session) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
-    ephy_shell_open_uris (shell, (const char **)ctx->arguments,
-                          ctx->startup_mode, ctx->user_time);
+    ephy_shell_open_uris (shell, (const char **)ctx->arguments, ctx->startup_mode);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
     EphyWindow *window = ephy_window_new ();
     ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
@@ -688,9 +683,7 @@ ephy_shell_activate (GApplication *application)
      * commands in session_load_cb. Otherwise, run them now.
      */
     if (session) {
-      ephy_session_resume (session,
-                           shell->local_startup_context->user_time,
-                           NULL, session_load_cb, shell->local_startup_context);
+      ephy_session_resume (session, NULL, session_load_cb, shell->local_startup_context);
     } else
       ephy_shell_startup_continue (shell, shell->local_startup_context);
   } else {
@@ -714,7 +707,6 @@ typedef enum {
   CTX_STARTUP_MODE,
   CTX_SESSION_FILENAME,
   CTX_ARGUMENTS,
-  CTX_USER_TIME
 } CtxEnum;
 
 static void
@@ -757,10 +749,6 @@ ephy_shell_add_platform_data (GApplication    *application,
                              CTX_ARGUMENTS,
                              g_variant_new_strv ((const char **)ctx->arguments, -1));
 
-    g_variant_builder_add (ctx_builder, "{iv}",
-                           CTX_USER_TIME,
-                           g_variant_new_uint32 (ctx->user_time));
-
     g_variant_builder_add (builder, "{sv}",
                            "ephy-shell-startup-context",
                            g_variant_builder_end (ctx_builder));
@@ -801,9 +789,6 @@ ephy_shell_before_emit (GApplication *application,
             break;
           case CTX_ARGUMENTS:
             ctx->arguments = g_variant_dup_strv (ctx_value, NULL);
-            break;
-          case CTX_USER_TIME:
-            ctx->user_time = g_variant_get_uint32 (ctx_value);
             break;
           default:
             g_assert_not_reached ();
@@ -1026,7 +1011,6 @@ show_notification_cb (WebKitWebView      *web_view,
  * @shell: a #EphyShell
  * @window: the target #EphyWindow or %NULL
  * @previous_embed: the referrer embed, or %NULL
- * @user_time: a timestamp, or 0
  *
  * Create a new tab and the parent window when necessary.
  * Use this function to open urls in new window/tabs.
@@ -1039,8 +1023,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
                          WebKitWebView   *related_view,
                          EphyWindow      *window,
                          EphyEmbed       *previous_embed,
-                         EphyNewTabFlags  flags,
-                         guint32          user_time)
+                         EphyNewTabFlags  flags)
 {
   EphyEmbedShell *embed_shell;
   GtkWidget *web_view;
@@ -1117,8 +1100,7 @@ ephy_shell_new_tab (EphyShell       *shell,
                     EphyNewTabFlags  flags)
 {
   return ephy_shell_new_tab_full (shell, NULL, NULL, parent_window,
-                                  previous_embed, flags,
-                                  0);
+                                  previous_embed, flags);
 }
 
 /**
@@ -1416,7 +1398,6 @@ typedef struct {
   EphyWindow *window;
   char **uris;
   EphyNewTabFlags flags;
-  guint32 user_time;
   EphyEmbed *previous_embed;
   guint current_uri;
   gboolean reuse_empty_tab;
@@ -1426,8 +1407,7 @@ typedef struct {
 static OpenURIsData *
 open_uris_data_new (EphyShell        *shell,
                     const char      **uris,
-                    EphyStartupMode   startup_mode,
-                    guint32           user_time)
+                    EphyStartupMode   startup_mode)
 {
   OpenURIsData *data;
   gboolean fullscreen_lockdown;
@@ -1437,7 +1417,6 @@ open_uris_data_new (EphyShell        *shell,
   data->shell = shell;
   data->session = session ? g_object_ref (session) : NULL;
   data->uris = g_strdupv ((char **)uris);
-  data->user_time = user_time;
 
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
@@ -1497,8 +1476,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
                                      NULL, NULL,
                                      data->window,
                                      data->previous_embed,
-                                     data->flags | page_flags,
-                                     data->user_time);
+                                     data->flags | page_flags);
   }
 
   if (url_is_xpi) {
@@ -1512,7 +1490,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
       gtk_widget_grab_focus (GTK_WIDGET (embed));
 
     if (data->flags & EPHY_NEW_TAB_JUMP && mode != EPHY_EMBED_SHELL_MODE_TEST)
-      gtk_window_present_with_time (GTK_WINDOW (data->window), data->user_time);
+      gtk_window_present (GTK_WINDOW (data->window));
   } else {
     ephy_web_view_load_new_tab_page (ephy_embed_get_web_view (embed));
     if (data->flags & EPHY_NEW_TAB_JUMP)
@@ -1543,15 +1521,14 @@ ephy_shell_open_uris_idle_done (OpenURIsData *data)
 void
 ephy_shell_open_uris (EphyShell        *shell,
                       const char      **uris,
-                      EphyStartupMode   startup_mode,
-                      guint32           user_time)
+                      EphyStartupMode   startup_mode)
 {
   OpenURIsData *data;
   guint id;
 
   g_assert (EPHY_IS_SHELL (shell));
 
-  data = open_uris_data_new (shell, uris, startup_mode, user_time);
+  data = open_uris_data_new (shell, uris, startup_mode);
   id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
                         (GSourceFunc)ephy_shell_open_uris_idle,
                         data,

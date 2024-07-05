@@ -133,37 +133,6 @@ static const GOptionEntry option_entries[] = {
   { NULL }
 };
 
-/* adapted from gtk+/gdk/x11/gdkdisplay-x11.c */
-static guint32
-get_startup_id (void)
-{
-  const char *startup_id, *time_str;
-  guint32 retval = 0;
-
-  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id == NULL)
-    return 0;
-
-  /* Find the launch time from the startup_id, if it's there.  Newer spec
-   * states that the startup_id is of the form <unique>_TIME<timestamp>
-   */
-  time_str = g_strrstr (startup_id, "_TIME");
-  if (time_str != NULL) {
-    gulong value;
-    gchar *end;
-    errno = 0;
-
-    /* Skip past the "_TIME" part */
-    time_str += 5;
-
-    value = strtoul (time_str, &end, 0);
-    if (end != time_str && errno == 0)
-      retval = (guint32)value;
-  }
-
-  return retval;
-}
-
 static void
 maximize_fd_limit (void)
 {
@@ -193,7 +162,6 @@ main (int   argc,
   GOptionContext *option_context;
   GOptionGroup *option_group;
   GError *error = NULL;
-  guint32 user_time;
   gboolean arbitrary_url;
   EphyShellStartupContext *ctx;
   EphyEmbedShellMode mode;
@@ -270,11 +238,8 @@ main (int   argc,
     g_strfreev (arg_list);
   }
 
-  /* Initialise our debug helpers */
+  /* Initialize our debug helpers */
   ephy_debug_init ();
-
-  /* get this early, since gdk will unset the env var */
-  user_time = get_startup_id ();
 
   option_context = g_option_context_new ("");
   option_group = g_option_group_new ("epiphany",
@@ -449,8 +414,7 @@ main (int   argc,
 
   ctx = ephy_shell_startup_context_new (open_in_new_window ? EPHY_STARTUP_NEW_WINDOW : EPHY_STARTUP_NEW_TAB,
                                         session_filename,
-                                        arguments,
-                                        user_time);
+                                        arguments);
   g_strfreev (arguments);
   ephy_shell = ephy_shell_get_default ();
   ephy_shell_set_startup_context (ephy_shell, ctx);

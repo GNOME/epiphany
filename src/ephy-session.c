@@ -380,8 +380,7 @@ tab_view_notify_selected_page_cb (AdwTabView  *tab_view,
 }
 
 static void
-session_maybe_open_window (EphySession *session,
-                           guint32      user_time)
+session_maybe_open_window (EphySession *session)
 {
   EphyShell *shell = ephy_shell_get_default ();
 
@@ -1077,8 +1076,7 @@ confirm_before_recover (EphyWindow *window,
   embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
                                    title, NULL,
                                    window, NULL,
-                                   EPHY_NEW_TAB_APPEND_LAST,
-                                   0);
+                                   EPHY_NEW_TAB_APPEND_LAST);
 
   ephy_web_view_load_error_page (ephy_embed_get_web_view (embed), url,
                                  EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL, NULL);
@@ -1086,7 +1084,6 @@ confirm_before_recover (EphyWindow *window,
 
 typedef struct {
   EphySession *session;
-  guint32 user_time;
 
   EphyWindow *window;
   gulong destroy_id;
@@ -1097,14 +1094,12 @@ typedef struct {
 } SessionParserContext;
 
 static SessionParserContext *
-session_parser_context_new (EphySession *session,
-                            guint32      user_time)
+session_parser_context_new (EphySession *session)
 {
   SessionParserContext *context;
 
   context = g_new0 (SessionParserContext, 1);
   context->session = g_object_ref (session);
-  context->user_time = user_time;
   context->is_first_window = TRUE;
 
   return context;
@@ -1252,8 +1247,7 @@ session_parse_embed (SessionParserContext  *context,
 
     embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
                                      title, NULL,
-                                     context->window, NULL, flags,
-                                     0);
+                                     context->window, NULL, flags);
 
     adw_tab_view_set_page_pinned (tab_view,
                                   adw_tab_view_get_page (tab_view, GTK_WIDGET (embed)),
@@ -1424,8 +1418,6 @@ load_stream_complete_error (GTask  *task,
                             GError *error)
 {
   EphySession *session;
-  LoadFromStreamAsyncData *data;
-  SessionParserContext *context;
 
   g_task_return_error (task, error);
 
@@ -1436,9 +1428,7 @@ load_stream_complete_error (GTask  *task,
    */
   session_delete (session);
 
-  data = g_task_get_task_data (task);
-  context = (SessionParserContext *)g_markup_parse_context_get_user_data (data->parser);
-  session_maybe_open_window (session, context->user_time);
+  session_maybe_open_window (session);
 
   g_object_unref (task);
 
@@ -1490,7 +1480,6 @@ load_stream_read_cb (GObject      *object,
  * ephy_session_load_from_stream:
  * @session: an #EphySession
  * @stream: a #GInputStream to read the session data from
- * @user_time: a user time, or 0
  * @cancellable: (allow-none): optional #GCancellable object, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback to call when the
  *    request is satisfied
@@ -1506,7 +1495,6 @@ load_stream_read_cb (GObject      *object,
 void
 ephy_session_load_from_stream (EphySession         *session,
                                GInputStream        *stream,
-                               guint32              user_time,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
@@ -1529,7 +1517,7 @@ ephy_session_load_from_stream (EphySession         *session,
    */
   g_task_set_priority (task, G_PRIORITY_HIGH_IDLE + 30);
 
-  context = session_parser_context_new (session, user_time);
+  context = session_parser_context_new (session);
   parser = g_markup_parse_context_new (&session_parser, 0, context, (GDestroyNotify)session_parser_context_free);
   data = load_from_stream_async_data_new (parser);
   g_task_set_task_data (task, data, (GDestroyNotify)load_from_stream_async_data_free);
@@ -1558,27 +1546,6 @@ ephy_session_load_from_stream_finish (EphySession   *session,
   g_assert (g_task_is_valid (result, session));
 
   return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-typedef struct {
-  guint32 user_time;
-} LoadAsyncData;
-
-static LoadAsyncData *
-load_async_data_new (guint32 user_time)
-{
-  LoadAsyncData *data;
-
-  data = g_new (LoadAsyncData, 1);
-  data->user_time = user_time;
-
-  return data;
-}
-
-static void
-load_async_data_free (LoadAsyncData *data)
-{
-  g_free (data);
 }
 
 static void
@@ -1611,11 +1578,9 @@ session_read_cb (GObject      *object,
   stream = g_file_read_finish (G_FILE (object), result, &error);
   if (stream) {
     EphySession *session;
-    LoadAsyncData *data;
 
     session = EPHY_SESSION (g_task_get_source_object (task));
-    data = g_task_get_task_data (task);
-    ephy_session_load_from_stream (session, G_INPUT_STREAM (stream), data->user_time,
+    ephy_session_load_from_stream (session, G_INPUT_STREAM (stream),
                                    g_task_get_cancellable (task), load_from_stream_cb, task);
     g_object_unref (stream);
   } else {
@@ -1630,7 +1595,6 @@ session_read_cb (GObject      *object,
  * ephy_session_load:
  * @session: an #EphySession
  * @filename: the path of the source file
- * @user_time: a user time, or 0
  * @cancellable: (allow-none): optional #GCancellable object, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback to call when the
  *    request is satisfied
@@ -1646,14 +1610,12 @@ session_read_cb (GObject      *object,
 void
 ephy_session_load (EphySession         *session,
                    const char          *filename,
-                   guint32              user_time,
                    GCancellable        *cancellable,
                    GAsyncReadyCallback  callback,
                    gpointer             user_data)
 {
   GFile *save_to_file;
   GTask *task;
-  LoadAsyncData *data;
 
   g_assert (EPHY_IS_SESSION (session));
   g_assert (filename);
@@ -1669,8 +1631,6 @@ ephy_session_load (EphySession         *session,
   g_task_set_priority (task, G_PRIORITY_HIGH_IDLE + 30);
 
   save_to_file = get_session_file (filename);
-  data = load_async_data_new (user_time);
-  g_task_set_task_data (task, data, (GDestroyNotify)load_async_data_free);
   g_file_read_async (save_to_file, g_task_get_priority (task), cancellable, session_read_cb, task);
   g_object_unref (save_to_file);
 }
@@ -1732,7 +1692,6 @@ session_resumed_cb (GObject      *object,
 
 void
 ephy_session_resume (EphySession         *session,
-                     guint32              user_time,
                      GCancellable        *cancellable,
                      GAsyncReadyCallback  callback,
                      gpointer             user_data)
@@ -1754,9 +1713,9 @@ ephy_session_resume (EphySession         *session,
    * file.
    */
   if (has_session_state == FALSE) {
-    session_maybe_open_window (session, user_time);
+    session_maybe_open_window (session);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
-    ephy_session_load (session, SESSION_STATE, user_time, cancellable,
+    ephy_session_load (session, SESSION_STATE, cancellable,
                        session_resumed_cb, task);
     return;
   }

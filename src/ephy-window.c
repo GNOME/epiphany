@@ -2018,8 +2018,7 @@ create_web_view_cb (WebKitWebView          *web_view,
                                    web_view,
                                    target_window,
                                    EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                                   flags,
-                                   0);
+                                   flags);
   if (target_window == window)
     gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -2209,8 +2208,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
                                          NULL, NULL,
                                          target_window,
                                          window->active_embed,
-                                         flags,
-                                         0);
+                                         flags);
 
     new_view = ephy_embed_get_web_view (new_embed);
     if (inherit_session) {

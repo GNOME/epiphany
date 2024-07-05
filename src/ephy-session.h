@@ -35,7 +35,6 @@ G_DECLARE_FINAL_TYPE (EphySession, ephy_session, EPHY, SESSION, GObject)
 void             ephy_session_save                    (EphySession *session);
 void             ephy_session_load                    (EphySession *session,
                                                        const char *filename,
-                                                       guint32 user_time,
                                                        GCancellable *cancellable,
                                                        GAsyncReadyCallback callback,
                                                        gpointer user_data);
@@ -44,7 +43,6 @@ gboolean         ephy_session_load_finish             (EphySession *session,
                                                        GError **error);
 void             ephy_session_load_from_stream        (EphySession *session,
                                                        GInputStream *stream,
-                                                       guint32 user_time,
                                                        GCancellable *cancellable,
                                                        GAsyncReadyCallback callback,
                                                        gpointer user_data);
@@ -52,7 +50,6 @@ gboolean         ephy_session_load_from_stream_finish (EphySession *session,
                                                        GAsyncResult *result,
                                                        GError **error);
 void             ephy_session_resume                  (EphySession *session,
-                                                       guint32 user_time,
                                                        GCancellable *cancellable,
                                                        GAsyncReadyCallback callback,
                                                        gpointer user_data);
