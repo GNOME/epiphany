@@ -12,7 +12,6 @@
         <property name="placeholder-text" translatable="yes">Search for websites, bookmarks, and open tabs</property>
         <property name="input-hints">no-emoji</property>
         <property name="max-width-chars">200</property>
-        <property name="xalign">0.5</property>
         <signal name="activate" handler="activate_cb" swapped="yes"/>
         <signal name="cut-clipboard" handler="cut_clipboard_cb" swapped="yes"/>
         <signal name="copy-clipboard" handler="copy_clipboard_cb" swapped="yes"/>
@@ -27,13 +26,6 @@
             <property name="exclusive">True</property>
             <property name="propagation-phase">capture</property>
             <signal name="pressed" handler="text_pressed_cb" swapped="yes"/>
-          </object>
-        </child>
-        <child>
-          <object class="GtkGestureDrag">
-            <!-- GDK_BUTTON_PRIMARY -->
-            <property name="button">1</property>
-            <signal name="drag-end" handler="text_drag_end_cb" swapped="yes"/>
           </object>
         </child>
         <child>
