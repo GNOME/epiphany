@@ -701,9 +701,6 @@ update_entry_style (EphyLocationEntry *self,
   color_normal->end_index = color_normal->start_index + strlen (base_domain);
   pango_attr_list_insert (attrs, color_normal);
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
-    goto out;
-
   /* Scheme is hidden */
   start_hidden = pango_attr_size_new (0);
   start_hidden->start_index = 0;
@@ -736,9 +733,8 @@ focus_enter_cb (EphyLocationEntry *entry)
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
-  /* Don't animate if the toplevel lost global input focus or "Always Show Full URL" is set */
-  if (!gtk_widget_is_focus (GTK_WIDGET (entry->text)) &&
-      !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
+  /* Don't animate if the toplevel lost global input focus */
+  if (!gtk_widget_is_focus (GTK_WIDGET (entry->text)))
     animate_focus (entry, FALSE);
 
   ephy_location_entry_reset (entry);
@@ -1603,9 +1599,6 @@ ephy_location_entry_init (EphyLocationEntry *entry)
                    entry->bookmark_button,
                    "visible",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
-    gtk_editable_set_alignment (GTK_EDITABLE (entry), 0.0);
 
   update_reader_icon (entry);
   g_signal_connect_object (gtk_settings_get_default (), "notify::gtk-icon-theme-name",

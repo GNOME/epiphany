@@ -92,7 +92,6 @@ struct _PrefsGeneralPage {
   /* Developer */
   AdwPreferencesGroup *dev_group;
   GtkWidget *show_developer_actions_row;
-  GtkWidget *always_show_full_url_row;
 
   GtkWindow *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
@@ -957,7 +956,6 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   /* Developer */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, dev_group);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, show_developer_actions_row);
-  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, always_show_full_url_row);
 
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_row_activated);
@@ -1156,12 +1154,6 @@ setup_general_page (PrefsGeneralPage *general_page)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_SHOW_DEVELOPER_ACTIONS,
                    general_page->show_developer_actions_row,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL,
-                   general_page->always_show_full_url_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
