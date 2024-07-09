@@ -1691,9 +1691,13 @@ download_failed_cb (WebKitDownload            *download,
                     EphyApplicationDialogData *data)
 {
   WebKitURIRequest *request = webkit_download_get_request (download);
-  g_warning ("Failed to download web app icon %s: %s", webkit_uri_request_get_uri (request), error->message);
+
+  /* favicon.ico is our last resort fallback. It's not expected to necessarily exist. */
+  if (!g_str_has_suffix (webkit_uri_request_get_uri (request), "favicon.ico"))
+    g_warning ("Failed to download web app icon %s: %s", webkit_uri_request_get_uri (request), error->message);
 
   g_signal_handlers_disconnect_by_func (download, download_finished_cb, data);
+
   /* Something happened, default to a page snapshot. */
   set_image_from_favicon (data);
 }
