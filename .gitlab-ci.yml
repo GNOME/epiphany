@@ -26,12 +26,12 @@ stages:
   - prepare
   - test
 
-# Use freedesktop-ci-templates for code style check and eslint.
+# Use freedesktop-ci-templates for code style check.
 # Everything else uses flatpak-ci-initiative
 
 .fedora.container.common:
   variables:
-    FDO_DISTRIBUTION_TAG: '2024-06-17.2'
+    FDO_DISTRIBUTION_TAG: '2024-07-09.1'
     FDO_DISTRIBUTION_VERSION: 'latest'
 
 build.container.fedora@x86_64:
@@ -43,6 +43,8 @@ build.container.fedora@x86_64:
     GIT_STRATEGY: none
     FDO_EXPIRES_AFTER: 8w
     FDO_DISTRIBUTION_PACKAGES: >-
+      colordiff
+      diffutils
       uncrustify
   rules:
     - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
