@@ -713,48 +713,44 @@ static void
 ephy_shell_add_platform_data (GApplication    *application,
                               GVariantBuilder *builder)
 {
-  EphyShell *app;
+  EphyShell *app = EPHY_SHELL (application);
   EphyShellStartupContext *ctx;
-  GVariantBuilder *ctx_builder;
+  GVariantBuilder ctx_builder;
 
-  app = EPHY_SHELL (application);
+  G_APPLICATION_CLASS (ephy_shell_parent_class)->add_platform_data (application, builder);
 
-  G_APPLICATION_CLASS (ephy_shell_parent_class)->add_platform_data (application,
-                                                                    builder);
+  if (!app->local_startup_context)
+    return;
 
-  if (app->local_startup_context) {
-    /*
-     * We create an array variant that contains only the elements in
-     * ctx that are non-NULL.
-     */
-    ctx_builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
-    ctx = app->local_startup_context;
+  /*
+   * We create an array variant that contains only the elements in
+   * ctx that are non-NULL.
+   */
+  g_variant_builder_init (&ctx_builder, G_VARIANT_TYPE_ARRAY);
+  ctx = app->local_startup_context;
 
-    if (ctx->startup_mode)
-      g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_STARTUP_MODE,
-                             g_variant_new_byte (ctx->startup_mode));
+  if (ctx->startup_mode)
+    g_variant_builder_add (&ctx_builder, "{iv}",
+                           CTX_STARTUP_MODE,
+                           g_variant_new_byte (ctx->startup_mode));
 
-    if (ctx->session_filename)
-      g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_SESSION_FILENAME,
-                             g_variant_new_string (ctx->session_filename));
+  if (ctx->session_filename)
+    g_variant_builder_add (&ctx_builder, "{iv}",
+                           CTX_SESSION_FILENAME,
+                           g_variant_new_string (ctx->session_filename));
 
-    /*
-     * If there are no URIs specified, pass an empty string, so that
-     * the primary instance opens a new window.
-     */
-    if (ctx->arguments)
-      g_variant_builder_add (ctx_builder, "{iv}",
-                             CTX_ARGUMENTS,
-                             g_variant_new_strv ((const char **)ctx->arguments, -1));
+  /*
+   * If there are no URIs specified, pass an empty string, so that
+   * the primary instance opens a new window.
+   */
+  if (ctx->arguments)
+    g_variant_builder_add (&ctx_builder, "{iv}",
+                           CTX_ARGUMENTS,
+                           g_variant_new_strv ((const char **)ctx->arguments, -1));
 
-    g_variant_builder_add (builder, "{sv}",
-                           "ephy-shell-startup-context",
-                           g_variant_builder_end (ctx_builder));
-
-    g_variant_builder_unref (ctx_builder);
-  }
+  g_variant_builder_add (builder, "{sv}",
+                         "ephy-shell-startup-context",
+                         g_variant_builder_end (&ctx_builder));
 }
 
 static void
