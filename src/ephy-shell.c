@@ -260,6 +260,18 @@ show_firefox_sync (GSimpleAction *action,
 }
 
 static void
+show_clear_data_view (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_show_clear_data_view (NULL, NULL, EPHY_WINDOW (window));
+}
+
+static void
 show_preferences (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
@@ -367,6 +379,7 @@ static GActionEntry app_entries[] = {
   { "import-passwords", import_passwords, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "firefox-sync-dialog", show_firefox_sync, NULL, NULL, NULL },
+  { "clear-data-view", show_clear_data_view, NULL, NULL, NULL},
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "shortcuts", show_shortcuts, NULL, NULL, NULL },
   { "help", show_help, NULL, NULL, NULL },
@@ -385,6 +398,7 @@ static GActionEntry non_incognito_extra_app_entries[] = {
 static GActionEntry app_mode_app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
+  { "clear-data-view", show_clear_data_view, NULL, NULL, NULL},
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
@@ -582,6 +596,7 @@ ephy_shell_startup (GApplication *application)
   /* Actions that are available in both app mode and browser mode */
   set_accel_for_action (shell, "app.new-window", "<Primary>n");
   set_accel_for_action (shell, "app.history", "<Primary>h");
+  set_accel_for_action (shell, "app.clear-data-view", "<Primary><Shift>Delete");
   set_accel_for_action (shell, "app.preferences", "<Primary>comma");
   set_accel_for_action (shell, "app.quit", "<Primary>q");
 }

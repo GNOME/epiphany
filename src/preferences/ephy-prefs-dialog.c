@@ -58,6 +58,18 @@ on_closed (EphyPrefsDialog *prefs_dialog)
   return GDK_EVENT_PROPAGATE;
 }
 
+void
+ephy_prefs_dialog_show_clear_data_view (EphyPrefsDialog *prefs_dialog)
+{
+  AdwNavigationPage *clear_data_view;
+
+  adw_preferences_dialog_set_visible_page_name (ADW_PREFERENCES_DIALOG (prefs_dialog),
+                                                "privacy-page");
+
+  clear_data_view = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
+  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), clear_data_view);
+}
+
 static void
 on_passwords_row_activated (GtkWidget       *privacy_page,
                             EphyPrefsDialog *prefs_dialog)
@@ -71,9 +83,7 @@ static void
 on_clear_data_row_activated (GtkWidget       *privacy_page,
                              EphyPrefsDialog *prefs_dialog)
 {
-  AdwNavigationPage *page = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
-
-  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), page);
+  ephy_prefs_dialog_show_clear_data_view (prefs_dialog);
 }
 
 static void

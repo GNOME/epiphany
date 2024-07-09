@@ -25,6 +25,7 @@
 
 #include "window-commands.h"
 
+#include "clear-data-view.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-manager.h"
@@ -46,6 +47,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-password-import.h"
 #include "ephy-pixbuf-utils.h"
+#include "ephy-prefs-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
@@ -904,6 +906,20 @@ window_cmd_show_firefox_sync (GSimpleAction *action,
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                   GTK_WINDOW (user_data));
   gtk_window_present (GTK_WINDOW (dialog));
+}
+
+void
+window_cmd_show_clear_data_view (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
+{
+  EphyPrefsDialog *dialog;
+
+  dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+
+  adw_dialog_present (ADW_DIALOG (dialog), user_data);
+
+  ephy_prefs_dialog_show_clear_data_view (dialog);
 }
 
 void

@@ -29,4 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, EPHY, PREFS_DIALOG, AdwPreferencesDialog)
 
+void ephy_prefs_dialog_show_clear_data_view (EphyPrefsDialog *prefs_dialog);
+
 G_END_DECLS
