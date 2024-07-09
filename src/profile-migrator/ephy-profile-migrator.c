@@ -1806,12 +1806,18 @@ ephy_migrator (void)
 }
 
 static const GOptionEntry option_entries[] = {
-  { "do-step", 'd', 0, G_OPTION_ARG_INT, &do_step_n,
-    N_("Executes only the n-th migration step"), NULL },
-  { "version", 'v', 0, G_OPTION_ARG_INT, &migration_version,
-    N_("Specifies the required version for the migrator"), NULL },
-  { "profile-dir", 'p', 0, G_OPTION_ARG_FILENAME, &profile_dir,
-    N_("Specifies the profile where the migrator should run"), NULL },
+  {
+    "do-step", 'd', 0, G_OPTION_ARG_INT, &do_step_n,
+    N_("Executes only the n-th migration step"), NULL
+  },
+  {
+    "version", 'v', 0, G_OPTION_ARG_INT, &migration_version,
+    N_("Specifies the required version for the migrator"), NULL
+  },
+  {
+    "profile-dir", 'p', 0, G_OPTION_ARG_FILENAME, &profile_dir,
+    N_("Specifies the profile where the migrator should run"), NULL
+  },
   { NULL }
 };
 

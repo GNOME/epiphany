@@ -490,65 +490,93 @@ webkit_pref_callback_hardware_acceleration_policy (GSettings  *settings,
 
 static const PrefData webkit_pref_entries[] = {
   /* Epiphany font settings */
-  { EPHY_PREFS_WEB_SCHEMA,
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_SERIF_FONT,
     "default-font-size",
-    webkit_pref_callback_font_size },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_font_size
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_MONOSPACE_FONT,
     "default-monospace-font-size",
-    webkit_pref_callback_font_size },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_font_size
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_SERIF_FONT,
     "default-font-family",
-    webkit_pref_callback_font_family },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_font_family
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_SANS_SERIF_FONT,
     "sans-serif-font-family",
-    webkit_pref_callback_font_family },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_font_family
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_MONOSPACE_FONT,
     "monospace-font-family",
-    webkit_pref_callback_font_family },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_font_family
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_SERIF_FONT,
     "serif-font-family",
-    webkit_pref_callback_font_family },
+    webkit_pref_callback_font_family
+  },
 
-  { EPHY_PREFS_WEB_SCHEMA,
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_USE_GNOME_FONTS,
     NULL,
-    webkit_pref_callback_gnome_fonts },
+    webkit_pref_callback_gnome_fonts
+  },
 
-  { EPHY_PREFS_WEB_SCHEMA,
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
     NULL,
-    webkit_pref_callback_enable_spell_checking },
+    webkit_pref_callback_enable_spell_checking
+  },
 
-  { EPHY_PREFS_WEB_SCHEMA,
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_ENABLE_USER_CSS,
     "user-stylesheet-uri",
-    webkit_pref_callback_user_stylesheet },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_user_stylesheet
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_ENABLE_USER_JS,
     "user-javascript-uri",
-    webkit_pref_callback_user_javascript },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_user_javascript
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_LANGUAGE,
     "accept-language",
-    webkit_pref_callback_accept_languages },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_accept_languages
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_USER_AGENT,
     "user-agent",
-    webkit_pref_callback_user_agent },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_user_agent
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
     NULL,
-    webkit_pref_callback_enable_website_data_storage },
-  { EPHY_PREFS_WEB_SCHEMA,
+    webkit_pref_callback_enable_website_data_storage
+  },
+  {
+    EPHY_PREFS_WEB_SCHEMA,
     EPHY_PREFS_WEB_HARDWARE_ACCELERATION_POLICY,
     "hardware-acceleration-policy",
-    webkit_pref_callback_hardware_acceleration_policy },
+    webkit_pref_callback_hardware_acceleration_policy
+  },
 };
 
 static gpointer

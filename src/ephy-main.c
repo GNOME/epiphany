@@ -108,27 +108,47 @@ option_version_cb (const gchar  *option_name,
 
 /* If you're modifying this array then you need to update the manpage. */
 static const GOptionEntry option_entries[] = {
-  { "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
-    N_("Open a new browser window instead of a new tab"), NULL },
-  { "load-session", 'l', 0, G_OPTION_ARG_FILENAME, &session_filename,
-    N_("Load the given session state file"), N_("FILE") },
-  { "incognito-mode", 'i', 0, G_OPTION_ARG_NONE, &incognito_mode,
-    N_("Start an instance with user data read-only"), NULL },
-  { "private-instance", 'p', 0, G_OPTION_ARG_NONE, &private_instance,
-    N_("Start a private instance with separate user data"), NULL },
-  { "application-mode", 'a', G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_OPTIONAL_ARG,
+  {
+    "new-window", 0, 0, G_OPTION_ARG_NONE, &open_in_new_window,
+    N_("Open a new browser window instead of a new tab"), NULL
+  },
+  {
+    "load-session", 'l', 0, G_OPTION_ARG_FILENAME, &session_filename,
+    N_("Load the given session state file"), N_("FILE")
+  },
+  {
+    "incognito-mode", 'i', 0, G_OPTION_ARG_NONE, &incognito_mode,
+    N_("Start an instance with user data read-only"), NULL
+  },
+  {
+    "private-instance", 'p', 0, G_OPTION_ARG_NONE, &private_instance,
+    N_("Start a private instance with separate user data"), NULL
+  },
+  {
+    "application-mode", 'a', G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_OPTIONAL_ARG,
     G_OPTION_ARG_CALLBACK, application_mode_cb,
-    N_("Start a private instance in web application mode"), NULL },
-  { "automation-mode", 0, 0, G_OPTION_ARG_NONE, &automation_mode,
-    N_("Start a private instance for WebDriver control"), NULL },
-  { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
-    N_("Custom profile directory for private instance"), N_("DIR") },
-  { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
-    "", N_("URL …") },
-  { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
-    G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
-  { "delete-application", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,
-    &application_to_delete, NULL, NULL },
+    N_("Start a private instance in web application mode"), NULL
+  },
+  {
+    "automation-mode", 0, 0, G_OPTION_ARG_NONE, &automation_mode,
+    N_("Start a private instance for WebDriver control"), NULL
+  },
+  {
+    "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
+    N_("Custom profile directory for private instance"), N_("DIR")
+  },
+  {
+    G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
+    "", N_("URL …")
+  },
+  {
+    "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
+    G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL
+  },
+  {
+    "delete-application", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,
+    &application_to_delete, NULL, NULL
+  },
   { "search", 0, 0, G_OPTION_ARG_STRING, &search_term, NULL, NULL},
   { NULL }
 };

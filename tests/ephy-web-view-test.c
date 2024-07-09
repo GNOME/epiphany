@@ -101,34 +101,52 @@ static const URLTest test_load_url[] = {
 
   /* Require internet */
 
-  { "127.0.0.1:12321",
-    "http://127.0.0.1:12321/" },
-  { "127.0.0.1:12321/path",
-    "http://127.0.0.1:12321/path" },
+  {
+    "127.0.0.1:12321",
+    "http://127.0.0.1:12321/"
+  },
+  {
+    "127.0.0.1:12321/path",
+    "http://127.0.0.1:12321/path"
+  },
 
   /* port is SERVER_PORT */
-  { "localhost:12321",
-    "http://localhost:12321/" },
+  {
+    "localhost:12321",
+    "http://localhost:12321/"
+  },
 
 #if 0
   /* FAIL */
-  { "gnome.org:80",
-    "http://www.gnome.org/" },
+  {
+    "gnome.org:80",
+    "http://www.gnome.org/"
+  },
 #endif
 
   /* Queries */
-  { "localhost:12321/?key=value",
-    "http://localhost:12321/?key=value" },
-  { "localhost:12321/?key=value:sub-value",
-    "http://localhost:12321/?key=value:sub-value" },
-  { "localhost:12321/?key=value&key2=value2",
-    "http://localhost:12321/?key=value&key2=value2" },
-  { "localhost:12321/?key=value&key2=",
-    "http://localhost:12321/?key=value&key2=" },
+  {
+    "localhost:12321/?key=value",
+    "http://localhost:12321/?key=value"
+  },
+  {
+    "localhost:12321/?key=value:sub-value",
+    "http://localhost:12321/?key=value:sub-value"
+  },
+  {
+    "localhost:12321/?key=value&key2=value2",
+    "http://localhost:12321/?key=value&key2=value2"
+  },
+  {
+    "localhost:12321/?key=value&key2=",
+    "http://localhost:12321/?key=value&key2="
+  },
 
   /* Other HTTP status */
-  { "localhost:12321/redirect",
-    "http://localhost:12321/redirect-result" },
+  {
+    "localhost:12321/redirect",
+    "http://localhost:12321/redirect-result"
+  },
 
   /* { "about:epiphany", "ephy-about:epiphany" }, */
   /* { "about:applications", "ephy-about:applications" }, */

@@ -81,7 +81,7 @@ convert_alpha (guchar *dest_data,
   src_data += src_stride * src_y + src_x * 4;
 
   for (int y = 0; y < height; y++) {
-    guint32 *src = (guint32 *) src_data;
+    guint32 *src = (guint32 *)src_data;
 
     for (int x = 0; x < width; x++) {
       guint alpha = src[x] >> 24;
@@ -92,8 +92,8 @@ convert_alpha (guchar *dest_data,
         dest_data[x * 4 + 2] = 0;
       } else {
         dest_data[x * 4 + 0] = (((src[x] & 0xff0000) >> 16) * 255 + alpha / 2) / alpha;
-        dest_data[x * 4 + 1] = (((src[x] & 0x00ff00) >>  8) * 255 + alpha / 2) / alpha;
-        dest_data[x * 4 + 2] = (((src[x] & 0x0000ff) >>  0) * 255 + alpha / 2) / alpha;
+        dest_data[x * 4 + 1] = (((src[x] & 0x00ff00) >> 8) * 255 + alpha / 2) / alpha;
+        dest_data[x * 4 + 2] = (((src[x] & 0x0000ff) >> 0) * 255 + alpha / 2) / alpha;
       }
       dest_data[x * 4 + 3] = alpha;
     }
@@ -116,11 +116,11 @@ convert_no_alpha (guchar *dest_data,
   src_data += src_stride * src_y + src_x * 4;
 
   for (int y = 0; y < height; y++) {
-    guint32 *src = (guint32 *) src_data;
+    guint32 *src = (guint32 *)src_data;
 
     for (int x = 0; x < width; x++) {
       dest_data[x * 3 + 0] = src[x] >> 16;
-      dest_data[x * 3 + 1] = src[x] >>  8;
+      dest_data[x * 3 + 1] = src[x] >> 8;
       dest_data[x * 3 + 2] = src[x];
     }
 
@@ -193,7 +193,7 @@ ephy_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
   bytes = g_bytes_new_with_free_func (gdk_pixbuf_get_pixels (pixbuf),
-                                      gdk_pixbuf_get_height (pixbuf) * (gsize) gdk_pixbuf_get_rowstride (pixbuf),
+                                      gdk_pixbuf_get_height (pixbuf) * (gsize)gdk_pixbuf_get_rowstride (pixbuf),
                                       g_object_unref,
                                       g_object_ref (pixbuf));
   return gdk_memory_texture_new (gdk_pixbuf_get_width (pixbuf),
