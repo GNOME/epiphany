@@ -726,9 +726,12 @@ ephy_shell_add_platform_data (GApplication    *application,
    * We create an array variant that contains only the elements in
    * ctx that are non-NULL.
    */
-  g_variant_builder_init (&ctx_builder, G_VARIANT_TYPE_ARRAY);
-  ctx = app->local_startup_context;
 
+  ctx = app->local_startup_context;
+  if (ctx->startup_mode == 0 && !ctx->session_filename && !ctx->arguments)
+    return;
+
+  g_variant_builder_init (&ctx_builder, G_VARIANT_TYPE_ARRAY);
   if (ctx->startup_mode)
     g_variant_builder_add (&ctx_builder, "{iv}",
                            CTX_STARTUP_MODE,
