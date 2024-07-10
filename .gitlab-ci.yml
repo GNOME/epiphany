@@ -125,6 +125,8 @@ canary:
     # TODO: Switch to debug? 5GB downloads though.
     - python3 generate-canary-manifest.py --release
     - flatpak remote-add --user --if-not-exists webkit-sdk ${SDK_REPO}
+    - export SCCACHE_NO_DAEMON=1
+    - export SCCACHE_START_SERVER=0
     - flatpak-builder --user --install-deps-from=webkit-sdk --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
     - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${SDK_REPO} org.gnome.Epiphany.Canary
     - tar cf canary-repo.tar repo/
