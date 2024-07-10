@@ -152,7 +152,6 @@ canary:
 
 canary nightly:
   extends: '.publish_nightly'
-  allow_failure: true
   stage: .post
   dependencies: ['canary']
   before_script:
