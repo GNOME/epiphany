@@ -3629,7 +3629,6 @@ ephy_web_view_ucm_add_custom_scripts (WebKitUserContentManager *ucm)
   webkit_user_content_manager_add_script (ucm, script);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 ephy_web_view_constructed (GObject *object)
 {
@@ -3637,8 +3636,7 @@ ephy_web_view_constructed (GObject *object)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (web_view));
   g_auto (GStrv) cors_allowlist = NULL;
-  GtkStyleContext *context;
-  GdkRGBA color;
+  GdkRGBA color = { }; /* transparent */
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
 
@@ -3654,20 +3652,22 @@ ephy_web_view_constructed (GObject *object)
   g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
                             "changed", G_CALLBACK (update_navigation_flags), web_view);
 
-  /* Avoid flashing a white background when loading the overview in
-   * dark mode. Note that we have to later reset this to white before
-   * loading any non-Epiphany page.
+  /* Avoid flashing a white background when loading the overview in dark mode by
+   * setting the web view background color to transparent. This is useful even
+   * in light mode because our about.css hardcodes the page background color to
+   * match what libadwaita uses, so it avoids flashing a slightly different
+   * background color. Assuming we keep the colors in about.css updated to match
+   * libadwaita, that is.
+   *
+   * Note that we have to later reset this before loading any non-Epiphany page.
    */
-  context = gtk_widget_get_style_context (GTK_WIDGET (web_view));
-  if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
-    webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
+  webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
 
   cors_allowlist = g_new (char *, 2);
   cors_allowlist[0] = g_strdup ("ephy-resource://*/*");
   cors_allowlist[1] = NULL;
   webkit_web_view_set_cors_allowlist (WEBKIT_WEB_VIEW (web_view), (const char * const *)cors_allowlist);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_web_view_init (EphyWebView *web_view)
