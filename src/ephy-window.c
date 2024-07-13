@@ -794,6 +794,9 @@ enable_edit_actions_sensitivity (EphyWindow *window)
   GActionGroup *action_group;
   GAction *action;
 
+  if (window->closing)
+    return;
+
   action_group = ephy_window_get_action_group (window, "win");
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "cut");
@@ -1795,9 +1798,9 @@ populate_context_menu (WebKitWebView       *web_view,
     }
   }
 
-  g_signal_connect (web_view, "context-menu-dismissed",
-                    G_CALLBACK (context_menu_dismissed_cb),
-                    window);
+  g_signal_connect_object (web_view, "context-menu-dismissed",
+                           G_CALLBACK (context_menu_dismissed_cb),
+                           window, 0);
 
   g_free (search_selection_action_name);
 
