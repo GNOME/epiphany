@@ -111,7 +111,6 @@ update_ui_state (EphyHistoryDialog *self)
 
   if (self->is_loading) {
     gtk_stack_set_visible_child (history_presentation_stack, self->loading_spinner);
-    gtk_spinner_start (GTK_SPINNER (self->loading_spinner));
   } else {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->search_button))) {
       if (has_data && self->has_search_results)
@@ -124,7 +123,6 @@ update_ui_state (EphyHistoryDialog *self)
       else
         gtk_stack_set_visible_child (history_presentation_stack, self->empty_history_message);
     }
-    gtk_spinner_stop (GTK_SPINNER (self->loading_spinner));
   }
 
   if (self->selection_active) {
