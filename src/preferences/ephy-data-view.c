@@ -86,7 +86,6 @@ update (EphyDataView *self)
 
   if (priv->is_loading) {
     gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "loading");
-    gtk_spinner_start (GTK_SPINNER (priv->spinner));
   } else {
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->search_button))) {
       if (has_data && priv->has_search_results)
@@ -99,7 +98,6 @@ update (EphyDataView *self)
       else
         gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "empty");
     }
-    gtk_spinner_stop (GTK_SPINNER (priv->spinner));
   }
 
   gtk_widget_set_sensitive (priv->clear_button, has_data && priv->can_clear);
