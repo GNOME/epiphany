@@ -2,10 +2,9 @@
 <interface>
   <template class="EphyAutoFillView" parent="AdwNavigationPage">
     <property name="title" translatable="yes">Autofill Data</property>
-    <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
           <object class="AdwHeaderBar">
             <child type="end">
               <object class="GtkButton">
@@ -20,7 +19,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <property name="content">
           <object class="AdwPreferencesPage">
             <child>
               <object class="AdwPreferencesGroup">
@@ -118,8 +117,8 @@
                </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </template>
 </interface>
