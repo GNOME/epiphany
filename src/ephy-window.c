@@ -4437,6 +4437,7 @@ force_close_window_cb (EphyWindow *window)
   window->force_close = TRUE;
   ephy_window_close (window);
   window->force_close = FALSE;
+  g_object_unref (window);
 }
 
 static void
@@ -4446,7 +4447,7 @@ finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data
    * AdwAlertDialog that's displaying the close confirmation warning gets
    * destroyed first.
    */
-  g_idle_add_once ((GSourceOnceFunc)force_close_window_cb, data->window);
+  g_idle_add_once ((GSourceOnceFunc)force_close_window_cb, g_object_ref (data->window));
   window_has_modified_forms_data_free (data);
 }
 
