@@ -101,6 +101,7 @@ window_cmd_new_incognito_window (GSimpleAction *action,
 #define IMPORT_FROM_FIREFOX_ID "firefox"
 #define IMPORT_FROM_CHROME_ID "chrome"
 #define IMPORT_FROM_CHROMIUM_ID "chromium"
+#define IMPORT_FROM_CSV_ID "csv"
 
 typedef enum {
   IMPORT_TYPE_CHOOSE,
@@ -377,10 +378,14 @@ dialog_bookmarks_import_file_dialog_cb (GtkFileDialog *dialog,
   g_autofree char *filename = NULL;
   gboolean imported;
 
-  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  file = gtk_file_dialog_open_finish (dialog, result, &error);
 
-  if (!file)
+  if (error) {
+    if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+      g_warning ("Failed to open file: %s", error->message);
     return;
+  }
+
 
   filename = g_file_get_path (file);
   imported = ephy_bookmarks_import (manager, filename, &error);
@@ -424,10 +429,13 @@ dialog_bookmarks_import_from_html_file_dialog_cb (GtkFileDialog *dialog,
   g_autofree char *filename = NULL;
   gboolean imported;
 
-  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  file = gtk_file_dialog_open_finish (dialog, result, &error);
 
-  if (!file)
+  if (error) {
+    if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+      g_warning ("Failed to open file: %s", error->message);
     return;
+  }
 
   filename = g_file_get_path (file);
   imported = ephy_bookmarks_import_from_html (manager, filename, &error);
@@ -715,6 +723,7 @@ chromium_passwords_exists (void)
 }
 
 static struct import_option import_passwords_options[] = {
+  { N_("CSV File"), IMPORT_TYPE_CHOOSE, IMPORT_FROM_CSV_ID, NULL },
   { N_("Chrome"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROME_ID, chrome_passwords_exists },
   { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_passwords_exists }
 };
@@ -762,6 +771,56 @@ dialog_password_import_cb (GObject      *source_object,
                              _("Passwords successfully imported!"));
 }
 
+static void
+dialog_password_import_file_dialog_cb (GtkFileDialog *dialog,
+                                       GAsyncResult  *result,
+                                       GtkWindow     *parent)
+{
+  EphyPasswordManager *manager;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) file = NULL;
+  g_autofree char *filename = NULL;
+  gboolean imported;
+
+  manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+  file = gtk_file_dialog_open_finish (dialog, result, &error);
+
+  if (error) {
+    if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+      g_warning ("Failed to open file: %s", error->message);
+    return;
+  }
+
+  filename = g_file_get_path (file);
+  imported = ephy_password_import_from_csv (manager, filename, &error);
+  show_import_export_result (parent, FALSE, imported, error,
+                             _("Passwords successfully imported!"));
+}
+
+static void
+dialog_password_import_from_csv (GtkWindow *parent)
+{
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
+
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Choose File"));
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.csv");
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+
+  gtk_file_dialog_open (dialog,
+                        parent,
+                        NULL,
+                        (GAsyncReadyCallback)dialog_password_import_file_dialog_cb,
+                        parent);
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 dialog_passwords_import_cb (GtkWidget   *button,
@@ -770,17 +829,23 @@ dialog_passwords_import_cb (GtkWidget   *button,
   EphyPasswordManager *manager;
   const char *active;
   GtkWidget *dialog;
+  GtkWindow *window;
 
   manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   active = gtk_combo_box_get_active_id (combo_box);
   dialog = GTK_WIDGET (gtk_widget_get_root (button));
+  window = gtk_window_get_transient_for (GTK_WINDOW (gtk_widget_get_root (button)));
 
   if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
     ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, dialog);
   else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
     ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, dialog);
+  else if (strcmp (active, IMPORT_FROM_CSV_ID) == 0)
+    dialog_password_import_from_csv (window);
   else
     g_assert_not_reached ();
+
+  gtk_window_close (GTK_WINDOW (dialog));
 }
 
 static void
@@ -836,7 +901,7 @@ window_cmd_import_passwords (GSimpleAction *action,
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "window.close");
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
-  button = gtk_button_new_with_mnemonic (_("I_mport"));
+  button = gtk_button_new_with_mnemonic (_("Ch_oose File"));
   gtk_widget_add_css_class (button, "suggested-action");
   gtk_window_set_default_widget (GTK_WINDOW (dialog), button);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
@@ -1378,13 +1443,17 @@ open_dialog_cb (GtkFileDialog *dialog,
                 EphyWindow    *window)
 {
   g_autoptr (GFile) file = NULL;
+  g_autoptr (GError) error = NULL;
   g_autofree char *uri = NULL;
   g_autofree char *converted = NULL;
 
-  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  file = gtk_file_dialog_open_finish (dialog, result, &error);
 
-  if (!file)
+  if (error) {
+    if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+      g_warning ("Failed to open file: %s", error->message);
     return;
+  }
 
   uri = g_file_get_uri (file);
   if (uri != NULL) {

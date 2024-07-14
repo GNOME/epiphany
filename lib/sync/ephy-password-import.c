@@ -281,3 +281,156 @@ ephy_password_import_from_chrome_finish (GObject       *object,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+char **
+parse_csv_row (char *row_string)
+{
+  g_autoptr (GString) token = NULL;
+  GPtrArray *fields = NULL;
+  gboolean quotes_opened = FALSE;
+  gboolean quotes_closed = FALSE;
+
+  fields = g_ptr_array_new ();
+  token = g_string_new ("");
+
+  for (guint j = 0; row_string[j] != '\0'; j++) {
+    if (row_string[j] == ',' && (!quotes_opened || (quotes_opened && quotes_closed))) {
+      g_ptr_array_add (fields, g_strdup (token->str));
+      g_string_truncate (token, 0);
+      quotes_opened = FALSE;
+      quotes_closed = FALSE;
+    } else {
+      if (row_string[j] == '\"') {
+        if (!quotes_opened) {
+          quotes_opened = TRUE;
+          quotes_closed = FALSE;
+        } else {
+          quotes_closed = !quotes_closed;
+        }
+      } else {
+        g_string_append_c (token, row_string[j]);
+      }
+    }
+  }
+
+  g_ptr_array_add (fields, g_strdup (token->str));
+  g_ptr_array_add (fields, NULL);
+
+  return (char **)g_ptr_array_free (fields, FALSE);
+}
+
+char ***
+parse_csv (char *csv)
+{
+  g_auto (GStrv) rows = NULL;
+  GPtrArray *parsed_rows = NULL;
+
+  parsed_rows = g_ptr_array_new ();
+  rows = g_strsplit (csv, "\n", -1);
+
+  for (guint i = 0; rows[i]; i++) {
+    char **parsed_row = NULL;
+
+    if (g_strcmp0 (rows[i], "") == 0)
+      continue;
+
+    parsed_row = parse_csv_row (rows[i]);
+    g_ptr_array_add (parsed_rows, parsed_row);
+  }
+
+  g_ptr_array_add (parsed_rows, NULL);
+
+  return (char ***)g_ptr_array_free (parsed_rows, FALSE);
+}
+
+gboolean
+ephy_password_import_from_csv (EphyPasswordManager  *manager,
+                               const char           *filename,
+                               GError              **error)
+{
+  g_autofree char *file_string = NULL;
+  char ***rows = NULL;
+  char **header_row = NULL;
+
+  g_file_get_contents (filename, &file_string, NULL, error);
+
+  if (!file_string) {
+    g_prefix_error (error, _("Error in reading CSV file"));
+    return FALSE;
+  }
+
+  rows = parse_csv (file_string);
+  header_row = rows[0];
+
+  for (guint i = 0; rows[i]; i++) {
+    char **row = NULL;
+
+    const char *url = NULL;
+    g_autofree char *secure_origin = NULL;
+    const char *secure_target_origin = NULL;
+    const char *username = NULL;
+    const char *decrypted_password = NULL;
+
+    g_autoptr (GUri) uri = NULL;
+    const gchar *scheme = NULL;
+    const gchar *host = NULL;
+    gint port;
+    gboolean exists;
+
+    row = rows[i];
+
+    if (i == 0)
+      continue;
+
+    for (guint j = 0; row[j]; j++) {
+      const char *field_value;
+      const char *field_name;
+
+      field_value = row[j];
+      field_name = header_row[j];
+
+      if (g_strcmp0 (field_name, "url") == 0) {
+        url = field_value;
+        secure_target_origin = field_value;
+      } else if (g_strcmp0 (field_name, "username") == 0) {
+        username = field_value;
+      } else if (g_strcmp0 (field_name, "password") == 0) {
+        decrypted_password = field_value;
+      }
+    }
+
+    uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
+
+    scheme = g_uri_get_scheme (uri);
+    host = g_uri_get_host (uri);
+    port = g_uri_get_port (uri);
+
+    if (port > 0)
+      secure_origin = g_strdup_printf ("%s://%s:%d", scheme, host, port);
+    else
+      secure_origin = g_strdup_printf ("%s://%s", scheme, host);
+
+    exists = ephy_password_manager_find (manager,
+                                         secure_origin,
+                                         secure_target_origin,
+                                         username,
+                                         NULL,
+                                         NULL);
+
+    ephy_password_manager_save (manager,
+                                secure_origin,
+                                secure_target_origin,
+                                username,
+                                decrypted_password,
+                                NULL,
+                                NULL,
+                                !exists);
+  }
+
+  for (guint k = 0; rows[k]; k++)
+    g_strfreev (rows[k]);
+
+  g_free (rows);
+
+  return TRUE;
+}

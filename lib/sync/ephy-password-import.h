@@ -26,8 +26,10 @@
 
 typedef enum {
   CHROME,
-  CHROMIUM
+  CHROMIUM,
+  CSV
 } ChromeType;
 
 void ephy_password_import_from_chrome_async (EphyPasswordManager *manager, ChromeType type, GAsyncReadyCallback callback, gpointer user_data);
 gboolean ephy_password_import_from_chrome_finish (GObject *source_object, GAsyncResult *result, GError **error);
+gboolean ephy_password_import_from_csv (EphyPasswordManager *manager, const char *filename, GError **error);
