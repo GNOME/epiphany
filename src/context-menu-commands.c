@@ -34,6 +34,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <libportal-gtk4/portal-gtk4.h>
 #include <string.h>
 #include <webkit/webkit.h>
 
@@ -311,19 +312,60 @@ context_cmd_save_media_as (GSimpleAction *action,
 }
 
 static void
+on_wallpaper_deleted (GObject      *source,
+                      GAsyncResult *res,
+                      gpointer      data)
+{
+  GFile *file = G_FILE (source);
+  g_autoptr (GError) error = NULL;
+  gboolean ret = g_file_delete_finish (file, res, &error);
+
+  if (!ret) {
+    g_warning ("Failed to delete downloaded wallpaper file: %s", error->message);
+  }
+}
+
+static void
+wallpaper_changed_cb (GObject      *source_object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  XdpPortal *portal = XDP_PORTAL (source_object);
+  g_autoptr (GError) error = NULL;
+  g_autofree char *uri = user_data;
+  g_autoptr (GFile) wallpaper_file = g_file_new_for_uri (uri);
+
+  if (!xdp_portal_set_wallpaper_finish (portal, result, &error)) {
+    g_warning ("Failed to set wallpaper: %s", error->message);
+    g_clear_error (&error);
+  }
+
+  g_file_delete_async (wallpaper_file, G_PRIORITY_DEFAULT, NULL, on_wallpaper_deleted, NULL);
+}
+
+static void
 background_download_completed (EphyDownload *download,
                                GtkWidget    *window)
 {
+  XdpPortal *portal = ephy_get_portal ();
+  g_autoptr (XdpParent) parent_window = xdp_parent_new_gtk (GTK_WINDOW (window));
   const char *path;
   g_autofree char *uri = NULL;
   g_autoptr (GError) error = NULL;
 
   path = ephy_download_get_destination (download);
   uri = g_filename_to_uri (path, NULL, &error);
-  if (!uri)
-    g_warning ("Failed to set desktop background: could not convert path %s to URI: %s", path, error->message);
-  else
-    g_settings_set_string (ephy_settings_get ("org.gnome.desktop.background"), "picture-uri", uri);
+  if (!uri) {
+    g_warning ("Could not convert filename `%s` to uri: %s", path, error->message);
+    return;
+  }
+  xdp_portal_set_wallpaper (portal,
+                            parent_window,
+                            uri,
+                            XDP_WALLPAPER_FLAG_BACKGROUND | XDP_WALLPAPER_FLAG_PREVIEW,
+                            NULL,
+                            wallpaper_changed_cb,
+                            g_strdup (uri));
 }
 
 void
@@ -338,20 +380,16 @@ context_cmd_set_image_as_background (GSimpleAction *action,
   g_autofree char *base_converted = NULL;
   g_autoptr (EphyDownload) download = NULL;
 
-  /* FIXME: Use wallpaper portal */
-  if (ephy_is_running_inside_sandbox ())
-    return;
-
   hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
   g_assert (hit_test_result != NULL);
 
   location = webkit_hit_test_result_get_image_uri (hit_test_result);
 
-  download = ephy_download_new_for_uri (location);
+  download = ephy_download_new_for_uri_internal (location);
 
   base = g_path_get_basename (location);
   base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
-  dest = g_build_filename (g_get_user_special_dir (G_USER_DIRECTORY_PICTURES), base_converted, NULL);
+  dest = g_build_filename (g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD), base_converted, NULL);
 
   ephy_download_set_destination (download, dest);
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),

@@ -39,7 +39,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-filters-manager.h"
 #include "ephy-find-toolbar.h"
-#include "ephy-flatpak-utils.h"
 #include "ephy-fullscreen-box.h"
 #include "ephy-header-bar.h"
 #include "ephy-lib-type-builtins.h"
@@ -1759,10 +1758,8 @@ populate_context_menu (WebKitWebView       *web_view,
     if (!app_mode)
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "view-image", window);
-
-    if (!ephy_is_running_inside_sandbox ())
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "set-image-as-background", window);
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "set-image-as-background", window);
   }
 
   if (is_media) {
