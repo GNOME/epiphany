@@ -19,6 +19,13 @@
         "--system-talk-name=org.freedesktop.GeoClue2",
         "--own-name=org.gnome.Epiphany.WebAppProvider"
     ],
+    "build-options" : {
+        "env" : {
+            "SCCACHE_LOG" : "1",
+            "SCCACHE_NO_DAEMON" : "1",
+            "SCCACHE_START_SERVER" : "0"
+        }
+    },
     "modules" : [
         {
             "name": "glib",
