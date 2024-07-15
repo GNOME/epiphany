@@ -1,6 +1,6 @@
 /*!
-  Highlight.js v11.9.0 (git: f47103d4f1)
-  (c) 2006-2023 undefined and other contributors
+  Highlight.js v11.10.0 (git: 366a8bd012)
+  (c) 2006-2024 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
 var hljs = (function () {
@@ -1558,7 +1558,7 @@ var hljs = (function () {
     return mode;
   }
 
-  var version = "11.9.0";
+  var version = "11.10.0";
 
   class HTMLInjectionError extends Error {
     constructor(reason, html) {
@@ -2600,9 +2600,6 @@ var hljs = (function () {
   // check https://github.com/wooorm/lowlight/issues/47
   highlight.newInstance = () => HLJS({});
 
-  // export an "instance" of the highlighter
-  var HighlightJS = highlight;
-
   const MODES = (hljs) => {
     return {
       IMPORTANT: {
@@ -2648,7 +2645,7 @@ var hljs = (function () {
     };
   };
 
-  const TAGS = [
+  const HTML_TAGS = [
     'a',
     'abbr',
     'address',
@@ -2700,11 +2697,16 @@ var hljs = (function () {
     'nav',
     'object',
     'ol',
+    'optgroup',
+    'option',
     'p',
+    'picture',
     'q',
     'quote',
     'samp',
     'section',
+    'select',
+    'source',
     'span',
     'strong',
     'summary',
@@ -2722,6 +2724,58 @@ var hljs = (function () {
     'var',
     'video'
   ];
+
+  const SVG_TAGS = [
+    'defs',
+    'g',
+    'marker',
+    'mask',
+    'pattern',
+    'svg',
+    'switch',
+    'symbol',
+    'feBlend',
+    'feColorMatrix',
+    'feComponentTransfer',
+    'feComposite',
+    'feConvolveMatrix',
+    'feDiffuseLighting',
+    'feDisplacementMap',
+    'feFlood',
+    'feGaussianBlur',
+    'feImage',
+    'feMerge',
+    'feMorphology',
+    'feOffset',
+    'feSpecularLighting',
+    'feTile',
+    'feTurbulence',
+    'linearGradient',
+    'radialGradient',
+    'stop',
+    'circle',
+    'ellipse',
+    'image',
+    'line',
+    'path',
+    'polygon',
+    'polyline',
+    'rect',
+    'text',
+    'use',
+    'textPath',
+    'tspan',
+    'foreignObject',
+    'clipPath'
+  ];
+
+  const TAGS = [
+    ...HTML_TAGS,
+    ...SVG_TAGS,
+  ];
+
+  // Sorting, then reversing makes sure longer attributes/elements like
+  // `font-weight` are matched fully instead of getting false positives on say `font`
 
   const MEDIA_FEATURES = [
     'any-hover',
@@ -2758,7 +2812,7 @@ var hljs = (function () {
     'max-width',
     'min-height',
     'max-height'
-  ];
+  ].sort().reverse();
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes
   const PSEUDO_CLASSES = [
@@ -2821,7 +2875,7 @@ var hljs = (function () {
     'valid',
     'visited',
     'where' // where()
-  ];
+  ].sort().reverse();
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements
   const PSEUDO_ELEMENTS = [
@@ -2839,12 +2893,14 @@ var hljs = (function () {
     'selection',
     'slotted',
     'spelling-error'
-  ];
+  ].sort().reverse();
 
   const ATTRIBUTES = [
+    'accent-color',
     'align-content',
     'align-items',
     'align-self',
+    'alignment-baseline',
     'all',
     'animation',
     'animation-delay',
@@ -2855,6 +2911,7 @@ var hljs = (function () {
     'animation-name',
     'animation-play-state',
     'animation-timing-function',
+    'appearance',
     'backface-visibility',
     'background',
     'background-attachment',
@@ -2866,6 +2923,7 @@ var hljs = (function () {
     'background-position',
     'background-repeat',
     'background-size',
+    'baseline-shift',
     'block-size',
     'border',
     'border-block',
@@ -2912,10 +2970,14 @@ var hljs = (function () {
     'border-left-width',
     'border-radius',
     'border-right',
+    'border-end-end-radius',
+    'border-end-start-radius',
     'border-right-color',
     'border-right-style',
     'border-right-width',
     'border-spacing',
+    'border-start-end-radius',
+    'border-start-start-radius',
     'border-style',
     'border-top',
     'border-top-color',
@@ -2931,6 +2993,8 @@ var hljs = (function () {
     'break-after',
     'break-before',
     'break-inside',
+    'cx',
+    'cy',
     'caption-side',
     'caret-color',
     'clear',
@@ -2938,6 +3002,11 @@ var hljs = (function () {
     'clip-path',
     'clip-rule',
     'color',
+    'color-interpolation',
+    'color-interpolation-filters',
+    'color-profile',
+    'color-rendering',
+    'color-scheme',
     'column-count',
     'column-fill',
     'column-gap',
@@ -2959,7 +3028,12 @@ var hljs = (function () {
     'cursor',
     'direction',
     'display',
+    'dominant-baseline',
     'empty-cells',
+    'enable-background',
+    'fill',
+    'fill-opacity',
+    'fill-rule',
     'filter',
     'flex',
     'flex-basis',
@@ -2970,6 +3044,8 @@ var hljs = (function () {
     'flex-wrap',
     'float',
     'flow',
+    'flood-color',
+    'flood-opacity',
     'font',
     'font-display',
     'font-family',
@@ -2991,6 +3067,7 @@ var hljs = (function () {
     'font-variation-settings',
     'font-weight',
     'gap',
+    'glyph-orientation-horizontal',
     'glyph-orientation-vertical',
     'grid',
     'grid-area',
@@ -3017,16 +3094,32 @@ var hljs = (function () {
     'image-resolution',
     'ime-mode',
     'inline-size',
+    'inset',
+    'inset-block',
+    'inset-block-end',
+    'inset-block-start',
+    'inset-inline',
+    'inset-inline-end',
+    'inset-inline-start',
     'isolation',
+    'kerning',
     'justify-content',
+    'justify-items',
+    'justify-self',
     'left',
     'letter-spacing',
+    'lighting-color',
     'line-break',
     'line-height',
     'list-style',
     'list-style-image',
     'list-style-position',
     'list-style-type',
+    'marker',
+    'marker-end',
+    'marker-mid',
+    'marker-start',
+    'mask',
     'margin',
     'margin-block',
     'margin-block-end',
@@ -3108,12 +3201,15 @@ var hljs = (function () {
     'pointer-events',
     'position',
     'quotes',
+    'r',
     'resize',
     'rest',
     'rest-after',
     'rest-before',
     'right',
+    'rotate',
     'row-gap',
+    'scale',
     'scroll-margin',
     'scroll-margin-block',
     'scroll-margin-block-end',
@@ -3145,11 +3241,23 @@ var hljs = (function () {
     'shape-image-threshold',
     'shape-margin',
     'shape-outside',
+    'shape-rendering',
+    'stop-color',
+    'stop-opacity',
+    'stroke',
+    'stroke-dasharray',
+    'stroke-dashoffset',
+    'stroke-linecap',
+    'stroke-linejoin',
+    'stroke-miterlimit',
+    'stroke-opacity',
+    'stroke-width',
     'speak',
     'speak-as',
     'src', // @font-face
     'tab-size',
     'table-layout',
+    'text-anchor',
     'text-align',
     'text-align-all',
     'text-align-last',
@@ -3157,7 +3265,9 @@ var hljs = (function () {
     'text-decoration',
     'text-decoration-color',
     'text-decoration-line',
+    'text-decoration-skip-ink',
     'text-decoration-style',
+    'text-decoration-thickness',
     'text-emphasis',
     'text-emphasis-color',
     'text-emphasis-position',
@@ -3169,6 +3279,7 @@ var hljs = (function () {
     'text-rendering',
     'text-shadow',
     'text-transform',
+    'text-underline-offset',
     'text-underline-position',
     'top',
     'transform',
@@ -3180,7 +3291,9 @@ var hljs = (function () {
     'transition-duration',
     'transition-property',
     'transition-timing-function',
+    'translate',
     'unicode-bidi',
+    'vector-effect',
     'vertical-align',
     'visibility',
     'voice-balance',
@@ -3199,10 +3312,10 @@ var hljs = (function () {
     'word-spacing',
     'word-wrap',
     'writing-mode',
+    'x',
+    'y',
     'z-index'
-    // reverse makes sure longer attributes `font-weight` are matched fully
-    // instead of getting false positives on say `font`
-  ].reverse();
+  ].sort().reverse();
 
   /*
   Language: CSS
@@ -3632,7 +3745,7 @@ var hljs = (function () {
       contains: [] // defined later
     };
     const HTML_TEMPLATE = {
-      begin: 'html`',
+      begin: '\.?html`',
       end: '',
       starts: {
         end: '`',
@@ -3645,7 +3758,7 @@ var hljs = (function () {
       }
     };
     const CSS_TEMPLATE = {
-      begin: 'css`',
+      begin: '\.?css`',
       end: '',
       starts: {
         end: '`',
@@ -3658,7 +3771,7 @@ var hljs = (function () {
       }
     };
     const GRAPHQL_TEMPLATE = {
-      begin: 'gql`',
+      begin: '\.?gql`',
       end: '',
       starts: {
         end: '`',
@@ -3755,7 +3868,7 @@ var hljs = (function () {
     const PARAMS_CONTAINS = SUBST_AND_COMMENTS.concat([
       // eat recursive parens in sub expressions
       {
-        begin: /\(/,
+        begin: /(\s*)\(/,
         end: /\)/,
         keywords: KEYWORDS$1,
         contains: ["self"].concat(SUBST_AND_COMMENTS)
@@ -3763,7 +3876,8 @@ var hljs = (function () {
     ]);
     const PARAMS = {
       className: 'params',
-      begin: /\(/,
+      // convert this to negative lookbehind in v12
+      begin: /(\s*)\(/, // to match the parms with 
       end: /\)/,
       excludeBegin: true,
       excludeEnd: true,
@@ -3886,8 +4000,8 @@ var hljs = (function () {
           ...BUILT_IN_GLOBALS,
           "super",
           "import"
-        ]),
-        IDENT_RE$1, regex.lookahead(/\(/)),
+        ].map(x => `${x}\\s*\\(`)),
+        IDENT_RE$1, regex.lookahead(/\s*\(/)),
       className: "title.function",
       relevance: 0
     };
@@ -4008,7 +4122,7 @@ var hljs = (function () {
                       skip: true
                     },
                     {
-                      begin: /\(/,
+                      begin: /(\s*)\(/,
                       end: /\)/,
                       excludeBegin: true,
                       excludeEnd: true,
@@ -4352,7 +4466,7 @@ var hljs = (function () {
     grmr_xml: xml
   });
 
-  const hljs = HighlightJS;
+  const hljs = highlight;
 
   for (const key of Object.keys(builtIns)) {
     // our builtInLanguages Rollup plugin has to use `_` to allow identifiers to be
