@@ -556,7 +556,7 @@ rules_match_uri (GStrv  rules,
 void
 menu_activate_browser_action (gpointer user_data)
 {
-  EphyWebExtension *web_extension = user_data;
+  g_autoptr (EphyWebExtension) web_extension = user_data;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
   ephy_web_extension_manager_show_browser_action (manager, web_extension);
@@ -565,7 +565,7 @@ menu_activate_browser_action (gpointer user_data)
 void
 menu_activate_page_button (gpointer user_data)
 {
-  EphyWebExtension *web_extension = user_data;
+  g_autoptr (EphyWebExtension) web_extension = user_data;
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   EphyShell *shell = ephy_shell_get_default ();
   EphyWebView *view = EPHY_WEB_VIEW (ephy_shell_get_active_web_view (shell));
@@ -583,9 +583,9 @@ menu_activate_command_action (GAction  *action,
   Command command = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (action), "command"));
 
   if (command == COMMAND_BROWSER_ACTION) {
-    g_idle_add_once (menu_activate_browser_action, web_extension);
+    g_idle_add_once (menu_activate_browser_action, g_object_ref (web_extension));
   } else if (command == COMMAND_PAGE_ACTION) {
-    g_idle_add_once (menu_activate_page_button, web_extension);
+    g_idle_add_once (menu_activate_page_button, g_object_ref (web_extension));
   }
 }
 
