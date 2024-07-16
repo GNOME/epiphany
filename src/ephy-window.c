@@ -2616,7 +2616,7 @@ present_on_idle_cb (GtkWindow *window)
 static gboolean
 delayed_remove_child (gpointer data)
 {
-  GtkWidget *widget = GTK_WIDGET (data);
+  g_autoptr (GtkWidget) widget = GTK_WIDGET (data);
   EphyEmbedContainer *container = EPHY_EMBED_CONTAINER (gtk_widget_get_root (widget));
 
   ephy_embed_container_remove_child (container, EPHY_EMBED (widget));
@@ -2633,7 +2633,7 @@ download_only_load_cb (EphyWebView *view,
     return;
   }
 
-  g_idle_add (delayed_remove_child, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view));
+  g_idle_add (delayed_remove_child, g_object_ref (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view)));
 }
 
 static void
