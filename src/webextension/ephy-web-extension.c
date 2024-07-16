@@ -297,6 +297,9 @@ ephy_web_extension_get_icon (EphyWebExtension *self,
   }
 
   /* Fallback */
+  if (!icon_fallback && self->browser_action && self->browser_action->default_icons)
+    icon_fallback = self->browser_action->default_icons->data;
+
   if (icon_fallback && icon_fallback->pixbuf)
     return gdk_pixbuf_scale_simple (icon_fallback->pixbuf, size, size, GDK_INTERP_BILINEAR);
 
