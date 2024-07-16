@@ -68,6 +68,7 @@ typedef struct {
   EphyReaderHandler *reader_handler;
   char *guid;
   EphyFiltersManager *filters_manager;
+  GVariant *web_extension_initialization_data;
   EphySearchEngineManager *search_engine_manager;
   GCancellable *cancellable;
 } EphyEmbedShellPrivate;
@@ -201,6 +202,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_pointer (&priv->guid, g_free);
   g_clear_object (&priv->filters_manager);
   g_clear_object (&priv->search_engine_manager);
+  g_clear_pointer (&priv->web_extension_initialization_data, g_variant_unref);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -686,13 +688,12 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
 #endif
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
-  user_data = g_variant_new ("(smsbbbs)",
+  user_data = g_variant_new ("(smsbbv)",
                              priv->guid,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
                              g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS),
                              private_profile,
-                             FALSE /* is_webextension */,
-                             "" /* webextension_translations */);
+                             priv->web_extension_initialization_data);
   webkit_web_context_set_web_process_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
@@ -936,6 +937,8 @@ ephy_embed_shell_constructed (GObject *object)
 
   priv->permissions_manager = ephy_permissions_manager_new ();
   priv->filters_manager = ephy_filters_manager_new (NULL);
+
+  priv->web_extension_initialization_data = g_variant_new ("a{sv}", NULL);
 }
 
 static void
@@ -1373,4 +1376,14 @@ ephy_embed_shell_unregister_ucm (EphyEmbedShell           *shell,
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordManagerSave",
                                                                  priv->guid);
+}
+
+void
+ephy_embed_shell_set_web_extension_initialization_data (EphyEmbedShell *shell,
+                                                        GVariant       *data)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  g_clear_pointer (&priv->web_extension_initialization_data, g_variant_unref);
+  priv->web_extension_initialization_data = g_variant_ref_sink (data);
 }

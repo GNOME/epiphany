@@ -55,6 +55,8 @@
 static void handle_message_reply (EphyWebExtension *web_extension,
                                   JsonArray        *args);
 
+static char *get_translation_contents (EphyWebExtension *web_extension);
+
 struct _EphyWebExtensionManager {
   GObject parent_instance;
 
@@ -115,11 +117,48 @@ create_user_agent_overrides (void)
   return overrides;
 }
 
+static GVariant *
+create_extension_data_variant (EphyWebExtension *extension)
+{
+  g_auto (GVariantDict) dict = G_VARIANT_DICT_INIT (NULL);
+  g_autofree char *translations = get_translation_contents (extension);
+
+  g_variant_dict_insert (&dict, "manifest", "s", ephy_web_extension_get_manifest (extension));
+  g_variant_dict_insert (&dict, "translations", "s", translations);
+  g_variant_dict_insert (&dict, "has-background-page", "b", ephy_web_extension_has_background_web_view (extension));
+
+  return g_variant_dict_end (&dict);
+}
+
+static GVariant *
+ephy_web_extension_manager_get_extension_initialization_data (EphyWebExtensionManager *self)
+{
+  g_auto (GVariantDict) dict = G_VARIANT_DICT_INIT (NULL);
+
+  for (guint i = 0; i < self->web_extensions->len; i++) {
+    EphyWebExtension *extension = g_ptr_array_index (self->web_extensions, i);
+
+    g_variant_dict_insert_value (&dict,
+                                 ephy_web_extension_get_guid (extension),
+                                 create_extension_data_variant (extension));
+  }
+
+  return g_variant_dict_end (&dict);
+}
+
+static void
+ephy_web_extension_manager_update_extension_initialization_data (EphyWebExtensionManager *self)
+{
+  EphyEmbedShell *embed = ephy_embed_shell_get_default ();
+  ephy_embed_shell_set_web_extension_initialization_data (embed, ephy_web_extension_manager_get_extension_initialization_data (self));
+}
+
 static void
 ephy_web_extension_manager_add_to_list (EphyWebExtensionManager *self,
                                         EphyWebExtension        *web_extension)
 {
   g_ptr_array_add (self->web_extensions, g_object_ref (web_extension));
+  ephy_web_extension_manager_update_extension_initialization_data (self);
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
@@ -128,6 +167,7 @@ ephy_web_extension_manager_remove_from_list (EphyWebExtensionManager *self,
                                              EphyWebExtension        *web_extension)
 {
   g_ptr_array_remove (self->web_extensions, web_extension);
+  ephy_web_extension_manager_update_extension_initialization_data (self);
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
@@ -137,7 +177,7 @@ ephy_web_extension_manager_get_extension_by_guid (EphyWebExtensionManager *self,
 {
   for (guint i = 0; i < self->web_extensions->len; i++) {
     EphyWebExtension *web_extension = g_ptr_array_index (self->web_extensions, i);
-    if (strcmp (guid, ephy_web_extension_get_guid (web_extension)) == 0)
+    if (g_strcmp0 (guid, ephy_web_extension_get_guid (web_extension)) == 0)
       return web_extension;
   }
 
@@ -218,11 +258,15 @@ ephy_webextension_scheme_cb (WebKitURISchemeRequest *request,
                              gpointer                user_data)
 {
   EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
-  EphyWebExtension *web_extension = user_data;
+  WebKitWebView *initiating_view;
+  EphyWebExtension *web_extension;
   EphyWebExtension *target_web_extension;
   g_autoptr (GInputStream) stream = NULL;
   g_autoptr (GUri) uri = NULL;
+  const char *initiating_uri_string;
+  g_autoptr (GUri) initiating_uri = NULL;
   g_autoptr (GError) error = NULL;
+  const char *initating_host;
   const unsigned char *data;
   gsize length;
 
@@ -240,6 +284,26 @@ ephy_webextension_scheme_cb (WebKitURISchemeRequest *request,
     webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));
     return;
   }
+
+  /* Figure out the source of this request. */
+  initiating_view = webkit_uri_scheme_request_get_web_view (request);
+  if (EPHY_IS_WEB_VIEW (initiating_view))
+    initiating_uri_string = ephy_web_view_get_address (EPHY_WEB_VIEW (initiating_view));
+  else
+    initiating_uri_string = webkit_web_view_get_uri (initiating_view);
+  if (!initiating_uri_string) {
+    webkit_uri_scheme_request_finish_error (request, g_error_new (WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_HOST, _("Failed to determine initiating URI")));
+    return;
+  }
+
+  initiating_uri = g_uri_parse (initiating_uri_string, G_URI_FLAGS_NON_DNS, &error);
+  if (!initiating_uri) {
+    webkit_uri_scheme_request_finish_error (request, g_steal_pointer (&error));
+    return;
+  }
+
+  initating_host = g_uri_get_host (initiating_uri);
+  web_extension = ephy_web_extension_manager_get_extension_by_guid (self, initating_host);
 
   /* If this is not originating from the same WebExtension view we must find it and filter it by web_accessible_resources. */
   if (web_extension != target_web_extension) {
@@ -856,17 +920,7 @@ get_translation_contents (EphyWebExtension *web_extension)
   g_autofree char *path = g_strdup_printf ("_locales/%s/messages.json", "en");
   g_autofree char *data = ephy_web_extension_get_resource_as_string (web_extension, path);
 
-  return data ? g_steal_pointer (&data) : g_strdup ("");
-}
-
-static void
-update_translations (EphyWebExtension *web_extension)
-{
-  g_autofree char *data = get_translation_contents (web_extension);
-
-  webkit_web_context_send_message_to_all_extensions (ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ()),
-                                                     webkit_user_message_new ("WebExtension.UpdateTranslations",
-                                                                              g_variant_new ("(ss)", ephy_web_extension_get_guid (web_extension), data)));
+  return data ? g_steal_pointer (&data) : g_strdup ("{}");
 }
 
 static void
@@ -877,7 +931,6 @@ send_to_page_ready_cb (WebKitWebView    *web_view,
   g_autoptr (WebKitUserMessage) response = webkit_web_view_send_message_to_page_finish (web_view, result, NULL);
   (void)response;
 
-  update_translations (web_extension);
   add_content_scripts (web_extension, EPHY_WEB_VIEW (web_view));
 }
 
@@ -922,7 +975,8 @@ ephy_web_extension_manager_add_web_extension_to_webview (EphyWebExtensionManager
                     web_extension);
 
   webkit_web_view_send_message_to_page (WEBKIT_WEB_VIEW (web_view),
-                                        webkit_user_message_new ("WebExtension.Initialize", g_variant_new_string (ephy_web_extension_get_guid (web_extension))),
+                                        webkit_user_message_new ("WebExtension.Initialize",
+                                                                 g_variant_new ("(sv)", ephy_web_extension_get_guid (web_extension), create_extension_data_variant (web_extension))),
                                         NULL, (GAsyncReadyCallback)send_to_page_ready_cb, web_extension);
 }
 
@@ -947,6 +1001,7 @@ init_web_extension_api (WebKitWebContext *web_context,
                         EphyWebExtension *web_extension)
 {
   g_autoptr (GVariant) user_data = NULL;
+  EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
   g_autofree char *translations = get_translation_contents (web_extension);
 
 #if DEVELOPER_MODE
@@ -955,13 +1010,12 @@ init_web_extension_api (WebKitWebContext *web_context,
   webkit_web_context_set_web_process_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
 #endif
 
-  user_data = g_variant_new ("(smsbbbs)",
+  user_data = g_variant_new ("(smsbbv)",
                              ephy_web_extension_get_guid (web_extension),
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
                              FALSE /* should_remember_passwords */,
                              FALSE /* private_profile */,
-                             TRUE /* is_webextension */,
-                             translations);
+                             ephy_web_extension_manager_get_extension_initialization_data (manager));
   webkit_web_context_set_web_process_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
 
@@ -1037,7 +1091,7 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
   background_view = ephy_web_extension_manager_get_background_web_view (manager, web_extension);
   if (!background_view) {
     web_context = webkit_web_context_new ();
-    webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, web_extension, NULL);
+    webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, NULL, NULL);
     webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                            "ephy-webextension");
     g_signal_connect_object (web_context, "initialize-web-process-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
