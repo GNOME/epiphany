@@ -50,9 +50,9 @@ add_details_domain (gpointer data,
 }
 
 static void
-on_website_listbox_selected (GtkListBox    *box,
-                             GtkListBoxRow *row,
-                             gpointer       user_data)
+on_website_listbox_activated (GtkListBox    *box,
+                              GtkListBoxRow *row,
+                              gpointer       user_data)
 {
   EphyPrivacyReport *self = EPHY_PRIVACY_REPORT (user_data);
   AdwActionRow *action_row = ADW_ACTION_ROW (row);
@@ -70,9 +70,9 @@ on_website_listbox_selected (GtkListBox    *box,
 }
 
 static void
-on_tracker_listbox_selected (GtkListBox    *box,
-                             GtkListBoxRow *row,
-                             gpointer       user_data)
+on_tracker_listbox_activated (GtkListBox    *box,
+                              GtkListBoxRow *row,
+                              gpointer       user_data)
 {
   EphyPrivacyReport *self = EPHY_PRIVACY_REPORT (user_data);
   AdwActionRow *action_row = ADW_ACTION_ROW (row);
@@ -118,8 +118,8 @@ ephy_privacy_report_class_init (EphyPrivacyReportClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_prefs_page);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_website_listbox_selected);
-  gtk_widget_class_bind_template_callback (widget_class, on_tracker_listbox_selected);
+  gtk_widget_class_bind_template_callback (widget_class, on_website_listbox_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_tracker_listbox_activated);
 }
 
 static void
@@ -147,6 +147,7 @@ add_domain_row (gpointer key,
 
   row = adw_action_row_new ();
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), key);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   count = gtk_label_new (text);
   gtk_widget_add_css_class (count, "dim-label");
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), count);

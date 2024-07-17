@@ -42,7 +42,7 @@
                                 <property name="use-underline">True</property>
                                 <property name="child">
                                   <object class="GtkListBox" id="website_listbox">
-                                    <signal name="row-selected" handler="on_website_listbox_selected"/>
+                                    <signal name="row-activated" handler="on_website_listbox_activated"/>
                                     <style>
                                       <class name="content"/>
                                     </style>
@@ -57,7 +57,7 @@
                                 <property name="use-underline">True</property>
                                 <property name="child">
                                   <object class="GtkListBox" id="tracker_listbox">
-                                    <signal name="row-selected" handler="on_tracker_listbox_selected"/>
+                                    <signal name="row-activated" handler="on_tracker_listbox_activated"/>
                                     <style>
                                       <class name="content"/>
                                     </style>
