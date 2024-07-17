@@ -9,7 +9,7 @@
           <object class="AdwNavigationPage">
             <property name="title" translatable="yes">Overview</property>
             <property name="tag">overview</property>
-            <child>
+            <property name="child">
               <object class="AdwToolbarView">
                 <child type="top">
                   <object class="AdwHeaderBar">
@@ -23,7 +23,7 @@
                     <style>
                       <class name="compact"/>
                     </style>
-                    <child>
+                    <property name="child">
                       <object class="GtkBox">
                         <property name="orientation">vertical</property>
                         <property name="spacing">24</property>
@@ -78,11 +78,11 @@
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
