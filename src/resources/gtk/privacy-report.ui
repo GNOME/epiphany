@@ -41,12 +41,16 @@
                                 <property name="title" translatable="yes">_Websites</property>
                                 <property name="use-underline">True</property>
                                 <property name="child">
-                                  <object class="GtkListBox" id="website_listbox">
-                                    <property name="selection-mode">none</property>
-                                    <signal name="row-activated" handler="on_website_listbox_activated"/>
-                                    <style>
-                                      <class name="boxed-list"/>
-                                    </style>
+                                  <object class="AdwPreferencesGroup">
+                                    <child>
+                                      <object class="GtkListBox" id="website_listbox">
+                                        <property name="selection-mode">none</property>
+                                        <signal name="row-activated" handler="on_website_listbox_activated"/>
+                                        <style>
+                                          <class name="boxed-list"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                               </object>
@@ -57,12 +61,16 @@
                                 <property name="title" translatable="yes">_Trackers</property>
                                 <property name="use-underline">True</property>
                                 <property name="child">
-                                  <object class="GtkListBox" id="tracker_listbox">
-                                    <property name="selection-mode">none</property>
-                                    <signal name="row-activated" handler="on_tracker_listbox_activated"/>
-                                    <style>
-                                      <class name="boxed-list"/>
-                                    </style>
+                                  <object class="AdwPreferencesGroup">
+                                    <child>
+                                      <object class="GtkListBox" id="tracker_listbox">
+                                        <property name="selection-mode">none</property>
+                                        <signal name="row-activated" handler="on_tracker_listbox_activated"/>
+                                        <style>
+                                          <class name="boxed-list"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                               </object>
