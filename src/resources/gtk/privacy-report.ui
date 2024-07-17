@@ -42,9 +42,10 @@
                                 <property name="use-underline">True</property>
                                 <property name="child">
                                   <object class="GtkListBox" id="website_listbox">
+                                    <property name="selection-mode">none</property>
                                     <signal name="row-activated" handler="on_website_listbox_activated"/>
                                     <style>
-                                      <class name="content"/>
+                                      <class name="boxed-list"/>
                                     </style>
                                   </object>
                                 </property>
@@ -57,9 +58,10 @@
                                 <property name="use-underline">True</property>
                                 <property name="child">
                                   <object class="GtkListBox" id="tracker_listbox">
+                                    <property name="selection-mode">none</property>
                                     <signal name="row-activated" handler="on_tracker_listbox_activated"/>
                                     <style>
-                                      <class name="content"/>
+                                      <class name="boxed-list"/>
                                     </style>
                                   </object>
                                 </property>
@@ -93,7 +95,7 @@
                           <object class="GtkListBox" id="details_listbox">
                             <property name="selection-mode">none</property>
                             <style>
-                              <class name="content"/>
+                              <class name="boxed-list"/>
                             </style>
                           </object>
                         </child>
