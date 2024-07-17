@@ -28,7 +28,7 @@ struct _EphyPrivacyReport {
   GtkWidget *website_listbox;
   GtkWidget *tracker_listbox;
   GtkWidget *details_page;
-  GtkWidget *details_label;
+  GtkWidget *details_prefs_page;
   GtkWidget *details_listbox;
 
   GHashTable *website_table;
@@ -59,7 +59,7 @@ on_website_listbox_selected (GtkListBox    *box,
   const char *name = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (action_row));
   GPtrArray *domains = g_hash_table_lookup (self->website_table, name);
 
-  gtk_label_set_text (GTK_LABEL (self->details_label), _("Blocked trackers on this site"));
+  adw_preferences_page_set_description (ADW_PREFERENCES_PAGE (self->details_prefs_page), _("Blocked trackers on this site"));
 
   adw_navigation_page_set_title (ADW_NAVIGATION_PAGE (self->details_page), name);
 
@@ -79,7 +79,7 @@ on_tracker_listbox_selected (GtkListBox    *box,
   const char *name = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (action_row));
   GPtrArray *domains = g_hash_table_lookup (self->tracker_table, name);
 
-  gtk_label_set_text (GTK_LABEL (self->details_label), _("Sites this tracker was found on"));
+  adw_preferences_page_set_description (ADW_PREFERENCES_PAGE (self->details_prefs_page), _("Sites this tracker was found on"));
   adw_navigation_page_set_title (ADW_NAVIGATION_PAGE (self->details_page), name);
 
   gtk_list_box_remove_all (GTK_LIST_BOX (self->details_listbox));
@@ -116,7 +116,7 @@ ephy_privacy_report_class_init (EphyPrivacyReportClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, navigation_view);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_listbox);
-  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_label);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_prefs_page);
 
   gtk_widget_class_bind_template_callback (widget_class, on_website_listbox_selected);
   gtk_widget_class_bind_template_callback (widget_class, on_tracker_listbox_selected);
