@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "ephy-bookmarks-popover.h"
+#include "ephy-bookmarks-dialog.h"
 
 #include "ephy-bookmark.h"
 #include "ephy-bookmark-row.h"
@@ -30,10 +30,11 @@
 #include "ephy-shell.h"
 #include "ephy-window.h"
 
+#include <adwaita.h>
 #include <glib/gi18n.h>
 
-struct _EphyBookmarksPopover {
-  GtkPopover parent_instance;
+struct _EphyBookmarksDialog {
+  AdwBin parent_instance;
 
   GtkWidget *toplevel_stack;
   GtkWidget *bookmarks_list_box;
@@ -45,7 +46,7 @@ struct _EphyBookmarksPopover {
   EphyBookmarksManager *manager;
 };
 
-G_DEFINE_FINAL_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
+G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
 
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
@@ -54,11 +55,11 @@ static GtkWidget * create_bookmark_row (gpointer item, gpointer user_data);
 static GtkWidget *create_tag_row (const char *tag);
 
 static void
-tag_detail_back (EphyBookmarksPopover *self)
+tag_detail_back (EphyBookmarksDialog *self)
 {
   GtkListBoxRow *row;
 
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
                                     "default");
@@ -88,10 +89,10 @@ remove_bookmark_row (GtkListBox *list_box,
 }
 
 static void
-ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
-                                              EphyBookmark         *bookmark,
-                                              const char           *tag,
-                                              EphyBookmarksManager *manager)
+ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
+                                             EphyBookmark         *bookmark,
+                                             const char           *tag,
+                                             EphyBookmarksManager *manager)
 {
   gboolean exists;
   const char *visible_stack_child;
@@ -99,7 +100,7 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
   int i = 0;
 
   g_assert (EPHY_IS_BOOKMARK (bookmark));
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
 
   /* If the bookmark no longer has 0 tags, we remove it from the tags list box */
   if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1)
@@ -138,16 +139,16 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
-                                                EphyBookmark         *bookmark,
-                                                const char           *tag,
-                                                EphyBookmarksManager *manager)
+ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
+                                               EphyBookmark         *bookmark,
+                                               const char           *tag,
+                                               EphyBookmarksManager *manager)
 {
   const char *visible_stack_child;
   gboolean exists;
 
   g_assert (EPHY_IS_BOOKMARK (bookmark));
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
 
   /* If the bookmark has 0 tags after removing one, we add it to the tags list
    * box */
@@ -228,7 +229,7 @@ create_tag_row (const char *tag)
   GtkWidget *image;
   GtkWidget *label;
 
-  row = gtk_list_box_row_new ();
+  row = adw_action_row_new ();
   g_object_set_data_full (G_OBJECT (row), "type",
                           g_strdup (EPHY_LIST_BOX_ROW_TYPE_TAG),
                           (GDestroyNotify)g_free);
@@ -259,13 +260,13 @@ create_tag_row (const char *tag)
 }
 
 static void
-ephy_bookmarks_popover_bookmark_added_cb (EphyBookmarksPopover *self,
-                                          EphyBookmark         *bookmark,
-                                          EphyBookmarksManager *manager)
+ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
+                                         EphyBookmark         *bookmark,
+                                         EphyBookmarksManager *manager)
 {
   GtkWidget *row;
 
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
@@ -279,11 +280,11 @@ ephy_bookmarks_popover_bookmark_added_cb (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
-                                            EphyBookmark         *bookmark,
-                                            EphyBookmarksManager *manager)
+ephy_bookmarks_dialog_bookmark_removed_cb (EphyBookmarksDialog  *self,
+                                           EphyBookmark         *bookmark,
+                                           EphyBookmarksManager *manager)
 {
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
@@ -302,13 +303,13 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_tag_created_cb (EphyBookmarksPopover *self,
-                                       const char           *tag,
-                                       EphyBookmarksManager *manager)
+ephy_bookmarks_dialog_tag_created_cb (EphyBookmarksDialog  *self,
+                                      const char           *tag,
+                                      EphyBookmarksManager *manager)
 {
   GtkWidget *tag_row;
 
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
   g_assert (tag != NULL);
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
@@ -317,14 +318,14 @@ ephy_bookmarks_popover_tag_created_cb (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
-                                       const char           *tag,
-                                       EphyBookmarksManager *manager)
+ephy_bookmarks_dialog_tag_deleted_cb (EphyBookmarksDialog  *self,
+                                      const char           *tag,
+                                      EphyBookmarksManager *manager)
 {
   GtkListBoxRow *row;
   int i = 0;
 
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+  g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), i++))) {
@@ -377,8 +378,8 @@ tags_list_box_sort_func (GtkListBoxRow *row1,
 }
 
 static void
-ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
-                                        const char           *tag)
+ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
+                                       const char          *tag)
 {
   GSequence *bookmarks;
   GSequenceIter *iter;
@@ -406,11 +407,11 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
 }
 
 static void
-row_clicked_cb (GtkGesture           *gesture,
-                int                   n_click,
-                double                x,
-                double                y,
-                EphyBookmarksPopover *self)
+row_clicked_cb (GtkGesture          *gesture,
+                int                  n_click,
+                double               x,
+                double               y,
+                EphyBookmarksDialog *self)
 {
   GtkWidget *list;
   GtkListBoxRow *row;
@@ -443,46 +444,43 @@ row_clicked_cb (GtkGesture           *gesture,
     flags = ephy_link_flags_from_modifiers (modifiers, button == GDK_BUTTON_MIDDLE);
 
     ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (row), flags);
-
-    if (button != GDK_BUTTON_MIDDLE)
-      gtk_popover_popdown (GTK_POPOVER (self));
   } else {
     const char *tag = g_object_get_data (G_OBJECT (row), "title");
-    ephy_bookmarks_popover_show_tag_detail (self, tag);
+    ephy_bookmarks_dialog_show_tag_detail (self, tag);
   }
 }
 
 static void
-ephy_bookmarks_popover_finalize (GObject *object)
+ephy_bookmarks_dialog_finalize (GObject *object)
 {
-  EphyBookmarksPopover *self = EPHY_BOOKMARKS_POPOVER (object);
+  EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (object);
 
   g_free (self->tag_detail_tag);
 
-  G_OBJECT_CLASS (ephy_bookmarks_popover_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_bookmarks_dialog_parent_class)->finalize (object);
 }
 
 static void
-ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
+ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = ephy_bookmarks_popover_finalize;
+  object_class->finalize = ephy_bookmarks_dialog_finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-popover.ui");
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, toplevel_stack);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, bookmarks_list_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tags_list_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tag_detail_list_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tag_detail_label);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-dialog.ui");
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, toplevel_stack);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, bookmarks_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tags_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_label);
 
-  gtk_widget_class_install_action (widget_class, "popover.tag-detail-back", NULL,
+  gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
 }
 
 static void
-ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
+ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
 {
   GSequence *tags;
   GSequenceIter *iter;
@@ -533,22 +531,22 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   }
 
   g_signal_connect_object (self->manager, "bookmark-added",
-                           G_CALLBACK (ephy_bookmarks_popover_bookmark_added_cb),
+                           G_CALLBACK (ephy_bookmarks_dialog_bookmark_added_cb),
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->manager, "bookmark-removed",
-                           G_CALLBACK (ephy_bookmarks_popover_bookmark_removed_cb),
+                           G_CALLBACK (ephy_bookmarks_dialog_bookmark_removed_cb),
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->manager, "tag-created",
-                           G_CALLBACK (ephy_bookmarks_popover_tag_created_cb),
+                           G_CALLBACK (ephy_bookmarks_dialog_tag_created_cb),
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->manager, "tag-deleted",
-                           G_CALLBACK (ephy_bookmarks_popover_tag_deleted_cb),
+                           G_CALLBACK (ephy_bookmarks_dialog_tag_deleted_cb),
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->manager, "bookmark-tag-added",
-                           G_CALLBACK (ephy_bookmarks_popover_bookmark_tag_added_cb),
+                           G_CALLBACK (ephy_bookmarks_dialog_bookmark_tag_added_cb),
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->manager, "bookmark-tag-removed",
-                           G_CALLBACK (ephy_bookmarks_popover_bookmark_tag_removed_cb),
+                           G_CALLBACK (ephy_bookmarks_dialog_bookmark_tag_removed_cb),
                            self, G_CONNECT_SWAPPED);
 
   gesture = gtk_gesture_click_new ();
@@ -567,9 +565,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   gtk_widget_add_controller (self->tag_detail_list_box, GTK_EVENT_CONTROLLER (gesture));
 }
 
-EphyBookmarksPopover *
-ephy_bookmarks_popover_new (void)
+GtkWidget *
+ephy_bookmarks_dialog_new (void)
 {
-  return g_object_new (EPHY_TYPE_BOOKMARKS_POPOVER,
+  return g_object_new (EPHY_TYPE_BOOKMARKS_DIALOG,
                        NULL);
 }

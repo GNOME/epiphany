@@ -22,24 +22,23 @@
 
 #include "ephy-bookmark-properties.h"
 #include "ephy-bookmark-row.h"
-#include "ephy-bookmarks-popover.h"
+#include "ephy-bookmarks-dialog.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-settings.h"
 
 struct _EphyBookmarkRow {
-  GtkListBoxRow parent_instance;
+  AdwActionRow parent_instance;
 
   EphyBookmark *bookmark;
   GCancellable *cancellable;
 
   GtkWidget *favicon_image;
-  GtkWidget *title_label;
   GtkWidget *properties_button;
 };
 
-G_DEFINE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, ADW_TYPE_ACTION_ROW)
 
 enum {
   PROP_0,
@@ -184,10 +183,12 @@ transform_bookmark_title (GBinding     *binding,
 {
   EphyBookmarkRow *row = EPHY_BOOKMARK_ROW (user_data);
   const char *title;
+  g_autofree char *converted_title = NULL;
 
   title = g_value_get_string (from_value);
+  converted_title = g_markup_escape_text (title, -1);
 
-  if (strlen (title) == 0) {
+  if (strlen (converted_title) == 0) {
     EphyBookmark *bookmark;
     const char *url;
 
@@ -197,8 +198,8 @@ transform_bookmark_title (GBinding     *binding,
     g_value_set_string (to_value, url);
     gtk_widget_set_tooltip_text (GTK_WIDGET (row), url);
   } else {
-    g_value_set_string (to_value, title);
-    gtk_widget_set_tooltip_text (GTK_WIDGET (row), title);
+    g_value_set_string (to_value, converted_title);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (row), converted_title);
   }
 
   return TRUE;
@@ -229,7 +230,7 @@ ephy_bookmark_row_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->constructed (object);
 
   g_object_bind_property_full (self->bookmark, "title",
-                               self->title_label, "label",
+                               self, "title",
                                G_BINDING_SYNC_CREATE,
                                transform_bookmark_title,
                                NULL,
@@ -249,16 +250,6 @@ ephy_bookmark_row_constructed (GObject *object)
 }
 
 static void
-ephy_bookmark_row_activate (GtkListBoxRow *row)
-{
-  GtkWidget *popover = gtk_widget_get_ancestor (GTK_WIDGET (row), EPHY_TYPE_BOOKMARKS_POPOVER);
-  if (popover) {
-    gtk_popover_popdown (GTK_POPOVER (popover));
-  }
-  ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (row), 0);
-}
-
-static void
 ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -271,8 +262,6 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 
   widget_class->map = ephy_bookmark_row_map;
 
-  GTK_LIST_BOX_ROW_CLASS (klass)->activate = ephy_bookmark_row_activate;
-
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
                          NULL, NULL,
@@ -283,7 +272,6 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, favicon_image);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, title_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, properties_button);
 }
 

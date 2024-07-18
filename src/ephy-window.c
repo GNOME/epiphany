@@ -28,6 +28,7 @@
 #include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
 #include "ephy-bookmark-states.h"
+#include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-desktop-utils.h"
@@ -153,6 +154,9 @@ struct _EphyWindow {
   EphyTabView *tab_view;
   AdwTabBar *tab_bar;
   GtkWidget *action_bar;
+  GtkWidget *multi_layout_view;
+  GtkWidget *overlay_split_view;
+  GtkWidget *bottom_sheet;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
   WebKitHitTestResult *context_event;
@@ -3873,6 +3877,16 @@ insert_action_group (const char   *prefix,
   gtk_widget_insert_action_group (widget, prefix, group);
 }
 
+void
+on_bottom_sheet_close_attempt (AdwBottomSheet *sheet,
+                               gpointer        user_data)
+{
+  EphyWindow *self = EPHY_WINDOW (user_data);
+  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (self->action_bar));
+
+  ephy_action_bar_end_set_bookmark_button_state (action_bar_end, FALSE);
+}
+
 static void
 ephy_window_constructed (GObject *object)
 {
@@ -3888,6 +3902,12 @@ ephy_window_constructed (GObject *object)
   AdwBreakpoint *breakpoint;
   g_autoptr (GtkBuilder) builder = NULL;
   GtkEventController *controller;
+  AdwLayout *layout;
+  GtkWidget *sidebar;
+  GtkWidget *content_layout_slot;
+  GtkWidget *bookmarks_layout_slot;
+  GtkWidget *status_page;
+  GtkWidget *header_bar;
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
@@ -4004,7 +4024,53 @@ ephy_window_constructed (GObject *object)
 
   adw_tab_overview_set_child (ADW_TAB_OVERVIEW (window->overview),
                               GTK_WIDGET (window->fullscreen_box));
-  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->overview));
+
+  ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+
+  sidebar = adw_toolbar_view_new ();
+  header_bar = adw_header_bar_new ();
+  adw_header_bar_set_show_title (ADW_HEADER_BAR (header_bar), FALSE);
+  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (sidebar), header_bar);
+  adw_toolbar_view_set_extend_content_to_top_edge (ADW_TOOLBAR_VIEW (sidebar), TRUE);
+
+  status_page = adw_status_page_new ();
+  gtk_widget_set_valign (status_page, GTK_ALIGN_START);
+  adw_status_page_set_title (ADW_STATUS_PAGE (status_page), _("Bookmarks"));
+  adw_status_page_set_child (ADW_STATUS_PAGE (status_page), ephy_bookmarks_dialog_new ());
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (sidebar), status_page);
+
+  window->multi_layout_view = adw_multi_layout_view_new ();
+  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->multi_layout_view));
+
+  /* Set layout slots */
+  adw_multi_layout_view_set_child (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), "primary", GTK_WIDGET (window->overview));
+  adw_multi_layout_view_set_child (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), "secondary", sidebar);
+
+  /* Overlay Split View */
+  window->overlay_split_view = adw_overlay_split_view_new ();
+  content_layout_slot = adw_layout_slot_new ("primary");
+  bookmarks_layout_slot = adw_layout_slot_new ("secondary");
+  adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), FALSE);
+  adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), content_layout_slot);
+  adw_overlay_split_view_set_sidebar_position (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_PACK_END);
+  adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), bookmarks_layout_slot);
+
+  layout = adw_layout_new (window->overlay_split_view);
+  adw_layout_set_name (layout, "sidebar");
+  adw_multi_layout_view_add_layout (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), layout);
+
+  /* Bottom Sheet */
+  window->bottom_sheet = adw_bottom_sheet_new ();
+  content_layout_slot = adw_layout_slot_new ("primary");
+  bookmarks_layout_slot = adw_layout_slot_new ("secondary");
+  adw_bottom_sheet_set_content (ADW_BOTTOM_SHEET (window->bottom_sheet), content_layout_slot);
+  adw_bottom_sheet_set_sheet (ADW_BOTTOM_SHEET (window->bottom_sheet), bookmarks_layout_slot);
+  adw_bottom_sheet_set_can_close (ADW_BOTTOM_SHEET (window->bottom_sheet), FALSE);
+  g_signal_connect (G_OBJECT (window->bottom_sheet), "close-attempt", G_CALLBACK (on_bottom_sheet_close_attempt), window);
+
+  layout = adw_layout_new (window->bottom_sheet);
+  adw_layout_set_name (layout, "bottom-sheet");
+  adw_multi_layout_view_add_layout (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), layout);
 
   ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
@@ -4084,6 +4150,7 @@ ephy_window_constructed (GObject *object)
   breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 600px"));
   adw_breakpoint_add_setters (breakpoint,
                               G_OBJECT (window), "adaptive-mode", EPHY_ADAPTIVE_MODE_NARROW,
+                              G_OBJECT (window->multi_layout_view), "layout-name", "bottom-sheet",
                               NULL);
 
   adw_application_window_add_breakpoint (ADW_APPLICATION_WINDOW (window), breakpoint);
@@ -4702,4 +4769,15 @@ void
 ephy_window_switch_to_new_tab (EphyWindow *window)
 {
   ephy_tab_view_select_page (ephy_window_get_tab_view (window), window->switch_to_tab);
+}
+
+void
+ephy_window_toggle_bookmarks (EphyWindow *window,
+                              gboolean    state)
+{
+  if (g_strcmp0 (adw_multi_layout_view_get_layout_name (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view)), "sidebar") == 0) {
+    adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), state);
+  } else {
+    adw_bottom_sheet_set_open (ADW_BOTTOM_SHEET (window->bottom_sheet), state);
+  }
 }

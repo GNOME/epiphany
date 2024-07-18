@@ -15,20 +15,20 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>. 
+ *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #pragma once
 
+#include <adwaita.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_BOOKMARKS_POPOVER (ephy_bookmarks_popover_get_type())
+#define EPHY_TYPE_BOOKMARKS_DIALOG (ephy_bookmarks_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, EPHY, BOOKMARKS_POPOVER, GtkPopover)
+G_DECLARE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, EPHY, BOOKMARKS_DIALOG, AdwBin)
 
-EphyBookmarksPopover*       ephy_bookmarks_popover_new      (void);
-
+GtkWidget *ephy_bookmarks_dialog_new      (void);
 
 G_END_DECLS

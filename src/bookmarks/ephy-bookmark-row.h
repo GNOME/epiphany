@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_BOOKMARK_ROW (ephy_bookmark_row_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, EPHY, BOOKMARK_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, EPHY, BOOKMARK_ROW, AdwActionRow)
 
 GtkWidget           *ephy_bookmark_row_new              (EphyBookmark *bookmark);
 

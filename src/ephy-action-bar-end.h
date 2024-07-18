@@ -48,4 +48,7 @@ void              ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd 
 void              ephy_action_bar_end_set_adaptive_mode       (EphyActionBarEnd *action_bar_end,
                                                                EphyAdaptiveMode  adaptive_mode);
 
+void              ephy_action_bar_end_set_bookmark_button_state (EphyActionBarEnd *self,
+                                                                 gboolean          state);
+
 G_END_DECLS

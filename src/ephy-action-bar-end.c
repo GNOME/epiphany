@@ -21,6 +21,7 @@
 
 #include "ephy-action-bar-end.h"
 #include "ephy-add-bookmark-popover.h"
+#include "ephy-bookmarks-dialog.h"
 #include "ephy-browser-action.h"
 #include "ephy-browser-action-row.h"
 #include "ephy-desktop-utils.h"
@@ -215,6 +216,16 @@ browser_action_popover_visible_changed_cb (GtkWidget        *popover,
 }
 
 static void
+on_bookmarks_button (GtkToggleButton *button,
+                     gpointer         user_data)
+{
+  GtkWindow *parent_window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button)));
+  gboolean state = gtk_toggle_button_get_active (button);
+
+  ephy_window_toggle_bookmarks (EPHY_WINDOW (parent_window), state);
+}
+
+static void
 ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -266,6 +277,8 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
                                            browser_actions_popup_view_back_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class,
                                            browser_actions_row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class,
+                                           on_bookmarks_button);
 }
 
 static void
@@ -453,4 +466,11 @@ ephy_action_bar_end_set_adaptive_mode (EphyActionBarEnd *action_bar_end,
                           adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
   gtk_widget_set_visible (action_bar_end->overview_button,
                           adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
+}
+
+void
+ephy_action_bar_end_set_bookmark_button_state (EphyActionBarEnd *self,
+                                               gboolean          state)
+{
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->bookmarks_button), state);
 }
