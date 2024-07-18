@@ -292,6 +292,7 @@ ephy_header_bar_constructed (GObject *object)
     remove_menu_item (menu, "app.help");
     remove_menu_item (menu, "app.firefox-sync-dialog");
     remove_menu_item (menu, "import-export");
+    remove_menu_item (menu, "webapps");
   } else if (ephy_is_running_inside_sandbox ()) {
     remove_menu_item (menu, "app.run-in-background");
 
