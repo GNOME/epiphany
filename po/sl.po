@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-07-17 21:42+0000\n"
-"PO-Revision-Date: 2024-07-18 13:08+0200\n"
+"POT-Creation-Date: 2024-07-18 20:32+0000\n"
+"PO-Revision-Date: 2024-07-19 22:37+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1119,7 +1119,8 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:760
 #: src/ephy-history-dialog.c:772 src/ephy-window.c:253
-#: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
+#: src/preferences/autofill-view.c:363 src/preferences/extension-view.c:117
+#: src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:337
@@ -2431,7 +2432,8 @@ msgstr ""
 "Potrdilo je veljavno, vendar pa so viri s te strani poslani brez varnostne "
 "zaščite."
 
-#: src/ephy-downloads-popover.c:211 src/resources/gtk/passwords-view.ui:27
+#: src/ephy-downloads-popover.c:211 src/resources/gtk/autofill-view.ui:12
+#: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "Počisti _vse"
 
@@ -2722,6 +2724,21 @@ msgstr "Zahteva za dostop do spletišča"
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "Stran na »%s« zahteva dostop do odložišča"
+
+#: src/ephy-privacy-report.c:62
+msgid "Blocked trackers on this site"
+msgstr "Blokirani sledilniki na tem spletišču"
+
+#: src/ephy-privacy-report.c:82
+msgid "Sites this tracker was found on"
+msgstr "Spletna mesta, na katerih je bil ta sledilnik najden"
+
+#: src/ephy-privacy-report.c:252
+#, c-format
+msgid "GNOME Web prevented %ld trackers from following you across websites"
+msgstr ""
+"Splet GNOME je preprečil sledilnikom %ld, da bi vas spremljali na spletnih "
+"mestih"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -3104,6 +3121,22 @@ msgstr "Odprt je nov zavihek"
 msgid "Switch"
 msgstr "Preklopi"
 
+#: src/preferences/autofill-view.c:359
+msgid "Delete All Entries?"
+msgstr "Ali želite izbrisati vse vnose?"
+
+#: src/preferences/autofill-view.c:360
+msgid "This will clear all locally stored entries, and can not be undone."
+msgstr ""
+"S tem boste počistili vse krajevno shranjene vnose, česar ni mogoče "
+"razveljaviti."
+
+#: src/preferences/autofill-view.c:364 src/preferences/passwords-view.c:180
+#: src/resources/gtk/history-dialog.ui:148
+#: src/resources/gtk/location-entry.ui:303
+msgid "_Delete"
+msgstr "_Izbriši"
+
 #: src/preferences/clear-data-view.c:68
 msgid "Cookies"
 msgstr "Piškotki"
@@ -3212,11 +3245,6 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "S tem boste počistili vsa krajevno shranjena gesla. Opravila ni mogoče "
 "razveljaviti."
-
-#: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
-#: src/resources/gtk/location-entry.ui:303
-msgid "_Delete"
-msgstr "_Izbriši"
 
 #: src/preferences/passwords-view.c:235
 msgid "Copy password"
@@ -3332,6 +3360,73 @@ msgstr "Naprej"
 #: src/resources/gtk/prefs-general-page.ui:73
 msgid "Homepage"
 msgstr "Začetna stran"
+
+#: src/resources/gtk/autofill-view.ui:4
+msgid "Autofill Data"
+msgstr "Samodejno izpolni podatke"
+
+#: src/resources/gtk/autofill-view.ui:28
+msgid "First Name"
+msgstr "Ime"
+
+# G:3 K:4 O:1
+#: src/resources/gtk/autofill-view.ui:33
+msgid "Last Name"
+msgstr "Priimek"
+
+# G:3 K:4 O:1
+#: src/resources/gtk/autofill-view.ui:38
+msgid "Full Name"
+msgstr "Ime in priimek"
+
+# G:3 K:4 O:1
+#: src/resources/gtk/autofill-view.ui:48
+msgid "User Name"
+msgstr "Uporabniško ime"
+
+#: src/resources/gtk/autofill-view.ui:53
+msgid "E-Mail"
+msgstr "Elektronski naslov"
+
+#: src/resources/gtk/autofill-view.ui:58
+msgid "Phone"
+msgstr "Telefon"
+
+#: src/resources/gtk/autofill-view.ui:68
+msgid "Street"
+msgstr "Ulica"
+
+#: src/resources/gtk/autofill-view.ui:73
+msgid "Organization"
+msgstr "Organizacija"
+
+#: src/resources/gtk/autofill-view.ui:78
+msgid "Postal Code"
+msgstr "Poštna številka"
+
+#: src/resources/gtk/autofill-view.ui:83
+msgid "State"
+msgstr "Pokrajina / zvezna država"
+
+#: src/resources/gtk/autofill-view.ui:88
+msgid "City"
+msgstr "Kraj"
+
+#: src/resources/gtk/autofill-view.ui:93
+msgid "Country"
+msgstr "Država"
+
+#: src/resources/gtk/autofill-view.ui:103
+msgid "Type"
+msgstr "Vrsta"
+
+#: src/resources/gtk/autofill-view.ui:108
+msgid "Owner"
+msgstr "Lastnik"
+
+#: src/resources/gtk/autofill-view.ui:113
+msgid "Number"
+msgstr "Številka"
 
 # G:1 K:0 O:0
 #: src/resources/gtk/bookmark-properties.ui:14
@@ -4026,6 +4121,26 @@ msgstr "_Samodejno izpolni obrazce"
 #: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Autofill _Data"
 msgstr "Samodejno izpolni po_datke"
+
+#: src/resources/gtk/privacy-report.ui:10
+msgid "Overview"
+msgstr "Pregled"
+
+#: src/resources/gtk/privacy-report.ui:21
+msgid "Privacy Report"
+msgstr "Poročilo o zasebnosti"
+
+#: src/resources/gtk/privacy-report.ui:41
+msgid "_Websites"
+msgstr "_Spletne strani"
+
+#: src/resources/gtk/privacy-report.ui:61
+msgid "_Trackers"
+msgstr "_Sledilniki"
+
+#: src/resources/gtk/privacy-report.ui:90
+msgid "Details"
+msgstr "Podrobnosti"
 
 #: src/resources/gtk/search-engine-row.ui:8
 msgid "Selects Default Search Engine"
