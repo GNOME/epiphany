@@ -50,6 +50,8 @@
 #include "api/windows.h"
 
 #include <adwaita.h>
+#include <archive.h>
+#include <archive_entry.h>
 #include <json-glib/json-glib.h>
 
 static void handle_message_reply (EphyWebExtension *web_extension,
@@ -456,6 +458,163 @@ on_new_web_extension_loaded (GObject      *source_object,
   ephy_web_extension_manager_add_to_list (self, web_extension);
 }
 
+static char *
+decompress_xpi_finish (EphyWebExtensionManager  *self,
+                       GAsyncResult             *result,
+                       GError                  **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+on_extension_decompressed (GObject      *source,
+                           GAsyncResult *res,
+                           gpointer      user_data)
+{
+  EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) target = NULL;
+  GFileInfo *file_info;
+  g_autofree char *path = decompress_xpi_finish (self, res, &error);
+
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Could not decompress WebExtension: %s", error->message);
+    return;
+  }
+
+  target = g_file_new_for_path (path);
+  file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, 0, NULL, &error);
+  if (!file_info) {
+    g_warning ("Failed to query file info: %s", error->message);
+    return;
+  }
+
+  ephy_web_extension_load_async (g_steal_pointer (&target), file_info, self->cancellable, on_new_web_extension_loaded, self);
+}
+
+static int
+copy_data (struct archive *ar,
+           struct archive *aw)
+{
+  int r;
+  const void *buff;
+  size_t size;
+  la_int64_t offset;
+
+  for (;;) {
+    r = archive_read_data_block (ar, &buff, &size, &offset);
+    if (r == ARCHIVE_EOF)
+      return (ARCHIVE_OK);
+    if (r < ARCHIVE_OK)
+      return (r);
+    r = archive_write_data_block (aw, buff, size, offset);
+    if (r < ARCHIVE_OK) {
+      g_warning ("Failed to copy archive data: %s", archive_error_string (aw));
+      return (r);
+    }
+  }
+}
+
+static void
+decompress_xpi_thread (GTask        *task,
+                       gpointer      source_object,
+                       gpointer      task_data,
+                       GCancellable *cancellable)
+{
+  GFile *file = G_FILE (source_object);
+  GFile *web_extensions_dir = task_data;
+  struct archive *archive;
+  struct archive *ext;
+  int flags;
+  int ret;
+  const char *filename = g_file_get_path (file);
+  g_autofree char *path = NULL;
+  g_autofree char *basename = NULL;
+
+  flags = ARCHIVE_EXTRACT_TIME;
+  flags |= ARCHIVE_EXTRACT_PERM;
+  flags |= ARCHIVE_EXTRACT_ACL;
+  flags |= ARCHIVE_EXTRACT_FFLAGS;
+
+  archive = archive_read_new ();
+  archive_read_support_format_all (archive);
+  archive_read_support_filter_all (archive);
+
+  ext = archive_write_disk_new ();
+  archive_write_disk_set_options (ext, flags);
+  archive_write_disk_set_standard_lookup (ext);
+
+  ret = archive_read_open_filename (archive, filename, 10240);
+  if (ret) {
+    g_warning ("Could not open archive: %s", filename);
+    return;
+  }
+
+  basename = g_file_get_basename (file);
+  path = g_build_filename (g_file_peek_path (web_extensions_dir), basename, NULL);
+
+  while (1) {
+    struct archive_entry *entry;
+    g_autofree char *full_path = NULL;
+
+    ret = archive_read_next_header (archive, &entry);
+    if (ret == ARCHIVE_EOF)
+      break;
+
+    if (ret < ARCHIVE_OK)
+      g_warning ("Error extracting archive: %s", archive_error_string (archive));
+
+    if (ret < ARCHIVE_WARN)
+      return;
+
+    full_path = g_build_filename (path, archive_entry_pathname (entry), NULL);
+    archive_entry_set_pathname (entry, full_path);
+    ret = archive_write_header (ext, entry);
+    if (ret < ARCHIVE_OK)
+      g_warning ("Could not write archive: %s", archive_error_string (ext));
+    else if (archive_entry_size (entry) > 0) {
+      ret = copy_data (archive, ext);
+      if (ret < ARCHIVE_OK)
+        g_warning ("Could not copy archive data: %s", archive_error_string (ext));
+      if (ret < ARCHIVE_WARN)
+        return;
+    }
+
+    ret = archive_write_finish_entry (ext);
+    if (ret < ARCHIVE_OK)
+      g_warning ("Could not finish archive: %s", archive_error_string (ext));
+    if (ret < ARCHIVE_WARN)
+      return;
+  }
+
+  archive_read_close (archive);
+  archive_read_free (archive);
+  archive_write_close (ext);
+  archive_write_free (ext);
+
+  g_task_return_pointer (task, g_steal_pointer (&path), g_free);
+}
+
+static void
+decompress_xpi (GFile               *extension,
+                GFile               *web_extensions_dir,
+                GCancellable        *cancellable,
+                GAsyncReadyCallback  callback,
+                gpointer             user_data)
+{
+  g_autoptr (GTask) task = NULL;
+
+  g_assert (extension);
+  g_assert (web_extensions_dir);
+
+  task = g_task_new (extension, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (web_extensions_dir), g_object_unref);
+  g_task_set_return_on_cancel (task, TRUE);
+
+  g_task_run_in_thread (task, decompress_xpi_thread);
+}
+
 /**
  * Install a new web web_extension into the local web_extension directory.
  * File should only point to a manifest.json or a .xpi file
@@ -465,11 +624,11 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
                                     GFile                   *file)
 {
   g_autoptr (GFile) target = NULL;
-  g_autofree char *basename = NULL;
   g_autoptr (GFileInfo) file_info = NULL;
   gboolean is_xpi = FALSE;
   g_autoptr (GError) error = NULL;
   g_autoptr (GFile) web_extensions_dir = NULL;
+  g_autofree char *basename = NULL;
   const char *path;
 
   web_extensions_dir = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
@@ -480,22 +639,7 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
   /* FIXME: Make this async. */
 
   if (is_xpi) {
-    /* If we are given an .xpi file its a direct copy. */
-    basename = g_file_get_basename (file);
-    target = g_file_get_child (web_extensions_dir, basename);
-
-    if (!g_file_make_directory_with_parents (web_extensions_dir, NULL, &error)) {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
-        g_warning ("Failed to create web_extensions directory: %s", error->message);
-        return;
-      }
-      g_clear_error (&error);
-    }
-
-    if (!g_file_copy (file, target, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
-      g_warning ("Could not copy file for web_extension: %s", error->message);
-      return;
-    }
+    decompress_xpi (file, web_extensions_dir, self->cancellable, on_extension_decompressed, self);
   } else {
     /* Otherwise we copy the parent directory. */
     g_autoptr (GFile) parent = g_file_get_parent (file);
@@ -503,16 +647,16 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
     target = g_file_get_child (web_extensions_dir, basename);
 
     ephy_copy_directory (g_file_peek_path (parent), g_file_peek_path (target));
-  }
 
-  if (target) {
-    file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, 0, self->cancellable, &error);
-    if (!file_info) {
-      g_warning ("Failed to query file info: %s", error->message);
-      return;
+    if (target) {
+      file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, 0, self->cancellable, &error);
+      if (!file_info) {
+        g_warning ("Failed to query file info: %s", error->message);
+        return;
+      }
+
+      ephy_web_extension_load_async (g_steal_pointer (&target), file_info, self->cancellable, on_new_web_extension_loaded, self);
     }
-
-    ephy_web_extension_load_async (g_steal_pointer (&target), file_info, self->cancellable, on_new_web_extension_loaded, self);
   }
 }
 
