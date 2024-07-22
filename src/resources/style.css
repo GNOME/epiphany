@@ -1,19 +1,10 @@
 /* floating status bar */
 .floating-bar {
-  background-color: @view_bg_color;
-  color: @view_fg_color;
-  box-shadow: 0 0 0 1px @borders;
-  padding: 2px 12px;
-}
-
-.floating-bar:dir(ltr),
-.floating-bar.end:dir(rtl) {
-  border-radius: 0 6px 0 0;
-}
-
-.floating-bar:dir(rtl),
-.floating-bar.end:dir(ltr) {
-  border-radius: 6px 0 0 0;
+  background: var(--popover-bg-color);
+  color: var(--popover-fg-color);
+  padding: 4px 12px;
+  margin: 4px;
+  border-radius: 8px;
 }
 
 /* incognito mode */

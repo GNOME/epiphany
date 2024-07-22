@@ -100,6 +100,7 @@ ephy_floating_bar_init (EphyFloatingBar *self)
 
   gtk_widget_set_can_target (GTK_WIDGET (self), FALSE);
   gtk_widget_add_css_class (GTK_WIDGET (self), "floating-bar");
+  gtk_widget_add_css_class (GTK_WIDGET (self), "card");
 }
 
 static void
