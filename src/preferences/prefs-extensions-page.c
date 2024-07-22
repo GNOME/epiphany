@@ -55,15 +55,84 @@ on_extension_row_activated (GtkWidget           *row,
   g_signal_emit (page, signals[EXTENSION_ROW_ACTIVATED], 0, web_extension);
 }
 
+typedef struct {
+  PrefsExtensionsPage *page;
+  GFile *file;
+} AskForExtensionInstallationData;
+
+static AskForExtensionInstallationData *
+ask_for_extension_installation_data_new (GFile               *file,
+                                         PrefsExtensionsPage *page)
+{
+  AskForExtensionInstallationData *data = g_new0 (AskForExtensionInstallationData, 1);
+
+  data->page = g_object_ref (page);
+  data->file = file;
+  return data;
+}
+
+static void
+ask_for_installation_data_free (AskForExtensionInstallationData *data)
+{
+  g_clear_object (&data->file);
+  g_clear_object (&data->page);
+  g_clear_pointer (&data, g_free);
+}
+
+static void
+on_install_extension (AdwAlertDialog *self,
+                      char           *response,
+                      gpointer        user_data)
+{
+  AskForExtensionInstallationData *data = user_data;
+
+  if (g_strcmp0 (response, "install") == 0)
+    ephy_web_extension_manager_install (data->page->web_extension_manager, data->file);
+
+  g_clear_pointer (&data, ask_for_installation_data_free);
+}
+
+static gboolean
+ask_for_extension_installation (gpointer user_data)
+{
+  AskForExtensionInstallationData *data = user_data;
+  AdwDialog *dialog;
+
+  dialog = adw_alert_dialog_new (_("Install WebExtension?"), NULL);
+
+  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog), _("Do you want to install `%s`?"), g_file_get_basename (data->file));
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("Cancel"),
+                                  "install", _("Install"),
+                                  NULL);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "install", ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "install");
+  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+
+  g_signal_connect (dialog, "response", G_CALLBACK (on_install_extension), data);
+
+  adw_dialog_present (dialog, GTK_WIDGET (data->page));
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 on_add_file_selected (GtkFileDialog       *dialog,
                       GAsyncResult        *result,
                       PrefsExtensionsPage *self)
 {
-  g_autoptr (GFile) file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GFile) file = gtk_file_dialog_open_finish (dialog, result, &error);
+  AskForExtensionInstallationData *data = NULL;
 
-  if (file)
-    ephy_web_extension_manager_install (self->web_extension_manager, file);
+  if (!file) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Could not open WebExtension file: %s", error->message);
+    return;
+  }
+
+  data = ask_for_extension_installation_data_new (g_steal_pointer (&file), self);
+  g_idle_add (ask_for_extension_installation, g_steal_pointer (&data));
 }
 
 static void
