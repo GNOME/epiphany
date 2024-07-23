@@ -28,6 +28,7 @@ struct _EphySuggestion {
   DzlSuggestion parent;
 
   char *unescaped_title;
+  gboolean is_completion;
   cairo_surface_t *favicon;
 };
 
@@ -36,6 +37,7 @@ G_DEFINE_FINAL_TYPE (EphySuggestion, ephy_suggestion, DZL_TYPE_SUGGESTION)
 enum {
   PROP_0,
   PROP_UNESCAPED_TITLE,
+  PROP_IS_COMPLETION,
   LAST_PROP
 };
 
@@ -53,6 +55,9 @@ ephy_suggestion_set_property (GObject      *object,
     case PROP_UNESCAPED_TITLE:
       self->unescaped_title = g_strdup (g_value_get_string (value));
       break;
+    case PROP_IS_COMPLETION:
+      self->is_completion = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -69,6 +74,9 @@ ephy_suggestion_get_property (GObject    *object,
   switch (prop_id) {
     case PROP_UNESCAPED_TITLE:
       g_value_set_string (value, self->unescaped_title);
+      break;
+    case PROP_IS_COMPLETION:
+      g_value_set_boolean (value, self->is_completion);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -127,6 +135,12 @@ ephy_suggestion_class_init (EphySuggestionClass *klass)
                          "",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  obj_properties[PROP_IS_COMPLETION] =
+    g_param_spec_boolean ("is-completion",
+                          NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
@@ -138,7 +152,8 @@ ephy_suggestion_init (EphySuggestion *self)
 EphySuggestion *
 ephy_suggestion_new (const char *title_markup,
                      const char *unescaped_title,
-                     const char *uri)
+                     const char *uri,
+                     gboolean    is_completion)
 {
   EphySuggestion *suggestion;
   char *decoded_uri = ephy_uri_decode (uri);
@@ -150,6 +165,7 @@ ephy_suggestion_new (const char *title_markup,
                              "subtitle", escaped_uri,
                              "title", title_markup,
                              "unescaped-title", unescaped_title,
+                             "is-completion", is_completion,
                              NULL);
 
   g_free (decoded_uri);
@@ -229,4 +245,10 @@ ephy_suggestion_set_secondary_icon (EphySuggestion *self,
                                     const char     *icon_name)
 {
   dzl_suggestion_set_secondary_icon_name (DZL_SUGGESTION (self), icon_name);
+}
+
+gboolean
+ephy_suggestion_is_completion (EphySuggestion *self)
+{
+  return self->is_completion;
 }

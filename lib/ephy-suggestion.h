@@ -29,7 +29,8 @@ G_DECLARE_FINAL_TYPE (EphySuggestion, ephy_suggestion, EPHY, SUGGESTION, DzlSugg
 
 EphySuggestion *ephy_suggestion_new                      (const char *title_markup,
                                                           const char *unescaped_title,
-                                                          const char *uri);
+                                                          const char *uri,
+                                                          gboolean    is_completion);
 EphySuggestion *ephy_suggestion_new_with_custom_subtitle (const char *title_markup,
                                                           const char *unescaped_title,
                                                           const char *subtitle,
@@ -44,5 +45,6 @@ void            ephy_suggestion_set_favicon              (EphySuggestion  *self,
                                                           cairo_surface_t *favicon);
 void            ephy_suggestion_set_secondary_icon       (EphySuggestion  *self,
                                                           const char      *icon_name);
+gboolean        ephy_suggestion_is_completion            (EphySuggestion *self);
 
 G_END_DECLS

@@ -341,7 +341,7 @@ add_search_engines (EphySuggestionModel *self,
     address = ephy_search_engine_build_search_address (engine, query);
     escaped_title = g_markup_escape_text (engine_name, -1);
     markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
-    suggestion = ephy_suggestion_new (markup, engine_name, address);
+    suggestion = ephy_suggestion_new (markup, engine_name, address, FALSE);
 
     uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
     if (uri) {
@@ -589,7 +589,7 @@ bookmarks_query (EphySuggestionModel *self,
 
       escaped_title = g_markup_escape_text (title, -1);
       markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
-      suggestion = ephy_suggestion_new (markup, title, url);
+      suggestion = ephy_suggestion_new (markup, title, url, FALSE);
       ephy_suggestion_set_secondary_icon (suggestion, "ephy-starred-symbolic");
 
       g_sequence_append (data->bookmarks, g_object_ref (suggestion));
@@ -628,7 +628,7 @@ history_query_completed_cb (EphyHistoryService *service,
       escaped_title = g_markup_escape_text (title, -1);
 
       markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
-      suggestion = ephy_suggestion_new (markup, title, url->url);
+      suggestion = ephy_suggestion_new (markup, title, url->url, FALSE);
 
       g_sequence_append (data->history, g_steal_pointer (&suggestion));
     }
@@ -686,13 +686,11 @@ google_search_suggestions_cb (SoupSession  *session,
     g_autofree char *address = NULL;
     g_autofree char *escaped_title = NULL;
     g_autofree char *markup = NULL;
-    const char *engine_name;
 
     address = ephy_search_engine_build_search_address (engine, str);
     escaped_title = g_markup_escape_text (str, -1);
     markup = dzl_fuzzy_highlight (escaped_title, str, FALSE);
-    engine_name = ephy_search_engine_get_name (engine);
-    suggestion = ephy_suggestion_new (markup, engine_name, address);
+    suggestion = ephy_suggestion_new (markup, escaped_title, address, TRUE);
 
     g_sequence_append (data->google_suggestions, g_steal_pointer (&suggestion));
     added++;

@@ -234,7 +234,11 @@ update_selected_url (EphyLocationEntry *entry)
     entry->jump_tab = g_strdup (uri);
     gtk_editable_set_text (GTK_EDITABLE (entry), dzl_suggestion_get_subtitle (suggestion));
   } else {
-    gtk_editable_set_text (GTK_EDITABLE (entry), uri);
+    if (ephy_suggestion_is_completion (EPHY_SUGGESTION (suggestion))) {
+      gtk_editable_set_text (GTK_EDITABLE (entry), ephy_suggestion_get_unescaped_title (EPHY_SUGGESTION (suggestion)));
+    } else {
+      gtk_editable_set_text (GTK_EDITABLE (entry), uri);
+    }
   }
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
