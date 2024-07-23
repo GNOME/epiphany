@@ -743,6 +743,7 @@ static void
 clear_button_clicked_cb (EphyLocationEntry *self)
 {
   gtk_editable_set_text (GTK_EDITABLE (self), "");
+  gtk_widget_grab_focus (GTK_WIDGET (self->text));
 }
 
 static void
