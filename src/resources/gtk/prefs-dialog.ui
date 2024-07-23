@@ -4,6 +4,7 @@
   <template class="EphyPrefsDialog" parent="AdwPreferencesDialog">
     <property name="content-width">640</property>
     <property name="content-height">580</property>
+    <property name="search-enabled">true</property>
     <signal name="closed" handler="on_closed"/>
     <child>
       <object class="PrefsGeneralPage" id="general_page"/>
