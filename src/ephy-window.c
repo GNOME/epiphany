@@ -2361,10 +2361,15 @@ load_changed_cb (EphyWebView     *view,
                  WebKitLoadEvent  load_event,
                  EphyWindow      *window)
 {
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+
   sync_tab_load_status (view, load_event, window);
 
   if (load_event != WEBKIT_LOAD_STARTED)
     return;
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget))
+    ephy_location_entry_set_reader_mode_visible (EPHY_LOCATION_ENTRY (title_widget), FALSE);
 
   destroy_permission_popovers_for_view (window, view);
   if (view == ephy_embed_get_web_view (window->active_embed))
