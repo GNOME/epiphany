@@ -31,7 +31,6 @@ void ephy_webextension_install_common_apis (WebKitWebPage *page,
                                             WebKitFrame   *frame,
                                             JSCContext    *js_context,
                                             const char    *guid,
-                                            JsonObject    *translations,
-                                            const char    *manifest);
+                                            JsonObject    *translations);
 
 G_END_DECLS
