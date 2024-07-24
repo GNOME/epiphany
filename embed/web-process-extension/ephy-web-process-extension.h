@@ -34,8 +34,7 @@ void                     ephy_web_process_extension_initialize (EphyWebProcessEx
                                                                 WebKitWebProcessExtension *wk_extension,
                                                                 const char                *guid,
                                                                 gboolean                   should_remember_passwords,
-                                                                gboolean                   is_private_profile,
-                                                                GVariant                  *web_extensions);
+                                                                gboolean                   is_private_profile);
 
 void                     ephy_web_process_extension_deinitialize (EphyWebProcessExtension *extension);
 

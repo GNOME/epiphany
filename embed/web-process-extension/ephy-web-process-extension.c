@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "ephy-web-process-extension.h"
+#include "ephy-webextension-api.h"
 
 #include "ephy-autofill-field.h"
 #include "ephy-debug.h"
@@ -52,22 +53,16 @@ struct _EphyWebProcessExtension {
   EphyPermissionsManager *permissions_manager;
 
   WebKitScriptWorld *script_world;
+  GHashTable *content_script_worlds;
 
   gboolean should_remember_passwords;
   gboolean is_private_profile;
 
   GHashTable *frames_map;
-  GHashTable *web_extensions;
-
-  GHashTable *view_contexts;
-  JSCContext *background_context;
+  GHashTable *translation_table;
 };
 
 G_DEFINE_FINAL_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
-
-#define PAGE_IS_EXTENSION(web_page) (webkit_web_page_get_uri (web_page) && g_str_has_prefix (webkit_web_page_get_uri (web_page), "ephy-webextension:"))
-
-/* ================ Private Ephy API ================ */
 
 static void
 web_page_will_submit_form (WebKitWebPage *web_page,
@@ -207,6 +202,134 @@ web_page_context_menu (WebKitWebPage          *web_page,
 }
 
 static void
+content_script_window_object_cleared_cb (WebKitScriptWorld *world,
+                                         WebKitWebPage     *page,
+                                         WebKitFrame       *frame,
+                                         gpointer           user_data)
+{
+  EphyWebProcessExtension *extension = user_data;
+  g_autoptr (JSCContext) js_context = NULL;
+  g_autoptr (JSCValue) js_browser = NULL;
+  g_autoptr (JSCValue) result = NULL;
+  g_autoptr (GBytes) bytes = NULL;
+  JsonObject *translations;
+  const char *guid;
+  const char *data;
+  gsize data_size;
+
+  guid = webkit_script_world_get_name (world);
+  js_context = webkit_frame_get_js_context_for_script_world (frame, world);
+  translations = g_hash_table_lookup (extension->translation_table, guid);
+
+  js_browser = jsc_context_get_value (js_context, "browser");
+  g_assert (!jsc_value_is_object (js_browser));
+
+  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  data = g_bytes_get_data (bytes, &data_size);
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/webextensions-common.js", 1);
+  g_clear_object (&result);
+
+  ephy_webextension_install_common_apis (page,
+                                         frame,
+                                         js_context,
+                                         guid,
+                                         translations);
+}
+
+static void
+create_content_script_world (EphyWebProcessExtension *extension,
+                             const char              *guid)
+{
+  WebKitScriptWorld *world = webkit_script_world_new_with_name (guid);
+
+  g_hash_table_insert (extension->content_script_worlds, g_strdup (guid), world);
+
+  g_signal_connect (world,
+                    "window-object-cleared",
+                    G_CALLBACK (content_script_window_object_cleared_cb),
+                    extension);
+}
+
+static gboolean
+web_page_received_message (WebKitWebPage     *web_page,
+                           WebKitUserMessage *message,
+                           gpointer           user_data)
+{
+  EphyWebProcessExtension *extension = user_data;
+  const char *name = webkit_user_message_get_name (message);
+
+  if (g_strcmp0 (name, "WebExtension.Initialize") == 0) {
+    GVariant *parameters;
+    const char *guid;
+
+    parameters = webkit_user_message_get_parameters (message);
+    if (!parameters)
+      return FALSE;
+
+    g_variant_get (parameters, "&s", &guid);
+    create_content_script_world (extension, guid);
+  } else {
+    g_warning ("Unhandled page message: %s", name);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+static void
+ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
+                                            WebKitWebPage           *web_page)
+{
+  WebKitWebFormManager *form_manager;
+
+  g_signal_connect (web_page, "context-menu",
+                    G_CALLBACK (web_page_context_menu),
+                    extension);
+  g_signal_connect (web_page, "user-message-received",
+                    G_CALLBACK (web_page_received_message),
+                    extension);
+
+  form_manager = webkit_web_page_get_form_manager (web_page, extension->script_world);
+  g_signal_connect_swapped (form_manager, "will-send-submit-event",
+                            G_CALLBACK (web_page_will_submit_form),
+                            web_page);
+  g_signal_connect_swapped (form_manager, "will-submit-form",
+                            G_CALLBACK (web_page_will_submit_form),
+                            web_page);
+  g_signal_connect_swapped (form_manager, "form-controls-associated",
+                            G_CALLBACK (web_page_form_controls_associated),
+                            web_page);
+}
+
+static void
+ephy_web_process_extension_add_translations (GHashTable *translation_table,
+                                             const char *guid,
+                                             const char *data)
+{
+  g_autoptr (JsonParser) parser = NULL;
+  JsonNode *root;
+  JsonObject *root_object;
+  g_autoptr (GError) error = NULL;
+
+  g_hash_table_remove (translation_table, guid);
+
+  if (!data || !*data)
+    return;
+
+  parser = json_parser_new ();
+  if (json_parser_load_from_data (parser, data, -1, &error)) {
+    root = json_parser_get_root (parser);
+    g_assert (root);
+    root_object = json_node_get_object (root);
+    g_assert (root_object);
+
+    g_hash_table_insert (translation_table, g_strdup (guid), json_object_ref (root_object));
+  } else {
+    g_warning ("Could not read translation json data: %s. '%s'", error->message, data);
+  }
+}
+
+static void
 ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *extension,
                                                      WebKitUserMessage       *message)
 {
@@ -294,6 +417,17 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       return;
 
     g_variant_get (parameters, "b", &extension->should_remember_passwords);
+  } else if (g_strcmp0 (name, "WebExtension.UpdateTranslations") == 0) {
+    GVariant *parameters;
+    const char *guid;
+    const char *data;
+
+    parameters = webkit_user_message_get_parameters (message);
+    if (!parameters)
+      return;
+
+    g_variant_get (parameters, "(&s&s)", &guid, &data);
+    ephy_web_process_extension_add_translations (extension->translation_table, guid, data);
   }
 }
 
@@ -313,204 +447,6 @@ get_password_manager (EphyWebProcessExtension *self,
   js_ephy = jsc_context_get_value (js_context, "Ephy");
 
   return jsc_value_object_get_property (js_ephy, "passwordManager");
-}
-
-/* ================ End Private Ephy API ================ */
-
-/* ================ Content Script API ================ */
-
-typedef struct {
-  char *manifest;
-  JsonObject *translations;
-  WebKitScriptWorld *script_world;
-  gboolean has_background_page;
-  int woc_id;
-} WebExtensionData;
-
-static void
-content_script_window_object_cleared_cb (WebKitScriptWorld *world,
-                                         WebKitWebPage     *page,
-                                         WebKitFrame       *frame,
-                                         gpointer           user_data)
-{
-  WebExtensionData *extension_data = user_data;
-  g_autoptr (JSCContext) js_context = NULL;
-  g_autoptr (JSCValue) js_browser = NULL;
-  g_autoptr (JSCValue) result = NULL;
-  g_autoptr (GBytes) bytes = NULL;
-  const char *guid;
-  const char *data;
-  gsize data_size;
-
-  if (PAGE_IS_EXTENSION (page))
-    return;
-
-  guid = webkit_script_world_get_name (world);
-  js_context = webkit_frame_get_js_context_for_script_world (frame, world);
-
-  js_browser = jsc_context_get_value (js_context, "browser");
-  g_assert (!jsc_value_is_object (js_browser));
-
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-  data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/webextensions-common.js", 1);
-  g_clear_object (&result);
-
-  ephy_webextension_install_common_apis (page,
-                                         frame,
-                                         js_context,
-                                         guid,
-                                         extension_data->translations);
-}
-
-static void
-web_extension_data_free (WebExtensionData *data)
-{
-  g_signal_handler_disconnect (data->script_world, data->woc_id);
-  g_clear_pointer (&data->manifest, g_free);
-  g_clear_pointer (&data->translations, json_object_unref);
-  g_clear_object (&data->script_world);
-  g_free (data);
-}
-
-static WebExtensionData *
-create_web_extension_data (const char   *extension_guid,
-                           GVariantDict *dict)
-{
-  WebExtensionData *data = g_new (WebExtensionData, 1);
-  const char *translations_json;
-  g_autoptr (JsonNode) node = NULL;
-  gboolean ret;
-
-  ret = g_variant_dict_lookup (dict, "manifest", "s", &data->manifest);
-  g_assert (ret);
-  ret = g_variant_dict_lookup (dict, "translations", "&s", &translations_json);
-  g_assert (ret);
-  ret = g_variant_dict_lookup (dict, "has-background-page", "b", &data->has_background_page);
-  g_assert (ret);
-
-  node = json_from_string (translations_json, NULL);
-  g_assert (node);
-  data->translations = json_object_ref (json_node_get_object (node));
-
-  data->script_world = webkit_script_world_new_with_name (extension_guid);
-  data->woc_id = g_signal_connect (data->script_world,
-                                   "window-object-cleared",
-                                   G_CALLBACK (content_script_window_object_cleared_cb),
-                                   data);
-
-  return data;
-}
-
-static gboolean
-web_page_received_message (WebKitWebPage     *web_page,
-                           WebKitUserMessage *message,
-                           gpointer           user_data)
-{
-  EphyWebProcessExtension *extension = user_data;
-  const char *name = webkit_user_message_get_name (message);
-
-  if (g_strcmp0 (name, "WebExtension.Initialize") == 0) {
-    GVariant *parameters;
-    char *guid;
-    g_autoptr (GVariant) variant = NULL;
-    g_autoptr (GVariantDict) dict = NULL;
-
-    parameters = webkit_user_message_get_parameters (message);
-    if (!parameters)
-      return FALSE;
-
-    g_variant_get (parameters, "(sv)", &guid, &variant);
-    dict = g_variant_dict_new (variant);
-
-    /* WebExtensionData vreated using create_web_extension_data is transferred to hash table */
-    g_hash_table_replace (extension->web_extensions, guid, create_web_extension_data (guid, dict));
-  } else {
-    g_warning ("Unhandled page message: %s", name);
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-/* ================ End Content Script API ================ */
-
-/* ================ WebExtension API ================ */
-
-static void
-ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
-                                                  WebKitUserMessage *message)
-{
-  const char *name = webkit_user_message_get_name (message);
-  WebKitFrame *frame = webkit_web_page_get_main_frame (page);
-  g_autoptr (JSCValue) value = NULL;
-
-  if (!PAGE_IS_EXTENSION (page)) {
-    g_warning ("Got user messgae for non-extension page");
-    return;
-  }
-
-  if (strcmp (name, "executeScript") == 0) {
-    GVariant *parameters;
-    const char *guid;
-    const char *path;
-    const char *code;
-    g_autofree char *uri = NULL;
-    /* FIXME: This should run in content-script world of the target tab. */
-    JSCContext *context = webkit_frame_get_js_context (frame);
-
-    parameters = webkit_user_message_get_parameters (message);
-    if (!parameters)
-      return;
-
-    g_variant_get (parameters, "(&s&s&s)", &guid, &path, &code);
-    uri = g_strdup_printf ("ephy-webextension://%s/%s", guid, path);
-    value = jsc_context_evaluate_with_source_uri (context, code, -1, uri, 1);
-    g_clear_object (&value);
-  } else if (strcmp (name, "sendMessage") == 0) {
-    GVariant *parameters;
-    const char *script;
-    g_autofree char *uri = NULL;
-    JSCContext *context = webkit_frame_get_js_context (frame);
-
-    parameters = webkit_user_message_get_parameters (message);
-    if (!parameters)
-      return;
-
-    g_variant_get (parameters, "(&s)", &script);
-    value = jsc_context_evaluate (context, script, -1);
-    g_clear_object (&value);
-  }
-}
-
-static void
-ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
-                                            WebKitWebPage           *web_page)
-{
-  g_autoptr (JSCContext) js_context = NULL;
-
-  if (PAGE_IS_EXTENSION (web_page)) {
-    /* Enforce the creation of the script world global context in the main frame */
-    js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), webkit_script_world_get_default ());
-    (void)js_context;
-
-    g_signal_connect_swapped (web_page, "user-message-received",
-                              G_CALLBACK (ephy_web_extension_page_user_message_received_cb),
-                              NULL);
-  } else {
-    g_signal_connect (web_page, "context-menu",
-                      G_CALLBACK (web_page_context_menu),
-                      extension);
-    g_signal_connect (web_page, "will-submit-form",
-                      G_CALLBACK (web_page_will_submit_form),
-                      extension);
-    g_signal_connect (web_page, "form-controls-associated-for-frame",
-                      G_CALLBACK (web_page_form_controls_associated),
-                      extension);
-    g_signal_connect (web_page, "user-message-received",
-                      G_CALLBACK (web_page_received_message),
-                      extension);
-  }
 }
 
 static void
@@ -542,7 +478,8 @@ ephy_web_process_extension_dispose (GObject *object)
     g_clear_pointer (&extension->frames_map, g_hash_table_unref);
   }
 
-  g_clear_pointer (&extension->web_extensions, g_hash_table_destroy);
+  g_clear_pointer (&extension->translation_table, g_hash_table_destroy);
+  g_clear_pointer (&extension->content_script_worlds, g_hash_table_destroy);
 
   G_OBJECT_CLASS (ephy_web_process_extension_parent_class)->dispose (object);
 }
@@ -787,116 +724,6 @@ js_exception_handler (JSCContext   *context,
   jsc_context_throw_exception (context, exception);
 }
 
-static JSCValue *
-ephy_get_view_objects (gpointer user_data)
-{
-  EphyWebProcessExtension *extension = EPHY_WEB_PROCESS_EXTENSION (user_data);
-  g_autoptr (GPtrArray) window_objects = g_ptr_array_new ();
-  GHashTableIter iter;
-  JSCContext *context;
-
-  g_hash_table_iter_init (&iter, extension->view_contexts);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&context)) {
-    if (context == extension->background_context)
-      g_ptr_array_insert (window_objects, 0, jsc_context_get_global_object (context));
-    else
-      g_ptr_array_add (window_objects, jsc_context_get_global_object (context));
-  }
-
-  return jsc_value_new_array_from_garray (jsc_context_get_current (), window_objects);
-}
-
-static void
-on_frame_destroyed (gpointer  user_data,
-                    GObject  *object)
-{
-  EphyWebProcessExtension *extension = user_data;
-  WebKitFrame *frame = WEBKIT_FRAME (object);
-  int id = webkit_frame_get_id (frame);
-
-  g_hash_table_remove (extension->view_contexts, &id);
-}
-
-static void
-default_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
-                                               WebKitWebPage           *page,
-                                               WebKitFrame             *frame,
-                                               EphyWebProcessExtension *extension)
-{
-  g_autoptr (JSCContext) js_context = NULL;
-  g_autoptr (JSCValue) js_browser = NULL;
-  g_autoptr (JSCValue) js_i18n = NULL;
-  g_autoptr (JSCValue) js_extension = NULL;
-  g_autoptr (JSCValue) js_function = NULL;
-  g_autoptr (GBytes) bytes = NULL;
-  g_autoptr (JSCValue) result = NULL;
-  g_autoptr (GError) error = NULL;
-  WebExtensionData *extension_data;
-  const char *data;
-  const char *guid;
-  GUri *parsed_uri;
-  gsize data_size;
-
-  if (!PAGE_IS_EXTENSION (page))
-    return;
-
-  parsed_uri = g_uri_parse (webkit_web_page_get_uri (page), G_URI_FLAGS_NON_DNS, &error);
-  if (!parsed_uri) {
-    g_warning ("Failed to parse URI of web page: %s", error->message);
-    return;
-  }
-
-  guid = g_uri_get_host (parsed_uri);
-  extension_data = g_hash_table_lookup (extension->web_extensions, guid);
-  if (!extension_data) {
-    g_warning ("Failed to find extension by guid: %s", guid);
-    return;
-  }
-
-  js_context = webkit_frame_get_js_context_for_script_world (frame, world);
-
-  /* The first context made is assumed to be the background page. */
-  if (!extension->background_context && extension_data->has_background_page)
-    extension->background_context = js_context;
-
-  if (!g_hash_table_contains (extension->view_contexts, GUINT_TO_POINTER (webkit_frame_get_id (frame)))) {
-    g_hash_table_insert (extension->view_contexts, GUINT_TO_POINTER (webkit_frame_get_id (frame)), g_object_ref (js_context));
-    g_object_weak_ref (G_OBJECT (frame), on_frame_destroyed, extension);
-  }
-
-  js_browser = jsc_context_get_value (js_context, "browser");
-  g_assert (!jsc_value_is_object (js_browser));
-
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/webextensions-common.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-  data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/webextensions-common.js", 1);
-  g_clear_pointer (&bytes, g_bytes_unref);
-  g_clear_object (&result);
-
-  ephy_webextension_install_common_apis (page,
-                                         frame,
-                                         js_context,
-                                         guid,
-                                         extension_data->translations);
-
-  js_browser = jsc_context_get_value (js_context, "browser");
-  js_extension = jsc_value_object_get_property (js_browser, "extension");
-
-  js_function = jsc_value_new_function (js_context,
-                                        "ephy_get_view_objects",
-                                        G_CALLBACK (ephy_get_view_objects),
-                                        extension,
-                                        NULL,
-                                        JSC_TYPE_VALUE, 0);
-  jsc_value_object_set_property (js_extension, "_ephy_get_view_objects", js_function);
-  g_clear_object (&js_function);
-
-  bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/webextensions.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-  data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/webextensions.js", 1);
-  g_clear_object (&result);
-}
-
 static void
 ephy_autofill_js_change_value (JSCValue   *js_input_element,
                                const char *value)
@@ -958,10 +785,10 @@ ephy_autofill_js_get_field_value (EphyAutofillField        field,
 }
 
 static void
-private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
-                                               WebKitWebPage           *page,
-                                               WebKitFrame             *frame,
-                                               EphyWebProcessExtension *extension)
+window_object_cleared_cb (WebKitScriptWorld       *world,
+                          WebKitWebPage           *page,
+                          WebKitFrame             *frame,
+                          EphyWebProcessExtension *extension)
 {
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (GBytes) bytes = NULL;
@@ -972,9 +799,6 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   g_autoptr (JSCValue) js_function = NULL;
   g_autoptr (JSCValue) js_value = NULL;
   g_autoptr (JSCValue) result = NULL;
-
-  if (PAGE_IS_EXTENSION (page))
-    return;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
@@ -1141,9 +965,7 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
                                        WebKitWebProcessExtension *wk_extension,
                                        const char                *guid,
                                        gboolean                   should_remember_passwords,
-                                       gboolean                   is_private_profile,
-                                       GVariant                  *web_extensions)
-
+                                       gboolean                   is_private_profile)
 {
   g_assert (EPHY_IS_WEB_PROCESS_EXTENSION (extension));
 
@@ -1154,18 +976,11 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
 
   g_assert (guid && *guid);
 
-  /* Default script world, used by WebExtensions. */
-  g_signal_connect (webkit_script_world_get_default (),
-                    "window-object-cleared",
-                    G_CALLBACK (default_script_world_window_object_cleared_cb),
-                    extension);
-
-  /* Private script world, used by Epiphany on normal web pages. */
   extension->script_world = webkit_script_world_new_with_name (guid);
 
   g_signal_connect (extension->script_world,
                     "window-object-cleared",
-                    G_CALLBACK (private_script_world_window_object_cleared_cb),
+                    G_CALLBACK (window_object_cleared_cb),
                     extension);
 
   extension->extension = g_object_ref (wk_extension);
@@ -1185,19 +1000,9 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
   extension->frames_map = g_hash_table_new_full (g_int64_hash, g_int64_equal,
                                                  g_free, NULL);
 
-  extension->view_contexts = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
-  extension->web_extensions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                     (GDestroyNotify)web_extension_data_free);
+  extension->translation_table = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                        g_free, (GDestroyNotify)json_object_unref);
 
-  for (guint i = 0; i < g_variant_n_children (web_extensions); i++) {
-    g_autoptr (GVariant) child = g_variant_get_child_value (web_extensions, i);
-    g_autoptr (GVariant) variant = NULL;
-    g_autoptr (GVariantDict) dict = NULL;
-    char *extension_guid;
-
-    g_variant_get (child, "{sv}", &extension_guid, &variant);
-    dict = g_variant_dict_new (variant);
-    g_hash_table_replace (extension->web_extensions, extension_guid,
-                          create_web_extension_data (extension_guid, dict));
-  }
+  extension->content_script_worlds = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                            g_free, g_object_unref);
 }
