@@ -79,7 +79,7 @@ const ephy_message = function (fn, args) {
 
 window.browser.runtime = {
     getURL: function (args) { return window.browser.extension.getURL(args); },
-    getManifest: function () { return {}; },
+    getManifest: function () { return window.browser.extension.getManifest(); },
     onMessage: new EphyEventListener (),
     onConnect: new EphyEventListener (),
     sendMessage: function (...args) {
