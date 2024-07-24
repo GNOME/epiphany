@@ -157,6 +157,13 @@ js_geturl (const char *path,
   return g_strdup_printf ("ephy-webextension://%s/%s", guid, path[0] == '/' ? path + 1 : path);
 }
 
+static JSCValue *
+js_getmanifest (gpointer user_data)
+{
+  JSCValue *manifest_object = user_data;
+  return g_object_ref (manifest_object);
+}
+
 static void
 js_exception_handler (JSCContext   *context,
                       JSCException *exception)
@@ -179,12 +186,14 @@ ephy_webextension_install_common_apis (WebKitWebPage *page,
                                        WebKitFrame   *frame,
                                        JSCContext    *js_context,
                                        const char    *guid,
-                                       JsonObject    *translations)
+                                       JsonObject    *translations,
+                                       const char    *manifest)
 {
   g_autoptr (JSCValue) js_browser = NULL;
   g_autoptr (JSCValue) js_i18n = NULL;
   g_autoptr (JSCValue) js_extension = NULL;
   g_autoptr (JSCValue) js_function = NULL;
+  g_autoptr (JSCValue) manifest_object = NULL;
   EphySendMessageData *send_message_data;
 
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
@@ -227,6 +236,16 @@ ephy_webextension_install_common_apis (WebKitWebPage *page,
                                         1,
                                         G_TYPE_STRING);
   jsc_value_object_set_property (js_extension, "getURL", js_function);
+  g_clear_object (&js_function);
+
+  /* Manifest */
+  manifest_object = jsc_value_new_from_json (js_context, manifest);
+  js_function = jsc_value_new_function (js_context,
+                                        NULL,
+                                        G_CALLBACK (js_getmanifest), g_object_ref (manifest_object), g_object_unref,
+                                        JSC_TYPE_VALUE,
+                                        0);
+  jsc_value_object_set_property (js_extension, "getManifest", js_function);
   g_clear_object (&js_function);
 
   /* global functions */
