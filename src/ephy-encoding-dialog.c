@@ -37,7 +37,7 @@
 #include <webkit/webkit.h>
 
 struct _EphyEncodingDialog {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   EphyEncodings *encodings;
   EphyWindow *window;
@@ -70,7 +70,7 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-G_DEFINE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, ADW_TYPE_DIALOG)
 
 static void
 select_encoding_row (GtkListBox   *list_box,
@@ -103,6 +103,27 @@ select_encoding_row (GtkListBox   *list_box,
 }
 
 static void
+clean_selected_list_box (GtkListBox *list_box)
+{
+  GtkListBoxRow *row;
+  int i = 0;
+
+  while ((row = gtk_list_box_get_row_at_index (list_box, i++))) {
+    EphyEncodingRow *ephy_encoding_row =
+      EPHY_ENCODING_ROW (gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row)));
+    ephy_encoding_row_set_selected (ephy_encoding_row, FALSE);
+  }
+}
+
+static void
+clean_selected (EphyEncodingDialog *dialog)
+{
+  clean_selected_list_box (dialog->list_box);
+  clean_selected_list_box (dialog->recent_list_box);
+  clean_selected_list_box (dialog->related_list_box);
+}
+
+static void
 sync_encoding_against_embed (EphyEncodingDialog *dialog)
 {
   const char *encoding;
@@ -116,6 +137,8 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 
   encoding = webkit_web_view_get_custom_charset (view);
   is_automatic = encoding == NULL;
+
+  clean_selected (dialog);
 
   if (!is_automatic) {
     EphyEncoding *node;
@@ -209,27 +232,6 @@ activate_choice (EphyEncodingDialog *dialog)
 
     ephy_encodings_add_recent (dialog->encodings, code);
   }
-}
-
-static void
-clean_selected_list_box (GtkListBox *list_box)
-{
-  GtkListBoxRow *row;
-  int i = 0;
-
-  while ((row = gtk_list_box_get_row_at_index (list_box, i++))) {
-    EphyEncodingRow *ephy_encoding_row =
-      EPHY_ENCODING_ROW (gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row)));
-    ephy_encoding_row_set_selected (ephy_encoding_row, FALSE);
-  }
-}
-
-static void
-clean_selected (EphyEncodingDialog *dialog)
-{
-  clean_selected_list_box (dialog->list_box);
-  clean_selected_list_box (dialog->recent_list_box);
-  clean_selected_list_box (dialog->related_list_box);
 }
 
 static void

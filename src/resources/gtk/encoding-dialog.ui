@@ -2,12 +2,11 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
-  <template class="EphyEncodingDialog" parent="AdwWindow">
+  <template class="EphyEncodingDialog" parent="AdwDialog">
     <property name="title" translatable="yes">Text Encoding</property>
-    <property name="modal">True</property>
-    <property name="default_width">500</property>
-    <property name="default_height">420</property>
-    <property name="content">
+    <property name="content-width">500</property>
+    <property name="content-height">420</property>
+    <property name="child">
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar"/>
@@ -15,10 +14,11 @@
         <property name="content">
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
-            <property name="margin-bottom">6</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
             <child>
               <object class="GtkBox">
                 <property name="spacing">6</property>

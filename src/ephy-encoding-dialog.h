@@ -27,7 +27,7 @@
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_ENCODING_DIALOG (ephy_encoding_dialog_get_type ())
-G_DECLARE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY, ENCODING_DIALOG, AdwWindow);
+G_DECLARE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY, ENCODING_DIALOG, AdwDialog);
 
 EphyEncodingDialog  *ephy_encoding_dialog_new  (EphyWindow *window);
 
