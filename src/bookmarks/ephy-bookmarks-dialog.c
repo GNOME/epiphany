@@ -41,6 +41,7 @@ struct _EphyBookmarksDialog {
   GtkWidget *tags_list_box;
   GtkWidget *tag_detail_list_box;
   GtkWidget *tag_detail_label;
+  GtkWidget *search_entry;
   char *tag_detail_tag;
 
   EphyBookmarksManager *manager;
@@ -377,6 +378,27 @@ tags_list_box_sort_func (GtkListBoxRow *row1,
   return g_strcmp0 (title1, title2);
 }
 
+static gboolean
+tags_list_box_filter_func (GtkListBoxRow *row,
+                           gpointer       user_data)
+{
+  EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
+  g_autofree gchar *search_casefold = NULL;
+  g_autofree gchar *title_casefold = NULL;
+  const char *title;
+  const char *search_text;
+
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+
+  title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+  title_casefold = g_utf8_casefold (title, -1);
+
+  search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
+  search_casefold = g_utf8_casefold (search_text, -1);
+
+  return !!strstr (title_casefold, search_casefold);
+}
+
 static void
 ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
                                        const char          *tag)
@@ -451,6 +473,15 @@ row_clicked_cb (GtkGesture          *gesture,
 }
 
 static void
+on_search_entry_changed (GtkSearchEntry *entry,
+                         gpointer        user_data)
+{
+  EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
+
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->tags_list_box));
+}
+
+static void
 ephy_bookmarks_dialog_finalize (GObject *object)
 {
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (object);
@@ -474,6 +505,9 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tags_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_label);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, search_entry);
+
+  gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
@@ -486,13 +520,19 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   GSequenceIter *iter;
   g_autoptr (GSequence) bookmarks = NULL;
   GtkGesture *gesture;
+  GtkFilter *filter;
+  g_autoptr (GtkFilterListModel) filter_model = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
 
+  filter = GTK_FILTER (gtk_string_filter_new (gtk_property_expression_new (EPHY_TYPE_BOOKMARK, NULL, "title")));
+  g_object_bind_property (self->search_entry, "text", filter, "search", 0);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (self->manager), filter);
+
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
-                           G_LIST_MODEL (self->manager),
+                           G_LIST_MODEL (filter_model),
                            create_bookmark_row,
                            self, NULL);
 
@@ -502,6 +542,9 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tags_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->tags_list_box),
+                                (GtkListBoxFilterFunc)tags_list_box_filter_func,
+                                self, NULL);
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tag_detail_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);

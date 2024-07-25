@@ -17,6 +17,12 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">24</property>
                 <child>
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="placeholder-text" translatable="yes">Search bookmark</property>
+                    <signal name="search-changed" handler="on_search_entry_changed"/>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkStackSwitcher">
                     <property name="halign">center</property>
                     <property name="stack">stack</property>
