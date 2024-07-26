@@ -938,7 +938,7 @@ ephy_embed_shell_constructed (GObject *object)
   priv->permissions_manager = ephy_permissions_manager_new ();
   priv->filters_manager = ephy_filters_manager_new (NULL);
 
-  priv->web_extension_initialization_data = g_variant_new ("a{sv}", NULL);
+  ephy_embed_shell_set_web_extension_initialization_data (shell, g_variant_new ("a{sv}", NULL));
 }
 
 static void
