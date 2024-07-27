@@ -475,6 +475,13 @@ ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmark1,
   g_assert (EPHY_IS_BOOKMARK (bookmark1));
   g_assert (EPHY_IS_BOOKMARK (bookmark2));
 
+  if (ephy_bookmark_has_tag (bookmark1, EPHY_BOOKMARKS_FAVORITES_TAG) &&
+      !ephy_bookmark_has_tag (bookmark2, EPHY_BOOKMARKS_FAVORITES_TAG))
+    return -1;
+  if (!ephy_bookmark_has_tag (bookmark1, EPHY_BOOKMARKS_FAVORITES_TAG) &&
+      ephy_bookmark_has_tag (bookmark2, EPHY_BOOKMARKS_FAVORITES_TAG))
+    return 1;
+
   title1 = g_utf8_casefold (ephy_bookmark_get_title (bookmark1), -1);
   title2 = g_utf8_casefold (ephy_bookmark_get_title (bookmark2), -1);
   result = g_strcmp0 (title1, title2);
