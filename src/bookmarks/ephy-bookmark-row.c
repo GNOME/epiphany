@@ -241,6 +241,11 @@ ephy_bookmark_row_constructed (GObject *object)
                            G_CALLBACK (gtk_list_box_row_changed),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->bookmark,
+                           "notify::bmkUri",
+                           G_CALLBACK (gtk_list_box_row_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,

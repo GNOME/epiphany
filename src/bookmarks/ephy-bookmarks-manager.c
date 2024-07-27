@@ -262,6 +262,8 @@ bookmark_url_changed_cb (EphyBookmark         *bookmark,
                          GParamSpec           *pspec,
                          EphyBookmarksManager *self)
 {
+  ephy_bookmark_manager_sort_list (bookmark, self);
+
   g_signal_emit (self, signals[BOOKMARK_URL_CHANGED], 0, bookmark);
 }
 
