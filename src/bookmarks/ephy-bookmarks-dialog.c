@@ -495,6 +495,19 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
 }
 
+static GtkWidget *
+create_placeholder (const char *title)
+{
+  GtkWidget *status_page;
+
+  status_page = adw_status_page_new ();
+  adw_status_page_set_icon_name (ADW_STATUS_PAGE (status_page), "ephy-starred-symbolic");
+  adw_status_page_set_title (ADW_STATUS_PAGE (status_page), title);
+  gtk_widget_set_size_request (status_page, -1, 360);
+
+  return status_page;
+}
+
 static void
 ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
 {
@@ -512,6 +525,9 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   filter = GTK_FILTER (gtk_string_filter_new (gtk_property_expression_new (EPHY_TYPE_BOOKMARK, NULL, "title")));
   g_object_bind_property (self->search_entry, "text", filter, "search", 0);
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (self->manager), filter);
+
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->bookmarks_list_box), create_placeholder (_("No bookmarks found")));
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->tags_list_box), create_placeholder (_("No tags found")));
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
                            G_LIST_MODEL (filter_model),
