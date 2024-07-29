@@ -28,12 +28,13 @@
 #include "ephy-type-builtins.h"
 #include "ephy-uri-helpers.h"
 
+#include <adwaita.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
 #include <string.h>
 
 struct _EphyBookmarkProperties {
-  GtkBox parent_instance;
+  AdwBin parent_instance;
 
   EphyBookmarksManager *manager;
   EphyBookmark *bookmark;
@@ -42,18 +43,17 @@ struct _EphyBookmarkProperties {
 
   EphyBookmarkPropertiesType type;
 
-  GtkWidget *popover_bookmark_label;
-  GtkWidget *name_entry;
-  GtkWidget *address_label;
-  GtkWidget *address_entry;
-  GtkWidget *popover_tags_label;
-  GtkWidget *tags_box;
-  GtkWidget *tags_scrolled_window;
-  GtkWidget *add_tag_entry;
-  GtkWidget *add_tag_button;
+  GtkWidget *header_bar;
+  GtkWidget *tag_header_bar;
+  GtkWidget *navigation_view;
+  GtkWidget *name_row;
+  GtkWidget *address_row;
+  GtkWidget *remove_button;
+  GtkWidget *add_tag_row;
+  GtkWidget *tag_list;
 };
 
-G_DEFINE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, ADW_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -65,91 +65,60 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 static int
-flow_box_sort_func (GtkFlowBoxChild *child1,
-                    GtkFlowBoxChild *child2)
+tag_sort_func (GtkListBoxRow *child1,
+               GtkListBoxRow *child2,
+               gpointer       user_data)
 {
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *label1;
-  GtkWidget *label2;
   const char *tag1;
   const char *tag2;
 
-  g_assert (GTK_IS_FLOW_BOX_CHILD (child1));
-  g_assert (GTK_IS_FLOW_BOX_CHILD (child2));
+  g_assert (GTK_IS_LIST_BOX_ROW (child1));
+  g_assert (GTK_IS_LIST_BOX_ROW (child2));
 
-  box1 = gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child1));
-  box2 = gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child2));
-
-  label1 = g_object_get_data (G_OBJECT (box1), "label");
-  label2 = g_object_get_data (G_OBJECT (box2), "label");
-
-  tag1 = gtk_label_get_text (GTK_LABEL (label1));
-  tag2 = gtk_label_get_text (GTK_LABEL (label2));
+  tag1 = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (child1));
+  tag2 = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (child2));
 
   return ephy_bookmark_tags_compare (tag1, tag2);
-}
-
-static void
-update_tags_scrollbar (EphyBookmarkProperties *self)
-{
-  gboolean show_scrollbar;
-
-  /* We only allow showing scrollbar if we have 4 or more tags. */
-  show_scrollbar = !!gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (self->tags_box), 3);
-
-  g_object_set (self->tags_scrolled_window,
-                "vscrollbar-policy",
-                show_scrollbar ? GTK_POLICY_AUTOMATIC : GTK_POLICY_NEVER,
-                NULL);
-}
-
-static void
-ephy_bookmark_properties_tags_box_child_activated_cb (EphyBookmarkProperties *self,
-                                                      GtkFlowBoxChild        *child,
-                                                      GtkFlowBox             *flow_box)
-{
-  GtkWidget *box;
-  GtkWidget *label;
-
-  g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
-  g_assert (GTK_IS_FLOW_BOX_CHILD (child));
-  g_assert (GTK_IS_FLOW_BOX (flow_box));
-
-  box = gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child));
-  label = g_object_get_data (G_OBJECT (box), "label");
-
-  if (gtk_widget_has_css_class (GTK_WIDGET (child), "bookmark-tag-widget-selected")) {
-    ephy_bookmark_remove_tag (self->bookmark,
-                              gtk_label_get_text (GTK_LABEL (label)));
-    gtk_widget_remove_css_class (GTK_WIDGET (child), "bookmark-tag-widget-selected");
-  } else {
-    ephy_bookmark_add_tag (self->bookmark,
-                           gtk_label_get_text (GTK_LABEL (label)));
-    gtk_widget_add_css_class (GTK_WIDGET (child), "bookmark-tag-widget-selected");
-  }
 }
 
 static void
 ephy_bookmark_properties_tag_widget_button_clicked_cb (EphyBookmarkProperties *self,
                                                        GtkButton              *button)
 {
-  GtkWidget *box;
-  GtkWidget *flow_box_child;
-  GtkLabel *label;
+  GtkWidget *row;
+  const char *label;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
   g_assert (GTK_IS_BUTTON (button));
 
-  box = gtk_widget_get_parent (GTK_WIDGET (button));
-  g_assert (GTK_IS_BOX (box));
-  label = g_object_get_data (G_OBJECT (box), "label");
+  row = gtk_widget_get_ancestor (GTK_WIDGET (button), ADW_TYPE_ACTION_ROW);
+  g_assert (ADW_IS_ACTION_ROW (row));
+  label = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
 
-  ephy_bookmarks_manager_delete_tag (self->manager, gtk_label_get_text (label));
+  ephy_bookmarks_manager_delete_tag (self->manager, label);
 
-  flow_box_child = gtk_widget_get_parent (box);
-  gtk_flow_box_remove (GTK_FLOW_BOX (self->tags_box), flow_box_child);
-  update_tags_scrollbar (self);
+  gtk_list_box_remove (GTK_LIST_BOX (self->tag_list), row);
+}
+
+static void
+on_check_button_toggled (GtkWidget *button,
+                         gpointer   user_data)
+{
+  EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
+  const char *label;
+  GtkWidget *row;
+
+  g_assert (GTK_IS_CHECK_BUTTON (button));
+  g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
+
+  row = gtk_widget_get_ancestor (GTK_WIDGET (button), ADW_TYPE_ACTION_ROW);
+  label = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+
+  if (!gtk_check_button_get_active (GTK_CHECK_BUTTON (button))) {
+    ephy_bookmark_remove_tag (self->bookmark, label);
+  } else {
+    ephy_bookmark_add_tag (self->bookmark, label);
+  }
 }
 
 static GtkWidget *
@@ -158,53 +127,44 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
                                             gboolean                selected)
 {
   GtkWidget *widget;
-  GtkWidget *box;
-  GtkWidget *label;
+  GtkWidget *check_button;
   gboolean default_tag;
   const char *label_text;
 
   default_tag = (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0);
 
-  widget = gtk_flow_box_child_new ();
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  widget = adw_action_row_new ();
 
   if (default_tag) {
     GtkWidget *image;
 
     image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic");
-    gtk_widget_set_margin_bottom (image, 8);
-    gtk_widget_set_margin_top (image, 8);
-    gtk_box_append (GTK_BOX (box), image);
+    adw_action_row_add_prefix (ADW_ACTION_ROW (widget), image);
   }
 
+  check_button = gtk_check_button_new ();
+  gtk_widget_add_css_class (check_button, "selection-mode");
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), selected);
+  g_signal_connect_object (G_OBJECT (check_button), "toggled", G_CALLBACK (on_check_button_toggled), self, 0);
+  adw_action_row_add_prefix (ADW_ACTION_ROW (widget), check_button);
+
   label_text = default_tag ? EPHY_BOOKMARKS_FAVORITES_TAG : tag;
-  label = gtk_label_new (label_text);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_box_append (GTK_BOX (box), label);
+
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (widget), label_text);
 
   if (!default_tag) {
     GtkWidget *button;
 
-    button = gtk_button_new_from_icon_name ("window-close-symbolic");
+    button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_widget_add_css_class (button, "flat");
-    gtk_box_append (GTK_BOX (box), button);
+    adw_action_row_add_suffix (ADW_ACTION_ROW (widget), button);
     g_signal_connect_object (button, "clicked",
                              G_CALLBACK (ephy_bookmark_properties_tag_widget_button_clicked_cb),
                              self,
                              G_CONNECT_SWAPPED);
   }
 
-  g_object_set_data (G_OBJECT (box), "label", label);
-
-  gtk_flow_box_child_set_child (GTK_FLOW_BOX_CHILD (widget), box);
-
-  gtk_widget_add_css_class (widget, "bookmark-tag-widget");
-  if (selected)
-    gtk_widget_add_css_class (widget, "bookmark-tag-widget-selected");
 
   return widget;
 }
@@ -212,12 +172,10 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
 static void
 ephy_bookmark_properties_actions_add_tag (EphyBookmarkProperties *self)
 {
-  GtkEntryBuffer *buffer;
   GtkWidget *widget;
   const char *text;
 
-  buffer = gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry));
-  text = gtk_entry_buffer_get_text (buffer);
+  text = gtk_editable_get_text (GTK_EDITABLE (self->add_tag_row));
 
   /* Create new tag with the given title */
   ephy_bookmarks_manager_create_tag (self->manager, text);
@@ -227,14 +185,13 @@ ephy_bookmark_properties_actions_add_tag (EphyBookmarkProperties *self)
 
   /* Create a new widget for the new tag */
   widget = ephy_bookmark_properties_create_tag_widget (self, text, TRUE);
-  gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
-  update_tags_scrollbar (self);
+  gtk_list_box_insert (GTK_LIST_BOX (self->tag_list), widget, -1);
 
   /* Empty entry and disable button's action until new text is inserted */
-  gtk_editable_set_text (GTK_EDITABLE (self->add_tag_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (self->add_tag_row), "");
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->add_tag_entry));
+  gtk_widget_grab_focus (GTK_WIDGET (self->add_tag_row));
 }
 
 static void
@@ -243,8 +200,10 @@ ephy_bookmark_properties_actions_remove_bookmark (EphyBookmarkProperties *self)
   self->bookmark_is_removed = TRUE;
   ephy_bookmarks_manager_remove_bookmark (self->manager, self->bookmark);
 
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG)
-    gtk_window_destroy (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
+  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG) {
+    AdwDialog *dialog = ADW_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (self), ADW_TYPE_DIALOG));
+    adw_dialog_close (dialog);
+  }
 }
 
 static void
@@ -255,9 +214,8 @@ ephy_bookmark_properties_buffer_text_changed_cb (EphyBookmarkProperties *self,
   const char *text;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
-  g_assert (GTK_IS_ENTRY_BUFFER (buffer));
 
-  text = gtk_entry_buffer_get_text (buffer);
+  text = gtk_editable_get_text (GTK_EDITABLE (self->add_tag_row));
   if (ephy_bookmarks_manager_tag_exists (self->manager, text) || g_strcmp0 (text, "") == 0)
     gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
   else
@@ -316,6 +274,16 @@ ephy_bookmark_properties_bookmark_tag_removed_cb (EphyBookmarkProperties *self,
 }
 
 static void
+on_tags_activated (GtkListBox    *box,
+                   GtkListBoxRow *row,
+                   gpointer       user_data)
+{
+  EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
+
+  adw_navigation_view_push_by_tag (ADW_NAVIGATION_VIEW (self->navigation_view), "tags");
+}
+
+static void
 ephy_bookmark_properties_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
@@ -347,18 +315,17 @@ ephy_bookmark_properties_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructed (object);
 
   /* Set appearance based on type */
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG) {
-    gtk_box_remove (GTK_BOX (self), self->popover_bookmark_label);
-  } else if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER) {
-    gtk_box_remove (GTK_BOX (self), self->address_label);
-    gtk_box_remove (GTK_BOX (self), self->address_entry);
+  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER) {
+    gtk_widget_set_visible (self->address_row, FALSE);
+    adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (self->header_bar), FALSE);
+    adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (self->tag_header_bar), FALSE);
   }
 
   /* Set text for name entry */
-  gtk_editable_set_text (GTK_EDITABLE (self->name_entry),
+  gtk_editable_set_text (GTK_EDITABLE (self->name_row),
                          ephy_bookmark_get_title (self->bookmark));
 
-  g_object_bind_property (GTK_ENTRY (self->name_entry), "text",
+  g_object_bind_property (GTK_EDITABLE (self->name_row), "text",
                           self->bookmark, "title",
                           G_BINDING_DEFAULT);
 
@@ -368,9 +335,9 @@ ephy_bookmark_properties_constructed (GObject *object)
 
     address = ephy_bookmark_get_url (self->bookmark);
     decoded_address = ephy_uri_decode (address);
-    gtk_editable_set_text (GTK_EDITABLE (self->address_entry), decoded_address);
+    gtk_editable_set_text (GTK_EDITABLE (self->address_row), decoded_address);
 
-    g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
+    g_object_bind_property (GTK_EDITABLE (self->address_row), "text",
                             self->bookmark, "bmkUri",
                             G_BINDING_DEFAULT);
   }
@@ -392,14 +359,8 @@ ephy_bookmark_properties_constructed (GObject *object)
       selected = TRUE;
 
     widget = ephy_bookmark_properties_create_tag_widget (self, tag, selected);
-    gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
+    gtk_list_box_insert (GTK_LIST_BOX (self->tag_list), widget, -1);
   }
-  update_tags_scrollbar (self);
-
-  g_signal_connect_object (self->tags_box, "child-activated",
-                           G_CALLBACK (ephy_bookmark_properties_tags_box_child_activated_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -421,16 +382,6 @@ ephy_bookmark_properties_finalize (GObject *object)
 }
 
 static void
-ephy_bookmark_properties_realize (GtkWidget *widget)
-{
-  EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (widget);
-
-  GTK_WIDGET_CLASS (ephy_bookmark_properties_parent_class)->realize (widget);
-
-  gtk_widget_grab_focus (self->name_entry);
-}
-
-static void
 ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -439,8 +390,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
   object_class->set_property = ephy_bookmark_properties_set_property;
   object_class->constructed = ephy_bookmark_properties_constructed;
   object_class->finalize = ephy_bookmark_properties_finalize;
-
-  widget_class->realize = ephy_bookmark_properties_realize;
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
@@ -458,15 +407,16 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-properties.ui");
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, popover_bookmark_label);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, name_entry);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, address_label);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, address_entry);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, popover_tags_label);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tags_box);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tags_scrolled_window);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, add_tag_entry);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, add_tag_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, navigation_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, name_row);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, address_row);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, remove_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, add_tag_row);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tag_list);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tag_header_bar);
+
+  gtk_widget_class_bind_template_callback (widget_class, on_tags_activated);
 
   gtk_widget_class_install_action (widget_class, "bookmark-properties.add-tag",
                                    NULL, (GtkWidgetActionActivateFunc)ephy_bookmark_properties_actions_add_tag);
@@ -501,16 +451,14 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  gtk_flow_box_set_sort_func (GTK_FLOW_BOX (self->tags_box),
-                              (GtkFlowBoxSortFunc)flow_box_sort_func,
-                              NULL, NULL);
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tag_list), tag_sort_func, NULL, NULL);
 
   /* Disable the "add-tag" action until text is inserted in the corresponding
    * entry */
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
 
-  g_signal_connect_object (gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry)),
-                           "notify::text",
+  g_signal_connect_object (self->add_tag_row,
+                           "notify::text-length",
                            G_CALLBACK (ephy_bookmark_properties_buffer_text_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
@@ -533,5 +481,5 @@ ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *self)
 {
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
 
-  return self->add_tag_button;
+  return self->add_tag_row;
 }

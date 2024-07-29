@@ -28,6 +28,8 @@
 #include "ephy-favicon-helpers.h"
 #include "ephy-settings.h"
 
+#include <adwaita.h>
+
 struct _EphyBookmarkRow {
   AdwActionRow parent_instance;
 
@@ -52,12 +54,9 @@ static void
 ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
                                      GtkButton       *button)
 {
+  AdwDialog *dialog;
   GtkWidget *popover;
-  GtkWidget *dialog;
-  GtkWidget *grid;
-  GtkWidget *toolbar_view;
-  GtkEventController *controller;
-  GtkShortcut *shortcut;
+  GtkWidget *bin;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_BUTTON (button));
@@ -68,32 +67,16 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
                          "modal", TRUE,
                          NULL);
 
-  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
-                               gtk_named_action_new ("window.close"));
-  controller = gtk_shortcut_controller_new ();
-
-  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
-
-  gtk_widget_add_controller (dialog, controller);
-
   popover = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_POPOVER);
 
   if (popover)
     gtk_popover_popdown (GTK_POPOVER (popover));
 
-  grid = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
-                                       EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG);
-  gtk_window_set_default_widget (GTK_WINDOW (dialog),
-                                 ephy_bookmark_properties_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES (grid)));
-
-  toolbar_view = adw_toolbar_view_new ();
-  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view),
-                                adw_header_bar_new ());
-  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view),
-                                grid);
-  adw_window_set_content (ADW_WINDOW (dialog), toolbar_view);
-
-  gtk_window_present (GTK_WINDOW (dialog));
+  dialog = adw_dialog_new ();
+  bin = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
+                                      EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG);
+  adw_dialog_set_child (dialog, bin);
+  adw_dialog_present (dialog, gtk_widget_get_parent (GTK_WIDGET (row)));
 }
 
 void

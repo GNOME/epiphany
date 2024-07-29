@@ -22,11 +22,13 @@
 #include "ephy-action-bar-end.h"
 #include "ephy-add-bookmark-popover.h"
 #include "ephy-bookmarks-dialog.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-browser-action.h"
 #include "ephy-browser-action-row.h"
 #include "ephy-desktop-utils.h"
 #include "ephy-downloads-paintable.h"
 #include "ephy-downloads-popover.h"
+#include "ephy-embed-container.h"
 #include "ephy-shell.h"
 #include "ephy-web-extension-manager.h"
 #include "ephy-window.h"
@@ -224,6 +226,46 @@ on_bookmarks_button (GtkToggleButton *button,
 }
 
 static void
+on_bookmark_button_clicked (GtkButton *button,
+                            gpointer   user_data)
+{
+  GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
+  GtkWidget *content;
+  g_autoptr (EphyBookmark) new_bookmark = NULL;
+  AdwDialog *dialog;
+  EphyBookmarksManager *manager;
+  EphyBookmark *bookmark;
+  EphyEmbed *embed;
+  const char *address;
+
+  manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+
+  address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+
+  bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
+  if (!bookmark) {
+    g_autofree char *id = NULL;
+
+    id = ephy_bookmark_generate_random_id ();
+    new_bookmark = ephy_bookmark_new (address,
+                                      ephy_embed_get_title (embed),
+                                      g_sequence_new (g_free),
+                                      id);
+
+    ephy_bookmarks_manager_add_bookmark (manager, new_bookmark);
+    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
+
+    bookmark = new_bookmark;
+  }
+
+  dialog = adw_dialog_new ();
+  content = ephy_bookmark_properties_new (bookmark, EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG);
+  adw_dialog_set_child (dialog, content);
+  adw_dialog_present (dialog, window);
+}
+
+static void
 ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -284,7 +326,6 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
 {
   GObject *object = G_OBJECT (action_bar_end);
   EphyDownloadsManager *downloads_manager;
-  GtkWidget *popover;
   EphyWebExtensionManager *extension_manager;
   EphyEmbedShell *embed_shell;
 
@@ -332,9 +373,7 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
                            G_CALLBACK (show_downloads_cb),
                            object, 0);
 
-  popover = ephy_add_bookmark_popover_new ();
-
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (action_bar_end->bookmark_button), popover);
+  g_signal_connect_object (action_bar_end->bookmark_button, "clicked", G_CALLBACK (on_bookmark_button_clicked), action_bar_end, 0);
 
   extension_manager = ephy_web_extension_manager_get_default ();
   g_signal_connect_object (extension_manager, "show-browser-action",
@@ -400,15 +439,15 @@ ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd      *action_bar_e
       break;
     case EPHY_BOOKMARK_ICON_EMPTY:
       gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
-      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->bookmark_button),
-                                     "ephy-non-starred-symbolic");
+      gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->bookmark_button),
+                                "ephy-non-starred-symbolic");
       /* Translators: tooltip for the empty bookmark button */
       gtk_widget_set_tooltip_text (action_bar_end->bookmark_button, _("Bookmark Page"));
       break;
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
-      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->bookmark_button),
-                                     "ephy-starred-symbolic");
+      gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->bookmark_button),
+                                "ephy-starred-symbolic");
 
       /* Translators: tooltip for the bookmarked button */
       gtk_widget_set_tooltip_text (action_bar_end->bookmark_button, _("Edit Bookmark"));
