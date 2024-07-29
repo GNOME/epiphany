@@ -433,9 +433,11 @@ row_clicked_cb (GtkGesture          *gesture,
 
   g_assert (GTK_IS_LIST_BOX (list));
 
-  row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (list), y);
-
   gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+
+  row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (list), y);
+  if (!row)
+    return;
 
   type = g_object_get_data (G_OBJECT (row), "type");
   if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
