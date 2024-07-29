@@ -526,7 +526,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
 
   filter = GTK_FILTER (gtk_string_filter_new (gtk_property_expression_new (EPHY_TYPE_BOOKMARK, NULL, "title")));
   g_object_bind_property (self->search_entry, "text", filter, "search", 0);
-  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (self->manager), filter);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (g_object_ref (self->manager)), filter);
 
   gtk_list_box_set_placeholder (GTK_LIST_BOX (self->bookmarks_list_box), create_placeholder (_("No bookmarks found")));
   gtk_list_box_set_placeholder (GTK_LIST_BOX (self->tags_list_box), create_placeholder (_("No tags found")));
