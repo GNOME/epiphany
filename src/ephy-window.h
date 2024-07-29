@@ -102,7 +102,6 @@ void              ephy_window_switch_to_new_tab_toast    (EphyWindow *window,
 
 void              ephy_window_switch_to_new_tab          (EphyWindow *window);
 
-void              ephy_window_toggle_bookmarks           (EphyWindow *window,
-                                                          gboolean    state);
+void              ephy_window_toggle_bookmarks           (EphyWindow *window);
 
 G_END_DECLS

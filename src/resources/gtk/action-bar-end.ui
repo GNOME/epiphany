@@ -113,10 +113,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkToggleButton" id="bookmarks_button">
+      <object class="GtkButton" id="bookmarks_button">
         <!-- Translators: tooltip for the bookmarks popover button -->
         <property name="tooltip_text" translatable="yes">Bookmarks</property>
-        <signal name="toggled" handler="on_bookmarks_button"/>
+        <signal name="clicked" handler="on_bookmarks_button"/>
         <property name="icon-name">ephy-library-symbolic</property>
         <style>
           <class name="toolbar-button"/>

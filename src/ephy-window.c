@@ -3882,14 +3882,13 @@ insert_action_group (const char   *prefix,
   gtk_widget_insert_action_group (widget, prefix, group);
 }
 
-void
-on_bottom_sheet_close_attempt (AdwBottomSheet *sheet,
-                               gpointer        user_data)
+static void
+on_bookmark_close_button (GtkWidget *widget,
+                          gpointer   user_data)
 {
   EphyWindow *self = EPHY_WINDOW (user_data);
-  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (self->action_bar));
 
-  ephy_action_bar_end_set_bookmark_button_state (action_bar_end, FALSE);
+  ephy_window_toggle_bookmarks (self);
 }
 
 static void
@@ -3909,6 +3908,7 @@ ephy_window_constructed (GObject *object)
   GtkEventController *controller;
   AdwLayout *layout;
   GtkWidget *sidebar;
+  GtkWidget *bookmark_close_button;
   GtkWidget *content_layout_slot;
   GtkWidget *bookmarks_layout_slot;
   GtkWidget *status_page;
@@ -4035,6 +4035,12 @@ ephy_window_constructed (GObject *object)
   sidebar = adw_toolbar_view_new ();
   header_bar = adw_header_bar_new ();
   adw_header_bar_set_show_title (ADW_HEADER_BAR (header_bar), FALSE);
+  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar), FALSE);
+
+  bookmark_close_button = gtk_button_new ();
+  g_signal_connect_object (bookmark_close_button, "clicked", G_CALLBACK (on_bookmark_close_button), window, 0);
+  gtk_button_set_icon_name (GTK_BUTTON (bookmark_close_button), "view-sidebar-end-symbolic");
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar), bookmark_close_button);
   adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (sidebar), header_bar);
   adw_toolbar_view_set_extend_content_to_top_edge (ADW_TOOLBAR_VIEW (sidebar), TRUE);
 
@@ -4055,6 +4061,7 @@ ephy_window_constructed (GObject *object)
   window->overlay_split_view = adw_overlay_split_view_new ();
   content_layout_slot = adw_layout_slot_new ("primary");
   bookmarks_layout_slot = adw_layout_slot_new ("secondary");
+  adw_overlay_split_view_set_collapsed (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), TRUE);
   adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), FALSE);
   adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), content_layout_slot);
   adw_overlay_split_view_set_sidebar_position (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_PACK_END);
@@ -4070,8 +4077,6 @@ ephy_window_constructed (GObject *object)
   bookmarks_layout_slot = adw_layout_slot_new ("secondary");
   adw_bottom_sheet_set_content (ADW_BOTTOM_SHEET (window->bottom_sheet), content_layout_slot);
   adw_bottom_sheet_set_sheet (ADW_BOTTOM_SHEET (window->bottom_sheet), bookmarks_layout_slot);
-  adw_bottom_sheet_set_can_close (ADW_BOTTOM_SHEET (window->bottom_sheet), FALSE);
-  g_signal_connect (G_OBJECT (window->bottom_sheet), "close-attempt", G_CALLBACK (on_bottom_sheet_close_attempt), window);
 
   layout = adw_layout_new (window->bottom_sheet);
   adw_layout_set_name (layout, "bottom-sheet");
@@ -4777,12 +4782,15 @@ ephy_window_switch_to_new_tab (EphyWindow *window)
 }
 
 void
-ephy_window_toggle_bookmarks (EphyWindow *window,
-                              gboolean    state)
+ephy_window_toggle_bookmarks (EphyWindow *window)
 {
+  gboolean state;
+
   if (g_strcmp0 (adw_multi_layout_view_get_layout_name (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view)), "sidebar") == 0) {
+    state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view));
     adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), state);
   } else {
+    state = !adw_bottom_sheet_get_open (ADW_BOTTOM_SHEET (window->bottom_sheet));
     adw_bottom_sheet_set_open (ADW_BOTTOM_SHEET (window->bottom_sheet), state);
   }
 }

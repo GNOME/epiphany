@@ -220,9 +220,7 @@ on_bookmarks_button (GtkToggleButton *button,
                      gpointer         user_data)
 {
   GtkWindow *parent_window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button)));
-  gboolean state = gtk_toggle_button_get_active (button);
-
-  ephy_window_toggle_bookmarks (EPHY_WINDOW (parent_window), state);
+  ephy_window_toggle_bookmarks (EPHY_WINDOW (parent_window));
 }
 
 static void
@@ -309,8 +307,8 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
                                 action_bar_end->downloads_paintable);
 
   if (is_desktop_pantheon ()) {
-    gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->bookmarks_button),
-                                   "user-bookmarks");
+    gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->bookmarks_button),
+                              "user-bookmarks");
     gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->overview_button),
                                    "view-grid");
   }
@@ -466,11 +464,4 @@ ephy_action_bar_end_set_adaptive_mode (EphyActionBarEnd *action_bar_end,
                           adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
   gtk_widget_set_visible (action_bar_end->overview_button,
                           adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
-}
-
-void
-ephy_action_bar_end_set_bookmark_button_state (EphyActionBarEnd *self,
-                                               gboolean          state)
-{
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->bookmarks_button), state);
 }
