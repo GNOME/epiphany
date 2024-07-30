@@ -37,7 +37,6 @@ struct _EphyBookmarksDialog {
   AdwBin parent_instance;
 
   GtkWidget *toplevel_stack;
-  GtkWidget *bookmarks_list_box;
   GtkWidget *tags_list_box;
   GtkWidget *tag_detail_list_box;
   GtkWidget *tag_detail_label;
@@ -229,7 +228,6 @@ create_tag_row (const char *tag)
   g_object_set_data_full (G_OBJECT (row), "type",
                           g_strdup (EPHY_LIST_BOX_ROW_TYPE_TAG),
                           (GDestroyNotify)g_free);
-  g_object_set (G_OBJECT (row), "height-request", 40, NULL);
 
   if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0) {
     image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic");
@@ -238,6 +236,9 @@ create_tag_row (const char *tag)
   }
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), image);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), tag);
+
+  image = gtk_image_new_from_icon_name ("go-next-symbolic");
+  adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
 
   return row;
 }
@@ -485,7 +486,6 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, toplevel_stack);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, bookmarks_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tags_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_label);
@@ -528,13 +528,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   g_object_bind_property (self->search_entry, "text", filter, "search", 0);
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (g_object_ref (self->manager)), filter);
 
-  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->bookmarks_list_box), create_placeholder (_("No bookmarks found")));
-  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->tags_list_box), create_placeholder (_("No tags found")));
-
-  gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
-                           G_LIST_MODEL (filter_model),
-                           create_bookmark_row,
-                           self, NULL);
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->tags_list_box), create_placeholder (_("No bookmarks found")));
 
   if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
@@ -591,11 +585,6 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   g_signal_connect_object (self->manager, "bookmark-tag-removed",
                            G_CALLBACK (ephy_bookmarks_dialog_bookmark_tag_removed_cb),
                            self, G_CONNECT_SWAPPED);
-
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
-  g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
-  gtk_widget_add_controller (self->bookmarks_list_box, GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);

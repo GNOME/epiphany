@@ -23,54 +23,15 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkStackSwitcher">
-                    <property name="halign">center</property>
-                    <property name="stack">stack</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkStack" id="stack">
-                    <property name="vhomogeneous">false</property>
-                    <property name="interpolate-size">true</property>
-                    <property name="transition-type">slide-left-right</property>
+                  <object class="GtkScrolledWindow">
+                    <property name="propagate-natural-height">True</property>
+                    <property name="hscrollbar-policy">never</property>
                     <child>
-                      <object class="GtkStackPage">
-                        <property name="name">all</property>
-                        <property name="title" translatable="yes">All</property>
-                        <property name="child">
-                          <object class="GtkScrolledWindow">
-                            <property name="propagate-natural-height">True</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <child>
-                              <object class="GtkListBox" id="bookmarks_list_box">
-                                <property name="selection-mode">none</property>
-                                <style>
-                                  <class name="boxed-list"/>
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkStackPage">
-                        <property name="name">tags</property>
-                        <property name="title" translatable="yes">Tags</property>
-                        <property name="child">
-                          <object class="GtkScrolledWindow">
-                            <property name="propagate-natural-height">True</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <child>
-                              <object class="GtkListBox" id="tags_list_box">
-                                <property name="selection-mode">none</property>
-                                <style>
-                                  <class name="boxed-list"/>
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </property>
+                      <object class="GtkListBox" id="tags_list_box">
+                        <property name="selection-mode">none</property>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
                       </object>
                     </child>
                   </object>
