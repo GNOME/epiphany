@@ -26,7 +26,9 @@
 #include "ephy-location-entry.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-debug.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-pixbuf-utils.h"
@@ -1314,6 +1316,17 @@ register_activate_shortcuts (GtkWidgetClass  *widget_class,
 }
 
 static void
+on_bookmark_button_clicked (GtkButton *button,
+                            gpointer   user_data)
+{
+  GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
+  GtkWidget *dialog;
+
+  dialog = ephy_bookmark_properties_new_for_window (EPHY_WINDOW (window));
+  adw_dialog_present (ADW_DIALOG (dialog), window);
+}
+
+static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1516,6 +1529,8 @@ ephy_location_entry_init (EphyLocationEntry *entry)
                    entry->bookmark_button,
                    "visible",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
+
+  g_signal_connect (entry->bookmark_button, "clicked", G_CALLBACK (on_bookmark_button_clicked), entry);
 
   update_reader_icon (entry);
   g_signal_connect_object (gtk_settings_get_default (), "notify::gtk-icon-theme-name",
@@ -1784,16 +1799,16 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
       break;
     case EPHY_BOOKMARK_ICON_EMPTY:
       gtk_widget_set_visible (self->bookmark_button, TRUE);
-      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->bookmark_button),
-                                     "ephy-non-starred-symbolic");
+      gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
+                                "ephy-non-starred-symbolic");
       gtk_widget_remove_css_class (self->bookmark_button, "starred");
       /* Translators: tooltip for the empty bookmark button */
       gtk_widget_set_tooltip_text (self->bookmark_button, _("Bookmark Page"));
       break;
     case EPHY_BOOKMARK_ICON_BOOKMARKED:
       gtk_widget_set_visible (self->bookmark_button, TRUE);
-      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->bookmark_button),
-                                     "ephy-starred-symbolic");
+      gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
+                                "ephy-starred-symbolic");
       gtk_widget_add_css_class (self->bookmark_button, "starred");
       /* Translators: tooltip for the bookmarked button */
       gtk_widget_set_tooltip_text (self->bookmark_button, _("Edit Bookmark"));

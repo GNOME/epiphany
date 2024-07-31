@@ -13,7 +13,6 @@ enums = gnome.mkenums_simple('ephy-type-builtins',
 subdir('webextension')
 
 libephymain_sources = [
-  'bookmarks/ephy-add-bookmark-popover.c',
   'bookmarks/ephy-bookmark.c',
   'bookmarks/ephy-bookmark-properties.c',
   'bookmarks/ephy-bookmark-row.c',

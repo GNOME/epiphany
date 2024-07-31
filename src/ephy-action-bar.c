@@ -20,7 +20,6 @@
  */
 
 #include "ephy-action-bar.h"
-#include "ephy-add-bookmark-popover.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-tab-view.h"

@@ -54,29 +54,13 @@ static void
 ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
                                      GtkButton       *button)
 {
-  AdwDialog *dialog;
-  GtkWidget *popover;
-  GtkWidget *bin;
+  GtkWidget *dialog;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_BUTTON (button));
 
-  dialog = g_object_new (ADW_TYPE_WINDOW,
-                         "title", _("Bookmark Properties"),
-                         "transient-for", GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (row))),
-                         "modal", TRUE,
-                         NULL);
-
-  popover = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_POPOVER);
-
-  if (popover)
-    gtk_popover_popdown (GTK_POPOVER (popover));
-
-  dialog = adw_dialog_new ();
-  bin = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row),
-                                      EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG);
-  adw_dialog_set_child (dialog, bin);
-  adw_dialog_present (dialog, gtk_widget_get_parent (GTK_WIDGET (row)));
+  dialog = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row));
+  adw_dialog_present (ADW_DIALOG (dialog), gtk_widget_get_parent (GTK_WIDGET (row)));
 }
 
 void

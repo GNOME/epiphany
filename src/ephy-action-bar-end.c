@@ -20,7 +20,6 @@
  */
 
 #include "ephy-action-bar-end.h"
-#include "ephy-add-bookmark-popover.h"
 #include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-browser-action.h"
@@ -230,39 +229,10 @@ on_bookmark_button_clicked (GtkButton *button,
                             gpointer   user_data)
 {
   GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
-  GtkWidget *content;
-  g_autoptr (EphyBookmark) new_bookmark = NULL;
-  AdwDialog *dialog;
-  EphyBookmarksManager *manager;
-  EphyBookmark *bookmark;
-  EphyEmbed *embed;
-  const char *address;
+  GtkWidget *dialog;
 
-  manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-
-  address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-
-  bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
-  if (!bookmark) {
-    g_autofree char *id = NULL;
-
-    id = ephy_bookmark_generate_random_id ();
-    new_bookmark = ephy_bookmark_new (address,
-                                      ephy_embed_get_title (embed),
-                                      g_sequence_new (g_free),
-                                      id);
-
-    ephy_bookmarks_manager_add_bookmark (manager, new_bookmark);
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
-
-    bookmark = new_bookmark;
-  }
-
-  dialog = adw_dialog_new ();
-  content = ephy_bookmark_properties_new (bookmark, EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG);
-  adw_dialog_set_child (dialog, content);
-  adw_dialog_present (dialog, window);
+  dialog = ephy_bookmark_properties_new_for_window (EPHY_WINDOW (window));
+  adw_dialog_present (ADW_DIALOG (dialog), window);
 }
 
 static void

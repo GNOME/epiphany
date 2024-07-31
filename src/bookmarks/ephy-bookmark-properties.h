@@ -21,6 +21,7 @@
 #pragma once
 
 #include "ephy-bookmark.h"
+#include "ephy-window.h"
 
 #include <adwaita.h>
 #include <gtk/gtk.h>
@@ -29,16 +30,12 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_BOOKMARK_PROPERTIES (ephy_bookmark_properties_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, EPHY, BOOKMARK_PROPERTIES, AdwBin)
+G_DECLARE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, EPHY, BOOKMARK_PROPERTIES, AdwDialog)
 
-typedef enum {
-  EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
-  EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER
-} EphyBookmarkPropertiesType;
-
-GtkWidget *ephy_bookmark_properties_new                (EphyBookmark                   *bookmark,
-                                                        EphyBookmarkPropertiesType      type);
+GtkWidget *ephy_bookmark_properties_new                (EphyBookmark *bookmark);
 
 GtkWidget *ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *self);
+
+GtkWidget *ephy_bookmark_properties_new_for_window (EphyWindow *window);
 
 G_END_DECLS

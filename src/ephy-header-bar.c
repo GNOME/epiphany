@@ -23,7 +23,6 @@
 #include "config.h"
 #include "ephy-header-bar.h"
 
-#include "ephy-add-bookmark-popover.h"
 #include "ephy-desktop-utils.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -255,13 +254,6 @@ ephy_header_bar_constructed (GObject *object)
     adw_clamp_set_child (ADW_CLAMP (clamp), GTK_WIDGET (header_bar->title_widget));
 
     adw_bin_set_child (ADW_BIN (event_box), clamp);
-  }
-
-  if (EPHY_IS_LOCATION_ENTRY (header_bar->title_widget)) {
-    EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (header_bar->title_widget);
-    GtkWidget *popover = ephy_add_bookmark_popover_new ();
-
-    ephy_location_entry_set_add_bookmark_popover (lentry, GTK_POPOVER (popover));
   }
 
   /* Fullscreen restore button */

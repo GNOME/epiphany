@@ -24,6 +24,7 @@
 
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
+#include "ephy-embed-container.h"
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
 #include "ephy-uri-helpers.h"
@@ -34,14 +35,12 @@
 #include <string.h>
 
 struct _EphyBookmarkProperties {
-  AdwBin parent_instance;
+  AdwDialog parent_instance;
 
   EphyBookmarksManager *manager;
   EphyBookmark *bookmark;
   gboolean bookmark_is_modified;
   gboolean bookmark_is_removed;
-
-  EphyBookmarkPropertiesType type;
 
   GtkWidget *header_bar;
   GtkWidget *tag_header_bar;
@@ -53,12 +52,11 @@ struct _EphyBookmarkProperties {
   GtkWidget *tag_list;
 };
 
-G_DEFINE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, ADW_TYPE_DIALOG)
 
 enum {
   PROP_0,
   PROP_BOOKMARK,
-  PROP_TYPE,
   LAST_PROP
 };
 
@@ -197,13 +195,31 @@ ephy_bookmark_properties_actions_add_tag (EphyBookmarkProperties *self)
 static void
 ephy_bookmark_properties_actions_remove_bookmark (EphyBookmarkProperties *self)
 {
+  AdwDialog *dialog = ADW_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (self), ADW_TYPE_DIALOG));
+  GtkWidget *parent;
+  GtkRoot *window;
+  EphyEmbed *embed;
+  EphyWebView *view;
+  const char *address;
+
   self->bookmark_is_removed = TRUE;
   ephy_bookmarks_manager_remove_bookmark (self->manager, self->bookmark);
 
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG) {
-    AdwDialog *dialog = ADW_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (self), ADW_TYPE_DIALOG));
-    adw_dialog_close (dialog);
-  }
+  adw_dialog_close (dialog);
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (self));
+
+  if (!parent)
+    return;
+
+  window = gtk_widget_get_root (parent);
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  view = ephy_embed_get_web_view (embed);
+
+  address = ephy_web_view_get_address (view);
+
+  if (g_strcmp0 (ephy_bookmark_get_url (self->bookmark), address) == 0)
+    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_EMPTY);
 }
 
 static void
@@ -295,9 +311,6 @@ ephy_bookmark_properties_set_property (GObject      *object,
     case PROP_BOOKMARK:
       self->bookmark = g_value_dup_object (value);
       break;
-    case PROP_TYPE:
-      self->type = g_value_get_enum (value);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -311,15 +324,9 @@ ephy_bookmark_properties_constructed (GObject *object)
   GSequence *bookmark_tags;
   GSequenceIter *iter;
   const char *address;
+  g_autofree char *decoded_address = NULL;
 
   G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructed (object);
-
-  /* Set appearance based on type */
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_POPOVER) {
-    gtk_widget_set_visible (self->address_row, FALSE);
-    adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (self->header_bar), FALSE);
-    adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (self->tag_header_bar), FALSE);
-  }
 
   /* Set text for name entry */
   gtk_editable_set_text (GTK_EDITABLE (self->name_row),
@@ -330,17 +337,13 @@ ephy_bookmark_properties_constructed (GObject *object)
                           G_BINDING_DEFAULT);
 
   /* Set text for address entry */
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG) {
-    g_autofree char *decoded_address = NULL;
+  address = ephy_bookmark_get_url (self->bookmark);
+  decoded_address = ephy_uri_decode (address);
+  gtk_editable_set_text (GTK_EDITABLE (self->address_row), decoded_address);
 
-    address = ephy_bookmark_get_url (self->bookmark);
-    decoded_address = ephy_uri_decode (address);
-    gtk_editable_set_text (GTK_EDITABLE (self->address_row), decoded_address);
-
-    g_object_bind_property (GTK_EDITABLE (self->address_row), "text",
-                            self->bookmark, "bmkUri",
-                            G_BINDING_DEFAULT);
-  }
+  g_object_bind_property (GTK_EDITABLE (self->address_row), "text",
+                          self->bookmark, "bmkUri",
+                          G_BINDING_DEFAULT);
 
   /* Create tag widgets */
   tags = ephy_bookmarks_manager_get_tags (self->manager);
@@ -396,13 +399,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
                          NULL, NULL,
                          EPHY_TYPE_BOOKMARK,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  obj_properties[PROP_TYPE] =
-    g_param_spec_enum ("type",
-                       NULL, NULL,
-                       EPHY_TYPE_BOOKMARK_PROPERTIES_TYPE,
-                       EPHY_BOOKMARK_PROPERTIES_TYPE_DIALOG,
-                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
@@ -465,14 +461,12 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *self)
 }
 
 GtkWidget *
-ephy_bookmark_properties_new (EphyBookmark               *bookmark,
-                              EphyBookmarkPropertiesType  type)
+ephy_bookmark_properties_new (EphyBookmark *bookmark)
 {
   g_assert (EPHY_IS_BOOKMARK (bookmark));
 
   return g_object_new (EPHY_TYPE_BOOKMARK_PROPERTIES,
                        "bookmark", bookmark,
-                       "type", type,
                        NULL);
 }
 
@@ -482,4 +476,37 @@ ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *self)
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
 
   return self->add_tag_row;
+}
+
+GtkWidget *
+ephy_bookmark_properties_new_for_window (EphyWindow *window)
+{
+  g_autoptr (EphyBookmark) bookmark = NULL;
+  EphyBookmarksManager *manager;
+  EphyEmbed *embed;
+  const char *address;
+
+  manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+
+  address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+
+  bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
+  if (!bookmark) {
+    g_autofree char *id = NULL;
+    g_autoptr (GSequence) tags = NULL;
+
+    id = ephy_bookmark_generate_random_id ();
+    tags = g_sequence_new (g_free);
+
+    bookmark = ephy_bookmark_new (address,
+                                  ephy_embed_get_title (embed),
+                                  g_steal_pointer (&tags),
+                                  id);
+
+    ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
+  }
+
+  return ephy_bookmark_properties_new (g_steal_pointer (&bookmark));
 }
