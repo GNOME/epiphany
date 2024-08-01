@@ -4059,6 +4059,7 @@ ephy_window_constructed (GObject *object)
 
   /* Overlay Split View */
   window->overlay_split_view = adw_overlay_split_view_new ();
+  adw_overlay_split_view_set_max_sidebar_width (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), 360);
   content_layout_slot = adw_layout_slot_new ("primary");
   bookmarks_layout_slot = adw_layout_slot_new ("secondary");
   adw_overlay_split_view_set_collapsed (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), TRUE);
