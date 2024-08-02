@@ -300,6 +300,15 @@ on_tags_activated (GtkListBox    *box,
 }
 
 static void
+on_add_tag_entry_activated (AdwEntryRow *row,
+                            gpointer     user_data)
+{
+  EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
+
+  ephy_bookmark_properties_actions_add_tag (self);
+}
+
+static void
 ephy_bookmark_properties_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
@@ -413,6 +422,7 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tag_header_bar);
 
   gtk_widget_class_bind_template_callback (widget_class, on_tags_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_add_tag_entry_activated);
 
   gtk_widget_class_install_action (widget_class, "bookmark-properties.add-tag",
                                    NULL, (GtkWidgetActionActivateFunc)ephy_bookmark_properties_actions_add_tag);

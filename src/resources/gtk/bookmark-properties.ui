@@ -93,11 +93,14 @@
                         <child>
                           <object class="AdwEntryRow" id="add_tag_row">
                             <property name="title" translatable="yes">Add Tag</property>
+                            <property name="selectable">false</property>
                             <property name="activates-default">true</property>
+                            <signal name="entry-activated" handler="on_add_tag_entry_activated"/>
                             <child type="suffix">
                               <object class="GtkButton">
                                 <property name="icon-name">list-add-symbolic</property>
                                 <property name="action_name">bookmark-properties.add-tag</property>
+                                <property name="valign">center</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
