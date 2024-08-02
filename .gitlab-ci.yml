@@ -75,6 +75,18 @@ check-code-style:
       variables:
         CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled --werror'
 
+check-potfiles:
+  extends:
+    - '.fdo.distribution-image@fedora'
+    - '.fedora.container.common'
+  stage: 'test'
+  needs: [ 'build.container.fedora@x86_64' ]
+  interruptible: true
+  script:
+    - bash data/check-potfiles
+  artifacts:
+    when: on_failure
+
 flatpak:
   extends:
     - '.flatpak'

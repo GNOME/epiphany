@@ -1,0 +1,29 @@
+#!/bin/bash
+
+srcdirs="embed lib src"
+uidirs="src/resources/gtk"
+
+# find source files that contain gettext keywords
+c_files="$(grep -lR --include='*.c' '\(gettext\|[^I_)]_\)(' $srcdirs)"
+
+# find ui files that contain translatable string
+ui_files="$(grep -lRi --include='*.ui' 'translatable="[ty1]' $uidirs)"
+
+files="$c_files $ui_files"
+
+# filter out excluded files
+if [ -f po/POTFILES.skip ]; then
+  files="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.skip && echo "$f"; done)"
+fi
+
+# find all files that are missing from POTFILES.in
+missing="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.in && echo "$f"; done)"
+if [ ${#missing} -ne 0 ]; then
+  echo >&2 "The following files are missing from po/POTFILES.in:"
+
+  for f in ${missing[@]}; do
+    echo "  $f" >&2
+  done
+  echo >&2
+  exit 1
+fi
