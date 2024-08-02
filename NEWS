@@ -1,3 +1,47 @@
+47.beta - August 2, 2024
+========================
+
+ * Add autofill support (#199, based on work by Abdullah Alansari)
+ * Add bookmarks search bar (#332, !1571)
+ * Improve sorting of bookmarks (#390, #2359, #2378, Arak)
+ * Restore set image as wallpaper functionality under flatpak (#1198, based on work by Vanadiae)
+ * New Window should always open a non-incognito window (#1758, Arak)
+ * Prompt for confirmation when installing a WebExtension (#1817)
+ * Add Ctrl+Shift+Delete shortcut for Clear Website Data (#1921, Arak)
+ * Add Privacy Report feature (#1982) and improve its UI (!1546, Automeris naranja)
+ * Use GtkGraphicsOffload to maybe improve graphics performance in fullscreen mode (#2274, #2417)
+ * Replace bookmark properties popover with redesigned dialog (#2327, !1572)
+ * Disable Firefox Sync (#2337)
+ * Don't show reader mode button when page is loading (#2338)
+ * Revert address bar UI changes due to pango bug (#2376)
+ * Don't warn about failure to download favicon when creating web app (#2383)
+ * Fix crash when starting secondary instance (#2384)
+ * Fix crash when web process becomes unresponsive (#2386)
+ * Fix crash when closing window with context menu open (#2389)
+ * Fix crash on exit (#2404)
+ * Allow overriding fatal criticals using G_DEBUG= environment variable (!1513, Christopher Davis)
+ * Fix hiding of developer context menu actions (!1515, Vitaly Dyachkov)
+ * Fix a different crash when destroying window (!1516)
+ * Stop using various deprecated GTK APIs (!1519, !1532, !1533) 
+ * Support importing passwords from CSV files (!1521, Harshavardhan Navalli)
+ * Reduce the size of the preferences dialog (!1529)
+ * Use modern libadwaita spinners (!1537, Dexter Reed)
+ * Fix yet another crash when destroying window (!1538)
+ * Improve autofill dialog UI (!1539, Automeris naranja)
+ * Miscellaneous code robustness improvements (!1543)
+ * Load only one web process extension rather than two (!1544, based on work by Patrick Griffis)
+ * Add fallback web app icon (!1545)
+ * Redesign the bookmarks UI to use sidebar instead of popover
+   (!1547, !1565, !1573, !1578, !1580, !1581, #2401, #2405, #2408, #2410, #2412)
+ * Rearrange the window/hamburger menu (!1549, !1564, !1566)
+ * Adopt new floating bar style from nautilus (!1552, lo)
+ * Focus address bar after deleting URL (!1553)
+ * Reenable search in preferences dialog (!1554)
+ * Make address bar dropdown suggestions selectable (!1558)
+ * WebExtensions: support runtime.getManifest() API (!1560)
+ * Modernize encoding dialog (!1563)
+ * Update to highlight.js 11.10.0
+
 47.alpha - June 29, 2024
 ========================
 
