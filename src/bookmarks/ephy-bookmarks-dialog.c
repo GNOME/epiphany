@@ -37,7 +37,7 @@ struct _EphyBookmarksDialog {
   AdwBin parent_instance;
 
   GtkWidget *toplevel_stack;
-  GtkWidget *tags_list_box;
+  GtkWidget *bookmarks_list_box;
   GtkWidget *tag_detail_list_box;
   GtkWidget *tag_detail_label;
   GtkWidget *search_entry;
@@ -104,7 +104,7 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
 
   /* If the bookmark no longer has 0 tags, we remove it from the tags list box */
   if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1)
-    remove_bookmark_row (GTK_LIST_BOX (self->tags_list_box),
+    remove_bookmark_row (GTK_LIST_BOX (self->bookmarks_list_box),
                          ephy_bookmark_get_url (bookmark));
 
   /* If we are on the tag detail list box, then the user has toggled the state
@@ -121,7 +121,7 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
 
   exists = FALSE;
 
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), i++))) {
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
     const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
     const char *type = g_object_get_data (G_OBJECT (row), "type");
 
@@ -134,7 +134,7 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
 
   if (!exists) {
     GtkWidget *tag_row = create_tag_row (tag);
-    gtk_list_box_append (GTK_LIST_BOX (self->tags_list_box), tag_row);
+    gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
   }
 }
 
@@ -157,7 +157,7 @@ ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
     int i = 0;
 
     exists = FALSE;
-    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), i++))) {
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
       const char *type = g_object_get_data (G_OBJECT (row), "type");
 
       if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
@@ -172,7 +172,7 @@ ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
 
     if (!exists) {
       GtkWidget *row = create_bookmark_row (bookmark, self);
-      gtk_list_box_append (GTK_LIST_BOX (self->tags_list_box), row);
+      gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
     }
   }
 
@@ -194,11 +194,11 @@ ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
     GtkListBoxRow *row;
     int i = 0;
 
-    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), i++))) {
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
       const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
 
       if (g_strcmp0 (title, tag) == 0)
-        gtk_list_box_remove (GTK_LIST_BOX (self->tags_list_box), GTK_WIDGET (row));
+        gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
     }
   }
 }
@@ -256,7 +256,7 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
 
   if (g_sequence_is_empty (ephy_bookmark_get_tags (bookmark))) {
     row = create_bookmark_row (bookmark, self);
-    gtk_list_box_append (GTK_LIST_BOX (self->tags_list_box), row);
+    gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
   }
 
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0)
@@ -272,7 +272,7 @@ ephy_bookmarks_dialog_bookmark_removed_cb (EphyBookmarksDialog  *self,
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
-  remove_bookmark_row (GTK_LIST_BOX (self->tags_list_box),
+  remove_bookmark_row (GTK_LIST_BOX (self->bookmarks_list_box),
                        ephy_bookmark_get_url (bookmark));
   remove_bookmark_row (GTK_LIST_BOX (self->tag_detail_list_box),
                        ephy_bookmark_get_url (bookmark));
@@ -298,7 +298,7 @@ ephy_bookmarks_dialog_tag_created_cb (EphyBookmarksDialog  *self,
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
   tag_row = create_tag_row (tag);
-  gtk_list_box_append (GTK_LIST_BOX (self->tags_list_box), tag_row);
+  gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
 }
 
 static void
@@ -312,10 +312,10 @@ ephy_bookmarks_dialog_tag_deleted_cb (EphyBookmarksDialog  *self,
   g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tags_list_box), i++))) {
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
     const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
     if (g_strcmp0 (title, tag) == 0) {
-      gtk_list_box_remove (GTK_LIST_BOX (self->tags_list_box), GTK_WIDGET (row));
+      gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
       break;
     }
   }
@@ -463,7 +463,7 @@ on_search_entry_changed (GtkSearchEntry *entry,
 {
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
 
-  gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->tags_list_box));
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->bookmarks_list_box));
 }
 
 static void
@@ -486,7 +486,7 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, toplevel_stack);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tags_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, bookmarks_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, search_entry);
@@ -528,15 +528,15 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   g_object_bind_property (self->search_entry, "text", filter, "search", 0);
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (g_object_ref (self->manager)), filter);
 
-  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->tags_list_box), create_placeholder (_("No bookmarks found")));
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->bookmarks_list_box), create_placeholder (_("No bookmarks found")));
 
   if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
 
-  gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tags_list_box),
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (self->bookmarks_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->tags_list_box),
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->bookmarks_list_box),
                                 (GtkListBoxFilterFunc)tags_list_box_filter_func,
                                 self, NULL);
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tag_detail_list_box),
@@ -552,7 +552,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
 
     if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
       tag_row = create_tag_row (tag);
-      gtk_list_box_append (GTK_LIST_BOX (self->tags_list_box), tag_row);
+      gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
     }
   }
 
@@ -564,7 +564,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
     GtkWidget *bookmark_row;
 
     bookmark_row = create_bookmark_row (bookmark, self);
-    gtk_list_box_append (GTK_LIST_BOX (self->tags_list_box), bookmark_row);
+    gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), bookmark_row);
   }
 
   g_signal_connect_object (self->manager, "bookmark-added",
@@ -589,7 +589,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
-  gtk_widget_add_controller (self->tags_list_box, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (self->bookmarks_list_box, GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
