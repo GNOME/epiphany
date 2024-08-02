@@ -154,7 +154,6 @@ struct _EphyWindow {
   EphyTabView *tab_view;
   AdwTabBar *tab_bar;
   GtkWidget *action_bar;
-  GtkWidget *multi_layout_view;
   GtkWidget *overlay_split_view;
   GtkWidget *bottom_sheet;
   EphyEmbed *active_embed;
@@ -3906,11 +3905,8 @@ ephy_window_constructed (GObject *object)
   AdwBreakpoint *breakpoint;
   g_autoptr (GtkBuilder) builder = NULL;
   GtkEventController *controller;
-  AdwLayout *layout;
   GtkWidget *sidebar;
   GtkWidget *bookmark_close_button;
-  GtkWidget *content_layout_slot;
-  GtkWidget *bookmarks_layout_slot;
   GtkWidget *status_page;
   GtkWidget *header_bar;
 
@@ -4050,38 +4046,17 @@ ephy_window_constructed (GObject *object)
   adw_status_page_set_child (ADW_STATUS_PAGE (status_page), ephy_bookmarks_dialog_new ());
   adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (sidebar), status_page);
 
-  window->multi_layout_view = adw_multi_layout_view_new ();
-  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->multi_layout_view));
-
-  /* Set layout slots */
-  adw_multi_layout_view_set_child (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), "primary", GTK_WIDGET (window->overview));
-  adw_multi_layout_view_set_child (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), "secondary", sidebar);
-
   /* Overlay Split View */
   window->overlay_split_view = adw_overlay_split_view_new ();
+  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->overlay_split_view));
+
   adw_overlay_split_view_set_max_sidebar_width (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), 360);
-  content_layout_slot = adw_layout_slot_new ("primary");
-  bookmarks_layout_slot = adw_layout_slot_new ("secondary");
   adw_overlay_split_view_set_collapsed (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), TRUE);
   adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), FALSE);
-  adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), content_layout_slot);
   adw_overlay_split_view_set_sidebar_position (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_PACK_END);
-  adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), bookmarks_layout_slot);
 
-  layout = adw_layout_new (window->overlay_split_view);
-  adw_layout_set_name (layout, "sidebar");
-  adw_multi_layout_view_add_layout (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), layout);
-
-  /* Bottom Sheet */
-  window->bottom_sheet = adw_bottom_sheet_new ();
-  content_layout_slot = adw_layout_slot_new ("primary");
-  bookmarks_layout_slot = adw_layout_slot_new ("secondary");
-  adw_bottom_sheet_set_content (ADW_BOTTOM_SHEET (window->bottom_sheet), content_layout_slot);
-  adw_bottom_sheet_set_sheet (ADW_BOTTOM_SHEET (window->bottom_sheet), bookmarks_layout_slot);
-
-  layout = adw_layout_new (window->bottom_sheet);
-  adw_layout_set_name (layout, "bottom-sheet");
-  adw_multi_layout_view_add_layout (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view), layout);
+  adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_WIDGET (window->overview));
+  adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), sidebar);
 
   ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
@@ -4161,7 +4136,6 @@ ephy_window_constructed (GObject *object)
   breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 600px"));
   adw_breakpoint_add_setters (breakpoint,
                               G_OBJECT (window), "adaptive-mode", EPHY_ADAPTIVE_MODE_NARROW,
-                              G_OBJECT (window->multi_layout_view), "layout-name", "bottom-sheet",
                               NULL);
 
   adw_application_window_add_breakpoint (ADW_APPLICATION_WINDOW (window), breakpoint);
@@ -4787,11 +4761,6 @@ ephy_window_toggle_bookmarks (EphyWindow *window)
 {
   gboolean state;
 
-  if (g_strcmp0 (adw_multi_layout_view_get_layout_name (ADW_MULTI_LAYOUT_VIEW (window->multi_layout_view)), "sidebar") == 0) {
-    state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view));
-    adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), state);
-  } else {
-    state = !adw_bottom_sheet_get_open (ADW_BOTTOM_SHEET (window->bottom_sheet));
-    adw_bottom_sheet_set_open (ADW_BOTTOM_SHEET (window->bottom_sheet), state);
-  }
+  state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view));
+  adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), state);
 }
