@@ -234,6 +234,7 @@ create_tag_row (const char *tag)
   } else {
     image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic");
   }
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), image);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), tag);
 
