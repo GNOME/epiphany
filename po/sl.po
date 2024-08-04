@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-02 12:58+0000\n"
-"PO-Revision-Date: 2024-08-02 18:28+0200\n"
+"POT-Creation-Date: 2024-08-04 01:02+0000\n"
+"PO-Revision-Date: 2024-08-04 11:38+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1033,25 +1033,25 @@ msgid "A simple, clean, beautiful view of the web"
 msgstr "Enostaven, izčiščen, prekrasen pogled na splet"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:273 embed/ephy-about-handler.c:275
-#: embed/ephy-about-handler.c:339 embed/ephy-about-handler.c:365
+#: embed/ephy-about-handler.c:271 embed/ephy-about-handler.c:273
+#: embed/ephy-about-handler.c:337 embed/ephy-about-handler.c:363
 msgid "Apps"
 msgstr "Programi"
 
-#: embed/ephy-about-handler.c:276
+#: embed/ephy-about-handler.c:274
 msgid "List of installed web apps"
 msgstr "Seznam nameščenih spletnih programov"
 
-#: embed/ephy-about-handler.c:324
+#: embed/ephy-about-handler.c:322
 msgid "Delete"
 msgstr "Izbriši"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:326
+#: embed/ephy-about-handler.c:324
 msgid "Installed on:"
 msgstr "Nameščeno:"
 
-#: embed/ephy-about-handler.c:365
+#: embed/ephy-about-handler.c:363
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
@@ -1060,26 +1060,26 @@ msgstr ""
 "priljubljene spletne strani dodati kot priljubljene."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:470
+#: embed/ephy-about-handler.c:468
 msgid "Welcome to Web"
 msgstr "Dobrodošli v programu Splet"
 
-#: embed/ephy-about-handler.c:470
+#: embed/ephy-about-handler.c:468
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Ko začnete z brskanjem, bodo najpogosteje obiskane strani prikazane na tem "
 "mestu."
 
-#: embed/ephy-about-handler.c:504
+#: embed/ephy-about-handler.c:502
 #: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "Odstrani iz pregleda"
 
-#: embed/ephy-about-handler.c:594 embed/ephy-about-handler.c:595
+#: embed/ephy-about-handler.c:592 embed/ephy-about-handler.c:593
 msgid "Private Browsing"
 msgstr "Zasebno brskanje"
 
-#: embed/ephy-about-handler.c:596
+#: embed/ephy-about-handler.c:594
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1089,14 +1089,14 @@ msgstr ""
 "prikazane v zgodovini brskanja in vsi podatki, pridobljeni med to sejo, bodo "
 "po zaprtju okna izbrisani. Prejete datoteke bodo ohranjene."
 
-#: embed/ephy-about-handler.c:600
+#: embed/ephy-about-handler.c:598
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "V zasebnem načinu, lahko prikrijete dejavnosti, ki jih izvajate na spletu "
 "pred drugimi uporabniki tega računalnika."
 
-#: embed/ephy-about-handler.c:602
+#: embed/ephy-about-handler.c:600
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1118,9 +1118,9 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:760
-#: src/ephy-history-dialog.c:772 src/ephy-window.c:257
-#: src/preferences/autofill-view.c:363 src/preferences/extension-view.c:117
-#: src/preferences/passwords-view.c:179
+#: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
+#: src/ephy-window.c:256 src/preferences/autofill-view.c:363
+#: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:337
@@ -1712,7 +1712,7 @@ msgstr "Vse podprte vrste"
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Obrazec ni varen – vpisana gesla so lahko vidna tretjim osebam"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3362
+#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3422
 msgid "_Dismiss"
 msgstr "_Opusti"
 
@@ -1755,14 +1755,33 @@ msgstr "Poteka nalaganje »%s« …"
 msgid "Loading…"
 msgstr "Nalaganje …"
 
+#: embed/ephy-web-view.c:1341
+msgid "Delete Web App?"
+msgstr "Želite izbrisati spletno aplikacijo?"
+
+#: embed/ephy-web-view.c:1344
+#, c-format
+msgid ""
+"\"%s\" will be removed. You will have to re-install the website as an app "
+"from the menu to use it again."
+msgstr ""
+"»%s« bo odstranjen. Spletno mesto boste morali znova namestiti kot "
+"aplikacijo iz menija, da jo boste lahko znova uporabili."
+
+#: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
+#: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
+#: src/resources/gtk/location-entry.ui:303
+msgid "_Delete"
+msgstr "_Izbriši"
+
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1573
+#: embed/ephy-web-view.c:1633
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Spletna stran se javlja s potrdilom, ki pripada drugi spletni strani."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1578
+#: embed/ephy-web-view.c:1638
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1771,18 +1790,18 @@ msgstr ""
 "nastavljen na računalniku."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1583
+#: embed/ephy-web-view.c:1643
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Potrdilo strani ni ni bilo izdano s strani zaupljive ustanove."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1588
+#: embed/ephy-web-view.c:1648
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Potrdila strani ni mogoče prebrati. Najverjetneje je poškodovano."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1593
+#: embed/ephy-web-view.c:1653
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1790,7 +1809,7 @@ msgstr ""
 "Potrdilo strani je bilo preklicano s strani ustanove, ki je potrdilo izdalo."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1598
+#: embed/ephy-web-view.c:1658
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1798,7 +1817,7 @@ msgstr ""
 "Potrdilu strani ni mogoče zaupati, ker ima določeno zelo šibko šifriranje."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1603
+#: embed/ephy-web-view.c:1663
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1808,24 +1827,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1668 embed/ephy-web-view.c:1724
+#: embed/ephy-web-view.c:1728 embed/ephy-web-view.c:1784
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Težave z nalaganjem strani"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1671
+#: embed/ephy-web-view.c:1731
 msgid "Unable to display this website"
 msgstr "Spletne strani ni mogoče pokazati."
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1676
+#: embed/ephy-web-view.c:1736
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Spletišče %s najverjetneje ni na voljo."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1680
+#: embed/ephy-web-view.c:1740
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1834,7 +1853,7 @@ msgstr ""
 "napaka ponavlja, preverite tudi omrežno povezavo."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1690
+#: embed/ephy-web-view.c:1750
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Natančen opis napake je: %s"
@@ -1844,32 +1863,32 @@ msgstr "Natančen opis napake je: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1695 embed/ephy-web-view.c:1748
-#: embed/ephy-web-view.c:1784 embed/ephy-web-view.c:1820
+#: embed/ephy-web-view.c:1755 embed/ephy-web-view.c:1808
+#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1880
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:177
 msgid "Reload"
 msgstr "Ponovno naloži"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1699 embed/ephy-web-view.c:1752
-#: embed/ephy-web-view.c:1788 embed/ephy-web-view.c:1824
+#: embed/ephy-web-view.c:1759 embed/ephy-web-view.c:1812
+#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1884
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1727
+#: embed/ephy-web-view.c:1787
 msgid "Oops! There may be a problem"
 msgstr "Ojoj! Prišlo je do napake."
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1732
+#: embed/ephy-web-view.c:1792
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Stran %s je morda povzročila nepričakovano sesutje brskalnika"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1739
+#: embed/ephy-web-view.c:1799
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1877,18 +1896,18 @@ msgstr ""
 "%s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1833
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Napaka prikazovanja strani"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1776
+#: embed/ephy-web-view.c:1836
 msgid "Oops!"
 msgstr "Ojoj!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1779
+#: embed/ephy-web-view.c:1839
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1897,18 +1916,18 @@ msgstr ""
 "obiščite drugo stran."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1809
+#: embed/ephy-web-view.c:1869
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Neodzivna stran"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1812
+#: embed/ephy-web-view.c:1872
 msgid "Uh-oh!"
 msgstr "Ops!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1815
+#: embed/ephy-web-view.c:1875
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1917,18 +1936,18 @@ msgstr ""
 "stran za nadaljevanje."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1851
+#: embed/ephy-web-view.c:1911
 #, c-format
 msgid "Security Violation"
 msgstr "Kršitev varnostnih nastavitev"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1854
+#: embed/ephy-web-view.c:1914
 msgid "This Connection is Not Secure"
 msgstr "Ta povezava ni varna"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1859
+#: embed/ephy-web-view.c:1919
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1939,41 +1958,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1869 embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1979
 msgid "Go Back"
 msgstr "Nazaj"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1872 embed/ephy-web-view.c:1922
+#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1982
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1935
 msgid "Accept Risk and Proceed"
 msgstr "Sprejmi tveganje in nadaljuj"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1879
+#: embed/ephy-web-view.c:1939
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1902 embed/ephy-web-view.c:1905
+#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1965
 #, c-format
 msgid "File not found"
 msgstr "Datoteke ni mogoče najti"
 
-#: embed/ephy-web-view.c:1910
+#: embed/ephy-web-view.c:1970
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ni mogoče najti."
 
-#: embed/ephy-web-view.c:1912
+#: embed/ephy-web-view.c:1972
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1982,11 +2001,11 @@ msgstr ""
 "Preverite ime datoteke za velike črke oziroma druge napake. Preverite tudi, "
 "ali je bila datoteka premaknjena, preimenovana ali izbrisana."
 
-#: embed/ephy-web-view.c:1975
+#: embed/ephy-web-view.c:2035
 msgid "None specified"
 msgstr "Ni določeno"
 
-#: embed/ephy-web-view.c:2089
+#: embed/ephy-web-view.c:2149
 msgid "Technical information"
 msgstr "Tehnični podatki"
 
@@ -2295,10 +2314,6 @@ msgstr "Pridobivanje usklajevalnega ključa je spodletelo."
 #: src/bookmarks/ephy-bookmarks-dialog.c:531
 msgid "No bookmarks found"
 msgstr "Ni najdenih zaznamkov"
-
-#: src/bookmarks/ephy-bookmarks-dialog.c:532
-msgid "No tags found"
-msgstr "Oznak ni mogoče najti"
 
 #: src/bookmarks/ephy-bookmarks-import.c:127
 #, c-format
@@ -2835,219 +2850,219 @@ msgstr "Odpri nov zavihek"
 
 # G:5 K:1 O:2
 #. Undo, redo.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:277
+#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:957
 msgid "Re_do"
 msgstr "_Uveljavi"
 
 #. Edit.
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:960 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "_Izreži"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:962 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:963 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:962 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "_Prilepi"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:963
 msgid "_Paste Text Only"
 msgstr "_Prilepi le besedilo"
 
 # G:9 K:0 O:0
-#: src/ephy-window.c:965 src/resources/gtk/location-entry.ui:313
+#: src/ephy-window.c:964 src/resources/gtk/location-entry.ui:313
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:966
 msgid "S_end Link by Email…"
 msgstr "P_ošlji povezavo po elektronski pošti …"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:969
+#: src/ephy-window.c:968
 msgid "_Reload"
 msgstr "_Znova naloži"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:969
 msgid "_Back"
 msgstr "_Nazaj"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:970
 msgid "_Forward"
 msgstr "_Naprej"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:973
 msgid "Add Boo_kmark…"
 msgstr "_Dodaj zaznamek …"
 
 # G:1 K:2 O:0
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:977
 msgid "Open Link in New _Window"
 msgstr "Odpri povezavo v _novem oknu"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:979
+#: src/ephy-window.c:978
 msgid "Open Link in New _Tab"
 msgstr "Odpri povezavo v novem _zavihku"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:980
+#: src/ephy-window.c:979
 msgid "Open Link in I_ncognito Window"
 msgstr "Odpri povezavo v _zasebnem oknu"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:981
+#: src/ephy-window.c:980
 msgid "_Save Link As…"
 msgstr "Shrani povezavo _kot …"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:981
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:982
 msgid "_Copy E-mail Address"
 msgstr "_Kopiraj elektronski naslov"
 
 # G:1 K:0 O:0
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:986
 msgid "View _Image in New Tab"
 msgstr "Odpri _sliko v novem zavihku"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:988
+#: src/ephy-window.c:987
 msgid "Copy I_mage Address"
 msgstr "Kopiraj n_aslov slike"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:989
+#: src/ephy-window.c:988
 msgid "_Save Image As…"
 msgstr "S_hrani sliko kot …"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:989
 msgid "Set as _Wallpaper"
 msgstr "Nastavi kot sliko _ozadja"
 
 # G:1 K:0 O:0
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:993
 msgid "Open Video in New _Window"
 msgstr "Odpri _video v novem oknu"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:994
 msgid "Open Video in New _Tab"
 msgstr "Odpri video v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:996
+#: src/ephy-window.c:995
 msgid "_Save Video As…"
 msgstr "Shrani video povezavo _kot …"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:996
 msgid "_Copy Video Address"
 msgstr "Kopiraj _naslov video povezave"
 
 # G:1 K:0 O:0
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1000
 msgid "Open Audio in New _Window"
 msgstr "Odpri _zvok v novem oknu"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1001
 msgid "Open Audio in New _Tab"
 msgstr "Odpri zvok v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1002
 msgid "_Save Audio As…"
 msgstr "Shrani zvočno povezavo _kot …"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1003
 msgid "_Copy Audio Address"
 msgstr "Kopiraj _naslov zvočne povezave"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1009
 msgid "Save Pa_ge As…"
 msgstr "Shrani s_tran kot …"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1010
 msgid "_Take Screenshot…"
 msgstr "_Zajemi zaslonsko sliko …"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1011
 msgid "_Page Source"
 msgstr "_Izvorna koda strani"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1388
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Preišči splet za »%s«"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1417
 msgid "Open Link"
 msgstr "Odpri povezavo"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1419
 msgid "Open Link In New Tab"
 msgstr "Odpri povezavo v novem zavihku"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1422
+#: src/ephy-window.c:1421
 msgid "Open Link In New Window"
 msgstr "Odpri povezavo v novem oknu"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1424
+#: src/ephy-window.c:1423
 msgid "Open Link In Incognito Window"
 msgstr "Odpri povezavo v zasebnem oknu"
 
-#: src/ephy-window.c:2807
+#: src/ephy-window.c:2806
 msgid "_Ask Later"
 msgstr "_Vprašaj kasneje"
 
-#: src/ephy-window.c:2808 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2807 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Zavrni"
 
-#: src/ephy-window.c:2809 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2808 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Dovoli"
 
-#: src/ephy-window.c:3011 src/ephy-window.c:4544
+#: src/ephy-window.c:3010 src/ephy-window.c:4518
 msgid "Leave Website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:3012 src/ephy-window.c:4545 src/window-commands.c:1323
+#: src/ephy-window.c:3011 src/ephy-window.c:4519 src/window-commands.c:1323
 msgid "A form was modified and has not been submitted"
 msgstr "Podatki obrazca so spremenjeni in niso bili poslani."
 
-#: src/ephy-window.c:3013 src/ephy-window.c:4546 src/window-commands.c:1327
+#: src/ephy-window.c:3012 src/ephy-window.c:4520 src/window-commands.c:1327
 msgid "_Discard Form"
 msgstr "_Zavrzi obrazec"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:3033
 msgid "Download operation"
 msgstr "Opravilo prejemanja"
 
-#: src/ephy-window.c:3036
+#: src/ephy-window.c:3035
 msgid "Show details"
 msgstr "Pokaži podrobnosti"
 
-#: src/ephy-window.c:3038
+#: src/ephy-window.c:3037
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -3056,15 +3071,15 @@ msgstr[1] "V teku je %d prejemanje"
 msgstr[2] "V teku je %d prejemanji"
 msgstr[3] "V teku je %d prejemanja"
 
-#: src/ephy-window.c:3308
+#: src/ephy-window.c:3307
 msgid "Set as Default Browser?"
 msgstr "Ali želite nastaviti program kot privzeti brskalnik?"
 
-#: src/ephy-window.c:3310
+#: src/ephy-window.c:3309
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Uporabite Splet kot privzeti brskalnik za odpiranje zunanjih povezav"
 
-#: src/ephy-window.c:3312
+#: src/ephy-window.c:3311
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3072,63 +3087,63 @@ msgstr ""
 "Uporabi preizkusno različico brskalnika Epiphany kot privzet spletni "
 "brskalnik in za odpiranje zunanjih povezav"
 
-#: src/ephy-window.c:3316
+#: src/ephy-window.c:3315
 msgid "_Ask Again Later"
 msgstr "_Vprašaj ponovno kasneje"
 
-#: src/ephy-window.c:3317
+#: src/ephy-window.c:3316
 msgid "_No"
 msgstr "_Ne"
 
-#: src/ephy-window.c:3318
+#: src/ephy-window.c:3317
 msgid "_Yes"
 msgstr "_Da"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3766
 msgid "Save password?"
 msgstr "Ali želite shraniti gesla?"
 
-#: src/ephy-window.c:3768
+#: src/ephy-window.c:3767
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Gesla je mogoče kadarkoli odstraniti med nastavitvami"
 
-#: src/ephy-window.c:3770
+#: src/ephy-window.c:3769
 msgid "Not Now"
 msgstr "Ne zdaj"
 
-#: src/ephy-window.c:3771
+#: src/ephy-window.c:3770
 msgid "Never Save"
 msgstr "Nikoli ne shrani"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:3772
+#: src/ephy-window.c:3771
 msgid "Save"
 msgstr "Shrani"
 
 # G:1 K:0 O:0
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4049 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4045 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Zaznamki"
 
-#: src/ephy-window.c:4675
+#: src/ephy-window.c:4649
 msgid "Close Multiple Tabs?"
 msgstr "Ali res želite zapreti več zavihkov?"
 
-#: src/ephy-window.c:4676
+#: src/ephy-window.c:4650
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Če okno zaprete, bodo izgubljeni vsi odprti zavihki."
 
-#: src/ephy-window.c:4677
+#: src/ephy-window.c:4651
 msgid "C_lose Tabs"
 msgstr "Zapri _zavihke"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:4770
+#: src/ephy-window.c:4744
 msgid "New tab opened"
 msgstr "Odprt je nov zavihek"
 
-#: src/ephy-window.c:4774
+#: src/ephy-window.c:4748
 msgid "Switch"
 msgstr "Preklopi"
 
@@ -3141,12 +3156,6 @@ msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
 "S tem boste počistili vse krajevno shranjene vnose, česar ni mogoče "
 "razveljaviti."
-
-#: src/preferences/autofill-view.c:364 src/preferences/passwords-view.c:180
-#: src/resources/gtk/history-dialog.ui:148
-#: src/resources/gtk/location-entry.ui:303
-msgid "_Delete"
-msgstr "_Izbriši"
 
 #: src/preferences/clear-data-view.c:68
 msgid "Cookies"
@@ -3468,7 +3477,6 @@ msgstr "Naslov"
 
 #: src/resources/gtk/bookmark-properties.ui:38
 #: src/resources/gtk/bookmark-properties.ui:71
-#: src/resources/gtk/bookmarks-dialog.ui:59
 msgid "Tags"
 msgstr "Oznake"
 
@@ -3485,16 +3493,12 @@ msgstr "Dodaj oznako"
 msgid "Search bookmarks"
 msgstr "Išči med zaznamki"
 
-#: src/resources/gtk/bookmarks-dialog.ui:39
-msgid "All"
-msgstr "Vse"
-
 # G:1 K:0 O:0
-#: src/resources/gtk/bookmarks-dialog.ui:138
+#: src/resources/gtk/bookmarks-dialog.ui:99
 msgid "No Bookmarks"
 msgstr "Ni zaznamkov"
 
-#: src/resources/gtk/bookmarks-dialog.ui:139
+#: src/resources/gtk/bookmarks-dialog.ui:100
 msgid "Bookmarked pages will appear here"
 msgstr "Shranjeni zaznamki strani, bodo izpisani na tem mestu."
 
