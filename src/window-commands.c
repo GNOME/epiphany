@@ -45,6 +45,7 @@
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
+#include "ephy-password-export.h"
 #include "ephy-password-import.h"
 #include "ephy-pixbuf-utils.h"
 #include "ephy-prefs-dialog.h"
@@ -945,6 +946,81 @@ window_cmd_import_passwords (GSimpleAction *action,
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
+
+static void
+passwords_export_cb (GObject      *source_object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  EphyPasswordManager *manager;
+  g_autoptr (GtkWindow) window = NULL;
+  g_autoptr (GError) error = NULL;
+  gboolean exported;
+
+  manager = EPHY_PASSWORD_MANAGER (source_object);
+  window = GTK_WINDOW (user_data);
+
+  exported = ephy_passwords_export_finish (manager, result, &error);
+
+  show_import_export_result (window, FALSE, exported, error,
+                             _("Passwords successfully exported!"));
+}
+
+static void
+export_passwords_file_dialog_cb (GtkFileDialog *dialog,
+                                 GAsyncResult  *result,
+                                 GtkWindow     *parent)
+{
+  EphyPasswordManager *manager;
+  g_autoptr (GFile) file = NULL;
+  g_autoptr (GError) error = NULL;
+
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+
+  if (error) {
+    if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+      g_warning ("Failed to open file: %s", error->message);
+    return;
+  }
+
+  ephy_password_export (manager,
+                        g_file_peek_path (file),
+                        NULL,
+                        passwords_export_cb,
+                        g_steal_pointer (&parent));
+}
+
+void
+window_cmd_export_passwords (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  GtkFileDialog *dialog;
+  g_autoptr (GtkFileFilter) filter = NULL;
+  g_autoptr (GListStore) filters = NULL;
+  GtkWindow *window = user_data;
+
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Choose File"));
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.csv");
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+
+  /* Translators: Only translate the part before ".csv" (e.g. "passwords") */
+  gtk_file_dialog_set_initial_name (dialog, _("passwords.csv"));
+
+  gtk_file_dialog_save (dialog,
+                        window,
+                        NULL,
+                        (GAsyncReadyCallback)export_passwords_file_dialog_cb,
+                        g_object_ref (window));
+}
+
 G_GNUC_END_IGNORE_DEPRECATIONS
 
 void

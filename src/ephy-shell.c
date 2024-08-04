@@ -236,6 +236,18 @@ import_passwords (GSimpleAction *action,
 }
 
 static void
+export_passwords (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_export_passwords (NULL, NULL, EPHY_WINDOW (window));
+}
+
+static void
 show_history (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
@@ -377,6 +389,7 @@ static GActionEntry app_entries[] = {
   { "import-bookmarks", import_bookmarks, NULL, NULL, NULL },
   { "export-bookmarks", export_bookmarks, NULL, NULL, NULL },
   { "import-passwords", import_passwords, NULL, NULL, NULL },
+  { "export-passwords", export_passwords, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "firefox-sync-dialog", show_firefox_sync, NULL, NULL, NULL },
   { "clear-data-view", show_clear_data_view, NULL, NULL, NULL},
