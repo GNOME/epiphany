@@ -34,11 +34,12 @@
 #include <glib/gi18n.h>
 
 struct _EphyBookmarksDialog {
-  AdwBin parent_instance;
+  GtkBox parent_instance;
 
   GtkWidget *toplevel_stack;
   GtkWidget *bookmarks_list_box;
   GtkWidget *tag_detail_list_box;
+  GtkWidget *searching_bookmarks_list_box;
   GtkWidget *tag_detail_label;
   GtkWidget *search_entry;
   char *tag_detail_tag;
@@ -46,7 +47,7 @@ struct _EphyBookmarksDialog {
   EphyBookmarksManager *manager;
 };
 
-G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, GTK_TYPE_BOX)
 
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
@@ -57,15 +58,11 @@ static GtkWidget *create_tag_row (const char *tag);
 static void
 tag_detail_back (EphyBookmarksDialog *self)
 {
-  GtkListBoxRow *row;
-
   g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
                                     "default");
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
-    gtk_list_box_remove (GTK_LIST_BOX (self->tag_detail_list_box), GTK_WIDGET (row));
+  gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
 }
 
 static void
@@ -135,6 +132,8 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
   if (!exists) {
     GtkWidget *tag_row = create_tag_row (tag);
     gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
+    tag_row = create_tag_row (tag);
+    gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), tag_row);
   }
 }
 
@@ -200,6 +199,14 @@ ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
       if (g_strcmp0 (title, tag) == 0)
         gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
     }
+
+    i = 0;
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), i++))) {
+      const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+
+      if (g_strcmp0 (title, tag) == 0)
+        gtk_list_box_remove (GTK_LIST_BOX (self->searching_bookmarks_list_box), GTK_WIDGET (row));
+    }
   }
 }
 
@@ -260,8 +267,13 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
     gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
   }
 
-  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0)
+  row = create_bookmark_row (bookmark, self);
+  gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), row);
+
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0) {
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
+    gtk_widget_set_visible (self->search_entry, TRUE);
+  }
 }
 
 static void
@@ -277,9 +289,12 @@ ephy_bookmarks_dialog_bookmark_removed_cb (EphyBookmarksDialog  *self,
                        ephy_bookmark_get_url (bookmark));
   remove_bookmark_row (GTK_LIST_BOX (self->tag_detail_list_box),
                        ephy_bookmark_get_url (bookmark));
+  remove_bookmark_row (GTK_LIST_BOX (self->searching_bookmarks_list_box),
+                       ephy_bookmark_get_url (bookmark));
 
   if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0) {
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
+    gtk_widget_set_visible (self->search_entry, FALSE);
   } else if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
              ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, self->tag_detail_tag)) {
     /* If we removed the tag's last bookmark, switch back to the tags list. */
@@ -300,6 +315,8 @@ ephy_bookmarks_dialog_tag_created_cb (EphyBookmarksDialog  *self,
 
   tag_row = create_tag_row (tag);
   gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
+  tag_row = create_tag_row (tag);
+  gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), tag_row);
 }
 
 static void
@@ -317,6 +334,15 @@ ephy_bookmarks_dialog_tag_deleted_cb (EphyBookmarksDialog  *self,
     const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
     if (g_strcmp0 (title, tag) == 0) {
       gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
+      break;
+    }
+  }
+
+  i = 0;
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), i++))) {
+    const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+    if (g_strcmp0 (title, tag) == 0) {
+      gtk_list_box_remove (GTK_LIST_BOX (self->searching_bookmarks_list_box), GTK_WIDGET (row));
       break;
     }
   }
@@ -387,8 +413,12 @@ static void
 ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
                                        const char          *tag)
 {
+  GtkListBoxRow *row;
   GSequence *bookmarks;
   GSequenceIter *iter;
+
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
+    gtk_list_box_remove (GTK_LIST_BOX (self->tag_detail_list_box), GTK_WIDGET (row));
 
   bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag);
   for (iter = g_sequence_get_begin_iter (bookmarks);
@@ -404,6 +434,8 @@ ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
   gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
+  gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
+  gtk_widget_set_state_flags (self->search_entry, GTK_STATE_FLAG_NORMAL, TRUE);
 
   if (self->tag_detail_tag != NULL)
     g_free (self->tag_detail_tag);
@@ -463,8 +495,22 @@ on_search_entry_changed (GtkSearchEntry *entry,
                          gpointer        user_data)
 {
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
+  const char *entry_text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  const char *visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
+
+  if (g_strcmp0 (entry_text, "") != 0 && g_strcmp0 (visible_stack_child, "default") == 0) {
+    gtk_stack_set_transition_type (GTK_STACK (self->toplevel_stack), GTK_STACK_TRANSITION_TYPE_NONE);
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "searching_bookmarks");
+    gtk_stack_set_transition_type (GTK_STACK (self->toplevel_stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+  } else if (g_strcmp0 (entry_text, "") == 0 && g_strcmp0 (visible_stack_child, "searching_bookmarks") == 0) {
+    gtk_stack_set_transition_type (GTK_STACK (self->toplevel_stack), GTK_STACK_TRANSITION_TYPE_NONE);
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
+    gtk_stack_set_transition_type (GTK_STACK (self->toplevel_stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+  }
 
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->bookmarks_list_box));
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->tag_detail_list_box));
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->searching_bookmarks_list_box));
 }
 
 static void
@@ -489,6 +535,7 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, toplevel_stack);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, bookmarks_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, searching_bookmarks_list_box);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, search_entry);
 
@@ -529,20 +576,53 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   g_object_bind_property (self->search_entry, "text", filter, "search", 0);
   filter_model = gtk_filter_list_model_new (G_LIST_MODEL (g_object_ref (self->manager)), filter);
 
-  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->bookmarks_list_box), create_placeholder (_("No bookmarks found")));
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->tag_detail_list_box), create_placeholder (_("No bookmarks found")));
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (self->searching_bookmarks_list_box), create_placeholder (_("No bookmarks found")));
 
-  if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0)
+  if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0) {
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
+    gtk_widget_set_visible (self->search_entry, FALSE);
+  }
 
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->bookmarks_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->bookmarks_list_box),
-                                (GtkListBoxFilterFunc)tags_list_box_filter_func,
-                                self, NULL);
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tag_detail_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->tag_detail_list_box),
+                                (GtkListBoxFilterFunc)tags_list_box_filter_func,
+                                self, NULL);
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (self->searching_bookmarks_list_box),
+                              (GtkListBoxSortFunc)tags_list_box_sort_func,
+                              NULL, NULL);
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->searching_bookmarks_list_box),
+                                (GtkListBoxFilterFunc)tags_list_box_filter_func,
+                                self, NULL);
+
+  tags = ephy_bookmarks_manager_get_tags (self->manager);
+  for (iter = g_sequence_get_begin_iter (tags);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    const char *tag = g_sequence_get (iter);
+    GtkWidget *tag_row;
+
+    if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
+      tag_row = create_tag_row (tag);
+      gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), tag_row);
+    }
+  }
+
+  bookmarks = ephy_bookmarks_manager_get_bookmarks (self->manager);
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+    GtkWidget *bookmark_row;
+
+    bookmark_row = create_bookmark_row (bookmark, self);
+    gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), bookmark_row);
+  }
 
   tags = ephy_bookmarks_manager_get_tags (self->manager);
   for (iter = g_sequence_get_begin_iter (tags);
@@ -596,6 +676,11 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
   gtk_widget_add_controller (self->tag_detail_list_box, GTK_EVENT_CONTROLLER (gesture));
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
+  gtk_widget_add_controller (self->searching_bookmarks_list_box, GTK_EVENT_CONTROLLER (gesture));
 }
 
 GtkWidget *
