@@ -3907,7 +3907,8 @@ ephy_window_constructed (GObject *object)
   GtkEventController *controller;
   GtkWidget *sidebar;
   GtkWidget *bookmark_close_button;
-  GtkWidget *status_page;
+  GtkWidget *bookmark_box;
+  GtkWidget *bookmark_title;
   GtkWidget *header_bar;
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
@@ -4040,11 +4041,19 @@ ephy_window_constructed (GObject *object)
   adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (sidebar), header_bar);
   adw_toolbar_view_set_extend_content_to_top_edge (ADW_TOOLBAR_VIEW (sidebar), TRUE);
 
-  status_page = adw_status_page_new ();
-  gtk_widget_set_valign (status_page, GTK_ALIGN_START);
-  adw_status_page_set_title (ADW_STATUS_PAGE (status_page), _("Bookmarks"));
-  adw_status_page_set_child (ADW_STATUS_PAGE (status_page), ephy_bookmarks_dialog_new ());
-  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (sidebar), status_page);
+  bookmark_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  gtk_widget_set_margin_start (bookmark_box, 12);
+  gtk_widget_set_margin_end (bookmark_box, 12);
+  gtk_widget_set_margin_top (bookmark_box, 12);
+  gtk_widget_set_margin_bottom (bookmark_box, 12);
+  bookmark_title = gtk_label_new (_("Bookmarks"));
+  gtk_widget_set_margin_top (bookmark_title, 24);
+  gtk_widget_set_margin_bottom (bookmark_title, 24);
+  gtk_widget_add_css_class (bookmark_title, "title-1");
+  gtk_box_append (GTK_BOX (bookmark_box), bookmark_title);
+
+  gtk_box_append (GTK_BOX (bookmark_box), ephy_bookmarks_dialog_new ());
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (sidebar), bookmark_box);
 
   /* Overlay Split View */
   window->overlay_split_view = adw_overlay_split_view_new ();
