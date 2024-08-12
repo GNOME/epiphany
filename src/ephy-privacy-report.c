@@ -193,7 +193,6 @@ itp_report_ready (GObject      *source_object,
   g_autoptr (GError) error = NULL;
   g_autofree char *description = NULL;
   EphyPrivacyReport *self = NULL;
-  gsize count = 0;
 
   summary = webkit_website_data_manager_get_itp_summary_finish (manager, res, &error);
   if (error) {
@@ -215,9 +214,6 @@ itp_report_ready (GObject      *source_object,
         const char *tp_domain = webkit_itp_third_party_get_domain (tp);
         GPtrArray *websites = NULL;
         GPtrArray *trackers = NULL;
-
-        /* Total */
-        count++;
 
         /* Websites */
         if (g_hash_table_lookup_extended (self->website_table, fp_domain, NULL, (gpointer *)&websites)) {
@@ -249,7 +245,7 @@ itp_report_ready (GObject      *source_object,
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tracker_listbox), sort_domain, self->tracker_table, NULL);
   gtk_list_box_invalidate_sort (GTK_LIST_BOX (self->tracker_listbox));
 
-  description = g_strdup_printf (_("GNOME Web prevented %ld trackers from following you across websites"), count);
+  description = g_strdup_printf (_("GNOME Web prevented %u trackers from following you across websites"), g_list_length (summary));
   adw_status_page_set_description (ADW_STATUS_PAGE (self->status_page), description);
 
   adw_dialog_present (ADW_DIALOG (self), GTK_WIDGET (window));
