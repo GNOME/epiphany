@@ -217,8 +217,8 @@ browser_action_popover_visible_changed_cb (GtkWidget        *popover,
 }
 
 static void
-on_bookmarks_button (GtkToggleButton *button,
-                     gpointer         user_data)
+on_bookmarks_button (GtkButton *button,
+                     gpointer   user_data)
 {
   GtkWindow *parent_window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button)));
   ephy_window_toggle_bookmarks (EPHY_WINDOW (parent_window));
@@ -382,7 +382,7 @@ void
 ephy_action_bar_end_show_bookmarks (EphyActionBarEnd *action_bar_end)
 {
   if (gtk_widget_get_visible (action_bar_end->bookmarks_button))
-    gtk_menu_button_popup (GTK_MENU_BUTTON (action_bar_end->bookmarks_button));
+    on_bookmarks_button (GTK_BUTTON (action_bar_end->bookmarks_button), NULL);
 }
 
 GtkWidget *
