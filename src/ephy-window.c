@@ -4653,7 +4653,7 @@ ephy_window_close (EphyWindow *window)
     g_signal_connect_swapped (dialog, "response::accept",
                               G_CALLBACK (window_close_with_multiple_tabs_cb),
                               window);
-    adw_dialog_present (dialog, GTK_WIDGET (dialog));
+    adw_dialog_present (dialog, GTK_WIDGET (window));
 
     /* stop window close */
     return FALSE;
