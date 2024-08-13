@@ -520,9 +520,13 @@ on_search_entry_changed (GtkSearchEntry *entry,
       mapped++;
   }
 
-  if (g_strcmp0 (entry_text, "") != 0 && mapped == 0) {
+  if (mapped != 0)
+    return;
+
+  if (g_strcmp0 (entry_text, "") != 0)
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
-  }
+  else
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
 }
 
 static void
