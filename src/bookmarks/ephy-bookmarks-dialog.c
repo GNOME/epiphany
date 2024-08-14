@@ -53,7 +53,10 @@ G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, GTK_TYPE_BOX)
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
 
 static GtkWidget * create_bookmark_row (gpointer item, gpointer user_data);
-static GtkWidget *create_tag_row (const char *tag);
+static GtkWidget *create_tag_row (EphyBookmarksDialog *self,
+                                  const char          *tag);
+static void ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
+                                                   const char          *tag);
 
 static void
 tag_detail_back (EphyBookmarksDialog *self)
@@ -130,9 +133,9 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
   }
 
   if (!exists) {
-    GtkWidget *tag_row = create_tag_row (tag);
+    GtkWidget *tag_row = create_tag_row (self, tag);
     gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
-    tag_row = create_tag_row (tag);
+    tag_row = create_tag_row (self, tag);
     gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), tag_row);
   }
 }
@@ -225,8 +228,19 @@ create_bookmark_row (gpointer item,
   return row;
 }
 
+static void
+on_tag_row_activated (AdwActionRow *row,
+                      gpointer      user_data)
+{
+  EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
+  const char *tag = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+
+  ephy_bookmarks_dialog_show_tag_detail (self, tag);
+}
+
 static GtkWidget *
-create_tag_row (const char *tag)
+create_tag_row (EphyBookmarksDialog *self,
+                const char          *tag)
 {
   GtkWidget *row;
   GtkWidget *image;
@@ -247,6 +261,8 @@ create_tag_row (const char *tag)
 
   image = gtk_image_new_from_icon_name ("go-next-symbolic");
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
+
+  g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, 0);
 
   return row;
 }
@@ -313,9 +329,9 @@ ephy_bookmarks_dialog_tag_created_cb (EphyBookmarksDialog  *self,
   g_assert (tag != NULL);
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
-  tag_row = create_tag_row (tag);
+  tag_row = create_tag_row (self, tag);
   gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
-  tag_row = create_tag_row (tag);
+  tag_row = create_tag_row (self, tag);
   gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), tag_row);
 }
 
@@ -607,7 +623,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
     GtkWidget *tag_row;
 
     if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
-      tag_row = create_tag_row (tag);
+      tag_row = create_tag_row (self, tag);
       gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), tag_row);
     }
   }
@@ -631,7 +647,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
     GtkWidget *tag_row;
 
     if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
-      tag_row = create_tag_row (tag);
+      tag_row = create_tag_row (self, tag);
       gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
     }
   }

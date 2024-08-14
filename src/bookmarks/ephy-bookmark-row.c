@@ -248,9 +248,18 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 }
 
 static void
+on_row_activated (AdwActionRow *self,
+                  gpointer      user_data)
+{
+  ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (self), 0);
+}
+
+static void
 ephy_bookmark_row_init (EphyBookmarkRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self, "activated", G_CALLBACK (on_row_activated), self, G_CONNECT_DEFAULT);
 
   g_signal_connect_object (self->properties_button,
                            "clicked",
