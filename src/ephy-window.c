@@ -156,6 +156,7 @@ struct _EphyWindow {
   GtkWidget *action_bar;
   GtkWidget *overlay_split_view;
   GtkWidget *bottom_sheet;
+  GtkWidget *bookmarks_dialog;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
   WebKitHitTestResult *context_event;
@@ -4052,7 +4053,8 @@ ephy_window_constructed (GObject *object)
   gtk_widget_add_css_class (bookmark_title, "title-1");
   gtk_box_append (GTK_BOX (bookmark_box), bookmark_title);
 
-  gtk_box_append (GTK_BOX (bookmark_box), ephy_bookmarks_dialog_new ());
+  window->bookmarks_dialog = ephy_bookmarks_dialog_new ();
+  gtk_box_append (GTK_BOX (bookmark_box), window->bookmarks_dialog);
   adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (sidebar), bookmark_box);
 
   /* Overlay Split View */
@@ -4766,10 +4768,14 @@ ephy_window_switch_to_new_tab (EphyWindow *window)
 }
 
 void
-ephy_window_toggle_bookmarks (EphyWindow *window)
+ephy_window_toggle_bookmarks (EphyWindow *self)
 {
   gboolean state;
 
-  state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view));
-  adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), state);
+  state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view));
+  adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view), state);
+
+  if (state) {
+    ephy_bookmarks_dialog_focus (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
+  }
 }

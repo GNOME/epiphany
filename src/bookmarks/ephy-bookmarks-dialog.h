@@ -30,4 +30,6 @@ G_DECLARE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, EPHY, BOOKMARK
 
 GtkWidget *ephy_bookmarks_dialog_new      (void);
 
+void ephy_bookmarks_dialog_focus (EphyBookmarksDialog *self);
+
 G_END_DECLS

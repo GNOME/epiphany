@@ -688,3 +688,9 @@ ephy_bookmarks_dialog_new (void)
   return g_object_new (EPHY_TYPE_BOOKMARKS_DIALOG,
                        NULL);
 }
+
+void
+ephy_bookmarks_dialog_focus (EphyBookmarksDialog *self)
+{
+  gtk_widget_grab_focus (self->search_entry);
+}
