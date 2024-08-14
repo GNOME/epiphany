@@ -141,6 +141,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
   }
 
   check_button = gtk_check_button_new ();
+  gtk_accessible_update_property (GTK_ACCESSIBLE (check_button), GTK_ACCESSIBLE_PROPERTY_LABEL, _("Select current tag"), -1);
   gtk_widget_add_css_class (check_button, "selection-mode");
   gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), selected);
   g_signal_connect_object (G_OBJECT (check_button), "toggled", G_CALLBACK (on_check_button_toggled), self, 0);
@@ -154,6 +155,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
     GtkWidget *button;
 
     button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
+    gtk_accessible_update_property (GTK_ACCESSIBLE (button), GTK_ACCESSIBLE_PROPERTY_LABEL, _("Remove current tag"), -1);
     gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
     gtk_widget_add_css_class (button, "flat");
     adw_action_row_add_suffix (ADW_ACTION_ROW (widget), button);
