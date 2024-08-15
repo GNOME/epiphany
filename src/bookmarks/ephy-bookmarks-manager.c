@@ -591,7 +591,7 @@ ephy_bookmarks_manager_has_bookmarks_with_tag (EphyBookmarksManager *self,
 {
   g_autoptr (GSequence) bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (self, tag);
 
-  return g_sequence_is_empty (bookmarks);
+  return !g_sequence_is_empty (bookmarks);
 }
 
 GSequence *
