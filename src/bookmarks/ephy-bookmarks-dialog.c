@@ -597,6 +597,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
 
   if (g_list_model_get_n_items (G_LIST_MODEL (self->manager)) == 0) {
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
+    gtk_widget_set_visible (self->search_entry, FALSE);
   }
 
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->bookmarks_list_box),
