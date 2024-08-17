@@ -123,12 +123,28 @@ static gboolean chrome_exists (void);
 static gboolean chromium_exists (void);
 
 static struct import_option import_options[] = {
-  { N_("GVDB File"), IMPORT_TYPE_CHOOSE, IMPORT_FROM_GVDB_ID, NULL },
   { N_("HTML File"), IMPORT_TYPE_CHOOSE, IMPORT_FROM_HTML_ID, NULL },
   { N_("Firefox"), IMPORT_TYPE_IMPORT, IMPORT_FROM_FIREFOX_ID, firefox_exists },
   { N_("Chrome"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROME_ID, chrome_exists },
   { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_exists }
 };
+
+static char **
+get_available_bookmark_import_options ()
+{
+  GPtrArray *options = NULL;
+
+  options = g_ptr_array_new ();
+
+  for (int i = G_N_ELEMENTS (import_options) - 1; i >= 0; i--) {
+    if (!import_options[i].exists || import_options[i].exists ())
+      g_ptr_array_add (options, g_strdup (import_options[i].id));
+  }
+
+  g_ptr_array_add (options, NULL);
+
+  return (char **)g_ptr_array_free (options, FALSE);
+}
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
@@ -530,6 +546,24 @@ dialog_bookmarks_import_from_chromium (GtkWindow *parent)
                              _("Bookmarks successfully imported!"));
 }
 
+static void
+import_bookmarks_using_option_id (const char *option_id,
+                                  GtkWindow  *window)
+{
+  if (strcmp (option_id, IMPORT_FROM_GVDB_ID) == 0)
+    dialog_bookmarks_import (window);
+  else if (strcmp (option_id, IMPORT_FROM_HTML_ID) == 0)
+    dialog_bookmarks_import_from_html (window);
+  else if (strcmp (option_id, IMPORT_FROM_FIREFOX_ID) == 0)
+    dialog_bookmarks_import_from_firefox (window);
+  else if (strcmp (option_id, IMPORT_FROM_CHROME_ID) == 0)
+    dialog_bookmarks_import_from_chrome (window);
+  else if (strcmp (option_id, IMPORT_FROM_CHROMIUM_ID) == 0)
+    dialog_bookmarks_import_from_chromium (window);
+  else
+    g_assert_not_reached ();
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 dialog_bookmarks_import_cb (GtkWidget   *button,
@@ -539,28 +573,14 @@ dialog_bookmarks_import_cb (GtkWidget   *button,
   GtkWindow *window = gtk_window_get_transient_for (dialog);
   const char *active = gtk_combo_box_get_active_id (combo_box);
 
-  if (strcmp (active, IMPORT_FROM_GVDB_ID) == 0)
-    dialog_bookmarks_import (window);
-  else if (strcmp (active, IMPORT_FROM_HTML_ID) == 0)
-    dialog_bookmarks_import_from_html (window);
-  else if (strcmp (active, IMPORT_FROM_FIREFOX_ID) == 0)
-    dialog_bookmarks_import_from_firefox (window);
-  else if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
-    dialog_bookmarks_import_from_chrome (window);
-  else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
-    dialog_bookmarks_import_from_chromium (window);
-  else
-    g_assert_not_reached ();
+  import_bookmarks_using_option_id (active, window);
 
   gtk_window_close (GTK_WINDOW (dialog));
 }
 
-void
-window_cmd_import_bookmarks (GSimpleAction *action,
-                             GVariant      *parameter,
-                             gpointer       user_data)
+static void
+import_bookmarks_using_option_dialog (EphyWindow *window)
 {
-  EphyWindow *window = EPHY_WINDOW (user_data);
   GtkWidget *dialog;
   GtkWidget *header_bar;
   GtkWidget *button;
@@ -632,6 +652,22 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+void
+window_cmd_import_bookmarks (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  g_auto (GStrv) available_import_options = NULL;
+
+  available_import_options = get_available_bookmark_import_options ();
+
+  if (g_strv_length (available_import_options) == 1)
+    import_bookmarks_using_option_id (available_import_options[0], GTK_WINDOW (window));
+  else
+    import_bookmarks_using_option_dialog (window);
+}
 
 static void
 bookmarks_export_cb (GObject      *source_object,
@@ -761,6 +797,23 @@ create_import_passwords_tree_model (int *out_id_column)
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
+static char **
+get_available_password_import_options ()
+{
+  GPtrArray *options = NULL;
+
+  options = g_ptr_array_new ();
+
+  for (int i = G_N_ELEMENTS (import_passwords_options) - 1; i >= 0; i--) {
+    if (!import_passwords_options[i].exists || import_passwords_options[i].exists ())
+      g_ptr_array_add (options, g_strdup (import_passwords_options[i].id));
+  }
+
+  g_ptr_array_add (options, NULL);
+
+  return (char **)g_ptr_array_free (options, FALSE);
+}
+
 static void
 dialog_password_import_cb (GObject      *source_object,
                            GAsyncResult *res,
@@ -824,29 +877,38 @@ dialog_password_import_from_csv (GtkWindow *parent)
                         parent);
 }
 
+static void
+import_passwords_using_option_id (const char *option_id,
+                                  GtkWindow  *window)
+{
+  EphyPasswordManager *manager;
+
+  manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+
+  if (strcmp (option_id, IMPORT_FROM_CHROME_ID) == 0)
+    ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, window);
+  else if (strcmp (option_id, IMPORT_FROM_CHROMIUM_ID) == 0)
+    ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, window);
+  else if (strcmp (option_id, IMPORT_FROM_CSV_ID) == 0)
+    dialog_password_import_from_csv (window);
+  else
+    g_assert_not_reached ();
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 dialog_passwords_import_cb (GtkWidget   *button,
                             GtkComboBox *combo_box)
 {
-  EphyPasswordManager *manager;
   const char *active;
   GtkWidget *dialog;
   GtkWindow *window;
 
-  manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   active = gtk_combo_box_get_active_id (combo_box);
   dialog = GTK_WIDGET (gtk_widget_get_root (button));
   window = gtk_window_get_transient_for (GTK_WINDOW (gtk_widget_get_root (button)));
 
-  if (strcmp (active, IMPORT_FROM_CHROME_ID) == 0)
-    ephy_password_import_from_chrome_async (manager, CHROME, dialog_password_import_cb, dialog);
-  else if (strcmp (active, IMPORT_FROM_CHROMIUM_ID) == 0)
-    ephy_password_import_from_chrome_async (manager, CHROMIUM, dialog_password_import_cb, dialog);
-  else if (strcmp (active, IMPORT_FROM_CSV_ID) == 0)
-    dialog_password_import_from_csv (window);
-  else
-    g_assert_not_reached ();
+  import_passwords_using_option_id (active, window);
 
   gtk_window_close (GTK_WINDOW (dialog));
 }
@@ -867,12 +929,9 @@ passwords_combo_box_changed_cb (GtkComboBox *combo_box,
     gtk_button_set_label (button, _("I_mport"));
 }
 
-void
-window_cmd_import_passwords (GSimpleAction *action,
-                             GVariant      *parameter,
-                             gpointer       user_data)
+static void
+import_passwords_using_option_dialog (EphyWindow *window)
 {
-  EphyWindow *window = EPHY_WINDOW (user_data);
   GtkWidget *dialog;
   GtkWidget *header_bar;
   GtkWidget *button;
@@ -946,6 +1005,22 @@ window_cmd_import_passwords (GSimpleAction *action,
                     GTK_COMBO_BOX (combo_box));
 
   gtk_window_present (GTK_WINDOW (dialog));
+}
+
+void
+window_cmd_import_passwords (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  g_auto (GStrv) available_import_options = NULL;
+
+  available_import_options = get_available_password_import_options ();
+
+  if (g_strv_length (available_import_options) == 1)
+    import_passwords_using_option_id (available_import_options[0], GTK_WINDOW (window));
+  else
+    import_passwords_using_option_dialog (window);
 }
 
 static void
