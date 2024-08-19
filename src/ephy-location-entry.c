@@ -1934,23 +1934,6 @@ ephy_location_entry_show_password_popover (EphyLocationEntry *entry)
 }
 
 void
-ephy_location_entry_set_add_bookmark_popover (EphyLocationEntry *entry,
-                                              GtkPopover        *popover)
-{
-  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
-  g_assert (GTK_IS_POPOVER (popover));
-
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (entry->bookmark_button),
-                               GTK_WIDGET (popover));
-}
-
-void
-ephy_location_entry_show_add_bookmark_popover (EphyLocationEntry *entry)
-{
-  gtk_menu_button_popup (GTK_MENU_BUTTON (entry->bookmark_button));
-}
-
-void
 ephy_location_entry_set_reader_mode_visible (EphyLocationEntry *entry,
                                              gboolean           visible)
 {

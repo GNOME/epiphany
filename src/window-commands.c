@@ -26,6 +26,7 @@
 #include "window-commands.h"
 
 #include "clear-data-view.h"
+#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-manager.h"
@@ -2750,14 +2751,10 @@ window_cmd_bookmark_page (GSimpleAction *action,
                           gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyHeaderBar *header_bar;
-  EphyTitleWidget *title_widget;
+  GtkWidget *dialog;
 
-  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-  title_widget = ephy_header_bar_get_title_widget (header_bar);
-  g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
-
-  ephy_location_entry_show_add_bookmark_popover (EPHY_LOCATION_ENTRY (title_widget));
+  dialog = ephy_bookmark_properties_new_for_window (window);
+  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
 }
 
 void
@@ -2766,12 +2763,8 @@ window_cmd_bookmarks (GSimpleAction *action,
                       gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyHeaderBar *header_bar;
-  EphyActionBarEnd *action_bar_end;
 
-  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-  action_bar_end = EPHY_ACTION_BAR_END (ephy_header_bar_get_action_bar_end (header_bar));
-  ephy_action_bar_end_show_bookmarks (action_bar_end);
+  ephy_window_toggle_bookmarks (window);
 }
 
 void

@@ -378,19 +378,6 @@ ephy_action_bar_end_show_downloads (EphyActionBarEnd *action_bar_end)
     gtk_menu_button_popup (GTK_MENU_BUTTON (action_bar_end->downloads_button));
 }
 
-void
-ephy_action_bar_end_show_bookmarks (EphyActionBarEnd *action_bar_end)
-{
-  if (gtk_widget_get_visible (action_bar_end->bookmarks_button))
-    on_bookmarks_button (GTK_BUTTON (action_bar_end->bookmarks_button), NULL);
-}
-
-GtkWidget *
-ephy_action_bar_end_get_bookmarks_button (EphyActionBarEnd *action_bar_end)
-{
-  return action_bar_end->bookmarks_button;
-}
-
 GtkWidget *
 ephy_action_bar_end_get_downloads_revealer (EphyActionBarEnd *action_bar_end)
 {
