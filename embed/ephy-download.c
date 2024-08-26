@@ -238,6 +238,13 @@ set_destination_for_suggested_filename (EphyDownload *download,
   g_free (dest_dir);
   g_free (dest_name);
 
+  if (strlen (destination_filename) > NAME_MAX) {
+    g_autofree char *truncated_filename = g_utf8_substring (destination_filename, 0,
+                                                            g_utf8_strlen (destination_filename, NAME_MAX));
+    g_free (destination_filename);
+    destination_filename = g_steal_pointer (&truncated_filename);
+  }
+
   /* Append (n) as needed. */
   if (!webkit_download_get_allow_overwrite (download->download) && g_file_test (destination_filename, G_FILE_TEST_EXISTS)) {
     int i = 1;
@@ -263,6 +270,7 @@ set_destination_for_suggested_filename (EphyDownload *download,
       g_free (serial);
     } while (g_file_test (tmp_filename->str, G_FILE_TEST_EXISTS));
 
+    g_free (destination_filename);
     destination_filename = g_strdup (tmp_filename->str);
     g_string_free (tmp_filename, TRUE);
   }
