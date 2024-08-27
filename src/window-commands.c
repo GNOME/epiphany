@@ -1401,6 +1401,7 @@ typedef struct {
   EphyWebView *view;
   const char *display_address;
   const char *url;
+  char *manifest_url;
   char *icon_href;
   char *title;
   char *chosen_name;
@@ -1481,6 +1482,7 @@ ephy_application_dialog_data_free (EphyApplicationDialogData *data)
     g_object_unref (data->framed_pixbuf);
   if (data->icon_v)
     g_variant_unref (data->icon_v);
+  g_free (data->manifest_url);
   g_free (data->icon_href);
   g_free (data->title);
   g_free (data->chosen_name);
@@ -1952,6 +1954,22 @@ start_fallback (EphyApplicationDialogData *data)
   ephy_web_view_get_web_app_mobile_capable (data->view, data->cancellable, fill_mobile_capable_cb, data);
 }
 
+static char *
+icon_url_from_relative_url (const char *relative_url,
+                            const char *manifest_url)
+{
+  g_autofree char *url = NULL;
+  g_autoptr (GError) error = NULL;
+
+  url = g_uri_resolve_relative (manifest_url, relative_url, G_URI_FLAGS_NONE, &error);
+  if (!url) {
+    g_warning ("Failed to resolve URL %s relative to %s: %s", relative_url, manifest_url, error->message);
+    return NULL;
+  }
+
+  return g_steal_pointer (&url);
+}
+
 static void
 download_manifest_finished_cb (WebKitDownload            *download,
                                EphyApplicationDialogData *data)
@@ -2028,10 +2046,12 @@ download_manifest_finished_cb (WebKitDownload            *download,
 
   if (ephy_embed_utils_address_has_web_scheme (str))
     uri = g_strdup (str);
-  else if (g_str_has_suffix (data->url, "/"))
-    uri = g_strdup_printf ("%s%s", data->url, str);
   else
-    uri = g_strdup_printf ("%s/%s", data->url, str);
+    uri = icon_url_from_relative_url (str, data->manifest_url);
+  if (!uri) {
+    start_fallback (data);
+    return;
+  }
 
   display = ephy_json_object_get_string (manifest_object, "display");
   if (g_strcmp0 (display, "standalone") == 0 || g_strcmp0 (display, "fullscreen") == 0)
@@ -2075,6 +2095,7 @@ download_and_use_manifest (EphyApplicationDialogData *data,
   g_autofree char *tmp_filename = NULL;
 
   LOG ("%s: manifest url %s", __FUNCTION__, manifest_url);
+  data->manifest_url = g_strdup (manifest_url);
   data->download_manifest = ephy_download_new_for_uri_internal (manifest_url);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (data->download_manifest), TRUE);
   tmp_filename = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
