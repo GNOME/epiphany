@@ -179,8 +179,7 @@ epiphany_sources = [
   'ephy-main.c',
   resources,
   highlightjs_resources,
-  readability_resources,
-  adguard_resources
+  readability_resources
 ]
 
 epiphany = executable('epiphany',

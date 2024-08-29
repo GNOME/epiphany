@@ -1,10 +1,3 @@
-adguard_resource_files = files('adguard/adguard.gresource.xml')
-adguard_resources = gnome.compile_resources('adguard-resources',
-    adguard_resource_files,
-    c_name: 'adguard',
-    source_dir: 'adguard'
-)
-
 highlightjs_resource_files = files('highlightjs/highlightjs.gresource.xml')
 highlightjs_resources = gnome.compile_resources('highlightjs-resources',
     highlightjs_resource_files,
