@@ -33,7 +33,6 @@ if get_option('unit_tests').enabled()
 
   embed_shell_test = executable('test-ephy-embed-shell',
     'ephy-embed-shell-test.c',
-    adguard_resources,
     dependencies: ephymain_dep,
     c_args: test_cargs + ['-DTEST_DIR="' + meson.current_source_dir() + '"'],
   )
@@ -183,7 +182,6 @@ if get_option('unit_tests').enabled()
     'ephy-web-view-test.c',
     resources,
     readability_resources,
-    adguard_resources,
     dependencies: ephymain_dep
   )
   test('Web view test',
