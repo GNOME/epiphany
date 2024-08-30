@@ -2680,22 +2680,8 @@ window_cmd_delete (GSimpleAction *action,
   EphyWindow *window = user_data;
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 
-  if (GTK_IS_EDITABLE (widget)) {
+  if (GTK_IS_EDITABLE (widget))
     gtk_editable_delete_text (GTK_EDITABLE (widget), 0, -1);
-  } else {
-    EphyEmbed *embed;
-
-    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-
-    if (!embed)
-      return;
-
-    /* FIXME: TODO */
-#if 0
-    ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
-                                     "cmd_delete");
-#endif
-  }
 }
 
 static void
