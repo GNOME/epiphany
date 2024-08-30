@@ -181,8 +181,10 @@ web_page_context_menu (WebKitWebPage          *web_page,
   /* FIXME: this is wrong, see https://gitlab.gnome.org/GNOME/epiphany/issues/442
    * We need a way to get the right frame to use here.
    */
-  frame = webkit_web_page_get_main_frame (web_page);
-  js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    frame = webkit_web_page_get_main_frame (web_page);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+    js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
 
   js_value = jsc_context_evaluate (js_context, "window.getSelection().toString();", -1);
   if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
@@ -442,7 +444,9 @@ ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
                                                   WebKitUserMessage *message)
 {
   const char *name = webkit_user_message_get_name (message);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   WebKitFrame *frame = webkit_web_page_get_main_frame (page);
+  G_GNUC_END_IGNORE_DEPRECATIONS
   g_autoptr (JSCValue) value = NULL;
 
   if (!PAGE_IS_EXTENSION (page)) {
@@ -491,10 +495,13 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
 
   if (PAGE_IS_EXTENSION (web_page)) {
     /* Enforce the creation of the script world global context in the main frame */
-    js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), webkit_script_world_get_default ());
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      js_context = webkit_frame_get_js_context_for_script_world (webkit_web_page_get_main_frame (web_page), webkit_script_world_get_default ());
     (void)js_context;
+    G_GNUC_END_IGNORE_DEPRECATIONS
 
-    g_signal_connect_swapped (web_page, "user-message-received",
+    g_signal_connect_swapped (web_page,
+                              "user-message-received",
                               G_CALLBACK (ephy_web_extension_page_user_message_received_cb),
                               NULL);
   } else {
