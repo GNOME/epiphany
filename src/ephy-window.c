@@ -341,9 +341,10 @@ ephy_window_open_link (EphyLink      *link,
     ephy_web_view_set_visit_type (ephy_embed_get_web_view (embed),
                                   EPHY_PAGE_VISIT_TYPED);
 
-  if (flags & (EPHY_LINK_JUMP_TO |
-               EPHY_LINK_NEW_TAB |
-               EPHY_LINK_NEW_WINDOW)) {
+  if (!embed ||
+      (flags & (EPHY_LINK_JUMP_TO |
+                EPHY_LINK_NEW_TAB |
+                EPHY_LINK_NEW_WINDOW))) {
     EphyNewTabFlags ntflags = 0;
     EphyWindow *target_window;
 
@@ -630,6 +631,9 @@ handle_key_cb (EphyWindow            *window,
                GtkEventControllerKey *controller)
 {
   EphyWebView *view;
+
+  if (!window->active_embed)
+    return GDK_EVENT_PROPAGATE;
 
   view = ephy_embed_get_web_view (window->active_embed);
   if (gtk_window_get_focus (GTK_WINDOW (window)) != GTK_WIDGET (view))
