@@ -141,6 +141,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
   }
 
   check_button = gtk_check_button_new ();
+  gtk_widget_set_valign (check_button, GTK_ALIGN_CENTER);
   gtk_accessible_update_property (GTK_ACCESSIBLE (check_button), GTK_ACCESSIBLE_PROPERTY_LABEL, _("Select current tag"), -1);
   gtk_widget_add_css_class (check_button, "selection-mode");
   gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), selected);
