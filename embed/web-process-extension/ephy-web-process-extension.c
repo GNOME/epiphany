@@ -450,7 +450,7 @@ ephy_web_extension_page_user_message_received_cb (WebKitWebPage     *page,
   g_autoptr (JSCValue) value = NULL;
 
   if (!PAGE_IS_EXTENSION (page)) {
-    g_warning ("Got user messgae for non-extension page");
+    g_warning ("Got user message for non-extension page");
     return;
   }
 
