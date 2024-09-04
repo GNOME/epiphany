@@ -4,7 +4,10 @@
 # Based on German Galeon translation.
 # Copyright on Galeon translation is held by its translators.
 # Please keep in sync with Galeon translation.
-#
+# 
+# Auf Wunsch des Maintainers:
+# Link   ->  Link
+# Tab    ->  Tab 
 #
 # Christian Neumair <chris@gnome-de.org>, 2003, 2004.
 # Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008.
@@ -26,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-16 10:04+0000\n"
-"PO-Revision-Date: 2024-08-20 19:59+0200\n"
+"POT-Creation-Date: 2024-09-01 07:19+0000\n"
+"PO-Revision-Date: 2024-09-04 17:49+0200\n"
 "Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -35,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.5\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
@@ -178,12 +181,12 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:77
 msgid "Force new windows to be opened in tabs"
-msgstr "Neue Fenster als neue Reiter öffnen"
+msgstr "Neue Fenster als neue Tabs öffnen"
 
 #: data/org.gnome.epiphany.gschema.xml:78
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
-msgstr "Neue Fensteranfragen als Reiter anstatt als ein neues Fenster öffnen."
+msgstr "Neue Fensteranfragen als Tabs statt in einem neuen Fenster öffnen."
 
 #: data/org.gnome.epiphany.gschema.xml:85
 msgid "Whether to automatically restore the last session"
@@ -205,7 +208,7 @@ msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
-"Legt fest, ob das Laden von Reitern verzögert werden soll, die bei der "
+"Legt fest, ob das Laden von Tabs verzögert werden soll, die bei der "
 "Sitzungswiederherstellung nicht sofort sichtbar sind"
 
 #: data/org.gnome.epiphany.gschema.xml:91
@@ -213,9 +216,9 @@ msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr ""
-"Wenn diese Option aktiviert ist, werden Reiter bei der "
+"Wenn diese Option aktiviert ist, werden Tabs bei der "
 "Sitzungswiederherstellung nicht sofort geladen, sondern erst, wenn der "
-"Benutzer in einen dieser Reiter wechselt."
+"Benutzer in einen dieser Tabs wechselt."
 
 #: data/org.gnome.epiphany.gschema.xml:95
 msgid "List of adblock filters"
@@ -272,20 +275,20 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:117
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
-"Breite der Reiter ausdehnen und den gesamten verfügbaren Platz einnehmen."
+"Breite der Tabs ausdehnen und den gesamten verfügbaren Platz einnehmen."
 
 #: data/org.gnome.epiphany.gschema.xml:118
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
-"Wenn aktiviert, werden die Reiter den gesamten verfügbaren Platz in der "
-"Reiterleiste einnehmen. Diese Einstellung wird in der Pantheon-"
-"Arbeitsumgebung ignoriert."
+"Wenn aktiviert, werden die Tabs den gesamten verfügbaren Platz in der "
+"Tableiste einnehmen. Diese Einstellung wird in der Pantheon-Arbeitsumgebung "
+"ignoriert."
 
 #: data/org.gnome.epiphany.gschema.xml:122
 msgid "The visibility policy for the tabs bar."
-msgstr "Die Sichtbarkeitsvorgaben für die Reiterleiste."
+msgstr "Die Sichtbarkeitsvorgaben für die Tableiste."
 
 #: data/org.gnome.epiphany.gschema.xml:123
 msgid ""
@@ -294,20 +297,20 @@ msgid ""
 "two or more tabs) and “never” (the tabs bar is never shown). This setting is "
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
-"Legt fest, wann die Reiterleiste angezeigt wird. Mögliche Werte sind "
-"»always« (die Reiterleiste wird immer angezeigt), »more-than-one« (die "
-"Reiterleiste wird nur angezeigt, wenn dort zwei oder mehr Reiter sind) und "
-"»never« (die Reiterleiste wird nie angezeigt). Diese Einstellung wird in der "
-"Pantheon-Arbeitsumgebung ignoriert und es wird der Wert »always« verwendet."
+"Legt fest, wann die Tableiste angezeigt wird. Mögliche Werte sind »always« "
+"(die Tableiste wird immer angezeigt), »more-than-one« (die Tableiste wird "
+"nur angezeigt, wenn dort zwei oder mehr Tabs sind) und »never« (die "
+"Tableiste wird nie angezeigt). Diese Einstellung wird in der Pantheon-"
+"Arbeitsumgebung ignoriert und es wird der Wert »always« verwendet."
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Keep window open when closing last tab"
-msgstr "Fenster geöffnet lassen, wenn der letzte Reiter geschlossen wird"
+msgstr "Fenster geöffnet lassen, wenn der letzte Tab geschlossen wird"
 
 #: data/org.gnome.epiphany.gschema.xml:128
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
-"Legt fest, ob das Anwendungsfenster geöffnet bleibt, wenn der letzte Reiter "
+"Legt fest, ob das Anwendungsfenster geöffnet bleibt, wenn der letzte Tab "
 "geschlossen wird."
 
 #: data/org.gnome.epiphany.gschema.xml:134
@@ -615,13 +618,12 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:274
 msgid "Enable immediately switch to new open tab"
-msgstr "Sofort auf neue geöffnete Reiter wechseln"
+msgstr "Sofort auf neue geöffnete Tab wechseln"
 
 #: data/org.gnome.epiphany.gschema.xml:275
 msgid "Whether to automatically switch to a new open tab."
 msgstr ""
-"Gibt an, ob automatisch zu einem neuen geöffneten Reiter gewechselt werden "
-"soll."
+"Gibt an, ob automatisch zu einem neuen geöffneten Tab gewechselt werden soll."
 
 #: data/org.gnome.epiphany.gschema.xml:279
 msgid "Enable WebExtensions"
@@ -911,21 +913,21 @@ msgstr "Legt fest, ob die Chronik erstmalig abgeglichen werden muss."
 
 #: data/org.gnome.epiphany.gschema.xml:456
 msgid "Enable open tabs sync"
-msgstr "Abgleich geöffneter Reiter aktivieren"
+msgstr "Abgleich geöffneter Tabs aktivieren"
 
 #: data/org.gnome.epiphany.gschema.xml:457
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
-msgstr "Legt fest, ob die geöffneten Reiter abgeglichen werden sollen."
+msgstr "Legt fest, ob die geöffneten Tabs abgeglichen werden sollen."
 
 #: data/org.gnome.epiphany.gschema.xml:461
 msgid "Open tabs sync timestamp"
-msgstr "Sync-Zeitstempel für geöffnete Reiter"
+msgstr "Sync-Zeitstempel für geöffnete Tabs"
 
 #: data/org.gnome.epiphany.gschema.xml:462
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "Der Zeitstempel des zuletzt ausgeführten Abgleichs der zuletzt geöffneten "
-"Reiter."
+"Tabs."
 
 #: data/org.gnome.epiphany.gschema.xml:473
 msgid "Decision to apply when microphone permission is requested for this host"
@@ -1325,7 +1327,7 @@ msgstr "Leere Seite"
 #. Translators: tooltip for the new tab button
 #: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.ui:117
 msgid "New Tab"
-msgstr "Neuer Reiter"
+msgstr "Neuer Tab"
 
 #: embed/ephy-encodings.c:58
 msgid "Arabic (_IBM-864)"
@@ -2379,7 +2381,7 @@ msgstr "Mobil"
 
 #: src/context-menu-commands.c:295
 msgid "Save Link As"
-msgstr "Verweis speichern unter"
+msgstr "Link speichern unter"
 
 #: src/context-menu-commands.c:303
 msgid "Save Image As"
@@ -2574,7 +2576,7 @@ msgstr "Soll die Browser-Chronik geleert werden?"
 
 #: src/ephy-history-dialog.c:769
 msgid "All links will be permanently deleted"
-msgstr "Alle Verweise werden für immer gelöscht"
+msgstr "Alle Links werden für immer gelöscht"
 
 #: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
@@ -2611,7 +2613,7 @@ msgstr "Berechtigungsanfrage"
 
 #: src/ephy-main.c:113
 msgid "Open a new browser window instead of a new tab"
-msgstr "Ein neues Fenster statt eines neuen Reiters öffnen"
+msgstr "Ein neues Fenster statt eines neuen Tabs öffnen"
 
 #: src/ephy-main.c:117
 msgid "Load the given session state file"
@@ -2832,7 +2834,7 @@ msgstr "Ohne Ton"
 #. Translators: tooltip for the new tab button
 #: src/ephy-tab-view.c:650
 msgid "Open a new tab"
-msgstr "Einen neuen Reiter öffnen"
+msgstr "Einen neuen Tab öffnen"
 
 #. Undo, redo.
 #: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:277
@@ -2866,7 +2868,7 @@ msgstr "_Alles markieren"
 
 #: src/ephy-window.c:967
 msgid "S_end Link by Email…"
-msgstr "Verweis _über E-Mail verschicken an …"
+msgstr "Link _über E-Mail verschicken an …"
 
 #: src/ephy-window.c:969
 msgid "_Reload"
@@ -2888,23 +2890,23 @@ msgstr "Lesezeichen _hinzufügen …"
 #. Links.
 #: src/ephy-window.c:978
 msgid "Open Link in New _Window"
-msgstr "Verweis in _neuem Fenster öffnen"
+msgstr "Link in _neuem Fenster öffnen"
 
 #: src/ephy-window.c:979
 msgid "Open Link in New _Tab"
-msgstr "Verweis in neuem _Reiter öffnen"
+msgstr "Link in neuem _Tab öffnen"
 
 #: src/ephy-window.c:980
 msgid "Open Link in I_ncognito Window"
-msgstr "Verweis in _Inkognito-Fenster öffnen"
+msgstr "Link in _Inkognito-Fenster öffnen"
 
 #: src/ephy-window.c:981
 msgid "_Save Link As…"
-msgstr "Verweis _speichern unter …"
+msgstr "Link _speichern unter …"
 
 #: src/ephy-window.c:982
 msgid "_Copy Link Address"
-msgstr "Verweisadresse _kopieren"
+msgstr "Linkadresse _kopieren"
 
 #: src/ephy-window.c:983
 msgid "_Copy E-mail Address"
@@ -2913,7 +2915,7 @@ msgstr "E-Mail-Adresse _kopieren"
 #. Images.
 #: src/ephy-window.c:987
 msgid "View _Image in New Tab"
-msgstr "_Bild in neuem Reiter anzeigen"
+msgstr "_Bild in neuem Tab anzeigen"
 
 #: src/ephy-window.c:988
 msgid "Copy I_mage Address"
@@ -2934,7 +2936,7 @@ msgstr "Video in neuem _Fenster öffnen"
 
 #: src/ephy-window.c:995
 msgid "Open Video in New _Tab"
-msgstr "Video in neuem _Reiter öffnen"
+msgstr "Video in neuem _Tab öffnen"
 
 #: src/ephy-window.c:996
 msgid "_Save Video As…"
@@ -2951,7 +2953,7 @@ msgstr "Audio in neuem _Fenster öffnen"
 
 #: src/ephy-window.c:1002
 msgid "Open Audio in New _Tab"
-msgstr "Audio in neuem _Reiter öffnen"
+msgstr "Audio in neuem _Tab öffnen"
 
 #: src/ephy-window.c:1003
 msgid "_Save Audio As…"
@@ -2980,19 +2982,19 @@ msgstr "Nach »%s« im Internet suchen"
 
 #: src/ephy-window.c:1418
 msgid "Open Link"
-msgstr "Verweis öffnen"
+msgstr "Link öffnen"
 
 #: src/ephy-window.c:1420
 msgid "Open Link In New Tab"
-msgstr "Verweis in neuem Reiter öffnen"
+msgstr "Link in neuem Tab öffnen"
 
 #: src/ephy-window.c:1422
 msgid "Open Link In New Window"
-msgstr "Verweis in neuem Fenster öffnen"
+msgstr "Link in neuem Fenster öffnen"
 
 #: src/ephy-window.c:1424
 msgid "Open Link In Incognito Window"
-msgstr "Verweis in Inkognito-Fenster öffnen"
+msgstr "Link in Inkognito-Fenster öffnen"
 
 #: src/ephy-window.c:2807
 msgid "_Ask Later"
@@ -3039,7 +3041,7 @@ msgstr "Als Standardbrowser festlegen?"
 
 #: src/ephy-window.c:3310
 msgid "Use Web as your default web browser and for opening external links"
-msgstr "Web als Standardbrowser und zum Öffnen externer Verweise verwenden"
+msgstr "Web als Standardbrowser und zum Öffnen externer Links verwenden"
 
 #: src/ephy-window.c:3312
 msgid ""
@@ -3047,7 +3049,7 @@ msgid ""
 "external links"
 msgstr ""
 "Epiphany-Technologievorschau als Standardbrowser und zum Öffnen externer "
-"Verweise verwenden"
+"Links verwenden"
 
 #: src/ephy-window.c:3316
 msgid "_Ask Again Later"
@@ -3088,20 +3090,20 @@ msgstr "Lesezeichen"
 
 #: src/ephy-window.c:4660
 msgid "Close Multiple Tabs?"
-msgstr "Mehrere Reiter schließen?"
+msgstr "Mehrere Tabs schließen?"
 
 #: src/ephy-window.c:4661
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
-"Wenn dieses Fenster geschlossen wird, gehen alle geöffneten Reiter verloren"
+"Wenn dieses Fenster geschlossen wird, gehen alle geöffneten Tabs verloren"
 
 #: src/ephy-window.c:4662
 msgid "C_lose Tabs"
-msgstr "Reiter s_chließen"
+msgstr "Tabs s_chließen"
 
 #: src/ephy-window.c:4755
 msgid "New tab opened"
-msgstr "Neuer Reiter geöffnet"
+msgstr "Neuer Tab geöffnet"
 
 #: src/ephy-window.c:4759
 msgid "Switch"
@@ -3329,7 +3331,7 @@ msgstr "Erweiterungen"
 
 #: src/resources/gtk/action-bar-end.ui:100
 msgid "View Open Tabs"
-msgstr "Geöffnete Reiter anzeigen"
+msgstr "Geöffnete Tabs anzeigen"
 
 #. Translators: tooltip for the back button
 #: src/resources/gtk/action-bar-start.ui:17
@@ -3596,7 +3598,7 @@ msgstr "Geöffnete Rei_ter abgleichen"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:94
 msgid "S_ynced Tabs"
-msgstr "_Abgeglichene Reiter"
+msgstr "_Abgeglichene Tabs"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:104
 msgid "Frequency"
@@ -3650,7 +3652,7 @@ msgstr "Sprache entfernen"
 
 #: src/resources/gtk/location-entry.ui:12
 msgid "Search for websites, bookmarks, and open tabs"
-msgstr "Nach Webseiten, Lesezeichen und offenen Reitern suchen"
+msgstr "Nach Webseiten, Lesezeichen und offenen Tabs suchen"
 
 #: src/resources/gtk/location-entry.ui:67
 msgid "Website Security Status and Permissions"
@@ -3679,7 +3681,7 @@ msgstr "_Neu laden"
 
 #: src/resources/gtk/notebook-context-menu.ui:11
 msgid "Reload _All Tabs"
-msgstr "Alle Reiter _neu laden"
+msgstr "Alle Tabs _neu laden"
 
 #: src/resources/gtk/notebook-context-menu.ui:15
 msgid "_Duplicate"
@@ -3691,23 +3693,23 @@ msgstr "Re_iter anheften"
 
 #: src/resources/gtk/notebook-context-menu.ui:26
 msgid "Unp_in Tab"
-msgstr "Reiter lös_en"
+msgstr "Tab lös_en"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
 msgid "_Mute Tab"
-msgstr "_Reiter stumm schalten"
+msgstr "_Tab stumm schalten"
 
 #: src/resources/gtk/notebook-context-menu.ui:37
 msgid "Close Tabs to the _Left"
-msgstr "_Linke Reiter schließen"
+msgstr "_Linke Tabs schließen"
 
 #: src/resources/gtk/notebook-context-menu.ui:41
 msgid "Close Tabs to the _Right"
-msgstr "_Rechte Reiter schließen"
+msgstr "_Rechte Tabs schließen"
 
 #: src/resources/gtk/notebook-context-menu.ui:45
 msgid "Close _Other Tabs"
-msgstr "Andere Reiter sc_hließen"
+msgstr "Andere Tabs sc_hließen"
 
 #: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:269
 msgid "_Close"
@@ -4007,7 +4009,7 @@ msgstr "_Inkognito-Modus starten"
 
 #: src/resources/gtk/prefs-general-page.ui:190
 msgid "_Restore Tabs on Startup"
-msgstr "_Reiter beim Start wiederherstellen"
+msgstr "_Tabs beim Start wiederherstellen"
 
 #: src/resources/gtk/prefs-general-page.ui:198
 msgid "Browsing"
@@ -4019,7 +4021,7 @@ msgstr "Maus_gesten"
 
 #: src/resources/gtk/prefs-general-page.ui:207
 msgid "S_witch Immediately to New Tabs"
-msgstr "Sof_ort auf neue Reiter wechseln"
+msgstr "Sof_ort auf neue Tabs wechseln"
 
 #: src/resources/gtk/prefs-general-page.ui:213
 msgid "Touch _Navigation Gestures"
@@ -4249,52 +4251,52 @@ msgstr "Zur nächsten Seite"
 #: src/resources/gtk/shortcuts-dialog.ui:141
 msgctxt "shortcut window"
 msgid "Tabs"
-msgstr "Reiter"
+msgstr "Tabs"
 
 #: src/resources/gtk/shortcuts-dialog.ui:144
 msgctxt "shortcut window"
 msgid "New Tab"
-msgstr "Neuer Reiter"
+msgstr "Neuer Tab"
 
 #: src/resources/gtk/shortcuts-dialog.ui:150
 msgctxt "shortcut window"
 msgid "Close Current Tab"
-msgstr "Aktuellen Reiter schließen"
+msgstr "Aktuellen Tab schließen"
 
 #: src/resources/gtk/shortcuts-dialog.ui:156
 msgctxt "shortcut window"
 msgid "Reopen Closed Tab"
-msgstr "Geschlossenen Reiter erneut öffnen"
+msgstr "Geschlossenen Tab erneut öffnen"
 
 #: src/resources/gtk/shortcuts-dialog.ui:162
 msgctxt "shortcut window"
 msgid "Go to Next Tab"
-msgstr "Zum nächsten Reiter gehen"
+msgstr "Zum nächsten Tab gehen"
 
 #: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Go to Previous Tab"
-msgstr "Zum vorherigen Reiter gehen"
+msgstr "Zum vorherigen Tab gehen"
 
 #: src/resources/gtk/shortcuts-dialog.ui:174
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Left"
-msgstr "Aktuellen Reiter nach links verschieben"
+msgstr "Aktuellen Tab nach links verschieben"
 
 #: src/resources/gtk/shortcuts-dialog.ui:180
 msgctxt "shortcut window"
 msgid "Move Current Tab to the Right"
-msgstr "Aktuellen Reiter nach rechts verschieben"
+msgstr "Aktuellen Tab nach rechts verschieben"
 
 #: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
 msgid "Duplicate Current Tab"
-msgstr "Aktuellen Reiter duplizieren"
+msgstr "Aktuellen Tab duplizieren"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
 msgctxt "shortcut window"
 msgid "View Open Tabs"
-msgstr "Geöffnete Reiter anzeigen"
+msgstr "Geöffnete Tabs anzeigen"
 
 #: src/resources/gtk/shortcuts-dialog.ui:202
 msgctxt "shortcut window"
@@ -4453,7 +4455,7 @@ msgstr "Vorheriges Suchergebnis"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:18
 msgid "Synced Tabs"
-msgstr "Abgeglichene Reiter"
+msgstr "Abgeglichene Tabs"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:36
 msgid ""
@@ -4461,9 +4463,9 @@ msgid ""
 "with this account. Open a tab by double clicking its name (tabs under Local "
 "Tabs cannot be opened)."
 msgstr ""
-"Nachfolgend sehen Sie die geöffneten Reiter Ihrer anderen Geräte, die "
-"Firefox Sync mit diesem Konto verwenden. Öffnen Sie einen Reiter durch "
-"Doppelklick auf dessen Namen (»Lokale Reiter« können nicht geöffnet werden)."
+"Nachfolgend sehen Sie die geöffneten Tabs Ihrer anderen Geräte, die Firefox "
+"Sync mit diesem Konto verwenden. Öffnen Sie einen Tab durch Doppelklick auf "
+"dessen Namen (»Lokale Tabs« können nicht geöffnet werden)."
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:15
 msgid "Additional URLs"
@@ -4508,7 +4510,7 @@ msgstr "»%s« wird geladen"
 
 #: src/synced-tabs-dialog.c:194
 msgid "Local Tabs"
-msgstr "Lokale Reiter"
+msgstr "Lokale Tabs"
 
 # Bin mir nicht sicher, welche der Ausdrücke ich übersetzen sollte. -jb
 #: src/webapp-provider/ephy-webapp-provider.c:120
