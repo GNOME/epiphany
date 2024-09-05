@@ -193,6 +193,7 @@ itp_report_ready (GObject      *source_object,
   g_autoptr (GError) error = NULL;
   g_autofree char *description = NULL;
   EphyPrivacyReport *self = NULL;
+  guint length;
 
   summary = webkit_website_data_manager_get_itp_summary_finish (manager, res, &error);
   if (error) {
@@ -245,7 +246,8 @@ itp_report_ready (GObject      *source_object,
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tracker_listbox), sort_domain, self->tracker_table, NULL);
   gtk_list_box_invalidate_sort (GTK_LIST_BOX (self->tracker_listbox));
 
-  description = g_strdup_printf (_("GNOME Web prevented %u trackers from following you across websites"), g_list_length (summary));
+  length = g_list_length (summary);
+  description = g_strdup_printf (ngettext ("GNOME Web prevented %u tracker from following you across websites", "GNOME Web prevented %u trackers from following you across websites", length), length);
   adw_status_page_set_description (ADW_STATUS_PAGE (self->status_page), description);
 
   adw_dialog_present (ADW_DIALOG (self), GTK_WIDGET (window));
