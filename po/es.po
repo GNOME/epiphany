@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-15 20:53+0000\n"
-"PO-Revision-Date: 2024-09-02 11:55+0200\n"
+"POT-Creation-Date: 2024-09-02 09:57+0000\n"
+"PO-Revision-Date: 2024-09-05 13:58+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -472,15 +472,13 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:215
 msgid "Autofill form data"
-msgstr ""
+msgstr "Rellenar datos de formulario automáticamente"
 
 #: data/org.gnome.epiphany.gschema.xml:216
-#, fuzzy
-#| msgid "Whether to store and prefill passwords in websites."
 msgid "Whether to auto fill form data in websites."
 msgstr ""
-"Indica si se deben almacenar y precompletar las contraseñas en los sitios "
-"web."
+"Indica si se deben rellenar automáticamente los datos de los formularios en "
+"los sitios web."
 
 #: data/org.gnome.epiphany.gschema.xml:220
 msgid "Enable site-specific quirks"
@@ -548,16 +546,14 @@ msgstr ""
 "comportamiento de Ópera y se activan usando el botón central + gesto."
 
 #: data/org.gnome.epiphany.gschema.xml:249
-#, fuzzy
-#| msgid "Enable mouse gestures"
 msgid "Enable navigation gestures"
-msgstr "Activar gestos del ratón"
+msgstr "Activar gestos de navegación"
 
 #: data/org.gnome.epiphany.gschema.xml:250
-#, fuzzy
-#| msgid "Whether to show buttons for navigation in WebApp."
 msgid "Whether to enable back and forward navigation gestures."
-msgstr "Indica si se deben mostrar botones para la navegación en WebApp."
+msgstr ""
+"Indica si se deben activar los gestos de navegación hacia adelante y hacia "
+"atrás."
 
 #: data/org.gnome.epiphany.gschema.xml:254
 msgid "Last upload directory"
@@ -1257,19 +1253,19 @@ msgstr "Web lo está controlado un proceso automático"
 
 #: embed/ephy-embed-autofill.c:115
 msgid "Autofill All Fields"
-msgstr ""
+msgstr "Rellenar automáticamente todos los campos"
 
 #: embed/ephy-embed-autofill.c:124
 msgid "Autofill Personal Fields"
-msgstr ""
+msgstr "Rellenar automáticamente los campos personales"
 
 #: embed/ephy-embed-autofill.c:132
 msgid "Fill This Field"
-msgstr ""
+msgstr "Rellenar este campo"
 
 #: embed/ephy-embed-autofill.c:140
 msgid "Do Not Autofill"
-msgstr ""
+msgstr "No rellenar automáticamente"
 
 #: embed/ephy-embed-shell.c:671
 #, c-format
@@ -1712,10 +1708,8 @@ msgid "Loading…"
 msgstr "Cargando…"
 
 #: embed/ephy-web-view.c:1341
-#, fuzzy
-#| msgid "Replace Existing Web App?"
 msgid "Delete Web App?"
-msgstr "¿Reemplazar la aplicación web existente?"
+msgstr "¿Eliminar la aplicación web?"
 
 #: embed/ephy-web-view.c:1344
 #, c-format
@@ -1723,6 +1717,8 @@ msgid ""
 "\"%s\" will be removed. You will have to re-install the website as an app "
 "from the menu to use it again."
 msgstr ""
+"«%s» se eliminará. Deberá reinstalar el sitio web como una aplicación desde "
+"el menú para usarlo de nuevo."
 
 #: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
 #: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
@@ -2138,7 +2134,7 @@ msgstr "Falló al crear el archivo .app: %s"
 
 #: lib/sync/ephy-password-export.c:121
 msgid "Error in exporting passwords to a CSV file"
-msgstr ""
+msgstr "Error al exportar las contraseñas a un archivo CSV"
 
 #: lib/sync/ephy-password-import.c:133
 #, c-format
@@ -2177,6 +2173,7 @@ msgstr "Contraseña para %s en un formulario"
 #: lib/sync/ephy-sync-service.c:932
 msgid "Response body is empty, do you need to install glib-networking?"
 msgstr ""
+"EL cuerpo de la respuesta está vacío, ¿necesita instalar glib-networking?"
 
 #: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
@@ -2206,23 +2203,23 @@ msgid "Failed to obtain signed certificate."
 msgstr "Falló al obtener el certificado firmado."
 
 #: lib/sync/ephy-sync-service.c:1926
-#, fuzzy, c-format
-#| msgid "The sync secrets for the current sync user are invalid."
+#, c-format
 msgid "The sync secrets for the current sync user are invalid: %s"
-msgstr "Los secretos de sincronización para el usuario actual no son válidos."
+msgstr ""
+"Los secretos de sincronización para el usuario actual no son válidos: %s"
 
 #: lib/sync/ephy-sync-service.c:1933
-#, fuzzy, c-format
-#| msgid "The sync secrets for the current sync user are invalid."
+#, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
-msgstr "Los secretos de sincronización para el usuario actual no son válidos."
+msgstr ""
+"Los secretos de sincronización para el usuario actual no son un JSON válido: "
+"%s"
 
 #: lib/sync/ephy-sync-service.c:1960
-#, fuzzy, c-format
-#| msgid "Could not find the sync secrets for the current sync user."
+#, c-format
 msgid "Could not find the sync secrets for the current sync user: %s"
 msgstr ""
-"No se pudieron obtener los secretos de sincronización del usuario actual."
+"No se pudieron obtener los secretos de sincronización del usuario actual: %s"
 
 #: lib/sync/ephy-sync-service.c:1966
 msgid "Could not find the sync secrets for the current sync user."
@@ -2281,16 +2278,12 @@ msgid "Failed to retrieve the Sync Key"
 msgstr "Falló al obtener la clave de sincronización"
 
 #: src/bookmarks/ephy-bookmark-properties.c:144
-#, fuzzy
-#| msgid "Reload the current page"
 msgid "Select current tag"
-msgstr "Recargar la página actual"
+msgstr "Seleccionar la etiqueta actual"
 
 #: src/bookmarks/ephy-bookmark-properties.c:158
-#, fuzzy
-#| msgid "Reload the current page"
 msgid "Remove current tag"
-msgstr "Recargar la página actual"
+msgstr "Quitar la etiqueta actual"
 
 #: src/bookmarks/ephy-bookmarks-import.c:127
 #, c-format
@@ -2527,10 +2520,8 @@ msgid "Stop loading the current page"
 msgstr "Detener la carga de la página actual"
 
 #: src/ephy-history-dialog.c:137 src/ephy-history-dialog.c:985
-#, fuzzy
-#| msgid "Start in _Incognito Mode"
 msgid "Unavailable in Incognito Mode"
-msgstr "Iniciar en modo _incógnito"
+msgstr "No disponible en modo incógnito"
 
 #: src/ephy-history-dialog.c:481
 msgid "Remove the selected pages from history"
@@ -2546,15 +2537,13 @@ msgstr "¿Quiere limpiar el histórico de navegación?"
 
 #: src/ephy-history-dialog.c:769
 msgid "All links will be permanently deleted"
-msgstr ""
+msgstr "Todos los enlaces se eliminaran permanentemente"
 
 #: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
 #: src/ephy-history-dialog.c:988
-#, fuzzy
-#| msgid "Remove all history"
 msgid "Remove All History"
 msgstr "Eliminar todo el histórico"
 
@@ -2706,16 +2695,16 @@ msgstr "La página «%s» quiere acceder a su portapapeles"
 
 #: src/ephy-privacy-report.c:62
 msgid "Blocked trackers on this site"
-msgstr ""
+msgstr "Rastreados bloqueados en este sitio"
 
 #: src/ephy-privacy-report.c:82
 msgid "Sites this tracker was found on"
-msgstr ""
+msgstr "Sitios en los que se ha encontrado este rastreador"
 
 #: src/ephy-privacy-report.c:248
 #, c-format
 msgid "GNOME Web prevented %u trackers from following you across websites"
-msgstr ""
+msgstr "GNOME Web ha evitado que %u rastreadores le sigan por los sitios web"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -3079,14 +3068,10 @@ msgid "Switch"
 msgstr "Cambiar"
 
 #: src/preferences/autofill-view.c:359
-#, fuzzy
-#| msgid "Delete All Passwords?"
 msgid "Delete All Entries?"
-msgstr "¿Eliminar todas las contraseñas?"
+msgstr "¿Eliminar todas las entradas?"
 
 #: src/preferences/autofill-view.c:360
-#, fuzzy
-#| msgid "This will clear all locally stored passwords, and can not be undone."
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
 "Esto eliminará la contraseñas guardadas en local y no se puede deshacer."
@@ -3124,10 +3109,8 @@ msgid "New search engine"
 msgstr "Nuevo motor de búsqueda"
 
 #: src/preferences/ephy-search-engine-listbox.c:305
-#, fuzzy
-#| msgid "A_dd Search Engine…"
 msgid "A_dd Search Engine"
-msgstr "Aña_dir motor de búsqueda…"
+msgstr "Aña_dir motor de búsqueda"
 
 #: src/preferences/ephy-search-engine-row.c:114
 msgid "This field is required"
@@ -3238,16 +3221,13 @@ msgid "Dark"
 msgstr "Oscuro"
 
 #: src/preferences/prefs-extensions-page.c:101
-#, fuzzy
-#| msgid "Enable WebExtensions"
 msgid "Install WebExtension?"
-msgstr "Habilitar WebExtensions"
+msgstr "¿Instalar WebExtension?"
 
 #: src/preferences/prefs-extensions-page.c:103
-#, fuzzy, c-format
-#| msgid "Do you want to leave this website?"
+#, c-format
 msgid "Do you want to install `%s`?"
-msgstr "¿quiere salir de esta página web?"
+msgstr "¿Quiere instalar «%s»?"
 
 #: src/preferences/prefs-extensions-page.c:105
 msgid "Cancel"
@@ -3328,7 +3308,7 @@ msgstr "Página de inicio"
 
 #: src/resources/gtk/autofill-view.ui:4
 msgid "Autofill Data"
-msgstr ""
+msgstr "Rellenar datos automáticamente"
 
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
@@ -3751,10 +3731,8 @@ msgid "Text Enco_ding…"
 msgstr "Co_dificación del texto…"
 
 #: src/resources/gtk/page-menu-popover.ui:88
-#, fuzzy
-#| msgid "Privacy"
 msgid "Pri_vacy Report"
-msgstr "Privacidad"
+msgstr "Informe de pri_vacidad"
 
 #: src/resources/gtk/page-menu-popover.ui:94
 msgid "Pr_eferences"
@@ -4004,7 +3982,7 @@ msgstr "Ca_mbiar inmediatamente a la nueva pestaña"
 
 #: src/resources/gtk/prefs-general-page.ui:213
 msgid "Touch _Navigation Gestures"
-msgstr ""
+msgstr "Gestos táctiles de _navegación"
 
 #: src/resources/gtk/prefs-general-page.ui:236
 msgid "_Spell Checking"
@@ -4078,25 +4056,23 @@ msgstr "_Recordar contraseñas"
 
 #: src/resources/gtk/prefs-privacy-page.ui:77
 msgid "Forms and Autofill"
-msgstr ""
+msgstr "Formularios y auto-rellenado"
 
 #: src/resources/gtk/prefs-privacy-page.ui:80
 msgid "_Autofill Forms"
-msgstr ""
+msgstr "Rellen_ar formularios automáticamente"
 
 #: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Autofill _Data"
-msgstr ""
+msgstr "Rellenar _datos automáticamente"
 
 #: src/resources/gtk/privacy-report.ui:10
 msgid "Overview"
 msgstr "Vista general"
 
 #: src/resources/gtk/privacy-report.ui:21
-#, fuzzy
-#| msgid "Privacy"
 msgid "Privacy Report"
-msgstr "Privacidad"
+msgstr "Informe de privacidad"
 
 #: src/resources/gtk/privacy-report.ui:41
 msgid "_Websites"
@@ -4530,37 +4506,35 @@ msgid "Options for %s"
 msgstr "Opciones para %s"
 
 #: src/webextension/ephy-web-extension.c:1027
-#, fuzzy, c-format
-#| msgid "Text not found"
+#, c-format
 msgid "manifest.json not found"
-msgstr "Texto no encontrado"
+msgstr "manifest.json no encontrado"
 
 #: src/webextension/ephy-web-extension.c:1033
-#, fuzzy, c-format
-#| msgid "Failed to create directory %s"
+#, c-format
 msgid "Failed to parse manifest.json: %s"
-msgstr "Falló al crear la carpeta %s"
+msgstr "Falló al analizar manifest.json: %s"
 
 #: src/webextension/ephy-web-extension.c:1039
 #: src/webextension/ephy-web-extension.c:1045
 #, c-format
 msgid "manifest.json invalid"
-msgstr ""
+msgstr "manifest.json no válido"
 
 #: src/webextension/ephy-web-extension.c:1052
 #, c-format
 msgid "Only manifest_version 2 is supported"
-msgstr ""
+msgstr "Sólo se soporta la versión 2 de manifest"
 
 #: src/webextension/ephy-web-extension.c:1069
 #, c-format
 msgid "Missing name or version"
-msgstr ""
+msgstr "Falta el nombre o la versión"
 
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
-msgstr ""
+msgstr "Falló al determinar el URI inicial"
 
 #: src/window-commands.c:125
 msgid "GVDB File"
@@ -4652,7 +4626,7 @@ msgstr "Epiphany Canary"
 #: src/window-commands.c:1246
 msgid "translator-credits"
 msgstr ""
-"Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2020\n"
+"Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2024\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
