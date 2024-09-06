@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-05-03 13:14+0000\n"
-"PO-Revision-Date: 2024-05-03 21:04+0200\n"
+"POT-Creation-Date: 2024-09-05 22:35+0000\n"
+"PO-Revision-Date: 2024-09-06 02:11+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
@@ -1047,7 +1047,7 @@ msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Börja surfa så kommer dina mest besökta webbplatser visas här."
 
 #: embed/ephy-about-handler.c:504
-#: embed/web-process-extension/resources/js/overview.js:151
+#: embed/web-process-extension/resources/js/overview.js:149
 msgid "Remove from overview"
 msgstr "Ta bort från överblick"
 
@@ -1100,8 +1100,8 @@ msgstr "Ange PIN för %s för att autentisera på %s:%d."
 #: src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831
-#: src/window-commands.c:1243 src/window-commands.c:1916
-#: src/window-commands.c:2818
+#: src/window-commands.c:1243 src/window-commands.c:1918
+#: src/window-commands.c:2842
 msgid "_Cancel"
 msgstr "A_vbryt"
 
@@ -1733,7 +1733,7 @@ msgstr "Det exakta felet var: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1655 embed/ephy-web-view.c:1708
 #: embed/ephy-web-view.c:1744 embed/ephy-web-view.c:1780
-#: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:170
+#: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:173
 msgid "Reload"
 msgstr "Uppdatera"
 
@@ -1919,6 +1919,16 @@ msgstr "Filen ”%s” existerar. Vänligen flytta bort den."
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Misslyckades med att skapa katalogen ”%s”."
+
+#: lib/ephy-file-helpers.c:762
+#, c-format
+msgid "Error removing file %s: %s"
+msgstr "Fel vid borttagning av filen %s: %s"
+
+#: lib/ephy-file-helpers.c:780
+#, c-format
+msgid "Error removing directory %s: %s"
+msgstr "Fel vid borttagning av katalogen %s: %s"
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
@@ -2223,7 +2233,7 @@ msgstr "Bokmärk sida"
 msgid "Edit Bookmark"
 msgstr "Redigera bokmärke"
 
-#: src/ephy-action-bar-start.c:561
+#: src/ephy-action-bar-start.c:568
 msgid "Stop"
 msgstr "Stoppa"
 
@@ -2641,214 +2651,214 @@ msgid "Open a new tab"
 msgstr "Öppna en ny flik"
 
 #. Undo, redo.
-#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:953 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:954
 msgid "Re_do"
 msgstr "_Gör om"
 
 #. Edit.
-#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:959 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:960
 msgid "_Paste Text Only"
 msgstr "Klistra endast _in text"
 
-#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:963
 msgid "S_end Link by Email…"
 msgstr "Sk_icka länk via e-post…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:965
 msgid "_Reload"
 msgstr "_Uppdatera"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:966
 msgid "_Back"
 msgstr "_Bakåt"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:967
 msgid "_Forward"
 msgstr "_Framåt"
 
 #. Bookmarks
-#: src/ephy-window.c:967
+#: src/ephy-window.c:970
 msgid "Add Boo_kmark…"
 msgstr "Lägg till bo_kmärke…"
 
 #. Links.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:974
 msgid "Open Link in New _Window"
 msgstr "Öppna länk i n_ytt fönster"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:975
 msgid "Open Link in New _Tab"
 msgstr "Öppna länk i ny _flik"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:976
 msgid "Open Link in I_ncognito Window"
 msgstr "Öppna länk i i_nkognitofönster"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:977
 msgid "_Save Link As…"
 msgstr "_Spara länk som…"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:978
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:979
 msgid "_Copy E-mail Address"
 msgstr "_Kopiera e-postadress"
 
 #. Images.
-#: src/ephy-window.c:980
+#: src/ephy-window.c:983
 msgid "View _Image in New Tab"
 msgstr "Visa _bild i ny flik"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:984
 msgid "Copy I_mage Address"
 msgstr "Kopiera b_ildadress"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:985
 msgid "_Save Image As…"
 msgstr "Spara bil_d som…"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:986
 msgid "Set as _Wallpaper"
 msgstr "Använd som sk_rivbordsbakgrund"
 
 #. Video.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:990
 msgid "Open Video in New _Window"
 msgstr "Öppna video i nyt_t fönster"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:991
 msgid "Open Video in New _Tab"
 msgstr "Öppna video i ny _flik"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:992
 msgid "_Save Video As…"
 msgstr "_Spara video som…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:993
 msgid "_Copy Video Address"
 msgstr "_Kopiera video-adress"
 
 #. Audio.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:997
 msgid "Open Audio in New _Window"
 msgstr "Öppna ljud i nyt_t fönster"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:998
 msgid "Open Audio in New _Tab"
 msgstr "Öppna ljud i ny _flik"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:999
 msgid "_Save Audio As…"
 msgstr "_Spara ljud som…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:1000
 msgid "_Copy Audio Address"
 msgstr "_Kopiera ljud-adress"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1006
 msgid "Save Pa_ge As…"
 msgstr "Spara si_da som…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1007
 msgid "_Take Screenshot…"
 msgstr "_Ta skärmbild…"
 
-#: src/ephy-window.c:1005
+#: src/ephy-window.c:1008
 msgid "_Page Source"
 msgstr "Sidk_älla"
 
-#: src/ephy-window.c:1382
+#: src/ephy-window.c:1385
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Sök på nätet efter ”%s”"
 
-#: src/ephy-window.c:1411
+#: src/ephy-window.c:1414
 msgid "Open Link"
 msgstr "Öppna länk"
 
-#: src/ephy-window.c:1413
+#: src/ephy-window.c:1416
 msgid "Open Link In New Tab"
 msgstr "Öppna länk i ny flik"
 
-#: src/ephy-window.c:1415
+#: src/ephy-window.c:1418
 msgid "Open Link In New Window"
 msgstr "Öppna länk i nytt fönster"
 
-#: src/ephy-window.c:1417
+#: src/ephy-window.c:1420
 msgid "Open Link In Incognito Window"
 msgstr "Öppna länk i inkognitofönster"
 
-#: src/ephy-window.c:2800
+#: src/ephy-window.c:2803
 msgid "_Ask Later"
 msgstr "_Fråga senare"
 
-#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2804 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Neka"
 
-#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2805 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Tillåt"
 
-#: src/ephy-window.c:3004 src/ephy-window.c:4439
+#: src/ephy-window.c:3007 src/ephy-window.c:4444
 msgid "Leave Website?"
 msgstr "Lämna webbplats?"
 
-#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
+#: src/ephy-window.c:3008 src/ephy-window.c:4445 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Ett formulär ändrades och har inte skickats"
 
-#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
+#: src/ephy-window.c:3009 src/ephy-window.c:4446 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Förkasta formulär"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3030
 msgid "Download operation"
 msgstr "Hämtningsåtgärd"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3032
 msgid "Show details"
 msgstr "Visa detaljer"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3034
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d hämtningsåtgärd aktiv"
 msgstr[1] "%d hämtningsåtgärder aktiva"
 
-#: src/ephy-window.c:3272
+#: src/ephy-window.c:3275
 msgid "Set as Default Browser?"
 msgstr "Ställ in som standardwebbläsare?"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3277
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Använd Webb som din standardwebbläsare och för att öppna externa länkar"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3279
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2856,55 +2866,55 @@ msgstr ""
 "Använd den teknologiska förhandsversionen av Epiphany som din "
 "standardwebbläsare och för att öppna externa länkar"
 
-#: src/ephy-window.c:3280
+#: src/ephy-window.c:3283
 msgid "_Ask Again Later"
 msgstr "_Fråga igen senare"
 
-#: src/ephy-window.c:3281
+#: src/ephy-window.c:3284
 msgid "_No"
 msgstr "_Nej"
 
-#: src/ephy-window.c:3282
+#: src/ephy-window.c:3285
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3736
 msgid "Save password?"
 msgstr "Spara lösenord?"
 
-#: src/ephy-window.c:3733
+#: src/ephy-window.c:3737
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Lösenord kan tas bort när som helst i Inställningar"
 
-#: src/ephy-window.c:3735
+#: src/ephy-window.c:3739
 msgid "Not Now"
 msgstr "Inte nu"
 
-#: src/ephy-window.c:3736
+#: src/ephy-window.c:3740
 msgid "Never Save"
 msgstr "Spara aldrig"
 
-#: src/ephy-window.c:3737
+#: src/ephy-window.c:3741
 msgid "Save"
 msgstr "Spara"
 
-#: src/ephy-window.c:4570
+#: src/ephy-window.c:4575
 msgid "Close Multiple Tabs?"
 msgstr "Stäng flera flikar?"
 
-#: src/ephy-window.c:4571
+#: src/ephy-window.c:4576
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Om detta fönster stängs kommer alla öppna flikar att förloras"
 
-#: src/ephy-window.c:4572
+#: src/ephy-window.c:4577
 msgid "C_lose Tabs"
 msgstr "Stäng f_likar"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4670
 msgid "New tab opened"
 msgstr "Ny flik öppnad"
 
-#: src/ephy-window.c:4669
+#: src/ephy-window.c:4674
 msgid "Switch"
 msgstr "Växla"
 
@@ -3441,77 +3451,73 @@ msgstr "Öppna stängd _flik igen"
 msgid "Histo_ry"
 msgstr "Histo_rik"
 
-#: src/resources/gtk/page-menu-popover.ui:41
-msgid "Firefox _Sync"
-msgstr "Firefox _Sync"
-
-#: src/resources/gtk/page-menu-popover.ui:45
+#: src/resources/gtk/page-menu-popover.ui:48
 msgid "I_mport and Export"
 msgstr "I_mport och export"
 
-#: src/resources/gtk/page-menu-popover.ui:49
+#: src/resources/gtk/page-menu-popover.ui:52
 msgid "I_mport Bookmarks…"
 msgstr "I_mportera bokmärken…"
 
-#: src/resources/gtk/page-menu-popover.ui:53
+#: src/resources/gtk/page-menu-popover.ui:56
 msgid "E_xport Bookmarks…"
 msgstr "E_xportera bokmärken…"
 
-#: src/resources/gtk/page-menu-popover.ui:59
+#: src/resources/gtk/page-menu-popover.ui:62
 msgid "Import _Passwords…"
 msgstr "Importera _lösenord…"
 
-#: src/resources/gtk/page-menu-popover.ui:67
+#: src/resources/gtk/page-menu-popover.ui:70
 msgid "Install as _Web App…"
 msgstr "Installera som _webbapp…"
 
-#: src/resources/gtk/page-menu-popover.ui:71
+#: src/resources/gtk/page-menu-popover.ui:74
 msgid "Manag_e Web Apps"
 msgstr "Hant_era webbappar"
 
-#: src/resources/gtk/page-menu-popover.ui:77
+#: src/resources/gtk/page-menu-popover.ui:80
 msgid "Text Enco_ding…"
 msgstr "Textko_dning…"
 
-#: src/resources/gtk/page-menu-popover.ui:83
+#: src/resources/gtk/page-menu-popover.ui:86
 msgid "Pr_eferences"
 msgstr "Instä_llningar"
 
-#: src/resources/gtk/page-menu-popover.ui:87
+#: src/resources/gtk/page-menu-popover.ui:90
 msgid "_Keyboard Shortcuts"
 msgstr "_Tangentbordsgenvägar"
 
-#: src/resources/gtk/page-menu-popover.ui:91
+#: src/resources/gtk/page-menu-popover.ui:94
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: src/resources/gtk/page-menu-popover.ui:95
+#: src/resources/gtk/page-menu-popover.ui:98
 msgid "_About Web"
 msgstr "_Om Webb"
 
-#: src/resources/gtk/page-menu-popover.ui:112
+#: src/resources/gtk/page-menu-popover.ui:115
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Zooma ut"
 
-#: src/resources/gtk/page-menu-popover.ui:119
+#: src/resources/gtk/page-menu-popover.ui:122
 msgid "Restore Zoom"
 msgstr "Återställ zoomnivå"
 
-#: src/resources/gtk/page-menu-popover.ui:130
+#: src/resources/gtk/page-menu-popover.ui:133
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Zooma in"
 
-#: src/resources/gtk/page-menu-popover.ui:148
+#: src/resources/gtk/page-menu-popover.ui:151
 msgid "Print…"
 msgstr "Skriv ut…"
 
-#: src/resources/gtk/page-menu-popover.ui:155
+#: src/resources/gtk/page-menu-popover.ui:158
 msgid "Find…"
 msgstr "Sök…"
 
-#: src/resources/gtk/page-menu-popover.ui:162
+#: src/resources/gtk/page-menu-popover.ui:165
 msgid "Fullscreen"
 msgstr "Helskärm"
 
@@ -4204,6 +4210,32 @@ msgstr "Webbapplikationen ”%s” kunde inte tas bort"
 msgid "Options for %s"
 msgstr "Alternativ för %s"
 
+#: src/webextension/ephy-web-extension.c:1024
+#, c-format
+msgid "manifest.json not found"
+msgstr "manifest.json hittades inte"
+
+#: src/webextension/ephy-web-extension.c:1030
+#, c-format
+msgid "Failed to parse manifest.json: %s"
+msgstr "Misslyckades med att tolka manifest.json: %s"
+
+#: src/webextension/ephy-web-extension.c:1036
+#: src/webextension/ephy-web-extension.c:1042
+#, c-format
+msgid "manifest.json invalid"
+msgstr "ogiltig manifest.json"
+
+#: src/webextension/ephy-web-extension.c:1049
+#, c-format
+msgid "Only manifest_version 2 is supported"
+msgstr "Endast manifest_version 2 stöds"
+
+#: src/webextension/ephy-web-extension.c:1066
+#, c-format
+msgid "Missing name or version"
+msgstr "Saknar namn eller version"
+
 #: src/window-commands.c:118
 msgid "GVDB File"
 msgstr "GVDB-fil"
@@ -4295,26 +4327,26 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "Uppdatera webbplats?"
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1831
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Applikationen ”%s” är redo att användas"
 
-#: src/window-commands.c:1832
+#: src/window-commands.c:1834
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Applikationen ”%s” kunde inte skapas: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1842
+#: src/window-commands.c:1844
 msgid "Launch"
 msgstr "Starta"
 
-#: src/window-commands.c:1908
+#: src/window-commands.c:1910
 msgid "Replace Existing Web App?"
 msgstr "Ersätt befintlig webbapp?"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1914
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -4322,27 +4354,27 @@ msgstr ""
 "Det finns redan en applikation med namnet ”%s”, om du ersätter den så skrivs "
 "den över"
 
-#: src/window-commands.c:1917
+#: src/window-commands.c:1919
 msgid "_Replace"
 msgstr "E_rsätt"
 
-#: src/window-commands.c:2280
+#: src/window-commands.c:2304
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2284
+#: src/window-commands.c:2308
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2330
+#: src/window-commands.c:2354
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2813
+#: src/window-commands.c:2837
 msgid "Enable Caret Browsing Mode?"
 msgstr "Aktivera markörläge?"
 
-#: src/window-commands.c:2814
+#: src/window-commands.c:2838
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4352,9 +4384,12 @@ msgstr ""
 "markör i webbsidor, vilket gör att du kan flytta runt med ditt tangentbord. "
 "Vill du aktivera markörläge?"
 
-#: src/window-commands.c:2819
+#: src/window-commands.c:2843
 msgid "_Enable"
 msgstr "_Aktivera"
+
+#~ msgid "Firefox _Sync"
+#~ msgstr "Firefox _Sync"
 
 #~ msgid "There is no Website Data"
 #~ msgstr "Det finns inga webbplatsdata"
