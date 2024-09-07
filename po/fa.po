@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-05-03 13:14+0000\n"
-"PO-Revision-Date: 2024-05-04 04:40+0330\n"
+"POT-Creation-Date: 2024-09-06 19:45+0000\n"
+"PO-Revision-Date: 2024-09-07 11:38+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -965,7 +965,7 @@ msgstr ""
 "می‌شوند."
 
 #: embed/ephy-about-handler.c:504
-#: embed/web-process-extension/resources/js/overview.js:151
+#: embed/web-process-extension/resources/js/overview.js:149
 msgid "Remove from overview"
 msgstr "حذف از بررسی اجمالی"
 
@@ -1014,7 +1014,7 @@ msgstr "لطفاً پینی برای هویت‌سنجی %s روی %s وارد �
 #: src/resources/gtk/firefox-sync-dialog.ui:117 src/resources/gtk/history-dialog.ui:41
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:331
 #: src/window-commands.c:577 src/window-commands.c:831 src/window-commands.c:1243
-#: src/window-commands.c:1916 src/window-commands.c:2818
+#: src/window-commands.c:1918 src/window-commands.c:2842
 msgid "_Cancel"
 msgstr "_لغو"
 
@@ -1628,7 +1628,7 @@ msgstr "خطای دقیق این بود: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1655 embed/ephy-web-view.c:1708 embed/ephy-web-view.c:1744
 #: embed/ephy-web-view.c:1780 src/ephy-action-bar-start.c:36
-#: src/resources/gtk/page-menu-popover.ui:170
+#: src/resources/gtk/page-menu-popover.ui:173
 msgid "Reload"
 msgstr "بازخوانی"
 
@@ -1812,6 +1812,16 @@ msgstr "پروندهٔ «%s» وجود دارد. لطفاً آن را از سر 
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ایجاد شاخهٔ «%s» شکست خورد."
+
+#: lib/ephy-file-helpers.c:762
+#, c-format
+msgid "Error removing file %s: %s"
+msgstr "خطا در برداشتن پروندهٔ %s: %s"
+
+#: lib/ephy-file-helpers.c:780
+#, c-format
+msgid "Error removing directory %s: %s"
+msgstr "خطا در برداشتن شاخهٔ %s: ‏%s"
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
@@ -2102,7 +2112,7 @@ msgstr "نشانک‌گذاری صفحه"
 msgid "Edit Bookmark"
 msgstr "ویرایش نشانک"
 
-#: src/ephy-action-bar-start.c:561
+#: src/ephy-action-bar-start.c:568
 msgid "Stop"
 msgstr "توقف"
 
@@ -2514,268 +2524,268 @@ msgid "Open a new tab"
 msgstr "گشودن زبانه‌ای جدید"
 
 #. Undo, redo.
-#: src/ephy-window.c:950 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:953 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: src/ephy-window.c:951
+#: src/ephy-window.c:954
 msgid "Re_do"
 msgstr "دو_باره"
 
 #. Edit.
-#: src/ephy-window.c:954 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "_بریدن"
 
-#: src/ephy-window.c:955 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: src/ephy-window.c:956 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:959 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "_جای‌گذاری"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:960
 msgid "_Paste Text Only"
 msgstr "فقط _چسباندن متن"
 
-#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:963
 msgid "S_end Link by Email…"
 msgstr "_ارسال پیوند با رایانامه…"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:965
 msgid "_Reload"
 msgstr "_بار کردن مجدد"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:966
 msgid "_Back"
 msgstr "_بازگشت"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:967
 msgid "_Forward"
 msgstr "_پیشروی"
 
 #. Bookmarks
-#: src/ephy-window.c:967
+#: src/ephy-window.c:970
 msgid "Add Boo_kmark…"
 msgstr "افزودن _نشانک…"
 
 #. Links.
-#: src/ephy-window.c:971
+#: src/ephy-window.c:974
 msgid "Open Link in New _Window"
 msgstr "گشودن پیوند در پنجرهٔ _جدید"
 
-#: src/ephy-window.c:972
+#: src/ephy-window.c:975
 msgid "Open Link in New _Tab"
 msgstr "گشودن پیوند در _زبانهٔ جدید"
 
-#: src/ephy-window.c:973
+#: src/ephy-window.c:976
 msgid "Open Link in I_ncognito Window"
 msgstr "گشودن پیوند در پنجرهٔ _ناشناس"
 
-#: src/ephy-window.c:974
+#: src/ephy-window.c:977
 msgid "_Save Link As…"
 msgstr "_ذخیرهٔ پیوند به عنوان…"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:978
 msgid "_Copy Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:979
 msgid "_Copy E-mail Address"
 msgstr "_رونوشت از آدرس رایانامه"
 
 #. Images.
-#: src/ephy-window.c:980
+#: src/ephy-window.c:983
 msgid "View _Image in New Tab"
 msgstr "نمایش _‌تصویر در زبانهٔ جدید"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:984
 msgid "Copy I_mage Address"
 msgstr "رونوشت از نشانی _تصویر"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:985
 msgid "_Save Image As…"
 msgstr "_ذخیرهٔ تصویر به عنوان…"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:986
 msgid "Set as _Wallpaper"
 msgstr "تنظیم به عنوان _‌کاغذ دیواری"
 
 #. Video.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:990
 msgid "Open Video in New _Window"
 msgstr "گشودن ویدیو در _پنجرهٔ جدید"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:991
 msgid "Open Video in New _Tab"
 msgstr "گشودن ویدیو در _زبانهٔ جدید"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:992
 msgid "_Save Video As…"
 msgstr "_ذخیرهٔ ویدیو به عنوان…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:993
 msgid "_Copy Video Address"
 msgstr "_رونوشت از نشانی ویدیو"
 
 #. Audio.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:997
 msgid "Open Audio in New _Window"
 msgstr "گشودن صدا در _پنجرهٔ جدید"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:998
 msgid "Open Audio in New _Tab"
 msgstr "گشودن صدا در _زبانهٔ جدید"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:999
 msgid "_Save Audio As…"
 msgstr "_ذخیرهٔ صدا به عنوان…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:1000
 msgid "_Copy Audio Address"
 msgstr "_‌نسخه‌برداری از نشانی صدا"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1006
 msgid "Save Pa_ge As…"
 msgstr "_ذخیرهٔ _صفحه به عنوان…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1007
 msgid "_Take Screenshot…"
 msgstr "-ضبط نماگرفت…"
 
-#: src/ephy-window.c:1005
+#: src/ephy-window.c:1008
 msgid "_Page Source"
 msgstr "کد منبع _صفحه"
 
-#: src/ephy-window.c:1382
+#: src/ephy-window.c:1385
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "جست‌وجوی وب برای %s"
 
-#: src/ephy-window.c:1411
+#: src/ephy-window.c:1414
 msgid "Open Link"
 msgstr "گشودن پیوند"
 
-#: src/ephy-window.c:1413
+#: src/ephy-window.c:1416
 msgid "Open Link In New Tab"
 msgstr "گشودن پیوند در زبانهٔ جدید"
 
-#: src/ephy-window.c:1415
+#: src/ephy-window.c:1418
 msgid "Open Link In New Window"
 msgstr "گشودن پیوند در پنجرهٔ جدید"
 
-#: src/ephy-window.c:1417
+#: src/ephy-window.c:1420
 msgid "Open Link In Incognito Window"
 msgstr "گشودن پیوند در پنجرهٔ ناشناس"
 
-#: src/ephy-window.c:2800
+#: src/ephy-window.c:2803
 msgid "_Ask Later"
 msgstr "_بعداً پرسیده شود"
 
-#: src/ephy-window.c:2801 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2804 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_رد"
 
-#: src/ephy-window.c:2802 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2805 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_اجازه"
 
-#: src/ephy-window.c:3004 src/ephy-window.c:4439
+#: src/ephy-window.c:3007 src/ephy-window.c:4444
 msgid "Leave Website?"
 msgstr "ترک پایگاه؟"
 
-#: src/ephy-window.c:3005 src/ephy-window.c:4440 src/window-commands.c:1240
+#: src/ephy-window.c:3008 src/ephy-window.c:4445 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "فرمی تغییر داده و ثبت نشده"
 
-#: src/ephy-window.c:3006 src/ephy-window.c:4441 src/window-commands.c:1244
+#: src/ephy-window.c:3009 src/ephy-window.c:4446 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_دور انداختن فرم"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:3030
 msgid "Download operation"
 msgstr "عملیات بارگیری"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:3032
 msgid "Show details"
 msgstr "نمایش جزییات"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:3034
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%Id عملیات بارگیری فعّال"
 msgstr[1] "%Id عملیات بارگیری فعّال"
 
-#: src/ephy-window.c:3272
+#: src/ephy-window.c:3275
 msgid "Set as Default Browser?"
 msgstr "تنظیم به عنوان مرورگر پیش‌گزیده؟"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3277
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "استفاده از وب به عنوان مرورگر وب پیش‌گزیده‌تان و برای گشودن پیوندهای خارجی"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3279
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening external "
 "links"
 msgstr ""
 "تنظیم پیش‌نمایش فنی اپیفنی به عنوان مرورگر پیش‌گزیده‌تان و برای گشودن پیوندهای خارجی"
 
-#: src/ephy-window.c:3280
+#: src/ephy-window.c:3283
 msgid "_Ask Again Later"
 msgstr "_بعداً دوباره پرسیده شود"
 
-#: src/ephy-window.c:3281
+#: src/ephy-window.c:3284
 msgid "_No"
 msgstr "_خیر"
 
-#: src/ephy-window.c:3282
+#: src/ephy-window.c:3285
 msgid "_Yes"
 msgstr "_بله"
 
-#: src/ephy-window.c:3732
+#: src/ephy-window.c:3736
 msgid "Save password?"
 msgstr "ذخیرهٔ گذرواژه؟"
 
-#: src/ephy-window.c:3733
+#: src/ephy-window.c:3737
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "گذرواژه‌ها می‌توانند هر زمان در ترجیحات برداشته شوند"
 
-#: src/ephy-window.c:3735
+#: src/ephy-window.c:3739
 msgid "Not Now"
 msgstr "اکنون نه"
 
-#: src/ephy-window.c:3736
+#: src/ephy-window.c:3740
 msgid "Never Save"
 msgstr "هرگز ذخیره نشود"
 
-#: src/ephy-window.c:3737
+#: src/ephy-window.c:3741
 msgid "Save"
 msgstr "ذخیره"
 
-#: src/ephy-window.c:4570
+#: src/ephy-window.c:4575
 msgid "Close Multiple Tabs?"
 msgstr "بستن چندین زبانه؟"
 
-#: src/ephy-window.c:4571
+#: src/ephy-window.c:4576
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "اگر این پنجره بسته شود، تمامی زبانه‌های باز از دست می‌روند"
 
-#: src/ephy-window.c:4572
+#: src/ephy-window.c:4577
 msgid "C_lose Tabs"
 msgstr "_بستن زبانه‌ها"
 
-#: src/ephy-window.c:4665
+#: src/ephy-window.c:4670
 msgid "New tab opened"
 msgstr "زبانهٔ جدید گشوده شد"
 
-#: src/ephy-window.c:4669
+#: src/ephy-window.c:4674
 msgid "Switch"
 msgstr "تعویض"
 
@@ -3299,77 +3309,73 @@ msgstr "دوباره گشودن _زبانه بسته شده"
 msgid "Histo_ry"
 msgstr "_تاریخچه"
 
-#: src/resources/gtk/page-menu-popover.ui:41
-msgid "Firefox _Sync"
-msgstr "_همگام‌سازی فایرفاکس"
-
-#: src/resources/gtk/page-menu-popover.ui:45
+#: src/resources/gtk/page-menu-popover.ui:48
 msgid "I_mport and Export"
 msgstr "_درون‌ریزی و برون‌ریزی"
 
-#: src/resources/gtk/page-menu-popover.ui:49
+#: src/resources/gtk/page-menu-popover.ui:52
 msgid "I_mport Bookmarks…"
 msgstr "_درون‌ریزی نشانک‌ها…"
 
-#: src/resources/gtk/page-menu-popover.ui:53
+#: src/resources/gtk/page-menu-popover.ui:56
 msgid "E_xport Bookmarks…"
 msgstr "_برون‌ریزی نشانک‌ها…"
 
-#: src/resources/gtk/page-menu-popover.ui:59
+#: src/resources/gtk/page-menu-popover.ui:62
 msgid "Import _Passwords…"
 msgstr "درون‌ریزی _گذرواژه‌ها…"
 
-#: src/resources/gtk/page-menu-popover.ui:67
+#: src/resources/gtk/page-menu-popover.ui:70
 msgid "Install as _Web App…"
 msgstr "نصب پایگاه به عنوان _کارهٔ وب…"
 
-#: src/resources/gtk/page-menu-popover.ui:71
+#: src/resources/gtk/page-menu-popover.ui:74
 msgid "Manag_e Web Apps"
 msgstr "_مدیریت کاره‌های وب"
 
-#: src/resources/gtk/page-menu-popover.ui:77
+#: src/resources/gtk/page-menu-popover.ui:80
 msgid "Text Enco_ding…"
 msgstr "_کدگذاری متن…"
 
-#: src/resources/gtk/page-menu-popover.ui:83
+#: src/resources/gtk/page-menu-popover.ui:86
 msgid "Pr_eferences"
 msgstr "_ترجیحات"
 
-#: src/resources/gtk/page-menu-popover.ui:87
+#: src/resources/gtk/page-menu-popover.ui:90
 msgid "_Keyboard Shortcuts"
 msgstr "_کلید‌های میانبر"
 
-#: src/resources/gtk/page-menu-popover.ui:91
+#: src/resources/gtk/page-menu-popover.ui:94
 msgid "_Help"
 msgstr "_راهنما"
 
-#: src/resources/gtk/page-menu-popover.ui:95
+#: src/resources/gtk/page-menu-popover.ui:98
 msgid "_About Web"
 msgstr "_دربارهٔ وب"
 
-#: src/resources/gtk/page-menu-popover.ui:112
+#: src/resources/gtk/page-menu-popover.ui:115
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "بزرگ‌نمایی به خارج"
 
-#: src/resources/gtk/page-menu-popover.ui:119
+#: src/resources/gtk/page-menu-popover.ui:122
 msgid "Restore Zoom"
 msgstr "بازگردانی بزگنمایی"
 
-#: src/resources/gtk/page-menu-popover.ui:130
+#: src/resources/gtk/page-menu-popover.ui:133
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "بزرگ‌نمایی به داخل"
 
-#: src/resources/gtk/page-menu-popover.ui:148
+#: src/resources/gtk/page-menu-popover.ui:151
 msgid "Print…"
 msgstr "چاپ…"
 
-#: src/resources/gtk/page-menu-popover.ui:155
+#: src/resources/gtk/page-menu-popover.ui:158
 msgid "Find…"
 msgstr "یافتن…"
 
-#: src/resources/gtk/page-menu-popover.ui:162
+#: src/resources/gtk/page-menu-popover.ui:165
 msgid "Fullscreen"
 msgstr "تمام‌صفحه"
 
@@ -4054,6 +4060,32 @@ msgstr "کارهٔ وب «%s» نتوانست حذف شود"
 msgid "Options for %s"
 msgstr "گزینه‌های %s"
 
+#: src/webextension/ephy-web-extension.c:1024
+#, c-format
+msgid "manifest.json not found"
+msgstr "پروندهٔ manifest.json پیدا نشد"
+
+#: src/webextension/ephy-web-extension.c:1030
+#, c-format
+msgid "Failed to parse manifest.json: %s"
+msgstr "شکست در تجزیهٔ manifest.json:‏ %s"
+
+#: src/webextension/ephy-web-extension.c:1036
+#: src/webextension/ephy-web-extension.c:1042
+#, c-format
+msgid "manifest.json invalid"
+msgstr "پروندهٔ نامعتبر manifest.json"
+
+#: src/webextension/ephy-web-extension.c:1049
+#, c-format
+msgid "Only manifest_version 2 is supported"
+msgstr "فقط manifest_version 2 پشتیبانی می‌شود"
+
+#: src/webextension/ephy-web-extension.c:1066
+#, c-format
+msgid "Missing name or version"
+msgstr "نام یا نگارش ناموجود"
+
 #: src/window-commands.c:118
 msgid "GVDB File"
 msgstr "پروندهٔ GVDB"
@@ -4139,51 +4171,51 @@ msgstr ""
 msgid "Reload Website?"
 msgstr "بازخوانی پایگاه؟"
 
-#: src/window-commands.c:1829
+#: src/window-commands.c:1831
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "برنامهٔ «%s» آمادهٔ استفاده است"
 
-#: src/window-commands.c:1832
+#: src/window-commands.c:1834
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "برنامهٔ «%s» نتوانست ایجاد شود: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1842
+#: src/window-commands.c:1844
 msgid "Launch"
 msgstr "راه‌اندازی"
 
-#: src/window-commands.c:1908
+#: src/window-commands.c:1910
 msgid "Replace Existing Web App?"
 msgstr "جایگزینی کارهٔ وب موجود؟"
 
-#: src/window-commands.c:1912
+#: src/window-commands.c:1914
 #, c-format
 msgid "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "برنامه‌ای با نام «%s» از پیش موجود است. جای‌گزینیش موجب پایمالیش خواهد شد"
 
-#: src/window-commands.c:1917
+#: src/window-commands.c:1919
 msgid "_Replace"
 msgstr "_جای‌گزینی"
 
-#: src/window-commands.c:2280
+#: src/window-commands.c:2304
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2284
+#: src/window-commands.c:2308
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2330
+#: src/window-commands.c:2354
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2813
+#: src/window-commands.c:2837
 msgid "Enable Caret Browsing Mode?"
 msgstr "به‌کار انداختن حالت مرور با کرت؟"
 
-#: src/window-commands.c:2814
+#: src/window-commands.c:2838
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in "
 "web pages, allowing you to move around with your keyboard. Do you want to enable "
@@ -4193,9 +4225,12 @@ msgstr ""
 "در صفحهٔ وب می‌گذارد، تا به شما اجازه دهد بوسیلهٔ صفحهٔ کلید خود در صفحه جابجا شوید. آیا "
 "مایلید مرور با مکان‌نما را روشن کنید؟"
 
-#: src/window-commands.c:2819
+#: src/window-commands.c:2843
 msgid "_Enable"
 msgstr "_به کار انداختن"
+
+#~ msgid "Firefox _Sync"
+#~ msgstr "_همگام‌سازی فایرفاکس"
 
 #~ msgid "There is no Website Data"
 #~ msgstr "هیچ دادهٔ پایگاه وبی وجود ندارد"
