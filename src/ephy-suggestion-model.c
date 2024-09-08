@@ -19,6 +19,7 @@
 #include "config.h"
 #include "ephy-suggestion-model.h"
 
+#include "ephy-about-handler.h"
 #include "ephy-embed-shell.h"
 #include "ephy-prefs.h"
 #include "ephy-search-engine-manager.h"
@@ -545,6 +546,12 @@ tabs_query (EphySuggestionModel *self,
       if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
         char *escaped_address = g_markup_escape_text (display_address, -1);
 
+        if (g_str_has_prefix (escaped_address, EPHY_ABOUT_SCHEME)) {
+          g_autofree char *pretty_address = g_strconcat ("about", escaped_address + EPHY_ABOUT_SCHEME_LEN, NULL);
+          g_free (escaped_address);
+          escaped_address = g_steal_pointer (&pretty_address);
+        }
+
         escaped_title = g_markup_escape_text (title, -1);
         markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
         suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
@@ -586,6 +593,12 @@ bookmarks_query (EphySuggestionModel *self,
       EphySuggestion *suggestion;
       g_autofree gchar *escaped_title = NULL;
       g_autofree gchar *markup = NULL;
+      g_autofree gchar *pretty_url = NULL;
+
+      if (g_str_has_prefix (url, EPHY_ABOUT_SCHEME)) {
+        pretty_url = g_strconcat ("about", url + EPHY_ABOUT_SCHEME_LEN, NULL);
+        url = pretty_url;
+      }
 
       escaped_title = g_markup_escape_text (title, -1);
       markup = dzl_fuzzy_highlight (escaped_title, data->query, FALSE);
