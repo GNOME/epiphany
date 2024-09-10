@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-20 17:59+0000\n"
-"PO-Revision-Date: 2024-08-22 21:23+0300\n"
+"POT-Creation-Date: 2024-09-10 14:32+0000\n"
+"PO-Revision-Date: 2024-09-10 21:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1226
+#: src/ephy-main.c:419 src/window-commands.c:1227
 msgid "Web"
 msgstr "Тенет"
 
@@ -52,7 +52,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "«Тенета» часто називають за їхньою кодовою назвою, Epiphany."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1236
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1237
 msgid "The GNOME Project"
 msgstr "Проєкт GNOME"
 
@@ -461,7 +461,6 @@ msgid "Autofill form data"
 msgstr "Автоматично заповнювати дані форми"
 
 #: data/org.gnome.epiphany.gschema.xml:216
-#| msgid "Whether to store and prefill passwords in websites."
 msgid "Whether to auto fill form data in websites."
 msgstr "Визначає, чи слід автоматично заповнювати дані форм на сайтах."
 
@@ -1009,7 +1008,7 @@ msgstr "Версія %s"
 msgid "About Web"
 msgstr "Про «Тенета»"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1228
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1229
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany Technology Preview"
 
@@ -1100,15 +1099,15 @@ msgstr ""
 "Будь ласка, введіть PIN-код для %s, щоб пройти розпізнавання на %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:303
-#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:760
+#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:768
 #: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
-#: src/ephy-window.c:257 src/preferences/autofill-view.c:363
+#: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:338
-#: src/window-commands.c:591 src/window-commands.c:902
-#: src/window-commands.c:1402 src/window-commands.c:2085
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:339
+#: src/window-commands.c:592 src/window-commands.c:903
+#: src/window-commands.c:1403 src/window-commands.c:2088
 #: src/window-commands.c:2988
 msgid "_Cancel"
 msgstr "_Скасувати"
@@ -1134,51 +1133,51 @@ msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "Сайт %s:%d вимагає надання вами сертифіката для розпізнавання."
 
-#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:342
+#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:343
 msgid "_Select"
 msgstr "_Вибрати"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:716 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "Виберіть каталог"
 
-#: embed/ephy-download.c:716
+#: embed/ephy-download.c:724
 msgid "Select the Destination"
 msgstr "Виберіть призначення"
 
-#: embed/ephy-download.c:758
+#: embed/ephy-download.c:766
 msgid "Download Requested"
 msgstr "Запит на завантаження"
 
-#: embed/ephy-download.c:761
+#: embed/ephy-download.c:769
 msgid "_Download"
 msgstr "_Завантажити"
 
 #. Type
-#: embed/ephy-download.c:789
+#: embed/ephy-download.c:797
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Тип: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:795
+#: embed/ephy-download.c:803
 #, c-format
 msgid "Source: %s"
 msgstr "Джерело: %s"
 
 #. Question
-#: embed/ephy-download.c:801
+#: embed/ephy-download.c:809
 msgid "Where do you want to save the file?"
 msgstr "Де бажаєте зберегти цей файл?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:960
+#: embed/ephy-download.c:968
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Завершено завантаження %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:962
+#: embed/ephy-download.c:970
 msgid "Download finished"
 msgstr "Завантаження завершено"
 
@@ -1656,7 +1655,6 @@ msgid "Loading…"
 msgstr "Завантаження…"
 
 #: embed/ephy-web-view.c:1341
-#| msgid "Replace Existing Web App?"
 msgid "Delete Web App?"
 msgstr "Вилучити вебпрограму?"
 
@@ -1666,8 +1664,8 @@ msgid ""
 "\"%s\" will be removed. You will have to re-install the website as an app "
 "from the menu to use it again."
 msgstr ""
-"«%s» буде вилучено. Вам доведеться повторно встановити сайт як програму з"
-" меню, щоб скористатися нею знову."
+"«%s» буде вилучено. Вам доведеться повторно встановити сайт як програму з "
+"меню, щоб скористатися нею знову."
 
 #: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
 #: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
@@ -2221,13 +2219,11 @@ msgstr "Не вдалося передати інформацію про при�
 msgid "Failed to retrieve the Sync Key"
 msgstr "Не вдалося отримати ключ синхронізації"
 
-#: src/bookmarks/ephy-bookmark-properties.c:144
-#| msgid "Reload the current page"
+#: src/bookmarks/ephy-bookmark-properties.c:145
 msgid "Select current tag"
 msgstr "Вибрати поточну мітку"
 
-#: src/bookmarks/ephy-bookmark-properties.c:158
-#| msgid "Reload the current page"
+#: src/bookmarks/ephy-bookmark-properties.c:159
 msgid "Remove current tag"
 msgstr "Вилучити поточну мітку"
 
@@ -2295,12 +2291,12 @@ msgid "Save Media As"
 msgstr "Зберегти медіа як"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:415 src/ephy-location-entry.c:1806
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1806
 msgid "Bookmark Page"
 msgstr "Створити закладку для сторінки"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:423 src/ephy-location-entry.c:1814
+#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1814
 msgid "Edit Bookmark"
 msgstr "Редагувати закладку"
 
@@ -2469,7 +2465,6 @@ msgid "Stop loading the current page"
 msgstr "Зупинити завантаження поточної сторінки"
 
 #: src/ephy-history-dialog.c:137 src/ephy-history-dialog.c:985
-#| msgid "Start in _Incognito Mode"
 msgid "Unavailable in Incognito Mode"
 msgstr "Недоступне у конфіденційному режимі"
 
@@ -2494,7 +2489,6 @@ msgid "Cl_ear"
 msgstr "О_чистити"
 
 #: src/ephy-history-dialog.c:988
-#| msgid "Remove all history"
 msgid "Remove All History"
 msgstr "Вилучити увесь журнал"
 
@@ -2654,10 +2648,15 @@ msgstr "Заблоковані засоби стеження на цьому с�
 msgid "Sites this tracker was found on"
 msgstr "Сайти, на яких знайдено цей засіб стеження"
 
-#: src/ephy-privacy-report.c:248
+#: src/ephy-privacy-report.c:250
 #, c-format
-msgid "GNOME Web prevented %u trackers from following you across websites"
-msgstr "GNOME Тенет запобіг роботі зі стеження за вами %u засобам"
+#| msgid "GNOME Web prevented %u trackers from following you across websites"
+msgid "GNOME Web prevented %u tracker from following you across websites"
+msgid_plural ""
+"GNOME Web prevented %u trackers from following you across websites"
+msgstr[0] "GNOME Тенет запобіг роботі зі стеження за вами %u засобом"
+msgstr[1] "GNOME Тенет запобіг роботі зі стеження за вами %u засобам"
+msgstr[2] "GNOME Тенет запобіг роботі зі стеження за вами %u засобам"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2747,198 +2746,198 @@ msgid "Open a new tab"
 msgstr "Відкрити нову вкладку"
 
 #. Undo, redo.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:277
+#: src/ephy-window.c:914 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "Повер_нути"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "Повт_орити"
 
 #. Edit.
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "_Вирізати"
 
-#: src/ephy-window.c:962 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:919 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/ephy-window.c:963 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:921
 msgid "_Paste Text Only"
 msgstr "Лише _вставити текст"
 
-#: src/ephy-window.c:965 src/resources/gtk/location-entry.ui:313
+#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:313
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:924
 msgid "S_end Link by Email…"
 msgstr "_Надіслати посилання листом…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:926
 msgid "_Reload"
 msgstr "Перезаванта_жити"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:927
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:928
 msgid "_Forward"
 msgstr "_Далі"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:931
 msgid "Add Boo_kmark…"
 msgstr "Додати _закладку…"
 
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:935
 msgid "Open Link in New _Window"
 msgstr "Відкрити посилання у _новому вікні"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:936
 msgid "Open Link in New _Tab"
 msgstr "Відкрити посилання у новій вк_ладці"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:937
 msgid "Open Link in I_ncognito Window"
 msgstr "Відкрити посилання у _конфіденційному вікні"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:938
 msgid "_Save Link As…"
 msgstr "З_берегти посилання як…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:939
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:940
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати поштову адресу"
 
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:944
 msgid "View _Image in New Tab"
 msgstr "Переглянути _зображення в новій вкладці"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:945
 msgid "Copy I_mage Address"
 msgstr "Копіювати адресу _зображення"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:946
 msgid "_Save Image As…"
 msgstr "З_берегти зображення як…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:947
 msgid "Set as _Wallpaper"
 msgstr "Встановити як _шпалери"
 
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:951
 msgid "Open Video in New _Window"
 msgstr "Відкрити відеозапис у новому _вікні"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:952
 msgid "Open Video in New _Tab"
 msgstr "Відкрити відеозапис у новій в_кладці"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:953
 msgid "_Save Video As…"
 msgstr "З_берегти відеозапис як…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:954
 msgid "_Copy Video Address"
 msgstr "_Копіювати адресу відеозапису"
 
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Window"
 msgstr "Відкрити аудіозапис у новому _вікні"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:959
 msgid "Open Audio in New _Tab"
 msgstr "Відкрити аудіозапис у новій в_кладці"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:960
 msgid "_Save Audio As…"
 msgstr "З_берегти аудіозапис як…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:961
 msgid "_Copy Audio Address"
 msgstr "_Копіювати адресу аудіозапису"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:967
 msgid "Save Pa_ge As…"
 msgstr "Зберегти _сторінку як…"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:968
 msgid "_Take Screenshot…"
 msgstr "З_робити знімок…"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:969
 msgid "_Page Source"
 msgstr "Вихідний текст с_торінки"
 
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1346
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Шукати «%s» в Тенет"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1375
 msgid "Open Link"
 msgstr "Відкрити посилання"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1377
 msgid "Open Link In New Tab"
 msgstr "Відкрити посилання у новій вкладці"
 
-#: src/ephy-window.c:1422
+#: src/ephy-window.c:1379
 msgid "Open Link In New Window"
 msgstr "Відкрити посилання у новому вікні"
 
-#: src/ephy-window.c:1424
+#: src/ephy-window.c:1381
 msgid "Open Link In Incognito Window"
 msgstr "Відкрити посилання у конфіденційному вікні"
 
-#: src/ephy-window.c:2807
+#: src/ephy-window.c:2764
 msgid "_Ask Later"
 msgstr "З_апитати пізніше"
 
-#: src/ephy-window.c:2808 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "Від_мовити"
 
-#: src/ephy-window.c:2809 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2766 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Дозволити"
 
-#: src/ephy-window.c:3011 src/ephy-window.c:4529
+#: src/ephy-window.c:2968 src/ephy-window.c:4493
 msgid "Leave Website?"
 msgstr "Полишити сайт?"
 
-#: src/ephy-window.c:3012 src/ephy-window.c:4530 src/window-commands.c:1399
+#: src/ephy-window.c:2969 src/ephy-window.c:4494 src/window-commands.c:1400
 msgid "A form was modified and has not been submitted"
 msgstr "До форми було внесено зміни, які не було надіслано"
 
-#: src/ephy-window.c:3013 src/ephy-window.c:4531 src/window-commands.c:1403
+#: src/ephy-window.c:2970 src/ephy-window.c:4495 src/window-commands.c:1404
 msgid "_Discard Form"
 msgstr "_Відхилити форму"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:2991
 msgid "Download operation"
 msgstr "Завантаження"
 
-#: src/ephy-window.c:3036
+#: src/ephy-window.c:2993
 msgid "Show details"
 msgstr "Показати подробиці"
 
-#: src/ephy-window.c:3038
+#: src/ephy-window.c:2995
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2946,17 +2945,17 @@ msgstr[0] "%d файл завантажується"
 msgstr[1] "%d файли завантажуються"
 msgstr[2] "%d файлів завантажуються"
 
-#: src/ephy-window.c:3308
+#: src/ephy-window.c:3265
 msgid "Set as Default Browser?"
 msgstr "Зробити типовим браузером?"
 
-#: src/ephy-window.c:3310
+#: src/ephy-window.c:3267
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Використовувати «Тенета» як вашу типову програму для перегляду інтернету і "
 "відкриття зовнішніх посилань"
 
-#: src/ephy-window.c:3312
+#: src/ephy-window.c:3269
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2964,70 +2963,68 @@ msgstr ""
 "Використовувати Epiphany Technology Preview як типовий браузер і програму "
 "для відкриття зовнішніх посилань?"
 
-#: src/ephy-window.c:3316
+#: src/ephy-window.c:3273
 msgid "_Ask Again Later"
 msgstr "З_апитати знову пізніше"
 
-#: src/ephy-window.c:3317
+#: src/ephy-window.c:3274
 msgid "_No"
 msgstr "_Ні"
 
-#: src/ephy-window.c:3318
+#: src/ephy-window.c:3275
 msgid "_Yes"
 msgstr "_Так"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3725
 msgid "Save password?"
 msgstr "Зберегти пароль?"
 
-#: src/ephy-window.c:3768
+#: src/ephy-window.c:3726
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Паролі можна будь-коли вилучити за допомогою вікна «Параметри»"
 
-#: src/ephy-window.c:3770
+#: src/ephy-window.c:3728
 msgid "Not Now"
 msgstr "Не зараз"
 
-#: src/ephy-window.c:3771
+#: src/ephy-window.c:3729
 msgid "Never Save"
 msgstr "Ніколи не зберігати"
 
-#: src/ephy-window.c:3772
+#: src/ephy-window.c:3730
 msgid "Save"
 msgstr "Зберегти"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4050 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4011 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4624
 msgid "Close Multiple Tabs?"
 msgstr "Закрити декілька вкладок?"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4625
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Якщо закриєте це вікно, всі відкриті вкладки буде втрачено"
 
-#: src/ephy-window.c:4662
+#: src/ephy-window.c:4626
 msgid "C_lose Tabs"
 msgstr "_Закрити вкладки"
 
-#: src/ephy-window.c:4755
+#: src/ephy-window.c:4719
 msgid "New tab opened"
 msgstr "Відкрито нову вкладку"
 
-#: src/ephy-window.c:4759
+#: src/ephy-window.c:4723
 msgid "Switch"
 msgstr "Перемкнутися"
 
 #: src/preferences/autofill-view.c:359
-#| msgid "Delete All Passwords?"
 msgid "Delete All Entries?"
 msgstr "Вилучити усі записи?"
 
 #: src/preferences/autofill-view.c:360
-#| msgid "This will clear all locally stored passwords, and can not be undone."
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
 "У результаті цієї дії буде вилучено усі локально збережені записи. Наслідки "
@@ -3066,7 +3063,6 @@ msgid "New search engine"
 msgstr "Новий рушій пошуку"
 
 #: src/preferences/ephy-search-engine-listbox.c:305
-#| msgid "A_dd Search Engine…"
 msgid "A_dd Search Engine"
 msgstr "Д_одати рушій пошуку"
 
@@ -3180,13 +3176,11 @@ msgid "Dark"
 msgstr "Темна"
 
 #: src/preferences/prefs-extensions-page.c:101
-#| msgid "Enable WebExtensions"
 msgid "Install WebExtension?"
 msgstr "Встановити веброзширення?"
 
 #: src/preferences/prefs-extensions-page.c:103
 #, c-format
-#| msgid "Do you want to leave this website?"
 msgid "Do you want to install `%s`?"
 msgstr "Хочете встановити «%s»?"
 
@@ -3195,7 +3189,6 @@ msgid "Cancel"
 msgstr "Скасувати"
 
 #: src/preferences/prefs-extensions-page.c:106
-#| msgid "Installed on:"
 msgid "Install"
 msgstr "Встановити"
 
@@ -3278,17 +3271,14 @@ msgid "First Name"
 msgstr "Ім'я"
 
 #: src/resources/gtk/autofill-view.ui:33
-#| msgid "Name"
 msgid "Last Name"
 msgstr "Прізвище"
 
 #: src/resources/gtk/autofill-view.ui:38
-#| msgid "Name"
 msgid "Full Name"
 msgstr "Ім'я повністю"
 
 #: src/resources/gtk/autofill-view.ui:48
-#| msgid "Username"
 msgid "User Name"
 msgstr "Користувач"
 
@@ -3305,8 +3295,6 @@ msgid "Street"
 msgstr "Вулиця"
 
 #: src/resources/gtk/autofill-view.ui:73
-#| msgctxt "shortcut window"
-#| msgid "Navigation"
 msgid "Organization"
 msgstr "Організація"
 
@@ -3362,17 +3350,14 @@ msgid "Remove"
 msgstr "Вилучити"
 
 #: src/resources/gtk/bookmark-properties.ui:95
-#| msgid "Add Tag…"
 msgid "Add Tag"
 msgstr "Додати мітку"
 
 #: src/resources/gtk/bookmark-properties.ui:105
-#| msgid "Add New URL"
 msgid "Add new tag"
 msgstr "Додати нову мітку"
 
 #: src/resources/gtk/bookmarks-dialog.ui:10
-#| msgid "Sync _Bookmarks"
 msgid "Search bookmarks"
 msgstr "Шукати закладки"
 
@@ -3469,7 +3454,6 @@ msgid "Enabled"
 msgstr "Увімкнено"
 
 #: src/resources/gtk/extension-view.ui:87
-#| msgid "Remove Extension"
 msgid "Remove Extension…"
 msgstr "Вилучити розширення…"
 
@@ -3638,7 +3622,7 @@ msgstr "Закрити вкладки _праворуч"
 msgid "Close _Other Tabs"
 msgstr "Закрити _інші вкладки"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:269
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:270
 msgid "_Close"
 msgstr "_Закрити"
 
@@ -3682,12 +3666,10 @@ msgid "Import _Passwords…"
 msgstr "І_мпортувати паролі…"
 
 #: src/resources/gtk/page-menu-popover.ui:64
-#| msgid "Import _Passwords…"
 msgid "Export _Passwords…"
 msgstr "Експортувати _паролі…"
 
 #: src/resources/gtk/page-menu-popover.ui:70
-#| msgid "Web App"
 msgid "_Web Apps"
 msgstr "_Вебпрограми"
 
@@ -3704,7 +3686,6 @@ msgid "Text Enco_ding…"
 msgstr "Кодування тексту…"
 
 #: src/resources/gtk/page-menu-popover.ui:88
-#| msgid "Privacy"
 msgid "Pri_vacy Report"
 msgstr "Звіт щодо к_онфіденційності"
 
@@ -3974,7 +3955,6 @@ msgid "_Add"
 msgstr "_Додати"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:45
-#| msgid "Choose a language:"
 msgid "Choose a language"
 msgstr "Виберіть мову"
 
@@ -4043,12 +4023,10 @@ msgid "Overview"
 msgstr "Огляд"
 
 #: src/resources/gtk/privacy-report.ui:21
-#| msgid "Privacy"
 msgid "Privacy Report"
 msgstr "Звіт щодо конфіденційності"
 
 #: src/resources/gtk/privacy-report.ui:41
-#| msgid "Website Data"
 msgid "_Websites"
 msgstr "_Вебсайти"
 
@@ -4057,7 +4035,6 @@ msgid "_Trackers"
 msgstr "З_асоби стеження"
 
 #: src/resources/gtk/privacy-report.ui:90
-#| msgid "Show details"
 msgid "Details"
 msgstr "Подробиці"
 
@@ -4239,7 +4216,6 @@ msgid "History"
 msgstr "Історія"
 
 #: src/resources/gtk/shortcuts-dialog.ui:211
-#| msgid "Clear Website _Data"
 msgctxt "shortcut window"
 msgid "Clear Website Data"
 msgstr "Вилучити дані сайтів"
@@ -4484,13 +4460,11 @@ msgstr "Параметри для %s"
 
 #: src/webextension/ephy-web-extension.c:1027
 #, c-format
-#| msgid "Text not found"
 msgid "manifest.json not found"
 msgstr "manifest.json не знайдено"
 
 #: src/webextension/ephy-web-extension.c:1033
 #, c-format
-#| msgid "Failed to create directory %s"
 msgid "Failed to parse manifest.json: %s"
 msgstr "Не вдалося обробити manifest.json: %s"
 
@@ -4515,97 +4489,94 @@ msgstr "Не вказано назви або версії"
 msgid "Failed to determine initiating URI"
 msgstr "Не вдалося визначити адресу ініціалізації"
 
-#: src/window-commands.c:125
+#: src/window-commands.c:126
 msgid "GVDB File"
 msgstr "Файл GVDB"
 
-#: src/window-commands.c:126
+#: src/window-commands.c:127
 msgid "HTML File"
 msgstr "Файл HTML"
 
-#: src/window-commands.c:127
+#: src/window-commands.c:128
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:128 src/window-commands.c:729
+#: src/window-commands.c:129 src/window-commands.c:730
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:129 src/window-commands.c:730
+#: src/window-commands.c:130 src/window-commands.c:731
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:144 src/window-commands.c:595
-#: src/window-commands.c:864 src/window-commands.c:906
+#: src/window-commands.c:145 src/window-commands.c:596
+#: src/window-commands.c:865 src/window-commands.c:907
 msgid "Ch_oose File"
 msgstr "_Вибрати файл"
 
-#: src/window-commands.c:146 src/window-commands.c:866
+#: src/window-commands.c:147 src/window-commands.c:867
 msgid "I_mport"
 msgstr "_Імпортувати"
 
-#: src/window-commands.c:306 src/window-commands.c:396
-#: src/window-commands.c:446 src/window-commands.c:490
-#: src/window-commands.c:513 src/window-commands.c:529
+#: src/window-commands.c:307 src/window-commands.c:397
+#: src/window-commands.c:447 src/window-commands.c:491
+#: src/window-commands.c:514 src/window-commands.c:530
 msgid "Bookmarks successfully imported!"
 msgstr "Закладки успішно імпортовано!"
 
-#: src/window-commands.c:325
+#: src/window-commands.c:326
 msgid "Select Profile"
 msgstr "Вибрати профіль"
 
-#: src/window-commands.c:407 src/window-commands.c:457
-#: src/window-commands.c:687 src/window-commands.c:810
-#: src/window-commands.c:1005
+#: src/window-commands.c:408 src/window-commands.c:458
+#: src/window-commands.c:688 src/window-commands.c:811
+#: src/window-commands.c:1006
 msgid "Choose File"
 msgstr "Вибрати файл"
 
-#: src/window-commands.c:578
+#: src/window-commands.c:579
 msgid "Import Bookmarks"
 msgstr "Імпортувати закладки"
 
-#: src/window-commands.c:608 src/window-commands.c:919
+#: src/window-commands.c:609 src/window-commands.c:920
 msgid "From:"
 msgstr "З:"
 
-#: src/window-commands.c:648
+#: src/window-commands.c:649
 msgid "Bookmarks successfully exported!"
 msgstr "Закладки успішно експортовано!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:698
+#: src/window-commands.c:699
 msgid "bookmarks.html"
 msgstr "закладки.html"
 
-#: src/window-commands.c:728
-#| msgid "GVDB File"
+#: src/window-commands.c:729
 msgid "CSV File"
 msgstr "файл CSV"
 
-#: src/window-commands.c:773 src/window-commands.c:799
+#: src/window-commands.c:774 src/window-commands.c:800
 msgid "Passwords successfully imported!"
 msgstr "Паролі успішно імпортовано!"
 
-#: src/window-commands.c:890
+#: src/window-commands.c:891
 msgid "Import Passwords"
 msgstr "Імпортувати паролі"
 
-#: src/window-commands.c:966
-#| msgid "Passwords successfully imported!"
+#: src/window-commands.c:967
 msgid "Passwords successfully exported!"
 msgstr "Паролі успішно експортовано!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1015
-#| msgid "Passwords"
+#: src/window-commands.c:1016
 msgid "passwords.csv"
 msgstr "паролі.csv"
 
-#: src/window-commands.c:1223
+#: src/window-commands.c:1224
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1246
+#: src/window-commands.c:1247
 msgid "translator-credits"
 msgstr ""
 "Максим Дзюманенко <dziumanenko@gmail.com>\n"
@@ -4613,48 +4584,48 @@ msgstr ""
 "Eugene Strezhnev <strezhnev.ua@gmail.com>\n"
 "Юрій Яновський <lytvyn349@ukr.net>"
 
-#: src/window-commands.c:1398
+#: src/window-commands.c:1399
 msgid "Reload Website?"
 msgstr "Перезавантажити сайт?"
 
-#: src/window-commands.c:1999
+#: src/window-commands.c:2002
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Програма «%s» готова до використання"
 
-#: src/window-commands.c:2002
+#: src/window-commands.c:2005
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Не вдалося створити програму «%s»: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2012
+#: src/window-commands.c:2015
 msgid "Launch"
 msgstr "Запустити"
 
-#: src/window-commands.c:2078
+#: src/window-commands.c:2081
 msgid "Replace Existing Web App?"
 msgstr "Замінити наявну вебпрограму?"
 
-#: src/window-commands.c:2081
+#: src/window-commands.c:2084
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Програма з назвою «%s» вже існує. Заміна перепише її."
 
-#: src/window-commands.c:2086
+#: src/window-commands.c:2089
 msgid "_Replace"
 msgstr "З_амінити"
 
-#: src/window-commands.c:2452
+#: src/window-commands.c:2474
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2456
+#: src/window-commands.c:2478
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2502
+#: src/window-commands.c:2524
 msgid "PNG"
 msgstr "PNG"
 
