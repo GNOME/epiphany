@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-23 06:11+0000\n"
-"PO-Revision-Date: 2024-08-24 16:27+0800\n"
+"POT-Creation-Date: 2024-09-10 14:32+0000\n"
+"PO-Revision-Date: 2024-09-11 19:06+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -37,7 +37,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1226
+#: src/ephy-main.c:419 src/window-commands.c:1227
 msgid "Web"
 msgstr "浏览器"
 
@@ -61,7 +61,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "人们一般用 GNOME 浏览器的代号将其称为 Epiphany。"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1236
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1237
 msgid "The GNOME Project"
 msgstr "GNOME 项目"
 
@@ -941,7 +941,7 @@ msgstr "版本 %s"
 msgid "About Web"
 msgstr "关于浏览器"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1228
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1229
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany 技术预览"
 
@@ -1025,15 +1025,15 @@ msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "请输入PIN码进行 %s，以便在 %s:%d 进行身份验证。"
 
 #: embed/ephy-client-certificate-manager.c:303
-#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:760
+#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:768
 #: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
-#: src/ephy-window.c:257 src/preferences/autofill-view.c:363
+#: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:338
-#: src/window-commands.c:591 src/window-commands.c:902
-#: src/window-commands.c:1402 src/window-commands.c:2085
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:339
+#: src/window-commands.c:592 src/window-commands.c:903
+#: src/window-commands.c:1403 src/window-commands.c:2088
 #: src/window-commands.c:2988
 msgid "_Cancel"
 msgstr "取消(_C)"
@@ -1059,51 +1059,51 @@ msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "网站 %s:%d 要求您提供用于身份验证的证书。"
 
-#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:342
+#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:343
 msgid "_Select"
 msgstr "选中(_S)"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:716 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "选择目录"
 
-#: embed/ephy-download.c:716
+#: embed/ephy-download.c:724
 msgid "Select the Destination"
 msgstr "选择目标位置"
 
-#: embed/ephy-download.c:758
+#: embed/ephy-download.c:766
 msgid "Download Requested"
 msgstr "已请求下载"
 
-#: embed/ephy-download.c:761
+#: embed/ephy-download.c:769
 msgid "_Download"
 msgstr "下载(_D)"
 
 #. Type
-#: embed/ephy-download.c:789
+#: embed/ephy-download.c:797
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "类型：%s (%s)"
 
 #. Source
-#: embed/ephy-download.c:795
+#: embed/ephy-download.c:803
 #, c-format
 msgid "Source: %s"
 msgstr "来源：%s"
 
 #. Question
-#: embed/ephy-download.c:801
+#: embed/ephy-download.c:809
 msgid "Where do you want to save the file?"
 msgstr "您想将文件保存到哪里？"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:960
+#: embed/ephy-download.c:968
 #, c-format
 msgid "Finished downloading %s"
 msgstr "已完成下载 %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:962
+#: embed/ephy-download.c:970
 msgid "Download finished"
 msgstr "已完成下载"
 
@@ -2106,11 +2106,11 @@ msgstr "无法上传设备信息"
 msgid "Failed to retrieve the Sync Key"
 msgstr "无法获取同步密钥"
 
-#: src/bookmarks/ephy-bookmark-properties.c:144
+#: src/bookmarks/ephy-bookmark-properties.c:145
 msgid "Select current tag"
 msgstr "选择当前标签"
 
-#: src/bookmarks/ephy-bookmark-properties.c:158
+#: src/bookmarks/ephy-bookmark-properties.c:159
 msgid "Remove current tag"
 msgstr "移除当前标签"
 
@@ -2176,12 +2176,12 @@ msgid "Save Media As"
 msgstr "媒体另存为"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:415 src/ephy-location-entry.c:1806
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1806
 msgid "Bookmark Page"
 msgstr "书签页"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:423 src/ephy-location-entry.c:1814
+#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1814
 msgid "Edit Bookmark"
 msgstr "编辑书签"
 
@@ -2514,10 +2514,12 @@ msgstr "已封锁该网站上的跟踪器"
 msgid "Sites this tracker was found on"
 msgstr "发现该跟踪器的网站"
 
-#: src/ephy-privacy-report.c:248
+#: src/ephy-privacy-report.c:250
 #, c-format
-msgid "GNOME Web prevented %u trackers from following you across websites"
-msgstr "GNOME 网络阻止了 %u 跟踪器跨网站跟随你"
+msgid "GNOME Web prevented %u tracker from following you across websites"
+msgid_plural ""
+"GNOME Web prevented %u trackers from following you across websites"
+msgstr[0] "GNOME 网络阻止了 %u 个跟踪器跨网站跟随你"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2604,271 +2606,271 @@ msgid "Open a new tab"
 msgstr "打开新标签页"
 
 #. Undo, redo.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:277
+#: src/ephy-window.c:914 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "重做(_D)"
 
 #. Edit.
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: src/ephy-window.c:962 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:919 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: src/ephy-window.c:963 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:921
 msgid "_Paste Text Only"
 msgstr "仅粘贴文本(_P)"
 
-#: src/ephy-window.c:965 src/resources/gtk/location-entry.ui:313
+#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:313
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:924
 msgid "S_end Link by Email…"
 msgstr "用电子邮件发送链接(_E)…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:926
 msgid "_Reload"
 msgstr "重新载入(_R)"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:927
 msgid "_Back"
 msgstr "后退(_B)"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:928
 msgid "_Forward"
 msgstr "前进(_F)"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:931
 msgid "Add Boo_kmark…"
 msgstr "添加书签(_K)…"
 
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:935
 msgid "Open Link in New _Window"
 msgstr "在新窗口中打开链接(_W)"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:936
 msgid "Open Link in New _Tab"
 msgstr "在新标签页中打开链接(_T)"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:937
 msgid "Open Link in I_ncognito Window"
 msgstr "在无痕窗口中打开链接(_N)"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:938
 msgid "_Save Link As…"
 msgstr "链接另存为(_S)…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:939
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:940
 msgid "_Copy E-mail Address"
 msgstr "复制电子邮件地址(_C)"
 
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:944
 msgid "View _Image in New Tab"
 msgstr "在新标签页中查看图像(_I)"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:945
 msgid "Copy I_mage Address"
 msgstr "复制图像地址(_M)"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:946
 msgid "_Save Image As…"
 msgstr "图像另存为(_S)…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:947
 msgid "Set as _Wallpaper"
 msgstr "设为墙纸(_W)"
 
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:951
 msgid "Open Video in New _Window"
 msgstr "在新窗口中打开视频(_W)"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:952
 msgid "Open Video in New _Tab"
 msgstr "在新标签页中打开视频(_T)"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:953
 msgid "_Save Video As…"
 msgstr "视频另存为(_S)…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:954
 msgid "_Copy Video Address"
 msgstr "复制视频地址(_C)"
 
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Window"
 msgstr "在新窗口中打开音频(_W)"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:959
 msgid "Open Audio in New _Tab"
 msgstr "在新标签页中打开音频(_T)"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:960
 msgid "_Save Audio As…"
 msgstr "音频另存为(_S)…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:961
 msgid "_Copy Audio Address"
 msgstr "复制音频地址(_C)"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:967
 msgid "Save Pa_ge As…"
 msgstr "页面另存为(_G)…"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:968
 msgid "_Take Screenshot…"
 msgstr "截图(_T)…"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:969
 msgid "_Page Source"
 msgstr "页面源代码(_P)"
 
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1346
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "上网搜索“%s”"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1375
 msgid "Open Link"
 msgstr "打开链接"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1377
 msgid "Open Link In New Tab"
 msgstr "在新标签页中打开链接"
 
-#: src/ephy-window.c:1422
+#: src/ephy-window.c:1379
 msgid "Open Link In New Window"
 msgstr "在新窗口中打开链接"
 
-#: src/ephy-window.c:1424
+#: src/ephy-window.c:1381
 msgid "Open Link In Incognito Window"
 msgstr "在无痕窗口中打开链接"
 
-#: src/ephy-window.c:2807
+#: src/ephy-window.c:2764
 msgid "_Ask Later"
 msgstr "稍后询问(_A)"
 
-#: src/ephy-window.c:2808 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "拒绝(_D)"
 
-#: src/ephy-window.c:2809 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2766 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "允许(_A)"
 
-#: src/ephy-window.c:3011 src/ephy-window.c:4529
+#: src/ephy-window.c:2968 src/ephy-window.c:4493
 msgid "Leave Website?"
 msgstr "离开网站？"
 
-#: src/ephy-window.c:3012 src/ephy-window.c:4530 src/window-commands.c:1399
+#: src/ephy-window.c:2969 src/ephy-window.c:4494 src/window-commands.c:1400
 msgid "A form was modified and has not been submitted"
 msgstr "一个表格已被修改，但还没有提交"
 
-#: src/ephy-window.c:3013 src/ephy-window.c:4531 src/window-commands.c:1403
+#: src/ephy-window.c:2970 src/ephy-window.c:4495 src/window-commands.c:1404
 msgid "_Discard Form"
 msgstr "丢弃表单(_D)"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:2991
 msgid "Download operation"
 msgstr "下载操作"
 
-#: src/ephy-window.c:3036
+#: src/ephy-window.c:2993
 msgid "Show details"
 msgstr "显示细节"
 
-#: src/ephy-window.c:3038
+#: src/ephy-window.c:2995
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "有 %d 个项目正在下载"
 
-#: src/ephy-window.c:3308
+#: src/ephy-window.c:3265
 msgid "Set as Default Browser?"
 msgstr "是否设置为默认浏览器？"
 
-#: src/ephy-window.c:3310
+#: src/ephy-window.c:3267
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "使用浏览器作为您的默认网络浏览器并用于打开外部链接"
 
-#: src/ephy-window.c:3312
+#: src/ephy-window.c:3269
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr "使用 Epiphany 技术预览版作为您的默认网络浏览器，并用于打开外部链接"
 
-#: src/ephy-window.c:3316
+#: src/ephy-window.c:3273
 msgid "_Ask Again Later"
 msgstr "稍后再次询问(_A)"
 
-#: src/ephy-window.c:3317
+#: src/ephy-window.c:3274
 msgid "_No"
 msgstr "否(_N)"
 
-#: src/ephy-window.c:3318
+#: src/ephy-window.c:3275
 msgid "_Yes"
 msgstr "是(_Y)"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3725
 msgid "Save password?"
 msgstr "保存密码？"
 
-#: src/ephy-window.c:3768
+#: src/ephy-window.c:3726
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "密码可以在任何时候从首选项中删除"
 
-#: src/ephy-window.c:3770
+#: src/ephy-window.c:3728
 msgid "Not Now"
 msgstr "暂不"
 
-#: src/ephy-window.c:3771
+#: src/ephy-window.c:3729
 msgid "Never Save"
 msgstr "从不保存"
 
-#: src/ephy-window.c:3772
+#: src/ephy-window.c:3730
 msgid "Save"
 msgstr "保存"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4050 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4011 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "书签"
 
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4624
 msgid "Close Multiple Tabs?"
 msgstr "关闭多个标签页？"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4625
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "如果你关闭该窗口，所有其中的标签页都将被关闭"
 
-#: src/ephy-window.c:4662
+#: src/ephy-window.c:4626
 msgid "C_lose Tabs"
 msgstr "关闭多个标签页(_L)"
 
-#: src/ephy-window.c:4755
+#: src/ephy-window.c:4719
 msgid "New tab opened"
 msgstr "打开的新标签页"
 
-#: src/ephy-window.c:4759
+#: src/ephy-window.c:4723
 msgid "Switch"
 msgstr "开关"
 
@@ -3463,7 +3465,7 @@ msgstr "关于右侧的标签页(_R)"
 msgid "Close _Other Tabs"
 msgstr "关闭其他标签页(_O)"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:269
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:270
 msgid "_Close"
 msgstr "关闭(_C)"
 
@@ -4323,94 +4325,94 @@ msgstr "缺少名称或版本"
 msgid "Failed to determine initiating URI"
 msgstr "确定启动 URI 失败"
 
-#: src/window-commands.c:125
+#: src/window-commands.c:126
 msgid "GVDB File"
 msgstr "GVDB 文件"
 
-#: src/window-commands.c:126
+#: src/window-commands.c:127
 msgid "HTML File"
 msgstr "HTML 文件"
 
-#: src/window-commands.c:127
+#: src/window-commands.c:128
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:128 src/window-commands.c:729
+#: src/window-commands.c:129 src/window-commands.c:730
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:129 src/window-commands.c:730
+#: src/window-commands.c:130 src/window-commands.c:731
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:144 src/window-commands.c:595
-#: src/window-commands.c:864 src/window-commands.c:906
+#: src/window-commands.c:145 src/window-commands.c:596
+#: src/window-commands.c:865 src/window-commands.c:907
 msgid "Ch_oose File"
 msgstr "选择文件(_O)"
 
-#: src/window-commands.c:146 src/window-commands.c:866
+#: src/window-commands.c:147 src/window-commands.c:867
 msgid "I_mport"
 msgstr "导入(_M)"
 
-#: src/window-commands.c:306 src/window-commands.c:396
-#: src/window-commands.c:446 src/window-commands.c:490
-#: src/window-commands.c:513 src/window-commands.c:529
+#: src/window-commands.c:307 src/window-commands.c:397
+#: src/window-commands.c:447 src/window-commands.c:491
+#: src/window-commands.c:514 src/window-commands.c:530
 msgid "Bookmarks successfully imported!"
 msgstr "成功导入书签！"
 
-#: src/window-commands.c:325
+#: src/window-commands.c:326
 msgid "Select Profile"
 msgstr "选择档案"
 
-#: src/window-commands.c:407 src/window-commands.c:457
-#: src/window-commands.c:687 src/window-commands.c:810
-#: src/window-commands.c:1005
+#: src/window-commands.c:408 src/window-commands.c:458
+#: src/window-commands.c:688 src/window-commands.c:811
+#: src/window-commands.c:1006
 msgid "Choose File"
 msgstr "选择文件"
 
-#: src/window-commands.c:578
+#: src/window-commands.c:579
 msgid "Import Bookmarks"
 msgstr "导入书签"
 
-#: src/window-commands.c:608 src/window-commands.c:919
+#: src/window-commands.c:609 src/window-commands.c:920
 msgid "From:"
 msgstr "从："
 
-#: src/window-commands.c:648
+#: src/window-commands.c:649
 msgid "Bookmarks successfully exported!"
 msgstr "成功导出书签！"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:698
+#: src/window-commands.c:699
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
-#: src/window-commands.c:728
+#: src/window-commands.c:729
 msgid "CSV File"
 msgstr "CSV 文件"
 
-#: src/window-commands.c:773 src/window-commands.c:799
+#: src/window-commands.c:774 src/window-commands.c:800
 msgid "Passwords successfully imported!"
 msgstr "成功导入密码数据！"
 
-#: src/window-commands.c:890
+#: src/window-commands.c:891
 msgid "Import Passwords"
 msgstr "导入密码"
 
-#: src/window-commands.c:966
+#: src/window-commands.c:967
 msgid "Passwords successfully exported!"
 msgstr "成功导出密码数据！"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1015
+#: src/window-commands.c:1016
 msgid "passwords.csv"
 msgstr "密码.csv"
 
-#: src/window-commands.c:1223
+#: src/window-commands.c:1224
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1246
+#: src/window-commands.c:1247
 msgid "translator-credits"
 msgstr ""
 "Funda Wang <fundawang@linux.net.cn>, 2003, 2006\n"
@@ -4430,48 +4432,48 @@ msgstr ""
 "Nanling <neithern@outlook.com>,2023\n"
 "Eni <enigma@petalmail.com>,2023"
 
-#: src/window-commands.c:1398
+#: src/window-commands.c:1399
 msgid "Reload Website?"
 msgstr "重新加载网站？"
 
-#: src/window-commands.c:1999
+#: src/window-commands.c:2002
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "应用程序“%s”已就绪"
 
-#: src/window-commands.c:2002
+#: src/window-commands.c:2005
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "无法创建应用程序“%s”：%s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2012
+#: src/window-commands.c:2015
 msgid "Launch"
 msgstr "启动"
 
-#: src/window-commands.c:2078
+#: src/window-commands.c:2081
 msgid "Replace Existing Web App?"
 msgstr "替换现有的网页应用？"
 
-#: src/window-commands.c:2081
+#: src/window-commands.c:2084
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "一个名为 %s 的应用程序已经存在，替换它将覆盖它"
 
-#: src/window-commands.c:2086
+#: src/window-commands.c:2089
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: src/window-commands.c:2452
+#: src/window-commands.c:2474
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2456
+#: src/window-commands.c:2478
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2502
+#: src/window-commands.c:2524
 msgid "PNG"
 msgstr "PNG"
 
