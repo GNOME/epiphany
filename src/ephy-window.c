@@ -3790,6 +3790,8 @@ static const char *disabled_win_actions_for_overview[] = {
 static const char *disabled_toolbar_actions_for_overview[] = {
   "reload",
   "reload-bypass-cache",
+  "navigation-back",
+  "navigation-forward",
 };
 
 static void
