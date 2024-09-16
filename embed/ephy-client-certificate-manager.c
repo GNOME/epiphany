@@ -38,6 +38,7 @@ struct EphyClientCertificateManager {
   GCancellable *cancellable;
   GList *objects;
   char *password;
+  char *current_label;
 };
 
 typedef struct {
@@ -72,6 +73,7 @@ ephy_client_certificate_manager_free (EphyClientCertificateManager *self)
 {
   g_cancellable_cancel (self->cancellable);
   g_clear_pointer (&self->password, g_free);
+  g_clear_pointer (&self->current_label, g_free);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->web_view);
   g_clear_object (&self->request);
@@ -328,22 +330,16 @@ certificate_selection_dialog_response_cb (AdwAlertDialog *dialog,
   EphyClientCertificateManager *self = user_data;
   g_autoptr (GError) error = NULL;
   GckSlot *slot = NULL;
-  GtkWidget *listbox = adw_alert_dialog_get_extra_child (dialog);
-  GtkListBoxRow *row;
-  const char *label;
 
   if (strcmp (response, "cancel") == 0) {
     cancel_authentication (self);
     return;
   }
 
-  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (listbox));
-  label = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
-
   for (GList *iter = self->certificates; iter && iter->data; iter = iter->next) {
     EphyClientCertificate *cert = iter->data;
 
-    if (g_strcmp0 (cert->label, label) == 0) {
+    if (g_strcmp0 (cert->label, self->current_label) == 0) {
       slot = cert->slot;
       break;
     }
@@ -358,10 +354,26 @@ certificate_selection_dialog_response_cb (AdwAlertDialog *dialog,
 }
 
 static void
+on_radio_button_toggled (GtkWidget *button,
+                         gpointer   user_data)
+{
+  EphyClientCertificateManager *self = user_data;
+
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button))) {
+    GtkWidget *row = gtk_widget_get_ancestor (GTK_WIDGET (button), ADW_TYPE_ACTION_ROW);
+    const char *label = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+
+    g_clear_pointer (&self->current_label, g_free);
+    self->current_label = g_strdup (label);
+  }
+}
+
+static void
 certificate_selection_dialog (EphyClientCertificateManager *self)
 {
   AdwDialog *dialog;
   GtkWidget *listbox;
+  GtkWidget *check_button_group = NULL;
   g_autofree char *body = NULL;
   const char *realm = webkit_authentication_request_get_realm (self->request);
 
@@ -395,14 +407,28 @@ certificate_selection_dialog (EphyClientCertificateManager *self)
   adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
 
   listbox = gtk_list_box_new ();
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (listbox), GTK_SELECTION_NONE);
   gtk_widget_add_css_class (listbox, "content");
 
   for (GList *iter = self->certificates; iter; iter = iter->next) {
     EphyClientCertificate *certificate = iter->data;
     GtkWidget *row;
+    GtkWidget *check_button;
 
     row = adw_action_row_new ();
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), certificate->label);
+
+    check_button = gtk_check_button_new ();
+    gtk_widget_set_valign (check_button, GTK_ALIGN_CENTER);
+    g_signal_connect (G_OBJECT (check_button), "toggled", G_CALLBACK (on_radio_button_toggled), self);
+    adw_action_row_add_prefix (ADW_ACTION_ROW (row), GTK_WIDGET (check_button));
+    adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), check_button);
+    gtk_check_button_set_group (GTK_CHECK_BUTTON (check_button), GTK_CHECK_BUTTON (check_button_group));
+
+    if (!check_button_group) {
+      check_button_group = check_button;
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), TRUE);
+    }
 
     gtk_list_box_append (GTK_LIST_BOX (listbox), row);
   }
