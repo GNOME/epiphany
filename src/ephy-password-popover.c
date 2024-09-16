@@ -75,7 +75,6 @@ on_password_never (EphyPasswordPopover *self,
                                            self->request_data->origin,
                                            EPHY_PERMISSION_DENY);
 
-  gtk_popover_popdown (GTK_POPOVER (self));
   g_signal_emit (self, signals[RESPONSE], 0);
 }
 
@@ -83,7 +82,6 @@ static void
 on_password_not_now (EphyPasswordPopover *self,
                      GtkButton           *button)
 {
-  gtk_popover_popdown (GTK_POPOVER (self));
   g_signal_emit (self, signals[RESPONSE], 0);
 }
 
@@ -99,7 +97,6 @@ on_password_save (EphyPasswordPopover *self,
                               self->request_data->password, self->request_data->usernameField,
                               self->request_data->passwordField, self->request_data->isNew);
 
-  gtk_popover_popdown (GTK_POPOVER (self));
   g_signal_emit (self, signals[RESPONSE], 0);
 }
 
