@@ -312,6 +312,7 @@ session_opened_cb (GObject      *obj,
   adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
 
   entry = adw_password_entry_row_new ();
+  gtk_widget_add_css_class (entry, "card");
   gtk_text_set_activates_default (GTK_TEXT (gtk_editable_get_delegate (GTK_EDITABLE (entry))), TRUE);
 
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (entry), "PIN");
@@ -320,6 +321,7 @@ session_opened_cb (GObject      *obj,
   g_signal_connect (dialog, "response", G_CALLBACK (certificate_pin_response), self);
 
   adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self->web_view))));
+  gtk_widget_grab_focus (entry);
 }
 
 static void
