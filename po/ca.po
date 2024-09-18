@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-07 14:25+0000\n"
-"PO-Revision-Date: 2024-09-08 21:47+0200\n"
+"POT-Creation-Date: 2024-09-14 23:45+0000\n"
+"PO-Revision-Date: 2024-09-17 18:03+0200\n"
 "Last-Translator: Quique Serrano <qserrano@outlook.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -1150,7 +1150,7 @@ msgstr "Introduïu el PIN per a %s, per a autenticar-vos a %s:%d."
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:339
 #: src/window-commands.c:592 src/window-commands.c:903
 #: src/window-commands.c:1403 src/window-commands.c:2088
-#: src/window-commands.c:3002
+#: src/window-commands.c:2988
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -1711,6 +1711,8 @@ msgid ""
 "\"%s\" will be removed. You will have to re-install the website as an app "
 "from the menu to use it again."
 msgstr ""
+"S'eliminarà «%s». Haureu de tornar a instal·lar el lloc web com a aplicació "
+"des del menú per tornar-la a utilitzar."
 
 #: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
 #: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
@@ -2009,12 +2011,12 @@ msgstr "No s'han pogut crear el directori «%s»."
 #: lib/ephy-file-helpers.c:716
 #, c-format
 msgid "Error removing file %s: %s"
-msgstr ""
+msgstr "S'ha produït un error en suprimir el fitxer %s: %s"
 
 #: lib/ephy-file-helpers.c:734
 #, c-format
 msgid "Error removing directory %s: %s"
-msgstr ""
+msgstr "S'ha produït un error en suprimir el directori %s: %s"
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
@@ -2126,7 +2128,7 @@ msgstr "No s'ha pogut crear el fitxer .app: %s"
 
 #: lib/sync/ephy-password-export.c:121
 msgid "Error in exporting passwords to a CSV file"
-msgstr ""
+msgstr "S'ha produït un error en exportar contrasenyes a un fitxer CSV"
 
 #: lib/sync/ephy-password-import.c:133
 #, c-format
@@ -2144,7 +2146,7 @@ msgstr ""
 
 #: lib/sync/ephy-password-import.c:360
 msgid "Error in reading CSV file"
-msgstr ""
+msgstr "S'ha produït un error en llegir el fitxer CSV"
 
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
@@ -2194,28 +2196,25 @@ msgid "Failed to obtain signed certificate."
 msgstr "No s'ha pogut obtenir un certificat signat."
 
 #: lib/sync/ephy-sync-service.c:1926
-#, fuzzy, c-format
-#| msgid "The sync secrets for the current sync user are invalid."
+#, c-format
 msgid "The sync secrets for the current sync user are invalid: %s"
 msgstr ""
 "Els secrets de sincronització per l'usuari sincronitzat actualment no són "
-"vàlids."
+"vàlids: %s"
 
 #: lib/sync/ephy-sync-service.c:1933
-#, fuzzy, c-format
-#| msgid "The sync secrets for the current sync user are invalid."
+#, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
 msgstr ""
-"Els secrets de sincronització per l'usuari sincronitzat actualment no són "
-"vàlids."
+"Els secrets de sincronització per l'usuari sincronitzat actualment no són un "
+"JSON vàlid: %s"
 
 #: lib/sync/ephy-sync-service.c:1960
-#, fuzzy, c-format
-#| msgid "Could not find the sync secrets for the current sync user."
+#, c-format
 msgid "Could not find the sync secrets for the current sync user: %s"
 msgstr ""
 "No s'han pogut trobar els secrets de sincronització per l'usuari "
-"sincronitzat actualment."
+"sincronitzat actualment: %s"
 
 #: lib/sync/ephy-sync-service.c:1966
 msgid "Could not find the sync secrets for the current sync user."
@@ -2365,7 +2364,7 @@ msgstr "Atura"
 
 #: src/ephy-certificate-dialog.c:179
 msgid "Show More"
-msgstr ""
+msgstr "Mostra'n més"
 
 #: src/ephy-certificate-dialog.c:253
 msgid "The certificate does not match this website"
@@ -2534,7 +2533,7 @@ msgstr "Voleu esborrar l'historial de navegació?"
 
 #: src/ephy-history-dialog.c:769
 msgid "All links will be permanently deleted"
-msgstr ""
+msgstr "Se suprimiran permanentment tots els enllaços"
 
 #: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
@@ -2692,16 +2691,20 @@ msgstr "La pàgina «%s» vol accedir al porta-retalls"
 
 #: src/ephy-privacy-report.c:62
 msgid "Blocked trackers on this site"
-msgstr ""
+msgstr "S'han bloquejat rastrejadors en aquest lloc"
 
 #: src/ephy-privacy-report.c:82
 msgid "Sites this tracker was found on"
-msgstr ""
+msgstr "Llocs on s'ha trobat aquest rastrejador"
 
-#: src/ephy-privacy-report.c:248
+#: src/ephy-privacy-report.c:250
 #, c-format
-msgid "GNOME Web prevented %u trackers from following you across websites"
-msgstr ""
+msgid "GNOME Web prevented %u tracker from following you across websites"
+msgid_plural ""
+"GNOME Web prevented %u trackers from following you across websites"
+msgstr[0] "El GNOME Web ha evitat que %u rastrejador us segueixi per llocs web"
+msgstr[1] ""
+"El GNOME Web ha evitat que %u rastrejadors us segueixin per llocs web"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2791,215 +2794,215 @@ msgid "Open a new tab"
 msgstr "Obre una pestanya nova"
 
 #. Undo, redo.
-#: src/ephy-window.c:910 src/resources/gtk/location-entry.ui:277
+#: src/ephy-window.c:914 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: src/ephy-window.c:911
+#: src/ephy-window.c:915
 msgid "Re_do"
 msgstr "_Refés"
 
 #. Edit.
-#: src/ephy-window.c:914 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "_Retalla"
 
-#: src/ephy-window.c:915 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:919 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "_Copia"
 
-#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:921
 msgid "_Paste Text Only"
 msgstr "_Enganxa només text"
 
-#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:313
+#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:313
 msgid "Select _All"
 msgstr "_Selecciona-ho tot"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:924
 msgid "S_end Link by Email…"
 msgstr "Envia l'_enllaç per correu electrònic…"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:926
 msgid "_Reload"
 msgstr "_Torna a carregar"
 
-#: src/ephy-window.c:923
+#: src/ephy-window.c:927
 msgid "_Back"
 msgstr "E_nrere"
 
-#: src/ephy-window.c:924
+#: src/ephy-window.c:928
 msgid "_Forward"
 msgstr "Se_güent"
 
 #. Bookmarks
-#: src/ephy-window.c:927
+#: src/ephy-window.c:931
 msgid "Add Boo_kmark…"
 msgstr "Afege_ix una adreça d'interès…"
 
 #. Links.
-#: src/ephy-window.c:931
+#: src/ephy-window.c:935
 msgid "Open Link in New _Window"
 msgstr "Obre l'enllaç en una _finestra nova"
 
-#: src/ephy-window.c:932
+#: src/ephy-window.c:936
 msgid "Open Link in New _Tab"
 msgstr "Obre l'enllaç en una _pestanya nova"
 
-#: src/ephy-window.c:933
+#: src/ephy-window.c:937
 msgid "Open Link in I_ncognito Window"
 msgstr "Obre l'enllaç en una finestra _incògnita"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:938
 msgid "_Save Link As…"
 msgstr "De_sa l'enllaç com a…"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:939
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: src/ephy-window.c:936
+#: src/ephy-window.c:940
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça del correu"
 
 #. Images.
-#: src/ephy-window.c:940
+#: src/ephy-window.c:944
 msgid "View _Image in New Tab"
 msgstr "Mostra la _imatge en una pestanya nova"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:945
 msgid "Copy I_mage Address"
 msgstr "Copia l'adreça de la _imatge"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:946
 msgid "_Save Image As…"
 msgstr "_Desa la imatge com a…"
 
-#: src/ephy-window.c:943
+#: src/ephy-window.c:947
 msgid "Set as _Wallpaper"
 msgstr "Estableix com _fons de pantalla"
 
 #. Video.
-#: src/ephy-window.c:947
+#: src/ephy-window.c:951
 msgid "Open Video in New _Window"
 msgstr "Obre el vídeo en una _finestra nova"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:952
 msgid "Open Video in New _Tab"
 msgstr "Obre el vídeo en una _pestanya nova"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:953
 msgid "_Save Video As…"
 msgstr "De_sa el vídeo com a…"
 
-#: src/ephy-window.c:950
+#: src/ephy-window.c:954
 msgid "_Copy Video Address"
 msgstr "_Copia l'adreça del vídeo"
 
 #. Audio.
-#: src/ephy-window.c:954
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Window"
 msgstr "Obre l'àudio en una _finestra nova"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:959
 msgid "Open Audio in New _Tab"
 msgstr "Obre l'àudio en una _pestanya nova"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:960
 msgid "_Save Audio As…"
 msgstr "De_sa l'àudio com a…"
 
-#: src/ephy-window.c:957
+#: src/ephy-window.c:961
 msgid "_Copy Audio Address"
 msgstr "_Copia l'adreça de l'àudio"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:967
 msgid "Save Pa_ge As…"
 msgstr "Anomena i de_sa la pàgina…"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:968
 msgid "_Take Screenshot…"
 msgstr "_Pren una captura de pantalla…"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:969
 msgid "_Page Source"
 msgstr "Codi font de la _pàgina"
 
-#: src/ephy-window.c:1342
+#: src/ephy-window.c:1346
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Cerca al web «%s»"
 
-#: src/ephy-window.c:1371
+#: src/ephy-window.c:1375
 msgid "Open Link"
 msgstr "Obre l'enllaç"
 
-#: src/ephy-window.c:1373
+#: src/ephy-window.c:1377
 msgid "Open Link In New Tab"
 msgstr "Obre l'enllaç en una pestanya nova"
 
-#: src/ephy-window.c:1375
+#: src/ephy-window.c:1379
 msgid "Open Link In New Window"
 msgstr "Obre l'enllaç en una finestra nova"
 
-#: src/ephy-window.c:1377
+#: src/ephy-window.c:1381
 msgid "Open Link In Incognito Window"
 msgstr "Obre l'enllaç en una d'incògnit nova"
 
-#: src/ephy-window.c:2760
+#: src/ephy-window.c:2764
 msgid "_Ask Later"
 msgstr "_Pregunta-ho més tard"
 
-#: src/ephy-window.c:2761 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Denega"
 
-#: src/ephy-window.c:2762 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2766 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Permet"
 
-#: src/ephy-window.c:2964 src/ephy-window.c:4489
+#: src/ephy-window.c:2968 src/ephy-window.c:4493
 msgid "Leave Website?"
 msgstr "Voleu sortir del lloc web?"
 
-#: src/ephy-window.c:2965 src/ephy-window.c:4490 src/window-commands.c:1400
+#: src/ephy-window.c:2969 src/ephy-window.c:4494 src/window-commands.c:1400
 msgid "A form was modified and has not been submitted"
 msgstr "Un formulari modificat no ha estat enviat"
 
-#: src/ephy-window.c:2966 src/ephy-window.c:4491 src/window-commands.c:1404
+#: src/ephy-window.c:2970 src/ephy-window.c:4495 src/window-commands.c:1404
 msgid "_Discard Form"
 msgstr "_Descarta el formulari"
 
-#: src/ephy-window.c:2987
+#: src/ephy-window.c:2991
 msgid "Download operation"
 msgstr "Operació de baixada"
 
-#: src/ephy-window.c:2989
+#: src/ephy-window.c:2993
 msgid "Show details"
 msgstr "Mostra els detalls"
 
-#: src/ephy-window.c:2991
+#: src/ephy-window.c:2995
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operació de baixada activa"
 msgstr[1] "%d operacions de baixada actives"
 
-#: src/ephy-window.c:3261
+#: src/ephy-window.c:3265
 msgid "Set as Default Browser?"
 msgstr "Configurar-ho com el navegador per defecte?"
 
-#: src/ephy-window.c:3263
+#: src/ephy-window.c:3267
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Utilitzeu el Web com a navegador web per defecte i per a obrir enllaços "
 "externs"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3269
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3007,61 +3010,61 @@ msgstr ""
 "Utilitzeu la versió preliminar de la tecnologia Epiphany com a navegador web "
 "predeterminat i per a obrir enllaços externs"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3273
 msgid "_Ask Again Later"
 msgstr "_Pregunta-ho més tard"
 
-#: src/ephy-window.c:3270
+#: src/ephy-window.c:3274
 msgid "_No"
 msgstr "_No"
 
-#: src/ephy-window.c:3271
+#: src/ephy-window.c:3275
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3721
+#: src/ephy-window.c:3725
 msgid "Save password?"
 msgstr "Voleu desar la contrasenya?"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3726
 msgid "Passwords can be removed at any time in Preferences"
 msgstr ""
 "Les contrasenyes es poden suprimir en qualsevol moment a les preferències"
 
-#: src/ephy-window.c:3724
+#: src/ephy-window.c:3728
 msgid "Not Now"
 msgstr "_Ara no"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3729
 msgid "Never Save"
 msgstr "No ho desis mai"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3730
 msgid "Save"
 msgstr "Desa"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4007 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4011 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Adreces d'interès"
 
-#: src/ephy-window.c:4620
+#: src/ephy-window.c:4624
 msgid "Close Multiple Tabs?"
 msgstr "Voleu tancar múltiples pestanyes?"
 
-#: src/ephy-window.c:4621
+#: src/ephy-window.c:4625
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Si tanqueu aquesta finestra, totes les pestanyes obertes es perdran"
 
-#: src/ephy-window.c:4622
+#: src/ephy-window.c:4626
 msgid "C_lose Tabs"
 msgstr "_Tanca les pestanyes"
 
-#: src/ephy-window.c:4715
+#: src/ephy-window.c:4719
 msgid "New tab opened"
 msgstr "S'ha obert una pestanya nova"
 
-#: src/ephy-window.c:4719
+#: src/ephy-window.c:4723
 msgid "Switch"
 msgstr "Commuta"
 
@@ -3070,12 +3073,9 @@ msgid "Delete All Entries?"
 msgstr "Suprimeix totes les entrades?"
 
 #: src/preferences/autofill-view.c:360
-#, fuzzy
-#| msgid "This will clear all locally stored passwords, and can not be undone."
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
-"Això netejarà totes les contrasenyes emmagatzemades localment i no es pot "
-"desfer."
+"Això netejarà totes les entrades emmagatzemades localment i no es pot desfer."
 
 #: src/preferences/clear-data-view.c:68
 msgid "Cookies"
@@ -3110,10 +3110,8 @@ msgid "New search engine"
 msgstr "Motor de cerca nou"
 
 #: src/preferences/ephy-search-engine-listbox.c:305
-#, fuzzy
-#| msgid "A_dd Search Engine…"
 msgid "A_dd Search Engine"
-msgstr "A_fegeix un motor de cerca…"
+msgstr "Afegeix un motor _de cerca"
 
 #: src/preferences/ephy-search-engine-row.c:114
 msgid "This field is required"
@@ -3224,27 +3222,21 @@ msgid "Dark"
 msgstr "Fosc"
 
 #: src/preferences/prefs-extensions-page.c:101
-#, fuzzy
-#| msgid "Enable WebExtensions"
 msgid "Install WebExtension?"
-msgstr "Habilita les extensions web"
+msgstr "Voleu habilitar les extensions web?"
 
 #: src/preferences/prefs-extensions-page.c:103
 #, c-format
 msgid "Do you want to install `%s`?"
-msgstr ""
+msgstr "Voleu instal·lar «%s»?"
 
 #: src/preferences/prefs-extensions-page.c:105
-#, fuzzy
-#| msgid "_Cancel"
 msgid "Cancel"
-msgstr "_Cancel·la"
+msgstr "Cancel·la"
 
 #: src/preferences/prefs-extensions-page.c:106
-#, fuzzy
-#| msgid "Installed on:"
 msgid "Install"
-msgstr "Instal·lat a:"
+msgstr "Instal·la"
 
 #. Translators: this is the title of a file chooser dialog.
 #: src/preferences/prefs-extensions-page.c:149
@@ -3317,76 +3309,67 @@ msgstr "Pàgina d'inici"
 
 #: src/resources/gtk/autofill-view.ui:4
 msgid "Autofill Data"
-msgstr ""
+msgstr "Emplena les dades automàticament"
 
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
-msgstr ""
+msgstr "Nom"
 
 #: src/resources/gtk/autofill-view.ui:33
-#, fuzzy
-#| msgid "Name"
 msgid "Last Name"
-msgstr "Nom"
+msgstr "Cognom"
 
 #: src/resources/gtk/autofill-view.ui:38
-#, fuzzy
-#| msgid "Name"
 msgid "Full Name"
-msgstr "Nom"
+msgstr "Nom complet"
 
 #: src/resources/gtk/autofill-view.ui:48
-#, fuzzy
-#| msgid "Username"
 msgid "User Name"
 msgstr "Nom d'usuari"
 
 #: src/resources/gtk/autofill-view.ui:53
 msgid "E-Mail"
-msgstr ""
+msgstr "Correu electrònic"
 
 #: src/resources/gtk/autofill-view.ui:58
 msgid "Phone"
-msgstr ""
+msgstr "Telèfon"
 
 #: src/resources/gtk/autofill-view.ui:68
 msgid "Street"
-msgstr ""
+msgstr "Carrer"
 
 #: src/resources/gtk/autofill-view.ui:73
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Navigation"
 msgid "Organization"
-msgstr "Navegació"
+msgstr "Organització"
 
 #: src/resources/gtk/autofill-view.ui:78
 msgid "Postal Code"
-msgstr ""
+msgstr "Codi postal"
 
 #: src/resources/gtk/autofill-view.ui:83
 msgid "State"
-msgstr ""
+msgstr "Província"
 
 #: src/resources/gtk/autofill-view.ui:88
 msgid "City"
-msgstr ""
+msgstr "Ciutat"
 
 #: src/resources/gtk/autofill-view.ui:93
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #: src/resources/gtk/autofill-view.ui:103
 msgid "Type"
-msgstr ""
+msgstr "Tipus"
 
 #: src/resources/gtk/autofill-view.ui:108
 msgid "Owner"
-msgstr ""
+msgstr "Propietari"
 
 #: src/resources/gtk/autofill-view.ui:113
 msgid "Number"
-msgstr ""
+msgstr "Número"
 
 #: src/resources/gtk/bookmark-properties.ui:10
 msgid "Bookmark"
@@ -3408,28 +3391,20 @@ msgid "Tags"
 msgstr "Etiquetes"
 
 #: src/resources/gtk/bookmark-properties.ui:54
-#, fuzzy
-#| msgid "_Remove"
 msgid "Remove"
-msgstr "_Suprimeix"
+msgstr "Suprimeix"
 
 #: src/resources/gtk/bookmark-properties.ui:95
-#, fuzzy
-#| msgid "Add Tag…"
 msgid "Add Tag"
-msgstr "Afegeix una etiqueta…"
+msgstr "Afegeix una etiqueta"
 
 #: src/resources/gtk/bookmark-properties.ui:105
-#, fuzzy
-#| msgid "Add New URL"
 msgid "Add new tag"
-msgstr "Afegeix un URL nou"
+msgstr "Afegeix una etiqueta nova"
 
 #: src/resources/gtk/bookmarks-dialog.ui:10
-#, fuzzy
-#| msgid "Sync _Bookmarks"
 msgid "Search bookmarks"
-msgstr "_Sincronitza adreces d'interès"
+msgstr "Cerca a les adreces d'interès"
 
 #: src/resources/gtk/bookmarks-dialog.ui:102
 msgid "No Bookmarks"
@@ -3525,10 +3500,8 @@ msgid "Enabled"
 msgstr "Habilitat"
 
 #: src/resources/gtk/extension-view.ui:87
-#, fuzzy
-#| msgid "Remove Extension"
 msgid "Remove Extension…"
-msgstr "Elimina l'extensió"
+msgstr "Elimina l'extensió…"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:9
 msgid "Firefox Sync"
@@ -3607,10 +3580,8 @@ msgstr "Historial"
 
 #: src/resources/gtk/history-dialog.ui:20
 #: src/resources/gtk/location-entry.ui:98
-#, fuzzy
-#| msgid "_Clear All"
 msgid "Clear"
-msgstr "_Neteja-ho tot"
+msgstr "Neteja"
 
 #: src/resources/gtk/history-dialog.ui:31
 msgid "Select Items"
@@ -3741,16 +3712,12 @@ msgid "Import _Passwords…"
 msgstr "Im_porta contrasenyes…"
 
 #: src/resources/gtk/page-menu-popover.ui:64
-#, fuzzy
-#| msgid "Import _Passwords…"
 msgid "Export _Passwords…"
-msgstr "Im_porta contrasenyes…"
+msgstr "Ex_porta les contrasenyes…"
 
 #: src/resources/gtk/page-menu-popover.ui:70
-#, fuzzy
-#| msgid "Web App"
 msgid "_Web Apps"
-msgstr "Aplicació Web"
+msgstr "Aplicacions _Web"
 
 #: src/resources/gtk/page-menu-popover.ui:74
 msgid "Install as _Web App…"
@@ -3765,10 +3732,8 @@ msgid "Text Enco_ding…"
 msgstr "_Codificació del text…"
 
 #: src/resources/gtk/page-menu-popover.ui:88
-#, fuzzy
-#| msgid "Privacy"
 msgid "Pri_vacy Report"
-msgstr "Privacitat"
+msgstr "Informe de pri_vacitat"
 
 #: src/resources/gtk/page-menu-popover.ui:94
 msgid "Pr_eferences"
@@ -3829,10 +3794,8 @@ msgid "_Never Save"
 msgstr "_No ho desis mai"
 
 #: src/resources/gtk/password-popover.ui:79
-#, fuzzy
-#| msgid "Not Now"
 msgid "N_ot Now"
-msgstr "_Ara no"
+msgstr "Ara n_o"
 
 #: src/resources/gtk/passwords-view.ui:25
 #: src/resources/gtk/prefs-privacy-page.ui:53
@@ -4019,7 +3982,7 @@ msgstr "Ca_nvia immediatament a les pestanyes noves"
 
 #: src/resources/gtk/prefs-general-page.ui:213
 msgid "Touch _Navigation Gestures"
-msgstr ""
+msgstr "Gestos de navegació tàctil"
 
 #: src/resources/gtk/prefs-general-page.ui:236
 msgid "_Spell Checking"
@@ -4038,10 +4001,8 @@ msgid "_Add"
 msgstr "_Afegeix"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:45
-#, fuzzy
-#| msgid "Choose a language:"
 msgid "Choose a language"
-msgstr "Selecciona una llengua:"
+msgstr "Selecciona una llengua"
 
 #: src/resources/gtk/prefs-privacy-page.ui:6
 msgid "Privacy"
@@ -4094,41 +4055,35 @@ msgstr "_Recorda les contrasenyes"
 
 #: src/resources/gtk/prefs-privacy-page.ui:77
 msgid "Forms and Autofill"
-msgstr ""
+msgstr "Formularis i emplenament automàtic"
 
 #: src/resources/gtk/prefs-privacy-page.ui:80
 msgid "_Autofill Forms"
-msgstr ""
+msgstr "Emplena _automàticament els formularis"
 
 #: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Autofill _Data"
-msgstr ""
+msgstr "Emplena automàticament les _dades"
 
 #: src/resources/gtk/privacy-report.ui:10
 msgid "Overview"
-msgstr ""
+msgstr "Descripció general"
 
 #: src/resources/gtk/privacy-report.ui:21
-#, fuzzy
-#| msgid "Privacy"
 msgid "Privacy Report"
-msgstr "Privacitat"
+msgstr "Informe de privacitat"
 
 #: src/resources/gtk/privacy-report.ui:41
-#, fuzzy
-#| msgid "Website Data"
 msgid "_Websites"
-msgstr "Dades del lloc web"
+msgstr "Llocs _web"
 
 #: src/resources/gtk/privacy-report.ui:61
 msgid "_Trackers"
-msgstr ""
+msgstr "Ras_trejadors"
 
 #: src/resources/gtk/privacy-report.ui:90
-#, fuzzy
-#| msgid "Show details"
 msgid "Details"
-msgstr "Mostra els detalls"
+msgstr "Detalls"
 
 #: src/resources/gtk/search-engine-row.ui:8
 msgid "Selects Default Search Engine"
@@ -4549,37 +4504,35 @@ msgid "Options for %s"
 msgstr "Opcions per a %s"
 
 #: src/webextension/ephy-web-extension.c:1027
-#, fuzzy, c-format
-#| msgid "Text not found"
+#, c-format
 msgid "manifest.json not found"
-msgstr "No s'ha trobat el text"
+msgstr "No s'ha trobat el «manifest.json»"
 
 #: src/webextension/ephy-web-extension.c:1033
-#, fuzzy, c-format
-#| msgid "Failed to create directory %s"
+#, c-format
 msgid "Failed to parse manifest.json: %s"
-msgstr "No s'han pogut crear el directori «%s»"
+msgstr "No s'han pogut analitzar el «manifest.json»: %s"
 
 #: src/webextension/ephy-web-extension.c:1039
 #: src/webextension/ephy-web-extension.c:1045
 #, c-format
 msgid "manifest.json invalid"
-msgstr ""
+msgstr "El «manifest.json» no és vàlid"
 
 #: src/webextension/ephy-web-extension.c:1052
 #, c-format
 msgid "Only manifest_version 2 is supported"
-msgstr ""
+msgstr "Només hi ha compatibilitat amb manifest_version 2"
 
 #: src/webextension/ephy-web-extension.c:1069
 #, c-format
 msgid "Missing name or version"
-msgstr ""
+msgstr "Manca el nom o la versió"
 
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
-msgstr ""
+msgstr "No s'ha pogut determinar l'URI iniciador"
 
 #: src/window-commands.c:126
 msgid "GVDB File"
@@ -4644,10 +4597,8 @@ msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
 #: src/window-commands.c:729
-#, fuzzy
-#| msgid "GVDB File"
 msgid "CSV File"
-msgstr "Fitxer GVDB"
+msgstr "Fitxer CSV"
 
 #: src/window-commands.c:774 src/window-commands.c:800
 msgid "Passwords successfully imported!"
@@ -4658,10 +4609,8 @@ msgid "Import Passwords"
 msgstr "Importa les contrasenyes"
 
 #: src/window-commands.c:967
-#, fuzzy
-#| msgid "Passwords successfully imported!"
 msgid "Passwords successfully exported!"
-msgstr "S'han importat amb èxit les contrasenyes!"
+msgstr "S'han exportat amb èxit les contrasenyes!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
 #: src/window-commands.c:1016
@@ -4728,11 +4677,11 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2997
+#: src/window-commands.c:2983
 msgid "Enable Caret Browsing Mode?"
 msgstr "Habilita el mode de navegació amb el cursor?"
 
-#: src/window-commands.c:2998
+#: src/window-commands.c:2984
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4742,7 +4691,7 @@ msgstr ""
 "característica col·loca un cursor mòbil a les pàgines web que us permet "
 "moure's amb el vostre teclat. Voleu habilitar la navegació amb el cursor?"
 
-#: src/window-commands.c:3003
+#: src/window-commands.c:2989
 msgid "_Enable"
 msgstr "_Habilita"
 
