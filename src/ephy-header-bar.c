@@ -258,6 +258,7 @@ ephy_header_bar_constructed (GObject *object)
 
   /* Fullscreen restore button */
   header_bar->restore_button = gtk_button_new_from_icon_name ("view-restore-symbolic");
+  gtk_widget_set_tooltip_text (header_bar->restore_button, _("Exit Fullscreen"));
   gtk_widget_set_visible (header_bar->restore_button, FALSE);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (header_bar->restore_button),
                                   "win.fullscreen");
