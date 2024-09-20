@@ -27,20 +27,21 @@
 # Matheus Barbosa <mdpb.matheus@gmail.com>, 2022.
 # Leônidas Araújo <leorusvellt@hotmail.com>, 2022-2023.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2024.
+# Juliano de Souza Camargo <julianosc@pm.me>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-10 14:32+0000\n"
-"PO-Revision-Date: 2024-09-10 13:12-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
-"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
+"POT-Creation-Date: 2024-09-20 13:36+0000\n"
+"PO-Revision-Date: 2024-09-20 12:17-0300\n"
+"Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
+"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 46.1\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: pt_BR\n"
@@ -308,10 +309,10 @@ msgid ""
 "two or more tabs) and “never” (the tabs bar is never shown). This setting is "
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
-"Controla quando a barra de abas é mostrada. Valores possíveis são “always” "
-"(a barra de abas é sempre mostrada), “more-than-one” (a barra de abas é "
-"somente mostrada se existem duas ou mais abas) e “never” (a barra de abas "
-"nunca é mostrada). Essa configuração é ignorada no ambiente Patheon e o "
+"Controla quando a barra de abas é mostrada. Valores possíveis são "
+"“always” (a barra de abas é sempre mostrada), “more-than-one” (a barra de "
+"abas é somente mostrada se existem duas ou mais abas) e “never” (a barra de "
+"abas nunca é mostrada). Essa configuração é ignorada no ambiente Patheon e o "
 "valor “always” é usado."
 
 #: data/org.gnome.epiphany.gschema.xml:127
@@ -2978,15 +2979,15 @@ msgstr "_Negar"
 msgid "_Allow"
 msgstr "_Permitir"
 
-#: src/ephy-window.c:2968 src/ephy-window.c:4493
+#: src/ephy-window.c:2968 src/ephy-window.c:4495
 msgid "Leave Website?"
 msgstr "Sair do site?"
 
-#: src/ephy-window.c:2969 src/ephy-window.c:4494 src/window-commands.c:1400
+#: src/ephy-window.c:2969 src/ephy-window.c:4496 src/window-commands.c:1400
 msgid "A form was modified and has not been submitted"
 msgstr "Um formulário foi modificado e não foi enviado"
 
-#: src/ephy-window.c:2970 src/ephy-window.c:4495 src/window-commands.c:1404
+#: src/ephy-window.c:2970 src/ephy-window.c:4497 src/window-commands.c:1404
 msgid "_Discard Form"
 msgstr "_Descartar formulário"
 
@@ -3054,27 +3055,27 @@ msgid "Save"
 msgstr "Salvar"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4011 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4013 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Favoritos"
 
-#: src/ephy-window.c:4624
+#: src/ephy-window.c:4626
 msgid "Close Multiple Tabs?"
 msgstr "Fechar várias abas?"
 
-#: src/ephy-window.c:4625
+#: src/ephy-window.c:4627
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Se esta janela for fechada, todas as abas abertas serão perdidas"
 
-#: src/ephy-window.c:4626
+#: src/ephy-window.c:4628
 msgid "C_lose Tabs"
 msgstr "Fe_char abas"
 
-#: src/ephy-window.c:4719
+#: src/ephy-window.c:4721
 msgid "New tab opened"
 msgstr "Nova aba aberta"
 
-#: src/ephy-window.c:4723
+#: src/ephy-window.c:4725
 msgid "Switch"
 msgstr "Trocar"
 
@@ -3321,6 +3322,10 @@ msgstr "Página inicial"
 msgid "Autofill Data"
 msgstr "Preencher dados automaticamente"
 
+#: src/resources/gtk/autofill-view.ui:25
+msgid "Personal"
+msgstr "Pessoal"
+
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
 msgstr "Primeiro nome"
@@ -3333,6 +3338,10 @@ msgstr "Último nome"
 msgid "Full Name"
 msgstr "Nome completo"
 
+#: src/resources/gtk/autofill-view.ui:45
+msgid "Contact"
+msgstr "Contato"
+
 #: src/resources/gtk/autofill-view.ui:48
 msgid "User Name"
 msgstr "Nome de usuário"
@@ -3344,6 +3353,12 @@ msgstr "E-mail"
 #: src/resources/gtk/autofill-view.ui:58
 msgid "Phone"
 msgstr "Telefone"
+
+#: src/resources/gtk/autofill-view.ui:65
+#: src/resources/gtk/bookmark-properties.ui:29
+#: src/resources/gtk/search-engine-row.ui:46
+msgid "Address"
+msgstr "Endereço"
 
 #: src/resources/gtk/autofill-view.ui:68
 msgid "Street"
@@ -3369,6 +3384,10 @@ msgstr "Cidade"
 msgid "Country"
 msgstr "País"
 
+#: src/resources/gtk/autofill-view.ui:100
+msgid "Credit Card"
+msgstr "Cartão de crédito"
+
 #: src/resources/gtk/autofill-view.ui:103
 msgid "Type"
 msgstr "Tipo"
@@ -3389,11 +3408,6 @@ msgstr "Favorito"
 #: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
 msgstr "Nome"
-
-#: src/resources/gtk/bookmark-properties.ui:29
-#: src/resources/gtk/search-engine-row.ui:46
-msgid "Address"
-msgstr "Endereço"
 
 #: src/resources/gtk/bookmark-properties.ui:38
 #: src/resources/gtk/bookmark-properties.ui:71
