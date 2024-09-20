@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-10 14:32+0000\n"
-"PO-Revision-Date: 2024-09-10 21:06+0300\n"
+"POT-Creation-Date: 2024-09-20 13:36+0000\n"
+"PO-Revision-Date: 2024-09-20 21:58+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2650,7 +2650,6 @@ msgstr "Сайти, на яких знайдено цей засіб стеже�
 
 #: src/ephy-privacy-report.c:250
 #, c-format
-#| msgid "GNOME Web prevented %u trackers from following you across websites"
 msgid "GNOME Web prevented %u tracker from following you across websites"
 msgid_plural ""
 "GNOME Web prevented %u trackers from following you across websites"
@@ -2917,15 +2916,15 @@ msgstr "Від_мовити"
 msgid "_Allow"
 msgstr "_Дозволити"
 
-#: src/ephy-window.c:2968 src/ephy-window.c:4493
+#: src/ephy-window.c:2968 src/ephy-window.c:4495
 msgid "Leave Website?"
 msgstr "Полишити сайт?"
 
-#: src/ephy-window.c:2969 src/ephy-window.c:4494 src/window-commands.c:1400
+#: src/ephy-window.c:2969 src/ephy-window.c:4496 src/window-commands.c:1400
 msgid "A form was modified and has not been submitted"
 msgstr "До форми було внесено зміни, які не було надіслано"
 
-#: src/ephy-window.c:2970 src/ephy-window.c:4495 src/window-commands.c:1404
+#: src/ephy-window.c:2970 src/ephy-window.c:4497 src/window-commands.c:1404
 msgid "_Discard Form"
 msgstr "_Відхилити форму"
 
@@ -2996,27 +2995,27 @@ msgid "Save"
 msgstr "Зберегти"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4011 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4013 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: src/ephy-window.c:4624
+#: src/ephy-window.c:4626
 msgid "Close Multiple Tabs?"
 msgstr "Закрити декілька вкладок?"
 
-#: src/ephy-window.c:4625
+#: src/ephy-window.c:4627
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Якщо закриєте це вікно, всі відкриті вкладки буде втрачено"
 
-#: src/ephy-window.c:4626
+#: src/ephy-window.c:4628
 msgid "C_lose Tabs"
 msgstr "_Закрити вкладки"
 
-#: src/ephy-window.c:4719
+#: src/ephy-window.c:4721
 msgid "New tab opened"
 msgstr "Відкрито нову вкладку"
 
-#: src/ephy-window.c:4723
+#: src/ephy-window.c:4725
 msgid "Switch"
 msgstr "Перемкнутися"
 
@@ -3266,6 +3265,11 @@ msgstr "Домівка"
 msgid "Autofill Data"
 msgstr "Автоматичне заповнення даних"
 
+#: src/resources/gtk/autofill-view.ui:25
+#| msgid "Personal Data"
+msgid "Personal"
+msgstr "Особисте"
+
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
 msgstr "Ім'я"
@@ -3278,6 +3282,10 @@ msgstr "Прізвище"
 msgid "Full Name"
 msgstr "Ім'я повністю"
 
+#: src/resources/gtk/autofill-view.ui:45
+msgid "Contact"
+msgstr "Контакт"
+
 #: src/resources/gtk/autofill-view.ui:48
 msgid "User Name"
 msgstr "Користувач"
@@ -3289,6 +3297,12 @@ msgstr "Ел. пошта"
 #: src/resources/gtk/autofill-view.ui:58
 msgid "Phone"
 msgstr "Телефон"
+
+#: src/resources/gtk/autofill-view.ui:65
+#: src/resources/gtk/bookmark-properties.ui:29
+#: src/resources/gtk/search-engine-row.ui:46
+msgid "Address"
+msgstr "Адреса"
 
 #: src/resources/gtk/autofill-view.ui:68
 msgid "Street"
@@ -3314,6 +3328,10 @@ msgstr "Місто"
 msgid "Country"
 msgstr "Країна"
 
+#: src/resources/gtk/autofill-view.ui:100
+msgid "Credit Card"
+msgstr "Кредитна картка"
+
 #: src/resources/gtk/autofill-view.ui:103
 msgid "Type"
 msgstr "Тип"
@@ -3334,11 +3352,6 @@ msgstr "Закладка"
 #: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
 msgstr "Назва"
-
-#: src/resources/gtk/bookmark-properties.ui:29
-#: src/resources/gtk/search-engine-row.ui:46
-msgid "Address"
-msgstr "Адреса"
 
 #: src/resources/gtk/bookmark-properties.ui:38
 #: src/resources/gtk/bookmark-properties.ui:71
