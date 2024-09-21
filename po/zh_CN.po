@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-10 14:32+0000\n"
-"PO-Revision-Date: 2024-09-11 19:06+0800\n"
+"POT-Creation-Date: 2024-09-21 06:29+0000\n"
+"PO-Revision-Date: 2024-09-21 19:51+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -37,7 +37,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1227
+#: src/ephy-main.c:419 src/window-commands.c:1302
 msgid "Web"
 msgstr "浏览器"
 
@@ -61,7 +61,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "人们一般用 GNOME 浏览器的代号将其称为 Epiphany。"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1237
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1312
 msgid "The GNOME Project"
 msgstr "GNOME 项目"
 
@@ -941,7 +941,7 @@ msgstr "版本 %s"
 msgid "About Web"
 msgstr "关于浏览器"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1229
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1304
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany 技术预览"
 
@@ -1015,51 +1015,51 @@ msgstr ""
 "无痕模式不能在工作中对雇主隐藏您的活动。您的互联网服务提供商、政府或其他政府"
 "机构，您访问的网站，以及广告提供商依然可以追踪您。"
 
-#: embed/ephy-client-certificate-manager.c:292
+#: embed/ephy-client-certificate-manager.c:294
 msgid "PIN required"
 msgstr "需要 PIN 码"
 
-#: embed/ephy-client-certificate-manager.c:295
+#: embed/ephy-client-certificate-manager.c:297
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "请输入PIN码进行 %s，以便在 %s:%d 进行身份验证。"
 
-#: embed/ephy-client-certificate-manager.c:303
-#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:768
+#: embed/ephy-client-certificate-manager.c:305
+#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:768
 #: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
 #: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:339
-#: src/window-commands.c:592 src/window-commands.c:903
-#: src/window-commands.c:1403 src/window-commands.c:2088
-#: src/window-commands.c:2988
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:355
+#: src/window-commands.c:612 src/window-commands.c:962
+#: src/window-commands.c:1478 src/window-commands.c:2163
+#: src/window-commands.c:3063
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: embed/ephy-client-certificate-manager.c:304
+#: embed/ephy-client-certificate-manager.c:306
 msgid "_Login"
 msgstr "登录(_L)"
 
-#: embed/ephy-client-certificate-manager.c:374
+#: embed/ephy-client-certificate-manager.c:388
 msgid "Select certificate"
 msgstr "选择证书"
 
-#: embed/ephy-client-certificate-manager.c:377
+#: embed/ephy-client-certificate-manager.c:391
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr "网站 %s:%d 要求您提供用于%s身份验证的证书。"
 
-#: embed/ephy-client-certificate-manager.c:382
+#: embed/ephy-client-certificate-manager.c:396
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "网站 %s:%d 要求您提供用于身份验证的证书。"
 
-#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:343
+#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:359
 msgid "_Select"
 msgstr "选中(_S)"
 
@@ -2325,11 +2325,15 @@ msgstr[0] "%u 分钟"
 msgid "Reload the current page"
 msgstr "重载当前页面"
 
-#: src/ephy-header-bar.c:271
+#: src/ephy-header-bar.c:261
+msgid "Exit Fullscreen"
+msgstr "退出全屏"
+
+#: src/ephy-header-bar.c:272
 msgid "Main Menu"
 msgstr "主菜单"
 
-#: src/ephy-header-bar.c:451
+#: src/ephy-header-bar.c:452
 msgid "Stop loading the current page"
 msgstr "停止加载当前页面"
 
@@ -2777,15 +2781,15 @@ msgstr "拒绝(_D)"
 msgid "_Allow"
 msgstr "允许(_A)"
 
-#: src/ephy-window.c:2968 src/ephy-window.c:4493
+#: src/ephy-window.c:2968 src/ephy-window.c:4495
 msgid "Leave Website?"
 msgstr "离开网站？"
 
-#: src/ephy-window.c:2969 src/ephy-window.c:4494 src/window-commands.c:1400
+#: src/ephy-window.c:2969 src/ephy-window.c:4496 src/window-commands.c:1475
 msgid "A form was modified and has not been submitted"
 msgstr "一个表格已被修改，但还没有提交"
 
-#: src/ephy-window.c:2970 src/ephy-window.c:4495 src/window-commands.c:1404
+#: src/ephy-window.c:2970 src/ephy-window.c:4497 src/window-commands.c:1479
 msgid "_Discard Form"
 msgstr "丢弃表单(_D)"
 
@@ -2850,27 +2854,27 @@ msgid "Save"
 msgstr "保存"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4011 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4013 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "书签"
 
-#: src/ephy-window.c:4624
+#: src/ephy-window.c:4626
 msgid "Close Multiple Tabs?"
 msgstr "关闭多个标签页？"
 
-#: src/ephy-window.c:4625
+#: src/ephy-window.c:4627
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "如果你关闭该窗口，所有其中的标签页都将被关闭"
 
-#: src/ephy-window.c:4626
+#: src/ephy-window.c:4628
 msgid "C_lose Tabs"
 msgstr "关闭多个标签页(_L)"
 
-#: src/ephy-window.c:4719
+#: src/ephy-window.c:4721
 msgid "New tab opened"
 msgstr "打开的新标签页"
 
-#: src/ephy-window.c:4723
+#: src/ephy-window.c:4725
 msgid "Switch"
 msgstr "开关"
 
@@ -3111,6 +3115,10 @@ msgstr "主页"
 msgid "Autofill Data"
 msgstr "自动填充数据"
 
+#: src/resources/gtk/autofill-view.ui:25
+msgid "Personal"
+msgstr "个人"
+
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
 msgstr "名字"
@@ -3123,6 +3131,10 @@ msgstr "姓氏"
 msgid "Full Name"
 msgstr "全名"
 
+#: src/resources/gtk/autofill-view.ui:45
+msgid "Contact"
+msgstr "联系方式"
+
 #: src/resources/gtk/autofill-view.ui:48
 msgid "User Name"
 msgstr "用户名"
@@ -3134,6 +3146,12 @@ msgstr "电子邮箱"
 #: src/resources/gtk/autofill-view.ui:58
 msgid "Phone"
 msgstr "电话"
+
+#: src/resources/gtk/autofill-view.ui:65
+#: src/resources/gtk/bookmark-properties.ui:29
+#: src/resources/gtk/search-engine-row.ui:46
+msgid "Address"
+msgstr "地址"
 
 #: src/resources/gtk/autofill-view.ui:68
 msgid "Street"
@@ -3159,6 +3177,10 @@ msgstr "城市"
 msgid "Country"
 msgstr "国家"
 
+#: src/resources/gtk/autofill-view.ui:100
+msgid "Credit Card"
+msgstr "信用卡"
+
 #: src/resources/gtk/autofill-view.ui:103
 msgid "Type"
 msgstr "类型"
@@ -3179,11 +3201,6 @@ msgstr "书签"
 #: src/resources/gtk/search-engine-row.ui:26
 msgid "Name"
 msgstr "名称"
-
-#: src/resources/gtk/bookmark-properties.ui:29
-#: src/resources/gtk/search-engine-row.ui:46
-msgid "Address"
-msgstr "地址"
 
 #: src/resources/gtk/bookmark-properties.ui:38
 #: src/resources/gtk/bookmark-properties.ui:71
@@ -3465,7 +3482,7 @@ msgstr "关于右侧的标签页(_R)"
 msgid "Close _Other Tabs"
 msgstr "关闭其他标签页(_O)"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:270
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:286
 msgid "_Close"
 msgstr "关闭(_C)"
 
@@ -3810,8 +3827,12 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "智能跟踪预防(_T)"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
-msgid "Allow websites to store cookies, databases, and local storage data"
-msgstr "允许网站存储 Cookie、数据库和本地存储数据"
+msgid ""
+"Allow websites to store cookies, databases, and local storage data. "
+"Disabling website data storage will break many websites."
+msgstr ""
+"允许网站存储 Cookie、数据库和本地存储数据。禁用网站数据存储将使许多网站工作不"
+"正常。"
 
 #: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "_Website Data Storage"
@@ -4326,93 +4347,89 @@ msgid "Failed to determine initiating URI"
 msgstr "确定启动 URI 失败"
 
 #: src/window-commands.c:126
-msgid "GVDB File"
-msgstr "GVDB 文件"
-
-#: src/window-commands.c:127
 msgid "HTML File"
 msgstr "HTML 文件"
 
-#: src/window-commands.c:128
+#: src/window-commands.c:127
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:129 src/window-commands.c:730
+#: src/window-commands.c:128 src/window-commands.c:766
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:130 src/window-commands.c:731
+#: src/window-commands.c:129 src/window-commands.c:767
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:145 src/window-commands.c:596
-#: src/window-commands.c:865 src/window-commands.c:907
+#: src/window-commands.c:161 src/window-commands.c:616
+#: src/window-commands.c:927 src/window-commands.c:966
 msgid "Ch_oose File"
 msgstr "选择文件(_O)"
 
-#: src/window-commands.c:147 src/window-commands.c:867
+#: src/window-commands.c:163 src/window-commands.c:929
 msgid "I_mport"
 msgstr "导入(_M)"
 
-#: src/window-commands.c:307 src/window-commands.c:397
-#: src/window-commands.c:447 src/window-commands.c:491
-#: src/window-commands.c:514 src/window-commands.c:530
+#: src/window-commands.c:323 src/window-commands.c:413
+#: src/window-commands.c:463 src/window-commands.c:507
+#: src/window-commands.c:530 src/window-commands.c:546
 msgid "Bookmarks successfully imported!"
 msgstr "成功导入书签！"
 
-#: src/window-commands.c:326
+#: src/window-commands.c:342
 msgid "Select Profile"
 msgstr "选择档案"
 
-#: src/window-commands.c:408 src/window-commands.c:458
-#: src/window-commands.c:688 src/window-commands.c:811
-#: src/window-commands.c:1006
+#: src/window-commands.c:424 src/window-commands.c:474
+#: src/window-commands.c:724 src/window-commands.c:864
+#: src/window-commands.c:1081
 msgid "Choose File"
 msgstr "选择文件"
 
-#: src/window-commands.c:579
+#: src/window-commands.c:599
 msgid "Import Bookmarks"
 msgstr "导入书签"
 
-#: src/window-commands.c:609 src/window-commands.c:920
+#: src/window-commands.c:629 src/window-commands.c:979
 msgid "From:"
 msgstr "从："
 
-#: src/window-commands.c:649
+#: src/window-commands.c:685
 msgid "Bookmarks successfully exported!"
 msgstr "成功导出书签！"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:699
+#: src/window-commands.c:735
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
-#: src/window-commands.c:729
+#: src/window-commands.c:765
 msgid "CSV File"
 msgstr "CSV 文件"
 
-#: src/window-commands.c:774 src/window-commands.c:800
+#: src/window-commands.c:827 src/window-commands.c:853
 msgid "Passwords successfully imported!"
 msgstr "成功导入密码数据！"
 
-#: src/window-commands.c:891
+#: src/window-commands.c:950
 msgid "Import Passwords"
 msgstr "导入密码"
 
-#: src/window-commands.c:967
+#: src/window-commands.c:1042
 msgid "Passwords successfully exported!"
 msgstr "成功导出密码数据！"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1016
+#: src/window-commands.c:1091
 msgid "passwords.csv"
 msgstr "密码.csv"
 
-#: src/window-commands.c:1224
+#: src/window-commands.c:1299
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1247
+#: src/window-commands.c:1322
 msgid "translator-credits"
 msgstr ""
 "Funda Wang <fundawang@linux.net.cn>, 2003, 2006\n"
@@ -4432,56 +4449,56 @@ msgstr ""
 "Nanling <neithern@outlook.com>,2023\n"
 "Eni <enigma@petalmail.com>,2023"
 
-#: src/window-commands.c:1399
+#: src/window-commands.c:1474
 msgid "Reload Website?"
 msgstr "重新加载网站？"
 
-#: src/window-commands.c:2002
+#: src/window-commands.c:2077
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "应用程序“%s”已就绪"
 
-#: src/window-commands.c:2005
+#: src/window-commands.c:2080
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "无法创建应用程序“%s”：%s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2015
+#: src/window-commands.c:2090
 msgid "Launch"
 msgstr "启动"
 
-#: src/window-commands.c:2081
+#: src/window-commands.c:2156
 msgid "Replace Existing Web App?"
 msgstr "替换现有的网页应用？"
 
-#: src/window-commands.c:2084
+#: src/window-commands.c:2159
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "一个名为 %s 的应用程序已经存在，替换它将覆盖它"
 
-#: src/window-commands.c:2089
+#: src/window-commands.c:2164
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: src/window-commands.c:2474
+#: src/window-commands.c:2549
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2478
+#: src/window-commands.c:2553
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2524
+#: src/window-commands.c:2599
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2983
+#: src/window-commands.c:3058
 msgid "Enable Caret Browsing Mode?"
 msgstr "启用光标导航吗？"
 
-#: src/window-commands.c:2984
+#: src/window-commands.c:3059
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4490,9 +4507,15 @@ msgstr ""
 "按 F7 键可以启用或停用光标导航功能。此功能在网页中放置一个可移动光标，从而允"
 "许您使用键盘在页面内导航。您是否要启用光标导航？"
 
-#: src/window-commands.c:2989
+#: src/window-commands.c:3064
 msgid "_Enable"
 msgstr "启用(_E)"
+
+#~ msgid "Allow websites to store cookies, databases, and local storage data"
+#~ msgstr "允许网站存储 Cookie、数据库和本地存储数据"
+
+#~ msgid "GVDB File"
+#~ msgstr "GVDB 文件"
 
 #~ msgid "Bookmark Properties"
 #~ msgstr "书签属性"
@@ -5175,9 +5198,6 @@ msgstr "启用(_E)"
 
 #~ msgid "Current maintainers:"
 #~ msgstr "当前维护者："
-
-#~ msgid "Contact us at:"
-#~ msgstr "联系我们："
 
 #~ msgid "Past maintainers:"
 #~ msgstr "前维护者："
