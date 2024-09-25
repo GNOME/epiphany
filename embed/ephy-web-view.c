@@ -1231,15 +1231,6 @@ update_ucm_ads_state (WebKitWebView *web_view,
 }
 
 static void
-reset_background_color (WebKitWebView *web_view)
-{
-  GdkRGBA white = { 1.0, 1.0, 1.0, 1.0 };
-
-  /* https://bugs.webkit.org/show_bug.cgi?id=206953#c2 */
-  webkit_web_view_set_background_color (web_view, &white);
-}
-
-static void
 tls_error_page_message_received_cb (WebKitUserContentManager *manager,
                                     JSCValue                 *message,
                                     EphyWebView              *view)
@@ -1517,13 +1508,6 @@ load_changed_cb (WebKitWebView   *web_view,
 
       /* Zoom level. */
       restore_zoom_level (view, uri);
-
-      /* We have to reset the background color here because we set a
-       * nonwhite background in constructed.
-       */
-      if (!g_str_has_prefix (uri, EPHY_ABOUT_SCHEME))
-        reset_background_color (web_view);
-
       break;
     }
     case WEBKIT_LOAD_FINISHED:
@@ -3787,7 +3771,6 @@ ephy_web_view_constructed (GObject *object)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (web_view));
   g_auto (GStrv) cors_allowlist = NULL;
-  GdkRGBA color = { }; /* transparent */
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
 
@@ -3802,17 +3785,6 @@ ephy_web_view_constructed (GObject *object)
                     G_CALLBACK (process_terminated_cb), NULL);
   g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
                             "changed", G_CALLBACK (update_navigation_flags), web_view);
-
-  /* Avoid flashing a white background when loading the overview in dark mode by
-   * setting the web view background color to transparent. This is useful even
-   * in light mode because our about.css hardcodes the page background color to
-   * match what libadwaita uses, so it avoids flashing a slightly different
-   * background color. Assuming we keep the colors in about.css updated to match
-   * libadwaita, that is.
-   *
-   * Note that we have to later reset this before loading any non-Epiphany page.
-   */
-  webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (web_view), &color);
 
   cors_allowlist = g_new (char *, 2);
   cors_allowlist[0] = g_strdup ("ephy-resource://*/*");
