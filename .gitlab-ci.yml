@@ -46,8 +46,6 @@ build.container.fedora@x86_64:
       colordiff
       diffutils
       uncrustify
-  rules:
-    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 check-code-style:
   extends:
