@@ -369,7 +369,6 @@ ephy_password_import_from_csv (EphyPasswordManager  *manager,
 
     const char *url = NULL;
     g_autofree char *secure_origin = NULL;
-    const char *secure_target_origin = NULL;
     const char *username = NULL;
     const char *decrypted_password = NULL;
 
@@ -393,7 +392,6 @@ ephy_password_import_from_csv (EphyPasswordManager  *manager,
 
       if (g_strcmp0 (field_name, "url") == 0) {
         url = field_value;
-        secure_target_origin = field_value;
       } else if (g_strcmp0 (field_name, "username") == 0) {
         username = field_value;
       } else if (g_strcmp0 (field_name, "password") == 0) {
@@ -414,14 +412,14 @@ ephy_password_import_from_csv (EphyPasswordManager  *manager,
 
     exists = ephy_password_manager_find (manager,
                                          secure_origin,
-                                         secure_target_origin,
+                                         secure_origin,
                                          username,
                                          NULL,
                                          NULL);
 
     ephy_password_manager_save (manager,
                                 secure_origin,
-                                secure_target_origin,
+                                secure_origin,
                                 username,
                                 decrypted_password,
                                 NULL,
