@@ -1285,7 +1285,7 @@ ephy_shell_get_history_dialog (EphyShell *shell)
     service = ephy_embed_shell_get_global_history_service (embed_shell);
     shell->history_dialog = ephy_history_dialog_new (service);
     g_signal_connect (shell->history_dialog,
-                      "destroy",
+                      "closed",
                       G_CALLBACK (window_destroyed),
                       &shell->history_dialog);
   }
@@ -1324,7 +1324,7 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
     shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
 
     g_signal_connect (shell->prefs_dialog,
-                      "destroy",
+                      "closed",
                       G_CALLBACK (window_destroyed),
                       &shell->prefs_dialog);
   }

@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "ephy-window.h"
+
 #include <adwaita.h>
 
 G_BEGIN_DECLS
@@ -29,6 +31,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, EPHY, PREFS_DIALOG, AdwPreferencesDialog)
 
-void ephy_prefs_dialog_show_clear_data_view (EphyPrefsDialog *prefs_dialog);
+EphyWindow *ephy_prefs_dialog_get_parent_window (EphyPrefsDialog *prefs_dialog);
+void        ephy_prefs_dialog_set_parent_window (EphyPrefsDialog *prefs_dialog,
+                                                 EphyWindow      *window);
+
+void        ephy_prefs_dialog_show_clear_data_view (EphyPrefsDialog *prefs_dialog);
 
 G_END_DECLS

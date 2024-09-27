@@ -78,6 +78,7 @@ struct _EphyHistoryDialog {
   GList *urls;
   guint sorter_source;
 
+  EphyWindow *parent_window;
   gint num_fetch;
   gboolean shift_modifier_active;
   gboolean is_loading;
@@ -209,6 +210,19 @@ set_selection_active (EphyHistoryDialog *self,
   }
 
   update_ui_state (self);
+}
+
+EphyWindow *
+ephy_history_dialog_get_parent_window (EphyHistoryDialog *self)
+{
+  return self->parent_window;
+}
+
+void
+ephy_history_dialog_set_parent_window (EphyHistoryDialog *self,
+                                       EphyWindow        *window)
+{
+  self->parent_window = window;
 }
 
 static void

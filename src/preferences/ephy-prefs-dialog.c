@@ -42,6 +42,8 @@ struct _EphyPrefsDialog {
 
   PrefsGeneralPage *general_page;
   GtkWidget *extensions_page;
+
+  EphyWindow *parent_window;
 };
 
 G_DEFINE_FINAL_TYPE (EphyPrefsDialog, ephy_prefs_dialog, ADW_TYPE_PREFERENCES_DIALOG)
@@ -57,6 +59,19 @@ on_closed (EphyPrefsDialog *prefs_dialog)
   ephy_search_engine_manager_save_to_settings (ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ()));
 
   return GDK_EVENT_PROPAGATE;
+}
+
+EphyWindow *
+ephy_prefs_dialog_get_parent_window (EphyPrefsDialog *prefs_dialog)
+{
+  return prefs_dialog->parent_window;
+}
+
+void
+ephy_prefs_dialog_set_parent_window (EphyPrefsDialog *prefs_dialog,
+                                     EphyWindow      *window)
+{
+  prefs_dialog->parent_window = window;
 }
 
 void

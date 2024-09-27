@@ -23,6 +23,7 @@
 #include <adwaita.h>
 
 #include "ephy-history-service.h"
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 
@@ -30,6 +31,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, EPHY, HISTORY_DIALOG, AdwDialog)
 
-GtkWidget      *ephy_history_dialog_new        (EphyHistoryService *history_service);
+EphyWindow     *ephy_history_dialog_get_parent_window (EphyHistoryDialog  *self);
+void            ephy_history_dialog_set_parent_window (EphyHistoryDialog  *self,
+                                                       EphyWindow         *window);
+
+GtkWidget      *ephy_history_dialog_new               (EphyHistoryService *history_service);
 
 G_END_DECLS
