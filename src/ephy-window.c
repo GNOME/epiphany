@@ -1216,7 +1216,6 @@ sync_tab_bookmarked_status (EphyWebView *view,
 
   if (!address ||
       ephy_embed_utils_is_no_show_address (address) ||
-      mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
       mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     state = EPHY_BOOKMARK_ICON_HIDDEN;
   } else {
@@ -4079,16 +4078,6 @@ ephy_window_constructed (GObject *object)
                                             SENS_FLAG_CHROME, TRUE);
     }
     chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR | EPHY_WINDOW_CHROME_BOOKMARKS);
-  } else if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-    action_group = ephy_window_get_action_group (window, "win");
-    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark-page");
-    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
-                                          SENS_FLAG_CHROME, TRUE);
-
-    action_group = ephy_window_get_action_group (window, "popup");
-    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
-    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
-                                          SENS_FLAG_CHROME, TRUE);
   } else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     g_object_set (window->location_controller, "editable", FALSE, NULL);
   }
