@@ -1525,7 +1525,8 @@ load_changed_cb (WebKitWebView   *web_view,
       }
 
       if (!ephy_web_view_is_history_frozen (view) &&
-          ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+          ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO &&
+          ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
         /* FIXME: The 1s delay is a workaround to allow time to render the page and get a favicon.
          * https://bugzilla.gnome.org/show_bug.cgi?id=761065
          * https://bugs.webkit.org/show_bug.cgi?id=164180
