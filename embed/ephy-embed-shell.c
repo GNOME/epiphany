@@ -1368,13 +1368,16 @@ ephy_embed_shell_unregister_ucm (EphyEmbedShell           *shell,
                                                                  "overview",
                                                                  priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
-                                                                 "passwordManagerRequestSave",
-                                                                 priv->guid);
-  webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordFormFocused",
                                                                  priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordManagerSave",
+                                                                 priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler (ucm,
+                                                                 "passwordManagerRequestSave",
+                                                                 priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler (ucm,
+                                                                 "autofillAskUser",
                                                                  priv->guid);
 }
 
