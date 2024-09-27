@@ -1029,11 +1029,19 @@ window_cmd_show_history (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)
 {
-  AdwDialog *dialog;
+  EphyHistoryDialog *dialog;
 
-  dialog = ADW_DIALOG (ephy_shell_get_history_dialog (ephy_shell_get_default ()));
+  user_data = EPHY_WINDOW (user_data);
 
-  adw_dialog_present (dialog, user_data);
+  dialog = EPHY_HISTORY_DIALOG (ephy_shell_get_history_dialog (ephy_shell_get_default ()));
+  if (ephy_history_dialog_get_parent_window (dialog) != user_data &&
+      ephy_history_dialog_get_parent_window (dialog) != NULL) {
+    adw_dialog_force_close (ADW_DIALOG (dialog));
+    dialog = EPHY_HISTORY_DIALOG (ephy_shell_get_history_dialog (ephy_shell_get_default ()));
+  }
+
+  adw_dialog_present (ADW_DIALOG (dialog), user_data);
+  ephy_history_dialog_set_parent_window (dialog, user_data);
 }
 
 void
@@ -1058,9 +1066,17 @@ window_cmd_show_clear_data_view (GSimpleAction *action,
 {
   EphyPrefsDialog *dialog;
 
+  user_data = EPHY_WINDOW (user_data);
+
   dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  if (ephy_prefs_dialog_get_parent_window (dialog) != user_data &&
+      ephy_prefs_dialog_get_parent_window (dialog) != NULL) {
+    adw_dialog_force_close (ADW_DIALOG (dialog));
+    dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  }
 
   adw_dialog_present (ADW_DIALOG (dialog), user_data);
+  ephy_prefs_dialog_set_parent_window (dialog, user_data);
 
   ephy_prefs_dialog_show_clear_data_view (dialog);
 }
@@ -1070,11 +1086,19 @@ window_cmd_show_preferences (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
-  AdwDialog *dialog;
+  EphyPrefsDialog *dialog;
 
-  dialog = ADW_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  user_data = EPHY_WINDOW (user_data);
 
-  adw_dialog_present (dialog, user_data);
+  dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  if (ephy_prefs_dialog_get_parent_window (dialog) != user_data &&
+      ephy_prefs_dialog_get_parent_window (dialog) != NULL) {
+    adw_dialog_force_close (ADW_DIALOG (dialog));
+    dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  }
+
+  adw_dialog_present (ADW_DIALOG (dialog), user_data);
+  ephy_prefs_dialog_set_parent_window (dialog, user_data);
 }
 
 static void
