@@ -42,6 +42,11 @@ typedef enum
   EPHY_FILE_HELPERS_TESTING_MODE     = 1 << 5
 } EphyFileHelpersFlags;
 
+typedef enum {
+  EPHY_FILE_LAUNCH_URI_HANDLER_FILE,
+  EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY
+} EphyFileLaunchUriHandlerType;
+
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
                                                              EphyFileHelpersFlags   flags,
                                                              GError               **error);
@@ -62,9 +67,10 @@ char       *       ephy_file_tmp_filename                   (const char         
                                                              const char            *extension);
 gboolean           ephy_ensure_dir_exists                   (const char            *dir,
                                                              GError               **error);
-gboolean           ephy_file_launch_uri_handler             (GFile                 *file,
-                                                             const char            *mime_type,
-                                                             GdkDisplay            *display);
+gboolean           ephy_file_launch_uri_handler             (GFile                         *file,
+                                                             const char                    *mime_type,
+                                                             GdkDisplay                    *display,
+                                                             EphyFileLaunchUriHandlerType   type);
 gboolean           ephy_file_delete_dir_recursively         (const char            *directory,
                                                              GError               **error);
 char       *       ephy_sanitize_filename                   (char                  *filename);

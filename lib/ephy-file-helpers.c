@@ -612,9 +612,10 @@ launch_application (GAppInfo   *app,
  * Returns: %TRUE on success
  **/
 gboolean
-ephy_file_launch_uri_handler (GFile      *file,
-                              const char *mime_type,
-                              GdkDisplay *display)
+ephy_file_launch_uri_handler (GFile                        *file,
+                              const char                   *mime_type,
+                              GdkDisplay                   *display,
+                              EphyFileLaunchUriHandlerType  type)
 {
   g_autoptr (GAppInfo) app = NULL;
   g_autoptr (GList) list = NULL;
@@ -630,7 +631,11 @@ ephy_file_launch_uri_handler (GFile      *file,
    */
   if (ephy_is_running_inside_sandbox ()) {
     g_autofree char *uri = g_file_get_uri (file);
-    ephy_open_uri_via_flatpak_portal (uri);
+    if (type == EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY) {
+      ephy_open_directory_via_flatpak_portal (uri);
+    } else {
+      ephy_open_uri_via_flatpak_portal (uri);
+    }
     return TRUE;
   }
 
@@ -656,7 +661,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
                                        GdkDisplay *display)
 {
   g_autoptr (GFile) file = g_file_new_for_uri (uri);
-  return ephy_file_launch_uri_handler (file, "x-scheme-handler/http", display);
+  return ephy_file_launch_uri_handler (file, "x-scheme-handler/http", display, EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
 }
 
 /**
@@ -674,7 +679,7 @@ gboolean
 ephy_file_browse_to (GFile      *file,
                      GdkDisplay *display)
 {
-  return ephy_file_launch_uri_handler (file, "inode/directory", display);
+  return ephy_file_launch_uri_handler (file, "inode/directory", display, EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY);
 }
 
 /**
