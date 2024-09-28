@@ -742,7 +742,7 @@ js_query_password (const char              *origin,
   WebKitUserMessage *message;
   PasswordManagerQueryData *data;
 
-  if (!origin || !target_origin || !password_field)
+  if (!origin || !target_origin)
     return;
 
   web_page = webkit_web_process_extension_get_page (extension->extension, page_id);
@@ -754,7 +754,7 @@ js_query_password (const char              *origin,
   data->promise_id = promise_id;
   data->frame_id = frame_id;
   message = webkit_user_message_new ("PasswordManager.QueryPassword",
-                                     g_variant_new ("(ssmsmss)", origin, target_origin, username, username_field, password_field));
+                                     g_variant_new ("(ssmsmsms)", origin, target_origin, username, username_field, password_field));
   webkit_web_page_send_message_to_view (web_page, message,
                                         extension->cancellable,
                                         (GAsyncReadyCallback)web_view_query_password_ready_cb,

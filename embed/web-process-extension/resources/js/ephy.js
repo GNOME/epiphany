@@ -579,23 +579,26 @@ Ephy.FormManager = class FormManager
             formAuth.usernameField,
             formAuth.passwordField).then(authInfo => {
                 if (!authInfo) {
-                    Ephy.log('No result');
+                    Ephy.log('No passwords found for user ' + formAuth.username + ' at origin ' + formAuth.origin);
+                    Ephy.log('Retrying password search with username and password fields as null');
+                    Ephy.passwordManager.query(
+                        formAuth.origin,
+                        formAuth.targetOrigin,
+                        formAuth.username,
+                        null,
+                        null).then(authInfo => {
+                            if (!authInfo) {
+                                Ephy.log('No passwords found for user ' + formAuth.username + ' at origin ' + formAuth.origin);
+                                return;
+                            }
+
+                            this.#handlePasswordQuerySuccessResponse(formAuth, authInfo);
+                        }
+                    );
                     return;
                 }
 
-                Ephy.log('Found: user ' + authInfo.username + ' pass (hidden)');
-
-                if (formAuth.usernameNode && authInfo.username) {
-                    this.#elementBeingAutoFilled = formAuth.usernameNode;
-                    Ephy.autoFill(formAuth.usernameNode, authInfo.username);
-                    this.#elementBeingAutoFilled = null;
-                }
-
-                if (authInfo.password) {
-                    this.#elementBeingAutoFilled = formAuth.passwordNode;
-                    Ephy.autoFill(formAuth.passwordNode, authInfo.password);
-                    this.#elementBeingAutoFilled = null;
-                }
+                this.#handlePasswordQuerySuccessResponse(formAuth, authInfo);
             }
         );
     }
@@ -868,6 +871,22 @@ Ephy.FormManager = class FormManager
             return null;
 
         return formAuth;
+    }
+
+    #handlePasswordQuerySuccessResponse(formAuth, authInfo) {
+        Ephy.log('Recieved success on password query for user ' + authInfo.username + ' with password (hidden)');
+
+        if (formAuth.usernameNode && authInfo.username) {
+            this.#elementBeingAutoFilled = formAuth.usernameNode;
+            Ephy.autoFill(formAuth.usernameNode, authInfo.username);
+            this.#elementBeingAutoFilled = null;
+        }
+
+        if (authInfo.password) {
+            this.#elementBeingAutoFilled = formAuth.passwordNode;
+            Ephy.autoFill(formAuth.passwordNode, authInfo.password);
+            this.#elementBeingAutoFilled = null;
+        }
     }
 };
 

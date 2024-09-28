@@ -2507,7 +2507,7 @@ password_manager_query_finished_cb (GList               *records,
     password = ephy_password_record_get_password (record);
   }
 
-  g_variant_get (webkit_user_message_get_parameters (data->message), "(&s@sm@sm@s@s)", &origin, NULL, NULL, NULL, NULL);
+  g_variant_get (webkit_user_message_get_parameters (data->message), "(&s@sm@sm@sm@s)", &origin, NULL, NULL, NULL, NULL);
   real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (data->web_view));
   if (g_strcmp0 (real_origin, origin) != 0) {
     g_debug ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
@@ -2572,7 +2572,7 @@ password_manager_handle_query_password_message (WebKitWebView     *web_view,
   if (!parameters)
     return FALSE;
 
-  g_variant_get (parameters, "(&s&sm&sm&s&s)", &origin, &target_origin, &username, &username_field, &password_field);
+  g_variant_get (parameters, "(&s&sm&sm&sm&s)", &origin, &target_origin, &username, &username_field, &password_field);
 
   /* Don't include username_field in queries unless we actually have a username
    * to go along with it, or the query will fail because we don't save
