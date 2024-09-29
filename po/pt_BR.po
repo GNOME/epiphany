@@ -33,10 +33,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-20 13:36+0000\n"
+"POT-Creation-Date: 2024-09-25 19:03+0000\n"
 "PO-Revision-Date: 2024-09-20 12:17-0300\n"
 "Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
-"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>>\n"
+"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -309,10 +309,10 @@ msgid ""
 "two or more tabs) and “never” (the tabs bar is never shown). This setting is "
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
-"Controla quando a barra de abas é mostrada. Valores possíveis são "
-"“always” (a barra de abas é sempre mostrada), “more-than-one” (a barra de "
-"abas é somente mostrada se existem duas ou mais abas) e “never” (a barra de "
-"abas nunca é mostrada). Essa configuração é ignorada no ambiente Patheon e o "
+"Controla quando a barra de abas é mostrada. Valores possíveis são “always” "
+"(a barra de abas é sempre mostrada), “more-than-one” (a barra de abas é "
+"somente mostrada se existem duas ou mais abas) e “never” (a barra de abas "
+"nunca é mostrada). Essa configuração é ignorada no ambiente Patheon e o "
 "valor “always” é usado."
 
 #: data/org.gnome.epiphany.gschema.xml:127
@@ -1161,7 +1161,7 @@ msgstr "Insira o PIN de %s para autenticar em %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:768
-#: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
+#: embed/ephy-web-view.c:1339 src/ephy-history-dialog.c:772
 #: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
@@ -1675,7 +1675,7 @@ msgstr "Todos os tipos com suporte"
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Este formulário não é seguro ‒ as senhas não serão mantidas em sigilo"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3422
+#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3406
 msgid "_Dismiss"
 msgstr "_Dispensar"
 
@@ -1718,11 +1718,11 @@ msgstr "Carregando “%s”…"
 msgid "Loading…"
 msgstr "Carregando…"
 
-#: embed/ephy-web-view.c:1341
+#: embed/ephy-web-view.c:1332
 msgid "Delete Web App?"
 msgstr "Excluir aplicativo web?"
 
-#: embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1335
 #, c-format
 msgid ""
 "\"%s\" will be removed. You will have to re-install the website as an app "
@@ -1731,21 +1731,21 @@ msgstr ""
 "“%s” será removido. Você terá que reinstalar o site como um aplicativo a "
 "partir do menu para usá-lo novamente."
 
-#: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
+#: embed/ephy-web-view.c:1340 src/preferences/autofill-view.c:364
 #: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
 #: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "E_xcluir"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1633
+#: embed/ephy-web-view.c:1617
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Este site apresentou uma identificação que pertence a um site diferente."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1638
+#: embed/ephy-web-view.c:1622
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1754,13 +1754,13 @@ msgstr ""
 "data no calendário do seu computador."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1643
+#: embed/ephy-web-view.c:1627
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "A identificação deste site não foi emitida por uma organização confiável."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1648
+#: embed/ephy-web-view.c:1632
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1768,7 +1768,7 @@ msgstr ""
 "corrompida."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1653
+#: embed/ephy-web-view.c:1637
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1777,7 +1777,7 @@ msgstr ""
 "emitiu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1658
+#: embed/ephy-web-view.c:1642
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1786,7 +1786,7 @@ msgstr ""
 "codificação muito fraca."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1647
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1796,24 +1796,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1728 embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1712 embed/ephy-web-view.c:1768
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema ao carregar página"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1731
+#: embed/ephy-web-view.c:1715
 msgid "Unable to display this website"
 msgstr "Não foi possível exibir este site"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1736
+#: embed/ephy-web-view.c:1720
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "A página em %s parece estar indisponível."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1740
+#: embed/ephy-web-view.c:1724
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1823,7 +1823,7 @@ msgstr ""
 "está funcionando corretamente."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1734
 #, c-format
 msgid "The precise error was: %s"
 msgstr "O erro específico foi: %s"
@@ -1833,50 +1833,50 @@ msgstr "O erro específico foi: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1755 embed/ephy-web-view.c:1808
-#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1739 embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1828 embed/ephy-web-view.c:1864
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:181
 msgid "Reload"
 msgstr "Recarregar"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1759 embed/ephy-web-view.c:1812
-#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1743 embed/ephy-web-view.c:1796
+#: embed/ephy-web-view.c:1832 embed/ephy-web-view.c:1868
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1787
+#: embed/ephy-web-view.c:1771
 msgid "Oops! There may be a problem"
 msgstr "Opa! Pode ter alguma coisa de errada"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1776
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "A página %s pode ter causado o Web a fechar inesperadamente."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1799
+#: embed/ephy-web-view.c:1783
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Se isso acontecer novamente, relate o problema para os desenvolvedores do %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1817
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Ocorreu problema ao exibir página"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1836
+#: embed/ephy-web-view.c:1820
 msgid "Oops!"
 msgstr "Opa!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1839
+#: embed/ephy-web-view.c:1823
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1885,18 +1885,18 @@ msgstr ""
 "página diferente para continuar."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1853
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Página não responsiva"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1856
 msgid "Uh-oh!"
 msgstr "Eita!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1859
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1905,18 +1905,18 @@ msgstr ""
 "diferente para continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1911
+#: embed/ephy-web-view.c:1895
 #, c-format
 msgid "Security Violation"
 msgstr "Violação de segurança"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1898
 msgid "This Connection is Not Secure"
 msgstr "Esta conexão não é segura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1903
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1927,41 +1927,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1979
+#: embed/ephy-web-view.c:1913 embed/ephy-web-view.c:1963
 msgid "Go Back"
 msgstr "Voltar"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1982
+#: embed/ephy-web-view.c:1916 embed/ephy-web-view.c:1966
 msgctxt "back-access-key"
 msgid "B"
 msgstr "V"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1935
+#: embed/ephy-web-view.c:1919
 msgid "Accept Risk and Proceed"
 msgstr "Aceitar o risco e prosseguir"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1939
+#: embed/ephy-web-view.c:1923
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:1946 embed/ephy-web-view.c:1949
 #, c-format
 msgid "File not found"
 msgstr "Arquivo não localizado"
 
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1954
 #, c-format
 msgid "%s could not be found."
 msgstr "%s não pôde ser localizado."
 
-#: embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:1956
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1970,11 +1970,11 @@ msgstr ""
 "Verifique o nome do arquivo por letras maiúsculo ou outros erros de escrita. "
 "Também verifique se ele já foi movido, renomeado ou excluído."
 
-#: embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2019
 msgid "None specified"
 msgstr "Nada especificado"
 
-#: embed/ephy-web-view.c:2149
+#: embed/ephy-web-view.c:2133
 msgid "Technical information"
 msgstr "Informações técnicas"
 
