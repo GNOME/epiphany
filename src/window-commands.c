@@ -2041,6 +2041,11 @@ set_default_application_title (EphyApplicationDialogData *data,
     title = g_strdup (webkit_web_view_get_title (WEBKIT_WEB_VIEW (data->view)));
   }
 
+  if (title == NULL || title[0] == '\0') {
+    g_clear_pointer (&title, g_free);
+    title = g_strdup (_("New Web App"));
+  }
+
   data->title = g_strdup (title);
   create_install_dialog_when_ready (data);
   g_free (title);
