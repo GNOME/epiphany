@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-20 13:35+0000\n"
-"PO-Revision-Date: 2024-09-22 12:24+0200\n"
+"POT-Creation-Date: 2024-10-01 02:55+0000\n"
+"PO-Revision-Date: 2024-10-01 12:04+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1302
+#: src/ephy-main.c:419 src/window-commands.c:1326
 msgid "Web"
 msgstr "Web"
 
@@ -56,7 +56,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "Pro aplikaci Web je často používán její kódový název Epiphany."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1312
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1336
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -1038,7 +1038,7 @@ msgstr "Verze %s"
 msgid "About Web"
 msgstr "O aplikaci Web"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1304
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1328
 msgid "Epiphany Technology Preview"
 msgstr "Ukázka technologií Epiphany"
 
@@ -1131,16 +1131,16 @@ msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Zadejte prosím PIN k %s pro ověření na %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:305
-#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:768
-#: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
+#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:767
+#: embed/ephy-web-view.c:1339 src/ephy-history-dialog.c:786
 #: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:355
 #: src/window-commands.c:612 src/window-commands.c:962
-#: src/window-commands.c:1478 src/window-commands.c:2163
-#: src/window-commands.c:3063
+#: src/window-commands.c:1502 src/window-commands.c:2192
+#: src/window-commands.c:3092
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -1169,47 +1169,47 @@ msgstr "Webový server %s:%d si žádá poskytnutí certifikátu pro ověření"
 msgid "_Select"
 msgstr "_Vybrat"
 
-#: embed/ephy-download.c:716 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "Výběr složky"
 
-#: embed/ephy-download.c:724
+#: embed/ephy-download.c:723
 msgid "Select the Destination"
 msgstr "Výběr cíle"
 
-#: embed/ephy-download.c:766
+#: embed/ephy-download.c:765
 msgid "Download Requested"
 msgstr "Požadováno stažení"
 
-#: embed/ephy-download.c:769
+#: embed/ephy-download.c:768
 msgid "_Download"
 msgstr "_Stáhnout"
 
 #. Type
-#: embed/ephy-download.c:797
+#: embed/ephy-download.c:796
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Typ: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:803
+#: embed/ephy-download.c:802
 #, c-format
 msgid "Source: %s"
 msgstr "Zdroj: %s"
 
 #. Question
-#: embed/ephy-download.c:809
+#: embed/ephy-download.c:808
 msgid "Where do you want to save the file?"
 msgstr "Opravdu chcete uložit tento soubor?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:968
+#: embed/ephy-download.c:967
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Bylo dokončeno stahování %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:970
+#: embed/ephy-download.c:969
 msgid "Download finished"
 msgstr "Stahování bylo dokončeno"
 
@@ -1643,7 +1643,7 @@ msgstr "Všechny podporované typy"
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Tento formulář není bezpečný – heslo nezůstane uchováno v soukromí"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3422
+#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3407
 msgid "_Dismiss"
 msgstr "_Zavřít"
 
@@ -1686,11 +1686,11 @@ msgstr "Načítá se „%s“…"
 msgid "Loading…"
 msgstr "Načítá se…"
 
-#: embed/ephy-web-view.c:1341
+#: embed/ephy-web-view.c:1332
 msgid "Delete Web App?"
 msgstr "Smazat webovou aplikaci?"
 
-#: embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1335
 #, c-format
 msgid ""
 "\"%s\" will be removed. You will have to re-install the website as an app "
@@ -1699,21 +1699,21 @@ msgstr ""
 "„%s“ bude odstraněno. Pro opětovné použití jako aplikaci budete muset tento "
 "web znovu nainstalovat z nabídky."
 
-#: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
+#: embed/ephy-web-view.c:1340 src/preferences/autofill-view.c:364
 #: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
 #: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "Od_stranit"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1633
+#: embed/ephy-web-view.c:1618
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Tato webová stránka se prokázala identifikací, která náleží jinému webu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1638
+#: embed/ephy-web-view.c:1623
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1722,13 +1722,13 @@ msgstr ""
 "důvěřovat. Zkontrolujte datum v kalendáři svého počítače."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1643
+#: embed/ephy-web-view.c:1628
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identifikace této webové stránky nebyla vytvořena důvěryhodnou organizací."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1648
+#: embed/ephy-web-view.c:1633
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1736,7 +1736,7 @@ msgstr ""
 "poškozena."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1653
+#: embed/ephy-web-view.c:1638
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1745,7 +1745,7 @@ msgstr ""
 "která ji vydala."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1658
+#: embed/ephy-web-view.c:1643
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1754,7 +1754,7 @@ msgstr ""
 "slabé šifrování."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1648
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1764,24 +1764,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1728 embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1713 embed/ephy-web-view.c:1769
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problém s načtením stránky"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1731
+#: embed/ephy-web-view.c:1716
 msgid "Unable to display this website"
 msgstr "Tuto stránku není možné zobrazit"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1736
+#: embed/ephy-web-view.c:1721
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Vypadá to, že server %s je nedostupný."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1740
+#: embed/ephy-web-view.c:1725
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1791,7 +1791,7 @@ msgstr ""
 "Internetu."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1735
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Přesné znění chyby: %s"
@@ -1801,50 +1801,50 @@ msgstr "Přesné znění chyby: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1755 embed/ephy-web-view.c:1808
-#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1740 embed/ephy-web-view.c:1793
+#: embed/ephy-web-view.c:1829 embed/ephy-web-view.c:1865
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:181
 msgid "Reload"
 msgstr "Znovu načíst"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1759 embed/ephy-web-view.c:1812
-#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1744 embed/ephy-web-view.c:1797
+#: embed/ephy-web-view.c:1833 embed/ephy-web-view.c:1869
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "N"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1787
+#: embed/ephy-web-view.c:1772
 msgid "Oops! There may be a problem"
 msgstr "Vyskytl se problém"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1777
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Webová stránka %s možná způsobila nechtěné zavření aplikace Web."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1799
+#: embed/ephy-web-view.c:1784
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Jestli se to stane znovu, nahlaste to prosím jako problém vývojářům %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1818
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problém se zobrazením stránky"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1836
+#: embed/ephy-web-view.c:1821
 msgid "Oops!"
 msgstr "Problém!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1839
+#: embed/ephy-web-view.c:1824
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1853,18 +1853,18 @@ msgstr ""
 "prosím znovu načtěte nebo navštivte jinou stránku."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1854
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Nereagující stránka"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1857
 msgid "Uh-oh!"
 msgstr "Jejda"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1860
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1873,18 +1873,18 @@ msgstr ""
 "načtěte nebo navštivte jinou stránku."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1911
+#: embed/ephy-web-view.c:1896
 #, c-format
 msgid "Security Violation"
 msgstr "Narušení bezpečnosti"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1899
 msgid "This Connection is Not Secure"
 msgstr "Toto připojení není bezpečné"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1904
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1895,41 +1895,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1979
+#: embed/ephy-web-view.c:1914 embed/ephy-web-view.c:1964
 msgid "Go Back"
 msgstr "Vrátit se zpět"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1982
+#: embed/ephy-web-view.c:1917 embed/ephy-web-view.c:1967
 msgctxt "back-access-key"
 msgid "B"
 msgstr "Z"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1935
+#: embed/ephy-web-view.c:1920
 msgid "Accept Risk and Proceed"
 msgstr "Přijmout riziko a pokračovat"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1939
+#: embed/ephy-web-view.c:1924
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:1947 embed/ephy-web-view.c:1950
 #, c-format
 msgid "File not found"
 msgstr "Soubor nebyl nenalezen"
 
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1955
 #, c-format
 msgid "%s could not be found."
 msgstr "Nezdařilo se najít %s."
 
-#: embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:1957
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1938,11 +1938,11 @@ msgstr ""
 "Zkontrolujte prosím velká/malá písmena a jiné překlepy v názvu souboru. Také "
 "prosím zkontrolujte, jestli nebyl přemístěn, přejmenován nebo smazán."
 
-#: embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2020
 msgid "None specified"
 msgstr "Není specifikováno"
 
-#: embed/ephy-web-view.c:2149
+#: embed/ephy-web-view.c:2134
 msgid "Technical information"
 msgstr "Technické informace"
 
@@ -1990,12 +1990,12 @@ msgstr "Soubor „%s“ existuje. Přesuňte jej prosím jinam."
 msgid "Failed to create directory “%s”."
 msgstr "Nelze vytvořit složku „%s“."
 
-#: lib/ephy-file-helpers.c:716
+#: lib/ephy-file-helpers.c:721
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Chyba při odstraňování souboru %s: %s"
 
-#: lib/ephy-file-helpers.c:734
+#: lib/ephy-file-helpers.c:739
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Chyba při odstraňování adresáře %s: %s"
@@ -2505,31 +2505,31 @@ msgstr "Hlavní nabídka"
 msgid "Stop loading the current page"
 msgstr "Zastavit načítání aktuální stránky"
 
-#: src/ephy-history-dialog.c:137 src/ephy-history-dialog.c:985
+#: src/ephy-history-dialog.c:138 src/ephy-history-dialog.c:999
 msgid "Unavailable in Incognito Mode"
 msgstr "Nedostupné v anonymním režimu"
 
-#: src/ephy-history-dialog.c:481
+#: src/ephy-history-dialog.c:495
 msgid "Remove the selected pages from history"
 msgstr "Odstranit vybranou stránku z historie"
 
-#: src/ephy-history-dialog.c:487
+#: src/ephy-history-dialog.c:501
 msgid "Copy URL"
 msgstr "Zkopírovat URL"
 
-#: src/ephy-history-dialog.c:768
+#: src/ephy-history-dialog.c:782
 msgid "Clear Browsing History?"
 msgstr "Vymazat historii prohlížení?"
 
-#: src/ephy-history-dialog.c:769
+#: src/ephy-history-dialog.c:783
 msgid "All links will be permanently deleted"
 msgstr "Všechny odkazy budou trvale smazány"
 
-#: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:787 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "Vy_mazat"
 
-#: src/ephy-history-dialog.c:988
+#: src/ephy-history-dialog.c:1002
 msgid "Remove All History"
 msgstr "Odstranit celou historii"
 
@@ -2925,60 +2925,60 @@ msgstr "Pořídi_t snímek obrazovky"
 msgid "_Page Source"
 msgstr "Z_drojový kód stránky"
 
-#: src/ephy-window.c:1346
+#: src/ephy-window.c:1345
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Na webu vyhledat „%s“"
 
-#: src/ephy-window.c:1375
+#: src/ephy-window.c:1374
 msgid "Open Link"
 msgstr "Otevřít odkaz"
 
-#: src/ephy-window.c:1377
+#: src/ephy-window.c:1376
 msgid "Open Link In New Tab"
 msgstr "Otevřít odkaz v nové kartě"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1378
 msgid "Open Link In New Window"
 msgstr "Otevřít odkaz v novém okně"
 
-#: src/ephy-window.c:1381
+#: src/ephy-window.c:1380
 msgid "Open Link In Incognito Window"
 msgstr "Otevřít odkaz v anonymním okně"
 
-#: src/ephy-window.c:2764
+#: src/ephy-window.c:2763
 msgid "_Ask Later"
 msgstr "P_tát se i příště"
 
-#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2764 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Zakázat"
 
-#: src/ephy-window.c:2766 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Povolit"
 
-#: src/ephy-window.c:2968 src/ephy-window.c:4495
+#: src/ephy-window.c:2967 src/ephy-window.c:4484
 msgid "Leave Website?"
 msgstr "Opeustit webovou stránku?"
 
-#: src/ephy-window.c:2969 src/ephy-window.c:4496 src/window-commands.c:1475
+#: src/ephy-window.c:2968 src/ephy-window.c:4485 src/window-commands.c:1499
 msgid "A form was modified and has not been submitted"
 msgstr "Formulář by upraven, ale není odeslán."
 
-#: src/ephy-window.c:2970 src/ephy-window.c:4497 src/window-commands.c:1479
+#: src/ephy-window.c:2969 src/ephy-window.c:4486 src/window-commands.c:1503
 msgid "_Discard Form"
 msgstr "Zaho_dit formulář"
 
-#: src/ephy-window.c:2991
+#: src/ephy-window.c:2990
 msgid "Download operation"
 msgstr "Operace stahování"
 
-#: src/ephy-window.c:2993
+#: src/ephy-window.c:2992
 msgid "Show details"
 msgstr "Zobrazit podrobnosti"
 
-#: src/ephy-window.c:2995
+#: src/ephy-window.c:2994
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -2986,17 +2986,17 @@ msgstr[0] "%d aktivní stahování"
 msgstr[1] "%d aktivní stahování"
 msgstr[2] "%d aktivních stahování"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3264
 msgid "Set as Default Browser?"
 msgstr "Nastavit jako výchozí prohlížeč?"
 
-#: src/ephy-window.c:3267
+#: src/ephy-window.c:3266
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Používat aplikaci Web jako výchozí webový prohlížeč a pro otevírání "
 "externích odkazů"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3268
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3004,60 +3004,60 @@ msgstr ""
 "Používat Epiphany Technology Preview jako výchozí prohlížeč a k otevírání "
 "externích odkazů"
 
-#: src/ephy-window.c:3273
+#: src/ephy-window.c:3272
 msgid "_Ask Again Later"
 msgstr "P_tát se i příště znovu"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3273
 msgid "_No"
 msgstr "_Ne"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3274
 msgid "_Yes"
 msgstr "_Ano"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3724
 msgid "Save password?"
 msgstr "Uložit heslo?"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3725
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Hesla můžete kdykoliv odstranit v Předvolbách."
 
-#: src/ephy-window.c:3728
+#: src/ephy-window.c:3727
 msgid "Not Now"
 msgstr "Nyní ne"
 
-#: src/ephy-window.c:3729
+#: src/ephy-window.c:3728
 msgid "Never Save"
 msgstr "Nikdy neukládat"
 
-#: src/ephy-window.c:3730
+#: src/ephy-window.c:3729
 msgid "Save"
 msgstr "Uložit"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4013 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4012 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: src/ephy-window.c:4626
+#: src/ephy-window.c:4615
 msgid "Close Multiple Tabs?"
 msgstr "Zavřít několik karet?"
 
-#: src/ephy-window.c:4627
+#: src/ephy-window.c:4616
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Při zavření okna příjdete o všechny otevřené karty"
 
-#: src/ephy-window.c:4628
+#: src/ephy-window.c:4617
 msgid "C_lose Tabs"
 msgstr "Zavřít _karty"
 
-#: src/ephy-window.c:4721
+#: src/ephy-window.c:4710
 msgid "New tab opened"
 msgstr "Byla otevřena nová karta"
 
-#: src/ephy-window.c:4725
+#: src/ephy-window.c:4714
 msgid "Switch"
 msgstr "Přepnout na ni"
 
@@ -3410,7 +3410,7 @@ msgstr "Přidat nový štítek"
 
 #: src/resources/gtk/bookmarks-dialog.ui:10
 msgid "Search bookmarks"
-msgstr "Prohledat záložky"
+msgstr "prohledat záložky"
 
 #: src/resources/gtk/bookmarks-dialog.ui:102
 msgid "No Bookmarks"
@@ -4624,11 +4624,11 @@ msgstr "Hesla byla úspěšně exportována!"
 msgid "passwords.csv"
 msgstr "passwords.csv"
 
-#: src/window-commands.c:1299
+#: src/window-commands.c:1323
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1322
+#: src/window-commands.c:1346
 msgid "translator-credits"
 msgstr ""
 "Miloslav Trmač <mitr@volny.cz>\n"
@@ -4641,57 +4641,63 @@ msgstr ""
 "Adam Matoušek <adamatousek@gmail.com> \n"
 "Ondřej Kolín <ondrej.kolin@gmail.com>"
 
-#: src/window-commands.c:1474
+#: src/window-commands.c:1498
 msgid "Reload Website?"
 msgstr "Načíst webovou stránku znovu?"
 
-#: src/window-commands.c:2077
+#: src/window-commands.c:2046
+#, fuzzy
+#| msgid "Web App"
+msgid "New Web App"
+msgstr "Webová aplikace"
+
+#: src/window-commands.c:2106
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplikace „%s“ je připravena k použití"
 
-#: src/window-commands.c:2080
+#: src/window-commands.c:2109
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Aplikaci „%s“ se nezdařilo vytvořit: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2090
+#: src/window-commands.c:2119
 msgid "Launch"
 msgstr "Spustit"
 
-#: src/window-commands.c:2156
+#: src/window-commands.c:2185
 msgid "Replace Existing Web App?"
 msgstr "Nahradit stávající webovou aplikaci?"
 
-#: src/window-commands.c:2159
+#: src/window-commands.c:2188
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "Aplikace s názvem „%s“ již existuje. Nahrazením způsobíte její přepsání."
 
-#: src/window-commands.c:2164
+#: src/window-commands.c:2193
 msgid "_Replace"
 msgstr "Nah_radit"
 
-#: src/window-commands.c:2549
+#: src/window-commands.c:2578
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2553
+#: src/window-commands.c:2582
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2599
+#: src/window-commands.c:2628
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3058
+#: src/window-commands.c:3087
 msgid "Enable Caret Browsing Mode?"
 msgstr "Povolit režim prohlížení s kurzorem?"
 
-#: src/window-commands.c:3059
+#: src/window-commands.c:3088
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4701,7 +4707,7 @@ msgstr ""
 "funkce vloží do stránky pohyblivý kurzor umožňující navigaci pomocí "
 "klávesnice. Přejete si zapnout prohlížení s kurzorem?"
 
-#: src/window-commands.c:3064
+#: src/window-commands.c:3093
 msgid "_Enable"
 msgstr "_Povolit"
 
