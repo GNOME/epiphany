@@ -100,6 +100,9 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 static gboolean add_urls_source (EphyHistoryDialog *self);
+static void set_is_selection_empty (EphyHistoryDialog *self,
+                                    gboolean           is_selection_empty);
+static GList *get_checked_rows (EphyHistoryDialog *self);
 
 static void
 update_ui_state (EphyHistoryDialog *self)
@@ -109,6 +112,10 @@ update_ui_state (EphyHistoryDialog *self)
   GtkStack *history_presentation_stack = GTK_STACK (self->history_presentation_stack);
   gboolean has_data = self->has_data;
   gboolean incognito_mode = (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO);
+  g_autoptr (GList) checked_rows = get_checked_rows (self);
+  guint n_rows = g_list_length (checked_rows);
+
+  set_is_selection_empty (self, n_rows == 0);
 
   if (self->is_loading) {
     gtk_stack_set_visible_child (history_presentation_stack, self->loading_spinner);
