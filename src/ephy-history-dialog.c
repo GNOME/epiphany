@@ -141,11 +141,6 @@ update_ui_state (EphyHistoryDialog *self)
     gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), FALSE);
   }
 
-  if (incognito_mode) {
-    const char *selection_delete_tooltip = _("Unavailable in Incognito Mode");
-    gtk_widget_set_tooltip_text (self->selection_delete_button, selection_delete_tooltip);
-  }
-
   gtk_widget_set_sensitive (self->search_button, has_data);
   gtk_widget_set_sensitive (self->selection_button, has_data);
   gtk_widget_set_sensitive (self->clear_button, has_data && self->can_clear);
@@ -161,7 +156,6 @@ set_is_loading (EphyHistoryDialog *self,
     return;
 
   self->is_loading = is_loading;
-  update_ui_state (self);
 }
 
 static void
@@ -172,7 +166,6 @@ set_can_clear (EphyHistoryDialog *self,
     return;
 
   self->can_clear = can_clear;
-  update_ui_state (self);
 }
 
 static void
@@ -183,7 +176,6 @@ set_has_data (EphyHistoryDialog *self,
     return;
 
   self->has_data = has_data;
-  update_ui_state (self);
 }
 
 static void
@@ -194,7 +186,6 @@ set_has_search_results (EphyHistoryDialog *self,
     return;
 
   self->has_search_results = has_search_results;
-  update_ui_state (self);
 }
 
 static void
@@ -254,7 +245,6 @@ set_is_selection_empty (EphyHistoryDialog *self,
     return;
 
   self->is_selection_empty = is_selection_empty;
-  update_ui_state (self);
 }
 
 static EphyHistoryURL *
@@ -432,6 +422,7 @@ row_check_button_toggled (GtkCheckButton    *check_button,
   guint n_rows = g_list_length (checked_rows);
 
   set_is_selection_empty (self, n_rows == 0);
+  update_ui_state (self);
 }
 
 static void
@@ -529,6 +520,7 @@ add_urls_source (EphyHistoryDialog *self)
   GList *element;
   GtkWidget *row;
   gboolean has_results;
+  gboolean prev_has_data = self->has_data;
 
   set_is_loading (self, FALSE);
 
@@ -540,6 +532,10 @@ add_urls_source (EphyHistoryDialog *self)
   if (!self->urls || !self->num_fetch) {
     self->sorter_source = 0;
     gtk_widget_queue_draw (self->listbox);
+
+    if (self->is_loading || prev_has_data != self->has_data)
+      update_ui_state (self);
+
     return G_SOURCE_REMOVE;
   }
 
@@ -555,6 +551,9 @@ add_urls_source (EphyHistoryDialog *self)
   g_list_free_1 (element);
 
   self->num_fetch--;
+
+  if (self->is_loading || prev_has_data != self->has_data)
+    update_ui_state (self);
 
   if (!self->num_fetch) {
     self->sorter_source = 0;
@@ -1012,6 +1011,7 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
 
   gtk_widget_set_tooltip_text (self->clear_button, tooltip);
   set_is_loading (self, TRUE);
+  update_ui_state (self);
 
   adw_status_page_set_icon_name (ADW_STATUS_PAGE (self->empty_history_message),
                                  APPLICATION_ID "-symbolic");
