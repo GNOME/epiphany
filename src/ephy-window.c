@@ -1792,7 +1792,7 @@ populate_context_menu (WebKitWebView       *web_view,
   }
 
   event = webkit_context_menu_get_event (context_menu);
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+  if (event && gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     state = gdk_event_get_modifier_state (event);
 
   ephy_web_extension_manager_append_context_menu (extension_manager, web_view,
