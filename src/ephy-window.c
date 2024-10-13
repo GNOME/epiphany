@@ -2559,10 +2559,6 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
                                        "unpin");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !page || pinned);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                       "close");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !page || !pinned);
-
   muted = view && webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "mute");
@@ -3007,9 +3003,6 @@ tab_view_close_page_cb (AdwTabView *tab_view,
                         EphyWindow *window)
 {
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
-
-  if (adw_tab_page_get_pinned (page))
-    return GDK_EVENT_PROPAGATE;
 
   if (ephy_tab_view_get_n_pages (window->tab_view) == 1) {
     if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
