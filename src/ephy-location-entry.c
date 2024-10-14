@@ -477,7 +477,7 @@ key_pressed_cb (EphyLocationEntry     *entry,
     if (selected == GTK_INVALID_LIST_POSITION)
       selected = matches - 1;
     else if (selected == 0)
-      selected = GTK_INVALID_LIST_POSITION;
+      selected = matches - 1;
     else
       selected--;
   }
@@ -486,7 +486,7 @@ key_pressed_cb (EphyLocationEntry     *entry,
     if (selected == GTK_INVALID_LIST_POSITION)
       selected = 0;
     else if (selected == matches - 1)
-      selected = GTK_INVALID_LIST_POSITION;
+      selected = 0;
     else
       selected++;
   }
