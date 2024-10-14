@@ -28,15 +28,15 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">24</property>
                         <child>
-                          <object class="GtkStackSwitcher">
+                          <object class="AdwInlineViewSwitcher">
                             <property name="stack">stack</property>
                             <property name="halign">center</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkStack" id="stack">
+                          <object class="AdwViewStack" id="stack">
                             <child>
-                              <object class="GtkStackPage">
+                              <object class="AdwViewStackPage">
                                 <property name="name">website</property>
                                 <property name="title" translatable="yes">_Websites</property>
                                 <property name="use-underline">True</property>
@@ -56,7 +56,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkStackPage">
+                              <object class="AdwViewStackPage">
                                 <property name="name">tracker</property>
                                 <property name="title" translatable="yes">_Trackers</property>
                                 <property name="use-underline">True</property>

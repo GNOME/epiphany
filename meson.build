@@ -71,7 +71,7 @@ conf.set_quoted('VERSION', '@VCS_TAG@')
 
 glib_requirement = '>= 2.74.0'
 gtk_requirement = '>= 4.13.3'
-libadwaita_requirement = '>= 1.6.alpha'
+libadwaita_requirement = '>= 1.7.alpha'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.43.4'
 
