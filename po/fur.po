@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: evolution master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
 "POT-Creation-Date: 2024-10-14 14:39+0000\n"
-"PO-Revision-Date: 2024-10-14 14:41+0000\n"
+"PO-Revision-Date: 2024-10-14 14:45+0000\n"
 "Last-Translator: Fabio T. <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <f.t.public@gmail.com>\n"
 "Language: fur\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1251
+#: src/ephy-main.c:419 src/window-commands.c:1326
 msgid "Web"
 msgstr "Web"
 
@@ -49,7 +49,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "Tantis voltis si fâs riferiment a Web cul so non in codiç, Epiphany."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1261
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1336
 msgid "The GNOME Project"
 msgstr "Il progjet GNOME"
 
@@ -1057,7 +1057,7 @@ msgstr "Version %s"
 msgid "About Web"
 msgstr "Informazions su Web"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1253
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1328
 msgid "Epiphany Technology Preview"
 msgstr "Anteprime di tecnologjie di Epiphany"
 
@@ -1149,16 +1149,16 @@ msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Inserìs il PIN par %s, par autenticati su %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:305
-#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:768
-#: embed/ephy-web-view.c:1339 src/ephy-history-dialog.c:793
+#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:767
+#: embed/ephy-web-view.c:1339 src/ephy-history-dialog.c:792
 #: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:339
-#: src/window-commands.c:592 src/window-commands.c:903
-#: src/window-commands.c:1427 src/window-commands.c:2112
-#: src/window-commands.c:3012
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:355
+#: src/window-commands.c:612 src/window-commands.c:962
+#: src/window-commands.c:1502 src/window-commands.c:2192
+#: src/window-commands.c:3092
 msgid "_Cancel"
 msgstr "_Anule"
 
@@ -1188,51 +1188,51 @@ msgstr ""
 "Il sît web %s:%d al domande che tu indichedis un certificât pe "
 "autenticazion."
 
-#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:343
+#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:359
 msgid "_Select"
 msgstr "_Selezione"
 
-#: embed/ephy-download.c:716 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "Selezione une cartele"
 
-#: embed/ephy-download.c:724
+#: embed/ephy-download.c:723
 msgid "Select the Destination"
 msgstr "Selezione la destinazion"
 
-#: embed/ephy-download.c:766
+#: embed/ephy-download.c:765
 msgid "Download Requested"
 msgstr "Discjariament domandât"
 
-#: embed/ephy-download.c:769
+#: embed/ephy-download.c:768
 msgid "_Download"
 msgstr "_Discjarie"
 
 #. Type
-#: embed/ephy-download.c:797
+#: embed/ephy-download.c:796
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Gjenar: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:803
+#: embed/ephy-download.c:802
 #, c-format
 msgid "Source: %s"
 msgstr "Sorzint: %s"
 
 #. Question
-#: embed/ephy-download.c:809
+#: embed/ephy-download.c:808
 msgid "Where do you want to save the file?"
 msgstr "Dulà si desiderie salvâ il file?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:968
+#: embed/ephy-download.c:967
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Discjariament di %s finît"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:970
+#: embed/ephy-download.c:969
 msgid "Download finished"
 msgstr "Discjariament finît"
 
@@ -2021,12 +2021,12 @@ msgstr "Il file \"%s\" al esist. Spostilu di une altre bande."
 msgid "Failed to create directory “%s”."
 msgstr "Creazion de cartele \"%s\" falide."
 
-#: lib/ephy-file-helpers.c:716
+#: lib/ephy-file-helpers.c:721
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Erôr tal gjavâ il file %s: %s"
 
-#: lib/ephy-file-helpers.c:734
+#: lib/ephy-file-helpers.c:739
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Erôr tal gjavâ la cartele %s: %s"
@@ -2506,39 +2506,43 @@ msgstr[1] "%u min"
 msgid "Reload the current page"
 msgstr "Torne cjarie cheste pagjine"
 
-#: src/ephy-header-bar.c:271
+#: src/ephy-header-bar.c:261
+msgid "Exit Fullscreen"
+msgstr "Jes dal plen visôr"
+
+#: src/ephy-header-bar.c:272
 msgid "Main Menu"
 msgstr "Menù principâl"
 
-#: src/ephy-header-bar.c:451
+#: src/ephy-header-bar.c:452
 msgid "Stop loading the current page"
 msgstr "Ferme di cjariâ cheste pagjine"
 
-#: src/ephy-history-dialog.c:145 src/ephy-history-dialog.c:1006
-msgid "Unavailable in Incognito Mode"
-msgstr "No disponibil in modalitât segrete"
-
-#: src/ephy-history-dialog.c:502
+#: src/ephy-history-dialog.c:493
 msgid "Remove the selected pages from history"
 msgstr "Gjave la pagjine selezionade de cronologjie"
 
-#: src/ephy-history-dialog.c:508
+#: src/ephy-history-dialog.c:499
 msgid "Copy URL"
 msgstr "Copie URL"
 
-#: src/ephy-history-dialog.c:789
+#: src/ephy-history-dialog.c:788
 msgid "Clear Browsing History?"
 msgstr "Netâ la cronologjie di navigazion?"
 
-#: src/ephy-history-dialog.c:790
+#: src/ephy-history-dialog.c:789
 msgid "All links will be permanently deleted"
 msgstr "Ducj i colegaments a vignaran eliminâts par simpri"
 
-#: src/ephy-history-dialog.c:794 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:793 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "Ne_te"
 
-#: src/ephy-history-dialog.c:1009
+#: src/ephy-history-dialog.c:1005
+msgid "Unavailable in Incognito Mode"
+msgstr "No disponibil in modalitât segrete"
+
+#: src/ephy-history-dialog.c:1008
 msgid "Remove All History"
 msgstr "Elimine dute la cronologjie"
 
@@ -2968,11 +2972,11 @@ msgstr "_Pemet"
 msgid "Leave Website?"
 msgstr "Lâ vie dal sît web?"
 
-#: src/ephy-window.c:2968 src/ephy-window.c:4485 src/window-commands.c:1424
+#: src/ephy-window.c:2968 src/ephy-window.c:4485 src/window-commands.c:1499
 msgid "A form was modified and has not been submitted"
 msgstr "Al è stât modificât un formulari e nol è stât inviât"
 
-#: src/ephy-window.c:2969 src/ephy-window.c:4486 src/window-commands.c:1428
+#: src/ephy-window.c:2969 src/ephy-window.c:4486 src/window-commands.c:1503
 msgid "_Discard Form"
 msgstr "_Scarte formulari"
 
@@ -3682,7 +3686,7 @@ msgstr "Siere schedis a _drete"
 msgid "Close _Other Tabs"
 msgstr "Siere lis _altris schedis"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:270
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:286
 msgid "_Close"
 msgstr "_Siere"
 
@@ -4031,10 +4035,13 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "Prevenzion in_teligjente de racuelte des sdrassis"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
-msgid "Allow websites to store cookies, databases, and local storage data"
+msgid ""
+"Allow websites to store cookies, databases, and local storage data. "
+"Disabling website data storage will break many websites."
 msgstr ""
-"Permet ai sîts web di archiviâ cookie, basis di dâts e dâts di archiviazion "
-"locâi"
+"Permet ai sîts web di memorizâ cookies, basis di dâts e dâts di archiviazion"
+" locâl. Se si disabilite la archiviazion di dâts dai sîts web tancj no "
+"funzionaran."
 
 #: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "_Website Data Storage"
@@ -4551,120 +4558,120 @@ msgid "Failed to determine initiating URI"
 msgstr "Impussibil determinâ l'URI di inizializazion"
 
 #: src/window-commands.c:126
-msgid "GVDB File"
-msgstr "File GVDB"
-
-#: src/window-commands.c:127
 msgid "HTML File"
 msgstr "File HTML"
 
-#: src/window-commands.c:128
+#: src/window-commands.c:127
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:129 src/window-commands.c:730
+#: src/window-commands.c:128 src/window-commands.c:766
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:130 src/window-commands.c:731
+#: src/window-commands.c:129 src/window-commands.c:767
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:145 src/window-commands.c:596
-#: src/window-commands.c:865 src/window-commands.c:907
+#: src/window-commands.c:161 src/window-commands.c:616
+#: src/window-commands.c:927 src/window-commands.c:966
 msgid "Ch_oose File"
 msgstr "Si_elç file"
 
-#: src/window-commands.c:147 src/window-commands.c:867
+#: src/window-commands.c:163 src/window-commands.c:929
 msgid "I_mport"
 msgstr "I_mpuarte"
 
-#: src/window-commands.c:307 src/window-commands.c:397
-#: src/window-commands.c:447 src/window-commands.c:491
-#: src/window-commands.c:514 src/window-commands.c:530
+#: src/window-commands.c:323 src/window-commands.c:413
+#: src/window-commands.c:463 src/window-commands.c:507
+#: src/window-commands.c:530 src/window-commands.c:546
 msgid "Bookmarks successfully imported!"
 msgstr "Segnelibris impuartâts cun sucès!"
 
-#: src/window-commands.c:326
+#: src/window-commands.c:342
 msgid "Select Profile"
 msgstr "Selezione profîl"
 
-#: src/window-commands.c:408 src/window-commands.c:458
-#: src/window-commands.c:688 src/window-commands.c:811
-#: src/window-commands.c:1006
+#: src/window-commands.c:424 src/window-commands.c:474
+#: src/window-commands.c:724 src/window-commands.c:864
+#: src/window-commands.c:1081
 msgid "Choose File"
 msgstr "Sielç file"
 
-#: src/window-commands.c:579
+#: src/window-commands.c:599
 msgid "Import Bookmarks"
 msgstr "Impuarte segnelibris"
 
-#: src/window-commands.c:609 src/window-commands.c:920
+#: src/window-commands.c:629 src/window-commands.c:979
 msgid "From:"
 msgstr "Di:"
 
-#: src/window-commands.c:649
+#: src/window-commands.c:685
 msgid "Bookmarks successfully exported!"
 msgstr "Segnelibris espuartâts cun sucès!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:699
+#: src/window-commands.c:735
 msgid "bookmarks.html"
 msgstr "segnelibris.html"
 
-#: src/window-commands.c:729
+#: src/window-commands.c:765
 msgid "CSV File"
 msgstr "File CSV"
 
-#: src/window-commands.c:774 src/window-commands.c:800
+#: src/window-commands.c:827 src/window-commands.c:853
 msgid "Passwords successfully imported!"
 msgstr "Passwords impuartadis cun sucès!"
 
-#: src/window-commands.c:891
+#: src/window-commands.c:950
 msgid "Import Passwords"
 msgstr "Impuarte lis passwords"
 
-#: src/window-commands.c:967
+#: src/window-commands.c:1042
 msgid "Passwords successfully exported!"
 msgstr "Passwords espuartadis cun sucès!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1016
+#: src/window-commands.c:1091
 msgid "passwords.csv"
 msgstr "passwords.csv"
 
-#: src/window-commands.c:1248
+#: src/window-commands.c:1323
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1271
+#: src/window-commands.c:1346
 msgid "translator-credits"
 msgstr "Fabio Tomat <f.t.public@gmail.com>, 2024"
 
-#: src/window-commands.c:1423
+#: src/window-commands.c:1498
 msgid "Reload Website?"
 msgstr "Tornâ a cjariâ il sît web?"
 
-#: src/window-commands.c:2026
+#: src/window-commands.c:2046
+msgid "New Web App"
+msgstr "Gnove aplicazion web"
+
+#: src/window-commands.c:2106
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "La aplicazion “%s” e je pronte"
 
-#: src/window-commands.c:2029
+#: src/window-commands.c:2109
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Nol è stât pussibil creâ la aplicazion “%s”: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2039
+#: src/window-commands.c:2119
 msgid "Launch"
 msgstr "Eseguìs"
 
-#: src/window-commands.c:2105
+#: src/window-commands.c:2185
 msgid "Replace Existing Web App?"
 msgstr "Sostituî la aplicazion web esistente?"
 
-#: src/window-commands.c:2108
+#: src/window-commands.c:2188
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -4672,27 +4679,27 @@ msgstr ""
 "Une aplicazion clamade “%s” e esist za, se tu le sostituissis e vignarà "
 "sorescrite"
 
-#: src/window-commands.c:2113
+#: src/window-commands.c:2193
 msgid "_Replace"
 msgstr "_Sostituìs"
 
-#: src/window-commands.c:2498
+#: src/window-commands.c:2578
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2502
+#: src/window-commands.c:2582
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2548
+#: src/window-commands.c:2628
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3007
+#: src/window-commands.c:3087
 msgid "Enable Caret Browsing Mode?"
 msgstr "Abilitâ la modalitât di navigazion cun cursôr?"
 
-#: src/window-commands.c:3008
+#: src/window-commands.c:3088
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4702,9 +4709,17 @@ msgstr ""
 "funzionalitât al place un cursôr mobil te pagjine web, permetint di movisi "
 "tor ator cun la tastiere. Abilitâ la navigazion cun cursôr?"
 
-#: src/window-commands.c:3013
+#: src/window-commands.c:3093
 msgid "_Enable"
 msgstr "_Abilite"
+
+#~ msgid "Allow websites to store cookies, databases, and local storage data"
+#~ msgstr ""
+#~ "Permet ai sîts web di archiviâ cookie, basis di dâts e dâts di archiviazion "
+#~ "locâi"
+
+#~ msgid "GVDB File"
+#~ msgstr "File GVDB"
 
 #~ msgid "Bookmark Properties"
 #~ msgstr "Propietâts segnelibri"
