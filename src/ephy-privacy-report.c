@@ -250,6 +250,9 @@ itp_report_ready (GObject      *source_object,
   description = g_strdup_printf (ngettext ("GNOME Web prevented %u tracker from following you across websites", "GNOME Web prevented %u trackers from following you across websites", length), length);
   adw_status_page_set_description (ADW_STATUS_PAGE (self->status_page), description);
 
+  if (!length)
+    adw_status_page_set_child (ADW_STATUS_PAGE (self->status_page), NULL);
+
   adw_dialog_present (ADW_DIALOG (self), GTK_WIDGET (window));
 }
 
