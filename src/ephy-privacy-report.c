@@ -24,7 +24,8 @@ struct _EphyPrivacyReport {
   AdwDialog parent_instance;
 
   GtkWidget *navigation_view;
-  GtkWidget *status_page;
+  GtkWidget *stack;
+  GtkWidget *page;
   GtkWidget *website_listbox;
   GtkWidget *tracker_listbox;
   GtkWidget *details_page;
@@ -112,7 +113,8 @@ ephy_privacy_report_class_init (EphyPrivacyReportClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, website_listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, tracker_listbox);
-  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, status_page);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, stack);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, navigation_view);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_listbox);
@@ -126,8 +128,6 @@ static void
 ephy_privacy_report_init (EphyPrivacyReport *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  gtk_widget_add_css_class (self->status_page, "privacy-title");
 
   self->website_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_ptr_array_unref);
   self->tracker_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_ptr_array_unref);
@@ -248,10 +248,10 @@ itp_report_ready (GObject      *source_object,
 
   length = g_list_length (summary);
   description = g_strdup_printf (ngettext ("GNOME Web prevented %u tracker from following you across websites", "GNOME Web prevented %u trackers from following you across websites", length), length);
-  adw_status_page_set_description (ADW_STATUS_PAGE (self->status_page), description);
+  adw_preferences_page_set_description (ADW_PREFERENCES_PAGE (self->page), description);
 
-  if (!length)
-    adw_status_page_set_child (ADW_STATUS_PAGE (self->status_page), NULL);
+  if (length)
+    gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "privacy-report-page");
 
   adw_dialog_present (ADW_DIALOG (self), GTK_WIDGET (window));
 }
