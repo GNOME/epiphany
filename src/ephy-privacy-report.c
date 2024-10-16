@@ -23,9 +23,11 @@
 struct _EphyPrivacyReport {
   AdwDialog parent_instance;
 
+  GtkWidget *headerbar;
   GtkWidget *navigation_view;
   GtkWidget *stack;
-  GtkWidget *page;
+  GtkWidget *website_prefs_page;
+  GtkWidget *tracker_prefs_page;
   GtkWidget *website_listbox;
   GtkWidget *tracker_listbox;
   GtkWidget *details_page;
@@ -114,8 +116,10 @@ ephy_privacy_report_class_init (EphyPrivacyReportClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, website_listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, tracker_listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, stack);
-  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, page);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, website_prefs_page);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, tracker_prefs_page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, navigation_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, headerbar);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_page);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPrivacyReport, details_prefs_page);
@@ -248,10 +252,13 @@ itp_report_ready (GObject      *source_object,
 
   length = g_list_length (summary);
   description = g_strdup_printf (ngettext ("GNOME Web prevented %u tracker from following you across websites", "GNOME Web prevented %u trackers from following you across websites", length), length);
-  adw_preferences_page_set_description (ADW_PREFERENCES_PAGE (self->page), description);
+  adw_preferences_page_set_description (ADW_PREFERENCES_PAGE (self->website_prefs_page), description);
+  adw_preferences_page_set_description (ADW_PREFERENCES_PAGE (self->tracker_prefs_page), description);
 
-  if (length)
-    gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "privacy-report-page");
+  if (!length) {
+    gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "no-trackers-page");
+    adw_header_bar_set_title_widget (ADW_HEADER_BAR (self->headerbar), NULL);
+  }
 
   adw_dialog_present (ADW_DIALOG (self), GTK_WIDGET (window));
 }
