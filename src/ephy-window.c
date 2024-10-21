@@ -2522,6 +2522,7 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
   int position;
   gboolean pinned;
   gboolean muted;
+  gboolean overview_open = adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview));
 
   if (page) {
     view = ephy_embed_get_web_view (EPHY_EMBED (adw_tab_page_get_child (page)));
@@ -2530,6 +2531,11 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
     position = adw_tab_view_get_page_position (tab_view, page);
     pinned = adw_tab_page_get_pinned (page);
   }
+
+  action_group = ephy_window_get_action_group (window, "toolbar");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "reload");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !overview_open || page);
 
   action_group = ephy_window_get_action_group (window, "tab");
 
@@ -3780,7 +3786,6 @@ static const char *disabled_win_actions_for_overview[] = {
 };
 
 static const char *disabled_toolbar_actions_for_overview[] = {
-  "reload",
   "reload-bypass-cache",
   "navigation-back",
   "navigation-forward",
@@ -3805,6 +3810,10 @@ notify_overview_open_cb (EphyWindow *window)
   }
 
   action_group = ephy_window_get_action_group (window, "toolbar");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "reload");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !overview_open);
 
   for (i = 0; i < G_N_ELEMENTS (disabled_toolbar_actions_for_overview); i++) {
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
