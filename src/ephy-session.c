@@ -882,7 +882,9 @@ session_seems_reasonable (GList *windows)
       if (g_str_has_prefix (url, "about:"))
         continue;
 
-      uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, NULL);
+      uri = g_uri_parse (url,
+                         G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED,
+                         NULL);
       if (uri) {
         if (g_uri_get_host (uri) != NULL ||
             strcmp (g_uri_get_scheme (uri), "file") == 0 ||
