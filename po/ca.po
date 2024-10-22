@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-20 13:36+0000\n"
-"PO-Revision-Date: 2024-09-21 18:03+0200\n"
+"POT-Creation-Date: 2024-10-22 19:19+0000\n"
+"PO-Revision-Date: 2024-10-22 21:52+0200\n"
 "Last-Translator: Quique Serrano <qserrano@outlook.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1227
+#: src/ephy-main.c:419 src/window-commands.c:1251
 msgid "Web"
 msgstr "Web"
 
@@ -44,15 +44,15 @@ msgid ""
 msgstr ""
 "El navegador web del GNOME, amb una estreta integració amb l'escriptori i "
 "una interfície d'usuari simple i intuïtiva que us permet centrar-vos en les "
-"pàgines web. Si busqueu una visualització senzilla, neta i bonica de la web,"
-" aquest és el vostre navegador."
+"pàgines web. Si busqueu una visualització senzilla, neta i bonica de la web, "
+"aquest és el vostre navegador."
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:15
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr "La web és sovint referida pel seu nom en clau, Epiphany."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1237
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1261
 msgid "The GNOME Project"
 msgstr "El projecte GNOME"
 
@@ -60,8 +60,7 @@ msgstr "El projecte GNOME"
 msgid "Web Browser"
 msgstr "Navegador web"
 
-#. Translators: Search terms to find this application. Do NOT translate or
-#. localize the semicolons! The list MUST also end with a semicolon!
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:7
 msgid "web;browser;internet;epiphany;"
 msgstr "web;navegador;Internet;epiphany;"
@@ -98,44 +97,11 @@ msgstr "Nom del motor de cerca seleccionat per defecte."
 msgid "Deprecated. Please use search-engine-providers instead."
 msgstr "Obsolet. Utilitzeu els proveïdors de motors de cerca."
 
-#. TRANSLATORS: These are the prepopulated search engines. You should
-#. add country-specific URL query parameters if appropriate or change
-#. the domain name's TLD. The different query parameters to be used for each
-#. engine is as follows:
-#. - DuckDuckGo: kl=country-language (see https://duckduckgo.com/params)
-#. - Google: hl=lang (see https://developers.google.com/custom-
-#. search/docs/xml_results_appendices#interfaceLanguages)
-#. - Bing: cc=country (see https://docs.microsoft.com/en-us/azure/cognitive-
-#. services/bing-web-search/language-support)
-#. You are allowed to add search engines here, *if they make sense*. Please
-#. don't add your favorite search engine just because you like it though,
-#. only do it for search engines that are already widely used in this specific
-#. country.
-#. Obvious cases where it makes sense are for example adding Yandex for
-#. Russian, or Baidu for Chinese. If you do add a search engine, then please
-#. make sure that you're not making mistakes in the GVariant text (e.g.
-#. missing ', <, > or trailing comma), and that you're keeping the %s
-#. placeholder for the search query. Also please check if they are actually
-#. properly shown in the Preferences if you reset the gsettings key.
-#: data/org.gnome.epiphany.gschema.xml:53
-msgid ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q=%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>}\n"
-"\t\t\t\t]"
-msgstr ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q=%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>}\n"
-"\t\t\t\t]"
-
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:45
 msgid "List of the search engines."
 msgstr "Llistat dels cercadors."
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:46
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -146,67 +112,66 @@ msgstr ""
 "Llista dels motors de cerca. Es tracta d'una sèrie de vardicts amb cada "
 "vardict corresponent a un motor de cerca, i amb les següents claus admeses: "
 "- «name»: el nom del motor de cerca - «url»: l'URL de cerca amb el terme de "
-"cerca substituït per %s. - bang: el «bang» (paraula de drecera) del motor de"
-" cerca."
+"cerca substituït per %s. - bang: el «bang» (paraula de drecera) del motor de "
+"cerca."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Enable Google Search Suggestions"
 msgstr "Habilita els suggeriments de cerca de Google"
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr ""
 "Si s'ha de mostrar el suggeriment de cerca de Google al desplegable "
 "d'entrada url."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Force new windows to be opened in tabs"
 msgstr "Força les finestres noves a obrir-se en pestanyes"
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
-"Force new window requests to be opened in tabs instead of using a new "
-"window."
+"Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "Força les peticions de finestres noves a obrir-se en pestanyes en lloc de "
 "finestres noves."
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid "Whether to automatically restore the last session"
 msgstr "Si s'ha de restaurar de forma automàtica la darrera sessió"
 
-#: data/org.gnome.epiphany.gschema.xml:86
+#: data/org.gnome.epiphany.gschema.xml:70
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr ""
-"Defineix com es restaurarà la sessió durant l'inici. Els valors permesos són"
-" «always» (l'estat previ de l'aplicació sempre es restaura), «crashed» (la "
+"Defineix com es restaurarà la sessió durant l'inici. Els valors permesos són "
+"«always» (l'estat previ de l'aplicació sempre es restaura), «crashed» (la "
 "sessió només es restaura si l'aplicació falla)."
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
-"Whether to delay loading of tabs that are not immediately visible on session"
-" restore"
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
 msgstr ""
 "Si s'ha de retardar la càrrega de pestanyes que no són visibles "
 "immediatament a la sessió restaurada"
 
-#: data/org.gnome.epiphany.gschema.xml:91
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr ""
 "Quan aquesta opció s'habilita com certa, les pestanyes no començaran a "
-"carregar-se fins que l'usuari ho marqui, una vegada que la sessió hagi estat"
-" restaurada."
+"carregar-se fins que l'usuari ho marqui, una vegada que la sessió hagi estat "
+"restaurada."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "List of adblock filters"
 msgstr "Llista de filtres de bloqueig publicitari"
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
@@ -214,36 +179,36 @@ msgstr ""
 "Llista d'URL amb regles de filtrat en format JSON a usar per al filtre de "
 "bloqueig publicitari."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid "Whether to ask for setting browser as default"
 msgstr ""
 "Si s'ha de demanar si es vol configurar el navegador com a navegador per "
 "defecte"
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
-"When this option is set to true, browser will ask for being default if it is"
-" not already set."
+"When this option is set to true, browser will ask for being default if it is "
+"not already set."
 msgstr ""
 "Quan aquesta opció s'estableix com certa, el navegador demanarà si s'ha de "
 "configurar com a navegador per defecte si encara no ho és."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Start in incognito mode"
 msgstr "Inicia en mode d'incògnit"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 "Quan aquesta opció s'habilita com certa, el navegador s'iniciarà sempre en "
 "mode d'incògnit"
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "Active clear data items."
 msgstr "Activa la neteja d'elements de dades."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
@@ -258,53 +223,52 @@ msgstr ""
 "connectors, 128 = memòria cau de polítiques HSTS, 256 = dades de prevenció "
 "del seguiment intel·ligent."
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Expandeix la mida de les pestanyes per a omplir l'espai disponible a la "
 "barra de pestanyes."
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:102
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
 msgstr ""
 "Si l'habilitació de les pestanyes permetrà l'ús de tot l'espai disponible a "
-"la barra de pestanyes. Aquesta configuració s'ignora a l'escriptori "
-"Pantheon."
+"la barra de pestanyes. Aquesta configuració s'ignora a l'escriptori Pantheon."
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid "The visibility policy for the tabs bar."
 msgstr "La política de visibilitat de la barra de pestanyes."
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
-"bar is always shown), “more-than-one” (the tabs bar is only shown if there’s"
-" two or more tabs) and “never” (the tabs bar is never shown). This setting "
-"is ignored in Pantheon desktop, and “always” value is used."
+"bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
+"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
+"ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 "Com es mostraran els controls a la barra de pestanyes. Els valors possibles "
-"són «sempre» (sempre es mostra la barra de pestanyes), «més d'una» (la barra"
-" de pestanyes només es mostra si hi ha dues o més pestanyes) i «mai» (la "
+"són «sempre» (sempre es mostra la barra de pestanyes), «més d'una» (la barra "
+"de pestanyes només es mostra si hi ha dues o més pestanyes) i «mai» (la "
 "barra de pestanyes no és mostra mai). Aquesta configuració s'ignora a "
 "l'escriptori Pantheon, i s'usa el valor «sempre»."
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Keep window open when closing last tab"
 msgstr "Mantén la finestra oberta quan es tanqui l'última pestanya"
 
-#: data/org.gnome.epiphany.gschema.xml:128
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Si s'habilita la finestra d'aplicació es manté quan es tanqui l'última "
 "pestanya."
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid "Reader mode article font style."
 msgstr "Estil del tipus de lletra pels articles en mode de lectura."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:119
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -312,40 +276,40 @@ msgstr ""
 "Tria l'estil del text del cos principal pels articles en mode de lectura. "
 "Els valors possibles són «sans» i «serif»."
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:123
 msgid "Reader mode color scheme."
 msgstr "Esquema de colors en model de lectura."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
-"values are “light” (dark text on light background) and “dark” (light text on"
-" dark background). This setting is ignored on systems that provide a system-"
+"values are “light” (dark text on light background) and “dark” (light text on "
+"dark background). This setting is ignored on systems that provide a system-"
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
-"Selecciona l'estil de colors per als articles que es mostren en mode lector."
-" Els valors possibles són «clar» (text fosc sobre fons clar) i «fosc» (text "
+"Selecciona l'estil de colors per als articles que es mostren en mode lector. "
+"Els valors possibles són «clar» (text fosc sobre fons clar) i «fosc» (text "
 "clar sobre fons fosc). Aquesta configuració s'ignora als sistemes que "
 "proporcionen una preferència d'estil fosc per a tot el sistema, com ara "
 "GNOME 42 i posteriors."
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:130
 msgid "Minimum font size"
 msgstr "Mida mínima del tipus de lletra"
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid "Use GNOME fonts"
 msgstr "Useu tipus de lletra GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:135
 msgid "Use GNOME font settings."
 msgstr "Useu paràmetres del tipus de lletra GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Custom sans-serif font"
 msgstr "Personalitza el tipus de lletra Sans-serif"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:140
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -353,11 +317,11 @@ msgstr ""
 "Un valor que s'utilitzarà per a sobreescriure el tipus de lletra "
 "d'escriptori sans-serif quan es configuri usa-tipus de lletra-gnome."
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid "Custom serif font"
 msgstr "Personalitza el tipus de lletra serif"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:145
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -365,11 +329,11 @@ msgstr ""
 "Un valor que s'utilitzarà per a sobreescriure el tipus de lletra "
 "d'escriptori serif quan es configuri usa-tipus de lletra-gnome."
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid "Custom monospace font"
 msgstr "Personalitza el tipus de lletra monospace"
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:150
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -377,71 +341,70 @@ msgstr ""
 "Un valor que s'utilitzarà per a sobreescriure el tipus de lletra "
 "d'escriptori monospace quan es configuri usa-tipus de lletra-gnome."
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Use a custom CSS"
 msgstr "Usa un CSS personalitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:155
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "Useu un fitxer CSS personalitzat per a modificar llocs web propis de CSS."
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid "Use a custom JS"
 msgstr "Usa un JS personalitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:160
 msgid "Use a custom JS file to modify websites."
 msgstr "Useu un JS personalitzat per a modificar llocs web."
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid "Enable spell checking"
 msgstr "Habilita el verificador ortogràfic"
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:165
 msgid "Spell check any text typed in editable areas."
 msgstr "Corregeix l'ortografia de qualsevol text escrit en àrees editables."
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid "Default encoding"
 msgstr "Codificació per defecte"
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "Codificació per defecte. Els valors acceptats són els que WebKitGTK+ pot "
 "entendre."
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:174
 #: src/resources/gtk/prefs-general-page.ui:221
 msgid "Languages"
 msgstr "Llengües"
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid ""
-"Preferred languages. Array of locale codes or “system” to use current "
-"locale."
+"Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
-"Llengües preferides. Matriu amb els codis localitzats o «sistema» per a usar"
-" com localització actual."
+"Llengües preferides. Matriu amb els codis localitzats o «sistema» per a usar "
+"com localització actual."
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:179
 msgid "Allow popups"
 msgstr "Habilita finestres emergents"
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Permet als llocs que obrin finestres noves usant JavaScript (si JavaScript "
 "està habilitat)."
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:184
 msgid "User agent"
 msgstr "Agent d'usuari"
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -449,11 +412,11 @@ msgstr ""
 "Cadena que s'usarà com agent d'usuari per a identificar el navegador als "
 "servidors web."
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:189
 msgid "Enable adblock"
 msgstr "Habilita el bloqueig publicitari"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -461,27 +424,27 @@ msgstr ""
 "Si s'ha de bloquejar els advertiments incrustats que les pàgines web poden "
 "mostrar."
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:194
 msgid "Remember passwords"
 msgstr "Recorda les contrasenyes"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Si s'han d'emmagatzemar i pre-omplir contrasenyes en llocs web."
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:199
 msgid "Autofill form data"
 msgstr "Omple automàticament les dades dels formularis"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Whether to auto fill form data in websites."
 msgstr "Si s'han d'omplir automàticament els formularis dels llocs web."
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:204
 msgid "Enable site-specific quirks"
 msgstr "Habilita peculiaritats en llocs web específics"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -490,19 +453,19 @@ msgstr ""
 "És possible que vulgueu desactivar aquest paràmetre si depureu un problema "
 "específic."
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:209
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "Habilita la Prevenció de Seguiment Intel·ligent (PSI)"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "Si s'ha d'habilitar la Prevenció de Seguiment Intel·ligent (PSI)."
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:214
 msgid "Allow websites to store local website data"
 msgstr "Permet que els llocs web emmagatzemin dades locals web"
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -510,15 +473,15 @@ msgstr ""
 "Si els llocs web poden emmagatzemar galetes, dades locals i bases de dades "
 "IndexedDB. Si no es permet, molts llocs no funcionaran bé."
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:219
 msgid "Default zoom level for new pages"
 msgstr "Nivell de zoom predeterminat per a pàgines noves"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable autosearch"
 msgstr "Habilita la cerca automàtica"
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -530,53 +493,53 @@ msgstr ""
 "desactivat tot es carregarà com a URL tret que se seleccioni explícitament "
 "un motor de cerca des del menú desplegable."
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "Enable mouse gestures"
 msgstr "Habilita els gestos del ratolí"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
 "Si s'han d'habilitar els gestos del ratolí. Estan basats en el comportament "
-"de l'Opera i es poden habilitar utilitzant el botó central del ratolí més el"
-" gest corresponent."
+"de l'Opera i es poden habilitar utilitzant el botó central del ratolí més el "
+"gest corresponent."
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:233
 msgid "Enable navigation gestures"
 msgstr "Habilita els gestos de navegació"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Whether to enable back and forward navigation gestures."
 msgstr "Si s'han d'activar els gestos de navegació endavant i endarrere."
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "Last upload directory"
 msgstr "Últim directori de pujada"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Keep track of last upload directory"
 msgstr "Fes un seguiment de l'últim directori de pujada"
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "Last download directory"
 msgstr "Últim directori de descàrrega"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Keep track of last download directory"
 msgstr "Fes un seguiment de l'últim directori de baixada"
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "Hardware acceleration policy"
 msgstr "Política d'acceleració de maquinari"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
-"performance on embedded devices, but increases memory usage requirements and"
-" could expose severe hardware-specific graphics driver bugs."
+"performance on embedded devices, but increases memory usage requirements and "
+"could expose severe hardware-specific graphics driver bugs."
 msgstr ""
 "Si s'ha d'habilitar l'acceleració del maquinari. Els valors possibles són "
 "«always» i «never». L'acceleració del maquinari pot ser necessària per a "
@@ -584,108 +547,108 @@ msgstr ""
 "els requisits d'ús de la memòria i pot exposar errors greus de controladors "
 "gràfics específics del maquinari."
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Always ask for download directory"
 msgstr "Pregunta sempre pel directori de baixada"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Si s'ha de mostrar el diàleg per a escollir directori a cada baixada."
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Enable immediately switch to new open tab"
 msgstr "Activa immediatament el canvi a una pestanya oberta nova"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Si s'ha de canviar automàticament a una pestanya oberta nova."
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Enable WebExtensions"
 msgstr "Habilita les extensions web"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid ""
-"Whether to enable WebExtensions. WebExtensions is a cross-browser system for"
-" extensions."
+"Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
+"extensions."
 msgstr ""
 "Si s'han d'habilitar les extensions Web. Les WebExtensions són un sistema "
 "d'extensions independent del navegador."
 
-#: data/org.gnome.epiphany.gschema.xml:284
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Active WebExtensions"
 msgstr "Extensions web actives"
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Indicates which WebExtensions are set to active."
 msgstr "Indica quines extensions web estan actives."
 
-#: data/org.gnome.epiphany.gschema.xml:289
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid "Show developer actions"
 msgstr "Mostra les accions per a desenvolupadors"
 
-#: data/org.gnome.epiphany.gschema.xml:290
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
-"Si cal mostrar les accions del menú contextual per als desenvolupadors. Això"
-" permet l'ús de les accions Codi font de la pàgina i Inspecciona l'element."
+"Si cal mostrar les accions del menú contextual per als desenvolupadors. Això "
+"permet l'ús de les accions Codi font de la pàgina i Inspecciona l'element."
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Web application additional URLs"
 msgstr "URL addicionals de l'aplicació web"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:281
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Llista d'URL que han de ser obertes per l'aplicació web"
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid "Show navigation buttons in WebApp"
 msgstr "Mostra els botons de navegació a WebApp"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:286
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "Si s'han de mostrar els botons de navegació a WebApp."
 
-#: data/org.gnome.epiphany.gschema.xml:306
+#: data/org.gnome.epiphany.gschema.xml:290
 msgid "Run in background"
 msgstr "Executa en segon pla"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
-"Si està habilitat, l'aplicació continua executant-se en segon pla després de"
-" tancar la finestra."
+"Si està habilitat, l'aplicació continua executant-se en segon pla després de "
+"tancar la finestra."
 
-#: data/org.gnome.epiphany.gschema.xml:311
+#: data/org.gnome.epiphany.gschema.xml:295
 msgid "WebApp is system-wide"
 msgstr "WebApp és de tot el sistema"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "If enabled, application cannot be edited or removed."
 msgstr "Si s'habilita, l'aplicació no es pot editar ni eliminar."
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "The downloads folder"
 msgstr "La carpeta de baixades"
 
-#: data/org.gnome.epiphany.gschema.xml:319
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid ""
-"The path of the folder where to download files to; or “Downloads” to use the"
-" default downloads folder, or “Desktop” to use the desktop folder."
+"The path of the folder where to download files to; or “Downloads” to use the "
+"default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
-"El camí de la carpeta on es baixaran els fitxers; o «Baixades» per a usar la"
-" carpeta de baixades per defecte, o «Escriptori» per a usar la carpeta de "
+"El camí de la carpeta on es baixaran els fitxers; o «Baixades» per a usar la "
+"carpeta de baixades per defecte, o «Escriptori» per a usar la carpeta de "
 "l'escriptori."
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:310
 msgid "Window position"
 msgstr "Posició de la finestra"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:311
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -693,11 +656,11 @@ msgstr ""
 "La posició per a usar una finestra nova que no es restaura des d'una sessió "
 "prèvia."
 
-#: data/org.gnome.epiphany.gschema.xml:331
+#: data/org.gnome.epiphany.gschema.xml:315
 msgid "Window size"
 msgstr "Mida de la finestra"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -705,23 +668,23 @@ msgstr ""
 "La mida a usar per a una finestra nova que no restaura des d'una sessió "
 "prèvia."
 
-#: data/org.gnome.epiphany.gschema.xml:336
+#: data/org.gnome.epiphany.gschema.xml:320
 msgid "Is maximized"
 msgstr "Està maximitzada"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
-"Si s'hauria de permetre que una finestra nova que no ha estat restaurada des"
-" d'una sessió prèvia estigui maximitzada inicialment."
+"Si s'hauria de permetre que una finestra nova que no ha estat restaurada des "
+"d'una sessió prèvia estigui maximitzada inicialment."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:336
 msgid "Disable forward and back buttons"
 msgstr "Inhabilita els botons següent i enrere"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -729,27 +692,27 @@ msgstr ""
 "Si s'estableix «true», els botons següent i enrere estan inhabilitats, "
 "prevenint que els usuaris puguin accedir a l'històric de navegació recent"
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:355
 msgid "Firefox Sync Token Server URL"
 msgstr "URL del servidor de testimonis de sincronització del Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid "URL to a custom Firefox Sync token server."
 msgstr "URL a un servidor de testimonis personalitzat del Firefox Sync."
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:360
 msgid "Firefox Sync Accounts Server URL"
 msgstr "URL del servidor de comptes del Firefox Sync"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "URL a un servidor de comptes del Firefox Sync personalitzat."
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:365
 msgid "Currently signed in sync user"
 msgstr "S'ha iniciat la sessió en la sincronització de l'usuari"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
@@ -757,43 +720,43 @@ msgstr ""
 "El correu electrònic enllaçat al compte de Mozilla utilitzat per a "
 "sincronitzar dades amb els servidors de Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:370
 msgid "Last sync timestamp"
 msgstr "Marca horària de la darrera sincronització"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "L'hora UNIX en segons a la qual es va fer la darrera sincronització."
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:375
 msgid "Sync device ID"
 msgstr "ID del dispositiu sincronitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "The sync device ID of the current device."
 msgstr "L'ID del dispositiu sincronitzat del dispositiu actual."
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "Sync device name"
 msgstr "Nom del dispositiu sincronitzat"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "The sync device name of the current device."
 msgstr "El nom del dispositiu sincronitzat del dispositiu actual."
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "The sync frequency in minutes"
 msgstr "La freqüència de sincronització en minuts"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "The number of minutes between two consecutive syncs."
 msgstr "El nombre de minuts entre dues sincronitzacions consecutives."
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "Sync data with Firefox"
 msgstr "Sincronitza les dades amb Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -801,33 +764,33 @@ msgstr ""
 "CERT si les col·leccions d'Ephy s'han de sincronitzar amb les col·leccions "
 "de Firefox, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid "Enable bookmarks sync"
 msgstr "Habilita la sincronització de les adreces d'interès"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció d'adreces d'interès ha de ser sincronitzada, FALS en "
 "cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Bookmarks sync timestamp"
 msgstr "Marca horària de la sincronització de les adreces d'interès"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 "La marca horària a la qual les darreres adreces d'interès van ser "
 "sincronitzades."
 
-#: data/org.gnome.epiphany.gschema.xml:421
-#: data/org.gnome.epiphany.gschema.xml:436
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid "Initial sync or normal sync"
 msgstr "Sincronització inicial o sincronització normal"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -835,52 +798,52 @@ msgstr ""
 "CERT si les col·leccions d'adreces d'interès necessiten ser sincronitzades "
 "per primera vegada, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "Enable passwords sync"
 msgstr "Habilita la sincronització de contrasenyes"
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
-"CERT si la col·lecció de contrasenyes han de ser sincronitzades, FALS en cas"
-" contrari."
+"CERT si la col·lecció de contrasenyes han de ser sincronitzades, FALS en cas "
+"contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "Passwords sync timestamp"
 msgstr "Marca horària de la sincronització de contrasenyes"
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 "La marca horària a la qual les darreres contrasenyes es van sincronitzar."
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
-"CERT si la col·lecció de contrasenyes necessiten sincronitzar-se per primera"
-" vegada, FALS en cas contrari."
+"CERT si la col·lecció de contrasenyes necessiten sincronitzar-se per primera "
+"vegada, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "Enable history sync"
 msgstr "Habilita la sincronització de l'historial"
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció de l'historial s'ha de sincronitzar, FALS en cas "
 "contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "History sync timestamp"
 msgstr "Marca horària de sincronització de l'historial"
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:431
 msgid "The timestamp at which last history sync was made."
 msgstr "La marca horària a la qual el darrer historial va ser sincronitzat."
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -888,34 +851,32 @@ msgstr ""
 "CERT si la col·lecció de l'historial ha de ser sincronitzada per primera "
 "vegada, FALS en cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:456
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "Enable open tabs sync"
 msgstr "Habilita la sincronització de les pestanyes obertes"
 
-#: data/org.gnome.epiphany.gschema.xml:457
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "CERT si la col·lecció de pestanyes obertes ha de ser sincronitzada, FALS en "
 "cas contrari."
 
-#: data/org.gnome.epiphany.gschema.xml:461
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid "Open tabs sync timestamp"
 msgstr "Marca horària de sincronització de les pestanyes obertes"
 
-#: data/org.gnome.epiphany.gschema.xml:462
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "La marca horària a la qual es va sincronitzar per última vegada les "
 "pestanyes obertes."
 
-#: data/org.gnome.epiphany.gschema.xml:473
-msgid ""
-"Decision to apply when microphone permission is requested for this host"
+#: data/org.gnome.epiphany.gschema.xml:457
+msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
-"Decisió a aplicar quan es demana el permís del micròfon per a aquest "
-"servidor"
+"Decisió a aplicar quan es demana el permís del micròfon per a aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:458
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -928,14 +889,14 @@ msgstr ""
 "«Permet» i «Denega», vol dir que prendrà la decisió automàticament sota "
 "demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:462
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan se sol·liciti el permís de geolocalització per a "
 "aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:463
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -943,17 +904,17 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 "Aquesta opció s'utilitza per a desar si un servidor determinat ha rebut "
-"permís per a accedir a la ubicació de l'usuari. L'opció «No decidit» vol dir"
-" que el navegador necessita demanar permís a l'usuari, mentre que «Permet» i"
-" «Denega», vol dir que prendrà la decisió automàticament sota demanda."
+"permís per a accedir a la ubicació de l'usuari. L'opció «No decidit» vol dir "
+"que el navegador necessita demanar permís a l'usuari, mentre que «Permet» i "
+"«Denega», vol dir que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana permís de notificació per a aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -965,14 +926,14 @@ msgstr ""
 "navegador necessita demanar permís a l'usuari, mentre que «Permet» i "
 "«Denega», vol dir que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:472
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana el permís de desar la contrasenya per a "
 "aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -984,32 +945,32 @@ msgstr ""
 "demanar permís a l'usuari, mentre que «Permet» i «Denega», vol dir que "
 "prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:477
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana el permís per la càmera web per a aquest "
 "servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "This option is used to save whether a given host has been given permission "
-"to access the user’s webcam. The “undecided” default means the browser needs"
-" to ask the user for permission, while “allow” and “deny” tell it to "
+"to access the user’s webcam. The “undecided” default means the browser needs "
+"to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
 "Aquesta opció s'utilitza per a desar si un servidor ha rebut permís per a "
 "accedir a la càmera web. L'opció «No decidit» vol dir que el navegador "
-"necessita demanar permís a l'usuari, mentre que «Permet» i «Denega», vol dir"
-" que prendrà la decisió automàticament sota demanda."
+"necessita demanar permís a l'usuari, mentre que «Permet» i «Denega», vol dir "
+"que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:498
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
-"Decisió a aplicar quan es demana el permís per a publicitat web per a aquest"
-" servidor"
+"Decisió a aplicar quan es demana el permís per a publicitat web per a aquest "
+"servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:499
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -1021,16 +982,16 @@ msgstr ""
 "navegador necessita demanar permís a l'usuari, mentre que «allow» i «deny», "
 "vol dir que prendrà la decisió automàticament sota demanda."
 
-#: data/org.gnome.epiphany.gschema.xml:503
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "Decisió a aplicar quan es demana permís de notificació per a aquest servidor"
 
-#: data/org.gnome.epiphany.gschema.xml:504
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
 "This option is used to save whether a given host has been given permission "
-"to autoplay. The “undecided” default means to allow autoplay of muted media,"
-" while “allow” and “deny” tell it to allow / deny all requests to autoplay "
+"to autoplay. The “undecided” default means to allow autoplay of muted media, "
+"while “allow” and “deny” tell it to allow / deny all requests to autoplay "
 "media respectively."
 msgstr ""
 "Aquesta opció s'utilitza per a desar si un servidor determinat ha rebut "
@@ -1052,7 +1013,7 @@ msgstr "Versió %s"
 msgid "About Web"
 msgstr "Quant al Web"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1229
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1253
 msgid "Epiphany Technology Preview"
 msgstr "Tecnologia de previsualització Epiphany"
 
@@ -1112,8 +1073,8 @@ msgid ""
 "when you close the window. Files you download will be kept."
 msgstr ""
 "Actualment esteu navegant en mode incògnit. Les pàgines que es visualitzin "
-"en aquest mode no es mostraran a l'historial de navegació i es netejarà tota"
-" la informació emmagatzemada quan es tanqui la finestra. Els arxius que "
+"en aquest mode no es mostraran a l'historial de navegació i es netejarà tota "
+"la informació emmagatzemada quan es tanqui la finestra. Els arxius que "
 "baixeu es conservaran."
 
 #: embed/ephy-about-handler.c:598
@@ -1129,61 +1090,60 @@ msgid ""
 "internet service provider, your government, other governments, the websites "
 "that you visit, and advertisers on these websites may still be tracking you."
 msgstr ""
-"No amagarà la vostra activitat del vostre patró si esteu al lloc de treball."
-" El vostre proveïdor de serveis d'Internet, el vostre govern, altres "
-"governs, els llocs web que visiteu i els anunciants d'aquests llocs web "
-"encara us poden rastrejar."
+"No amagarà la vostra activitat del vostre patró si esteu al lloc de treball. "
+"El vostre proveïdor de serveis d'Internet, el vostre govern, altres governs, "
+"els llocs web que visiteu i els anunciants d'aquests llocs web encara us "
+"poden rastrejar."
 
-#: embed/ephy-client-certificate-manager.c:292
+#: embed/ephy-client-certificate-manager.c:294
 msgid "PIN required"
 msgstr "PIN obligatori"
 
-#: embed/ephy-client-certificate-manager.c:295
+#: embed/ephy-client-certificate-manager.c:297
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Introduïu el PIN per a %s, per a autenticar-vos a %s:%d."
 
-#: embed/ephy-client-certificate-manager.c:303
-#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:768
-#: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
+#: embed/ephy-client-certificate-manager.c:305
+#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:768
+#: embed/ephy-web-view.c:1339 src/ephy-history-dialog.c:793
 #: src/ephy-window.c:260 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:50
 #: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:339
 #: src/window-commands.c:592 src/window-commands.c:903
-#: src/window-commands.c:1403 src/window-commands.c:2088
-#: src/window-commands.c:2988
+#: src/window-commands.c:1427 src/window-commands.c:2112
+#: src/window-commands.c:3012
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
-#: embed/ephy-client-certificate-manager.c:304
+#: embed/ephy-client-certificate-manager.c:306
 msgid "_Login"
 msgstr "_Inici de sessió"
 
-#: embed/ephy-client-certificate-manager.c:374
+#: embed/ephy-client-certificate-manager.c:388
 msgid "Select certificate"
 msgstr "Selecciona un certificat"
 
-#: embed/ephy-client-certificate-manager.c:377
+#: embed/ephy-client-certificate-manager.c:391
 #, c-format
 msgid ""
-"The website %s:%d requests that you provide a certificate for authentication"
-" for %s."
+"The website %s:%d requests that you provide a certificate for authentication "
+"for %s."
 msgstr ""
 "El lloc web %s:%d sol·licita que proporcioneu un certificat per a "
 "l'autenticació de %s."
 
-#: embed/ephy-client-certificate-manager.c:382
+#: embed/ephy-client-certificate-manager.c:396
 #, c-format
 msgid ""
-"The website %s:%d requests that you provide a certificate for "
-"authentication."
+"The website %s:%d requests that you provide a certificate for authentication."
 msgstr ""
 "El lloc web %s:%d sol·licita que  proporcioneu un certificat per a "
 "l'autenticació."
 
-#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:343
+#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:343
 msgid "_Select"
 msgstr "_Selecciona"
 
@@ -1278,13 +1238,12 @@ msgstr "Envieu un missatge de correu a «%s»"
 
 #. TRANSLATORS: This string is part of the previous translatable string.
 #. * It is appended for each extraneous mailto: URI email address. For
-#. * example if you have
-#. mailto:foo@example.com,bar@example.com,baz@example.com
+#. * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
 #. * it will show
 #. * Send an email to “foo@example.com”, “bar@example.com”, “baz@example.com”
-#. * when you hover such link, at the same place as regular URLs when you
-#. hover
+#. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
+#.
 #: embed/ephy-embed-utils.c:82
 #, c-format
 msgid ", “%s”"
@@ -1595,6 +1554,7 @@ msgstr "Occidental (_Windows-1252)"
 #. The following encodings are so rarely used that we don't want to
 #. * pollute the "related" part of the encodings menu with them, so we
 #. * set the language group to 0 here.
+#.
 #: embed/ephy-encodings.c:136
 msgid "English (_US-ASCII)"
 msgstr "Anglès (_US-ASCII)"
@@ -1617,6 +1577,7 @@ msgstr "Unicode (UTF-3_2 LE)"
 
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
+#.
 #: embed/ephy-encodings.c:219
 #, c-format
 msgid "Unknown (%s)"
@@ -1661,7 +1622,7 @@ msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr ""
 "Aquest formulari no és segur. Les contrasenyes no es mantindran privades"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3422
+#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3407
 msgid "_Dismiss"
 msgstr "_Descarta"
 
@@ -1704,11 +1665,11 @@ msgstr "S'està carregant «%s»…"
 msgid "Loading…"
 msgstr "S'està carregant…"
 
-#: embed/ephy-web-view.c:1341
+#: embed/ephy-web-view.c:1332
 msgid "Delete Web App?"
 msgstr "Voleu suprimir l'aplicació web?"
 
-#: embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1335
 #, c-format
 msgid ""
 "\"%s\" will be removed. You will have to re-install the website as an app "
@@ -1717,15 +1678,14 @@ msgstr ""
 "S'eliminarà «%s». Haureu de tornar a instal·lar el lloc web com a aplicació "
 "des del menú per tornar-la a utilitzar."
 
-#: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
-#: src/preferences/passwords-view.c:180
-#: src/resources/gtk/history-dialog.ui:148
+#: embed/ephy-web-view.c:1340 src/preferences/autofill-view.c:364
+#: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
 #: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "_Suprimeix"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1633
+#: embed/ephy-web-view.c:1618
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1733,7 +1693,7 @@ msgstr ""
 "diferent."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1638
+#: embed/ephy-web-view.c:1623
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1742,15 +1702,14 @@ msgstr ""
 "Consulteu la data al calendari del vostre ordinador."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1643
-msgid ""
-"This website’s identification was not issued by a trusted organization."
+#: embed/ephy-web-view.c:1628
+msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
-"La identificació d'aquest lloc web no ha estat emesa per una organització de"
-" confiança."
+"La identificació d'aquest lloc web no ha estat emesa per una organització de "
+"confiança."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1648
+#: embed/ephy-web-view.c:1633
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1758,7 +1717,7 @@ msgstr ""
 "danyada."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1653
+#: embed/ephy-web-view.c:1638
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1767,7 +1726,7 @@ msgstr ""
 "certificació que el va emetre."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1658
+#: embed/ephy-web-view.c:1643
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1775,44 +1734,44 @@ msgstr ""
 "La identificació del lloc web no és confiable perquè usa xifrat molt dèbil."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1648
 msgid ""
-"This website’s identification is only valid for future dates. Check the date"
-" on your computer’s calendar."
+"This website’s identification is only valid for future dates. Check the date "
+"on your computer’s calendar."
 msgstr ""
-"La identificació del lloc web només és vàlida per a dates futures. Comproveu"
-" la data del calendari del vostre ordinador."
+"La identificació del lloc web només és vàlida per a dates futures. Comproveu "
+"la data del calendari del vostre ordinador."
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1728 embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1713 embed/ephy-web-view.c:1769
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema carregant la pàgina"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1731
+#: embed/ephy-web-view.c:1716
 msgid "Unable to display this website"
 msgstr "No es pot visualitzar aquest lloc web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1736
+#: embed/ephy-web-view.c:1721
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "El lloc %s sembla no estar disponible."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1740
+#: embed/ephy-web-view.c:1725
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
 msgstr ""
 "Pot ser inaccessible temporalment o haver-se traslladat a una adreça nova. "
-"És possible que vulgueu verificar que la vostra connexió a Internet funcioni"
-" correctament."
+"És possible que vulgueu verificar que la vostra connexió a Internet funcioni "
+"correctament."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1735
 #, c-format
 msgid "The precise error was: %s"
 msgstr "L'error concret ha estat: %s"
@@ -1820,36 +1779,34 @@ msgstr "L'error concret ha estat: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#. The button on the unresponsive process error page. DO NOT ADD MNEMONICS
-#. HERE.
+#. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1755 embed/ephy-web-view.c:1808
-#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1740 embed/ephy-web-view.c:1793
+#: embed/ephy-web-view.c:1829 embed/ephy-web-view.c:1865
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:181
 msgid "Reload"
 msgstr "Torna a carregar"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1759 embed/ephy-web-view.c:1812
-#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1744 embed/ephy-web-view.c:1797
+#: embed/ephy-web-view.c:1833 embed/ephy-web-view.c:1869
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1787
+#: embed/ephy-web-view.c:1772
 msgid "Oops! There may be a problem"
 msgstr "Vaja! Sembla que hi ha un problema"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1777
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "La pàgina %s pot haver fet que el Web es tanqui inesperadament."
 
-#. Further error details when a site cannot be loaded due to a page crash
-#. error.
-#: embed/ephy-web-view.c:1799
+#. Further error details when a site cannot be loaded due to a page crash error.
+#: embed/ephy-web-view.c:1784
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1857,38 +1814,38 @@ msgstr ""
 "%s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1818
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema mostrant la pàgina"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1836
+#: embed/ephy-web-view.c:1821
 msgid "Oops!"
 msgstr "Error!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1839
+#: embed/ephy-web-view.c:1824
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
-"Alguna cosa no ha anat bé quan s'intentava mostrar aquesta pàgina. Torneu-la"
-" a carregar o aneu a una altra pàgina per a continuar."
+"Alguna cosa no ha anat bé quan s'intentava mostrar aquesta pàgina. Torneu-la "
+"a carregar o aneu a una altra pàgina per a continuar."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1854
 #, c-format
 msgid "Unresponsive Page"
 msgstr "La pàgina no respon"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1857
 msgid "Uh-oh!"
 msgstr "Vaja!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1860
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1897,66 +1854,63 @@ msgstr ""
 "visiteu una pàgina diferent per a continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1911
+#: embed/ephy-web-view.c:1896
 #, c-format
 msgid "Security Violation"
 msgstr "Violació de seguretat"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1899
 msgid "This Connection is Not Secure"
 msgstr "Aquesta connexió NO és segura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1904
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
 "alter information going to or from this site."
 msgstr ""
-"Això no sembla el %s real. Pot ser que els atacants estiguin intentant robar"
-" o alterar la informació que s'entra a aquest lloc o des d'aquest lloc."
+"Això no sembla el %s real. Pot ser que els atacants estiguin intentant robar "
+"o alterar la informació que s'entra a aquest lloc o des d'aquest lloc."
 
-#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS
-#. HERE.
+#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1979
+#: embed/ephy-web-view.c:1914 embed/ephy-web-view.c:1964
 msgid "Go Back"
 msgstr "Torna enrere"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1982
+#: embed/ephy-web-view.c:1917 embed/ephy-web-view.c:1967
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
-#. The hidden button on the invalid TLS certificate error page. Do not add
-#. mnemonics here.
-#: embed/ephy-web-view.c:1935
+#. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: embed/ephy-web-view.c:1920
 msgid "Accept Risk and Proceed"
 msgstr "Accepta el risc i procedeix"
 
-#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS
-#. certificate error page.
-#: embed/ephy-web-view.c:1939
+#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
+#: embed/ephy-web-view.c:1924
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:1947 embed/ephy-web-view.c:1950
 #, c-format
 msgid "File not found"
 msgstr "No s'ha trobat el fitxer"
 
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1955
 #, c-format
 msgid "%s could not be found."
 msgstr "No s'ha pogut trobar %s."
 
-#: embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:1957
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1966,11 +1920,11 @@ msgstr ""
 "errors tipogràfics. Comproveu també que no s'hagi mogut, canviat el nom o "
 "suprimit."
 
-#: embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2020
 msgid "None specified"
 msgstr "Res especificat"
 
-#: embed/ephy-web-view.c:2149
+#: embed/ephy-web-view.c:2134
 msgid "Technical information"
 msgstr "Informació tècnica"
 
@@ -2028,14 +1982,16 @@ msgstr "S'ha produït un error en suprimir el fitxer %s: %s"
 msgid "Error removing directory %s: %s"
 msgstr "S'ha produït un error en suprimir el directori %s: %s"
 
+# Deixo el .com perquè no em consta que hi hagi ja el .cat.
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
-#. * replace the ".com" with ".fr" :
-#. "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
+#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany&kd=-1"
+#.
 #: lib/ephy-search-engine-manager.h:35
 #, c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+#| msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany&kd=-1"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&kd=-1"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2045,56 +2001,61 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgid "%s’s GNOME Web on %s"
 msgstr "%s de GNOME Web a %s"
 
-#. Translators: "friendly time" string for the current day, strftime format.
-#. like "Today 12∶34 am"
+#. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:236
 msgid "Today %I∶%M %p"
 msgstr "Avui %I∶%M %p"
 
-#. Translators: "friendly time" string for the current day, strftime format.
-#. like "Today 15∶34"
+#. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
 #: lib/ephy-time-helpers.c:239
 msgid "Today %H∶%M"
 msgstr "Avui %-H∶%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12∶34 am"
+#.
 #: lib/ephy-time-helpers.c:254
 msgid "Yesterday %I∶%M %p"
 msgstr "Ahir %I∶%M %p"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 15∶34"
+#.
 #: lib/ephy-time-helpers.c:259
 msgid "Yesterday %H∶%M"
 msgstr "Ahir %-H:%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12∶34 am"
+#.
 #: lib/ephy-time-helpers.c:277
 msgid "%a %I∶%M %p"
 msgstr "%a a les %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 15∶34"
+#.
 #: lib/ephy-time-helpers.c:282
 msgid "%a %H∶%M"
 msgstr "%a a les %-H:%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12∶34 am"
+#.
 #: lib/ephy-time-helpers.c:296
 msgid "%b %d %I∶%M %p"
 msgstr "%-d %b %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
+#.
 #: lib/ephy-time-helpers.c:301
 msgid "%b %d %H∶%M"
 msgstr "%-d %b %-H:%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
+#.
 #: lib/ephy-time-helpers.c:307
 msgid "%b %d %Y"
 msgstr "%-d %b del %Y"
@@ -2108,8 +2069,8 @@ msgstr "Desconegut"
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
-"No s'ha pogut obtenir el nom del fitxer d'escriptori per l'aplicació web amb"
-" ID %s"
+"No s'ha pogut obtenir el nom del fitxer d'escriptori per l'aplicació web amb "
+"ID %s"
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
@@ -2211,8 +2172,8 @@ msgstr ""
 #, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
 msgstr ""
-"Els secrets de sincronització per l'usuari sincronitzat actualment no són un"
-" JSON vàlid: %s"
+"Els secrets de sincronització per l'usuari sincronitzat actualment no són un "
+"JSON vàlid: %s"
 
 #: lib/sync/ephy-sync-service.c:1960
 #, c-format
@@ -2490,6 +2451,7 @@ msgstr "S'està iniciant…"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+#.
 #: src/ephy-firefox-sync-dialog.c:140
 #, c-format
 msgid "Last synchronized: %s"
@@ -2519,31 +2481,31 @@ msgstr "Menú principal"
 msgid "Stop loading the current page"
 msgstr "Atura la càrrega de la pàgina actual"
 
-#: src/ephy-history-dialog.c:137 src/ephy-history-dialog.c:985
+#: src/ephy-history-dialog.c:145 src/ephy-history-dialog.c:1006
 msgid "Unavailable in Incognito Mode"
 msgstr "No està disponible en el mode d'incògnit"
 
-#: src/ephy-history-dialog.c:481
+#: src/ephy-history-dialog.c:502
 msgid "Remove the selected pages from history"
 msgstr "Suprimeix les pàgines seleccionades de l'historial"
 
-#: src/ephy-history-dialog.c:487
+#: src/ephy-history-dialog.c:508
 msgid "Copy URL"
 msgstr "Copia l'URL"
 
-#: src/ephy-history-dialog.c:768
+#: src/ephy-history-dialog.c:789
 msgid "Clear Browsing History?"
 msgstr "Voleu esborrar l'historial de navegació?"
 
-#: src/ephy-history-dialog.c:769
+#: src/ephy-history-dialog.c:790
 msgid "All links will be permanently deleted"
 msgstr "Se suprimiran permanentment tots els enllaços"
 
-#: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:794 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "_Esborra"
 
-#: src/ephy-history-dialog.c:988
+#: src/ephy-history-dialog.c:1009
 msgid "Remove All History"
 msgstr "Suprimeix tot l'historial"
 
@@ -2675,12 +2637,12 @@ msgstr "Sol·licitud d'accés a les dades del lloc web"
 #: src/ephy-permission-popover.c:310
 #, c-format
 msgid ""
-"The page at “%s” would like to access its own data (including cookies) while"
-" browsing “%s”. This will allow “%s” to track your activity on “%s”."
+"The page at “%s” would like to access its own data (including cookies) while "
+"browsing “%s”. This will allow “%s” to track your activity on “%s”."
 msgstr ""
 "A la pàgina «%s» li agradaria accedir a les seves pròpies dades (incloses "
-"les galetes) mentre navega «%s». Això permetrà que «%s» faci un seguiment de"
-" la vostra activitat en «%s»."
+"les galetes) mentre navega «%s». Això permetrà que «%s» faci un seguiment de "
+"la vostra activitat en «%s»."
 
 #. Translators: Clipboard policy for a specific site.
 #: src/ephy-permission-popover.c:315
@@ -2706,8 +2668,7 @@ msgstr "Llocs on s'ha trobat aquest rastrejador"
 msgid "GNOME Web prevented %u tracker from following you across websites"
 msgid_plural ""
 "GNOME Web prevented %u trackers from following you across websites"
-msgstr[0] ""
-"El GNOME Web ha evitat que %u rastrejador us segueixi per llocs web"
+msgstr[0] "El GNOME Web ha evitat que %u rastrejador us segueixi per llocs web"
 msgstr[1] ""
 "El GNOME Web ha evitat que %u rastrejadors us segueixin per llocs web"
 
@@ -2937,139 +2898,139 @@ msgstr "_Pren una captura de pantalla…"
 msgid "_Page Source"
 msgstr "Codi font de la _pàgina"
 
-#: src/ephy-window.c:1346
+#: src/ephy-window.c:1345
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Cerca al web «%s»"
 
-#: src/ephy-window.c:1375
+#: src/ephy-window.c:1374
 msgid "Open Link"
 msgstr "Obre l'enllaç"
 
-#: src/ephy-window.c:1377
+#: src/ephy-window.c:1376
 msgid "Open Link In New Tab"
 msgstr "Obre l'enllaç en una pestanya nova"
 
-#: src/ephy-window.c:1379
+#: src/ephy-window.c:1378
 msgid "Open Link In New Window"
 msgstr "Obre l'enllaç en una finestra nova"
 
-#: src/ephy-window.c:1381
+#: src/ephy-window.c:1380
 msgid "Open Link In Incognito Window"
 msgstr "Obre l'enllaç en una d'incògnit nova"
 
-#: src/ephy-window.c:2764
+#: src/ephy-window.c:2766
 msgid "_Ask Later"
 msgstr "_Pregunta-ho més tard"
 
-#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2767 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Denega"
 
-#: src/ephy-window.c:2766 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2768 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Permet"
 
-#: src/ephy-window.c:2968 src/ephy-window.c:4495
+#: src/ephy-window.c:2970 src/ephy-window.c:4487
 msgid "Leave Website?"
 msgstr "Voleu sortir del lloc web?"
 
-#: src/ephy-window.c:2969 src/ephy-window.c:4496 src/window-commands.c:1400
+#: src/ephy-window.c:2971 src/ephy-window.c:4488 src/window-commands.c:1424
 msgid "A form was modified and has not been submitted"
 msgstr "Un formulari modificat no ha estat enviat"
 
-#: src/ephy-window.c:2970 src/ephy-window.c:4497 src/window-commands.c:1404
+#: src/ephy-window.c:2972 src/ephy-window.c:4489 src/window-commands.c:1428
 msgid "_Discard Form"
 msgstr "_Descarta el formulari"
 
-#: src/ephy-window.c:2991
+#: src/ephy-window.c:2993
 msgid "Download operation"
 msgstr "Operació de baixada"
 
-#: src/ephy-window.c:2993
+#: src/ephy-window.c:2995
 msgid "Show details"
 msgstr "Mostra els detalls"
 
-#: src/ephy-window.c:2995
+#: src/ephy-window.c:2997
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operació de baixada activa"
 msgstr[1] "%d operacions de baixada actives"
 
-#: src/ephy-window.c:3265
+#: src/ephy-window.c:3267
 msgid "Set as Default Browser?"
 msgstr "Configurar-ho com el navegador per defecte?"
 
-#: src/ephy-window.c:3267
+#: src/ephy-window.c:3269
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Utilitzeu el Web com a navegador web per defecte i per a obrir enllaços "
 "externs"
 
-#: src/ephy-window.c:3269
+#: src/ephy-window.c:3271
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr ""
-"Utilitzeu la versió preliminar de la tecnologia Epiphany com a navegador web"
-" predeterminat i per a obrir enllaços externs"
+"Utilitzeu la versió preliminar de la tecnologia Epiphany com a navegador web "
+"predeterminat i per a obrir enllaços externs"
 
-#: src/ephy-window.c:3273
+#: src/ephy-window.c:3275
 msgid "_Ask Again Later"
 msgstr "_Pregunta-ho més tard"
 
-#: src/ephy-window.c:3274
+#: src/ephy-window.c:3276
 msgid "_No"
 msgstr "_No"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3277
 msgid "_Yes"
 msgstr "_Sí"
 
-#: src/ephy-window.c:3725
+#: src/ephy-window.c:3727
 msgid "Save password?"
 msgstr "Voleu desar la contrasenya?"
 
-#: src/ephy-window.c:3726
+#: src/ephy-window.c:3728
 msgid "Passwords can be removed at any time in Preferences"
 msgstr ""
 "Les contrasenyes es poden suprimir en qualsevol moment a les preferències"
 
-#: src/ephy-window.c:3728
+#: src/ephy-window.c:3730
 msgid "Not Now"
 msgstr "_Ara no"
 
-#: src/ephy-window.c:3729
+#: src/ephy-window.c:3731
 msgid "Never Save"
 msgstr "No ho desis mai"
 
-#: src/ephy-window.c:3730
+#: src/ephy-window.c:3732
 msgid "Save"
 msgstr "Desa"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4013 src/resources/gtk/action-bar-end.ui:118
+#: src/ephy-window.c:4015 src/resources/gtk/action-bar-end.ui:118
 msgid "Bookmarks"
 msgstr "Adreces d'interès"
 
-#: src/ephy-window.c:4626
+#: src/ephy-window.c:4618
 msgid "Close Multiple Tabs?"
 msgstr "Voleu tancar múltiples pestanyes?"
 
-#: src/ephy-window.c:4627
+#: src/ephy-window.c:4619
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Si tanqueu aquesta finestra, totes les pestanyes obertes es perdran"
 
-#: src/ephy-window.c:4628
+#: src/ephy-window.c:4620
 msgid "C_lose Tabs"
 msgstr "_Tanca les pestanyes"
 
-#: src/ephy-window.c:4721
+#: src/ephy-window.c:4713
 msgid "New tab opened"
 msgstr "S'ha obert una pestanya nova"
 
-#: src/ephy-window.c:4725
+#: src/ephy-window.c:4717
 msgid "Switch"
 msgstr "Commuta"
 
@@ -3080,8 +3041,7 @@ msgstr "Suprimeix totes les entrades?"
 #: src/preferences/autofill-view.c:360
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
-"Això netejarà totes les entrades emmagatzemades localment i no es pot "
-"desfer."
+"Això netejarà totes les entrades emmagatzemades localment i no es pot desfer."
 
 #: src/preferences/clear-data-view.c:68
 msgid "Cookies"
@@ -3143,11 +3103,11 @@ msgstr "L'adreça no és un URI vàlid"
 #: src/preferences/ephy-search-engine-row.c:145
 #, c-format
 msgid ""
-"Address is not a valid URL. The address should look like "
-"https://www.example.com/search?q=%s"
+"Address is not a valid URL. The address should look like https://www.example."
+"com/search?q=%s"
 msgstr ""
-"L'adreça no és un URL vàlid. Hauria de tenir un format "
-"https://www.example.com/search?q=%s"
+"L'adreça no és un URL vàlid. Hauria de tenir un format https://www.example."
+"com/search?q=%s"
 
 #: src/preferences/ephy-search-engine-row.c:188
 msgid "This shortcut is already used."
@@ -3904,12 +3864,12 @@ msgstr "Les extensions s'han d'instal·lar manualment des dels seus fitxers"
 #: src/resources/gtk/prefs-extensions-page.ui:27
 msgid ""
 "Epiphany is compatible with web extensions for Mozilla Firefox. To find and "
-"add web extensions, visit <a "
-"href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
+"add web extensions, visit <a href=\"https://addons.mozilla.org\">addons."
+"mozilla.org</a>"
 msgstr ""
 "Epiphany és compatible amb extensions web per a Mozilla Firefox. Per a "
-"trobar i afegir extensions web, visiteu <a "
-"href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
+"trobar i afegir extensions web, visiteu <a href=\"https://addons.mozilla.org"
+"\">addons.mozilla.org</a>"
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
 msgid "No Extensions Installed"
@@ -4437,8 +4397,8 @@ msgid ""
 "Tabs cannot be opened)."
 msgstr ""
 "A sota es mostren les pestanyes obertes sincronitzades dels altres "
-"dispositius que utilitzen Firefox Sync amb aquest compte. Obriu una pestanya"
-" fent doble clic al seu nom (les pestanyes locals no es poden obrir)."
+"dispositius que utilitzen Firefox Sync amb aquest compte. Obriu una pestanya "
+"fent doble clic al seu nom (les pestanyes locals no es poden obrir)."
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:15
 msgid "Additional URLs"
@@ -4636,11 +4596,11 @@ msgstr "S'han exportat amb èxit les contrasenyes!"
 msgid "passwords.csv"
 msgstr "contrasenyes.csv"
 
-#: src/window-commands.c:1224
+#: src/window-commands.c:1248
 msgid "Epiphany Canary"
 msgstr "Versions de prova de l'Epiphany"
 
-#: src/window-commands.c:1247
+#: src/window-commands.c:1271
 msgid "translator-credits"
 msgstr ""
 "Jordi Mallach <jordi@sindominio.net>\n"
@@ -4650,57 +4610,57 @@ msgstr ""
 "Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>\n"
 "Quique Serrano <qserrano@outlook.com>"
 
-#: src/window-commands.c:1399
+#: src/window-commands.c:1423
 msgid "Reload Website?"
 msgstr "Voleu tornar a carregar el lloc web?"
 
-#: src/window-commands.c:2002
+#: src/window-commands.c:2026
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "L'aplicació «%s» està llesta per a ser usada"
 
-#: src/window-commands.c:2005
+#: src/window-commands.c:2029
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "No s'ha pogut crear l'aplicació «%s»: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2015
+#: src/window-commands.c:2039
 msgid "Launch"
 msgstr "Llança"
 
-#: src/window-commands.c:2081
+#: src/window-commands.c:2105
 msgid "Replace Existing Web App?"
 msgstr "Substitueix l'aplicació web existent?"
 
-#: src/window-commands.c:2084
+#: src/window-commands.c:2108
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "Ja existeix una aplicació anomenada «%s», en substituir-la se sobreescriurà"
 
-#: src/window-commands.c:2089
+#: src/window-commands.c:2113
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: src/window-commands.c:2474
+#: src/window-commands.c:2498
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2478
+#: src/window-commands.c:2502
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2524
+#: src/window-commands.c:2548
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2983
+#: src/window-commands.c:3007
 msgid "Enable Caret Browsing Mode?"
 msgstr "Habilita el mode de navegació amb el cursor?"
 
-#: src/window-commands.c:2984
+#: src/window-commands.c:3008
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4710,6 +4670,25 @@ msgstr ""
 "característica col·loca un cursor mòbil a les pàgines web que us permet "
 "moure's amb el vostre teclat. Voleu habilitar la navegació amb el cursor?"
 
-#: src/window-commands.c:2989
+#: src/window-commands.c:3013
 msgid "_Enable"
 msgstr "_Habilita"
+
+#~ msgid ""
+#~ "[\n"
+#~ "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
+#~ "%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+#~ "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
+#~ "%s'>, 'bang': <'!g'>},\n"
+#~ "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
+#~ "'bang': <'!b'>}\n"
+#~ "\t\t\t\t]"
+#~ msgstr ""
+#~ "[\n"
+#~ "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q="
+#~ "%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+#~ "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?q="
+#~ "%s'>, 'bang': <'!g'>},\n"
+#~ "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
+#~ "'bang': <'!b'>}\n"
+#~ "\t\t\t\t]"
