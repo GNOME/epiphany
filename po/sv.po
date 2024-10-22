@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-05 22:35+0000\n"
-"PO-Revision-Date: 2024-09-06 02:11+0200\n"
+"POT-Creation-Date: 2024-10-22 19:00+0000\n"
+"PO-Revision-Date: 2024-10-22 21:03+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.5\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
@@ -117,7 +117,7 @@ msgstr "Föråldrad. Använd search-engine-providers i stället."
 msgid ""
 "[\n"
 "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
-"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+"q=%s&t=epiphany&kd=-1'>, 'bang': <'!ddg'>},\n"
 "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
 "q=%s'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
@@ -126,7 +126,7 @@ msgid ""
 msgstr ""
 "[\n"
 "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
-"q=%s&t=epiphany&kl=se-sv'>, 'bang': <'!ddg'>},\n"
+"q=%s&t=epiphany&kl=se-sv&kd=-1'>, 'bang': <'!ddg'>},\n"
 "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
 "q=%s&hl=sv'>, 'bang': <'!g'>},\n"
 "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?"
@@ -1094,7 +1094,7 @@ msgstr "Ange PIN för %s för att autentisera på %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
+#: src/ephy-history-dialog.c:572 src/ephy-window.c:257
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
@@ -1932,12 +1932,13 @@ msgstr "Fel vid borttagning av katalogen %s: %s"
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
-#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
+#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany&kd=-1"
 #.
 #: lib/ephy-search-engine-manager.h:35
 #, c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=se-sv&amp;kad=sv_SE"
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany&kd=-1"
+msgstr ""
+"https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=se-sv&amp;kad=sv_SE&kd=-1"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2651,214 +2652,214 @@ msgid "Open a new tab"
 msgstr "Öppna en ny flik"
 
 #. Undo, redo.
-#: src/ephy-window.c:953 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:910 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:911
 msgid "Re_do"
 msgstr "_Gör om"
 
 #. Edit.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:914 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:915 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: src/ephy-window.c:959 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:917
 msgid "_Paste Text Only"
 msgstr "Klistra endast _in text"
 
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:920
 msgid "S_end Link by Email…"
 msgstr "Sk_icka länk via e-post…"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:922
 msgid "_Reload"
 msgstr "_Uppdatera"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:923
 msgid "_Back"
 msgstr "_Bakåt"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:924
 msgid "_Forward"
 msgstr "_Framåt"
 
 #. Bookmarks
-#: src/ephy-window.c:970
+#: src/ephy-window.c:927
 msgid "Add Boo_kmark…"
 msgstr "Lägg till bo_kmärke…"
 
 #. Links.
-#: src/ephy-window.c:974
+#: src/ephy-window.c:931
 msgid "Open Link in New _Window"
 msgstr "Öppna länk i n_ytt fönster"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:932
 msgid "Open Link in New _Tab"
 msgstr "Öppna länk i ny _flik"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:933
 msgid "Open Link in I_ncognito Window"
 msgstr "Öppna länk i i_nkognitofönster"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:934
 msgid "_Save Link As…"
 msgstr "_Spara länk som…"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:935
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:936
 msgid "_Copy E-mail Address"
 msgstr "_Kopiera e-postadress"
 
 #. Images.
-#: src/ephy-window.c:983
+#: src/ephy-window.c:940
 msgid "View _Image in New Tab"
 msgstr "Visa _bild i ny flik"
 
-#: src/ephy-window.c:984
+#: src/ephy-window.c:941
 msgid "Copy I_mage Address"
 msgstr "Kopiera b_ildadress"
 
-#: src/ephy-window.c:985
+#: src/ephy-window.c:942
 msgid "_Save Image As…"
 msgstr "Spara bil_d som…"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:943
 msgid "Set as _Wallpaper"
 msgstr "Använd som sk_rivbordsbakgrund"
 
 #. Video.
-#: src/ephy-window.c:990
+#: src/ephy-window.c:947
 msgid "Open Video in New _Window"
 msgstr "Öppna video i nyt_t fönster"
 
-#: src/ephy-window.c:991
+#: src/ephy-window.c:948
 msgid "Open Video in New _Tab"
 msgstr "Öppna video i ny _flik"
 
-#: src/ephy-window.c:992
+#: src/ephy-window.c:949
 msgid "_Save Video As…"
 msgstr "_Spara video som…"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:950
 msgid "_Copy Video Address"
 msgstr "_Kopiera video-adress"
 
 #. Audio.
-#: src/ephy-window.c:997
+#: src/ephy-window.c:954
 msgid "Open Audio in New _Window"
 msgstr "Öppna ljud i nyt_t fönster"
 
-#: src/ephy-window.c:998
+#: src/ephy-window.c:955
 msgid "Open Audio in New _Tab"
 msgstr "Öppna ljud i ny _flik"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:956
 msgid "_Save Audio As…"
 msgstr "_Spara ljud som…"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:957
 msgid "_Copy Audio Address"
 msgstr "_Kopiera ljud-adress"
 
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:963
 msgid "Save Pa_ge As…"
 msgstr "Spara si_da som…"
 
-#: src/ephy-window.c:1007
+#: src/ephy-window.c:964
 msgid "_Take Screenshot…"
 msgstr "_Ta skärmbild…"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:965
 msgid "_Page Source"
 msgstr "Sidk_älla"
 
-#: src/ephy-window.c:1385
+#: src/ephy-window.c:1342
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Sök på nätet efter ”%s”"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1371
 msgid "Open Link"
 msgstr "Öppna länk"
 
-#: src/ephy-window.c:1416
+#: src/ephy-window.c:1373
 msgid "Open Link In New Tab"
 msgstr "Öppna länk i ny flik"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1375
 msgid "Open Link In New Window"
 msgstr "Öppna länk i nytt fönster"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1377
 msgid "Open Link In Incognito Window"
 msgstr "Öppna länk i inkognitofönster"
 
-#: src/ephy-window.c:2803
+#: src/ephy-window.c:2763
 msgid "_Ask Later"
 msgstr "_Fråga senare"
 
-#: src/ephy-window.c:2804 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2764 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_Neka"
 
-#: src/ephy-window.c:2805 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_Tillåt"
 
-#: src/ephy-window.c:3007 src/ephy-window.c:4444
+#: src/ephy-window.c:2967 src/ephy-window.c:4410
 msgid "Leave Website?"
 msgstr "Lämna webbplats?"
 
-#: src/ephy-window.c:3008 src/ephy-window.c:4445 src/window-commands.c:1240
+#: src/ephy-window.c:2968 src/ephy-window.c:4411 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "Ett formulär ändrades och har inte skickats"
 
-#: src/ephy-window.c:3009 src/ephy-window.c:4446 src/window-commands.c:1244
+#: src/ephy-window.c:2969 src/ephy-window.c:4412 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_Förkasta formulär"
 
-#: src/ephy-window.c:3030
+#: src/ephy-window.c:2990
 msgid "Download operation"
 msgstr "Hämtningsåtgärd"
 
-#: src/ephy-window.c:3032
+#: src/ephy-window.c:2992
 msgid "Show details"
 msgstr "Visa detaljer"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:2994
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d hämtningsåtgärd aktiv"
 msgstr[1] "%d hämtningsåtgärder aktiva"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3235
 msgid "Set as Default Browser?"
 msgstr "Ställ in som standardwebbläsare?"
 
-#: src/ephy-window.c:3277
+#: src/ephy-window.c:3237
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Använd Webb som din standardwebbläsare och för att öppna externa länkar"
 
-#: src/ephy-window.c:3279
+#: src/ephy-window.c:3239
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2866,55 +2867,55 @@ msgstr ""
 "Använd den teknologiska förhandsversionen av Epiphany som din "
 "standardwebbläsare och för att öppna externa länkar"
 
-#: src/ephy-window.c:3283
+#: src/ephy-window.c:3243
 msgid "_Ask Again Later"
 msgstr "_Fråga igen senare"
 
-#: src/ephy-window.c:3284
+#: src/ephy-window.c:3244
 msgid "_No"
 msgstr "_Nej"
 
-#: src/ephy-window.c:3285
+#: src/ephy-window.c:3245
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:3736
+#: src/ephy-window.c:3696
 msgid "Save password?"
 msgstr "Spara lösenord?"
 
-#: src/ephy-window.c:3737
+#: src/ephy-window.c:3697
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Lösenord kan tas bort när som helst i Inställningar"
 
-#: src/ephy-window.c:3739
+#: src/ephy-window.c:3699
 msgid "Not Now"
 msgstr "Inte nu"
 
-#: src/ephy-window.c:3740
+#: src/ephy-window.c:3700
 msgid "Never Save"
 msgstr "Spara aldrig"
 
-#: src/ephy-window.c:3741
+#: src/ephy-window.c:3701
 msgid "Save"
 msgstr "Spara"
 
-#: src/ephy-window.c:4575
+#: src/ephy-window.c:4541
 msgid "Close Multiple Tabs?"
 msgstr "Stäng flera flikar?"
 
-#: src/ephy-window.c:4576
+#: src/ephy-window.c:4542
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Om detta fönster stängs kommer alla öppna flikar att förloras"
 
-#: src/ephy-window.c:4577
+#: src/ephy-window.c:4543
 msgid "C_lose Tabs"
 msgstr "Stäng f_likar"
 
-#: src/ephy-window.c:4670
+#: src/ephy-window.c:4636
 msgid "New tab opened"
 msgstr "Ny flik öppnad"
 
-#: src/ephy-window.c:4674
+#: src/ephy-window.c:4640
 msgid "Switch"
 msgstr "Växla"
 
