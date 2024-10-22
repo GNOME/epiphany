@@ -34,23 +34,7 @@
 			<default>[]</default>
 		</key>
 		<key type="aa{sv}" name="search-engine-providers">
-			<!-- TRANSLATORS: These are the prepopulated search engines. You should
-				add country-specific URL query parameters if appropriate or change
-				the domain name's TLD. The different query parameters to be used for each
-				engine is as follows:
-				- DuckDuckGo: kl=country-language (see https://duckduckgo.com/params)
-				- Google: hl=lang (see https://developers.google.com/custom-search/docs/xml_results_appendices#interfaceLanguages)
-				- Bing: cc=country (see https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/language-support)
-				You are allowed to add search engines here, *if they make sense*. Please
-				don't add your favorite search engine just because you like it though,
-				only do it for search engines that are already widely used in this specific country.
-				Obvious cases where it makes sense are for example adding Yandex for
-				Russian, or Baidu for Chinese. If you do add a search engine, then please
-				make sure that you're not making mistakes in the GVariant text (e.g.
-				missing ', <, > or trailing comma), and that you're keeping the %s
-				placeholder for the search query. Also please check if they are actually
-				properly shown in the Preferences if you reset the gsettings key. -->
-			<default l10n="messages">
+			<default>
 				<![CDATA[
 				[
 					{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q=%s&t=epiphany&kd=-1'>, 'bang': <'!ddg'>},
