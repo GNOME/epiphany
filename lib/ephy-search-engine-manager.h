@@ -28,12 +28,6 @@
 
 G_BEGIN_DECLS
 
-/* TRANSLATORS: Please modify the main address of duckduckgo in order to match
- * the version used in your country. For example for the french version :
- * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany&kd=-1"
-*/
-#define EPHY_SEARCH_ENGINE_DEFAULT_ADDRESS _("https://duckduckgo.com/?q=%s&amp;t=epiphany&kd=-1")
-
 #define EPHY_TYPE_SEARCH_ENGINE_MANAGER (ephy_search_engine_manager_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphySearchEngineManager, ephy_search_engine_manager, EPHY, SEARCH_ENGINE_MANAGER, GObject)
