@@ -474,6 +474,7 @@ ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
   replace_str (&buf, "<DT>", "");
   replace_str (&buf, "<p>", "");
   replace_str (&buf, "&", "&amp;");
+  replace_str (&buf, "<HR>", "<HR/>");
 
   parser.start_element = xml_start_element;
   parser.end_element = xml_end_element;
