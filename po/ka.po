@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-09-08 12:50+0000\n"
-"PO-Revision-Date: 2024-09-09 14:57+0200\n"
+"POT-Creation-Date: 2024-10-23 01:17+0000\n"
+"PO-Revision-Date: 2024-10-23 05:47+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
@@ -92,47 +92,11 @@ msgstr "ნაგულისხმევად არჩეული საძ�
 msgid "Deprecated. Please use search-engine-providers instead."
 msgstr "მოძველებულია. გამოიყენეთ search-engine-providers."
 
-#. TRANSLATORS: These are the prepopulated search engines. You should
-#. add country-specific URL query parameters if appropriate or change
-#. the domain name's TLD. The different query parameters to be used for each
-#. engine is as follows:
-#. - DuckDuckGo: kl=country-language (see https://duckduckgo.com/params)
-#. - Google: hl=lang (see https://developers.google.com/custom-search/docs/xml_results_appendices#interfaceLanguages)
-#. - Bing: cc=country (see https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/language-support)
-#. You are allowed to add search engines here, *if they make sense*. Please
-#. don't add your favorite search engine just because you like it though,
-#. only do it for search engines that are already widely used in this specific country.
-#. Obvious cases where it makes sense are for example adding Yandex for
-#. Russian, or Baidu for Chinese. If you do add a search engine, then please
-#. make sure that you're not making mistakes in the GVariant text (e.g.
-#. missing ', <, > or trailing comma), and that you're keeping the %s
-#. placeholder for the search query. Also please check if they are actually
-#. properly shown in the Preferences if you reset the gsettings key.
-#: data/org.gnome.epiphany.gschema.xml:53
-msgid ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
-"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
-"q=%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
-"'bang': <'!b'>}\n"
-"\t\t\t\t]"
-msgstr ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
-"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
-"q=%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
-"'bang': <'!b'>}\n"
-"\t\t\t\t]"
-
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:45
 msgid "List of the search engines."
 msgstr "ხელმისაწვდომი საძიებო სისტემების სია."
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:46
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -145,40 +109,40 @@ msgstr ""
 "საძიებო სისტემის სახელია. \"url\" ძებნის ბმულია, სადაც ძებნის პირობა %s-ით "
 "ჩანაცვლდება. \"bang\" რაღაცაა, რაც ვერ გავიგე."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Enable Google Search Suggestions"
 msgstr "Google Search-ის შეთავაზებების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr ""
 "ნაჩვენები იქნება თუ არა Google-ის ძებნის მინიშნება ბმულის ჩანაწერის "
 "მინიშნებაში."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Force new windows to be opened in tabs"
 msgstr "ახალი ფანჯრის ჩანართებში ნაძალადევად გახსნის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "ახალი ფანჯრის მოთხოვნების ახალი ფანჯრის მაგიერ ჩანართებში გახსნა."
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid "Whether to automatically restore the last session"
 msgstr "აღვადგინო თუ არა ბოლო სესია"
 
-#: data/org.gnome.epiphany.gschema.xml:86
+#: data/org.gnome.epiphany.gschema.xml:70
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr ""
 "აღწერს, როგორ მოხდება გაშვებისას სესიის აღდგენა. დაშვებული მნიშვნელობებია "
-"\"always\" (აპლიკაციის წინა მდგომარეობა ყოველთვის აღდგება) da "
-"'crashed\" (სესია, მხოლოდ, მაშინ აღდგება, თუ აპლიკაცია ავარიულად დასრულდება)."
+"\"always\" (აპლიკაციის წინა მდგომარეობა ყოველთვის აღდგება) da 'crashed\" "
+"(სესია, მხოლოდ, მაშინ აღდგება, თუ აპლიკაცია ავარიულად დასრულდება)."
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -186,7 +150,7 @@ msgstr ""
 "დაყოვნდება თუ არა იმ ჩანართების ჩატვირთვა, რომლებიც სესიის აღდგენისას "
 "მაშინვე ხილული არაა"
 
-#: data/org.gnome.epiphany.gschema.xml:91
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -194,11 +158,11 @@ msgstr ""
 "როცა ეს პარამეტრი დაყენებულია ჭეშმარიტზე, სესიის აღდგენისას ბრაუზერი არ "
 "ჩატვირთავს ჩანართებს, სანამ მომხმარებელი ზედ არ გადაერთვება."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "List of adblock filters"
 msgstr "AdBlock-ის ფილტრების სია"
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
@@ -206,11 +170,11 @@ msgstr ""
 "ბმულების სია შემცველობის გაფილტვრის წესებით JSON ფორმატში, "
 "რეკლამთმბლოკისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid "Whether to ask for setting browser as default"
 msgstr "ვიკითხო თუ არა ბრაუზერის ნაგულისხმევად დაყენებისას"
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -218,22 +182,22 @@ msgstr ""
 "როცა ეს პარამეტრი დაყენებულია ჭეშმარიტზე, ბრაუზერი გკითხავთ, გახდეს თუ არა "
 "ნაგულისხმევი ბრაუზერი, თუ ის უკვე არაა."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Start in incognito mode"
 msgstr "ინკოგნიტო რეჟიმში გაშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 "როცა ეს პარამეტრი დაყენებულია ჭეშმარიტზე, ბრაუზერი ყოველთვის კონფიდენციალურ "
 "რეჟიმში გაეშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "Active clear data items."
 msgstr "მონაცემის ელემენტების აქტიური გასუფტავება."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
@@ -247,12 +211,12 @@ msgstr ""
 "ბაზები, 32 = WebSQL მონაცემთა ბაზები, 64 = დამატების მონაცემები, 128 = HSTS "
 "პოლიტიკის კეში, 256 = ჭკვიანი ტრეკინგის აკრძალვის მონაცემები."
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "ჩანართის ზომის გაზრდა, რომ ჩანართების პანელზე არსებული ადგილი დაიკავოს."
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:102
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
@@ -260,11 +224,11 @@ msgstr ""
 "თუ ჩართულია, ჩანართები გაიწელება, რომ დაიკავოს სრული ხელმისაწვდომი ადგილი "
 "ჩანართების ზოლში. ეს პარამეტრი გამოტოვებულია სამუშაო მაგიდაზე Pantheon."
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid "The visibility policy for the tabs bar."
 msgstr "ჩანართების ზოლის ხილვადობის პოლიტიკა."
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -272,26 +236,26 @@ msgid ""
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 "მართავს, როდისაა ნაჩვენები ჩანართების პანელი. დასაშვები მნიშვნელობებია "
-"\"ყოველთვის\" (ჩანართების ზოლი ყოველთვის ხილულია), \"ერთზე-"
-"მეტი\" (ჩანართების პანელი, მხოლოდ, მაშინაა ნაჩვენები, როცა არსებობს ორი ან "
-"მეტი ჩანართი) და \"არასოდეს\" (ჩანართების ზოლი ყოველთვის დამალულია). ეს "
-"პარამეტრი გამოტოვებულია სამუშაო მაგიდაზე Pantheon, სადაც გამოიყენება "
-"მნიშვნელობა \"ყოველთვის\"."
+"\"ყოველთვის\" (ჩანართების ზოლი ყოველთვის ხილულია), \"ერთზე-მეტი\" "
+"(ჩანართების პანელი, მხოლოდ, მაშინაა ნაჩვენები, როცა არსებობს ორი ან მეტი "
+"ჩანართი) და \"არასოდეს\" (ჩანართების ზოლი ყოველთვის დამალულია). ეს პარამეტრი "
+"გამოტოვებულია სამუშაო მაგიდაზე Pantheon, სადაც გამოიყენება მნიშვნელობა "
+"\"ყოველთვის\"."
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Keep window open when closing last tab"
 msgstr "ფანჯრის ღია დატოვება ბოლო ჩანართის დახურვის შემდეგ"
 
-#: data/org.gnome.epiphany.gschema.xml:128
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "თუ ჩართულია, აპლიკაციის ფანჯარა ბოლო ჩანართის დახურვის შემდეგაც ღია დარჩება."
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid "Reader mode article font style."
 msgstr "მკითხველის რეჟიმის სტატიის ფონტის სტილი."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:119
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
@@ -299,11 +263,11 @@ msgstr ""
 "აირჩიეთ სტილი მთავარი სხეულის ტექსტისთვის სტატიებისთვის წაკითხვის რეჟიმში. "
 "შესაძლო მნიშვნელობებია \"sans\" და \"serif\"."
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:123
 msgid "Reader mode color scheme."
 msgstr "მკითხველის რეჟიმის ფერის სქემა."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -315,23 +279,23 @@ msgstr ""
 "ტექსტი მუქ ფონზე). ეს პარამეტრი გამოტოვებულია სისტემებზე, რომლებსაც მთელი "
 "სისტემის მუქი თემის მხარდაჭერა გააჩნია. მაგ: GNOME 42, ან უფრო ახალი."
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:130
 msgid "Minimum font size"
 msgstr "ფონტის მინიმალური ზომა"
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid "Use GNOME fonts"
 msgstr "GNOME-ის ფონტები"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:135
 msgid "Use GNOME font settings."
 msgstr "GNOME-ის ფონტის პარამეტრების გამოყენება."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Custom sans-serif font"
 msgstr "Sans-serif ფონტის ხელით მითითება"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:140
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -339,11 +303,11 @@ msgstr ""
 "მნიშვნელობა, რომელიც გამოიყენება sans-serif ფონტის გადასაფარად, როცა "
 "დაყენებულია use-gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid "Custom serif font"
 msgstr "Sertif ფონტის ხელით მითითება"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:145
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -351,11 +315,11 @@ msgstr ""
 "მნიშვნელობა, რომელიც გამოიყენება serif ფონტის გადასაფარად, როცა დაყენებულია "
 "use-gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid "Custom monospace font"
 msgstr "ერთსიგანიან ფონტის ხელით მითითება"
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:150
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -363,68 +327,68 @@ msgstr ""
 "მნიშვნელობა, რომელიც გამოიყენება ერთსიგანიანი ფონტის გადასაფარად, როცა "
 "დაყენებულია use-gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Use a custom CSS"
 msgstr "მომხმარებლის CSS-ის გამოყენება"
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:155
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "ვებგვერდის CSS-ის შესაცვლელად მომხმარებლის CSS-ის გამოყენება."
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid "Use a custom JS"
 msgstr "მომხმარებლის JS-ის გამოყენება"
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:160
 msgid "Use a custom JS file to modify websites."
 msgstr "ვებგვერდების შესაცვლელად მომხმარებლის JS-ის გამოყენება."
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid "Enable spell checking"
 msgstr "მართლწერის შემოწმების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:165
 msgid "Spell check any text typed in editable areas."
 msgstr "ჩასწორებად ადგლებში აკრეფილი ტექსტის მართლწერის შემოწმება."
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid "Default encoding"
 msgstr "ნაგულისხმები კოდირება"
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "ნაგულისხმევი კოდირება. მისაღებია მნიშვნელობები, რომლებიც WebKitGTK-ს ესმის."
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:174
 #: src/resources/gtk/prefs-general-page.ui:215
 msgid "Languages"
 msgstr "ენები"
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "რჩეული ენები. ლოკალის კოდების მასივი, ან \"system\", რომ მიმდინარე ლოკალი "
 "გამოვიყენო."
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:179
 msgid "Allow popups"
 msgstr "მხტუნარების დაშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "საიტებისთვის JavaScript-ით ახალი ფანჯრების გახსნის უფლების მიცემა (თუ "
 "JavaScript ჩართულია)."
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:184
 msgid "User agent"
 msgstr "მომხმარებლის აგენტი"
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -432,11 +396,11 @@ msgstr ""
 "სტრიქონი, რომელიც გამოყენებული იქნება მომხმარებლის აგენტად, ბრაუზერის "
 "იდენტიფიკაციისთვის ვებსერვერებზე."
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:189
 msgid "Enable adblock"
 msgstr "AdBlock-ის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -444,19 +408,19 @@ msgstr ""
 "დავბლოკო თუ არა ჩაშენებული რეკლამები, რომლებიც ვებგვერდებს უნდათ, რომ "
 "გაჩვენონ."
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:194
 msgid "Remember passwords"
 msgstr "პაროლების დამახსოვრება"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Whether to store and prefill passwords in websites."
 msgstr "დავიმახსოვრო და წინასწარ შევავსო თუ არა ვებგვერდის პაროლები."
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:199
 msgid "Enable site-specific quirks"
 msgstr "საიტის შესაბამისი თავისებურებების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -464,19 +428,19 @@ msgstr ""
 "ეშმაკობების გამოყენება, რომელიც ზოგიერთი ვებგვერდის უკეთ მუშაობას უწყობს "
 "ხელს. შეგიძლიათ, გამორთოთ ეს პარამეტრი, თუ რაიმე შეცდომის გამართვას ცდილობთ."
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:204
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "ჭკვიანი ტრეკინგის თავიდან აცილების (ITP) ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "ჩავრთო თუ არა ჭკვიანი ტრეკინგის თავიდან აცილება."
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:209
 msgid "Allow websites to store local website data"
 msgstr "ვებგვერდებისთვის მონაცემების ლოკალურად დამახსოვრების უფლების მიცემა"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -485,15 +449,15 @@ msgstr ""
 "მონაცემები და IndexDB მონაცემთა ბაზები. ამ პარამეტრის გამორთვით ბევრი "
 "ვებგვერდი მუშაობას შეწყვეტს."
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:214
 msgid "Default zoom level for new pages"
 msgstr "ახალი გვერდების გადიდების ნაგულისხმები სიდიდე"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:218
 msgid "Enable autosearch"
 msgstr "ავტომატური ძებნის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:219
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -505,11 +469,11 @@ msgstr ""
 "ძებნის სტრიქონში შეიყვანთ, აღქმული იქნება, როგორც ბმული, იმ შემთხვევის "
 "გარდა, თუ საძიებო სისტემას ჩამოსაშლელი მენიუდან ხელით არ აირჩევთ."
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable mouse gestures"
 msgstr "თაგუნას ჟესტების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -517,27 +481,27 @@ msgstr ""
 "ჩავრთო თუ არა თაგუნას ჟესტები. თაგუნას ჟესტები დაფუძნებულია Opera-ის ქცევაზე "
 "და აქტიურდება თაგუნა შუა ღილაკით + ჟესტით."
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "Last upload directory"
 msgstr "ბოლო ატვირთვის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid "Keep track of last upload directory"
 msgstr "დავიმახსოვრო თუ არა ბოლო ატვირთვის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:233
 msgid "Last download directory"
 msgstr "ბოლო გადმოწერის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Keep track of last download directory"
 msgstr "დავიმახსოვრო თუ არა ბოლო გადმოწერის საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "Hardware acceleration policy"
 msgstr "აპარატურული აჩქარების პოლიტიკა"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
@@ -550,27 +514,27 @@ msgstr ""
 "გამოყენების მოთხოვნებს და შეიძლება, გრაფიკული დრაივერის უამრავი შეცდომა "
 "გამოაჩინოს."
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "Always ask for download directory"
 msgstr "გადმოწერისას საქაღალდის ყოველთვის კითხვა"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "საქაღალდის ამრჩევის ჩვენება თითოეული გადმოწერისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "Enable immediately switch to new open tab"
 msgstr "ახალ ჩანართზე დაუყოვნებლივი გადართვის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid "Whether to automatically switch to a new open tab."
 msgstr "გადავერთო თუ არა ავტომატურად ახალ გახსნილ ჩანართზე."
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Enable WebExtensions"
 msgstr "ვებგაფართოებების ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
@@ -578,19 +542,19 @@ msgstr ""
 "ჩაირთვება თუ არა WebExtensions. ის ბრაუზერთაშორისი სისტემაა "
 "გაფართოებებისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Active WebExtensions"
 msgstr "ჩართული ვებგაფართოებები"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Indicates which WebExtensions are set to active."
 msgstr "მიუთითებს, რომელი ვებგაფართოებებია აქტიური."
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Show developer actions"
 msgstr "პროგრამისტის ქმედებების ჩვენება"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
@@ -598,46 +562,46 @@ msgstr ""
 "ნაჩვენები იქნება თუ არა პროგრამისტის კონტექსტური მენიუს ქმედებები. ეს "
 "საშუალებას მოგცემთ, გვერდის კოდის ნახვა ან ელემენტის ინსპექტირება გამოიყენოთ."
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:270
 msgid "Web application additional URLs"
 msgstr "ვებ აპლიკაციის დამატებითი URL-ები"
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:271
 msgid "The list of URLs that should be opened by the web application"
 msgstr "URL-ების სია, რომელიც ვებ აპლიკაციას უნდა გაეხსნა"
 
-#: data/org.gnome.epiphany.gschema.xml:291
+#: data/org.gnome.epiphany.gschema.xml:275
 msgid "Show navigation buttons in WebApp"
 msgstr "ნავიგაციის ღილაკების ჩვენება WebApp-ში"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:276
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "ნავიგაციის ღილაკების ჩვენება WebApp-ში."
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Run in background"
 msgstr "ფონურად გაშვება"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:281
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
 "თუ ჩართულია, აპლიკაცია გააგრძელებს ფონურად მუშაობას ფანჯრის დახურვის შემდეგ."
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid "WebApp is system-wide"
 msgstr "ვებაპი მთელი სისტემისთვისაა"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:286
 msgid "If enabled, application cannot be edited or removed."
 msgstr "თუ ჩართულია, აპლიკაციას ვერ წაშლით ან ჩაასწორებთ."
 
-#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "The downloads folder"
 msgstr "გადმოწერების საქაღალდე"
 
-#: data/org.gnome.epiphany.gschema.xml:309
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -646,31 +610,31 @@ msgstr ""
 "ნაგულისხმევი გადმოწერების საქაღალდე გამოვიყენო, ან \"სამუშაო მაგიდა\", "
 "სამუშაო მაგიდის საქაღალდის გამოსაყენებლად."
 
-#: data/org.gnome.epiphany.gschema.xml:316
+#: data/org.gnome.epiphany.gschema.xml:300
 msgid "Window position"
 msgstr "ფანჯრის მდებარეობა"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "მდებარეობა ახალი ფანჯრისთვის, რომელიც წინა სესიიდან არ აღდგება."
 
-#: data/org.gnome.epiphany.gschema.xml:321
+#: data/org.gnome.epiphany.gschema.xml:305
 msgid "Window size"
 msgstr "ფანჯრის ზომა"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:306
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "ზომა ახალი ფანჯრისთვის, რომელიც წინა სესიიდან არ აღდგება."
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:310
 msgid "Is maximized"
 msgstr "გაშლილია"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:311
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -678,11 +642,11 @@ msgstr ""
 "გაიშლება თუ არა მთელ ეკრანზე ახალი ფანჯარა, რომლის წინა სესიიდან აღდგენაც არ "
 "ხდება."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "Disable forward and back buttons"
 msgstr "წინ და უკან ღილაკების გამორთვა"
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -690,27 +654,27 @@ msgstr ""
 "თუ დაყენებულია \"ჭეშმარიტზე\", წინ და უკან გადასვლის ღილაკები გათიშულია, "
 "რითიც მომხმარებლებს უახლოეს ისტორიასთან წვდომას უკრძალავს"
 
-#: data/org.gnome.epiphany.gschema.xml:361
+#: data/org.gnome.epiphany.gschema.xml:345
 msgid "Firefox Sync Token Server URL"
 msgstr "Firefox-ის სინქის კოდის სერვერის URL"
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:346
 msgid "URL to a custom Firefox Sync token server."
 msgstr "URL მომხმარებლის Firefox-ის სინქის კოდის სერვერამდე."
 
-#: data/org.gnome.epiphany.gschema.xml:366
+#: data/org.gnome.epiphany.gschema.xml:350
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Firefox-ის სინქის ანგარიშების სერვერის URL"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:351
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "URL მომხმარებლის Firefox-ის სინქის ანგარიშების სერვერამდე."
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:355
 msgid "Currently signed in sync user"
 msgstr "ამჟამად შესული სინქრონიზაციის მომხმარებელი"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
@@ -718,43 +682,43 @@ msgstr ""
 "ელფოსტა, რომელიც მიმაგრებულია Mozilla-ის ანგარიშზე, რომელიც Mozilla-ის "
 "სერვერებთან მონაცემების სინქრონიზაციისთვის გამოიყენება."
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:360
 msgid "Last sync timestamp"
 msgstr "ბლო სინქრონიზაციის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "UNIX-ის დრო, რომელზეც ბოლო სინქრონიზაცია განხორციელდა. წამებში."
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:365
 msgid "Sync device ID"
 msgstr "სინქის მოწყობილობის ID"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "The sync device ID of the current device."
 msgstr "სინქრონიზაციის მოწყობილობის ID მიმდინარე მოწყობილობისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:370
 msgid "Sync device name"
 msgstr "სინქის მოწყობილობის სახელი"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "The sync device name of the current device."
 msgstr "სინქრონიზაციის მოწყობილობის სახელი მიმდინარე მოწყობილობისთვის."
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:375
 msgid "The sync frequency in minutes"
 msgstr "სინქრონიზაციის სიხშირე წუთებში"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "The number of minutes between two consecutive syncs."
 msgstr "დრო წუთებში ორ სინქს შორის."
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "Sync data with Firefox"
 msgstr "მონაცემების სინქრონიზაცია Firefox-თან"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -762,105 +726,105 @@ msgstr ""
 "ჭეშმარტი, თუ Ephy-ს კოლექციები Firefox-ის კოლექციებთან უნდა დასინქდეს. ცრუ - "
 "წინააღმდეგ შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "Enable bookmarks sync"
 msgstr "სანიშნეების სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "ჭეშმარიტი, თუ სანიშნეების კოლექცია უნდა დასინქდეს. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "Bookmarks sync timestamp"
 msgstr "სანიშნეების სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "დროის შტამპი, რომელზეც სანიშნეების ბოლო სინქრონიზაცია განხორციელდა."
 
-#: data/org.gnome.epiphany.gschema.xml:411
-#: data/org.gnome.epiphany.gschema.xml:426
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "Initial sync or normal sync"
 msgstr "საწყისი სინქრონიზაცია თუ ნორმალური"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "ჭეშმარიტი, თუ სანიშნეები პირველად დასინქდება. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Enable passwords sync"
 msgstr "პაროლების სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "ჭეშმარიტი, თუ პაროლების კოლექცია უნდა დასინქდეს. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid "Passwords sync timestamp"
 msgstr "პაროლების სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid "The timestamp at which last passwords sync was made."
 msgstr "დროის შტამპი, რომელზეც პაროლების ბოლო სინქრონიზაცია განხორციელდა."
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "ჭეშმარიტი, თუ პაროლების კოლექცია პირველად დასინქდება. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "Enable history sync"
 msgstr "ისტორიის სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "ჭეშმარიტი, თუ ისტორიის კოლექცია უნდა დასინქდეს. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid "History sync timestamp"
 msgstr "ისტორიის სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid "The timestamp at which last history sync was made."
 msgstr "დროის შტამპი, რომელზეც ისტორიის ბოლო სინქრონიზაცია განხორციელდა."
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "ჭეშმარიტი, თუ ისტორიის კოლექცია პირველად დასინქდება. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "Enable open tabs sync"
 msgstr "ღია ჩანართების სინქის ჩართვა"
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:431
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "ჭეშმარიტი, თუ ღია ჩანართების კოლექცია უნდა დასინქდეს. ცრუ სხვა შემთხვევაში."
 
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid "Open tabs sync timestamp"
 msgstr "ღია ჩანართების სინქის დროის შტამპი"
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "დროის შტამპი, რომელზეც ღია ჩანართების ბოლო სინქრონიზაცია განხორციელდა."
 
-#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება მიკროფონთან წვდომა"
 
-#: data/org.gnome.epiphany.gschema.xml:464
+#: data/org.gnome.epiphany.gschema.xml:448
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -872,14 +836,14 @@ msgstr ""
 "უფლებები მომხმარებელს უნდა ჰკითხოს, როცა \"დაშვება\" ან \"აკრძალვა\" "
 "ავტომატურად გადაწყვეტს, რა დააყენოს, მიერთებისას."
 
-#: data/org.gnome.epiphany.gschema.xml:468
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება გეოლოკაციასთან წვდომა"
 
-#: data/org.gnome.epiphany.gschema.xml:469
+#: data/org.gnome.epiphany.gschema.xml:453
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -891,14 +855,14 @@ msgstr ""
 "ბრაუზერმა უფლებები მომხმარებელს უნდა ჰკითხოს, როცა \"დაშვება\" ან "
 "\"აკრძალვა\" ავტომატურად გადაწყვეტს, რა დააყენოს, მიერთებისას."
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება გაფრთხილებების წვდომა"
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:458
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -910,14 +874,14 @@ msgstr ""
 "რომ ბრაუზერმა უფლებები მომხმარებელს უნდა ჰკითხოს, როცა \"დაშვება\" ან "
 "\"აკრძალვა\" ავტომატურად გადაწყვეტს, რა დააყენოს, მიერთებისას."
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:462
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება პაროლებთან წვდომა"
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:463
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -929,13 +893,13 @@ msgstr ""
 "უფლებები მომხმარებელს უნდა ჰკითხოს, როცა \"დაშვება\" ან \"აკრძალვა\" "
 "ავტომატურად გადაწყვეტს, რა დააყენოს, მიერთებისას."
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება ვებკამერასთან წვდომა"
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -947,14 +911,14 @@ msgstr ""
 "ბრაუზერმა უფლებები მომხმარებელს უნდა ჰკითხოს, როცა \"დაშვება\" ან "
 "\"აკრძალვა\" ავტომატურად გადაწყვეტს, რა დააყენოს, მიერთებისას."
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:472
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება რეკლამებზე წვდომა"
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -962,18 +926,18 @@ msgid ""
 "decision upon request."
 msgstr ""
 "ეს პარამეტრი გამოიყენება შესანახად, აქვს თუ არა მითითებულ ჰოსტს "
-"მომხმარებლისთვის რეკლამების ჩვენების უფლება. "
-"\"გადაუწყვეტელი\" (ნაგულისხმევი) ნიშნავს, რომ ბრაუზერმა უფლებები "
-"მომხმარებელს უნდა ჰკითხოს, როცა \"დაშვება\" ან \"აკრძალვა\" ავტომატურად "
-"გადაწყვეტს, რა დააყენოს, მიერთებისას."
+"მომხმარებლისთვის რეკლამების ჩვენების უფლება. \"გადაუწყვეტელი\" "
+"(ნაგულისხმევი) ნიშნავს, რომ ბრაუზერმა უფლებები მომხმარებელს უნდა ჰკითხოს, "
+"როცა \"დაშვება\" ან \"აკრძალვა\" ავტომატურად გადაწყვეტს, რა დააყენოს, "
+"მიერთებისას."
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:477
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "გადაწყვეტილება, რომელიც გამოყენებული იქნება, როცა ამ ჰოსტისთვის მოთხოვნილი "
 "იქნება ავტოდაკვრის პოლიტიკა"
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -1093,7 +1057,7 @@ msgstr ""
 
 #: embed/ephy-client-certificate-manager.c:303
 #: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:762
-#: src/ephy-history-dialog.c:572 src/ephy-window.c:254
+#: src/ephy-history-dialog.c:572 src/ephy-window.c:257
 #: src/preferences/extension-view.c:118 src/preferences/passwords-view.c:183
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:41
@@ -1928,12 +1892,13 @@ msgstr "%s: საქაღალდის წაშლის შეცდომ
 
 #. TRANSLATORS: Please modify the main address of duckduckgo in order to match
 #. * the version used in your country. For example for the french version :
-#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
+#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany&kd=-1"
 #.
 #: lib/ephy-search-engine-manager.h:35
 #, c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+#| msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany&kd=-1"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&kd=-1"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2185,12 +2150,12 @@ msgstr "HTML სანიშნეების ბაზის გახსნ�
 msgid "HTML bookmarks database could not be read."
 msgstr "HTML სანიშნეების ბაზიდან წაკითხვა შეუძლებელია."
 
-#: src/bookmarks/ephy-bookmarks-import.c:491
+#: src/bookmarks/ephy-bookmarks-import.c:492
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "HTML სანიშნეების ბაზის დამუშავება შეუძლებელია: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:644
+#: src/bookmarks/ephy-bookmarks-import.c:645
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "სანიშნეების ფაილის დამუშავება შეუძლებელია:"
@@ -2645,213 +2610,213 @@ msgid "Open a new tab"
 msgstr "ახალ ჩანართის გახსნა"
 
 #. Undo, redo.
-#: src/ephy-window.c:953 src/resources/gtk/location-entry.ui:264
+#: src/ephy-window.c:910 src/resources/gtk/location-entry.ui:264
 msgid "_Undo"
 msgstr "_დაბრუნება"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:911
 msgid "Re_do"
 msgstr "_გამეორება"
 
 #. Edit.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:274
+#: src/ephy-window.c:914 src/resources/gtk/location-entry.ui:274
 msgid "Cu_t"
 msgstr "ამო_ჭრა"
 
-#: src/ephy-window.c:958 src/resources/gtk/location-entry.ui:278
+#: src/ephy-window.c:915 src/resources/gtk/location-entry.ui:278
 msgid "_Copy"
 msgstr "_ასლი"
 
-#: src/ephy-window.c:959 src/resources/gtk/location-entry.ui:282
+#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:282
 msgid "_Paste"
 msgstr "_ჩასმა"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:917
 msgid "_Paste Text Only"
 msgstr "_მხოლოდ ტექსტის ჩასმა"
 
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:300
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:300
 msgid "Select _All"
 msgstr "მონიშნე _ყველა"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:920
 msgid "S_end Link by Email…"
 msgstr "ბმულის ელფოსტით _გაგზავნა…"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:922
 msgid "_Reload"
 msgstr "_გადატვირთვა"
 
-#: src/ephy-window.c:966
+#: src/ephy-window.c:923
 msgid "_Back"
 msgstr "უკან"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:924
 msgid "_Forward"
 msgstr "_გადაგზავნა"
 
 #. Bookmarks
-#: src/ephy-window.c:970
+#: src/ephy-window.c:927
 msgid "Add Boo_kmark…"
 msgstr "სან_იშნის დამატება…"
 
 #. Links.
-#: src/ephy-window.c:974
+#: src/ephy-window.c:931
 msgid "Open Link in New _Window"
 msgstr "ბმულის ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:975
+#: src/ephy-window.c:932
 msgid "Open Link in New _Tab"
 msgstr "ბმულის ახალ ჩ_ანართში გახსნა"
 
-#: src/ephy-window.c:976
+#: src/ephy-window.c:933
 msgid "Open Link in I_ncognito Window"
 msgstr "ბმულის _ინკოგნიტო ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:934
 msgid "_Save Link As…"
 msgstr "_ბმულის შენახვა, როგორც…"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:935
 msgid "_Copy Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:936
 msgid "_Copy E-mail Address"
 msgstr "_დააკოპირე ელ-ფოსტის მისამართი"
 
 #. Images.
-#: src/ephy-window.c:983
+#: src/ephy-window.c:940
 msgid "View _Image in New Tab"
 msgstr "_გამოსახულების ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:984
+#: src/ephy-window.c:941
 msgid "Copy I_mage Address"
 msgstr "_გამოსახულების ბმულის კოპირება"
 
-#: src/ephy-window.c:985
+#: src/ephy-window.c:942
 msgid "_Save Image As…"
 msgstr "_გამოსახულების შენახვა, როგორც…"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:943
 msgid "Set as _Wallpaper"
 msgstr "ფონის სურათად _დაყენება"
 
 #. Video.
-#: src/ephy-window.c:990
+#: src/ephy-window.c:947
 msgid "Open Video in New _Window"
 msgstr "ვიდეოს ახალ ფანჯარაში _გახსნა"
 
-#: src/ephy-window.c:991
+#: src/ephy-window.c:948
 msgid "Open Video in New _Tab"
 msgstr "_ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:992
+#: src/ephy-window.c:949
 msgid "_Save Video As…"
 msgstr "ვიდეოს შენახვა, როგორც…"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:950
 msgid "_Copy Video Address"
 msgstr "ვიდეოს მისამართის _კოპირება"
 
 #. Audio.
-#: src/ephy-window.c:997
+#: src/ephy-window.c:954
 msgid "Open Audio in New _Window"
 msgstr "აუდიოს ახალ _ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:998
+#: src/ephy-window.c:955
 msgid "Open Audio in New _Tab"
 msgstr "აუდიოს ახალ _ჩანართში გახსნა"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:956
 msgid "_Save Audio As…"
 msgstr "აუდიოს _შენახვა, როგორც…"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:957
 msgid "_Copy Audio Address"
 msgstr "აუდიოს მისამართის _კოპირება"
 
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:963
 msgid "Save Pa_ge As…"
 msgstr "_გვერდის შენახვა, როგორც…"
 
-#: src/ephy-window.c:1007
+#: src/ephy-window.c:964
 msgid "_Take Screenshot…"
 msgstr "_ეკრანის ანაბეჭდის გადაღება…"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:965
 msgid "_Page Source"
 msgstr "_გვერდის წყარო"
 
-#: src/ephy-window.c:1385
+#: src/ephy-window.c:1342
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "\"%s\"-ის ვებში მოძებნა"
 
-#: src/ephy-window.c:1414
+#: src/ephy-window.c:1371
 msgid "Open Link"
 msgstr "ბმულის გახსნა"
 
-#: src/ephy-window.c:1416
+#: src/ephy-window.c:1373
 msgid "Open Link In New Tab"
 msgstr "ბმულის ახალ ჩანართში გახსნა"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1375
 msgid "Open Link In New Window"
 msgstr "ბმულის ახალ ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1377
 msgid "Open Link In Incognito Window"
 msgstr "ბმულის პირად ფანჯარაში გახსნა"
 
-#: src/ephy-window.c:2803
+#: src/ephy-window.c:2763
 msgid "_Ask Later"
 msgstr "მოგვიანებით _მკითხე"
 
-#: src/ephy-window.c:2804 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2764 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "_უარყოფა"
 
-#: src/ephy-window.c:2805 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2765 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "_დაშვება"
 
-#: src/ephy-window.c:3007 src/ephy-window.c:4444
+#: src/ephy-window.c:2967 src/ephy-window.c:4410
 msgid "Leave Website?"
 msgstr "დატოვებთ ვებგვერდს?"
 
-#: src/ephy-window.c:3008 src/ephy-window.c:4445 src/window-commands.c:1240
+#: src/ephy-window.c:2968 src/ephy-window.c:4411 src/window-commands.c:1240
 msgid "A form was modified and has not been submitted"
 msgstr "ფორმა შეიცვალა და არ გადაცემულა"
 
-#: src/ephy-window.c:3009 src/ephy-window.c:4446 src/window-commands.c:1244
+#: src/ephy-window.c:2969 src/ephy-window.c:4412 src/window-commands.c:1244
 msgid "_Discard Form"
 msgstr "_ფორმის მოცილება"
 
-#: src/ephy-window.c:3030
+#: src/ephy-window.c:2990
 msgid "Download operation"
 msgstr "გადმოწერის ოპერაცია"
 
-#: src/ephy-window.c:3032
+#: src/ephy-window.c:2992
 msgid "Show details"
 msgstr "დეტალების ჩვენება"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:2994
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "აქტიურია %d გადმოწერის ოპერაცია"
 msgstr[1] "აქტიურია %d გადმოწერის ოპერაცია"
 
-#: src/ephy-window.c:3275
+#: src/ephy-window.c:3235
 msgid "Set as Default Browser?"
 msgstr "დავაყენო ნაგულისხმევ ბრაუზერად?"
 
-#: src/ephy-window.c:3277
+#: src/ephy-window.c:3237
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Web-ის გამოყენება ნაგულისხმებ ბრაუზერად და გარე ბმულების გასახსნელად"
 
-#: src/ephy-window.c:3279
+#: src/ephy-window.c:3239
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2859,55 +2824,55 @@ msgstr ""
 "გამოიყენეთ Epiphany Technology Preview თქვენს ნაგულისხმევ ბრაუზერად და გარე "
 "ბმულების გასახსნელად"
 
-#: src/ephy-window.c:3283
+#: src/ephy-window.c:3243
 msgid "_Ask Again Later"
 msgstr "_მოგვიანებით თავიდან მკითხე"
 
-#: src/ephy-window.c:3284
+#: src/ephy-window.c:3244
 msgid "_No"
 msgstr "_არა"
 
-#: src/ephy-window.c:3285
+#: src/ephy-window.c:3245
 msgid "_Yes"
 msgstr "_დიახ"
 
-#: src/ephy-window.c:3736
+#: src/ephy-window.c:3696
 msgid "Save password?"
 msgstr "შევინახო პაროლი?"
 
-#: src/ephy-window.c:3737
+#: src/ephy-window.c:3697
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "პაროლების წაშლა ნებისმიერ დროს შეგიძლიათ მორგების ფანჯრიდან"
 
-#: src/ephy-window.c:3739
+#: src/ephy-window.c:3699
 msgid "Not Now"
 msgstr "არა ახლა"
 
-#: src/ephy-window.c:3740
+#: src/ephy-window.c:3700
 msgid "Never Save"
 msgstr "არასოდეს შეინახო"
 
-#: src/ephy-window.c:3741
+#: src/ephy-window.c:3701
 msgid "Save"
 msgstr "შენახვა"
 
-#: src/ephy-window.c:4575
+#: src/ephy-window.c:4541
 msgid "Close Multiple Tabs?"
 msgstr "დახურავთ ბევრ ჩანართს ერთდროულად?"
 
-#: src/ephy-window.c:4576
+#: src/ephy-window.c:4542
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "თუ ეს ფანჯარა დაიხურება, ყველა ღია ჩანართი დაიკარგება"
 
-#: src/ephy-window.c:4577
+#: src/ephy-window.c:4543
 msgid "C_lose Tabs"
 msgstr "_ჩანართების დახურვა"
 
-#: src/ephy-window.c:4670
+#: src/ephy-window.c:4636
 msgid "New tab opened"
 msgstr "ახალი ჩანართი გაიხსნა"
 
-#: src/ephy-window.c:4674
+#: src/ephy-window.c:4640
 msgid "Switch"
 msgstr "გადართვა"
 
@@ -4369,6 +4334,25 @@ msgstr ""
 #: src/window-commands.c:2843
 msgid "_Enable"
 msgstr "_ჩართვა"
+
+#~ msgid ""
+#~ "[\n"
+#~ "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+#~ "q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+#~ "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+#~ "q=%s'>, 'bang': <'!g'>},\n"
+#~ "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
+#~ "'bang': <'!b'>}\n"
+#~ "\t\t\t\t]"
+#~ msgstr ""
+#~ "[\n"
+#~ "\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
+#~ "q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
+#~ "\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
+#~ "q=%s'>, 'bang': <'!g'>},\n"
+#~ "\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
+#~ "'bang': <'!b'>}\n"
+#~ "\t\t\t\t]"
 
 #~ msgid "Firefox _Sync"
 #~ msgstr "Firefox-თან _სინქი"
