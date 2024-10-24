@@ -700,7 +700,7 @@ on_listbox_row_activated (GtkListBox        *box,
                                            window, NULL, EPHY_NEW_TAB_JUMP);
 
     ephy_web_view_load_url (ephy_embed_get_web_view (embed), url->url);
-    gtk_widget_grab_focus (GTK_WIDGET (self));
+    gtk_widget_grab_focus (GTK_WIDGET (row));
   } else {
     /* Selection mode is active, run selection logic */
     handle_selection_row_activated_event (self, row);
