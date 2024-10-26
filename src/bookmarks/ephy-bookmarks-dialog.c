@@ -34,7 +34,7 @@
 #include <glib/gi18n.h>
 
 struct _EphyBookmarksDialog {
-  GtkBox parent_instance;
+  AdwBin parent_instance;
 
   GtkWidget *toplevel_stack;
   GtkWidget *bookmarks_list_box;
@@ -47,7 +47,7 @@ struct _EphyBookmarksDialog {
   EphyBookmarksManager *manager;
 };
 
-G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
 
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
@@ -528,6 +528,15 @@ row_clicked_cb (GtkGesture          *gesture,
 }
 
 static void
+on_close_button_clicked (GtkButton *button,
+                         gpointer   user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (button)));
+
+  ephy_window_toggle_bookmarks (window);
+}
+
+static void
 on_search_entry_changed (GtkSearchEntry *entry,
                          gpointer        user_data)
 {
@@ -603,6 +612,7 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, tag_detail_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksDialog, search_entry);
 
+  gtk_widget_class_bind_template_callback (widget_class, on_close_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,

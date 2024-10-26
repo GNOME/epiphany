@@ -3847,15 +3847,6 @@ insert_action_group (const char   *prefix,
 }
 
 static void
-on_bookmark_close_button (GtkWidget *widget,
-                          gpointer   user_data)
-{
-  EphyWindow *self = EPHY_WINDOW (user_data);
-
-  ephy_window_toggle_bookmarks (self);
-}
-
-static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
@@ -3869,11 +3860,7 @@ ephy_window_constructed (GObject *object)
   GApplication *app;
   AdwBreakpoint *breakpoint;
   g_autoptr (GtkBuilder) builder = NULL;
-  GtkWidget *sidebar;
-  GtkWidget *bookmark_close_button;
-  GtkWidget *bookmark_box;
-  GtkWidget *bookmark_title;
-  GtkWidget *header_bar;
+
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
   GtkEventController *controller;
@@ -3996,33 +3983,7 @@ ephy_window_constructed (GObject *object)
                               GTK_WIDGET (window->fullscreen_box));
 
   ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-
-  sidebar = adw_toolbar_view_new ();
-  header_bar = adw_header_bar_new ();
-  adw_header_bar_set_show_title (ADW_HEADER_BAR (header_bar), FALSE);
-  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar), FALSE);
-
-  bookmark_close_button = gtk_button_new ();
-  g_signal_connect_object (bookmark_close_button, "clicked", G_CALLBACK (on_bookmark_close_button), window, 0);
-  gtk_button_set_icon_name (GTK_BUTTON (bookmark_close_button), "view-sidebar-end-symbolic");
-  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar), bookmark_close_button);
-  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (sidebar), header_bar);
-  adw_toolbar_view_set_extend_content_to_top_edge (ADW_TOOLBAR_VIEW (sidebar), TRUE);
-
-  bookmark_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_widget_set_margin_start (bookmark_box, 12);
-  gtk_widget_set_margin_end (bookmark_box, 12);
-  gtk_widget_set_margin_top (bookmark_box, 12);
-  gtk_widget_set_margin_bottom (bookmark_box, 12);
-  bookmark_title = gtk_label_new (_("Bookmarks"));
-  gtk_widget_set_margin_top (bookmark_title, 24);
-  gtk_widget_set_margin_bottom (bookmark_title, 24);
-  gtk_widget_add_css_class (bookmark_title, "title-1");
-  gtk_box_append (GTK_BOX (bookmark_box), bookmark_title);
-
   window->bookmarks_dialog = ephy_bookmarks_dialog_new ();
-  gtk_box_append (GTK_BOX (bookmark_box), window->bookmarks_dialog);
-  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (sidebar), bookmark_box);
 
   /* Overlay Split View */
   window->overlay_split_view = adw_overlay_split_view_new ();
@@ -4034,7 +3995,7 @@ ephy_window_constructed (GObject *object)
   adw_overlay_split_view_set_sidebar_position (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_PACK_END);
 
   adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_WIDGET (window->overview));
-  adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), sidebar);
+  adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), window->bookmarks_dialog);
 
   ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));

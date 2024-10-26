@@ -20,13 +20,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_BOOKMARKS_DIALOG (ephy_bookmarks_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, EPHY, BOOKMARKS_DIALOG, GtkBox)
+G_DECLARE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, EPHY, BOOKMARKS_DIALOG, AdwBin)
 
 GtkWidget *ephy_bookmarks_dialog_new      (void);
 
