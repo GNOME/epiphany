@@ -369,10 +369,15 @@ on_browse_history_deleted_cb (gpointer service,
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
-  if (!success)
-    return;
+  if (success) {
+    g_autoptr (GList) checked_rows = get_checked_rows (self);
+    GList *iter = NULL;
 
-  filter_now (self);
+    for (iter = checked_rows; iter != NULL; iter = g_list_next (iter))
+      gtk_list_box_remove (GTK_LIST_BOX (self->listbox), iter->data);
+  }
+
+  set_selection_active (self, FALSE);
 }
 
 static void
@@ -809,7 +814,6 @@ on_selection_delete_button_clicked (GtkButton         *button,
                                     EphyHistoryDialog *self)
 {
   delete_checked_rows (self);
-  set_selection_active (self, FALSE);
 }
 
 static void
