@@ -782,6 +782,7 @@ process_terminated_cb (EphyWebView                       *web_view,
                        gpointer                           user_data)
 {
   EphyWebViewErrorPage error_page = EPHY_WEB_VIEW_ERROR_PROCESS_CRASH;
+  GtkWidget *widget;
 
   switch (reason) {
     case WEBKIT_WEB_PROCESS_CRASHED:
@@ -796,7 +797,14 @@ process_terminated_cb (EphyWebView                       *web_view,
       break;
   }
 
-  if (!ephy_embed_has_load_pending (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view))) {
+  /* We're getting the embed manually here because the web view might already be
+   * unparented by this point.
+   */
+  widget = gtk_widget_get_parent (GTK_WIDGET (web_view));
+  while (widget && !EPHY_IS_EMBED (widget))
+    widget = gtk_widget_get_parent (widget);
+
+  if (widget && !ephy_embed_has_load_pending (EPHY_EMBED (widget))) {
     ephy_web_view_load_error_page (web_view, ephy_web_view_get_address (web_view),
                                    error_page, NULL, NULL);
   }
