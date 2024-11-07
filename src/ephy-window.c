@@ -3627,6 +3627,7 @@ static const char *disabled_actions_for_app_mode[] = {
   "bookmark-page",
   "new-tab",
   "home",
+  "location-search",
   "tabs-view",
   "open-application-manager"
 };
