@@ -1,8 +1,8 @@
 {
     "app-id" : "org.gnome.Epiphany.Canary",
-    "runtime" : "org.webkit.Platform",
-    "runtime-version" : "23.08",
-    "sdk" : "org.webkit.Sdk",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
     "command" : "ephy-wrapper",
     "tags" : [
         "nightly"
@@ -21,45 +21,92 @@
     ],
     "modules" : [
         {
-            "name": "glib",
+            "name": "elementary-icons",
             "buildsystem": "meson",
-            "config-opts": [
-            	"-Ddtrace=disabled",
-            	"-Dselinux=disabled",
-            	"-Dsystemtap=disabled"
-            ],
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/glib.git",
+                    "url": "https://github.com/elementary/icons.git",
                     "branch": "main"
                 }
             ],
             "modules": [
-            	{
-		              "name": "python3-packaging",
-		              "buildsystem": "simple",
-		              "build-commands": [
-			                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"packaging\" --no-build-isolation"
-		              ],
-		              "sources": [
-			                {
-			                    "type": "file",
-			                    "url": "https://files.pythonhosted.org/packages/08/aa/cc0199a5f0ad350994d660967a8efb233fe0416e4639146c089643407ce6/packaging-24.1-py3-none-any.whl",
-			                    "sha256": "5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"
-			                }
-		              ]
-		          }
+                {
+                    "name": "xcursorgen",
+                    "cleanup": [ "*" ],
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "https://xorg.freedesktop.org/archive/individual/app/xcursorgen-1.0.8.tar.gz",
+                            "sha256": "b8bb2756918343b8bc15a4ce875e9efb6c4e7777adba088280e53dd09753b6ac"
+                        }
+                    ]
+                }
             ]
         },
         {
-            "name": "glib-networking",
+            "name": "elementary-stylesheet",
             "buildsystem": "meson",
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/glib-networking.git",
-                    "branch": "master"
+                    "url": "https://github.com/elementary/stylesheet.git",
+                    "branch" : "main"
+                }
+            ],
+            "modules": [
+                {
+                    "name": "sassc",
+                    "buildsystem" : "meson",
+                    "cleanup": [ "*" ],
+                    "sources": [
+                        {
+                            "type": "git",
+                            "url" : "https://github.com/lazka/sassc.git",
+                            "branch" : "meson"
+                        }
+                    ],
+                    "modules": [
+                        {
+                            "name": "libsass",
+                            "buildsystem" : "meson",
+                            "cleanup": [ "*" ],
+                            "sources": [
+                                {
+                                    "type": "git",
+                                    "url" : "https://github.com/lazka/libsass.git",
+                                    "branch" : "meson"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name" : "libgee",
+            "buildsystem" : "autotools",
+            "build-options" : {
+                "env" : {
+                    "ACLOCAL_PATH" : "/usr/lib/sdk/vala-nightly/share/aclocal"
+                }
+            },
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libgee.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
+            "name": "granite",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/elementary/granite.git",
+                    "branch": "main"
                 }
             ]
         },
@@ -80,128 +127,6 @@
             ]
         },
         {
-            "name": "gcr",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dintrospection=false",
-                "-Dvapi=false",
-                "-Dgtk_doc=false",
-                "-Dssh_agent=false",
-                "-Dsystemd=disabled"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gcr.git"
-                }
-            ]
-        },
-        {
-            "name" : "json-glib",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/json-glib.git"
-                }
-            ]
-        },
-        {
-            "name" : "libsass",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/lazka/libsass.git",
-                    "branch" : "meson"
-                }
-            ]
-        },
-        {
-            "name" : "sassc",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/lazka/sassc.git",
-                    "branch" : "meson"
-                }
-            ]
-        },
-        {
-            "name": "yaml",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz",
-                    "sha256": "c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4"
-                }
-            ],
-            "cleanup": [ "/include", "/lib/*.a", "/lib/*.la", "/lib/pkgconfig" ]
-        },
-        {
-            "name": "xmlb",
-            "buildsystem": "meson",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/hughsie/libxmlb/",
-                    "branch": "main"
-                }
-            ]
-        },
-        {
-            "name": "appstream",
-            "buildsystem": "meson",
-            "config-opts": [
-                "-Dstemming=false"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/ximion/appstream",
-                    "branch": "stable-0.16.x"
-                }
-            ]
-        },
-        {
-            "name": "gtk",
-            "buildsystem": "meson",
-            "config-opts": [
-                "-Dvulkan=disabled"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/gtk.git",
-                    "branch": "main"
-                },
-                {
-                    "type": "git",
-                    "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git",
-                    "branch": "main",
-                    "dest": "subprojects/wayland-protocols"
-                }
-            ]
-        },
-        {
-            "name": "libadwaita",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dgtk_doc=false",
-                "-Dvapi=false",
-                "-Dtests=false",
-                "-Dexamples=false"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libadwaita.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "webkitgtk",
             "buildsystem" : "simple",
             "build-commands" : [
@@ -210,7 +135,8 @@
                 "cp lib/libwebkitgtkinjectedbundle.so /app/lib",
                 "mkdir -p /app/libexec",
                 "cp bin/WebKit*Process /app/libexec",
-                "cp -r install/lib/pkgconfig /app/lib/",
+                "cp -r install/lib64/pkgconfig /app/lib/",
+                "sed -i 's;/app/webkit/WebKitBuild/Release/install/lib64;/app/lib;g' /app/lib/pkgconfig/*.pc",
                 "sed -i 's;/app/webkit/WebKitBuild/Release/install;/app;g' /app/lib/pkgconfig/*.pc",
                 "cp -r install/include /app/"
             ],
@@ -221,7 +147,8 @@
             "name" : "epiphany",
             "buildsystem" : "meson",
             "config-opts" : [
-                "-Dprofile=Canary"
+                "-Dprofile=Canary",
+                "-Dgranite=enabled"
             ],
             "sources" : [
                 {

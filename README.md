@@ -23,10 +23,9 @@ is via [Flatpak](https://www.flatpak.org/). You may:
    flavor of Epiphany is more likely to be **very unstable** because the code
    being built comes directly from WebKit's git main branch and Epiphany's git
    master branch. Epiphany Canary can be installed by executing the following
-   flatpak commands in a terminal:
+   flatpak command in a terminal:
 
    ```shell
-   flatpak --user remote-add --if-not-exists webkit https://software.igalia.com/flatpak-refs/webkit-sdk.flatpakrepo
    flatpak --user install https://nightly.gnome.org/repo/appstream/org.gnome.Epiphany.Canary.flatpakref
    ```
 

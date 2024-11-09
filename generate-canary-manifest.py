@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2021 Igalia S.L.
+# Copyright (C) 2021-2024 Igalia S.L.
 #
 # This file is part of Epiphany.
 #
@@ -16,40 +16,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
 
-from html.parser import HTMLParser
 import argparse
-import hashlib
 import json
 import os
-import re
 import sys
 import urllib.request
 
-ZIP_FILE = "webkitgtk.zip"
+ARCHIVE_FILE = "webkitgtk.zip"
 
-# FIXME: Might be worth adding some JSON file listing builds on the servers.
-class MyHTMLParser(HTMLParser):
-    builds = []
-    def handle_starttag(self, tag, attrs):
-        if tag != "a":
-            return
-        for (name, value) in attrs:
-            if name == "href" and (value.startswith("release") or value.startswith("debug")) and '%40main' in value:
-                self.builds.append(value)
-
-def download_zipped_build(build_type, verbose):
-    url = f"https://webkitgtk4-{build_type}.igalia.com/built-products/"
-    with urllib.request.urlopen(url) as page_fd:
-        parser = MyHTMLParser()
-        parser.feed(page_fd.read().decode("utf-8"))
-        try:
-            latest = parser.builds[-1]
-        except IndexError:
-            print(f"No build found in {url}")
-            return ("", "")
+def download_nightly_build(verbose):
+    url = "https://webkitgtk.org/built-products/x86_64/release/nightly/GNOMEWebCanary"
+    with urllib.request.urlopen(f"{url}/LAST-IS") as fd:
+        latest = fd.read().strip().decode('utf8')
 
     print(f"Downloading build {latest} from {url}")
-    zip_file = open(ZIP_FILE, "wb")
+    archive = open(ARCHIVE_FILE, "wb")
 
     def update(blocks, bs, size):
         done = int(50 * blocks * bs / size)
@@ -60,30 +41,23 @@ def download_zipped_build(build_type, verbose):
     if verbose:
         args.append(update)
 
-    urllib.request.urlretrieve(f"{url}/{latest}", ZIP_FILE, *args)
-    h = hashlib.new('sha256')
-    with open(ZIP_FILE, "rb") as f:
-        h.update(f.read())
+    archive_url = f"{url}/{latest}"
+    urllib.request.urlretrieve(archive_url, ARCHIVE_FILE, *args)
 
-    checksum = h.hexdigest()
-    return (ZIP_FILE, checksum)
+    shasum_url = archive_url.replace('.zip', '.sha256sum')
+    with urllib.request.urlopen(shasum_url) as fd:
+        output = fd.read().strip()
+        checksum = output.split(b' ')[0].decode('utf8')
+
+    return (ARCHIVE_FILE, checksum)
 
 def main(args):
     parser = argparse.ArgumentParser()
-    type_group = parser.add_mutually_exclusive_group()
-    type_group.add_argument("--debug", help="Download a debug build.",
-                            dest='build_type', action="store_const", const="Debug")
-    type_group.add_argument("--release", help="Download a release build.",
-                            dest='build_type', action="store_const", const="Release")
     parser.add_argument("--verbose", help="Show progress bar.", action=argparse.BooleanOptionalAction, default=False)
 
-    if len(args) == 0:
-        parser.print_help(sys.stderr)
-        return 1
-
     parsed, _ = parser.parse_known_args(args=args)
-    zip_filename, checksum = download_zipped_build(parsed.build_type.lower(), parsed.verbose)
-    if not zip_filename:
+    archive_filename, checksum = download_nightly_build(parsed.verbose)
+    if not archive_filename:
         return 2
 
     manifest_path = "org.gnome.Epiphany.Canary.json"
@@ -92,7 +66,7 @@ def main(args):
         pwd = os.path.abspath(os.curdir)
         for module in json_input['modules']:
             if module['name'] == 'webkitgtk':
-                path = os.path.join(pwd, zip_filename)
+                path = os.path.join(pwd, archive_filename)
                 module['sources'] = [{'type': 'archive', 'url': f'file://{path}', 'sha256': checksum,
                                       'strip-components': 0}]
             elif module['name'] == 'epiphany':
