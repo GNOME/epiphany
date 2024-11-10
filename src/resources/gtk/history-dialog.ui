@@ -81,62 +81,66 @@
             </child>
           </object>
         </child>
-        <child>
-          <object class="GtkStack" id="history_presentation_stack">
-            <property name="vexpand">True</property>
-            <child>
-              <object class="GtkScrolledWindow" id="history_scrolled_window">
-                <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
+        <property name="content">
+          <object class="AdwToastOverlay" id="toast_overlay">
+            <property name="child">
+              <object class="GtkStack" id="history_presentation_stack">
+                <property name="vexpand">True</property>
                 <child>
-                  <object class="GtkViewport">
-                    <property name="scroll-to-focus">True</property>
+                  <object class="GtkScrolledWindow" id="history_scrolled_window">
+                    <signal name="edge-reached" handler="on_edge_reached" object="EphyHistoryDialog" swapped="no"/>
                     <child>
-                      <object class="AdwClamp">
-                        <property name="margin_start">6</property>
-                        <property name="margin_end">6</property>
-                        <property name="maximum_size">1024</property>
+                      <object class="GtkViewport">
+                        <property name="scroll-to-focus">True</property>
                         <child>
-                          <object class="GtkListBox" id="listbox">
-                            <property name="margin_top">6</property>
-                            <property name="margin_bottom">6</property>
-                            <property name="valign">start</property>
-                            <property name="selection_mode">none</property>
-                            <property name="activate_on_single_click">True</property>
-                            <signal name="row-activated" handler="on_listbox_row_activated"/>
-                            <style>
-                              <class name="boxed-list"/>
-                            </style>
+                          <object class="AdwClamp">
+                            <property name="margin_start">6</property>
+                            <property name="margin_end">6</property>
+                            <property name="maximum_size">1024</property>
+                            <child>
+                              <object class="GtkListBox" id="listbox">
+                                <property name="margin_top">6</property>
+                                <property name="margin_bottom">6</property>
+                                <property name="valign">start</property>
+                                <property name="selection_mode">none</property>
+                                <property name="activate_on_single_click">True</property>
+                                <signal name="row-activated" handler="on_listbox_row_activated"/>
+                                <style>
+                                  <class name="boxed-list"/>
+                                </style>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="AdwSpinner" id="loading_spinner">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="width-request">32</property>
+                    <property name="height-request">32</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwStatusPage" id="empty_history_message">
+                    <property name="title" translatable="yes">No History Found</property>
+                    <property name="description" translatable="yes">Visited pages will be listed here</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwStatusPage" id="no_search_results_message">
+                    <property name="icon_name">edit-find-symbolic</property>
+                    <property name="title" translatable="yes">No Results Found</property>
+                    <property name="description" translatable="yes">Try a different search</property>
+                  </object>
+                </child>
               </object>
-            </child>
-            <child>
-              <object class="AdwSpinner" id="loading_spinner">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="width-request">32</property>
-                <property name="height-request">32</property>
-              </object>
-            </child>
-            <child>
-              <object class="AdwStatusPage" id="empty_history_message">
-                <property name="title" translatable="yes">No History Found</property>
-                <property name="description" translatable="yes">Visited pages will be listed here</property>
-              </object>
-            </child>
-            <child>
-              <object class="AdwStatusPage" id="no_search_results_message">
-                <property name="icon_name">edit-find-symbolic</property>
-                <property name="title" translatable="yes">No Results Found</property>
-                <property name="description" translatable="yes">Try a different search</property>
-              </object>
-            </child>
+            </property>
           </object>
-        </child>
+        </property>
         <child type="bottom">
           <object class="GtkRevealer" id="action_bar_revealer">
             <property name="transition-type">slide-up</property>
@@ -176,3 +180,4 @@
     </child>
   </template>
 </interface>
+

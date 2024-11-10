@@ -60,6 +60,7 @@ struct _EphyHistoryDialog {
   GtkWidget *selection_header_bar;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
+  GtkWidget *toast_overlay;
   GtkWidget *history_presentation_stack;
   GtkWidget *history_scrolled_window;
   GtkWidget *listbox;
@@ -412,11 +413,17 @@ static void
 row_copy_url_button_clicked (GtkWidget *button,
                              gpointer   user_data)
 {
-  GtkListBoxRow *row = user_data;
+  EphyHistoryDialog *self = user_data;
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (gtk_widget_get_ancestor (button, GTK_TYPE_LIST_BOX_ROW));
   g_autoptr (EphyHistoryURL) url = get_url_from_row (row);
 
-  if (url)
+  if (url) {
+    AdwToast *toast = adw_toast_new (_("Link copied"));
+
     gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (button)), url->url);
+    adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+    adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
+  }
 }
 
 static void
@@ -504,7 +511,7 @@ create_row (EphyHistoryDialog *self,
   gtk_widget_set_valign (copy_url_button, GTK_ALIGN_CENTER);
   gtk_widget_set_tooltip_text (copy_url_button, _("Copy URL"));
   gtk_widget_add_css_class (copy_url_button, "flat");
-  g_signal_connect (copy_url_button, "clicked", G_CALLBACK (row_copy_url_button_clicked), row);
+  g_signal_connect (copy_url_button, "clicked", G_CALLBACK (row_copy_url_button_clicked), self);
 
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), check_button);
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), date);
@@ -927,6 +934,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, selection_header_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, toast_overlay);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, history_presentation_stack);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, history_scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, listbox);
