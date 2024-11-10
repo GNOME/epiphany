@@ -37,6 +37,7 @@ struct _EphyPasswordsView {
 
   EphyPasswordManager *manager;
   GList *records;
+  GtkWidget *toast_overlay;
   GtkWidget *listbox;
   GtkWidget *confirmation_dialog;
 
@@ -126,8 +127,14 @@ copy_password_clicked (GtkWidget *button,
 {
   const char *password = user_data;
 
-  if (password)
+  if (password) {
+    EphyPasswordsView *self = EPHY_PASSWORDS_VIEW (gtk_widget_get_ancestor (button, EPHY_TYPE_PASSWORDS_VIEW));
+    AdwToast *toast = adw_toast_new (_("Password copied"));
+
     gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (button)), password);
+    adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+    adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
+  }
 }
 
 static void
@@ -151,6 +158,7 @@ ephy_passwords_view_class_init (EphyPasswordsViewClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/passwords-view.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, toast_overlay);
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, listbox);
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
 }
