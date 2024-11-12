@@ -22,10 +22,11 @@
 
 #include "ephy-link.h"
 
-#include "ephy-embed-utils.h"
-#include "ephy-type-builtins.h"
-#include "ephy-signal-accumulator.h"
 #include "ephy-debug.h"
+#include "ephy-embed-utils.h"
+#include "ephy-signal-accumulator.h"
+#include "ephy-type-builtins.h"
+#include "ephy-web-app-utils.h"
 
 enum {
   OPEN_LINK,
@@ -83,6 +84,10 @@ ephy_link_open (EphyLink      *link,
                 EphyLinkFlags  flags)
 {
   EphyEmbed *new_embed = NULL;
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION && !ephy_web_application_is_uri_allowed (address))
+    return NULL;
 
   LOG ("ephy_link_open address \"%s\" parent-embed %p flags %u", address, embed, flags);
 
