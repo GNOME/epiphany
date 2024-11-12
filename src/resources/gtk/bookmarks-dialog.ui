@@ -48,6 +48,9 @@
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="propagate-natural-height">true</property>
+                    <style>
+                      <class name="undershoot-top"/>
+                    </style>
                     <property name="child">
                       <object class="GtkStack" id="toplevel_stack">
                         <property name="vhomogeneous">false</property>

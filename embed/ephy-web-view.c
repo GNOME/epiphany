@@ -1340,7 +1340,7 @@ about_apps_message_received_cb (WebKitUserContentManager *ucm,
   dialog = adw_alert_dialog_new (_("Delete Web App?"), NULL);
 
   adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
-                                _("\"%s\" will be removed. You will have to re-install the website as an app from the menu to use it again."),
+                                _("“%s” will be removed. You will have to re-install the website as an app from the menu to use it again."),
                                 app_name);
 
   adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
