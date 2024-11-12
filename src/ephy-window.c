@@ -1984,9 +1984,9 @@ create_web_view_cb (WebKitWebView          *web_view,
     gtk_widget_grab_focus (GTK_WIDGET (embed));
 
   new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  g_signal_connect (new_web_view, "ready-to-show",
-                    G_CALLBACK (web_view_ready_cb),
-                    web_view);
+  g_signal_connect_object (new_web_view, "ready-to-show",
+                           G_CALLBACK (web_view_ready_cb),
+                           web_view, 0);
 
   return new_web_view;
 }
