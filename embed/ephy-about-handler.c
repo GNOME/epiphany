@@ -316,10 +316,11 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               "<tbody><tr id =\"%s\">"
                               "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
                               "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
-                              "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s', '%s');\" "
+                              "<td class=\"input\"><input type=\"button\" value=\"%s\" "
+                              "onclick=\"const appRow = this.closest('tr'); deleteWebApp(appRow.id, appRow.querySelector('.appname').innerText);\" "
                               "class=\"destructive-action\"></td>"
                               "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
-                              app->id, encoded_icon_path, encoded_name, encoded_url, _("Delete"), app->id, encoded_name,
+                              app->id, encoded_icon_path, encoded_name, encoded_url, _("Delete"),
                               /* Note for translators: this refers to the installation date. */
                               _("Installed on:"), install_date);
     }
