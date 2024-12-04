@@ -1339,6 +1339,18 @@ session_end_element (GMarkupParseContext  *ctx,
       return;
     }
 
+    if (context->is_first_tab) {
+      EphyEmbed *embed;
+      EphyWebView *web_view;
+
+      /* No tabs were restored from session state. */
+
+      embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  context->window, NULL, 0);
+      web_view = ephy_embed_get_web_view (embed);
+      ephy_web_view_load_homepage (web_view);
+    }
+
     tab_view = ephy_window_get_tab_view (context->window);
     if (context->active_tab < ephy_tab_view_get_n_pages (tab_view))
       ephy_tab_view_select_nth_page (tab_view, context->active_tab);
