@@ -533,12 +533,16 @@ add_urls_source (EphyHistoryDialog *self)
   GList *element;
   GtkWidget *row;
   gboolean has_results;
+  gboolean prev_has_results = self->has_search_results;
   gboolean prev_has_data = self->has_data;
 
   set_is_loading (self, FALSE);
 
   has_results = !!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0);
   set_has_search_results (self, has_results);
+  if (has_results != prev_has_results)
+    update_ui_state (self);
+
   if (!has_results)
     set_has_data (self, FALSE);
 
