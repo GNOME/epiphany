@@ -1,5 +1,5 @@
 /*!
-  Highlight.js v11.10.0 (git: 366a8bd012)
+  Highlight.js v11.11.0 (git: 40883e19c5)
   (c) 2006-2024 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
@@ -1558,7 +1558,7 @@ var hljs = (function () {
     return mode;
   }
 
-  var version = "11.10.0";
+  var version = "11.11.0";
 
   class HTMLInjectionError extends Error {
     constructor(reason, html) {
@@ -2085,6 +2085,7 @@ var hljs = (function () {
         // first handler (when ignoreIllegals is true)
         if (match.type === "illegal" && lexeme === "") {
           // advance so we aren't stuck in an infinite loop
+          modeBuffer += "\n";
           return 1;
         }
 
@@ -2378,24 +2379,23 @@ var hljs = (function () {
      * auto-highlights all pre>code elements on the page
      */
     function highlightAll() {
+      function boot() {
+        // if a highlight was requested before DOM was loaded, do now
+        highlightAll();
+      }
+
       // if we are called too early in the loading process
       if (document.readyState === "loading") {
+        // make sure the event listener is only added once
+        if (!wantsHighlight) {
+          window.addEventListener('DOMContentLoaded', boot, false);
+        }
         wantsHighlight = true;
         return;
       }
 
       const blocks = document.querySelectorAll(options.cssSelector);
       blocks.forEach(highlightElement);
-    }
-
-    function boot() {
-      // if a highlight was requested before DOM was loaded, do now
-      if (wantsHighlight) highlightAll();
-    }
-
-    // make sure we are in the browser environment
-    if (typeof window !== 'undefined' && window.addEventListener) {
-      window.addEventListener('DOMContentLoaded', boot, false);
     }
 
     /**
@@ -2902,7 +2902,9 @@ var hljs = (function () {
     'align-self',
     'alignment-baseline',
     'all',
+    'anchor-name',
     'animation',
+    'animation-composition',
     'animation-delay',
     'animation-direction',
     'animation-duration',
@@ -2910,8 +2912,14 @@ var hljs = (function () {
     'animation-iteration-count',
     'animation-name',
     'animation-play-state',
+    'animation-range',
+    'animation-range-end',
+    'animation-range-start',
+    'animation-timeline',
     'animation-timing-function',
     'appearance',
+    'aspect-ratio',
+    'backdrop-filter',
     'backface-visibility',
     'background',
     'background-attachment',
@@ -2921,6 +2929,8 @@ var hljs = (function () {
     'background-image',
     'background-origin',
     'background-position',
+    'background-position-x',
+    'background-position-y',
     'background-repeat',
     'background-size',
     'baseline-shift',
@@ -2946,6 +2956,8 @@ var hljs = (function () {
     'border-bottom-width',
     'border-collapse',
     'border-color',
+    'border-end-end-radius',
+    'border-end-start-radius',
     'border-image',
     'border-image-outset',
     'border-image-repeat',
@@ -2970,8 +2982,6 @@ var hljs = (function () {
     'border-left-width',
     'border-radius',
     'border-right',
-    'border-end-end-radius',
-    'border-end-start-radius',
     'border-right-color',
     'border-right-style',
     'border-right-width',
@@ -2987,14 +2997,20 @@ var hljs = (function () {
     'border-top-width',
     'border-width',
     'bottom',
+    'box-align',
     'box-decoration-break',
+    'box-direction',
+    'box-flex',
+    'box-flex-group',
+    'box-lines',
+    'box-ordinal-group',
+    'box-orient',
+    'box-pack',
     'box-shadow',
     'box-sizing',
     'break-after',
     'break-before',
     'break-inside',
-    'cx',
-    'cy',
     'caption-side',
     'caret-color',
     'clear',
@@ -3018,19 +3034,31 @@ var hljs = (function () {
     'column-width',
     'columns',
     'contain',
+    'contain-intrinsic-block-size',
+    'contain-intrinsic-height',
+    'contain-intrinsic-inline-size',
+    'contain-intrinsic-size',
+    'contain-intrinsic-width',
+    'container',
+    'container-name',
+    'container-type',
     'content',
     'content-visibility',
     'counter-increment',
     'counter-reset',
+    'counter-set',
     'cue',
     'cue-after',
     'cue-before',
     'cursor',
+    'cx',
+    'cy',
     'direction',
     'display',
     'dominant-baseline',
     'empty-cells',
     'enable-background',
+    'field-sizing',
     'fill',
     'fill-opacity',
     'fill-rule',
@@ -3043,29 +3071,39 @@ var hljs = (function () {
     'flex-shrink',
     'flex-wrap',
     'float',
-    'flow',
     'flood-color',
     'flood-opacity',
+    'flow',
     'font',
     'font-display',
     'font-family',
     'font-feature-settings',
     'font-kerning',
     'font-language-override',
+    'font-optical-sizing',
+    'font-palette',
     'font-size',
     'font-size-adjust',
+    'font-smooth',
     'font-smoothing',
     'font-stretch',
     'font-style',
     'font-synthesis',
+    'font-synthesis-position',
+    'font-synthesis-small-caps',
+    'font-synthesis-style',
+    'font-synthesis-weight',
     'font-variant',
+    'font-variant-alternates',
     'font-variant-caps',
     'font-variant-east-asian',
+    'font-variant-emoji',
     'font-variant-ligatures',
     'font-variant-numeric',
     'font-variant-position',
     'font-variation-settings',
     'font-weight',
+    'forced-color-adjust',
     'gap',
     'glyph-orientation-horizontal',
     'glyph-orientation-vertical',
@@ -3087,14 +3125,19 @@ var hljs = (function () {
     'grid-template-rows',
     'hanging-punctuation',
     'height',
+    'hyphenate-character',
+    'hyphenate-limit-chars',
     'hyphens',
     'icon',
     'image-orientation',
     'image-rendering',
     'image-resolution',
     'ime-mode',
+    'initial-letter',
+    'initial-letter-align',
     'inline-size',
     'inset',
+    'inset-area',
     'inset-block',
     'inset-block-end',
     'inset-block-start',
@@ -3102,24 +3145,20 @@ var hljs = (function () {
     'inset-inline-end',
     'inset-inline-start',
     'isolation',
-    'kerning',
     'justify-content',
     'justify-items',
     'justify-self',
+    'kerning',
     'left',
     'letter-spacing',
     'lighting-color',
     'line-break',
     'line-height',
+    'line-height-step',
     'list-style',
     'list-style-image',
     'list-style-position',
     'list-style-type',
-    'marker',
-    'marker-end',
-    'marker-mid',
-    'marker-start',
-    'mask',
     'margin',
     'margin-block',
     'margin-block-end',
@@ -3131,6 +3170,11 @@ var hljs = (function () {
     'margin-left',
     'margin-right',
     'margin-top',
+    'margin-trim',
+    'marker',
+    'marker-end',
+    'marker-mid',
+    'marker-start',
     'marks',
     'mask',
     'mask-border',
@@ -3149,6 +3193,10 @@ var hljs = (function () {
     'mask-repeat',
     'mask-size',
     'mask-type',
+    'masonry-auto-flow',
+    'math-depth',
+    'math-shift',
+    'math-style',
     'max-block-size',
     'max-height',
     'max-inline-size',
@@ -3167,6 +3215,12 @@ var hljs = (function () {
     'normal',
     'object-fit',
     'object-position',
+    'offset',
+    'offset-anchor',
+    'offset-distance',
+    'offset-path',
+    'offset-position',
+    'offset-rotate',
     'opacity',
     'order',
     'orphans',
@@ -3176,9 +3230,19 @@ var hljs = (function () {
     'outline-style',
     'outline-width',
     'overflow',
+    'overflow-anchor',
+    'overflow-block',
+    'overflow-clip-margin',
+    'overflow-inline',
     'overflow-wrap',
     'overflow-x',
     'overflow-y',
+    'overlay',
+    'overscroll-behavior',
+    'overscroll-behavior-block',
+    'overscroll-behavior-inline',
+    'overscroll-behavior-x',
+    'overscroll-behavior-y',
     'padding',
     'padding-block',
     'padding-block-end',
@@ -3190,16 +3254,24 @@ var hljs = (function () {
     'padding-left',
     'padding-right',
     'padding-top',
+    'page',
     'page-break-after',
     'page-break-before',
     'page-break-inside',
+    'paint-order',
     'pause',
     'pause-after',
     'pause-before',
     'perspective',
     'perspective-origin',
+    'place-content',
+    'place-items',
+    'place-self',
     'pointer-events',
     'position',
+    'position-anchor',
+    'position-visibility',
+    'print-color-adjust',
     'quotes',
     'r',
     'resize',
@@ -3209,7 +3281,10 @@ var hljs = (function () {
     'right',
     'rotate',
     'row-gap',
+    'ruby-align',
+    'ruby-position',
     'scale',
+    'scroll-behavior',
     'scroll-margin',
     'scroll-margin-block',
     'scroll-margin-block-end',
@@ -3235,6 +3310,9 @@ var hljs = (function () {
     'scroll-snap-align',
     'scroll-snap-stop',
     'scroll-snap-type',
+    'scroll-timeline',
+    'scroll-timeline-axis',
+    'scroll-timeline-name',
     'scrollbar-color',
     'scrollbar-gutter',
     'scrollbar-width',
@@ -3242,6 +3320,9 @@ var hljs = (function () {
     'shape-margin',
     'shape-outside',
     'shape-rendering',
+    'speak',
+    'speak-as',
+    'src', // @font-face
     'stop-color',
     'stop-opacity',
     'stroke',
@@ -3252,19 +3333,17 @@ var hljs = (function () {
     'stroke-miterlimit',
     'stroke-opacity',
     'stroke-width',
-    'speak',
-    'speak-as',
-    'src', // @font-face
     'tab-size',
     'table-layout',
-    'text-anchor',
     'text-align',
     'text-align-all',
     'text-align-last',
+    'text-anchor',
     'text-combine-upright',
     'text-decoration',
     'text-decoration-color',
     'text-decoration-line',
+    'text-decoration-skip',
     'text-decoration-skip-ink',
     'text-decoration-style',
     'text-decoration-thickness',
@@ -3278,23 +3357,37 @@ var hljs = (function () {
     'text-overflow',
     'text-rendering',
     'text-shadow',
+    'text-size-adjust',
     'text-transform',
     'text-underline-offset',
     'text-underline-position',
+    'text-wrap',
+    'text-wrap-mode',
+    'text-wrap-style',
+    'timeline-scope',
     'top',
+    'touch-action',
     'transform',
     'transform-box',
     'transform-origin',
     'transform-style',
     'transition',
+    'transition-behavior',
     'transition-delay',
     'transition-duration',
     'transition-property',
     'transition-timing-function',
     'translate',
     'unicode-bidi',
+    'user-modify',
+    'user-select',
     'vector-effect',
     'vertical-align',
+    'view-timeline',
+    'view-timeline-axis',
+    'view-timeline-inset',
+    'view-timeline-name',
+    'view-transition-name',
     'visibility',
     'voice-balance',
     'voice-duration',
@@ -3305,6 +3398,7 @@ var hljs = (function () {
     'voice-stress',
     'voice-volume',
     'white-space',
+    'white-space-collapse',
     'widows',
     'width',
     'will-change',
@@ -3314,7 +3408,8 @@ var hljs = (function () {
     'writing-mode',
     'x',
     'y',
-    'z-index'
+    'z-index',
+    'zoom'
   ].sort().reverse();
 
   /*
@@ -3495,7 +3590,9 @@ var hljs = (function () {
     "import",
     "from",
     "export",
-    "extends"
+    "extends",
+    // It's reached stage 3, which is "recommended for implementation":
+    "using"
   ];
   const LITERALS = [
     "true",
@@ -3877,7 +3974,7 @@ var hljs = (function () {
     const PARAMS = {
       className: 'params',
       // convert this to negative lookbehind in v12
-      begin: /(\s*)\(/, // to match the parms with 
+      begin: /(\s*)\(/, // to match the parms with
       end: /\)/,
       excludeBegin: true,
       excludeEnd: true,
@@ -4088,8 +4185,8 @@ var hljs = (function () {
         NUMBER,
         CLASS_REFERENCE,
         {
-          className: 'attr',
-          begin: IDENT_RE$1 + regex.lookahead(':'),
+          scope: 'attr',
+          match: IDENT_RE$1 + regex.lookahead(':'),
           relevance: 0
         },
         FUNCTION_VARIABLE,
