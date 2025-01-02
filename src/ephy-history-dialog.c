@@ -583,11 +583,38 @@ add_urls_source (EphyHistoryDialog *self)
 static void
 confirmation_dialog_response_cb (EphyHistoryDialog *self)
 {
-  ephy_history_service_clear (self->history_service,
-                              NULL, NULL, NULL);
-  filter_now (self);
+  const char *search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
+  g_autoptr (GList) visible_rows = NULL;
+  GtkListBoxRow *row;
+  int i = 0;
+  GList *deleted_urls = NULL;
+  GList *iter = NULL;
 
-  ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
+  if (g_strcmp0 (search_text, "") == 0) {
+    ephy_history_service_clear (self->history_service,
+                                NULL, NULL, NULL);
+    ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
+  } else {
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++)))
+      visible_rows = g_list_prepend (visible_rows, row);
+
+    for (iter = visible_rows; iter != NULL; iter = g_list_next (iter)) {
+      EphyHistoryURL *url = get_url_from_row (iter->data);
+
+      deleted_urls = g_list_prepend (deleted_urls, url);
+    }
+
+    ephy_history_service_delete_urls (self->history_service, deleted_urls, self->cancellable,
+                                      (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
+
+    for (iter = deleted_urls; iter != NULL; iter = g_list_next (iter))
+      ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
+
+    g_list_free_full (deleted_urls, (GDestroyNotify)ephy_history_url_free);
+  }
+
+  filter_now (self);
+  gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
 }
 
 static void
@@ -804,7 +831,7 @@ on_clear_button_clicked (GtkButton         *button,
   AdwDialog *dialog;
 
   dialog = adw_alert_dialog_new (_("Clear Browsing History?"),
-                                 _("All links will be permanently deleted"));
+                                 _("All visible links will be permanently deleted"));
 
   adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
                                   "cancel", _("_Cancel"),
@@ -1023,7 +1050,7 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
     tooltip = _("Unavailable in Incognito Mode");
     set_can_clear (self, FALSE);
   } else {
-    tooltip = _("Remove All History");
+    tooltip = _("Clear History");
     set_can_clear (self, TRUE);
   }
 
