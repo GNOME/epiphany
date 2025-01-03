@@ -44,6 +44,12 @@
             <child>
               <object class="AdwHeaderBar" id="selection_header_bar">
                 <property name="show-end-title-buttons">False</property>
+                <child type="start">
+                  <object class="GtkButton" id="select_all_button">
+                    <property name="label" translatable="yes">_Select All</property>
+                    <signal name="clicked" handler="on_select_all_button_clicked"/>
+                  </object>
+                </child>
                 <child type="end">
                   <object class="GtkButton" id="selection_cancel_button">
                     <property name="use-underline">True</property>
