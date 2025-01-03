@@ -530,8 +530,8 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   popover->host_label = gtk_label_new (NULL);
   gtk_label_set_wrap (GTK_LABEL (popover->host_label), TRUE);
   gtk_label_set_wrap_mode (GTK_LABEL (popover->host_label), PANGO_WRAP_WORD_CHAR);
-  gtk_label_set_max_width_chars (GTK_LABEL (popover->host_label), 0);
   gtk_label_set_xalign (GTK_LABEL (popover->host_label), 0.0);
+  gtk_widget_set_hexpand (popover->host_label, TRUE);
   gtk_box_append (GTK_BOX (box), popover->host_label);
 
   popover->security_label = gtk_label_new (NULL);
