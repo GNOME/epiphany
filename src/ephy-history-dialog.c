@@ -413,6 +413,11 @@ on_browse_history_deleted_cb (gpointer service,
 
     for (iter = checked_rows; iter != NULL; iter = g_list_next (iter))
       gtk_list_box_remove (GTK_LIST_BOX (self->listbox), iter->data);
+
+    if (!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0)) {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
+      set_has_data (self, FALSE);
+    }
   }
 
   set_selection_active (self, FALSE);
@@ -584,6 +589,7 @@ add_urls_source (EphyHistoryDialog *self)
   GList *element;
   GtkWidget *row;
   gboolean has_results;
+  gboolean prev_is_loading = self->is_loading;
   gboolean prev_has_results = self->has_search_results;
   gboolean prev_has_data = self->has_data;
 
@@ -591,8 +597,6 @@ add_urls_source (EphyHistoryDialog *self)
 
   has_results = !!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0);
   set_has_search_results (self, has_results);
-  if (has_results != prev_has_results)
-    update_ui_state (self);
 
   if (!has_results)
     set_has_data (self, FALSE);
@@ -601,7 +605,9 @@ add_urls_source (EphyHistoryDialog *self)
     self->sorter_source = 0;
     gtk_widget_queue_draw (self->listbox);
 
-    if (self->is_loading || prev_has_data != self->has_data)
+    if (prev_is_loading != self->is_loading ||
+        prev_has_data != self->has_data ||
+        prev_has_results != has_results)
       update_ui_state (self);
 
     return G_SOURCE_REMOVE;
@@ -620,7 +626,9 @@ add_urls_source (EphyHistoryDialog *self)
 
   self->num_fetch--;
 
-  if (self->is_loading || prev_has_data != self->has_data)
+  if (prev_is_loading != self->is_loading ||
+      prev_has_data != self->has_data ||
+      prev_has_results != has_results)
     update_ui_state (self);
 
   if (!self->num_fetch) {
@@ -664,8 +672,8 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
     g_list_free_full (deleted_urls, (GDestroyNotify)ephy_history_url_free);
   }
 
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
   filter_now (self);
-  gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
 }
 
 static void
