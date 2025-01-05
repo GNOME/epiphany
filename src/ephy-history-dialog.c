@@ -619,6 +619,7 @@ add_urls_source (EphyHistoryDialog *self)
   row = create_row (self, url);
   gtk_list_box_insert (GTK_LIST_BOX (self->listbox), row, -1);
   set_has_data (self, TRUE);
+  set_is_all_selected (self, FALSE);
 
   self->urls = g_list_remove_link (self->urls, element);
   ephy_history_url_free (url);
