@@ -293,6 +293,8 @@ on_find_urls_cb (gpointer service,
 
   clear_listbox (self->listbox);
 
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
+
   self->num_fetch = NUM_FETCH_LIMIT;
   self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
 }
@@ -569,6 +571,8 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
 {
   ephy_history_service_clear (self->history_service,
                               NULL, NULL, NULL);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
   filter_now (self);
 
   ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
