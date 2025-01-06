@@ -798,6 +798,19 @@ enable_itp_setting_changed_cb (GSettings      *settings,
 }
 
 static void
+add_path_to_sandbox_or_die (const char       *path,
+                            WebKitWebContext *context)
+{
+  g_autoptr (GError) error = NULL;
+
+  ephy_ensure_dir_exists (path, &error);
+  if (error)
+    g_error ("Failed to create directory %s: %s", path, error->message);
+
+  webkit_web_context_add_path_to_sandbox (context, path, TRUE);
+}
+
+static void
 ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
@@ -808,12 +821,12 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_profile_dir (), TRUE);
-  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_cache_dir (), TRUE);
-  webkit_web_context_add_path_to_sandbox (priv->web_context, ephy_config_dir (), TRUE);
+  add_path_to_sandbox_or_die (ephy_profile_dir (), priv->web_context);
+  add_path_to_sandbox_or_die (ephy_cache_dir (), priv->web_context);
+  add_path_to_sandbox_or_die (ephy_config_dir (), priv->web_context);
 
 #if DEVELOPER_MODE
-  webkit_web_context_add_path_to_sandbox (priv->web_context, BUILD_ROOT, TRUE);
+  add_path_to_sandbox_or_die (BUILD_ROOT, priv->web_context);
 #endif
 
   g_signal_connect_object (priv->web_context, "initialize-web-process-extensions",
