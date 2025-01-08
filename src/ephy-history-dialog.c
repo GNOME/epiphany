@@ -261,7 +261,7 @@ set_is_all_selected (EphyHistoryDialog *self,
 
   if (is_all_selected)
     gtk_button_set_label (GTK_BUTTON (self->select_all_button),
-                          _("Un_select All"));
+                          _("De_select All"));
   else
     gtk_button_set_label (GTK_BUTTON (self->select_all_button),
                           _("_Select All"));
