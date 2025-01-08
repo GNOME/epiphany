@@ -3642,6 +3642,15 @@ browse_with_caret_get_mapping (GValue   *value,
 }
 
 static void
+download_added_cb (EphyWindow *window)
+{
+  AdwToast *toast = adw_toast_new (_("Download started"));
+
+  adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
+}
+
+static void
 download_completed_cb (EphyDownload *download,
                        gpointer      user_data)
 {
@@ -3860,6 +3869,7 @@ ephy_window_constructed (GObject *object)
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
   AdwBreakpoint *breakpoint;
+  EphyDownloadsManager *downloads_manager;
   g_autoptr (GtkBuilder) builder = NULL;
 
 #if 0
@@ -4063,6 +4073,9 @@ ephy_window_constructed (GObject *object)
   g_signal_connect_swapped (controller, "key-released", G_CALLBACK (handle_key_cb), window);
   gtk_widget_add_controller (GTK_WIDGET (window), controller);
 #endif
+
+  downloads_manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
+  g_signal_connect_object (downloads_manager, "download-added", G_CALLBACK (download_added_cb), window, G_CONNECT_SWAPPED);
 
   gtk_widget_set_size_request (GTK_WIDGET (window), 360, 200);
 
