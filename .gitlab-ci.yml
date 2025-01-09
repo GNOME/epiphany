@@ -74,10 +74,10 @@ check-code-style:
     - if: $CI_COMMIT_BRANCH =~ /gnome-\d\d+/
       variables:
         CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
         CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
-    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/ && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/ && $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
       variables:
         CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled --werror'
 
