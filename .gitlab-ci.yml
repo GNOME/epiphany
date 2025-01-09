@@ -1,7 +1,13 @@
 include:
   - project: 'GNOME/citemplates'
     file: 'flatpak/flatpak_ci_initiative.yml'
-  - remote: 'https://gitlab.gnome.org/Infrastructure/freedesktop-ci-templates/-/raw/b61a03cabbf308e81289f7aaaf0b5a80a34ffb99/templates/fedora.yml'
+  - component: gitlab.gnome.org/GNOME/citemplates/release-service@master
+    inputs:
+      dist-job-name: "flatpak"
+      tarball-artifact-path: "${TARBALL_ARTIFACT_PATH}"
+  - project: 'Infrastructure/freedesktop-ci-templates'
+    file: 'templates/fedora.yml'
+    ref: 'b61a03cabbf308e81289f7aaaf0b5a80a34ffb99'
 
 cache:
   paths:
@@ -20,12 +26,13 @@ variables:
   RUNTIME_REPO: 'https://nightly.gnome.org/gnome-nightly.flatpakrepo'
   FLATPAK_MODULE: 'epiphany'
   APP_ID: 'org.gnome.Epiphany.Devel'
-  ESLINT_LOG: "eslint-report.txt"
   FDO_UPSTREAM_REPO: GNOME/epiphany
+  TARBALL_ARTIFACT_PATH: ".flatpak-builder/build/${FLATPAK_MODULE}/_flatpak_build/meson-dist/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
 
 stages:
   - prepare
   - test
+  - deploy
 
 # Use freedesktop-ci-templates for code style check.
 # Everything else uses flatpak-ci-initiative
