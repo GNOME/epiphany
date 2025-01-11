@@ -119,6 +119,7 @@ handle_ephy_tab_uri (EphyLocationController *controller,
     return FALSE;
 
   ephy_tab_view_select_nth_page (tab_view, tab_id);
+  gtk_widget_grab_focus (GTK_WIDGET (webview));
 
   if (ephy_web_view_is_overview (webview)) {
     if (window_id != 0)
