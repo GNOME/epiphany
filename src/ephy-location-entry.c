@@ -85,6 +85,8 @@ struct _EphyLocationEntry {
   gboolean reader_mode_active;
   gboolean show_suggestions;
 
+  gboolean select_all_selected;
+
   guint dns_prefetch_handle_id;
 
   guint user_changed : 1;
@@ -278,7 +280,7 @@ update_actions (EphyLocationEntry *entry)
 
   gtk_widget_action_set_enabled (entry->text, "selection.delete",
                                  editable && has_selection);
-  gtk_widget_action_set_enabled (entry->text, "selection.select-all",
+  gtk_widget_action_set_enabled (entry->text, "entry.select-all",
                                  has_content);
 
   gtk_widget_action_set_enabled (GTK_WIDGET (entry), "clipboard.paste-and-go",
@@ -659,6 +661,11 @@ focus_enter_cb (EphyLocationEntry *entry)
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
+  if (entry->select_all_selected) {
+    entry->select_all_selected = FALSE;
+    return;
+  }
+
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
   set_show_suggestions (entry, FALSE);
@@ -932,6 +939,13 @@ clear_activate (EphyLocationEntry *entry)
   entry->block_update = FALSE;
   entry->user_changed = TRUE;
   update_actions (entry);
+}
+
+static void
+select_all_activate (EphyLocationEntry *entry)
+{
+  entry->select_all_selected = TRUE;
+  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 }
 
 static void
@@ -1491,6 +1505,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                    (GtkWidgetActionActivateFunc)ephy_location_entry_reset);
   gtk_widget_class_install_action (widget_class, "edit.redo-extra", NULL,
                                    (GtkWidgetActionActivateFunc)ephy_location_entry_undo_reset);
+  gtk_widget_class_install_action (widget_class, "entry.select-all", NULL,
+                                   (GtkWidgetActionActivateFunc)select_all_activate);
   gtk_widget_class_install_action (widget_class, "menu.popup-extra", NULL,
                                    (GtkWidgetActionActivateFunc)menu_popup_activate);
 
@@ -1516,6 +1532,7 @@ ephy_location_entry_init (EphyLocationEntry *entry)
   entry->saved_text = NULL;
   entry->page_actions = NULL;
   entry->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
+  entry->select_all_selected = FALSE;
 
   gtk_widget_init_template (GTK_WIDGET (entry));
 
