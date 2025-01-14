@@ -3655,12 +3655,16 @@ download_completed_cb (EphyDownload *download,
                        gpointer      user_data)
 {
   EphyShell *shell = ephy_shell_get_default ();
-  GtkWindow *window;
+  EphyWindow *window;
+  AdwToast *toast = adw_toast_new (_("Download finished"));
+
+  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
 
   if (ephy_shell_get_n_windows (shell) != 1)
     return;
 
-  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
   if (gtk_widget_is_visible (GTK_WIDGET (window)))
     return;
 
