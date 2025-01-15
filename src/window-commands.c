@@ -2088,21 +2088,13 @@ fill_mobile_capable_cb (GObject      *source,
 }
 
 static void
-save_as_application_proceed (EphyApplicationDialogData *data)
+send_web_app_install_notification (EphyApplicationDialogData *data,
+                                   GError                    *error)
 {
   g_autofree char *message = NULL;
   GNotification *notification;
-  gboolean success;
-  g_autoptr (GError) error = NULL;
 
-  /* Create Web Application, including a new profile and .desktop file. */
-  success = ephy_web_application_create (data->app_id,
-                                         data->url,
-                                         data->token,
-                                         data->webapp_options,
-                                         &error);
-
-  if (success)
+  if (!error)
     message = g_strdup_printf (_("The application “%s” is ready to be used"),
                                data->chosen_name);
   else
@@ -2114,17 +2106,34 @@ save_as_application_proceed (EphyApplicationDialogData *data)
   if (data->framed_pixbuf)
     g_notification_set_icon (notification, G_ICON (data->framed_pixbuf));
 
-  if (success) {
+  if (!error) {
     /* Translators: Desktop notification when a new web app is created. */
     g_notification_add_button_with_target (notification, _("Launch"), "app.launch-app", "s", data->app_id);
     g_notification_set_default_action_and_target (notification, "app.launch-app", "s", data->app_id);
-
-    ephy_focus_desktop_app (data->app_id);
   }
 
   g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_LOW);
 
   g_application_send_notification (G_APPLICATION (g_application_get_default ()), data->chosen_name, notification);
+}
+
+static void
+save_as_application_proceed (EphyApplicationDialogData *data)
+{
+  gboolean success;
+  g_autoptr (GError) error = NULL;
+
+  /* Create Web Application, including a new profile and .desktop file. */
+  success = ephy_web_application_create (data->app_id,
+                                         data->url,
+                                         data->token,
+                                         data->webapp_options,
+                                         &error);
+
+  send_web_app_install_notification (data, error);
+
+  if (success)
+    ephy_focus_desktop_app (data->app_id);
 
   ephy_application_dialog_data_free (data);
 }
@@ -2158,8 +2167,10 @@ prepare_install_cb (GObject      *object,
   ret = xdp_portal_dynamic_launcher_prepare_install_finish (portal, result, &error);
   if (ret == NULL) {
     /* This might just mean the user canceled the operation */
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+      send_web_app_install_notification (data, error);
       g_warning ("Failed to install web app, PrepareInstall() failed: %s", error->message);
+    }
     ephy_application_dialog_data_free (data);
     return;
   }
@@ -2167,6 +2178,7 @@ prepare_install_cb (GObject      *object,
   chosen_name_v = g_variant_lookup_value (ret, "name", G_VARIANT_TYPE_STRING);
   token_v = g_variant_lookup_value (ret, "token", G_VARIANT_TYPE_STRING);
   if (chosen_name_v == NULL || token_v == NULL) {
+    send_web_app_install_notification (data, error);
     g_warning ("Failed to install web app, PrepareInstall() returned invalid data");
     ephy_application_dialog_data_free (data);
     return;
