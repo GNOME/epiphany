@@ -147,8 +147,8 @@ get_available_bookmark_import_options ()
 }
 
 static void
-update_select_button_label (AdwComboRow *combo_row,
-                            GtkButton   *button)
+update_bookmarks_select_button_label (AdwComboRow *combo_row,
+                                      GtkButton   *button)
 {
   GtkStringObject *str_obj;
   const char *option_name;
@@ -174,11 +174,11 @@ update_select_button_label (AdwComboRow *combo_row,
 }
 
 static void
-combo_row_selected_cb (AdwComboRow *combo_row,
-                       GParamSpec  *pspec,
-                       GtkButton   *button)
+bookmarks_row_selected_cb (AdwComboRow *combo_row,
+                           GParamSpec  *pspec,
+                           GtkButton   *button)
 {
-  update_select_button_label (combo_row, button);
+  update_bookmarks_select_button_label (combo_row, button);
 }
 
 static GSList *
@@ -259,7 +259,7 @@ chromium_exists (void)
 }
 
 static GListModel *
-create_model ()
+create_bookmarks_model ()
 {
   GtkStringList *string_list = gtk_string_list_new (NULL);
   int i;
@@ -629,21 +629,22 @@ import_bookmarks_using_option_dialog (EphyWindow *window)
   gtk_widget_set_margin_end (prefs_group, 12);
   adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view), prefs_group);
 
-  model = create_model ();
+  model = create_bookmarks_model ();
   combo_row = adw_combo_row_new ();
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (combo_row), _("File Type"));
   adw_combo_row_set_model (ADW_COMBO_ROW (combo_row), model);
   adw_preferences_group_add (ADW_PREFERENCES_GROUP (prefs_group), combo_row);
 
   g_signal_connect_object (ADW_COMBO_ROW (combo_row), "notify::selected",
-                           G_CALLBACK (combo_row_selected_cb),
+                           G_CALLBACK (bookmarks_row_selected_cb),
                            GTK_BUTTON (select_button), 0);
   g_signal_connect_object (select_button, "clicked",
                            G_CALLBACK (dialog_bookmarks_import_cb),
                            ADW_COMBO_ROW (combo_row), 0);
 
   adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
-  update_select_button_label (ADW_COMBO_ROW (combo_row), GTK_BUTTON (select_button));
+  update_bookmarks_select_button_label (ADW_COMBO_ROW (combo_row),
+                                        GTK_BUTTON (select_button));
 }
 
 void
@@ -779,35 +780,21 @@ static struct import_option import_passwords_options[] = {
   { N_("Chromium"), IMPORT_TYPE_IMPORT, IMPORT_FROM_CHROMIUM_ID, chromium_passwords_exists }
 };
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-static GtkTreeModel *
-create_import_passwords_tree_model (int *out_id_column)
+static GListModel *
+create_passwords_model ()
 {
-  enum {
-    TEXT_COL,
-    ID_COL
-  };
-  GtkListStore *list_store;
-  GtkTreeIter iter;
+  GtkStringList *string_list = gtk_string_list_new (NULL);
   int i;
 
-  *out_id_column = ID_COL;
-
-  list_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
   for (i = G_N_ELEMENTS (import_passwords_options) - 1; i >= 0; i--) {
-    if (import_passwords_options[i].exists && !import_passwords_options[i].exists ())
+    if (import_options[i].exists && !import_passwords_options[i].exists ())
       continue;
 
-    gtk_list_store_prepend (list_store, &iter);
-    gtk_list_store_set (list_store, &iter,
-                        TEXT_COL, _(import_passwords_options[i].name),
-                        ID_COL, import_passwords_options[i].id,
-                        -1);
+    gtk_string_list_append (string_list, import_passwords_options[i].name);
   }
 
-  return GTK_TREE_MODEL (list_store);
+  return G_LIST_MODEL (string_list);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static char **
 get_available_password_import_options ()
@@ -907,38 +894,62 @@ import_passwords_using_option_id (const char *option_id,
     g_assert_not_reached ();
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 dialog_passwords_import_cb (GtkWidget   *button,
-                            GtkComboBox *combo_box)
+                            AdwComboRow *combo_row)
 {
-  const char *active;
-  GtkWidget *dialog;
-  GtkWindow *window;
+  AdwDialog *dialog = ADW_DIALOG (gtk_widget_get_ancestor (button, ADW_TYPE_DIALOG));
+  GtkWindow *window = GTK_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW));
+  GtkStringObject *str_obj = adw_combo_row_get_selected_item (combo_row);
+  const char *option_name = gtk_string_object_get_string (str_obj);
+  int i = 0;
+  const char *option_id = NULL;
 
-  active = gtk_combo_box_get_active_id (combo_box);
-  dialog = GTK_WIDGET (gtk_widget_get_root (button));
-  window = gtk_window_get_transient_for (GTK_WINDOW (gtk_widget_get_root (button)));
+  for (i = G_N_ELEMENTS (import_passwords_options) - 1; i >= 0; i--)
+    if (g_strcmp0 (import_passwords_options[i].name, option_name) == 0) {
+      option_id = import_passwords_options[i].id;
+      break;
+    }
 
-  import_passwords_using_option_id (active, window);
+  g_assert (option_id != NULL);
+  import_passwords_using_option_id (option_id, window);
 
-  gtk_window_close (GTK_WINDOW (dialog));
+  adw_dialog_force_close (dialog);
 }
 
 static void
-passwords_combo_box_changed_cb (GtkComboBox *combo_box,
-                                GtkButton   *button)
+update_passwords_select_button_label (AdwComboRow *combo_row,
+                                      GtkButton   *button)
 {
-  int active;
+  GtkStringObject *str_obj;
+  const char *option_name;
+  int i = 0;
+  gboolean option_found = FALSE;
 
-  g_assert (GTK_IS_COMBO_BOX (combo_box));
+  g_assert (ADW_IS_COMBO_ROW (combo_row));
   g_assert (GTK_IS_BUTTON (button));
 
-  active = gtk_combo_box_get_active (combo_box);
-  if (import_passwords_options[active].type == IMPORT_TYPE_CHOOSE)
-    gtk_button_set_label (button, _("Ch_oose File"));
-  else if (import_passwords_options[active].type == IMPORT_TYPE_IMPORT)
+  str_obj = adw_combo_row_get_selected_item (combo_row);
+  option_name = gtk_string_object_get_string (str_obj);
+  for (i = G_N_ELEMENTS (import_passwords_options) - 1; i >= 0; i--)
+    if (g_strcmp0 (import_passwords_options[i].name, option_name) == 0) {
+      option_found = TRUE;
+      break;
+    }
+
+  g_assert (option_found != FALSE);
+  if (import_passwords_options[i].type == IMPORT_TYPE_CHOOSE)
+    gtk_button_set_label (button, _("_Select File"));
+  else if (import_passwords_options[i].type == IMPORT_TYPE_IMPORT)
     gtk_button_set_label (button, _("I_mport"));
+}
+
+static void
+passwords_row_selected_cb (AdwComboRow *combo_row,
+                           GParamSpec  *pspec,
+                           GtkButton   *button)
+{
+  update_passwords_select_button_label (combo_row, button);
 }
 
 static void
@@ -946,77 +957,56 @@ import_passwords_using_option_dialog (EphyWindow *window)
 {
   GtkWidget *dialog;
   GtkWidget *header_bar;
-  GtkWidget *button;
-  GtkWidget *hbox;
-  GtkWidget *label;
-  GtkWidget *combo_box;
-  GtkTreeModel *tree_model;
-  GtkCellRenderer *cell_renderer;
-  int id_column = 0;
-  GtkEventController *controller;
-  GtkShortcut *shortcut;
+  GtkWidget *toolbar_view;
+  GtkWidget *cancel_button;
+  GtkWidget *select_button;
+  GtkWidget *prefs_group;
+  GtkWidget *combo_row;
+  GListModel *model;
 
-  dialog = gtk_window_new ();
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Import Passwords"));
+  dialog = GTK_WIDGET (adw_dialog_new ());
+  adw_dialog_set_title (ADW_DIALOG (dialog), _("Import Passwords"));
 
-  controller = gtk_shortcut_controller_new ();
-  gtk_widget_add_controller (dialog, controller);
+  header_bar = adw_header_bar_new ();
+  adw_header_bar_set_show_start_title_buttons (ADW_HEADER_BAR (header_bar), FALSE);
+  adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar), FALSE);
 
-  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
-                               gtk_named_action_new ("window.close"));
-  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
-  header_bar = gtk_header_bar_new ();
-  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar), FALSE);
-  gtk_window_set_titlebar (GTK_WINDOW (dialog), header_bar);
+  toolbar_view = GTK_WIDGET (adw_toolbar_view_new ());
+  adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (toolbar_view), header_bar);
+  adw_dialog_set_child (ADW_DIALOG (dialog), toolbar_view);
 
-  button = gtk_button_new_with_mnemonic (_("_Cancel"));
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "window.close");
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+  cancel_button = gtk_button_new_with_mnemonic (_("_Cancel"));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (cancel_button), "window.close");
+  adw_header_bar_pack_start (ADW_HEADER_BAR (header_bar), cancel_button);
 
-  button = gtk_button_new_with_mnemonic (_("Ch_oose File"));
-  gtk_widget_add_css_class (button, "suggested-action");
-  gtk_window_set_default_widget (GTK_WINDOW (dialog), button);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
+  select_button = gtk_button_new_with_mnemonic (_("_Select File"));
+  gtk_widget_add_css_class (select_button, "suggested-action");
+  adw_dialog_set_default_widget (ADW_DIALOG (dialog), select_button);
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar), select_button);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_top (hbox, 5);
-  gtk_widget_set_margin_bottom (hbox, 5);
-  gtk_widget_set_margin_start (hbox, 30);
-  gtk_widget_set_margin_end (hbox, 30);
-  gtk_window_set_child (GTK_WINDOW (dialog), hbox);
+  prefs_group = adw_preferences_group_new ();
+  gtk_widget_set_margin_top (prefs_group, 12);
+  gtk_widget_set_margin_bottom (prefs_group, 12);
+  gtk_widget_set_margin_start (prefs_group, 12);
+  gtk_widget_set_margin_end (prefs_group, 12);
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolbar_view), prefs_group);
 
-  label = gtk_label_new (_("From:"));
-  gtk_box_append (GTK_BOX (hbox), label);
+  model = create_passwords_model ();
+  combo_row = adw_combo_row_new ();
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (combo_row), _("File Type"));
+  adw_combo_row_set_model (ADW_COMBO_ROW (combo_row), model);
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (prefs_group), combo_row);
 
-  tree_model = create_import_passwords_tree_model (&id_column);
-
-  if (!gtk_tree_model_iter_n_children (tree_model, NULL))
-    gtk_widget_set_sensitive (button, FALSE);
-
-  combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
-  gtk_widget_set_hexpand (combo_box, TRUE);
-  g_object_unref (tree_model);
-
-  g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
-                    G_CALLBACK (passwords_combo_box_changed_cb), button);
-
-  gtk_combo_box_set_id_column (GTK_COMBO_BOX (combo_box), id_column);
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
-
-  cell_renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
-                                  "text", 0, NULL);
-  gtk_box_append (GTK_BOX (hbox), combo_box);
-
-  g_signal_connect (button, "clicked",
+  g_signal_connect_object (ADW_COMBO_ROW (combo_row), "notify::selected",
+                           G_CALLBACK (passwords_row_selected_cb),
+                           GTK_BUTTON (select_button), 0);
+  g_signal_connect (select_button, "clicked",
                     G_CALLBACK (dialog_passwords_import_cb),
-                    GTK_COMBO_BOX (combo_box));
+                    ADW_COMBO_ROW (combo_row));
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
+  update_passwords_select_button_label (ADW_COMBO_ROW (combo_row),
+                                        GTK_BUTTON (select_button));
 }
 
 void
