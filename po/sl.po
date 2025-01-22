@@ -10,24 +10,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-01-12 12:35+0000\n"
-"PO-Revision-Date: 2025-01-12 16:37+0100\n"
+"POT-Creation-Date: 2025-01-20 16:20+0000\n"
+"PO-Revision-Date: 2025-01-22 20:06+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
-"n%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "n%100==4 ? 3: 0);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1326
+#: src/ephy-main.c:419 src/window-commands.c:1328
 msgid "Web"
 msgstr "Brskalnik Splet"
 
@@ -52,7 +52,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "Program Splet je pogosto poimenovan z delovnim imenom Epiphany."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1336
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1338
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -988,7 +988,7 @@ msgstr "Različica %s"
 msgid "About Web"
 msgstr "O programu"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1328
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1330
 msgid "Epiphany Technology Preview"
 msgstr "Predogled tehnologije Epiphany"
 
@@ -1087,10 +1087,10 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:187
 #: src/resources/gtk/firefox-sync-dialog.ui:117
 #: src/resources/gtk/history-dialog.ui:58
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:355
-#: src/window-commands.c:612 src/window-commands.c:962
-#: src/window-commands.c:1502 src/window-commands.c:2192
-#: src/window-commands.c:3092
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:358
+#: src/window-commands.c:616 src/window-commands.c:978
+#: src/window-commands.c:1504 src/window-commands.c:2206
+#: src/window-commands.c:3106
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -1117,7 +1117,7 @@ msgid ""
 msgstr "Spletišče %s:%d zahteva overitev z ustreznim potrdilom."
 
 # G:9 K:0 O:0
-#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:359
+#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:362
 msgid "_Select"
 msgstr "_Izberi"
 
@@ -1164,7 +1164,7 @@ msgstr "Prejemanje %s je končano."
 
 # G:6 K:0 O:0
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969
+#: embed/ephy-download.c:969 src/ephy-window.c:3659
 msgid "Download finished"
 msgstr "Prejem je končan"
 
@@ -2347,13 +2347,13 @@ msgid "Save Media As"
 msgstr "Shrani predstavno datoteko kot"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1806
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1823
 msgid "Bookmark Page"
 msgstr "Stran zaznamkov"
 
 # G:1 K:0 O:0
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1814
+#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1831
 msgid "Edit Bookmark"
 msgstr "Uredi zaznamek"
 
@@ -2578,27 +2578,27 @@ msgid "Clear History"
 msgstr "Počisti zgodovino"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1850 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1867 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "Zahteva za prikaz obvestil"
 
-#: src/ephy-location-entry.c:1854
+#: src/ephy-location-entry.c:1871
 msgid "Camera Request"
 msgstr "Zahteva po dostopu do kamere"
 
-#: src/ephy-location-entry.c:1858
+#: src/ephy-location-entry.c:1875
 msgid "Microphone Request"
 msgstr "Zahteva za dostop do mikrofona"
 
-#: src/ephy-location-entry.c:1862
+#: src/ephy-location-entry.c:1879
 msgid "Location Request"
 msgstr "Zahteva za dostop do mesta"
 
-#: src/ephy-location-entry.c:1866
+#: src/ephy-location-entry.c:1883
 msgid "Webcam and Microphone Request"
 msgstr "Zahteva za dostop do kamere in mikrofona"
 
-#: src/ephy-location-entry.c:1870
+#: src/ephy-location-entry.c:1887
 msgid "Permission Request"
 msgstr "Zahteva za dovoljenje"
 
@@ -3033,15 +3033,15 @@ msgstr "_Zavrni"
 msgid "_Allow"
 msgstr "_Dovoli"
 
-#: src/ephy-window.c:2972 src/ephy-window.c:4464
+#: src/ephy-window.c:2972 src/ephy-window.c:4468
 msgid "Leave Website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:2973 src/ephy-window.c:4465 src/window-commands.c:1499
+#: src/ephy-window.c:2973 src/ephy-window.c:4469 src/window-commands.c:1501
 msgid "A form was modified and has not been submitted"
 msgstr "Podatki obrazca so spremenjeni in niso bili poslani."
 
-#: src/ephy-window.c:2974 src/ephy-window.c:4466 src/window-commands.c:1503
+#: src/ephy-window.c:2974 src/ephy-window.c:4470 src/window-commands.c:1505
 msgid "_Discard Form"
 msgstr "_Zavrzi obrazec"
 
@@ -3095,45 +3095,45 @@ msgstr "_Da"
 msgid "Download started"
 msgstr "Prenos se je začel"
 
-#: src/ephy-window.c:3736
+#: src/ephy-window.c:3740
 msgid "Save password?"
 msgstr "Ali želite shraniti gesla?"
 
-#: src/ephy-window.c:3737
+#: src/ephy-window.c:3741
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Gesla je mogoče kadarkoli odstraniti med nastavitvami"
 
-#: src/ephy-window.c:3739
+#: src/ephy-window.c:3743
 msgid "Not Now"
 msgstr "Ne zdaj"
 
-#: src/ephy-window.c:3740
+#: src/ephy-window.c:3744
 msgid "Never Save"
 msgstr "Nikoli ne shrani"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:3741
+#: src/ephy-window.c:3745
 msgid "Save"
 msgstr "Shrani"
 
-#: src/ephy-window.c:4595
+#: src/ephy-window.c:4599
 msgid "Close Multiple Tabs?"
 msgstr "Ali res želite zapreti več zavihkov?"
 
-#: src/ephy-window.c:4596
+#: src/ephy-window.c:4600
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Če okno zaprete, bodo izgubljeni vsi odprti zavihki."
 
-#: src/ephy-window.c:4597
+#: src/ephy-window.c:4601
 msgid "C_lose Tabs"
 msgstr "Zapri _zavihke"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:4690
+#: src/ephy-window.c:4694
 msgid "New tab opened"
 msgstr "Odprt je nov zavihek"
 
-#: src/ephy-window.c:4694
+#: src/ephy-window.c:4698
 msgid "Switch"
 msgstr "Preklopi"
 
@@ -3781,7 +3781,7 @@ msgstr "Zapri zavihke na _desni"
 msgid "Close _Other Tabs"
 msgstr "Zapri _preostale zavihke"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:286
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:289
 msgid "_Close"
 msgstr "_Zapri"
 
@@ -4695,86 +4695,87 @@ msgstr "Datoteka HTML"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:128 src/window-commands.c:766
+#: src/window-commands.c:128 src/window-commands.c:779
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:129 src/window-commands.c:767
+#: src/window-commands.c:129 src/window-commands.c:780
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:161 src/window-commands.c:616
-#: src/window-commands.c:927 src/window-commands.c:966
-msgid "Ch_oose File"
-msgstr "Izbor _datoteke"
+# G:9 K:0 O:0
+#: src/window-commands.c:171 src/window-commands.c:620
+#: src/window-commands.c:942 src/window-commands.c:982
+msgid "_Select File"
+msgstr "Izberi _datoteko"
 
 # G:2 K:2 O:0
-#: src/window-commands.c:163 src/window-commands.c:929
+#: src/window-commands.c:173 src/window-commands.c:944
 msgid "I_mport"
 msgstr "U_vozi"
 
-#: src/window-commands.c:323 src/window-commands.c:413
-#: src/window-commands.c:463 src/window-commands.c:507
-#: src/window-commands.c:530 src/window-commands.c:546
+#: src/window-commands.c:326 src/window-commands.c:416
+#: src/window-commands.c:466 src/window-commands.c:510
+#: src/window-commands.c:533 src/window-commands.c:549
 msgid "Bookmarks successfully imported!"
 msgstr "Zaznamki so uspešno uvoženi!"
 
 # G:9 K:0 O:0
-#: src/window-commands.c:342
+#: src/window-commands.c:345
 msgid "Select Profile"
 msgstr "Izbor profila"
 
-#: src/window-commands.c:424 src/window-commands.c:474
-#: src/window-commands.c:724 src/window-commands.c:864
-#: src/window-commands.c:1081
+#: src/window-commands.c:427 src/window-commands.c:477
+#: src/window-commands.c:737 src/window-commands.c:863
+#: src/window-commands.c:1083
 msgid "Choose File"
 msgstr "Izbor datoteke"
 
-#: src/window-commands.c:599
+#: src/window-commands.c:606
 msgid "Import Bookmarks"
 msgstr "Uvozi zaznamke"
 
-#: src/window-commands.c:629 src/window-commands.c:979
-msgid "From:"
-msgstr "Od:"
+#: src/window-commands.c:634 src/window-commands.c:996
+msgid "File Type"
+msgstr "Vrsta datoteke"
 
-#: src/window-commands.c:685
+#: src/window-commands.c:698
 msgid "Bookmarks successfully exported!"
 msgstr "Zaznamki so uspešno izvoženi!"
 
 # G:1 K:0 O:0
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:735
+#: src/window-commands.c:748
 msgid "bookmarks.html"
 msgstr "zaznamki.html"
 
 # G:16 K:0 O:29
-#: src/window-commands.c:765
+#: src/window-commands.c:778
 msgid "CSV File"
 msgstr "Datoteka CSV"
 
-#: src/window-commands.c:827 src/window-commands.c:853
+#: src/window-commands.c:826 src/window-commands.c:852
 msgid "Passwords successfully imported!"
 msgstr "Gesla so uspešno uvoženi!"
 
-#: src/window-commands.c:950
+#: src/window-commands.c:968
 msgid "Import Passwords"
 msgstr "Uvozi gesla"
 
-#: src/window-commands.c:1042
+#: src/window-commands.c:1044
 msgid "Passwords successfully exported!"
 msgstr "Gesla uspešno izvožena!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1091
+#: src/window-commands.c:1093
 msgid "passwords.csv"
 msgstr "gesla.csv"
 
-#: src/window-commands.c:1323
+#: src/window-commands.c:1325
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1346
+#: src/window-commands.c:1348
 msgid "translator-credits"
 msgstr ""
 "Matej Urbančič <mateju@src.gnome.org>\n"
@@ -4783,62 +4784,62 @@ msgstr ""
 "Matjaž Horvat\n"
 "Tilen Travnik"
 
-#: src/window-commands.c:1498
+#: src/window-commands.c:1500
 msgid "Reload Website?"
 msgstr "Ali želite ponovno naložiti spletišče?"
 
-#: src/window-commands.c:2046
+#: src/window-commands.c:2048
 msgid "New Web App"
 msgstr "Nova spletna aplikacija"
 
-#: src/window-commands.c:2106
+#: src/window-commands.c:2100
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Program »%s« je pripravljen za uporabo"
 
-#: src/window-commands.c:2109
+#: src/window-commands.c:2103
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Spletnega programa »%s« ni mogoče ustvariti: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2119
+#: src/window-commands.c:2113
 msgid "Launch"
 msgstr "Zaženi"
 
-#: src/window-commands.c:2185
+#: src/window-commands.c:2199
 msgid "Replace Existing Web App?"
 msgstr "Ali želite zamenjati obstoječi spletni program?"
 
-#: src/window-commands.c:2188
+#: src/window-commands.c:2202
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "Program z imenom »%s« že obstaja. Z zamenjavo bo predhodni program prepisan."
 
-#: src/window-commands.c:2193
+#: src/window-commands.c:2207
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: src/window-commands.c:2578
+#: src/window-commands.c:2592
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2582
+#: src/window-commands.c:2596
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2628
+#: src/window-commands.c:2642
 msgid "PNG"
 msgstr "PNG"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:3087
+#: src/window-commands.c:3101
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: src/window-commands.c:3088
+#: src/window-commands.c:3102
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4849,6 +4850,6 @@ msgstr ""
 "katero se je mogoče premikati po strani s pomočjo tipkovnice. Ali želite "
 "omogočiti kazalni način brskanja?"
 
-#: src/window-commands.c:3093
+#: src/window-commands.c:3107
 msgid "_Enable"
 msgstr "_Omogoči"
