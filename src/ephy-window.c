@@ -175,6 +175,7 @@ struct _EphyWindow {
   GtkWidget *toast_overlay;
   GtkWidget *switch_to_tab;
   AdwToast *switch_toast;
+  AdwToast *download_start_toast;
   GHashTable *active_permission_popovers;
 
   GList *pending_decisions;
@@ -3643,12 +3644,18 @@ browse_with_caret_get_mapping (GValue   *value,
 }
 
 static void
+download_start_toast_dismissed_cb (EphyWindow *window)
+{
+  window->download_start_toast = NULL;
+}
+
+static void
 download_added_cb (EphyWindow *window)
 {
-  AdwToast *toast = adw_toast_new (_("Download started"));
-
-  adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
-  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
+  window->download_start_toast = adw_toast_new (_("Download started"));
+  g_signal_connect_object (window->download_start_toast, "dismissed",
+                           G_CALLBACK (download_start_toast_dismissed_cb), window, G_CONNECT_SWAPPED);
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), window->download_start_toast);
 }
 
 static void
@@ -3660,6 +3667,9 @@ download_completed_cb (EphyDownload *download,
   AdwToast *toast = adw_toast_new (_("Download finished"));
 
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  if (window->download_start_toast != NULL)
+    adw_toast_dismiss (window->download_start_toast);
+
   adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
   adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
 
