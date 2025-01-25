@@ -97,6 +97,8 @@ void              ephy_window_sync_bookmark_state        (EphyWindow            
 
 guint64           ephy_window_get_uid                    (EphyWindow *window);
 
+gboolean          ephy_window_get_sidebar_shown          (EphyWindow *window);
+
 void              ephy_window_switch_to_new_tab_toast    (EphyWindow *window,
                                                           GtkWidget  *tab);
 

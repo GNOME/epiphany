@@ -1372,10 +1372,14 @@ window_cmd_reopen_closed_tab (GSimpleAction *action,
                               GVariant      *parameter,
                               gpointer       user_data)
 {
-  EphySession *session = ephy_shell_get_session (ephy_shell_get_default ());
+  EphyShell *shell = ephy_shell_get_default ();
+  EphySession *session = ephy_shell_get_session (shell);
+  EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
   g_assert (session != NULL);
-  ephy_session_undo_close_tab (session);
+
+  if (!ephy_window_get_sidebar_shown (window))
+    ephy_session_undo_close_tab (session);
 }
 
 void

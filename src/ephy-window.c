@@ -215,6 +215,7 @@ enum {
   SENS_FLAG_IS_BLANK      = 1 << 5,
   SENS_FLAG_IS_INTERNAL_PAGE = 1 << 6,
   SENS_FLAG_IS_OVERVIEW   = 1 << 7,
+  SENS_FLAG_IS_SIDEBAR    = 1 << 9,
 };
 
 static gint
@@ -3842,6 +3843,80 @@ notify_overview_open_cb (EphyWindow *window)
   _ephy_window_set_default_actions_sensitive (window, SENS_FLAG_IS_OVERVIEW, overview_open);
 }
 
+static const char *disabled_win_actions_for_sidebar[] = {
+  "home",
+  "new-tab",
+  "location",
+  "location-search",
+  "tabs-view",
+  "show-downloads",
+  "zoom-in",
+  "zoom-out",
+  "zoom-normal",
+  "toggle-inspector",
+  "toggle-reader-mode",
+};
+
+static const char *disabled_toolbar_actions_for_sidebar[] = {
+  "stop",
+  "reload",
+  "reload-bypass-cache",
+  "navigation-back",
+  "navigation-forward",
+};
+
+static const char *disabled_tab_actions_for_sidebar[] = {
+  "close",
+  "duplicate",
+};
+
+static void
+show_sidebar_cb (EphyWindow *window)
+{
+  GActionGroup *action_group;
+  GAction *action;
+  guint i;
+  gboolean shown = adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view));
+  AdwTabView *tab_view = ephy_tab_view_get_tab_view (window->tab_view);
+
+  action_group = ephy_window_get_action_group (window, "win");
+  for (i = 0; i < G_N_ELEMENTS (disabled_win_actions_for_sidebar); i++) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         disabled_win_actions_for_sidebar[i]);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                          SENS_FLAG_IS_SIDEBAR, shown);
+  }
+
+  action_group = ephy_window_get_action_group (window, "toolbar");
+  for (i = 0; i < G_N_ELEMENTS (disabled_toolbar_actions_for_sidebar); i++) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         disabled_toolbar_actions_for_sidebar[i]);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                          SENS_FLAG_IS_SIDEBAR, shown);
+  }
+
+  action_group = ephy_window_get_action_group (window, "tab");
+  for (i = 0; i < G_N_ELEMENTS (disabled_tab_actions_for_sidebar); i++) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         disabled_tab_actions_for_sidebar[i]);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                          SENS_FLAG_IS_SIDEBAR, shown);
+  }
+
+  if (shown) {
+    adw_tab_view_set_shortcuts (tab_view, ADW_TAB_VIEW_SHORTCUT_NONE);
+  } else {
+    adw_tab_view_set_shortcuts (tab_view, ADW_TAB_VIEW_SHORTCUT_ALL_SHORTCUTS);
+    adw_tab_view_remove_shortcuts (tab_view,
+                                   ADW_TAB_VIEW_SHORTCUT_CONTROL_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_END |
+                                   ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_END);
+  }
+
+  _ephy_window_set_default_actions_sensitive (window,
+                                              SENS_FLAG_IS_SIDEBAR,
+                                              shown);
+}
+
 static AdwTabPage *
 create_tab_cb (EphyWindow *window)
 {
@@ -4011,6 +4086,8 @@ ephy_window_constructed (GObject *object)
 
   adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_WIDGET (window->overview));
   adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), window->bookmarks_dialog);
+  g_signal_connect_object (window->overlay_split_view, "notify::show-sidebar",
+                           G_CALLBACK (show_sidebar_cb), window, G_CONNECT_SWAPPED);
 
   ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
@@ -4669,6 +4746,12 @@ ephy_window_get_action_group (EphyWindow *window,
                               const char *prefix)
 {
   return g_hash_table_lookup (window->action_groups, prefix);
+}
+
+gboolean
+ephy_window_get_sidebar_shown (EphyWindow *window)
+{
+  return adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view));
 }
 
 static void
