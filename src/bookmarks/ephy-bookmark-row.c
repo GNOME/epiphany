@@ -70,6 +70,7 @@ ephy_bookmark_row_open (EphyBookmarkRow *self,
   GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
   const char *url = ephy_bookmark_get_url (self->bookmark);
   ephy_link_open (EPHY_LINK (window), url, NULL, flags | EPHY_LINK_BOOKMARK);
+  gtk_widget_grab_focus (GTK_WIDGET (self));
 }
 
 static void
