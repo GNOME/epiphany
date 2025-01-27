@@ -96,56 +96,56 @@ typedef struct {
 static const URLTest test_load_url[] = {
   /* This will load the server unavailable error page unless you have a
    * local server in port 80 */
-  /* { "localhost", "http://localhost/" }, */
-  /* { "127.0.0.1", "http://127.0.0.1/" }, */
+  /* { "localhost", "https://localhost/" }, */
+  /* { "127.0.0.1", "https://127.0.0.1/" }, */
 
   /* Require internet */
 
   {
     "127.0.0.1:12321",
-    "http://127.0.0.1:12321/"
+    "https://127.0.0.1:12321/"
   },
   {
     "127.0.0.1:12321/path",
-    "http://127.0.0.1:12321/path"
+    "https://127.0.0.1:12321/path"
   },
 
   /* port is SERVER_PORT */
   {
     "localhost:12321",
-    "http://localhost:12321/"
+    "https://localhost:12321/"
   },
 
 #if 0
   /* FAIL */
   {
     "gnome.org:80",
-    "http://www.gnome.org/"
+    "https://www.gnome.org/"
   },
 #endif
 
   /* Queries */
   {
     "localhost:12321/?key=value",
-    "http://localhost:12321/?key=value"
+    "https://localhost:12321/?key=value"
   },
   {
     "localhost:12321/?key=value:sub-value",
-    "http://localhost:12321/?key=value:sub-value"
+    "https://localhost:12321/?key=value:sub-value"
   },
   {
     "localhost:12321/?key=value&key2=value2",
-    "http://localhost:12321/?key=value&key2=value2"
+    "https://localhost:12321/?key=value&key2=value2"
   },
   {
     "localhost:12321/?key=value&key2=",
-    "http://localhost:12321/?key=value&key2="
+    "https://localhost:12321/?key=value&key2="
   },
 
   /* Other HTTP status */
   {
     "localhost:12321/redirect",
-    "http://localhost:12321/redirect-result"
+    "https://localhost:12321/redirect-result"
   },
 
   /* { "about:epiphany", "ephy-about:epiphany" }, */
@@ -206,7 +206,7 @@ static const RegexTest test_non_search_regex[] = {
 
   { "gnome.org", TRUE },
   { "www.gnome.org", TRUE },
-  { "http://www.gnome.org", TRUE },
+  { "https://www.gnome.org", TRUE },
 
   /* Ip */
   { "192.168.1.1", TRUE },
@@ -272,24 +272,24 @@ typedef struct {
 } normalize_or_autosearch_t;
 
 normalize_or_autosearch_t normalize_or_autosearch_test_ddg[] = {
-  { "google.com", "http://google.com" },
-  { "http://google.com", "http://google.com" },
-  { "http://google.com/this/is/a/path", "http://google.com/this/is/a/path" },
-  { "search", "http://duckduckgo.com/?q=search&t=epiphany" },
-  { "search.me", "http://search.me" },
-  { "lala.lala", "http://duckduckgo.com/?q=lala.lala&t=epiphany" },
-  { "lala/lala", "http://duckduckgo.com/?q=lala%2Flala&t=epiphany" },
-  { "127.0.0.1", "http://127.0.0.1" },
-  { "http://127.0.0.1", "http://127.0.0.1" },
-  { "totalgarbage0xdeadbeef", "http://duckduckgo.com/?q=totalgarbage0xdeadbeef&t=epiphany" },
-  { "planet.gnome.org", "http://planet.gnome.org" },
-  { "search separated words please", "http://duckduckgo.com/?q=search+separated+words+please&t=epiphany" },
-  { "\"a quoted string should be searched\"", "http://duckduckgo.com/?q=%22a+quoted+string+should+be+searched%22&t=epiphany" }
+  { "google.com", "https://google.com" },
+  { "https://google.com", "https://google.com" },
+  { "https://google.com/this/is/a/path", "https://google.com/this/is/a/path" },
+  { "search", "https://duckduckgo.com/?q=search&t=epiphany" },
+  { "search.me", "https://search.me" },
+  { "lala.lala", "https://duckduckgo.com/?q=lala.lala&t=epiphany" },
+  { "lala/lala", "https://duckduckgo.com/?q=lala%2Flala&t=epiphany" },
+  { "127.0.0.1", "https://127.0.0.1" },
+  { "https://127.0.0.1", "https://127.0.0.1" },
+  { "totalgarbage0xdeadbeef", "https://duckduckgo.com/?q=totalgarbage0xdeadbeef&t=epiphany" },
+  { "planet.gnome.org", "https://planet.gnome.org" },
+  { "search separated words please", "https://duckduckgo.com/?q=search+separated+words+please&t=epiphany" },
+  { "\"a quoted string should be searched\"", "https://duckduckgo.com/?q=%22a+quoted+string+should+be+searched%22&t=epiphany" }
 };
 
 normalize_or_autosearch_t normalize_or_autosearch_test_google[] = {
-  { "search", "http://www.google.com/?q=search" },
-  { "lala/lala", "http://www.google.com/?q=lala%2Flala" },
+  { "search", "https://www.google.com/?q=search" },
+  { "lala/lala", "https://www.google.com/?q=lala%2Flala" },
 };
 
 static void
@@ -329,14 +329,14 @@ test_ephy_web_view_normalize_or_autosearch (void)
   default_engine = ephy_search_engine_manager_get_default_engine (manager);
   test_engine = g_object_new (EPHY_TYPE_SEARCH_ENGINE,
                               "name", "org.gnome.Epiphany.EphyWebViewTest",
-                              "url", "http://duckduckgo.com/?q=%s&t=epiphany",
+                              "url", "https://duckduckgo.com/?q=%s&t=epiphany",
                               NULL);
   ephy_search_engine_manager_add_engine (manager, test_engine);
   ephy_search_engine_manager_set_default_engine (manager, test_engine);
   g_assert_true (ephy_search_engine_manager_get_default_engine (manager) == test_engine);
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg, G_N_ELEMENTS (normalize_or_autosearch_test_ddg));
 
-  ephy_search_engine_set_url (test_engine, "http://www.google.com/?q=%s");
+  ephy_search_engine_set_url (test_engine, "https://www.google.com/?q=%s");
 
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google, G_N_ELEMENTS (normalize_or_autosearch_test_google));
 
@@ -414,7 +414,7 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
   view = EPHY_WEB_VIEW (ephy_web_view_new ());
 
   loop = setup_ensure_back_forward_list_changes (view);
-  bad_url = "http://localhost:2984375930/";
+  bad_url = "https://localhost:2984375930/";
 
   ephy_web_view_load_url (view, bad_url);
 
@@ -434,7 +434,7 @@ visit_url_cb (EphyHistoryService *service,
               EphyHistoryURL     *url,
               gpointer            user_data)
 {
-  if (strcmp (url->url, "http://localhost:2984375932/") != 0)
+  if (strcmp (url->url, "https://localhost:2984375932/") != 0)
     return;
 
   /* We are only loading an error page, this code should never be
@@ -453,7 +453,7 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
 
   view = EPHY_WEB_VIEW (ephy_web_view_new ());
   loop = g_main_loop_new (NULL, FALSE);
-  bad_url = "http://localhost:2984375932/";
+  bad_url = "https://localhost:2984375932/";
 
   history_service = ephy_embed_shell_get_global_history_service (embed_shell);
   g_assert_nonnull (history_service);

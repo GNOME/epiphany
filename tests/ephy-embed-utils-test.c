@@ -76,12 +76,12 @@ static const SchemeTest tests_no_scheme[] = {
 
 static const NormalizeTest tests_normalize[] = {
   { "append_file_to_path", "/etc/passwd", "file:///etc/passwd" },
-  { "append_http_to_domain", "gnome.org", "http://gnome.org" },
-  { "append_http_to_www", "www.gnome.org", "http://www.gnome.org" },
-  { "append_http_to_hostname", "gnome", "http://gnome" },
-  { "append_http_to_hostname_with_port", "localhost:8080", "http://localhost:8080" },
-  { "append_http_to_ip_address", "192.168.0.1", "http://192.168.0.1" },
-  { "append_http_to_ip_address_with_port", "192.168.0.1:8080", "http://192.168.0.1:8080" },
+  { "append_https_to_domain", "gnome.org", "https://gnome.org" },
+  { "append_https_to_www", "www.gnome.org", "https://www.gnome.org" },
+  { "append_https_to_hostname", "gnome", "https://gnome" },
+  { "append_https_to_hostname_with_port", "localhost:8080", "https://localhost:8080" },
+  { "append_https_to_ip_address", "192.168.0.1", "https://192.168.0.1" },
+  { "append_https_to_ip_address_with_port", "192.168.0.1:8080", "https://192.168.0.1:8080" },
   { "convert_about_to_ephy_about", "about:epiphany", "ephy-about:epiphany" },
   { "untouched_http", "http://gnome.org", "http://gnome.org" },
 };
