@@ -298,7 +298,7 @@ ephy_embed_utils_normalize_address (const char *input_address)
 
     scheme = g_uri_peek_scheme (address);
 
-    /* Auto-prepend http:// to anything that is not
+    /* Auto-prepend https:// to anything that is not
      * one according to GLib, because it probably will be
      * something like "google.com". Special case localhost(:port)
      * and IP(:port), because GUri, correctly, thinks it is a
@@ -310,7 +310,7 @@ ephy_embed_utils_normalize_address (const char *input_address)
         !g_strcmp0 (scheme, "localhost") ||
         g_hostname_is_ip_address (scheme) ||
         is_host_with_port (address))
-      effective_address = g_strconcat ("http://", address, NULL);
+      effective_address = g_strconcat ("https://", address, NULL);
   }
 
   return effective_address ? effective_address : g_strdup (address);
