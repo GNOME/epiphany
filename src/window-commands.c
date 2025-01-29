@@ -2100,12 +2100,14 @@ send_web_app_install_notification (EphyApplicationDialogData *data,
   g_autofree char *message = NULL;
   GNotification *notification;
 
-  if (!error)
+  if (!error) {
     message = g_strdup_printf (_("The application “%s” is ready to be used"),
                                data->chosen_name);
-  else
+  } else {
     message = g_strdup_printf (_("The application “%s” could not be created: %s"),
                                data->chosen_name, error->message);
+    g_warning ("The application “%s” could not be created: %s", data->chosen_name, error->message);
+  }
 
   notification = g_notification_new (message);
 
