@@ -52,6 +52,9 @@ void             ephy_embed_set_delayed_load_request      (EphyEmbed *embed,
 gboolean         ephy_embed_has_load_pending              (EphyEmbed *embed);
 gboolean         ephy_embed_inspector_is_loaded           (EphyEmbed *embed);
 const char      *ephy_embed_get_title                     (EphyEmbed *embed);
+const char      *ephy_embed_get_typed_input               (EphyEmbed *embed);
+void             ephy_embed_set_typed_input               (EphyEmbed  *embed,
+                                                           const char *input);
 void             ephy_embed_attach_notification_container (EphyEmbed *embed);
 void             ephy_embed_detach_notification_container (EphyEmbed *embed);
 void             ephy_embed_download_started              (EphyEmbed    *embed,

@@ -1039,6 +1039,7 @@ sync_tab_address (EphyWebView *view,
   const char *typed_address;
   char *location;
   gboolean is_internal_page;
+  EphyEmbed *embed = window->active_embed;
 
   if (window->closing)
     return;
@@ -1054,7 +1055,10 @@ sync_tab_address (EphyWebView *view,
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_INTERNAL_PAGE, is_internal_page);
 
-  location = calculate_location (typed_address, address);
+  location = g_strdup (ephy_embed_get_typed_input (embed));
+  if (!location)
+    location = calculate_location (typed_address, address);
+
   ephy_window_set_location (window, location);
 
   g_free (location);
@@ -2325,6 +2329,7 @@ load_changed_cb (EphyWebView     *view,
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
   sync_tab_load_status (view, load_event, window);
+  sync_tab_address (view, NULL, window);
 
   if (load_event != WEBKIT_LOAD_STARTED)
     return;
@@ -4279,6 +4284,22 @@ ephy_window_get_tab_view (EphyWindow *window)
   g_assert (EPHY_IS_WINDOW (window));
 
   return window->tab_view;
+}
+
+/**
+ * ephy_window_get_active_embed:
+ * @window: an #EphyWindow
+ *
+ * Returns the active #EphyEmbed for this window.
+ *
+ * Return value: (transfer none): the @window's active #EphyEmbed
+ **/
+EphyEmbed *
+ephy_window_get_active_embed (EphyWindow *window)
+{
+  g_assert (EPHY_IS_WINDOW (window));
+
+  return window->active_embed;
 }
 
 /**

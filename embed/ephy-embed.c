@@ -69,6 +69,7 @@ struct _EphyEmbed {
   WebKitURIRequest *delayed_request;
   WebKitWebViewSessionState *delayed_state;
   guint delayed_request_source_id;
+  char *typed_input;
 
   GSList *messages; /* owned EphyEmbedStatusbarMsgs */
   GSList *keys;     /* owned strings */
@@ -288,6 +289,20 @@ web_view_title_changed_cb (WebKitWebView *web_view,
   ephy_embed_set_title (embed, webkit_web_view_get_title (web_view));
 }
 
+const char *
+ephy_embed_get_typed_input (EphyEmbed *embed)
+{
+  return embed->typed_input;
+}
+
+void
+ephy_embed_set_typed_input (EphyEmbed  *embed,
+                            const char *input)
+{
+  g_free (embed->typed_input);
+  embed->typed_input = g_strdup (input);
+}
+
 static void
 load_changed_cb (WebKitWebView   *web_view,
                  WebKitLoadEvent  load_event,
@@ -304,6 +319,9 @@ load_changed_cb (WebKitWebView   *web_view,
       break;
     }
     case WEBKIT_LOAD_STARTED:
+      g_free (embed->typed_input);
+      embed->typed_input = NULL;
+      break;
     case WEBKIT_LOAD_REDIRECTED:
     default:
       break;

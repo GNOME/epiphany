@@ -728,8 +728,17 @@ static void
 editable_changed_cb (GtkEditable       *editable,
                      EphyLocationEntry *entry)
 {
+  GtkRoot *window = gtk_widget_get_root (GTK_WIDGET (entry));
+
   if (entry->block_update)
     return;
+
+  if (window) {
+    EphyEmbed *embed = ephy_window_get_active_embed (EPHY_WINDOW (window));
+    const char *text = gtk_editable_get_text (editable);
+
+    ephy_embed_set_typed_input (embed, text);
+  }
 
   entry->user_changed = TRUE;
   entry->can_redo = FALSE;
