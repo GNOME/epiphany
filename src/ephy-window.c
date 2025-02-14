@@ -1040,6 +1040,8 @@ sync_tab_address (EphyWebView *view,
   char *location;
   gboolean is_internal_page;
   EphyEmbed *embed = window->active_embed;
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  const char *current_text = ephy_title_widget_get_address (title_widget);
 
   if (window->closing)
     return;
@@ -1059,7 +1061,8 @@ sync_tab_address (EphyWebView *view,
   if (!location)
     location = calculate_location (typed_address, address);
 
-  ephy_window_set_location (window, location);
+  if (g_strcmp0 (location, current_text) != 0)
+    ephy_window_set_location (window, location);
 
   g_free (location);
 }
