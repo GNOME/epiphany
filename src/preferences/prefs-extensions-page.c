@@ -226,21 +226,12 @@ create_row (PrefsExtensionsPage *self,
 }
 
 static void
-clear_listbox (GtkWidget *listbox)
-{
-  GtkListBoxRow *row;
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (listbox), 0)))
-    gtk_list_box_remove (GTK_LIST_BOX (listbox), GTK_WIDGET (row));
-}
-
-static void
 refresh_listbox (PrefsExtensionsPage *self)
 {
   GPtrArray *extensions = ephy_web_extension_manager_get_web_extensions (self->web_extension_manager);
   gboolean empty = TRUE;
 
-  clear_listbox (self->listbox);
+  gtk_list_box_remove_all (GTK_LIST_BOX (self->listbox));
 
   for (guint i = 0; i < extensions->len; i++) {
     EphyWebExtension *web_extension = g_ptr_array_index (extensions, i);

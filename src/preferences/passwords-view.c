@@ -64,15 +64,6 @@ ephy_passwords_view_dispose (GObject *object)
 }
 
 static void
-clear_listbox (GtkWidget *listbox)
-{
-  GtkListBoxRow *row;
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (listbox), 0)))
-    gtk_list_box_remove (GTK_LIST_BOX (listbox), GTK_WIDGET (row));
-}
-
-static void
 on_search_text_changed (EphyPasswordsView *passwords_view)
 {
   ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (passwords_view), FALSE);
@@ -112,7 +103,7 @@ forget_clicked (GtkWidget *button,
                                 passwords_view);
 
   /* Clear internal state */
-  clear_listbox (passwords_view->listbox);
+  gtk_list_box_remove_all (GTK_LIST_BOX (passwords_view->listbox));
   g_list_free_full (passwords_view->records, g_object_unref);
   passwords_view->records = NULL;
 
@@ -168,7 +159,7 @@ confirmation_dialog_response_cb (EphyPasswordsView *self)
 {
   ephy_password_manager_forget_all (self->manager);
 
-  clear_listbox (self->listbox);
+  gtk_list_box_remove_all (GTK_LIST_BOX (self->listbox));
   ephy_data_view_set_has_data (EPHY_DATA_VIEW (self), FALSE);
 
   g_list_free_full (self->records, g_object_unref);

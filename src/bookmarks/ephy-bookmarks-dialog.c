@@ -77,15 +77,11 @@ static void ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
 static void
 tag_detail_back (EphyBookmarksDialog *self)
 {
-  GtkListBoxRow *row;
-
   g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
-    gtk_list_box_remove (GTK_LIST_BOX (self->tag_detail_list_box), GTK_WIDGET (row));
+  gtk_list_box_remove_all (GTK_LIST_BOX (self->tag_detail_list_box));
 }
 
 static void
@@ -926,18 +922,12 @@ ephy_bookmarks_dialog_order_updated_cb (EphyBookmarksDialog  *self,
                                         const char           *view,
                                         EphyBookmarksManager *manager)
 {
-  GtkListBoxRow *row;
-
   if (g_strcmp0 (view, NULL) == 0) {
-    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), 0)))
-      gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
+    gtk_list_box_remove_all (GTK_LIST_BOX (self->bookmarks_list_box));
     populate_bookmarks_list_box (self);
-  } else {
-    if (g_strcmp0 (self->tag_detail_tag, view) == 0) {
-      while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
-        gtk_list_box_remove (GTK_LIST_BOX (self->tag_detail_list_box), GTK_WIDGET (row));
-      populate_tag_detail_list_box (self, self->tag_detail_tag);
-    }
+  } else if (g_strcmp0 (self->tag_detail_tag, view) == 0) {
+    gtk_list_box_remove_all (GTK_LIST_BOX (self->tag_detail_list_box));
+    populate_tag_detail_list_box (self, self->tag_detail_tag);
   }
 }
 

@@ -296,15 +296,6 @@ get_url_from_row (GtkListBoxRow *row)
 }
 
 static void
-clear_listbox (GtkWidget *listbox)
-{
-  GtkListBoxRow *row;
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (listbox), 0)))
-    gtk_list_box_remove (GTK_LIST_BOX (listbox), GTK_WIDGET (row));
-}
-
-static void
 on_find_urls_cb (gpointer service,
                  gboolean success,
                  gpointer result_data,
@@ -319,7 +310,7 @@ on_find_urls_cb (gpointer service,
     ephy_history_url_list_free (self->urls);
   self->urls = ephy_history_url_list_copy (result_data);
 
-  clear_listbox (self->listbox);
+  gtk_list_box_remove_all (GTK_LIST_BOX (self->listbox));
 
   self->num_fetch = NUM_FETCH_LIMIT;
   self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
