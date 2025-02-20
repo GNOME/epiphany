@@ -214,6 +214,10 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
       not_empty = TRUE;
     } else if (ephy_bookmarks_manager_tag_exists (self->manager, tag)) {
       bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self->manager, bookmark_id);
+
+      if (bookmark == NULL)
+        continue;
+
       seq_iter = g_sequence_lookup (bookmarks,
                                     (gpointer)bookmark,
                                     (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func,

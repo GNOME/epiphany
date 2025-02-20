@@ -161,6 +161,45 @@ out:
   return res;
 }
 
+static EphyBookmark *
+get_existing_bookmark (const char           *url,
+                       GSequence            *tags,
+                       EphyBookmarksManager *manager)
+{
+  GSequence *bookmarks = ephy_bookmarks_manager_get_bookmarks (manager);
+  GSequenceIter *iter;
+  EphyBookmark *existing_bookmark = NULL;
+
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+    GSequence *bookmark_tags = ephy_bookmark_get_tags (bookmark);
+    GSequenceIter *tags_iter;
+
+    if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) != 0)
+      continue;
+
+    existing_bookmark = bookmark;
+
+    /* If the bookmark already exists, add any tags the imported bookmark has
+     * that the existing one doesn't. */
+    for (tags_iter = g_sequence_get_begin_iter (tags);
+         !g_sequence_iter_is_end (tags_iter);
+         tags_iter = g_sequence_iter_next (tags_iter)) {
+      const char *tag = g_sequence_get (tags_iter);
+      GSequenceIter *search_iter = g_sequence_lookup (bookmark_tags, (gpointer)tag,
+                                                      (GCompareDataFunc)ephy_bookmark_tags_compare,
+                                                      NULL);
+
+      if (search_iter == NULL)
+        ephy_bookmark_add_tag (bookmark, tag);
+    }
+  }
+
+  return existing_bookmark;
+}
+
 static void
 load_tags_for_bookmark (EphySQLiteConnection *connection,
                         EphyBookmark         *bookmark,
@@ -279,8 +318,12 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
     if (!g_strcmp0 (parent_title, FIREFOX_BOOKMARKS_MOBILE_FOLDER))
       ephy_bookmark_add_tag (bookmark, EPHY_BOOKMARKS_MOBILE_TAG);
     load_tags_for_bookmark (connection, bookmark, bookmark_id);
+    tags = ephy_bookmark_get_tags (bookmark);
 
-    g_sequence_prepend (bookmarks, bookmark);
+    if (get_existing_bookmark (url, tags, manager))
+      g_sequence_prepend (bookmarks, get_existing_bookmark (url, tags, manager));
+    else
+      g_sequence_prepend (bookmarks, bookmark);
   }
 
   if (my_error) {
@@ -515,11 +558,15 @@ ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
       if (tag)
         g_sequence_append (tags, g_strdup (tag));
     }
-    bookmark = ephy_bookmark_new (url, title, tags, guid);
-    ephy_bookmark_set_time_added (bookmark, time_added);
-    ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), time_added);
 
-    g_sequence_prepend (bookmarks, bookmark);
+    bookmark = get_existing_bookmark (url, tags, manager);
+    if (!bookmark) {
+      bookmark = ephy_bookmark_new (url, title, tags, guid);
+      ephy_bookmark_set_time_added (bookmark, time_added);
+      ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), time_added);
+
+      g_sequence_prepend (bookmarks, bookmark);
+    }
   }
   ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
 
@@ -612,6 +659,7 @@ ephy_bookmarks_import_from_chrome (EphyBookmarksManager  *manager,
   JsonNode *root;
   JsonObject *object;
   JsonObject *roots_object;
+  GSequenceIter *iter;
 
   parser = json_parser_new ();
 
@@ -633,6 +681,20 @@ ephy_bookmarks_import_from_chrome (EphyBookmarksManager  *manager,
   bookmarks = g_sequence_new (g_object_unref);
 
   json_object_foreach_member (roots_object, chrome_parse_root, bookmarks);
+
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+    const char *url = ephy_bookmark_get_url (bookmark);
+    GSequence *tags = ephy_bookmark_get_tags (bookmark);
+    EphyBookmark *existing_bookmark = get_existing_bookmark (url, tags, manager);
+
+    if (existing_bookmark) {
+      g_sequence_insert_before (iter, existing_bookmark);
+      g_sequence_remove (iter);
+    }
+  }
 
   ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
 
