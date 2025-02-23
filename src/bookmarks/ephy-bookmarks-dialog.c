@@ -277,6 +277,11 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
     g_variant_dict_lookup (&dict, "item", "&s", &item);
     g_variant_dict_clear (&dict);
 
+    if (item == NULL) {
+      g_variant_unref (variant);
+      continue;
+    }
+
     if (g_strcmp0 (type, "bookmark") == 0) {
       EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self->manager, item);
 
@@ -284,10 +289,11 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
 
       row = create_bookmark_row (bookmark, self);
     } else {
-      if (g_strcmp0 (item, "") == 0 || item == NULL) {
+      if (g_strcmp0 (item, "") == 0) {
         g_variant_unref (variant);
         continue;
       }
+
       g_assert (ephy_bookmarks_manager_tag_exists (self->manager, item));
 
       row = create_tag_row (self, item);
