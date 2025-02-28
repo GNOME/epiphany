@@ -17,6 +17,7 @@
         <property name="content">
           <object class="GtkBox">
             <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
                 <property name="xalign">0</property>
@@ -27,29 +28,38 @@
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="vexpand">True</property>
-                <property name="hscrollbar_policy">never</property>
+              <object class="GtkFrame">
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
                 <child>
-                  <object class="GtkColumnView" id="columnview">
-                    <property name="show-row-separators">true</property>
-                    <property name="model">
-                      <object class="GtkSingleSelection" id="selection_model">
-                        <property name="autoselect">false</property>
-                        <signal name="selection-changed" handler="on_columnview_selection_changed"/>
-                      </object>
-                    </property>
+                  <object class="GtkScrolledWindow">
+                    <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
                     <child>
-                      <object class="GtkColumnViewColumn" id="url_column">
-                        <property name="expand">true</property>
-                        <property name="title" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
-                        <property name="factory">
-                          <object class="GtkSignalListItemFactory" id="url_cell_factory">
-                            <signal name="setup" handler="on_url_cell_setup"/>
-                            <signal name="bind" handler="on_url_cell_bind"/>
-                            <signal name="teardown" handler="on_url_cell_teardown"/>
+                      <object class="GtkColumnView" id="columnview">
+                        <property name="show-row-separators">true</property>
+                        <property name="model">
+                          <object class="GtkSingleSelection" id="selection_model">
+                            <property name="autoselect">false</property>
+                            <signal name="selection-changed" handler="on_columnview_selection_changed"/>
                           </object>
                         </property>
+                        <accessibility>
+                          <property name="label" translatable="yes" context="Accessible label for the Additional URLs list">List of Additional URLs</property>
+                        </accessibility>
+                        <child>
+                          <object class="GtkColumnViewColumn" id="url_column">
+                            <property name="expand">true</property>
+                            <property name="title" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
+                            <property name="factory">
+                              <object class="GtkSignalListItemFactory" id="url_cell_factory">
+                                <signal name="setup" handler="on_url_cell_setup"/>
+                                <signal name="bind" handler="on_url_cell_bind"/>
+                                <signal name="teardown" handler="on_url_cell_teardown"/>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -76,13 +86,20 @@
               </object>
             </child>
             <child type="end">
+              <object class="GtkButton" id="save_button">
+                <property name="label" translatable="yes">_Save</property>
+                <property name="use_underline">True</property>
+                <property name="action-name">webapp-additional-urls.save-and-close</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+            <child type="end">
               <object class="GtkButton">
                 <property name="label" translatable="yes">_Clear All</property>
                 <property name="use_underline">True</property>
                 <property name="action-name">webapp-additional-urls.forget-all</property>
-                <style>
-                  <class name="destructive-action"/>
-                </style>
               </object>
             </child>
           </object>
