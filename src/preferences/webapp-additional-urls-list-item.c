@@ -126,9 +126,8 @@ ephy_webapp_additional_urls_list_item_set_url (EphyWebappAdditionalURLsListItem 
 {
   g_assert (url);
 
-  /* We will notify even if the new string is equal to the old string. This
-   * allows our one consumer (EphyWebappAdditionalURLsDialog) to expect a change
-   * notify event to always fire when the user enters a new value. */
+  if (g_strcmp0 (url, self->url) == 0)
+    return;
 
   g_free (self->url);
   self->url = g_strdup (url);

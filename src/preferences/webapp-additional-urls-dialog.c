@@ -42,9 +42,17 @@ static void
 ephy_webapp_additional_urls_update_settings (EphyWebappAdditionalURLsDialog *dialog)
 {
   GVariantBuilder builder;
+  guint n_items;
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (dialog->liststore));
+
+  if (n_items == 0) {
+    g_settings_set_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS, NULL);
+    return;
+  }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
-  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (dialog->liststore)); i++) {
+  for (guint i = 0; i < n_items; i++) {
     g_autoptr (EphyWebappAdditionalURLsListItem) item = NULL;
     item = EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (g_list_model_get_item (G_LIST_MODEL (dialog->liststore), i));
     ephy_webapp_additional_urls_list_item_add_to_builder (EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (item), &builder);
@@ -52,6 +60,44 @@ ephy_webapp_additional_urls_update_settings (EphyWebappAdditionalURLsDialog *dia
   g_settings_set (EPHY_SETTINGS_WEB_APP,
                   EPHY_PREFS_WEB_APP_ADDITIONAL_URLS,
                   "as", &builder);
+}
+
+static void
+append_url_list_item (EphyWebappAdditionalURLsDialog *dialog,
+                      const gchar                    *url,
+                      gboolean                        select)
+{
+  g_autoptr (EphyWebappAdditionalURLsListItem) item = NULL;
+
+  item = ephy_webapp_additional_urls_list_item_new (url);
+  g_list_store_append (G_LIST_STORE (dialog->liststore), item);
+
+  if (select)
+    gtk_single_selection_set_selected (dialog->selection_model,
+                                       g_list_model_get_n_items (G_LIST_MODEL (dialog->liststore)) - 1);
+}
+
+static void
+append_empty_list_item (EphyWebappAdditionalURLsDialog *dialog,
+                        gboolean                        select)
+{
+  g_autoptr (EphyWebappAdditionalURLsListItem) last_item = NULL;
+  const gchar *last_url;
+  guint n_items;
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (dialog->liststore));
+
+  if (n_items > 0) {
+    last_item = EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (g_list_model_get_item (G_LIST_MODEL (dialog->liststore), n_items - 1));
+    last_url = ephy_webapp_additional_urls_list_item_get_url (last_item);
+    if (last_url == NULL || last_url[0] == '\0') {
+      /* If there is a last item, and it is empty, then select it */
+      gtk_single_selection_set_selected (dialog->selection_model, n_items - 1);
+      return;
+    }
+  }
+
+  append_url_list_item (dialog, "", select);
 }
 
 static void
@@ -65,18 +111,6 @@ on_list_item_selected (GtkListItem *list_item,
 }
 
 static void
-submit_text_input_for_list_item (GtkListItem *list_item,
-                                 GtkText     *entry,
-                                 bool         select)
-{
-  EphyWebappAdditionalURLsListItem *model_item = EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (gtk_list_item_get_item (list_item));
-  const gchar *text = gtk_editable_get_text (GTK_EDITABLE (entry));
-  ephy_webapp_additional_urls_list_item_set_url (model_item, text);
-  if (select)
-    gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-}
-
-static void
 on_url_entry_has_focus (GtkText     *entry,
                         GParamSpec  *pspec,
                         GtkListItem *list_item)
@@ -84,22 +118,73 @@ on_url_entry_has_focus (GtkText     *entry,
   EphyWebappAdditionalURLsDialog *dialog;
   guint position;
 
+  dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (entry), EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG));
+
+  if (dialog == NULL)
+    return;
+
   if (!gtk_widget_has_focus (GTK_WIDGET (entry))) {
-    submit_text_input_for_list_item (list_item, entry, false);
+    gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
     return;
   }
 
-  dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (entry), EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG));
-  g_assert (dialog != NULL);
   position = gtk_list_item_get_position (list_item);
   gtk_single_selection_set_selected (dialog->selection_model, position);
+}
+
+static gboolean
+remove_list_item_if_empty (GtkText     *entry,
+                           GtkListItem *list_item)
+{
+  EphyWebappAdditionalURLsDialog *dialog;
+  guint position;
+  const gchar *url;
+
+  url = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  if (url != NULL && url[0] != '\0')
+    return false;
+
+  dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (entry), EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG));
+  position = gtk_list_item_get_position (list_item);
+
+  g_list_store_remove (dialog->liststore, position);
+
+  return true;
 }
 
 static void
 on_url_entry_activate (GtkText     *entry,
                        GtkListItem *list_item)
 {
-  submit_text_input_for_list_item (list_item, entry, true);
+  EphyWebappAdditionalURLsDialog *dialog;
+  const gchar *url;
+
+  url = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  if (url == NULL || url[0] == '\0')
+    return;
+
+  dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (entry), EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG));
+  append_empty_list_item (dialog, true);
+}
+
+static void
+on_url_entry_backspace (GtkText     *entry,
+                        GtkListItem *list_item)
+{
+  remove_list_item_if_empty (entry, list_item);
+}
+
+static void
+on_url_entry_delete_from_cursor (GtkText       *entry,
+                                 GtkDeleteType *type,
+                                 gint           count,
+                                 GtkListItem   *list_item)
+{
+  if (type != GTK_DELETE_CHARS)
+    return;
+  remove_list_item_if_empty (entry, list_item);
 }
 
 static void
@@ -124,6 +209,7 @@ on_url_cell_bind (GtkSignalListItemFactory       *factory,
   current_url = ephy_webapp_additional_urls_list_item_get_url (EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (model_item));
   gtk_editable_set_text (GTK_EDITABLE (entry_widget),
                          current_url != NULL ? current_url : "");
+  g_object_bind_property (G_OBJECT (entry_widget), "text", model_item, "url", G_BINDING_DEFAULT);
   g_signal_connect_object (object,
                            "notify::selected",
                            G_CALLBACK (on_list_item_selected),
@@ -139,6 +225,16 @@ on_url_cell_bind (GtkSignalListItemFactory       *factory,
                            G_CALLBACK (on_url_entry_activate),
                            GTK_LIST_ITEM (object),
                            G_CONNECT_DEFAULT);
+  g_signal_connect_object (G_OBJECT (entry_widget),
+                           "backspace",
+                           G_CALLBACK (on_url_entry_backspace),
+                           GTK_LIST_ITEM (object),
+                           G_CONNECT_DEFAULT);
+  g_signal_connect_object (G_OBJECT (entry_widget),
+                           "delete-from-cursor",
+                           G_CALLBACK (on_url_entry_delete_from_cursor),
+                           GTK_LIST_ITEM (object),
+                           G_CONNECT_DEFAULT);
 }
 
 static void
@@ -147,23 +243,6 @@ on_url_cell_teardown (GtkSignalListItemFactory       *factory,
                       EphyWebappAdditionalURLsDialog *dialog)
 {
   gtk_list_item_set_child (GTK_LIST_ITEM (object), NULL);
-}
-
-static void
-on_list_item_notify (EphyWebappAdditionalURLsListItem *model_item,
-                     GParamSpec                       *pspec,
-                     EphyWebappAdditionalURLsDialog   *dialog)
-{
-  const gchar *url;
-  guint item_position;
-
-  url = ephy_webapp_additional_urls_list_item_get_url (EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (model_item));
-
-  if ((!url || url[0] == '\0') &&
-      g_list_store_find (dialog->liststore, model_item, &item_position))
-    g_list_store_remove (dialog->liststore, item_position);
-
-  ephy_webapp_additional_urls_update_settings (dialog);
 }
 
 static void
@@ -219,27 +298,8 @@ ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogCla
   gtk_widget_class_bind_template_callback (widget_class, on_url_cell_bind);
   gtk_widget_class_bind_template_callback (widget_class, on_url_cell_teardown);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Delete, 0, "webapp-additional-urls.forget", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Delete, 0, "webapp-additional-urls.forget", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Delete, GDK_SHIFT_MASK, "webapp-additional-urls.forget-all", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Delete, GDK_SHIFT_MASK, "webapp-additional-urls.forget-all", NULL);
-
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
-}
-
-static EphyWebappAdditionalURLsListItem *
-append_url_list_item (EphyWebappAdditionalURLsDialog *dialog,
-                      const gchar                    *url)
-{
-  g_autoptr (EphyWebappAdditionalURLsListItem) item = NULL;
-  item = ephy_webapp_additional_urls_list_item_new (url);
-  g_list_store_append (G_LIST_STORE (dialog->liststore), item);
-  g_signal_connect_object (item,
-                           "notify",
-                           G_CALLBACK (on_list_item_notify),
-                           dialog,
-                           G_CONNECT_DEFAULT);
-  return item;
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK, "webapp-additional-urls.save-and-close", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, GDK_CONTROL_MASK, "webapp-additional-urls.save-and-close", NULL);
 }
 
 static void
@@ -248,9 +308,7 @@ add_new (GSimpleAction *action,
          gpointer       user_data)
 {
   EphyWebappAdditionalURLsDialog *dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (user_data);
-  append_url_list_item (dialog, "");
-  gtk_single_selection_set_selected (dialog->selection_model,
-                                     g_list_model_get_n_items (G_LIST_MODEL (dialog->liststore)) - 1);
+  append_empty_list_item (dialog, true);
 }
 
 static void
@@ -276,7 +334,17 @@ forget_all (GSimpleAction *action,
   EphyWebappAdditionalURLsDialog *dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (user_data);
 
   g_list_store_remove_all (dialog->liststore);
-  g_settings_set_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS, NULL);
+}
+
+static void
+save_and_close (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  EphyWebappAdditionalURLsDialog *dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (user_data);
+
+  ephy_webapp_additional_urls_update_settings (dialog);
+  gtk_window_close (GTK_WINDOW (dialog));
 }
 
 static GActionGroup *
@@ -286,6 +354,7 @@ create_action_group (EphyWebappAdditionalURLsDialog *dialog)
     { "new", add_new },
     { "forget", forget },
     { "forget-all", forget_all },
+    { "save-and-close", save_and_close },
   };
   GSimpleActionGroup *group;
 
@@ -304,10 +373,12 @@ show_dialog_cb (GtkWidget *widget,
   guint i;
 
   urls = g_settings_get_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS);
-  for (i = 0; urls[i]; i++) {
-    append_url_list_item (dialog, urls[i]);
-  }
+  for (i = 0; urls[i]; i++)
+    append_url_list_item (dialog, urls[i], false);
   g_strfreev (urls);
+
+  if (i == 0)
+    append_url_list_item (dialog, "", true);
 }
 
 static void
