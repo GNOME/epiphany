@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkListStore" id="liststore">
-    <columns>
-      <!-- column-name URL -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <template class="EphyWebappAdditionalURLsDialog" parent="AdwWindow">
     <property name="modal">True</property>
     <property name="default_width">300</property>
@@ -38,32 +31,25 @@
                 <property name="vexpand">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <child>
-                  <object class="GtkTreeView" id="treeview">
-                    <property name="model">liststore</property>
-                    <property name="enable_search">False</property>
-                    <property name="search_column">0</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="tree_selection">
-                        <property name="mode">multiple</property>
-                        <signal name="changed" handler="on_treeview_selection_changed"/>
+                  <object class="GtkColumnView" id="columnview">
+                    <property name="show-row-separators">true</property>
+                    <property name="model">
+                      <object class="GtkSingleSelection" id="selection_model">
+                        <property name="autoselect">false</property>
+                        <signal name="selection-changed" handler="on_columnview_selection_changed"/>
                       </object>
-                    </child>
+                    </property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="url_column">
-                        <property name="sizing">autosize</property>
+                      <object class="GtkColumnViewColumn" id="url_column">
+                        <property name="expand">true</property>
                         <property name="title" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
-                        <property name="clickable">True</property>
-                        <property name="reorderable">True</property>
-                        <property name="sort_column_id">0</property>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="editable">TRUE</property>
-                            <signal name="edited" handler="on_cell_edited"/>
+                        <property name="factory">
+                          <object class="GtkSignalListItemFactory" id="url_cell_factory">
+                            <signal name="setup" handler="on_url_cell_setup"/>
+                            <signal name="bind" handler="on_url_cell_bind"/>
+                            <signal name="teardown" handler="on_url_cell_teardown"/>
                           </object>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
+                        </property>
                       </object>
                     </child>
                   </object>
