@@ -28,37 +28,39 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
+                <property name="margin-start">8</property>
+                <property name="margin-end">8</property>
+                <child type="label">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
+                    <style>
+                      <class name="heading"/>
+                    </style>
+                    <accessibility>
+                      <relation name="label-for">listview</relation>
+                    </accessibility>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="vexpand">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <child>
-                      <object class="GtkColumnView" id="columnview">
-                        <property name="show-row-separators">true</property>
+                      <object class="GtkListView" id="listview">
+                        <property name="show-separators">true</property>
                         <property name="model">
                           <object class="GtkSingleSelection" id="selection_model">
                             <property name="autoselect">false</property>
-                            <signal name="selection-changed" handler="on_columnview_selection_changed"/>
+                            <signal name="selection-changed" handler="on_listview_selection_changed"/>
                           </object>
                         </property>
-                        <accessibility>
-                          <property name="label" translatable="yes" context="Accessible label for the Additional URLs list">List of Additional URLs</property>
-                        </accessibility>
-                        <child>
-                          <object class="GtkColumnViewColumn" id="url_column">
-                            <property name="expand">true</property>
-                            <property name="title" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
-                            <property name="factory">
-                              <object class="GtkSignalListItemFactory" id="url_cell_factory">
-                                <signal name="setup" handler="on_url_cell_setup"/>
-                                <signal name="bind" handler="on_url_cell_bind"/>
-                                <signal name="teardown" handler="on_url_cell_teardown"/>
-                              </object>
-                            </property>
+                        <property name="factory">
+                          <object class="GtkSignalListItemFactory" id="url_cell_factory">
+                            <signal name="setup" handler="on_url_cell_setup"/>
+                            <signal name="bind" handler="on_url_cell_bind"/>
+                            <signal name="teardown" handler="on_url_cell_teardown"/>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                   </object>

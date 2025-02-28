@@ -27,9 +27,6 @@
 struct _EphyWebappAdditionalURLsDialog {
   AdwDialog parent_instance;
 
-  GtkColumnView *columnview;
-  GtkTreeViewColumn *url_column;
-  GtkSignalListItemFactory *url_cell_factory;
   GtkSingleSelection *selection_model;
 
   GListStore *liststore;
@@ -193,6 +190,10 @@ on_url_cell_setup (GtkSignalListItemFactory       *factory,
                    EphyWebappAdditionalURLsDialog *dialog)
 {
   GtkWidget *entry_widget = gtk_text_new ();
+  gtk_widget_set_margin_top (entry_widget, 2);
+  gtk_widget_set_margin_end (entry_widget, 2);
+  gtk_widget_set_margin_bottom (entry_widget, 2);
+  gtk_widget_set_margin_start (entry_widget, 2);
   gtk_list_item_set_child (GTK_LIST_ITEM (object), entry_widget);
 }
 
@@ -256,10 +257,10 @@ update_selection_actions (GActionMap *action_map,
 }
 
 static void
-on_columnview_selection_changed (GtkSelectionModel              *selection,
-                                 guint                           position,
-                                 guint                           n_items,
-                                 EphyWebappAdditionalURLsDialog *dialog)
+on_listview_selection_changed (GtkSelectionModel              *selection,
+                               guint                           position,
+                               guint                           n_items,
+                               EphyWebappAdditionalURLsDialog *dialog)
 {
   guint selected_position = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (selection));
   update_selection_actions (G_ACTION_MAP (dialog->action_group),
@@ -288,12 +289,9 @@ ephy_webapp_additional_urls_dialog_class_init (EphyWebappAdditionalURLsDialogCla
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/webapp-additional-urls-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphyWebappAdditionalURLsDialog, columnview);
-  gtk_widget_class_bind_template_child (widget_class, EphyWebappAdditionalURLsDialog, url_column);
-  gtk_widget_class_bind_template_child (widget_class, EphyWebappAdditionalURLsDialog, url_cell_factory);
   gtk_widget_class_bind_template_child (widget_class, EphyWebappAdditionalURLsDialog, selection_model);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_columnview_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_listview_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_url_cell_setup);
   gtk_widget_class_bind_template_callback (widget_class, on_url_cell_bind);
   gtk_widget_class_bind_template_callback (widget_class, on_url_cell_teardown);
