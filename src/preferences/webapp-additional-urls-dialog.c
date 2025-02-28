@@ -25,7 +25,7 @@
 #include "webapp-additional-urls-list-item.h"
 
 struct _EphyWebappAdditionalURLsDialog {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   GtkColumnView *columnview;
   GtkTreeViewColumn *url_column;
@@ -36,7 +36,7 @@ struct _EphyWebappAdditionalURLsDialog {
   GActionGroup *action_group;
 };
 
-G_DEFINE_FINAL_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, ADW_TYPE_DIALOG)
 
 static void
 ephy_webapp_additional_urls_update_settings (EphyWebappAdditionalURLsDialog *dialog)
@@ -344,7 +344,7 @@ save_and_close (GSimpleAction *action,
   EphyWebappAdditionalURLsDialog *dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (user_data);
 
   ephy_webapp_additional_urls_update_settings (dialog);
-  gtk_window_close (GTK_WINDOW (dialog));
+  adw_dialog_close (ADW_DIALOG (dialog));
 }
 
 static GActionGroup *
@@ -365,8 +365,8 @@ create_action_group (EphyWebappAdditionalURLsDialog *dialog)
 }
 
 static void
-show_dialog_cb (GtkWidget *widget,
-                gpointer   user_data)
+realize_dialog_cb (GtkWidget *widget,
+                   gpointer   user_data)
 {
   EphyWebappAdditionalURLsDialog *dialog = EPHY_WEBAPP_ADDITIONAL_URLS_DIALOG (widget);
   char **urls;
@@ -413,7 +413,7 @@ ephy_webapp_additional_urls_dialog_init (EphyWebappAdditionalURLsDialog *dialog)
                            G_CALLBACK (on_liststore_items_changed),
                            dialog,
                            G_CONNECT_DEFAULT);
-  g_signal_connect (GTK_WIDGET (dialog), "show", G_CALLBACK (show_dialog_cb), NULL);
+  g_signal_connect (GTK_WIDGET (dialog), "realize", G_CALLBACK (realize_dialog_cb), NULL);
 }
 
 EphyWebappAdditionalURLsDialog *

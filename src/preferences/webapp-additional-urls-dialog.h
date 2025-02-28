@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG (ephy_webapp_additional_urls_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, EPHY, WEBAPP_ADDITIONAL_URLS_DIALOG, AdwWindow);
+G_DECLARE_FINAL_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, EPHY, WEBAPP_ADDITIONAL_URLS_DIALOG, AdwDialog);
 
 EphyWebappAdditionalURLsDialog *ephy_webapp_additional_urls_dialog_new (void);
 
