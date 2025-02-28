@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="EphyWebappAdditionalURLsDialog" parent="AdwWindow">
-    <property name="modal">True</property>
-    <property name="default_width">300</property>
-    <property name="default_height">400</property>
-    <property name="destroy_with_parent">True</property>
+  <template class="EphyWebappAdditionalURLsDialog" parent="AdwDialog">
+    <property name="content-width">540</property>
+    <property name="content-height">400</property>
+    <property name="default-widget">save_button</property>
     <property name="title" translatable="yes">Additional URLs</property>
     <style>
       <class name="view"/>
     </style>
-    <property name="content">
+    <property name="child">
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar"/>

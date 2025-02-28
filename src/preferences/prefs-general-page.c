@@ -894,9 +894,7 @@ on_manage_webapp_additional_urls_row_activated (GtkWidget        *button,
   urls_dialog = ephy_webapp_additional_urls_dialog_new ();
   window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
 
-  gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), window);
-  gtk_window_set_modal (GTK_WINDOW (urls_dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (urls_dialog));
+  adw_dialog_present (ADW_DIALOG (urls_dialog), GTK_WIDGET (window));
 }
 
 static void
