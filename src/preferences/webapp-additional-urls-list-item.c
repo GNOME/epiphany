@@ -21,6 +21,8 @@
 #include "config.h"
 #include "webapp-additional-urls-list-item.h"
 
+#include "ephy-web-app-utils.h"
+
 struct _EphyWebappAdditionalURLsListItem {
   GObject parent_instance;
 
@@ -139,9 +141,11 @@ ephy_webapp_additional_urls_list_item_add_to_builder (EphyWebappAdditionalURLsLi
                                                       GVariantBuilder                  *builder)
 {
   const gchar *url = ephy_webapp_additional_urls_list_item_get_url (item);
+  g_autofree gchar *normalized_url = ephy_web_application_normalize_additional_url (url);
 
-  if (url && url[0] != '\0')
-    g_variant_builder_add (builder, "s", url);
+  if (!normalized_url)
+    return FALSE;
 
-  return FALSE;
+  g_variant_builder_add (builder, "s", normalized_url);
+  return TRUE;
 }

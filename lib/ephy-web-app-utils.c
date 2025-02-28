@@ -956,6 +956,39 @@ ephy_web_application_is_uri_allowed (const char *uri)
   return matched;
 }
 
+char *
+ephy_web_application_normalize_additional_url (const char *url)
+{
+  g_autoptr (EphyWebApplication) webapp = ephy_web_application_for_profile_directory (ephy_profile_dir (),
+                                                                                      EPHY_WEB_APP_NO_TMP_ICON);
+  const char *url_scheme = NULL;
+  char *absolute_url = NULL;
+
+  g_assert (webapp);
+
+  if (url == NULL || url[0] == '\0')
+    return NULL;
+
+  url_scheme = g_uri_peek_scheme (url);
+  if (!url_scheme) {
+    const char *webapp_scheme = g_uri_peek_scheme (webapp->url);
+
+    if (!webapp_scheme)
+      return NULL;
+
+    absolute_url = g_strdup_printf ("%s://%s", webapp_scheme, url);
+
+    if (!g_uri_is_valid (absolute_url, G_URI_FLAGS_NONE, NULL)) {
+      g_free (absolute_url);
+      return NULL;
+    }
+  } else {
+    absolute_url = g_strdup (url);
+  }
+
+  return absolute_url;
+}
+
 static void
 ephy_web_icon_copy_cb (GFile        *file,
                        GAsyncResult *result,

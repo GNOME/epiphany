@@ -122,6 +122,8 @@ void                ephy_web_application_initialize_settings (const char *profil
 
 gboolean            ephy_web_application_is_uri_allowed (const char *uri);
 
+char               *ephy_web_application_normalize_additional_url (const char *url);
+
 gboolean            ephy_web_application_save (EphyWebApplication *app);
 
 gboolean            ephy_web_application_is_system (EphyWebApplication *app);

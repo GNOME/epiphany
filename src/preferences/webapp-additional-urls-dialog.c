@@ -22,6 +22,7 @@
 #include "webapp-additional-urls-dialog.h"
 
 #include "ephy-settings.h"
+#include "ephy-web-app-utils.h"
 #include "webapp-additional-urls-list-item.h"
 
 struct _EphyWebappAdditionalURLsDialog {
@@ -151,6 +152,36 @@ remove_list_item_if_empty (GtkText     *entry,
 }
 
 static void
+on_url_entry_changed (GtkText     *entry,
+                      GtkListItem *list_item)
+{
+  GObject *model_item;
+  GtkWidget *parent_widget;
+  const gchar *url;
+  g_autofree gchar *normalized_url = NULL;
+
+  model_item = gtk_list_item_get_item (list_item);
+  g_assert (model_item != NULL);
+
+  parent_widget = gtk_widget_get_parent (GTK_WIDGET (entry));
+  g_assert (parent_widget != NULL);
+
+  url = gtk_editable_get_text (GTK_EDITABLE (entry));
+  normalized_url = ephy_web_application_normalize_additional_url (url);
+
+  /* Show an error if the URL is invalid, but only if it is non-empty */
+  if (normalized_url || !url || url[0] == '\0') {
+    gtk_widget_remove_css_class (parent_widget, "error");
+    ephy_webapp_additional_urls_list_item_set_url (EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (model_item),
+                                                   normalized_url ? normalized_url : "");
+  } else if (!normalized_url) {
+    gtk_widget_add_css_class (parent_widget, "error");
+    ephy_webapp_additional_urls_list_item_set_url (EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (model_item),
+                                                   "");
+  }
+}
+
+static void
 on_url_entry_activate (GtkText     *entry,
                        GtkListItem *list_item)
 {
@@ -210,7 +241,6 @@ on_url_cell_bind (GtkSignalListItemFactory       *factory,
   current_url = ephy_webapp_additional_urls_list_item_get_url (EPHY_WEBAPP_ADDITIONAL_URLS_LIST_ITEM (model_item));
   gtk_editable_set_text (GTK_EDITABLE (entry_widget),
                          current_url != NULL ? current_url : "");
-  g_object_bind_property (G_OBJECT (entry_widget), "text", model_item, "url", G_BINDING_DEFAULT);
   g_signal_connect_object (object,
                            "notify::selected",
                            G_CALLBACK (on_list_item_selected),
@@ -219,6 +249,11 @@ on_url_cell_bind (GtkSignalListItemFactory       *factory,
   g_signal_connect_object (G_OBJECT (entry_widget),
                            "notify::has-focus",
                            G_CALLBACK (on_url_entry_has_focus),
+                           GTK_LIST_ITEM (object),
+                           G_CONNECT_DEFAULT);
+  g_signal_connect_object (G_OBJECT (entry_widget),
+                           "changed",
+                           G_CALLBACK (on_url_entry_changed),
                            GTK_LIST_ITEM (object),
                            G_CONNECT_DEFAULT);
   g_signal_connect_object (G_OBJECT (entry_widget),
