@@ -275,13 +275,14 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
     GVariantDict dict;
     const char *type, *item;
     GtkWidget *row;
+    gboolean has_type, has_item;
 
     g_variant_dict_init (&dict, variant);
-    g_variant_dict_lookup (&dict, "type", "&s", &type);
-    g_variant_dict_lookup (&dict, "item", "&s", &item);
+    has_type = g_variant_dict_lookup (&dict, "type", "&s", &type);
+    has_item = g_variant_dict_lookup (&dict, "item", "&s", &item);
     g_variant_dict_clear (&dict);
 
-    if (item == NULL) {
+    if (!has_item || !has_type) {
       g_variant_unref (variant);
       continue;
     }
