@@ -1774,6 +1774,7 @@ gboolean
 ephy_location_entry_reset (EphyLocationEntry *entry)
 {
   const char *text, *old_text;
+  int position, offset;
   g_autofree char *url = NULL;
 
   g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
@@ -1785,7 +1786,10 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
   entry->saved_text = g_strdup (old_text);
   entry->can_redo = TRUE;
 
+  offset = strlen (text) - strlen (old_text);
+  position = gtk_editable_get_position (GTK_EDITABLE (entry));
   ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
+  gtk_editable_set_position (GTK_EDITABLE (entry), position + offset);
 
   entry->user_changed = FALSE;
   update_actions (entry);
