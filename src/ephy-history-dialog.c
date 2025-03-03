@@ -293,8 +293,6 @@ on_find_urls_cb (gpointer service,
 
   clear_listbox (self->listbox);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
-
   self->num_fetch = NUM_FETCH_LIMIT;
   self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
 }
@@ -385,6 +383,11 @@ on_browse_history_deleted_cb (gpointer service,
     return;
 
   filter_now (self);
+
+  /* Checks if all history has been deleted. If it has, there will still be
+   * one row in the list box, but it won't be visible to the user. */
+  if (!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 1))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
 }
 
 static void
