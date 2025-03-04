@@ -1043,7 +1043,7 @@ sync_tab_address (EphyWebView *view,
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
   const char *current_text = ephy_title_widget_get_address (title_widget);
 
-  if (window->closing)
+  if (window->closing || ephy_embed_get_web_view (embed) != view)
     return;
 
   address = ephy_web_view_get_display_address (view);
