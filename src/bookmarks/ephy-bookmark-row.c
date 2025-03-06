@@ -23,13 +23,10 @@
 #include "ephy-bookmark-properties.h"
 #include "ephy-bookmark-row.h"
 #include "ephy-bookmarks-dialog.h"
-#include "ephy-bookmarks-manager.h"
-#include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-settings.h"
-#include "ephy-shell.h"
 
 #include <adwaita.h>
 
@@ -40,7 +37,6 @@ struct _EphyBookmarkRow {
   GCancellable *cancellable;
 
   GtkWidget *favicon_image;
-  GtkWidget *remove_button;
   GtkWidget *properties_button;
 };
 
@@ -54,40 +50,9 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-enum {
-  MOVE_ROW,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 static void
-ephy_bookmark_row_remove_button_clicked_cb (EphyBookmarkRow *row,
-                                            GtkButton       *button)
-{
-  GtkWindow *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
-
-  g_assert (EPHY_IS_BOOKMARK_ROW (row));
-  g_assert (GTK_IS_BUTTON (button));
-
-  ephy_bookmarks_manager_remove_bookmark (ephy_shell_get_bookmarks_manager (ephy_shell_get_default ()), row->bookmark);
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (row->bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_EMPTY);
-}
-
-static void
-ephy_bookmark_row_properties_button_clicked_cb (EphyBookmarkRow *row,
-                                                GtkButton       *button)
+ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
+                                     GtkButton       *button)
 {
   GtkWidget *dialog;
 
@@ -96,57 +61,6 @@ ephy_bookmark_row_properties_button_clicked_cb (EphyBookmarkRow *row,
 
   dialog = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row));
   adw_dialog_present (ADW_DIALOG (dialog), gtk_widget_get_parent (GTK_WIDGET (row)));
-}
-
-static GdkContentProvider *
-drag_prepare_cb (AdwActionRow *self,
-                 double        x,
-                 double        y)
-{
-  return gdk_content_provider_new_typed (ADW_TYPE_ACTION_ROW, self);
-}
-
-static void
-drag_begin_cb (EphyBookmarkRow *self,
-               GdkDrag         *drag)
-{
-  GtkWidget *drag_list;
-  GtkWidget *drag_row;
-  GtkWidget *drag_icon;
-  int width, height;
-
-  width = gtk_widget_get_width (GTK_WIDGET (self));
-  height = gtk_widget_get_height (GTK_WIDGET (self));
-
-  drag_list = gtk_list_box_new ();
-  gtk_widget_set_size_request (drag_list, width, height);
-  gtk_widget_add_css_class (drag_list, "boxed-list");
-
-  drag_row = ephy_bookmark_row_new (self->bookmark);
-  gtk_list_box_append (GTK_LIST_BOX (drag_list), drag_row);
-
-  drag_icon = gtk_drag_icon_get_for_drag (drag);
-  gtk_widget_add_css_class (drag_icon, "boxed-list");
-  gtk_drag_icon_set_child (GTK_DRAG_ICON (drag_icon), drag_list);
-}
-
-static gboolean
-drop_cb (AdwActionRow *self,
-         const GValue *value,
-         double        x,
-         double        y)
-{
-  AdwActionRow *source;
-
-  if (!G_VALUE_HOLDS (value, ADW_TYPE_ACTION_ROW))
-    return FALSE;
-
-  source = g_value_get_object (value);
-  g_object_set_data (G_OBJECT (source), "list-box", gtk_widget_get_parent (GTK_WIDGET (source)));
-
-  g_signal_emit (source, signals[MOVE_ROW], 0, self);
-
-  return TRUE;
 }
 
 void
@@ -303,11 +217,6 @@ ephy_bookmark_row_constructed (GObject *object)
 
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
-                   self->remove_button,
-                   "visible",
-                   G_SETTINGS_BIND_INVERT_BOOLEAN);
-  g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
-                   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
                    self->properties_button,
                    "visible",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
@@ -334,15 +243,9 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-  signals[MOVE_ROW] = g_signal_lookup ("bmks-move-row", ADW_TYPE_ACTION_ROW);
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, favicon_image);
-  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, remove_button);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, properties_button);
-
-  gtk_widget_class_bind_template_callback (widget_class, drag_prepare_cb);
-  gtk_widget_class_bind_template_callback (widget_class, drag_begin_cb);
 }
 
 static void
@@ -355,29 +258,17 @@ on_row_activated (AdwActionRow *self,
 static void
 ephy_bookmark_row_init (EphyBookmarkRow *self)
 {
-  GtkDropTarget *target;
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect_object (self, "activated", G_CALLBACK (on_row_activated), self, G_CONNECT_DEFAULT);
 
-  g_signal_connect_object (self->remove_button,
-                           "clicked",
-                           G_CALLBACK (ephy_bookmark_row_remove_button_clicked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
   g_signal_connect_object (self->properties_button,
                            "clicked",
-                           G_CALLBACK (ephy_bookmark_row_properties_button_clicked_cb),
+                           G_CALLBACK (ephy_bookmark_row_button_clicked_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
   self->cancellable = g_cancellable_new ();
-
-  target = gtk_drop_target_new (ADW_TYPE_ACTION_ROW, GDK_ACTION_MOVE);
-  gtk_drop_target_set_preload (target, TRUE);
-  g_signal_connect_swapped (target, "drop", G_CALLBACK (drop_cb), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
 }
 
 GtkWidget *

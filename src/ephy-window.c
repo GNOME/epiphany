@@ -4823,51 +4823,6 @@ ephy_window_switch_to_new_tab (EphyWindow *window)
   ephy_tab_view_select_page (ephy_window_get_tab_view (window), window->switch_to_tab);
 }
 
-gboolean
-ephy_window_get_show_sidebar (EphyWindow *self)
-{
-  return adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view));
-}
-
-static void
-bookmark_removed_toast_dismissed (AdwToast     *toast,
-                                  EphyBookmark *bookmark)
-{
-  g_object_unref (bookmark);
-}
-
-static void
-bookmark_removed_toast_button_clicked (AdwToast     *toast,
-                                       EphyBookmark *bookmark)
-{
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GtkWindow *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
-
-  ephy_bookmarks_manager_add_bookmark (manager, bookmark);
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
-}
-
-void
-ephy_window_bookmark_removed_toast (EphyWindow   *self,
-                                    EphyBookmark *bookmark,
-                                    AdwToast     *toast)
-{
-  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, 0);
-  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, 0);
-  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
-}
-
 void
 ephy_window_toggle_bookmarks (EphyWindow *self)
 {
@@ -4877,7 +4832,6 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
   adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view), state);
 
   if (state) {
-    ephy_bookmarks_dialog_set_is_editing (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog), FALSE);
     ephy_bookmarks_dialog_focus (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
   }
 }

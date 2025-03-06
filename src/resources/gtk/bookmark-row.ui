@@ -11,34 +11,10 @@
         <property name="pixel-size">16</property>
       </object>
     </child>
-    <child type="prefix">
-      <object class="GtkImage" id="drag_handle">
-        <property name="icon-name">list-drag-handle-symbolic</property>
-        <child>
-          <object class="GtkDragSource">
-            <property name="actions">move</property>
-            <signal name="prepare" handler="drag_prepare_cb" swapped="yes"/>
-            <signal name="drag-begin" handler="drag_begin_cb" swapped="yes"/>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child type="suffix">
-      <object class="GtkButton" id="remove_button">
-        <property name="icon_name">user-trash-symbolic</property>
-        <property name="receives_default">False</property>
-        <property name="tooltip-text" translatable="yes">Remove</property>
-        <property name="valign">center</property>
-        <style>
-          <class name="flat"/>
-        </style>
-      </object>
-    </child>
     <child type="suffix">
       <object class="GtkButton" id="properties_button">
-        <property name="icon_name">document-edit-symbolic</property>
+        <property name="icon_name">emblem-system-symbolic</property>
         <property name="receives_default">False</property>
-        <property name="tooltip-text" translatable="yes">Properties</property>
         <property name="valign">center</property>
         <style>
           <class name="flat"/>

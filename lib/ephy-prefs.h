@@ -69,17 +69,13 @@ typedef enum
 #define EPHY_PREFS_STATE_WINDOW_POSITION        "window-position"
 #define EPHY_PREFS_STATE_WINDOW_SIZE            "window-size"
 #define EPHY_PREFS_STATE_IS_MAXIMIZED           "is-maximized"
-#define EPHY_PREFS_STATE_BOOKMARKS_ORDER        "bookmarks-order"
-#define EPHY_PREFS_STATE_TAGS_ORDER             "tags-order"
 
 static const char * const ephy_prefs_state_schema[] = {
   EPHY_PREFS_STATE_DOWNLOAD_DIR,
   EPHY_PREFS_STATE_RECENT_ENCODINGS,
   EPHY_PREFS_STATE_WINDOW_POSITION,
   EPHY_PREFS_STATE_WINDOW_SIZE,
-  EPHY_PREFS_STATE_IS_MAXIMIZED,
-  EPHY_PREFS_STATE_BOOKMARKS_ORDER,
-  EPHY_PREFS_STATE_TAGS_ORDER
+  EPHY_PREFS_STATE_IS_MAXIMIZED
 };
 
 #define EPHY_PREFS_WEB_SCHEMA                       "org.gnome.Epiphany.web"
