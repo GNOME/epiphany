@@ -99,7 +99,6 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
-#define IMPORT_FROM_GVDB_ID "gvdb"
 #define IMPORT_FROM_HTML_ID "html"
 #define IMPORT_FROM_FIREFOX_ID "firefox"
 #define IMPORT_FROM_CHROME_ID "chrome"
@@ -390,57 +389,6 @@ show_firefox_profile_selector (GtkWindow *parent,
 }
 
 static void
-dialog_bookmarks_import_file_dialog_cb (GtkFileDialog *dialog,
-                                        GAsyncResult  *result,
-                                        GtkWindow     *parent)
-{
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  g_autoptr (GError) error = NULL;
-  g_autoptr (GFile) file = NULL;
-  g_autofree char *filename = NULL;
-  gboolean imported;
-
-  file = gtk_file_dialog_open_finish (dialog, result, &error);
-
-  if (error) {
-    if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
-      g_warning ("Failed to open file: %s", error->message);
-    return;
-  }
-
-
-  filename = g_file_get_path (file);
-  imported = ephy_bookmarks_import (manager, filename, &error);
-
-  show_import_export_result (parent, FALSE, imported, error,
-                             _("Bookmarks successfully imported!"));
-}
-
-static void
-dialog_bookmarks_import (GtkWindow *parent)
-{
-  GtkFileDialog *dialog;
-  g_autoptr (GtkFileFilter) filter = NULL;
-  g_autoptr (GListStore) filters = NULL;
-
-  dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, _("Choose File"));
-
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_add_pattern (filter, "*.gvdb");
-
-  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
-  g_list_store_append (filters, filter);
-  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
-
-  gtk_file_dialog_open (dialog,
-                        parent,
-                        NULL,
-                        (GAsyncReadyCallback)dialog_bookmarks_import_file_dialog_cb,
-                        parent);
-}
-
-static void
 dialog_bookmarks_import_from_html_file_dialog_cb (GtkFileDialog *dialog,
                                                   GAsyncResult  *result,
                                                   GtkWindow     *parent)
@@ -553,9 +501,7 @@ static void
 import_bookmarks_using_option_id (const char *option_id,
                                   GtkWindow  *window)
 {
-  if (strcmp (option_id, IMPORT_FROM_GVDB_ID) == 0)
-    dialog_bookmarks_import (window);
-  else if (strcmp (option_id, IMPORT_FROM_HTML_ID) == 0)
+  if (strcmp (option_id, IMPORT_FROM_HTML_ID) == 0)
     dialog_bookmarks_import_from_html (window);
   else if (strcmp (option_id, IMPORT_FROM_FIREFOX_ID) == 0)
     dialog_bookmarks_import_from_firefox (window);
