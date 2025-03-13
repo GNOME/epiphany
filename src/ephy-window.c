@@ -332,9 +332,8 @@ ephy_window_open_link (EphyLink      *link,
 
   g_assert (address != NULL || (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_NEW_TAB | EPHY_LINK_HOME_PAGE)));
 
-  if (embed == NULL) {
+  if (embed == NULL)
     embed = window->active_embed;
-  }
 
   if (flags & EPHY_LINK_BOOKMARK)
     ephy_web_view_set_visit_type (ephy_embed_get_web_view (embed),
@@ -355,14 +354,12 @@ ephy_window_open_link (EphyLink      *link,
     else
       target_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed)));
 
-    if (flags & EPHY_LINK_JUMP_TO) {
+    if (flags & EPHY_LINK_JUMP_TO)
       ntflags |= EPHY_NEW_TAB_JUMP;
-    }
 
     if (flags & EPHY_LINK_NEW_WINDOW ||
-        (flags & EPHY_LINK_NEW_TAB && window->is_popup)) {
+        (flags & EPHY_LINK_NEW_TAB && window->is_popup))
       target_window = ephy_window_new ();
-    }
 
     if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
       ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
@@ -378,18 +375,17 @@ ephy_window_open_link (EphyLink      *link,
 
   web_view = ephy_embed_get_web_view (new_embed);
 
-  if (address)
+  if (address) {
     ephy_web_view_load_url (web_view, address);
-  else if (flags & EPHY_LINK_NEW_TAB)
+  } else if (flags & EPHY_LINK_NEW_TAB) {
     ephy_web_view_load_new_tab_page (web_view);
-  else if (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_HOME_PAGE)) {
+  } else if (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_HOME_PAGE)) {
     EphyShell *shell = ephy_shell_get_default ();
     EphyWebApplication *webapp = ephy_shell_get_webapp (shell);
-    if (webapp) {
+    if (webapp)
       ephy_web_view_load_url (web_view, webapp->url);
-    } else {
+    else
       ephy_web_view_load_homepage (web_view);
-    }
   }
 
   if (ephy_web_view_get_is_blank (web_view))
@@ -651,7 +647,8 @@ handle_key_cb (EphyWindow            *window,
 static gboolean
 ephy_window_close_request (GtkWindow *window)
 {
-  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) && g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
+  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) &&
+      g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
     gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
     return TRUE;
   }
@@ -1084,17 +1081,14 @@ sync_tab_zoom (WebKitWebView *web_view,
 
   ephy_header_bar_set_zoom_level (EPHY_HEADER_BAR (window->header_bar), zoom);
 
-  if (zoom >= ZOOM_MAXIMAL) {
+  if (zoom >= ZOOM_MAXIMAL)
     can_zoom_in = FALSE;
-  }
 
-  if (zoom <= ZOOM_MINIMAL) {
+  if (zoom <= ZOOM_MINIMAL)
     can_zoom_out = FALSE;
-  }
 
-  if (zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL)) {
+  if (zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL))
     can_zoom_normal = TRUE;
-  }
 
   action_group = ephy_window_get_action_group (window, "win");
 
@@ -1140,9 +1134,8 @@ sync_tab_document_type (EphyWebView *view,
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find-next");
   ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
 
-  if (!can_find) {
+  if (!can_find)
     ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (window->active_embed));
-  }
 }
 
 static void
@@ -1824,17 +1817,13 @@ save_target_uri (EphyWindow    *window,
   LOG ("save_target_uri: context %d", context);
 
   /* shift+click saves the link target */
-  if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) {
+  if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK)
     g_object_get (G_OBJECT (window->hit_test_result), "link-uri", &location, NULL);
-  }
-  /* Note: pressing enter to submit a form synthesizes a mouse
-   * click event
-   */
+  /* Note: pressing enter to submit a form synthesizes a mouse click event */
   /* shift+click saves the non-link image */
   else if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE &&
-           !(context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE)) {
+           !(context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE))
     g_object_get (G_OBJECT (window->hit_test_result), "image-uri", &location, NULL);
-  }
 
   if (location) {
     LOG ("Location: %s", location);
@@ -2952,8 +2941,9 @@ tab_has_modified_forms_dialog_cb (AdwAlertDialog          *dialog,
      */
     adw_tab_view_close_page_finish (tab_view, data->page, TRUE);
     ephy_window_close_tab (data->window, data->embed);
-  } else
+  } else {
     adw_tab_view_close_page_finish (tab_view, data->page, FALSE);
+  }
 
   tab_has_modified_forms_data_free (data);
 }
@@ -4831,7 +4821,6 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
   state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view));
   adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view), state);
 
-  if (state) {
+  if (state)
     ephy_bookmarks_dialog_focus (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
-  }
 }

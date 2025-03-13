@@ -75,7 +75,7 @@ static const DataEntry data_entries[] = {
 };
 
 static WebKitWebsiteDataManager *
-get_website_data_manger (void)
+get_website_data_manager (void)
 {
   WebKitNetworkSession *network_session;
 
@@ -208,13 +208,13 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
   } while (gtk_tree_model_iter_next (clear_data_view->treestore, &top_iter));
 
   if (types_to_clear) {
-    webkit_website_data_manager_clear (get_website_data_manger (),
+    webkit_website_data_manager_clear (get_website_data_manager (),
                                        types_to_clear, 0,
                                        NULL, NULL, NULL);
   }
 
   if (types_to_remove) {
-    webkit_website_data_manager_remove (get_website_data_manger (),
+    webkit_website_data_manager_remove (get_website_data_manager (),
                                         types_to_remove, data_to_remove,
                                         NULL, NULL, NULL);
   }
@@ -224,7 +224,7 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
   /* Reload tree */
   ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), TRUE);
   gtk_tree_store_clear (GTK_TREE_STORE (clear_data_view->treestore));
-  webkit_website_data_manager_fetch (get_website_data_manger (),
+  webkit_website_data_manager_fetch (get_website_data_manager (),
                                      PERSISTENT_DATA_TYPES,
                                      clear_data_view->cancellable,
                                      (GAsyncReadyCallback)website_data_fetched_cb,
@@ -440,7 +440,7 @@ clear_data_view_init (ClearDataView *clear_data_view)
 
   clear_data_view->cancellable = g_cancellable_new ();
 
-  webkit_website_data_manager_fetch (get_website_data_manger (),
+  webkit_website_data_manager_fetch (get_website_data_manager (),
                                      PERSISTENT_DATA_TYPES,
                                      clear_data_view->cancellable,
                                      (GAsyncReadyCallback)website_data_fetched_cb,

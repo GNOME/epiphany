@@ -264,7 +264,7 @@ itp_report_ready (GObject      *source_object,
 }
 
 static WebKitWebsiteDataManager *
-get_website_data_manger (void)
+get_website_data_manager (void)
 {
   WebKitNetworkSession *network_session;
 
@@ -275,5 +275,5 @@ get_website_data_manger (void)
 void
 ephy_privacy_report_show (EphyWindow *window)
 {
-  webkit_website_data_manager_get_itp_summary (get_website_data_manger (), NULL, itp_report_ready, g_object_ref (window));
+  webkit_website_data_manager_get_itp_summary (get_website_data_manager (), NULL, itp_report_ready, g_object_ref (window));
 }
