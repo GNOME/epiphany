@@ -11,9 +11,32 @@ template $EphyBookmarkRow: Adw.ActionRow {
     pixel-size: 16;
   }
 
+  [prefix]
+  Image drag_handle {
+    icon-name: "list-drag-handle-symbolic";
+
+    DragSource {
+      actions: move;
+      prepare => $drag_prepare_cb() swapped;
+      drag-begin => $drag_begin_cb() swapped;
+    }
+  }
+
+  [suffix]
+  Button remove_button {
+    icon-name: "user-trash-symbolic";
+    receives-default: false;
+    tooltip-text: _("Remove");
+    valign: center;
+
+    styles [
+      "flat",
+    ]
+  }
+
   [suffix]
   Button properties_button {
-    icon-name: "emblem-system-symbolic";
+    icon-name: "document-edit-symbolic";
     receives-default: false;
     valign: center;
 

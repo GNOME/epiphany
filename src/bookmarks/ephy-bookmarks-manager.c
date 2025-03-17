@@ -117,7 +117,6 @@ ephy_bookmarks_manager_finalize (GObject *object)
 
   g_sequence_free (self->bookmarks);
   g_sequence_free (self->tags);
-
   g_free (self->gvdb_filename);
 
   G_OBJECT_CLASS (ephy_bookmarks_manager_parent_class)->finalize (object);
@@ -237,23 +236,10 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 }
 
 static void
-ephy_bookmark_manager_sort_list (EphyBookmark         *bookmark,
-                                 EphyBookmarksManager *self)
-{
-  guint n = g_list_model_get_n_items (G_LIST_MODEL (self));
-
-  g_sequence_sort (self->bookmarks, (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func, bookmark);
-  g_list_model_items_changed (G_LIST_MODEL (self), 0, n, n);
-}
-
-
-static void
 bookmark_title_changed_cb (EphyBookmark         *bookmark,
                            GParamSpec           *pspec,
                            EphyBookmarksManager *self)
 {
-  ephy_bookmark_manager_sort_list (bookmark, self);
-
   g_signal_emit (self, signals[BOOKMARK_TITLE_CHANGED], 0, bookmark);
 }
 
@@ -262,8 +248,6 @@ bookmark_url_changed_cb (EphyBookmark         *bookmark,
                          GParamSpec           *pspec,
                          EphyBookmarksManager *self)
 {
-  ephy_bookmark_manager_sort_list (bookmark, self);
-
   g_signal_emit (self, signals[BOOKMARK_URL_CHANGED], 0, bookmark);
 }
 
@@ -272,9 +256,6 @@ bookmark_tag_added_cb (EphyBookmark         *bookmark,
                        const char           *tag,
                        EphyBookmarksManager *self)
 {
-  if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
-    ephy_bookmark_manager_sort_list (bookmark, self);
-
   g_signal_emit (self, signals[BOOKMARK_TAG_ADDED], 0, bookmark, tag);
 }
 
@@ -283,9 +264,6 @@ bookmark_tag_removed_cb (EphyBookmark         *bookmark,
                          const char           *tag,
                          EphyBookmarksManager *self)
 {
-  if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
-    ephy_bookmark_manager_sort_list (bookmark, self);
-
   g_signal_emit (self, signals[BOOKMARK_TAG_REMOVED], 0, bookmark, tag);
 }
 
@@ -415,7 +393,6 @@ ephy_bookmarks_manager_remove_bookmark_internal (EphyBookmarksManager *self,
                                NULL);
 
   ephy_bookmarks_manager_unwatch_bookmark (self, bookmark);
-  g_object_unref (bookmark);
 }
 
 void

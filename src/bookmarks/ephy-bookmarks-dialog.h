@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "ephy-bookmark.h"
+
 #include <adwaita.h>
 
 G_BEGIN_DECLS
@@ -27,6 +29,9 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_BOOKMARKS_DIALOG (ephy_bookmarks_dialog_get_type())
 
 G_DECLARE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, EPHY, BOOKMARKS_DIALOG, AdwBin)
+
+void ephy_bookmarks_dialog_set_is_editing (EphyBookmarksDialog *self,
+                                           gboolean             is_editing);
 
 GtkWidget *ephy_bookmarks_dialog_new      (void);
 
