@@ -40,6 +40,7 @@
 #include "ephy-uri-helpers.h"
 #include "ephy-web-view.h"
 
+#include <adwaita.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -75,6 +76,8 @@ struct _EphyLocationEntry {
   GtkSingleSelection *suggestions_model;
 
   GtkWidget *context_menu;
+
+  AdwAnimation *focus_animation;
 
   char *saved_text;
   char *jump_tab;
@@ -545,6 +548,26 @@ text_pressed_cb (EphyLocationEntry *entry,
   }
 }
 
+static void
+select_timeout_cb (gpointer user_data)
+{
+  gtk_editable_select_region (GTK_EDITABLE (user_data), 0, -1);
+  g_object_unref (user_data);
+}
+
+static void
+text_drag_end_cb (EphyLocationEntry *entry,
+                  double             x,
+                  double             y,
+                  GtkGesture        *gesture)
+{
+  if (entry->focus_animation &&
+      adw_animation_get_state (entry->focus_animation) == ADW_ANIMATION_PLAYING) {
+    /* Add a small timeout to let the text selection GestureDrag to finish */
+    g_timeout_add_once (50, (GSourceOnceFunc)select_timeout_cb, g_object_ref (entry));
+  }
+}
+
 static GIcon *
 get_suggestion_icon (GtkListItem *item,
                      GIcon       *icon)
@@ -602,6 +625,35 @@ get_suggestion_secondary_icon (GtkListItem *item,
 }
 
 static void
+animate_focus (EphyLocationEntry *self,
+               gboolean           focus)
+{
+  AdwAnimationTarget *target;
+
+  if (self->focus_animation) {
+    adw_animation_pause (self->focus_animation);
+
+    adw_timed_animation_set_value_from (ADW_TIMED_ANIMATION (self->focus_animation),
+                                        gtk_editable_get_alignment (GTK_EDITABLE (self)));
+
+    adw_timed_animation_set_value_to (ADW_TIMED_ANIMATION (self->focus_animation),
+                                      focus ? 0.0 : 0.5);
+  } else {
+    target = adw_property_animation_target_new (G_OBJECT (self), "xalign");
+
+    self->focus_animation = adw_timed_animation_new (GTK_WIDGET (self),
+                                                     gtk_editable_get_alignment (GTK_EDITABLE (self)),
+                                                     focus ? 0.0 : 0.5,
+                                                     250,
+                                                     target);
+
+    adw_timed_animation_set_easing (ADW_TIMED_ANIMATION (self->focus_animation), ADW_EASE_OUT_QUINT);
+  }
+
+  adw_animation_play (self->focus_animation);
+}
+
+static void
 update_entry_style (EphyLocationEntry *self,
                     gboolean           focus)
 {
@@ -655,17 +707,18 @@ out:
 static void
 focus_enter_cb (EphyLocationEntry *entry)
 {
+  animate_focus (entry, TRUE);
   update_entry_style (entry, TRUE);
 }
 
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
-  if (entry->select_all_selected) {
-    entry->select_all_selected = FALSE;
-    return;
-  }
+  /* Don't animate if the toplevel lost global input focus */
+  if (!gtk_widget_is_focus (GTK_WIDGET (entry->text)))
+    animate_focus (entry, FALSE);
 
+  ephy_location_entry_reset (entry);
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
   set_show_suggestions (entry, FALSE);
@@ -1309,6 +1362,8 @@ ephy_location_entry_dispose (GObject *object)
   gtk_widget_unparent (entry->clear_button);
   gtk_widget_unparent (entry->suggestions_popover);
 
+  g_clear_object (&entry->focus_animation);
+
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
 }
 
@@ -1497,6 +1552,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, key_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, text_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, text_drag_end_cb);
   gtk_widget_class_bind_template_callback (widget_class, item_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, item_released_cb);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
