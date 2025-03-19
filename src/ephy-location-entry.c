@@ -748,15 +748,18 @@ focus_enter_cb (EphyLocationEntry *entry)
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
-  /* Don't animate if the toplevel lost global input focus or "Always Show Full URL" is set */
-  if (!gtk_widget_is_focus (GTK_WIDGET (entry->text)) &&
-      !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
-    animate_focus (entry, FALSE);
+  set_show_suggestions (entry, FALSE);
+
+  /* Return if the toplevel lost global input focus */
+  if (gtk_widget_is_focus (GTK_WIDGET (entry->text)))
+    return;
 
   ephy_location_entry_reset (entry);
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
-  set_show_suggestions (entry, FALSE);
+
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
+    animate_focus (entry, FALSE);
 }
 
 static void
