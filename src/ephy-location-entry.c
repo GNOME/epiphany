@@ -78,6 +78,7 @@ struct _EphyLocationEntry {
   GtkWidget *context_menu;
 
   AdwAnimation *focus_animation;
+  gboolean focused;
 
   char *saved_text;
   char *jump_tab;
@@ -741,6 +742,7 @@ out:
 static void
 focus_enter_cb (EphyLocationEntry *entry)
 {
+  entry->focused = TRUE;
   animate_focus (entry, TRUE);
   update_entry_style (entry, TRUE);
 }
@@ -754,6 +756,7 @@ focus_leave_cb (EphyLocationEntry *entry)
   if (gtk_widget_is_focus (GTK_WIDGET (entry->text)))
     return;
 
+  entry->focused = FALSE;
   ephy_location_entry_reset (entry);
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
@@ -1870,9 +1873,18 @@ ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 gboolean
 ephy_location_entry_reset (EphyLocationEntry *entry)
 {
+  EphyWindow *active_window;
+  EphyEmbed *active_embed;
   const char *text, *old_text;
   int position, offset;
   g_autofree char *url = NULL;
+
+  active_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+  if (active_window) {
+    active_embed = ephy_window_get_active_embed (active_window);
+    if (ephy_embed_get_typed_input (active_embed) && !entry->focused)
+      return FALSE;
+  }
 
   g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
   text = url != NULL ? url : "";
