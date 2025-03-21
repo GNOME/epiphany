@@ -4697,7 +4697,7 @@ ephy_window_close (EphyWindow *window)
   session = ephy_shell_get_session (ephy_shell_get_default ());
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) > 1 &&
       ephy_tab_view_get_n_pages (window->tab_view) > 1 &&
-      !ephy_session_is_closing (session) &&
+      !(session && ephy_session_is_closing (session)) &&
       !window->confirmed_close_with_multiple_tabs) {
     AdwDialog *dialog;
 
@@ -4718,7 +4718,6 @@ ephy_window_close (EphyWindow *window)
   /* If this is the last window, check ongoing downloads and save its state in the session. */
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
     EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-    EphySession *session;
 
     if (ephy_downloads_manager_has_active_downloads (manager)) {
       GList *list = ephy_downloads_manager_get_downloads (manager);
@@ -4728,7 +4727,6 @@ ephy_window_close (EphyWindow *window)
       return FALSE;
     }
 
-    session = ephy_shell_get_session (ephy_shell_get_default ());
     if (session)
       ephy_session_close (session);
   }
