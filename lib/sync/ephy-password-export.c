@@ -37,6 +37,8 @@ get_name_from_password_record (EphyPasswordRecord *record)
 
   origin = ephy_password_record_get_origin (record);
   uri = g_uri_parse (origin, G_URI_FLAGS_NONE, NULL);
+  if (!uri)
+    return NULL;
 
   return g_strdup (g_uri_get_host (uri));
 }
