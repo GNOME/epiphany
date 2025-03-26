@@ -79,24 +79,24 @@ static char *
 escape_csv_field (const char *field)
 {
   g_autoptr (GString) escaped_field = NULL;
-  gboolean is_whitespace_present = FALSE;
+  gboolean must_escape = FALSE;
   char *result;
 
   escaped_field = g_string_new ("");
 
   for (int i = 0; field[i] != '\0'; i++) {
-    if (field[i] == ' ')
-      is_whitespace_present = TRUE;
+    if (field[i] == ' ' || field[i] == ',' || field[i] == '\"')
+      must_escape = TRUE;
   }
 
   for (int i = 0; field[i] != '\0'; i++) {
     g_string_append_c (escaped_field, field[i]);
 
-    if (field[i] == '\"' && is_whitespace_present)
+    if (field[i] == '\"' && must_escape)
       g_string_append_c (escaped_field, '\"');
   }
 
-  if (is_whitespace_present) {
+  if (must_escape) {
     g_string_prepend_c (escaped_field, '\"');
     g_string_append_c (escaped_field, '\"');
   }
