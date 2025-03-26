@@ -62,7 +62,7 @@ get_password_from_password_record (EphyPasswordRecord *record)
 static char *
 get_note_from_password_record (EphyPasswordRecord *record)
 {
-  return g_strdup ("");
+  return NULL;
 }
 
 static PasswordExportCSVColumn password_export_csv_columns[] = {
@@ -165,12 +165,12 @@ ephy_password_manager_query_cb (GList    *records,
 
     for (int i = 0; i < number_of_columns; i++) {
       g_autofree char *column_field = NULL;
-      g_autofree char *escaped_column_field = NULL;
 
       column_field = password_export_csv_columns[i].get_column_field_from_password_record (record);
-      escaped_column_field = escape_csv_field (column_field);
-
-      g_string_append (csv, escaped_column_field);
+      if (column_field) {
+        g_autofree char *escaped_column_field = escape_csv_field (column_field);
+        g_string_append (csv, escaped_column_field);
+      }
 
       if (i < (number_of_columns - 1))
         g_string_append (csv, ",");
