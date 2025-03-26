@@ -2211,7 +2211,7 @@ icon_url_from_relative_url (const char *relative_url,
 }
 
 static void
-download_manifest_finished_cb (WebKitDownload            *download,
+download_manifest_finished_cb (EphyDownload              *download,
                                EphyApplicationDialogData *data)
 {
   g_autoptr (GError) error = NULL;
@@ -2228,8 +2228,8 @@ download_manifest_finished_cb (WebKitDownload            *download,
   gint max_width = 0;
   g_autofree char *uri = NULL;
 
-  filename = g_filename_from_uri (ephy_download_get_destination (EPHY_DOWNLOAD (download)), NULL, NULL);
-  json_parser_load_from_file (parser, ephy_download_get_destination (EPHY_DOWNLOAD (download)), &error);
+  filename = g_filename_from_uri (ephy_download_get_destination (download), NULL, NULL);
+  json_parser_load_from_file (parser, ephy_download_get_destination (download), &error);
   if (error) {
     g_warning ("Unable to parse manifest %s: %s", filename, error->message);
     start_fallback (data);
@@ -2317,11 +2317,12 @@ download_manifest_finished_cb (WebKitDownload            *download,
 }
 
 static void
-download_manifest_failed_cb (WebKitDownload            *download,
+download_manifest_failed_cb (EphyDownload              *download,
                              GError                    *error,
                              EphyApplicationDialogData *data)
 {
-  WebKitURIRequest *request = webkit_download_get_request (download);
+  WebKitDownload *webkit_download = ephy_download_get_webkit_download (download);
+  WebKitURIRequest *request = webkit_download_get_request (webkit_download);
 
   g_warning ("Could not download manifest from %s", webkit_uri_request_get_uri (request));
   start_fallback (data);
