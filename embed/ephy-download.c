@@ -620,7 +620,7 @@ ephy_download_init (EphyDownload *download)
 typedef struct {
   EphyDownload *download;
   char *suggested_filename;
-  GtkWindow *dialog;
+  AdwDialog *dialog;
   GFile *directory;
   GtkLabel *directory_label;
   gboolean choose_filename;
@@ -629,7 +629,7 @@ typedef struct {
 static SuggestedFilenameData *
 suggested_filename_data_new (EphyDownload *download,
                              const char   *suggested_filename,
-                             GtkWindow    *dialog,
+                             AdwDialog    *dialog,
                              GFile        *directory,
                              GtkLabel     *directory_label,
                              gboolean      choose_filename)
@@ -716,7 +716,7 @@ filename_suggested_button_cb (GtkButton             *button,
     gtk_file_dialog_set_title (dialog, _("Select a Directory"));
 
     gtk_file_dialog_select_folder (dialog,
-                                   data->dialog,
+                                   GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (data->dialog))),
                                    data->download->cancellable,
                                    (GAsyncReadyCallback)filename_suggested_file_dialog_cb,
                                    data);
@@ -725,7 +725,7 @@ filename_suggested_button_cb (GtkButton             *button,
     gtk_file_dialog_set_initial_name (dialog, data->suggested_filename);
 
     gtk_file_dialog_save (dialog,
-                          data->dialog,
+                          GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (data->dialog))),
                           data->download->cancellable,
                           (GAsyncReadyCallback)filename_suggested_file_dialog_cb,
                           data);
@@ -841,7 +841,7 @@ open_download_confirmation_dialog (EphyDownload *download,
 
   data = suggested_filename_data_new (download,
                                       suggested_filename,
-                                      GTK_WINDOW (dialog),
+                                      dialog,
                                       directory,
                                       GTK_LABEL (button_label),
                                       download->choose_filename);
