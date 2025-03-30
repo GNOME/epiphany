@@ -301,6 +301,13 @@ ephy_permission_popover_get_text (EphyPermissionPopover  *self,
       *message = g_strdup_printf (_("The page at “%s” would like to use your webcam and microphone"),
                                   bold_origin);
       break;
+    case EPHY_PERMISSION_TYPE_ACCESS_DISPLAY:
+      /* Translators: Display access policy for a specific site. */
+      *title = g_strdup ("Display Access Request");
+      /* Translators: Display access policy for a specific site. */
+      *message = g_strdup_printf ("The page at “%s” would like to share your screen",
+                                  bold_origin);
+      break;
     case EPHY_PERMISSION_TYPE_WEBSITE_DATA_ACCESS:
       requesting_domain = webkit_website_data_access_permission_request_get_requesting_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (self->permission_request));
       current_domain = webkit_website_data_access_permission_request_get_current_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (self->permission_request));

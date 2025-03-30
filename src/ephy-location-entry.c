@@ -1997,6 +1997,10 @@ ephy_location_entry_add_permission_popover (EphyLocationEntry     *entry,
       gtk_menu_button_set_icon_name (menu_button, "ephy-permission-microphone-symbolic");
       gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Microphone Request"));
       break;
+    case EPHY_PERMISSION_TYPE_ACCESS_DISPLAY:
+      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-generic-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Screen Sharing Request"));
+      break;
     case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
       gtk_menu_button_set_icon_name (menu_button, "ephy-permission-location-symbolic");
       gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Location Request"));

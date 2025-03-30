@@ -956,6 +956,7 @@ permission_request_cb (WebKitWebView           *web_view,
   } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (request)) {
     gboolean is_for_audio_device = webkit_user_media_permission_is_for_audio_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (request));
     gboolean is_for_video_device = webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (request));
+    gboolean is_for_display_device = webkit_user_media_permission_is_for_display_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (request));
 
     if (is_for_audio_device) {
       if (is_for_video_device)
@@ -964,6 +965,8 @@ permission_request_cb (WebKitWebView           *web_view,
         permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
     } else if (is_for_video_device) {
       permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
+    } else if (is_for_display_device) {
+      permission_type = EPHY_PERMISSION_TYPE_ACCESS_DISPLAY;
     } else {
       return FALSE;
     }
@@ -2691,6 +2694,8 @@ query_permission_state_cb (EphyWebView                *web_view,
     permission_type = EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE;
   else if (g_strcmp0 (name, "camera") == 0)
     permission_type = EPHY_PERMISSION_TYPE_ACCESS_WEBCAM;
+  else if (g_strcmp0 (name, "display") == 0)
+    permission_type = EPHY_PERMISSION_TYPE_ACCESS_DISPLAY;
   else if (g_strcmp0 (name, "autoplay") == 0)
     permission_type = EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY;
   else

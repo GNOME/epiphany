@@ -64,6 +64,7 @@ struct _EphySecurityPopover {
   GtkWidget *access_location_combobox;
   GtkWidget *access_microphone_combobox;
   GtkWidget *access_webcam_combobox;
+  GtkWidget *access_display_combobox;
   GtkWidget *autoplay_combobox;
   GtkWidget *grid;
   GTlsCertificate *certificate;
@@ -155,6 +156,7 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, popover->access_location_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, popover->access_microphone_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, popover->access_webcam_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_DISPLAY, origin, popover->access_display_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY, origin, popover->autoplay_combobox);
 }
 
@@ -462,6 +464,13 @@ on_access_webcam_combobox_changed (GtkComboBox         *box,
 }
 
 static void
+on_access_display_combobox_changed (GtkComboBox         *box,
+                                    EphySecurityPopover *popover)
+{
+  handle_permission_combobox_changed (popover, gtk_combo_box_get_active (box), EPHY_PERMISSION_TYPE_ACCESS_DISPLAY);
+}
+
+static void
 on_autoplay_policy_combobox_changed (GtkComboBox         *box,
                                      EphySecurityPopover *popover)
 {
@@ -559,6 +568,7 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   popover->access_location_combobox = add_permission_combobox (popover, _("Location access"), on_access_location_combobox_changed, combo_box_size_group, FALSE, NULL);
   popover->access_microphone_combobox = add_permission_combobox (popover, _("Microphone access"), on_access_microphone_combobox_changed, combo_box_size_group, FALSE, NULL);
   popover->access_webcam_combobox = add_permission_combobox (popover, _("Webcam access"), on_access_webcam_combobox_changed, combo_box_size_group, FALSE, NULL);
+  popover->access_display_combobox = add_permission_combobox (popover, _("Display access"), on_access_display_combobox_changed, combo_box_size_group, FALSE, NULL);
   popover->autoplay_combobox = add_permission_combobox (popover, _("Media autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, _("Without Sound"));
 
   gtk_popover_set_child (GTK_POPOVER (popover), popover->grid);
