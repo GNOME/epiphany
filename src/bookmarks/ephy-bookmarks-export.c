@@ -79,6 +79,18 @@ add_tag_to_table (const char *tag,
 }
 
 static void
+add_to_bookmarks_order_table (GVariant   *variant,
+                              GHashTable *table)
+{
+  const char *type, *item, *key;
+
+  g_variant_get (variant, "(ssi)", &type, &item, NULL);
+  key = g_strconcat (type, ":", item, NULL);
+
+  gvdb_hash_table_insert_variant (table, key, variant);
+}
+
+static void
 write_contents_cb (GObject      *source_object,
                    GAsyncResult *result,
                    gpointer      user_data)
@@ -160,6 +172,10 @@ ephy_bookmarks_export (EphyBookmarksManager *manager,
 
     table = gvdb_hash_table_new (root_table, "tags");
     g_sequence_foreach (ephy_bookmarks_manager_get_tags (manager), (GFunc)add_tag_to_table, table);
+    g_hash_table_unref (table);
+
+    table = gvdb_hash_table_new (root_table, "bookmarks-order");
+    g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks_order (manager), (GFunc)add_to_bookmarks_order_table, table);
     g_hash_table_unref (table);
 
     table = gvdb_hash_table_new (root_table, "bookmarks");

@@ -40,6 +40,7 @@ struct _EphyBookmarksManager {
 
   GSequence *bookmarks;
   GSequence *tags;
+  GSequence *bookmarks_order;
 
   gchar *gvdb_filename;
 };
@@ -62,6 +63,7 @@ enum {
   BOOKMARK_TAG_REMOVED,
   TAG_CREATED,
   TAG_DELETED,
+  SORTED,
   LAST_SIGNAL
 };
 
@@ -203,6 +205,15 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_STRING);
+
+  signals[SORTED] =
+    g_signal_new ("sorted",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 }
 
 static void
@@ -218,6 +229,7 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 
   self->bookmarks = g_sequence_new (g_object_unref);
   self->tags = g_sequence_new (g_free);
+  self->bookmarks_order = g_sequence_new (g_free);
 
   g_sequence_insert_sorted (self->tags,
                             g_strdup (EPHY_BOOKMARKS_FAVORITES_TAG),
@@ -233,6 +245,10 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   }
 
   ephy_bookmarks_import (self, self->gvdb_filename, NULL);
+
+  ephy_bookmarks_manager_save (self, self->cancellable,
+                               (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
+                               NULL);
 }
 
 static void
@@ -353,10 +369,6 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
     ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, FALSE);
     g_signal_emit_by_name (self, "synchronizable-modified", bookmark, FALSE);
   }
-
-  ephy_bookmarks_manager_save (self, self->cancellable,
-                               (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
-                               NULL);
 }
 
 static void
@@ -577,6 +589,55 @@ ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
 
   return self->tags;
+}
+
+GSequence *
+ephy_bookmarks_manager_get_bookmarks_order (EphyBookmarksManager *self)
+{
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  return self->bookmarks_order;
+}
+
+void
+ephy_bookmarks_manager_add_to_bookmarks_order (EphyBookmarksManager *self,
+                                               const char           *type,
+                                               const char           *item,
+                                               int                   index)
+{
+  GVariant *variant;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  variant = g_variant_new ("(ssi)", type, item, index);
+  g_sequence_append (self->bookmarks_order, variant);
+}
+
+void
+ephy_bookmarks_manager_clear_bookmarks_order (EphyBookmarksManager *self)
+{
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  g_free (self->bookmarks_order);
+  self->bookmarks_order = g_sequence_new (g_free);
+}
+
+int
+sort_bookmarks_order (GVariant *variant_1,
+                      GVariant *variant_2)
+{
+  int index_1, index_2;
+
+  g_variant_get (variant_1, "(ssi)", NULL, NULL, &index_1);
+  g_variant_get (variant_2, "(ssi)", NULL, NULL, &index_2);
+
+  return index_1 - index_2;
+}
+
+void
+ephy_bookmarks_manager_sort_bookmarks_order (EphyBookmarksManager *self)
+{
+  g_sequence_sort (self->bookmarks_order, (GCompareDataFunc)sort_bookmarks_order, NULL);
 }
 
 void

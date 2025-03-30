@@ -72,6 +72,17 @@ gboolean     ephy_bookmarks_manager_save_finish                     (EphyBookmar
                                                                      GAsyncResult          *result,
                                                                      GError               **error);
 
+GSequence   *ephy_bookmarks_manager_get_bookmarks_order             (EphyBookmarksManager   *self);
+
+void         ephy_bookmarks_manager_sort_bookmarks_order            (EphyBookmarksManager   *self);
+
+void         ephy_bookmarks_manager_add_to_bookmarks_order          (EphyBookmarksManager   *self,
+                                                                     const char             *type,
+                                                                     const char             *item,
+                                                                     int                     index);
+
+void         ephy_bookmarks_manager_clear_bookmarks_order           (EphyBookmarksManager   *self);
+
 void          ephy_bookmarks_manager_save_warn_on_error_cb          (GObject               *object,
                                                                      GAsyncResult          *result,
                                                                      gpointer               user_data);

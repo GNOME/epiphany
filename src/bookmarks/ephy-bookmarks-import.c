@@ -149,6 +149,23 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
 
   bookmarks = get_bookmarks_from_table (table);
   ephy_bookmarks_manager_add_bookmarks (manager, bookmarks);
+  gvdb_table_free (table);
+
+  /* Get bookmarks order table */
+  table = gvdb_table_get_table (root_table, "bookmarks-order");
+  if (table) {
+    list = gvdb_table_get_names (table, &length);
+    for (i = 0; i < length; i++) {
+      GVariant *variant = gvdb_table_get_value (table, list[i]);
+      const char *type, *item;
+      int index;
+
+      g_variant_get (variant, "(ssi)", &type, &item, &index);
+
+      ephy_bookmarks_manager_add_to_bookmarks_order (manager, type, item, index);
+    }
+    g_strfreev (list);
+  }
 
 out:
   if (table)
