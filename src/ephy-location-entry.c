@@ -664,6 +664,7 @@ static void
 update_entry_style (EphyLocationEntry *self,
                     gboolean           focus)
 {
+  const PangoRectangle empty_rect = {};
   PangoAttrList *attrs;
   PangoAttribute *color_normal;
   PangoAttribute *color_dimmed;
@@ -718,13 +719,13 @@ update_entry_style (EphyLocationEntry *self,
     goto out;
 
   /* Scheme is hidden */
-  start_hidden = pango_attr_size_new (0);
+  start_hidden = pango_attr_shape_new (&empty_rect, &empty_rect);
   start_hidden->start_index = 0;
   start_hidden->end_index = start_hidden->start_index + strlen (scheme) + strlen ("://");
   pango_attr_list_insert (attrs, start_hidden);
 
   /* Everything after the port is hidden */
-  end_hidden = pango_attr_size_new (0);
+  end_hidden = pango_attr_shape_new (&empty_rect, &empty_rect);
   end_hidden->start_index = color_normal->end_index;
   end_hidden->end_index = strlen (text);
   pango_attr_list_insert (attrs, end_hidden);
