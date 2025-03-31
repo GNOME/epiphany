@@ -250,7 +250,7 @@ ephy_permission_popover_get_origin (EphyPermissionPopover *self)
 {
   g_assert (EPHY_IS_PERMISSION_POPOVER (self));
 
-  return g_strdup (self->origin);
+  return self->origin;
 }
 
 void
