@@ -818,7 +818,7 @@ static const GActionEntry window_entries [] = {
   { "bookmarks", window_cmd_bookmarks },
   { "show-downloads", window_cmd_show_downloads },
   { "encoding", window_cmd_encoding },
-  { "privacy_report", window_cmd_privacy_report },
+  { "privacy-report", window_cmd_privacy_report },
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
   { "toggle-reader-mode", window_cmd_toggle_reader_mode },
