@@ -73,13 +73,13 @@ check-code-style:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /gnome-\d\d+/
       variables:
-        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
-    - if: $CI_COMMIT_BRANCH == "master"
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
-        CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
-    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/ && $CI_COMMIT_BRANCH != "master"
+        CONFIG_OPTS: '-Dtech_preview=true -Dprofile=Devel -Dunit_tests=enabled'
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/ && $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
       variables:
-        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled --werror'
+        CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled --werror'
 
 check-potfiles:
   extends:
@@ -112,7 +112,7 @@ scanbuild:
   needs: []
   image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-47'
   variables:
-    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled -Dgranite=enabled'
+    CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
     - flatpak-builder --user --disable-rofiles-fuse --stop-at=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH}
     - flatpak build flatpak_app bash -c "source /usr/lib/sdk/llvm18/enable.sh; meson setup --prefix=/app ${CONFIG_OPTS} _build; SCANBUILD=$(pwd)/.run-scan-build ninja -C _build scan-build"

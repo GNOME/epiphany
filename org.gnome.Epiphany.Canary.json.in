@@ -21,49 +21,6 @@
     ],
     "modules" : [
         {
-            "name": "glib",
-            "buildsystem": "meson",
-            "config-opts": [
-            	"-Ddtrace=disabled",
-            	"-Dselinux=disabled",
-            	"-Dsystemtap=disabled"
-            ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/glib.git",
-                    "branch": "main"
-                }
-            ],
-            "modules": [
-            	{
-		              "name": "python3-packaging",
-		              "buildsystem": "simple",
-		              "build-commands": [
-			                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"packaging\" --no-build-isolation"
-		              ],
-		              "sources": [
-			                {
-			                    "type": "file",
-			                    "url": "https://files.pythonhosted.org/packages/08/aa/cc0199a5f0ad350994d660967a8efb233fe0416e4639146c089643407ce6/packaging-24.1-py3-none-any.whl",
-			                    "sha256": "5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"
-			                }
-		              ]
-		          }
-            ]
-        },
-        {
-            "name": "glib-networking",
-            "buildsystem": "meson",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/glib-networking.git",
-                    "branch": "master"
-                }
-            ]
-        },
-        {
             "name" : "libportal",
             "buildsystem" : "meson",
             "config-opts" : [
