@@ -19,96 +19,6 @@
         "--own-name=org.gnome.Epiphany.WebAppProvider"
     ],
     "modules" : [
-         {
-            "name": "elementary-icons",
-            "buildsystem": "meson",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/elementary/icons.git",
-                    "branch": "main"
-                }
-            ],
-            "modules": [
-                {
-                    "name": "xcursorgen",
-                    "cleanup": [ "*" ],
-                    "sources": [
-                        {
-                            "type": "archive",
-                            "url": "https://xorg.freedesktop.org/archive/individual/app/xcursorgen-1.0.8.tar.gz",
-                            "sha256": "b8bb2756918343b8bc15a4ce875e9efb6c4e7777adba088280e53dd09753b6ac"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "elementary-stylesheet",
-            "buildsystem": "meson",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/elementary/stylesheet.git",
-                    "branch" : "main"
-                }
-            ],
-            "modules": [
-                {
-                    "name": "sassc",
-                    "buildsystem" : "meson",
-                    "cleanup": [ "*" ],
-                    "sources": [
-                        {
-                            "type": "git",
-                            "url" : "https://github.com/lazka/sassc.git",
-                            "branch" : "meson"
-                        }
-                    ],
-                    "modules": [
-                        {
-                            "name": "libsass",
-                            "buildsystem" : "meson",
-                            "cleanup": [ "*" ],
-                            "sources": [
-                                {
-                                    "type": "git",
-                                    "url" : "https://github.com/lazka/libsass.git",
-                                    "branch" : "meson"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name" : "libgee",
-            "buildsystem" : "autotools",
-            "build-options" : {
-                "env" : {
-                    "ACLOCAL_PATH" : "/usr/lib/sdk/vala-nightly/share/aclocal"
-                }
-            },
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libgee.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
-            "name": "granite",
-            "buildsystem": "meson",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/elementary/granite.git",
-                    "branch": "main"
-                }
-            ]
-        },
         {
             "name" : "libportal",
             "buildsystem" : "meson",
@@ -131,8 +41,7 @@
             "builddir" : true,
             "config-opts" : [
                 "-Dtech_preview=true",
-                "-Dprofile=Devel",
-                "-Dgranite=enabled"
+                "-Dprofile=Devel"
             ],
             "build-options" : {
                 "test-args" : [
