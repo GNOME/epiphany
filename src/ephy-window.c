@@ -3631,6 +3631,10 @@ static const char *disabled_actions_for_app_mode[] = {
   "open-application-manager"
 };
 
+static const char *disabled_actions_for_incognito_mode[] = {
+  "privacy-report"
+};
+
 static gboolean
 browse_with_caret_get_mapping (GValue   *value,
                                GVariant *variant,
@@ -4128,7 +4132,6 @@ ephy_window_constructed (GObject *object)
                                         SENS_FLAG_CHROME,
                                         window->is_popup);
 
-  /* Disabled actions not needed for application mode. */
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     g_object_set (window->location_controller, "editable", FALSE, NULL);
 
@@ -4144,6 +4147,15 @@ ephy_window_constructed (GObject *object)
                                             SENS_FLAG_CHROME, TRUE);
     }
     chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR | EPHY_WINDOW_CHROME_BOOKMARKS);
+  } else if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    action_group = ephy_window_get_action_group (window, "win");
+
+    for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_incognito_mode); i++) {
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           disabled_actions_for_incognito_mode[i]);
+      ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                            SENS_FLAG_CHROME, TRUE);
+    }
   } else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     g_object_set (window->location_controller, "editable", FALSE, NULL);
   }
