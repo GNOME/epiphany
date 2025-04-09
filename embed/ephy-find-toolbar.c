@@ -404,9 +404,9 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
     g_signal_connect_object (toolbar->controller, "counted_matches",
                              G_CALLBACK (counted_matches_cb),
                              toolbar, 0);
-    g_signal_connect (web_view, "load-changed",
-                      G_CALLBACK (ephy_find_toolbar_load_changed_cb),
-                      toolbar);
+    g_signal_connect_object (web_view, "load-changed",
+                             G_CALLBACK (ephy_find_toolbar_load_changed_cb),
+                             toolbar, 0);
 
     clear_status (toolbar);
   }
