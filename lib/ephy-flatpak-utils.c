@@ -89,14 +89,13 @@ opened_uri (GObject      *object,
   XdpPortal *portal = XDP_PORTAL (object);
   g_autoptr (GError) error = NULL;
   gboolean open_dir = GPOINTER_TO_INT (data);
-  gboolean res;
 
   if (open_dir)
-    res = xdp_portal_open_directory_finish (portal, result, &error);
+    xdp_portal_open_directory_finish (portal, result, &error);
   else
-    res = xdp_portal_open_uri_finish (portal, result, &error);
+    xdp_portal_open_uri_finish (portal, result, &error);
 
-  if (!res)
+  if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     g_warning ("%s", error->message);
 }
 
