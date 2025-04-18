@@ -2081,12 +2081,26 @@ decide_navigation_policy (WebKitWebView            *web_view,
   uri = webkit_uri_request_get_uri (request);
 
   if (!ephy_embed_utils_address_has_web_scheme (uri)) {
+    /* User gesture is required to prevent websites from spamming open URL
+     * requests unless the user has actually interacted with the website. (This
+     * corresponds roughly to "transient activation" in the HTML standard.)
+     */
     if (webkit_navigation_action_is_user_gesture (navigation_action)) {
-      g_autoptr (GtkUriLauncher) launcher = gtk_uri_launcher_new (uri);
-
-      gtk_uri_launcher_launch (launcher, GTK_WINDOW (window), NULL, NULL, NULL);
+      /* Additional user interaction is required to prevent malicious websites
+       * from launching URL handler application's on the user's computer without
+       * explicit user consent. Notably, websites can download malicious files
+       * without consent, so they should not be able to also open those files
+       * without user interaction.
+       */
+      g_autoptr (GFile) file = g_file_new_for_uri (uri);
+      ephy_file_launch_uri_handler (file,
+                                    NULL,
+                                    gtk_widget_get_display (GTK_WIDGET (window)),
+                                    EPHY_FILE_LAUNCH_URI_HANDLER_FILE,
+                                    EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_REQUIRE_USER_INTERACTION);
     }
 
+    g_debug ("The website %s was prevented from navigating to URL %s due to lack of user interaction", webkit_web_view_get_uri (web_view), uri);
     webkit_policy_decision_ignore (decision);
     return TRUE;
   }

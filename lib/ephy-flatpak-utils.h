@@ -22,12 +22,18 @@
 
 #include <gio/gio.h>
 
+typedef enum {
+  EPHY_OPEN_URI_FLAGS_NONE                     = 0,
+  EPHY_OPEN_URI_FLAGS_REQUIRE_USER_INTERACTION = 1 << 0
+} EphyOpenUriFlags;
+
 void     ephy_flatpak_utils_set_is_web_process_extension (void);
 
 gboolean ephy_is_running_inside_sandbox                  (void);
 
-void     ephy_open_uri_via_flatpak_portal                (const char *uri);
-
-void     ephy_open_directory_via_flatpak_portal          (const char *uri);
+void     ephy_open_uri_via_flatpak_portal                (const char       *uri,
+                                                          EphyOpenUriFlags  flags);
+void     ephy_open_directory_via_flatpak_portal          (const char       *uri,
+                                                          EphyOpenUriFlags  flags);
 
 gboolean ephy_can_install_web_apps                       (void);

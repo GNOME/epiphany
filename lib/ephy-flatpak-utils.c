@@ -102,7 +102,8 @@ opened_uri (GObject      *object,
 
 static void
 ephy_open_uri (const char *uri,
-               gboolean    is_dir)
+               gboolean    is_dir,
+               gboolean    require_consent)
 {
   GApplication *application;
   GtkWindow *window;
@@ -113,24 +114,32 @@ ephy_open_uri (const char *uri,
   window = gtk_application_get_active_window (GTK_APPLICATION (application));
   parent = xdp_parent_new_gtk (window);
 
+  g_assert (require_consent);
+
   if (is_dir)
-    xdp_portal_open_directory (portal, parent, uri, XDP_OPEN_URI_FLAG_NONE, NULL, opened_uri, GINT_TO_POINTER (TRUE));
+    xdp_portal_open_directory (portal, parent, uri,
+                               require_consent ? XDP_OPEN_URI_FLAG_ASK : XDP_OPEN_URI_FLAG_NONE,
+                               NULL, opened_uri, GINT_TO_POINTER (TRUE));
   else
-    xdp_portal_open_uri (portal, parent, uri, XDP_OPEN_URI_FLAG_NONE, NULL, opened_uri, GINT_TO_POINTER (FALSE));
+    xdp_portal_open_uri (portal, parent, uri,
+                         require_consent ? XDP_OPEN_URI_FLAG_ASK : XDP_OPEN_URI_FLAG_NONE,
+                         NULL, opened_uri, GINT_TO_POINTER (FALSE));
 
   xdp_parent_free (parent);
 }
 
 void
-ephy_open_directory_via_flatpak_portal (const char *uri)
+ephy_open_directory_via_flatpak_portal (const char       *uri,
+                                        EphyOpenUriFlags  flags)
 {
-  ephy_open_uri (uri, TRUE);
+  ephy_open_uri (uri, TRUE, (flags & EPHY_OPEN_URI_FLAGS_REQUIRE_USER_INTERACTION));
 }
 
 void
-ephy_open_uri_via_flatpak_portal (const char *uri)
+ephy_open_uri_via_flatpak_portal (const char       *uri,
+                                  EphyOpenUriFlags  flags)
 {
-  ephy_open_uri (uri, FALSE);
+  ephy_open_uri (uri, FALSE, (flags & EPHY_OPEN_URI_FLAGS_REQUIRE_USER_INTERACTION));
 }
 
 gboolean
