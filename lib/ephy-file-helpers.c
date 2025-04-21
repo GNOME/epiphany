@@ -612,10 +612,11 @@ launch_application (GAppInfo   *app,
  * Returns: %TRUE on success
  **/
 gboolean
-ephy_file_launch_uri_handler (GFile                        *file,
-                              const char                   *mime_type,
-                              GdkDisplay                   *display,
-                              EphyFileLaunchUriHandlerType  type)
+ephy_file_launch_uri_handler (GFile                         *file,
+                              const char                    *mime_type,
+                              GdkDisplay                    *display,
+                              EphyFileLaunchUriHandlerType   type,
+                              EphyFileLaunchUriHandlerFlags  flags)
 {
   g_autoptr (GAppInfo) app = NULL;
   g_autoptr (GList) list = NULL;
@@ -624,18 +625,22 @@ ephy_file_launch_uri_handler (GFile                        *file,
 
   g_assert (file != NULL);
 
-  /* Launch via URI handler only under sandbox, because this way loses
-   * focus stealing prevention. There's no other way to open a file
-   * under sandbox, and focus stealing prevention becomes the
-   * responsibility of the portal in this case anyway.
+  /* Launch via URI handler only under sandbox or when user interaction is
+   * required, because this way loses focus stealing prevention. There's no
+   * other way to open a file when sandboxed, and focus stealing prevention
+   * becomes the responsibility of the portal in this case anyway.
    */
-  if (ephy_is_running_inside_sandbox ()) {
+  if ((flags & EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_REQUIRE_USER_INTERACTION) || ephy_is_running_inside_sandbox ()) {
     g_autofree char *uri = g_file_get_uri (file);
-    if (type == EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY) {
-      ephy_open_directory_via_flatpak_portal (uri);
-    } else {
-      ephy_open_uri_via_flatpak_portal (uri);
-    }
+    EphyOpenUriFlags openUriFlags = EPHY_OPEN_URI_FLAGS_NONE;
+
+    if (flags & EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_REQUIRE_USER_INTERACTION)
+      openUriFlags |= EPHY_OPEN_URI_FLAGS_REQUIRE_USER_INTERACTION;
+
+    if (type == EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY)
+      ephy_open_directory_via_flatpak_portal (uri, openUriFlags);
+    else
+      ephy_open_uri_via_flatpak_portal (uri, openUriFlags);
     return TRUE;
   }
 
@@ -661,7 +666,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
                                        GdkDisplay *display)
 {
   g_autoptr (GFile) file = g_file_new_for_uri (uri);
-  return ephy_file_launch_uri_handler (file, "x-scheme-handler/http", display, EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
+  return ephy_file_launch_uri_handler (file, "x-scheme-handler/http", display, EPHY_FILE_LAUNCH_URI_HANDLER_FILE, EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_NONE);
 }
 
 /**
@@ -679,7 +684,7 @@ gboolean
 ephy_file_browse_to (GFile      *file,
                      GdkDisplay *display)
 {
-  return ephy_file_launch_uri_handler (file, "inode/directory", display, EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY);
+  return ephy_file_launch_uri_handler (file, "inode/directory", display, EPHY_FILE_LAUNCH_URI_HANDLER_DIRECTORY, EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_NONE);
 }
 
 /**
