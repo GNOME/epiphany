@@ -825,12 +825,10 @@ ephy_copy_directory (const char *source,
     g_autoptr (GFileEnumerator) enumerator = NULL;
 
     if (!g_file_make_directory_with_parents (dest_file, NULL, &error)) {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
         g_warning ("Could not create target directory for webextension: %s", error->message);
-        return;
-      }
 
-      g_error_free (error);
+      return;
     }
 
     if (!g_file_copy_attributes (src_file, dest_file, G_FILE_COPY_NONE, NULL, &error)) {
