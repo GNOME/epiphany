@@ -86,7 +86,7 @@ ephy_link_open (EphyLink      *link,
   EphyEmbed *new_embed = NULL;
   EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
-  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION && !ephy_web_application_is_uri_allowed (address))
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION && address && !ephy_web_application_is_uri_allowed (address))
     return NULL;
 
   LOG ("ephy_link_open address \"%s\" parent-embed %p flags %u", address, embed, flags);
