@@ -6,14 +6,14 @@
 # Rajesh Ranjan <rajesh672@gmail.com>, 2009.
 # rajesh <rajeshkajha@yahoo.com>, 2012.
 # chandankumar <chandankumar.093047@gmail.com>, 2013.
-# Scrambled777 <weblate.scrambled777@simplelogin.com>, 2024.
+# Scrambled777 <weblate.scrambled777@simplelogin.com>, 2024-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-15 20:53+0000\n"
-"PO-Revision-Date: 2024-08-18 11:34+0530\n"
+"POT-Creation-Date: 2025-04-21 15:35+0000\n"
+"PO-Revision-Date: 2025-04-21 23:07+0700\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 46.1\n"
+"X-Generator: Gtranslator 47.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1226
+#: src/ephy-main.c:419 src/window-commands.c:1274
 msgid "Web"
 msgstr "वेब"
 
@@ -51,7 +51,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "वेब को अक्सर इसके कोड नाम एपिफेनी से जाना जाता है।"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1236
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1284
 msgid "The GNOME Project"
 msgstr "गनोम परियोजना"
 
@@ -98,47 +98,11 @@ msgstr "तयशुदा रूप से चयनित खोज इंज�
 msgid "Deprecated. Please use search-engine-providers instead."
 msgstr "पदावनत। कृपया इसके बजाय search-engine-providers का उपयोग करें।"
 
-#. TRANSLATORS: These are the prepopulated search engines. You should
-#. add country-specific URL query parameters if appropriate or change
-#. the domain name's TLD. The different query parameters to be used for each
-#. engine is as follows:
-#. - DuckDuckGo: kl=country-language (see https://duckduckgo.com/params)
-#. - Google: hl=lang (see https://developers.google.com/custom-search/docs/xml_results_appendices#interfaceLanguages)
-#. - Bing: cc=country (see https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/language-support)
-#. You are allowed to add search engines here, *if they make sense*. Please
-#. don't add your favorite search engine just because you like it though,
-#. only do it for search engines that are already widely used in this specific country.
-#. Obvious cases where it makes sense are for example adding Yandex for
-#. Russian, or Baidu for Chinese. If you do add a search engine, then please
-#. make sure that you're not making mistakes in the GVariant text (e.g.
-#. missing ', <, > or trailing comma), and that you're keeping the %s
-#. placeholder for the search query. Also please check if they are actually
-#. properly shown in the Preferences if you reset the gsettings key.
-#: data/org.gnome.epiphany.gschema.xml:53
-msgid ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
-"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
-"q=%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
-"'bang': <'!b'>}\n"
-"\t\t\t\t]"
-msgstr ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.in/?"
-"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.in/search?q=%s'>, "
-"'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.in/search?q=%s'>, "
-"'bang': <'!b'>}\n"
-"\t\t\t\t]"
-
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:45
 msgid "List of the search engines."
 msgstr "खोज इंजनों की सूची।"
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:46
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -150,45 +114,45 @@ msgstr ""
 "निम्नलिखित समर्थित कुंजी के साथ: \"name\" खोज इंजन का नाम है। \"url\" खोज URL है "
 "जिसमें खोज शब्द को %s से बदल दिया गया है। \"bang\" सर्च इंजन का bang (शॉर्टकट शब्द) है।"
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Enable Google Search Suggestions"
 msgstr "गूगल खोज सुझाव सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgstr "क्या url प्रविष्टि पॉपडाउन में गूगल खोज सुझाव दिखाना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Force new windows to be opened in tabs"
 msgstr "टैब को नए विंडो में खोलने के लिए बाध्य करें"
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "टैब में नए विंडो को खोले जाने के लिए बाध्य करें बजाए किसी नए विंडो को प्रयोग के।"
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid "Whether to automatically restore the last session"
 msgstr "क्या स्वचालित रूप से पिछले सत्र को बहाल करने के लिए"
 
-#: data/org.gnome.epiphany.gschema.xml:86
+#: data/org.gnome.epiphany.gschema.xml:70
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr ""
-"परिभाषित करता है कि स्टार्टअप के दौरान सत्र कैसे बहाल किया जाएगा। अनुमत मान "
-"“always” (अनुप्रयोग की पिछली स्थिति हमेशा बहाल होती है) और “crashed” (अनुप्रयोग क्रैश "
-"होने पर ही सत्र बहाल होता है) हैं।"
+"परिभाषित करता है कि स्टार्टअप के दौरान सत्र कैसे बहाल किया जाएगा। अनुमत मान “always” "
+"(अनुप्रयोग की पिछली स्थिति हमेशा बहाल होती है) और “crashed” (अनुप्रयोग क्रैश होने पर "
+"ही सत्र बहाल होता है) हैं।"
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
 "क्या उन टैब को लोड करने में देरी करनी है जो सत्र पुनर्स्थापना पर तुरंत दिखाई नहीं देते हैं"
 
-#: data/org.gnome.epiphany.gschema.xml:91
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -196,11 +160,11 @@ msgstr ""
 "जब यह विकल्प सही पर निर्धारित होता है, तो सत्र पुनर्स्थापना पर, जब तक उपयोक्ता उन पर "
 "नहीं जाता, तब तक टैब लोड होना शुरू नहीं होंगे।"
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "List of adblock filters"
 msgstr "एडब्लॉक फिल्टर की सूची"
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
@@ -208,11 +172,11 @@ msgstr ""
 "विज्ञापन अवरोधक द्वारा उपयोग किए जाने वाले JSON प्रारूप में सामग्री फिल्टरिंग नियमों वाले "
 "URL की सूची।"
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid "Whether to ask for setting browser as default"
 msgstr "क्या ब्राउज़र को तयशुदा के रूप में निर्धारित करने के लिए पूछना है"
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -220,21 +184,21 @@ msgstr ""
 "जब यह विकल्प सही पर निर्धारित होता है, तो ब्राउज़र तयशुदा होने के लिए पूछेगा यदि यह "
 "पहले से निर्धारित नहीं है।"
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Start in incognito mode"
 msgstr "गुप्त मोड में प्रारंभ करें"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 "जब यह विकल्प सही पर निर्धारित होता है, तो ब्राउज़र हमेशा गुप्त मोड में प्रारंभ होगा"
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "Active clear data items."
 msgstr "डेटा सफाई के लिए सक्रिय वस्तुएं।"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
@@ -247,11 +211,11 @@ msgstr ""
 "IndexDB डेटाबेस, 32 = WebSQL डेटाबेस, 64 = प्लगइन्स डेटा, 128 = HSTS नीतियां कैशे, 256 "
 "= बुद्धिमान ट्रैकिंग रोकथाम डेटा ।"
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "टैब पट्टी पर उपलब्ध स्थान को भरने के लिए टैब का आकार विस्तृत करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:102
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
@@ -259,11 +223,11 @@ msgstr ""
 "सक्षम होने पर टैब टैब-पट्टी में संपूर्ण उपलब्ध स्थान का उपयोग करने के लिए विस्तारित हो "
 "जाएंगे। Pantheon डेस्कटॉप में इस सेटिंग को अनदेखा किया जाता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid "The visibility policy for the tabs bar."
 msgstr "टैब पट्टी के लिए दृश्यता नीति।"
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -275,58 +239,58 @@ msgstr ""
 "नहीं” (टैब पट्टी कभी नहीं दिखाया जाता है)। Pantheon डेस्कटॉप में इस सेटिंग को नजरअंदाज "
 "कर दिया जाता है, और “हमेशा” मान का उपयोग किया जाता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Keep window open when closing last tab"
 msgstr "अंतिम टैब बंद करते समय विंडो खुली रखें"
 
-#: data/org.gnome.epiphany.gschema.xml:128
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr "सक्षम होने पर अंतिम टैब बंद करते समय अनुप्रयोग विंडो खुली रखी जाती है।"
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid "Reader mode article font style."
 msgstr "पाठक मोड की लेख फॉन्ट शैली।"
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:119
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
 "पाठक मोड में लेखों के लिए मुख्य पाठ की शैली चुनता है। संभावित मान “सैन्स” और “सेरिफ़” हैं।"
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:123
 msgid "Reader mode color scheme."
 msgstr "पाठक मोड की रंग योजना।"
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
 "dark background). This setting is ignored on systems that provide a system-"
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
-"पाठक मोड में प्रदर्शित लेखों के लिए रंगों की शैली का चयन करता है। संभावित मान "
-"\"हल्की\" (प्रकाश पृष्ठभूमि पर गहरा पाठ) और \"गहरी\" (अंधेरे पृष्ठभूमि पर हल्का पाठ) हैं। "
-"इस सेटिंग को उन सिस्टमों पर नज़रअंदाज कर दिया जाता है जो सिस्टम-व्यापी गहरी शैली "
-"प्राथमिकता प्रदान करते हैं, जैसे कि गनोम 42 और नए।"
+"पाठक मोड में प्रदर्शित लेखों के लिए रंगों की शैली का चयन करता है। संभावित मान \"हल्की\" "
+"(प्रकाश पृष्ठभूमि पर गहरा पाठ) और \"गहरी\" (अंधेरे पृष्ठभूमि पर हल्का पाठ) हैं। इस सेटिंग "
+"को उन सिस्टमों पर नज़रअंदाज कर दिया जाता है जो सिस्टम-व्यापी गहरी शैली प्राथमिकता "
+"प्रदान करते हैं, जैसे कि गनोम 42 और नए।"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:130
 msgid "Minimum font size"
 msgstr "न्यूनतम फॉन्ट आकार"
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid "Use GNOME fonts"
 msgstr "गनोम फॉन्ट का प्रयोग करें"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:135
 msgid "Use GNOME font settings."
 msgstr "गनोम फॉन्ट सेटिंग्स का उपयोग करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Custom sans-serif font"
 msgstr "तदनुकूल सैन्स-सेरिफ फॉन्ट"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:140
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -334,11 +298,11 @@ msgstr ""
 "use-gnome-fonts निर्धारित होने पर सैन्स-सेरिफ़ डेस्कटॉप फॉन्ट को अध्यारोहण करने के लिए "
 "उपयोग किया जाने वाला मान।"
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid "Custom serif font"
 msgstr "तदनुकूल सेरिफ फॉन्ट"
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:145
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -346,11 +310,11 @@ msgstr ""
 "use-gnome-fonts निर्धारित होने पर सेरिफ़ डेस्कटॉप फॉन्ट को अध्यारोहण करने के लिए उपयोग "
 "किया जाने वाला मान।"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid "Custom monospace font"
 msgstr "तदनुकूल मोनोस्पेस फॉन्ट"
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:150
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -358,64 +322,64 @@ msgstr ""
 "use-gnome-fonts निर्धारित होने पर मोनोस्पेस डेस्कटॉप फॉन्ट को अध्यारोहण करने के लिए "
 "उपयोग किया जाने वाला मान।"
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Use a custom CSS"
 msgstr "तदनुकूल CSS का उपयोग करें"
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:155
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "वेबसाइटों के स्वयं के CSS को संशोधित करने के लिए एक तदनुकूल CSS फाइल का उपयोग करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid "Use a custom JS"
 msgstr "तदनुकूल JS का उपयोग करें"
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:160
 msgid "Use a custom JS file to modify websites."
 msgstr "वेबसाइटों को संशोधित करने के लिए तदनुकूल JS फाइल का उपयोग करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid "Enable spell checking"
 msgstr "वर्तनीजांच सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:165
 msgid "Spell check any text typed in editable areas."
 msgstr "संपादन योग्य क्षेत्रों में टाइप किए गए किसी भी पाठ की वर्तनी जांचें।"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid "Default encoding"
 msgstr "तयशुदा एनकोडिंग"
 
-#: data/org.gnome.epiphany.gschema.xml:186
+#: data/org.gnome.epiphany.gschema.xml:170
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "तयशुदा एन्कोडिंग। स्वीकृत मान वे हैं जिन्हें WebKitGTK समझ सकता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:221
+#: data/org.gnome.epiphany.gschema.xml:174
+#: src/resources/gtk/prefs-general-page.ui:219
 msgid "Languages"
 msgstr "भाषाएं"
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "पसंदीदा भाषाएं। वर्तमान लोकेल का उपयोग करने के लिए लोकेल कोड या “सिस्टम” की सरणी।"
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:179
 msgid "Allow popups"
 msgstr "पॉपअप स्वीकारें"
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "साइटों को जावास्क्रिप्ट के उपयोग से नया विंडो खोलने दें (यदि जावास्क्रिप्ट समर्थ है)"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:184
 msgid "User agent"
 msgstr "उपयोक्ता प्रतिनिधि"
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -423,37 +387,37 @@ msgstr ""
 "वेब सर्वर पर ब्राउज़र की पहचान करने के लिए स्ट्रिंग का उपयोग उपयोक्ता एजेंट के रूप में किया "
 "जाएगा।"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:189
 msgid "Enable adblock"
 msgstr "एडब्लॉक सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "क्या सन्निहित विज्ञापनों को अवरुद्ध किया जाए जिन्हें वेब पृष्ठ दिखाना चाहते हों।"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:194
 msgid "Remember passwords"
 msgstr "पासवर्ड याद करें"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Whether to store and prefill passwords in websites."
 msgstr "क्या वेबसाइटों में पासवर्ड संग्रहीत और पूर्वभरण करना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:199
 msgid "Autofill form data"
 msgstr "प्रपत्र डेटा स्वत: भरें"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:200
 msgid "Whether to auto fill form data in websites."
 msgstr "क्या वेबसाइटों में प्रपत्र डेटा स्वतः भरना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:204
 msgid "Enable site-specific quirks"
 msgstr "साइट-विशिष्ट विचित्रताओं को सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -461,19 +425,19 @@ msgstr ""
 "विशिष्ट वेबसाइटों को बेहतर ढंग से काम करने के लिए विचित्रताएं सक्षम करें। यदि आप किसी "
 "विशिष्ट समस्या को डीबग कर रहे हैं तो आप इस सेटिंग को अक्षम करना चाह सकते हैं।"
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:209
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "इंटेलिजेंट ट्रैकिंग प्रिवेंशन (ITP) सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "क्या इंटेलिजेंट ट्रैकिंग प्रिवेंशन सक्षम करना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:214
 msgid "Allow websites to store local website data"
 msgstr "वेबसाइटों को स्थानीय वेबसाइट डेटा संग्रहीत करने की अनुमति दें"
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -481,15 +445,15 @@ msgstr ""
 "क्या वेबसाइटों को कुकीज़, स्थानीय भंडारण डेटा और IndexedDB डेटाबेस संग्रहीत करने की अनुमति "
 "दी जानी चाहिए। इसे अक्षम करने से कई वेबसाइटें टूट जाएंगी।"
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:219
 msgid "Default zoom level for new pages"
 msgstr "नये पृष्ठों के लिए तयशुदा जूम स्तर"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable autosearch"
 msgstr "स्वतः खोज सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -500,11 +464,11 @@ msgstr ""
 "से वेब पर खोज की जाती है। यदि यह सेटिंग अक्षम है, तो सब कुछ एक URL के रूप में लोड किया "
 "जाएगा जब तक कि ड्रॉपडाउन मेनू से एक खोज इंजन स्पष्ट रूप से नहीं चुना जाता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "Enable mouse gestures"
 msgstr "माउस जेस्चर सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -512,35 +476,35 @@ msgstr ""
 "क्या माउस जेस्चर सक्षम करना है। माउस जेस्चर Opera के व्यवहार पर आधारित होते हैं और मध्य "
 "माउस बटन + जेस्चर का उपयोग करके सक्रिय होते हैं।"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:233
 msgid "Enable navigation gestures"
 msgstr "नेविगेशन जेस्चर सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Whether to enable back and forward navigation gestures."
 msgstr "क्या पीछे और आगे नेविगेशन जेस्चर सक्षम करना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "Last upload directory"
 msgstr "अंतिम अपलोड निर्देशिका"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Keep track of last upload directory"
 msgstr "अंतिम अपलोड निर्देशिका का ध्यान रखें"
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "Last download directory"
 msgstr "अंतिम डाउनलोड निर्देशिका"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Keep track of last download directory"
 msgstr "अंतिम डाउनलोड निर्देशिका का ध्यान रखें"
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "Hardware acceleration policy"
 msgstr "हार्डवेयर त्वरण नीति"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
@@ -552,46 +516,46 @@ msgstr ""
 "लेकिन मेमोरी उपयोग की आवश्यकताएं बढ़ जाती हैं और गंभीर हार्डवेयर-विशिष्ट चित्रोपमा "
 "ड्राइवर बग उजागर हो सकते हैं।"
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Always ask for download directory"
 msgstr "हमेशा डाउनलोड निर्देशिका मांगें"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "क्या प्रत्येक डाउनलोड के लिए निर्देशिका चयनकर्ता संवाद प्रस्तुत करना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Enable immediately switch to new open tab"
 msgstr "नए खुले टैब पर तुरंत जाना सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Whether to automatically switch to a new open tab."
 msgstr "क्या स्वचालित रूप से नए खुले टैब पर जाना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Enable WebExtensions"
 msgstr "वेबएक्सटेंशन सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
 "क्या वेबएक्सटेंशन को सक्षम करना है। वेबएक्सटेंशन एक्सटेंशन के लिए एक क्रॉस-ब्राउज़र सिस्टम है।"
 
-#: data/org.gnome.epiphany.gschema.xml:284
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Active WebExtensions"
 msgstr "सक्रिय वेबएक्सटेंशन"
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Indicates which WebExtensions are set to active."
 msgstr "इंगित करता है कि कौन से वेबएक्सटेंशन सक्रिय हैं।"
 
-#: data/org.gnome.epiphany.gschema.xml:289
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid "Show developer actions"
 msgstr "विकासकर्ता गतिविधियां दिखाएं"
 
-#: data/org.gnome.epiphany.gschema.xml:290
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
@@ -599,45 +563,45 @@ msgstr ""
 "क्या विकासकर्ता संदर्भ मेनू क्रियाएं दिखानी हैं। यह पृष्ठ स्रोत और निरीक्षण तत्व क्रियाओं के "
 "उपयोग की अनुमति देता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Web application additional URLs"
 msgstr "वेब अनुप्रयोग अतिरिक्त URL"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:281
 msgid "The list of URLs that should be opened by the web application"
 msgstr "URL की सूची जिसे वेब अनुप्रयोग द्वारा खोला जाना चाहिए"
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid "Show navigation buttons in WebApp"
 msgstr "वेबऐप में नेविगेशन बटन दिखाएं"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:286
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "क्या वेबऐप में नेविगेशन के लिए बटन दिखाना है।"
 
-#: data/org.gnome.epiphany.gschema.xml:306
+#: data/org.gnome.epiphany.gschema.xml:290
 msgid "Run in background"
 msgstr "पृष्ठभूमि में चलाएं"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr "सक्षम होने पर, विंडो बंद करने के बाद भी अनुप्रयोग पृष्ठभूमि में चलता रहेगा।"
 
-#: data/org.gnome.epiphany.gschema.xml:311
+#: data/org.gnome.epiphany.gschema.xml:295
 msgid "WebApp is system-wide"
 msgstr "वेबऐप सिस्टम-व्यापी है"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "If enabled, application cannot be edited or removed."
 msgstr "सक्षम होने पर, अनुप्रयोग को संपादित या हटाया नहीं जा सकता।"
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "The downloads folder"
 msgstr "डाउनलोड फोल्डर"
 
-#: data/org.gnome.epiphany.gschema.xml:319
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -645,21 +609,21 @@ msgstr ""
 "फोल्डर का पथ जहां फाइलें डाउनलोड करनी हैं; या तयशुदा डाउनलोड फोल्डर का उपयोग करने के "
 "लिए “Downloads”, या डेस्कटॉप फोल्डर का उपयोग करने के लिए “Desktop”।"
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:310
 msgid "Window position"
 msgstr "विंडो का स्थान"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:311
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "नई विंडो के लिए उपयोग की जाने वाली स्थिति जो पिछले सत्र से बहाल नहीं की गई है।"
 
-#: data/org.gnome.epiphany.gschema.xml:331
+#: data/org.gnome.epiphany.gschema.xml:315
 msgid "Window size"
 msgstr "विंडो का आकार"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -667,11 +631,11 @@ msgstr ""
 "नई विंडो के लिए उपयोग किया जाने वाला आकार जो पिछले सत्र से पुनर्स्थापित नहीं किया गया "
 "है।"
 
-#: data/org.gnome.epiphany.gschema.xml:336
+#: data/org.gnome.epiphany.gschema.xml:320
 msgid "Is maximized"
 msgstr "अधिकतमीकृत है"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -679,11 +643,11 @@ msgstr ""
 "क्या एक नई विंडो जो पिछले सत्र से बहाल नहीं की गई है, उसे शुरू में अधिकतम किया जाना "
 "चाहिए।"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:336
 msgid "Disable forward and back buttons"
 msgstr "आगे और पीछे के बटन अक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -691,27 +655,27 @@ msgstr ""
 "यदि “सही” पर निर्धारित किया जाता है, तो आगे और पीछे के बटन अक्षम हो जाते हैं, जिससे "
 "उपयोक्ताओं को तत्काल ब्राउज़र इतिहास तक पहुंचने से रोका जा सकता है"
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:355
 msgid "Firefox Sync Token Server URL"
 msgstr "फायरफॉक्स सिंक टोकन की सर्वर URL"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid "URL to a custom Firefox Sync token server."
 msgstr "तदनुकूल फायरफॉक्स सिंक टोकन सर्वर का URL।"
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:360
 msgid "Firefox Sync Accounts Server URL"
 msgstr "फायरफॉक्स सिंक खाते की सर्वर URL"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "तदनुकूल फायरफॉक्स सिंक खाते सर्वर का URL।"
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:365
 msgid "Currently signed in sync user"
 msgstr "वर्तमान में साइन इन किए हुए समन्वयित उपयोक्ता"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
@@ -719,43 +683,43 @@ msgstr ""
 "मोज़िला खाते से जुड़े ईमेल का उपयोग मोज़िला के सर्वर के साथ डेटा समन्वयित करने के लिए किया "
 "जाता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:370
 msgid "Last sync timestamp"
 msgstr "अंतिम समन्वयन समय-चिह्न"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "UNIX समय जिस पर अंतिम समन्वयन (सेकंड में) किया गया था।"
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:375
 msgid "Sync device ID"
 msgstr "समन्वयित उपकरण ID"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "The sync device ID of the current device."
 msgstr "वर्तमान उपकरण की समन्वयित उपकरण ID।"
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "Sync device name"
 msgstr "समन्वयित उपकरण नाम"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "The sync device name of the current device."
 msgstr "वर्तमान उपकरण का समन्वयित उपकरण नाम।"
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "The sync frequency in minutes"
 msgstr "मिनटों में समन्वयन आवृत्ति"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "The number of minutes between two consecutive syncs."
 msgstr "लगातार दो समन्वयन के बीच मिनटों की संख्या।"
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "Sync data with Firefox"
 msgstr "फायरफॉक्स के साथ डेटा समन्वयित करें"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -763,31 +727,31 @@ msgstr ""
 "यदि Ephy संग्रह को फायरफॉक्स संग्रह के साथ समन्वयित किया जाना चाहिए तो TRUE पर "
 "निर्धारित करें, अन्यथा FALSE पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid "Enable bookmarks sync"
 msgstr "बुकमार्क समन्वयन सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "यदि बुकमार्क संग्रह समन्वयित किया जाना चाहिए तो TRUE पर निर्धारित करें, अन्यथा FALSE "
 "पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Bookmarks sync timestamp"
 msgstr "बुकमार्क समन्वयन समय-चिह्न"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "वह समय-चिह्न जिस पर अंतिम बुकमार्क समन्वयित किया गया था।"
 
-#: data/org.gnome.epiphany.gschema.xml:421
-#: data/org.gnome.epiphany.gschema.xml:436
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid "Initial sync or normal sync"
 msgstr "प्रारंभिक या सामान्य समन्वयन"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -795,25 +759,25 @@ msgstr ""
 "यदि बुकमार्क संग्रह को पहली बार समन्वयित करने की आवश्यकता है तो TRUE पर निर्धारित करें, "
 "अन्यथा FALSE पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "Enable passwords sync"
 msgstr "पासवर्ड समन्वयन सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "यदि पासवर्ड संग्रह समन्वयित किया जाना चाहिए तो TRUE पर निर्धारित करें, अन्यथा FALSE "
 "पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "Passwords sync timestamp"
 msgstr "पासवर्ड समन्वयन समय-चिह्न"
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid "The timestamp at which last passwords sync was made."
 msgstr "वह समय-चिह्न जिस पर अंतिम पासवर्ड समन्वयित किया गया था।"
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -821,25 +785,25 @@ msgstr ""
 "यदि पासवर्ड संग्रह को पहली बार समन्वयित करने की आवश्यकता है तो TRUE पर निर्धारित करें, "
 "अन्यथा FALSE पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "Enable history sync"
 msgstr "इतिहास समन्वयन सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "यदि इतिहास संग्रह को समन्वयित किया जाना चाहिए तो TRUE पर निर्धारित करें, अन्यथा "
 "FALSE पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "History sync timestamp"
 msgstr "इतिहास समन्वयन समय-चिह्न"
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:431
 msgid "The timestamp at which last history sync was made."
 msgstr "वह समय-चिह्न जिस पर अंतिम इतिहास समन्वयन किया गया था।"
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -847,29 +811,29 @@ msgstr ""
 "यदि इतिहास संग्रह को पहली बार समन्वयित करने की आवश्यकता है तो TRUE पर निर्धारित करें, "
 "अन्यथा FALSE पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:456
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "Enable open tabs sync"
 msgstr "खुले टैब के समन्वयन सक्षम करें"
 
-#: data/org.gnome.epiphany.gschema.xml:457
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "यदि खुले टैब संग्रह को समन्वयित किया जाना चाहिए तो TRUE पर निर्धारित करें, अन्यथा "
 "FALSE पर निर्धारित करें।"
 
-#: data/org.gnome.epiphany.gschema.xml:461
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid "Open tabs sync timestamp"
 msgstr "खुले टैब का समन्वयन समय-चिह्न"
 
-#: data/org.gnome.epiphany.gschema.xml:462
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "वह समय-चिह्न जिस पर अंतिम खुले टैब समन्वयित किए गए थे।"
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "इस होस्ट के लिए माइक्रोफोन अनुमति का अनुरोध किए जाने पर लागू करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:458
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -881,12 +845,12 @@ msgstr ""
 "ब्राउज़र को उपयोक्ता से अनुमति माँगने की आवश्यकता है, जबकि “अनुमति” और “अस्वीकार” उसे "
 "अनुरोध पर स्वचालित रूप से निर्णय लेने के लिए कहता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:462
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "इस होस्ट के लिए भौगोलिक-स्थान अनुमति का अनुरोध किए जाने पर लागू करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:479
+#: data/org.gnome.epiphany.gschema.xml:463
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -898,12 +862,12 @@ msgstr ""
 "उपयोक्ता से अनुमति माँगने की आवश्यकता है, जबकि “अनुमति” और “अस्वीकार” उसे अनुरोध पर "
 "स्वचालित रूप से निर्णय लेने के लिए कहता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "इस होस्ट के लिए अधिसूचना अनुमति का अनुरोध किए जाने पर लागू करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:484
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -915,13 +879,13 @@ msgstr ""
 "उपयोक्ता से अनुमति माँगने की आवश्यकता है, जबकि “अनुमति” और “अस्वीकार” उसे अनुरोध पर "
 "स्वचालित रूप से निर्णय लेने के लिए कहता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:472
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "इस होस्ट के लिए पासवर्ड सहेजने की अनुमति का अनुरोध किए जाने पर लागू करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:489
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -933,11 +897,11 @@ msgstr ""
 "से अनुमति माँगने की आवश्यकता है, जबकि “अनुमति” और “अस्वीकार” उसे अनुरोध पर स्वचालित रूप "
 "से निर्णय लेने के लिए कहता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:493
+#: data/org.gnome.epiphany.gschema.xml:477
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "इस होस्ट के लिए वेबकैम की अनुमति का अनुरोध किए जाने पर लागू करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:494
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -949,12 +913,12 @@ msgstr ""
 "उपयोक्ता से अनुमति माँगने की आवश्यकता है, जबकि “अनुमति” और “अस्वीकार” उसे अनुरोध पर "
 "स्वचालित रूप से निर्णय लेने के लिए कहता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:498
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "इस होस्ट के लिए विज्ञापन अनुमति का अनुरोध किए जाने पर आवेदन करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:499
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -966,11 +930,11 @@ msgstr ""
 "उपयोग किया जाता है, जबकि “अनुमति” और “अस्वीकार” इसे अनुरोध पर स्वचालित रूप से निर्णय "
 "लेने के लिए कहता है।"
 
-#: data/org.gnome.epiphany.gschema.xml:503
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr "इस होस्ट के लिए ऑटोप्ले नीति का अनुरोध किए जाने पर लागू करने का निर्णय"
 
-#: data/org.gnome.epiphany.gschema.xml:504
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -995,7 +959,7 @@ msgstr "संस्करण %s"
 msgid "About Web"
 msgstr "वेब के बारे में"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1228
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1276
 msgid "Epiphany Technology Preview"
 msgstr "एपिफेनी प्रौद्योगिकी पूर्वावलोकन"
 
@@ -1005,7 +969,7 @@ msgstr "वेब का एक सरल, स्वच्छ, सुंदर �
 
 #. Displayed when opening applications without any installed web apps.
 #: embed/ephy-about-handler.c:271 embed/ephy-about-handler.c:273
-#: embed/ephy-about-handler.c:337 embed/ephy-about-handler.c:363
+#: embed/ephy-about-handler.c:338 embed/ephy-about-handler.c:364
 msgid "Apps"
 msgstr "ऐप्स"
 
@@ -1013,16 +977,16 @@ msgstr "ऐप्स"
 msgid "List of installed web apps"
 msgstr "स्थापित वेब ऐप्स की सूची"
 
-#: embed/ephy-about-handler.c:322
+#: embed/ephy-about-handler.c:323
 msgid "Delete"
 msgstr "मिटाएं"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:324
+#: embed/ephy-about-handler.c:325
 msgid "Installed on:"
 msgstr "स्थापना तिथि:"
 
-#: embed/ephy-about-handler.c:363
+#: embed/ephy-about-handler.c:364
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
@@ -1031,24 +995,24 @@ msgstr ""
 "वेबसाइट जोड़ सकते हैं।"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:468
+#: embed/ephy-about-handler.c:469
 msgid "Welcome to Web"
 msgstr "वेब में आपका स्वागत है"
 
-#: embed/ephy-about-handler.c:468
+#: embed/ephy-about-handler.c:469
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "ब्राउज़ करना प्रारंभ करें और आपकी सर्वाधिक देखी गई साइटें यहां दिखाई देंगी।"
 
-#: embed/ephy-about-handler.c:502
+#: embed/ephy-about-handler.c:503
 #: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "अवलोकन से हटाएं"
 
-#: embed/ephy-about-handler.c:592 embed/ephy-about-handler.c:593
+#: embed/ephy-about-handler.c:593 embed/ephy-about-handler.c:594
 msgid "Private Browsing"
 msgstr "निजी ब्राउज़िंग"
 
-#: embed/ephy-about-handler.c:594
+#: embed/ephy-about-handler.c:595
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1058,12 +1022,12 @@ msgstr ""
 "दिखाई नहीं देंगे और विंडो बंद करने पर सभी संग्रहीत जानकारी साफ हो जाएगी। आपके द्वारा "
 "डाउनलोड की गई फाइलें रखी जाएंगी।"
 
-#: embed/ephy-about-handler.c:598
+#: embed/ephy-about-handler.c:599
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr "गुप्त मोड आपकी गतिविधि को केवल इस कंप्यूटर का उपयोग करने वाले लोगों से छुपाता है।"
 
-#: embed/ephy-about-handler.c:600
+#: embed/ephy-about-handler.c:601
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1073,39 +1037,39 @@ msgstr ""
 "सेवा प्रदाता, आपकी सरकार, अन्य सरकारें, वे वेबसाइटें जिन पर आप जाते हैं, और इन वेबसाइटों "
 "पर विज्ञापनदाता अभी भी आपको ट्रैक कर रहे होंगे।"
 
-#: embed/ephy-client-certificate-manager.c:292
+#: embed/ephy-client-certificate-manager.c:294
 msgid "PIN required"
 msgstr "PIN आवश्यक"
 
-#: embed/ephy-client-certificate-manager.c:295
+#: embed/ephy-client-certificate-manager.c:297
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "%2$s:%3$d पर प्रमाणित करने के लिए कृपया %1$s के लिए PIN दर्ज करें।"
 
-#: embed/ephy-client-certificate-manager.c:303
-#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:760
-#: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
-#: src/ephy-window.c:257 src/preferences/autofill-view.c:363
-#: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
+#: embed/ephy-client-certificate-manager.c:305
+#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:767
+#: embed/ephy-web-view.c:1347 src/ephy-history-dialog.c:889
+#: src/ephy-window.c:262 src/preferences/autofill-view.c:363
+#: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:178
 #: src/resources/gtk/firefox-sync-dialog.ui:117
-#: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:338
-#: src/window-commands.c:591 src/window-commands.c:902
-#: src/window-commands.c:1402 src/window-commands.c:2085
-#: src/window-commands.c:2988
+#: src/resources/gtk/history-dialog.ui:58
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:357
+#: src/window-commands.c:562 src/window-commands.c:924
+#: src/window-commands.c:1454 src/window-commands.c:2158
+#: src/window-commands.c:3059
 msgid "_Cancel"
 msgstr "रद्द करें (_C)"
 
-#: embed/ephy-client-certificate-manager.c:304
+#: embed/ephy-client-certificate-manager.c:306
 msgid "_Login"
 msgstr "लॉगिन (_L)"
 
 #  Add the buttons
-#: embed/ephy-client-certificate-manager.c:374
+#: embed/ephy-client-certificate-manager.c:388
 msgid "Select certificate"
 msgstr "प्रमाणपत्र चुनें"
 
-#: embed/ephy-client-certificate-manager.c:377
+#: embed/ephy-client-certificate-manager.c:391
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
@@ -1113,76 +1077,76 @@ msgid ""
 msgstr ""
 "वेबसाइट %s:%d अनुरोध करती है कि आप %s के प्रमाणीकरण के लिए एक प्रमाणपत्र प्रदान करें।"
 
-#: embed/ephy-client-certificate-manager.c:382
+#: embed/ephy-client-certificate-manager.c:396
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "वेबसाइट %s:%d अनुरोध करती है कि आप प्रमाणीकरण के लिए एक प्रमाणपत्र प्रदान करें।"
 
-#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:342
+#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:361
 msgid "_Select"
 msgstr "चुनें (_S)"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "निर्देशिका चुनें"
 
-#: embed/ephy-download.c:716
+#: embed/ephy-download.c:723
 msgid "Select the Destination"
 msgstr "गंतव्य चुनें"
 
-#: embed/ephy-download.c:758
+#: embed/ephy-download.c:765
 msgid "Download Requested"
 msgstr "डाउनलोड अनुरोधित"
 
-#: embed/ephy-download.c:761
+#: embed/ephy-download.c:768
 msgid "_Download"
 msgstr "डाउनलोड (_D)"
 
 #. Type
-#: embed/ephy-download.c:789
+#: embed/ephy-download.c:796
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "प्रकार: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:795
+#: embed/ephy-download.c:802
 #, c-format
 msgid "Source: %s"
 msgstr "स्रोतः %s"
 
 #. Question
-#: embed/ephy-download.c:801
+#: embed/ephy-download.c:808
 msgid "Where do you want to save the file?"
 msgstr "आप फाइल कहां सहेजना चाहते हैं?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:960
+#: embed/ephy-download.c:967
 #, c-format
 msgid "Finished downloading %s"
 msgstr "%s का डाउनलोड समाप्त हुआ"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:962
+#: embed/ephy-download.c:969 src/ephy-window.c:3683
 msgid "Download finished"
 msgstr "डाउनलोड समाप्त"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:514
+#: embed/ephy-embed.c:537
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "पूर्णस्क्रीन से बाहर निकलने के लिए %s दबाएं"
 
-#: embed/ephy-embed.c:514
+#: embed/ephy-embed.c:537
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:514
+#: embed/ephy-embed.c:537
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:793
+#: embed/ephy-embed.c:816
 msgid "Web is being controlled by automation"
 msgstr "वेब को स्वचालन द्वारा नियंत्रित किया जा रहा है"
 
@@ -1601,77 +1565,77 @@ msgstr "सभी समर्थित फाइलें"
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "यह फॉर्म सुरक्षित नहीं है - पासवर्ड को निजी नहीं रखा जाएगा"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3422
+#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3415
 msgid "_Dismiss"
 msgstr "खारिज करें (_D)"
 
-#: embed/ephy-web-view.c:788
+#: embed/ephy-web-view.c:789
 msgid "Web process crashed"
 msgstr "वेब प्रक्रिया क्रैश हो गई"
 
-#: embed/ephy-web-view.c:791
+#: embed/ephy-web-view.c:792
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "मेमोरी सीमा पार हो जाने के कारण वेब प्रक्रिया समाप्त हो गई"
 
-#: embed/ephy-web-view.c:794
+#: embed/ephy-web-view.c:795
 msgid "Web process terminated by API request"
 msgstr "API अनुरोध द्वारा वेब प्रक्रिया समाप्त कर दी गई"
 
-#: embed/ephy-web-view.c:832
+#: embed/ephy-web-view.c:840
 msgid "Page Unresponsive"
 msgstr "पृष्ठ अनुत्तरदायी"
 
-#: embed/ephy-web-view.c:835
+#: embed/ephy-web-view.c:843
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "वर्तमान पृष्ठ “%s” प्रत्युत्तर नहीं दे रहा है"
 
-#: embed/ephy-web-view.c:839
+#: embed/ephy-web-view.c:847
 msgid "_Wait"
 msgstr "प्रतीक्षा करें (_W)"
 
 #  View menu
-#: embed/ephy-web-view.c:840
+#: embed/ephy-web-view.c:848
 msgid "Force _Stop"
 msgstr "बलपूर्वक रोकें (_S)"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1083
+#: embed/ephy-web-view.c:1091
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” लोड कर रहा है…"
 
-#: embed/ephy-web-view.c:1085 embed/ephy-web-view.c:1091
+#: embed/ephy-web-view.c:1093 embed/ephy-web-view.c:1099
 msgid "Loading…"
 msgstr "लोड हो रहा है…"
 
-#: embed/ephy-web-view.c:1341
+#: embed/ephy-web-view.c:1340
 msgid "Delete Web App?"
 msgstr "वेब ऐप मिटाएं?"
 
-#: embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1343
 #, c-format
 msgid ""
-"\"%s\" will be removed. You will have to re-install the website as an app "
-"from the menu to use it again."
+"“%s” will be removed. You will have to re-install the website as an app from "
+"the menu to use it again."
 msgstr ""
-"\"%s\" हटा दिया जाएगा। इसे फिर से उपयोग करने के लिए आपको मेनू से वेबसाइट को ऐप के रूप "
-"में फिर से स्थापित करना होगा।"
+"“%s” हटा दिया जाएगा। इसे फिर से उपयोग करने के लिए आपको मेनू से वेबसाइट को ऐप के रूप में "
+"फिर से स्थापित करना होगा।"
 
-#: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
-#: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
+#: embed/ephy-web-view.c:1348 src/preferences/autofill-view.c:364
+#: src/preferences/passwords-view.c:179 src/resources/gtk/history-dialog.ui:160
 #: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "मिटाएं (_D)"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1633
+#: embed/ephy-web-view.c:1626
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "इस वेबसाइट ने ऐसी पहचान प्रस्तुत की जो किसी भिन्न वेबसाइट से संबंधित है।"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1638
+#: embed/ephy-web-view.c:1631
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1680,25 +1644,25 @@ msgstr ""
 "जांचें।"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1643
+#: embed/ephy-web-view.c:1636
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "इस वेबसाइट की पहचान किसी विश्वसनीय संगठन द्वारा जारी नहीं की गई थी।"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1648
+#: embed/ephy-web-view.c:1641
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "इस वेबसाइट की पहचान संसाधित नहीं की जा सकी। यह भ्रष्ट हो सकता है।"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1653
+#: embed/ephy-web-view.c:1646
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "इस वेबसाइट की पहचान इसे जारी करने वाले विश्वसनीय संगठन द्वारा रद्द कर दी गई है।"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1658
+#: embed/ephy-web-view.c:1651
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1707,7 +1671,7 @@ msgstr ""
 "उपयोग करती है।"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1656
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1717,24 +1681,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1728 embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1721 embed/ephy-web-view.c:1777
 #, c-format
 msgid "Problem Loading Page"
 msgstr "पृष्ठ लोड करने में समस्या"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1731
+#: embed/ephy-web-view.c:1724
 msgid "Unable to display this website"
 msgstr "यह वेबसाइट प्रदर्शित करने में असमर्थ"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1736
+#: embed/ephy-web-view.c:1729
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "%s पर साइट अनुपलब्ध लगती है।"
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1740
+#: embed/ephy-web-view.c:1733
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1743,7 +1707,7 @@ msgstr ""
 "सत्यापित करना चाह सकते हैं कि आपका इंटरनेट कनेक्शन सही ढंग से काम कर रहा है।"
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1743
 #, c-format
 msgid "The precise error was: %s"
 msgstr "सटीक त्रुटि यह थी: %s"
@@ -1753,49 +1717,49 @@ msgstr "सटीक त्रुटि यह थी: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1755 embed/ephy-web-view.c:1808
-#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1837 embed/ephy-web-view.c:1873
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:181
 msgid "Reload"
 msgstr "पुनः लोड करें"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1759 embed/ephy-web-view.c:1812
-#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1752 embed/ephy-web-view.c:1805
+#: embed/ephy-web-view.c:1841 embed/ephy-web-view.c:1877
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1787
+#: embed/ephy-web-view.c:1780
 msgid "Oops! There may be a problem"
 msgstr "उफ़! कोई समस्या हो सकती है"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1785
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "पृष्ठ %s के कारण वेब अप्रत्याशित रूप से बंद हो सकता है।"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1799
+#: embed/ephy-web-view.c:1792
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "यदि ऐसा दोबारा होता है, तो कृपया %s विकासकर्ता को समस्या बताएं।"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1826
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "पृष्ठ प्रदर्शित करने में समस्या"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1836
+#: embed/ephy-web-view.c:1829
 msgid "Oops!"
 msgstr "ओफ्फ!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1839
+#: embed/ephy-web-view.c:1832
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1804,18 +1768,18 @@ msgstr ""
 "किसी भिन्न पृष्ठ पर जाएं।"
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1862
 #, c-format
 msgid "Unresponsive Page"
 msgstr "अनुत्तरदायी पृष्ठ"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1865
 msgid "Uh-oh!"
 msgstr "उह-ओह!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1868
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1824,18 +1788,18 @@ msgstr ""
 "पृष्ठ पर जाएं।"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1911
+#: embed/ephy-web-view.c:1904
 #, c-format
 msgid "Security Violation"
 msgstr "सुरक्षा उल्लंघन"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1907
 msgid "This Connection is Not Secure"
 msgstr "यह कनेक्शन सुरक्षित नहीं है"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1912
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1847,41 +1811,41 @@ msgstr ""
 #  Go menu
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1979
+#: embed/ephy-web-view.c:1922 embed/ephy-web-view.c:1972
 msgid "Go Back"
 msgstr "पीछे जाएं"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1982
+#: embed/ephy-web-view.c:1925 embed/ephy-web-view.c:1975
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1935
+#: embed/ephy-web-view.c:1928
 msgid "Accept Risk and Proceed"
 msgstr "जोखिम स्वीकारें और आगे बढ़ें"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1939
+#: embed/ephy-web-view.c:1932
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:1955 embed/ephy-web-view.c:1958
 #, c-format
 msgid "File not found"
 msgstr "फाइल नहीं मिली"
 
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1963
 #, c-format
 msgid "%s could not be found."
 msgstr "%s नहीं मिल सका।"
 
-#: embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:1965
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1890,11 +1854,11 @@ msgstr ""
 "कृपया बड़े अक्षरों या अन्य टाइपिंग त्रुटियों के लिए फाइल नाम की जांच करें। यह भी जांचें कि "
 "क्या इसे स्थानांतरित कर दिया गया है, इसका नाम बदल दिया गया है या मिटा दिया गया है।"
 
-#: embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2028
 msgid "None specified"
 msgstr "कोई निर्दिष्ट नहीं"
 
-#: embed/ephy-web-view.c:2149
+#: embed/ephy-web-view.c:2142
 msgid "Technical information"
 msgstr "तकनीकी जानकारी"
 
@@ -1915,7 +1879,7 @@ msgstr "छवियां"
 #. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/action-bar-end.ui:11
-#: src/resources/gtk/prefs-general-page.ui:123
+#: src/resources/gtk/prefs-general-page.ui:121
 msgid "Downloads"
 msgstr "डाउनलोड"
 
@@ -1943,24 +1907,15 @@ msgstr "“%s” फाइल मौज़ूद है, कृपया इस�
 msgid "Failed to create directory “%s”."
 msgstr "निर्देशिका “%s” बनाने में विफल।"
 
-#: lib/ephy-file-helpers.c:716
+#: lib/ephy-file-helpers.c:726
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "फाइल %s हटाने में त्रुटि: %s"
 
-#: lib/ephy-file-helpers.c:734
+#: lib/ephy-file-helpers.c:744
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "निर्देशिका %s हटाने में त्रुटि: %s"
-
-#. TRANSLATORS: Please modify the main address of duckduckgo in order to match
-#. * the version used in your country. For example for the french version :
-#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
-#.
-#: lib/ephy-search-engine-manager.h:35
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.in/?q=%s&amp;t=epiphany"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2072,7 +2027,7 @@ msgstr "निर्देशिका %s बनाने में विफल
 msgid "Failed to create .app file: %s"
 msgstr ".app फाइल बनाने में विफल: %s"
 
-#: lib/sync/ephy-password-export.c:121
+#: lib/sync/ephy-password-export.c:123
 msgid "Error in exporting passwords to a CSV file"
 msgstr "पासवर्ड को CSV फाइल में निर्यात करने में त्रुटि"
 
@@ -2203,11 +2158,11 @@ msgstr "उपकरण जानकारी अपलोड करने म�
 msgid "Failed to retrieve the Sync Key"
 msgstr "समन्वयन कुंजी पुनः प्राप्त करने में विफल"
 
-#: src/bookmarks/ephy-bookmark-properties.c:144
+#: src/bookmarks/ephy-bookmark-properties.c:145
 msgid "Select current tag"
 msgstr "वर्तमान टैग चुनें"
 
-#: src/bookmarks/ephy-bookmark-properties.c:158
+#: src/bookmarks/ephy-bookmark-properties.c:159
 msgid "Remove current tag"
 msgstr "वर्तमान टैग हटाएं"
 
@@ -2221,33 +2176,33 @@ msgstr "फाइल एक मान्य एपिफेनी बुकम�
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr "फाइल एक मान्य एपिफेनी बुकमार्क फाइल नहीं है: बुकमार्क तालिका अनुपलब्ध है"
 
-#: src/bookmarks/ephy-bookmarks-import.c:247
+#: src/bookmarks/ephy-bookmarks-import.c:286
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr "फायरफॉक्स बुकमार्क डेटाबेस नहीं खोला जा सका। फायरफॉक्स बंद करें और पुनः प्रयास करें।"
 
-#: src/bookmarks/ephy-bookmarks-import.c:260
-#: src/bookmarks/ephy-bookmarks-import.c:292
+#: src/bookmarks/ephy-bookmarks-import.c:299
+#: src/bookmarks/ephy-bookmarks-import.c:335
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "फायरफॉक्स बुकमार्क पुनर्प्राप्त नहीं किए जा सके!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:459
+#: src/bookmarks/ephy-bookmarks-import.c:502
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "HTML बुकमार्क डेटाबेस खोला नहीं जा सका: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:470
+#: src/bookmarks/ephy-bookmarks-import.c:513
 msgid "HTML bookmarks database could not be read."
 msgstr "HTML बुकमार्क डेटाबेस को पढ़ा नहीं जा सका।"
 
-#: src/bookmarks/ephy-bookmarks-import.c:491
+#: src/bookmarks/ephy-bookmarks-import.c:535
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "HTML बुकमार्क डेटाबेस का विश्लेषण नहीं किया जा सका: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:644
+#: src/bookmarks/ephy-bookmarks-import.c:707
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "बुकमार्क फाइल का विश्लेषण नहीं किया जा सका:"
@@ -2273,12 +2228,12 @@ msgid "Save Media As"
 msgstr "लिंक ऐसे सहेजें"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:415 src/ephy-location-entry.c:1806
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1836
 msgid "Bookmark Page"
 msgstr "बुकमार्क पृष्ठ"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:423 src/ephy-location-entry.c:1814
+#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1844
 msgid "Edit Bookmark"
 msgstr "बुकमार्क संपादित करें"
 
@@ -2341,6 +2296,7 @@ msgstr "यह प्रमाणपत्र मान्य है। हा�
 
 #: src/ephy-downloads-popover.c:211 src/resources/gtk/autofill-view.ui:12
 #: src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:101
 msgid "_Clear All"
 msgstr "सभी साफ करें (_C)"
 
@@ -2431,64 +2387,82 @@ msgstr[1] "%u मिन"
 msgid "Reload the current page"
 msgstr "वर्तमान पृष्ठ पुनः लोड करें"
 
-#: src/ephy-header-bar.c:271
+#: src/ephy-header-bar.c:261
+msgid "Exit Fullscreen"
+msgstr "पूर्णस्क्रीन से बाहर निकलें"
+
+#: src/ephy-header-bar.c:272
 msgid "Main Menu"
 msgstr "मुख्य मेनू"
 
-#: src/ephy-header-bar.c:451
+#: src/ephy-header-bar.c:452
 msgid "Stop loading the current page"
 msgstr "वर्तमान पृष्ठ लोड करना बंद करें"
 
-#: src/ephy-history-dialog.c:137 src/ephy-history-dialog.c:985
-msgid "Unavailable in Incognito Mode"
-msgstr "गुप्त मोड में अनुपलब्ध"
+#: src/ephy-history-dialog.c:264
+msgid "De_select All"
+msgstr "सभी अचयनित करें (_s)"
 
-#: src/ephy-history-dialog.c:481
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:921
+#: src/resources/gtk/history-dialog.ui:50
+#: src/resources/gtk/location-entry.ui:313
+msgid "Select _All"
+msgstr "सभी चुनें (_A)"
+
+#: src/ephy-history-dialog.c:454
+msgid "Link copied"
+msgstr "लिंक कॉपी किया गया"
+
+#: src/ephy-history-dialog.c:552
 msgid "Remove the selected pages from history"
 msgstr "इतिहास से चयनित पृष्ठ हटाएं"
 
-#: src/ephy-history-dialog.c:487
+#: src/ephy-history-dialog.c:559
 msgid "Copy URL"
 msgstr "URL कॉपी करें"
 
-#: src/ephy-history-dialog.c:768
+#: src/ephy-history-dialog.c:885
 msgid "Clear Browsing History?"
 msgstr "ब्राउज़िंग इतिहास साफ करें?"
 
-#: src/ephy-history-dialog.c:769
-msgid "All links will be permanently deleted"
-msgstr "सभी लिंक स्थायी रूप से मिटा दिये जायेंगे"
+#: src/ephy-history-dialog.c:886
+msgid "All visible links will be permanently deleted"
+msgstr "सभी दृश्यमान लिंक स्थायी रूप से मिटा दिये जायेंगे"
 
-#: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:890 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "साफ करें (_e)"
 
-#: src/ephy-history-dialog.c:988
-msgid "Remove All History"
-msgstr "सारा इतिहास हटाएं"
+#: src/ephy-history-dialog.c:1105
+msgid "Unavailable in Incognito Mode"
+msgstr "गुप्त मोड में अनुपलब्ध"
+
+#: src/ephy-history-dialog.c:1108
+msgid "Clear History"
+msgstr "इतिहास साफ करें"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1850 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1880 src/ephy-permission-popover.c:271
 msgid "Notification Request"
 msgstr "अधिसूचना अनुरोध"
 
-#: src/ephy-location-entry.c:1854
+#: src/ephy-location-entry.c:1884
 msgid "Camera Request"
 msgstr "कैमरा अनुरोध"
 
-#: src/ephy-location-entry.c:1858
+#: src/ephy-location-entry.c:1888
 msgid "Microphone Request"
 msgstr "माइक्रोफोन अनुरोध"
 
-#: src/ephy-location-entry.c:1862
+#: src/ephy-location-entry.c:1892
 msgid "Location Request"
 msgstr "स्थान अनुरोध"
 
-#: src/ephy-location-entry.c:1866
+#: src/ephy-location-entry.c:1896
 msgid "Webcam and Microphone Request"
 msgstr "वेबकैम और माइक्रोफोन अनुरोध"
 
-#: src/ephy-location-entry.c:1870
+#: src/ephy-location-entry.c:1900
 msgid "Permission Request"
 msgstr "अनुमति अनुरोध"
 
@@ -2613,18 +2587,21 @@ msgstr "क्लिपबोर्ड पहुंच का अनुरोध
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "“%s” पर मौजूद पेज आपके क्लिपबोर्ड तक पहुंचना चाहता है"
 
-#: src/ephy-privacy-report.c:62
+#: src/ephy-privacy-report.c:65
 msgid "Blocked trackers on this site"
 msgstr "इस साइट पर ब्लॉक किए गए ट्रैकर"
 
-#: src/ephy-privacy-report.c:82
+#: src/ephy-privacy-report.c:85
 msgid "Sites this tracker was found on"
 msgstr "वे साइटें जिन पर यह ट्रैकर पाया गया"
 
-#: src/ephy-privacy-report.c:248
+#: src/ephy-privacy-report.c:254
 #, c-format
-msgid "GNOME Web prevented %u trackers from following you across websites"
-msgstr "गनोम वेब ने %u ट्रैकरों को वेबसाइटों पर आपका अनुसरण करने से रोका"
+msgid "GNOME Web prevented %u tracker from following you across websites"
+msgid_plural ""
+"GNOME Web prevented %u trackers from following you across websites"
+msgstr[0] "गनोम वेब ने %u ट्रैकर को वेबसाइटों पर आपका अनुसरण करने से रोका"
+msgstr[1] "गनोम वेब ने %u ट्रैकरों को वेबसाइटों पर आपका अनुसरण करने से रोका"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
@@ -2716,222 +2693,218 @@ msgstr "नया टैब खोलें"
 
 #  Edit menu
 #. Undo, redo.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:277
+#: src/ephy-window.c:913 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "पूर्ववत करें (_U)"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:914
 msgid "Re_do"
 msgstr "दोहराएं (_d)"
 
 #. Edit.
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:917 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "काटें (_t)"
 
-#: src/ephy-window.c:962 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "कॉपी (_C)"
 
-#: src/ephy-window.c:963 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:919 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "चिपकाएं (_P)"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:920
 msgid "_Paste Text Only"
 msgstr "केवल पाठ चिपकाएं (_P)"
 
-#: src/ephy-window.c:965 src/resources/gtk/location-entry.ui:313
-msgid "Select _All"
-msgstr "सभी चुनें (_A)"
-
-#: src/ephy-window.c:967
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "ईमेल द्वारा लिंक भेजें (_e)…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "पुनः लोड करें (_R)"
 
 #  Go menu
-#: src/ephy-window.c:970
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "पीछे (_B)"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "आगे (_F)"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
 msgstr "बुकमार्क जोड़ें (_k)…"
 
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "लिंक नई विंडो में खोलें (_N)"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "लिंक नए टैब में खोलें (_T)"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "गुप्त विंडो में लिंक खोलें (_n)"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "लिंक ऐसे सहेजें (_S)…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "लिंक पता कॉपी करें (_C)"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "ईमेल पता कॉपी करें (_C)"
 
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "नए टैब में छवि देखें (_I)"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "छवि पता कॉपी करें (_m)"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "छवि ऐसे सहेजें (_S)…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "वॉलपेपर के रूप में निर्धारित करें"
 
 #  File Menu
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "नई विंडो में वीडियो खोलें (_W)"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "नए टैब में वीडियो खोलें (_T)"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "वीडियो ऐसे सहेजें (_S)…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "वीडियो पता प्रतिलिपि करें (_C)"
 
 #  File Menu
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "नए विंडो में ऑडियो खोलें (_W)"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "नए टैब में ऑडियो खोलें (_T)"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "ऑडियो ऐसे सहेजें (_S)…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "ऑडियो पता प्रतिलिपि करें (_C)"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:966
 msgid "Save Pa_ge As…"
 msgstr "पृष्ठ ऐसे सहेजें (_g)…"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:967
 msgid "_Take Screenshot…"
 msgstr "स्क्रीनशॉट लें (_T)…"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:968
 msgid "_Page Source"
 msgstr "पृष्ठ स्रोत (_P)"
 
 #  Translators you should change these links to respect your locale.
 #  * For instance in .nl these should be
 #  * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1347
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "वेब पर “%s” खोजें"
 
 #  Links
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1376
 msgid "Open Link"
 msgstr "लिंक खोलें"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1378
 msgid "Open Link In New Tab"
 msgstr "नए टैब में लिंक खोलें"
 
-#: src/ephy-window.c:1422
+#: src/ephy-window.c:1380
 msgid "Open Link In New Window"
 msgstr "नई विंडो में लिंक खोलें"
 
 #  File menu
-#: src/ephy-window.c:1424
+#: src/ephy-window.c:1382
 msgid "Open Link In Incognito Window"
 msgstr "गुप्त विंडो में लिंक खोलें"
 
-#: src/ephy-window.c:2807
+#: src/ephy-window.c:2781
 msgid "_Ask Later"
 msgstr "बाद में पूछें (_A)"
 
-#: src/ephy-window.c:2808 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2782 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "अस्वीकारें (_D)"
 
-#: src/ephy-window.c:2809 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2783 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "स्वीकारें (_A)"
 
-#: src/ephy-window.c:3011 src/ephy-window.c:4529
+#: src/ephy-window.c:2986 src/ephy-window.c:4595
 msgid "Leave Website?"
 msgstr "वेबसाइट छोड़ें?"
 
-#: src/ephy-window.c:3012 src/ephy-window.c:4530 src/window-commands.c:1399
+#: src/ephy-window.c:2987 src/ephy-window.c:4596 src/window-commands.c:1451
 msgid "A form was modified and has not been submitted"
 msgstr "एक प्रपत्र संशोधित किया गया था और जमा नहीं किया गया है"
 
-#: src/ephy-window.c:3013 src/ephy-window.c:4531 src/window-commands.c:1403
+#: src/ephy-window.c:2988 src/ephy-window.c:4597 src/window-commands.c:1455
 msgid "_Discard Form"
 msgstr "प्रपत्र त्यागें (_D)"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:3009
 msgid "Download operation"
 msgstr "डाउनलोड अभियान"
 
-#: src/ephy-window.c:3036
+#: src/ephy-window.c:3011
 msgid "Show details"
 msgstr "विवरण दिखाएं"
 
-#: src/ephy-window.c:3038
+#: src/ephy-window.c:3013
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d डाउनलोड अभियान सक्रिय है"
 msgstr[1] "%d डाउनलोड अभियान सक्रिय है"
 
-#: src/ephy-window.c:3308
+#: src/ephy-window.c:3280
 msgid "Set as Default Browser?"
 msgstr "तयशुदा ब्राउज़र के रूप में निर्धारित?"
 
-#: src/ephy-window.c:3310
+#: src/ephy-window.c:3282
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "<i>वेब</i> को अपने तयशुदा वेब ब्राउज़र के रूप में और बाहरी लिंक खोलने के लिए उपयोग करें"
 
-#: src/ephy-window.c:3312
+#: src/ephy-window.c:3284
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -2939,17 +2912,21 @@ msgstr ""
 "अपने तयशुदा वेब ब्राउज़र के रूप में और बाहरी लिंक खोलने के लिए एपिफेनी तकनीकी पूर्वावलोकन "
 "का उपयोग करें"
 
-#: src/ephy-window.c:3316
+#: src/ephy-window.c:3288
 msgid "_Ask Again Later"
 msgstr "बाद में दोबारा पूछें (_A)"
 
-#: src/ephy-window.c:3317
+#: src/ephy-window.c:3289
 msgid "_No"
 msgstr "नहीं (_N)"
 
-#: src/ephy-window.c:3318
+#: src/ephy-window.c:3290
 msgid "_Yes"
 msgstr "हां (_Y)"
+
+#: src/ephy-window.c:3671
+msgid "Download started"
+msgstr "डाउनलोड प्रारंभ हुआ"
 
 #: src/ephy-window.c:3767
 msgid "Save password?"
@@ -2971,28 +2948,23 @@ msgstr "कभी न सहेजें"
 msgid "Save"
 msgstr "सहेजें"
 
-#. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4050 src/resources/gtk/action-bar-end.ui:118
-msgid "Bookmarks"
-msgstr "बुकमार्क"
-
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4726
 msgid "Close Multiple Tabs?"
 msgstr "एकाधिक टैब बंद करें?"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4727
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "यदि यह विंडो बंद है, तो सभी खुले टैब खो जाएंगे"
 
-#: src/ephy-window.c:4662
+#: src/ephy-window.c:4728
 msgid "C_lose Tabs"
 msgstr "टैब बंद करें (_l)"
 
-#: src/ephy-window.c:4755
+#: src/ephy-window.c:4825
 msgid "New tab opened"
 msgstr "नया टैब खोला गया"
 
-#: src/ephy-window.c:4759
+#: src/ephy-window.c:4829
 msgid "Switch"
 msgstr "बदले"
 
@@ -3066,8 +3038,8 @@ msgstr "पता मान्य URI नहीं है"
 #: src/preferences/ephy-search-engine-row.c:145
 #, c-format
 msgid ""
-"Address is not a valid URL. The address should look like https://www.example."
-"com/search?q=%s"
+"Address is not a valid URL. The address should look like https://"
+"www.example.com/search?q=%s"
 msgstr ""
 "पता मान्य URL नहीं है। पता https://www.example.com/search?q=%s जैसा दिखना चाहिए"
 
@@ -3103,32 +3075,36 @@ msgstr "क्या आप वास्तव में इस एक्सट�
 msgid "_Remove"
 msgstr "हटाएं (_R)"
 
-#: src/preferences/passwords-view.c:175
+#: src/preferences/passwords-view.c:123
+msgid "Password copied"
+msgstr "पासवर्ड कॉपी किया गया"
+
+#: src/preferences/passwords-view.c:174
 msgid "Delete All Passwords?"
 msgstr "सभी पासवर्ड मिटाएं?"
 
-#: src/preferences/passwords-view.c:176
+#: src/preferences/passwords-view.c:175
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "इससे स्थानीय रूप से संग्रहीत सभी पासवर्ड साफ हो जाएंगे, और इन्हें पूर्ववत नहीं किया जा सकेगा।"
 
-#: src/preferences/passwords-view.c:235
+#: src/preferences/passwords-view.c:234
 msgid "Copy password"
 msgstr "पासवर्ड कॉपी करें"
 
-#: src/preferences/passwords-view.c:242
+#: src/preferences/passwords-view.c:241
 msgid "Username"
 msgstr "उपयोक्तानाम"
 
-#: src/preferences/passwords-view.c:252
+#: src/preferences/passwords-view.c:251
 msgid "Copy username"
 msgstr "उपयोक्तानाम कॉपी करें"
 
-#: src/preferences/passwords-view.c:259
+#: src/preferences/passwords-view.c:258
 msgid "Password"
 msgstr "पासवर्ड"
 
-#: src/preferences/passwords-view.c:271
+#: src/preferences/passwords-view.c:270
 msgid "Remove Password"
 msgstr "पासवर्ड हटाएं"
 
@@ -3223,6 +3199,12 @@ msgstr "एक्सटेंशन"
 msgid "View Open Tabs"
 msgstr "खुले टैब देखें"
 
+#. Translators: tooltip for the bookmarks popover button
+#: src/resources/gtk/action-bar-end.ui:118
+#: src/resources/gtk/bookmarks-dialog.ui:29
+msgid "Bookmarks"
+msgstr "बुकमार्क"
+
 #  Go menu
 #. Translators: tooltip for the back button
 #: src/resources/gtk/action-bar-start.ui:17
@@ -3237,13 +3219,17 @@ msgstr "आगे"
 #. Translators: tooltip for the secret homepage button
 #: src/resources/gtk/action-bar-start.ui:98
 #: src/resources/gtk/extension-view.ui:62
-#: src/resources/gtk/prefs-general-page.ui:73
+#: src/resources/gtk/prefs-general-page.ui:71
 msgid "Homepage"
 msgstr "मुखपृष्ठ"
 
 #: src/resources/gtk/autofill-view.ui:4
 msgid "Autofill Data"
 msgstr "डेटा स्वत: भरें"
+
+#: src/resources/gtk/autofill-view.ui:25
+msgid "Personal"
+msgstr "व्यक्तिगत"
 
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
@@ -3273,6 +3259,10 @@ msgstr "अंतिम नाम"
 msgid "Full Name"
 msgstr "पूरा नाम"
 
+#: src/resources/gtk/autofill-view.ui:45
+msgid "Contact"
+msgstr "संपर्क"
+
 #: src/resources/gtk/autofill-view.ui:48
 msgid "User Name"
 msgstr "उपयोक्तानाम"
@@ -3284,6 +3274,12 @@ msgstr "ई-मेल"
 #: src/resources/gtk/autofill-view.ui:58
 msgid "Phone"
 msgstr "फोन"
+
+#: src/resources/gtk/autofill-view.ui:65
+#: src/resources/gtk/bookmark-properties.ui:29
+#: src/resources/gtk/search-engine-row.ui:46
+msgid "Address"
+msgstr "पता"
 
 #: src/resources/gtk/autofill-view.ui:68
 msgid "Street"
@@ -3308,6 +3304,10 @@ msgstr "शहर"
 #: src/resources/gtk/autofill-view.ui:93
 msgid "Country"
 msgstr "देश"
+
+#: src/resources/gtk/autofill-view.ui:100
+msgid "Credit Card"
+msgstr "क्रेडिट कार्ड"
 
 #: src/resources/gtk/autofill-view.ui:103
 msgid "Type"
@@ -3338,11 +3338,6 @@ msgstr "बुकमार्क"
 msgid "Name"
 msgstr "नाम"
 
-#: src/resources/gtk/bookmark-properties.ui:29
-#: src/resources/gtk/search-engine-row.ui:46
-msgid "Address"
-msgstr "पता"
-
 #: src/resources/gtk/bookmark-properties.ui:38
 #: src/resources/gtk/bookmark-properties.ui:71
 msgid "Tags"
@@ -3353,24 +3348,24 @@ msgid "Remove"
 msgstr "हटाएं"
 
 #  Bookmarks menu
-#: src/resources/gtk/bookmark-properties.ui:95
+#: src/resources/gtk/bookmark-properties.ui:94
 msgid "Add Tag"
 msgstr "टैग जोड़ें"
 
 #  Bookmarks menu
-#: src/resources/gtk/bookmark-properties.ui:105
+#: src/resources/gtk/bookmark-properties.ui:104
 msgid "Add new tag"
 msgstr "नया टैग जोड़ें"
 
-#: src/resources/gtk/bookmarks-dialog.ui:10
+#: src/resources/gtk/bookmarks-dialog.ui:44
 msgid "Search bookmarks"
 msgstr "बुकमार्क खोजें"
 
-#: src/resources/gtk/bookmarks-dialog.ui:102
+#: src/resources/gtk/bookmarks-dialog.ui:139
 msgid "No Bookmarks"
 msgstr "कोई बुकमार्क नहीं"
 
-#: src/resources/gtk/bookmarks-dialog.ui:103
+#: src/resources/gtk/bookmarks-dialog.ui:140
 msgid "Bookmarked pages will appear here"
 msgstr "बुकमार्क किए गए पृष्ठ यहां दिखाई देंगे"
 
@@ -3413,16 +3408,16 @@ msgstr ""
 "आप इस क्रिया को पूर्ववत नहीं कर सकते। जिस डेटा को आप साफ करना चुन रहे हैं वह हमेशा के "
 "लिए हटा दिया जाएगा।"
 
-#: src/resources/gtk/data-view.ui:14 src/resources/gtk/history-dialog.ui:38
-#: src/resources/gtk/history-dialog.ui:57
+#: src/resources/gtk/data-view.ui:14 src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:65
 msgid "Search"
 msgstr "खोजें"
 
-#: src/resources/gtk/data-view.ui:66 src/resources/gtk/history-dialog.ui:134
+#: src/resources/gtk/data-view.ui:66 src/resources/gtk/history-dialog.ui:144
 msgid "No Results Found"
 msgstr "कोई परिणाम नहीं मिला"
 
-#: src/resources/gtk/data-view.ui:67 src/resources/gtk/history-dialog.ui:135
+#: src/resources/gtk/data-view.ui:67 src/resources/gtk/history-dialog.ui:145
 msgid "Try a different search"
 msgstr "भिन्न खोज का प्रयास करें"
 
@@ -3530,6 +3525,7 @@ msgstr "उपकरण का नाम"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:126
 #: src/resources/gtk/password-popover.ui:94
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:91
 msgid "_Save"
 msgstr "सहेजें (_S)"
 
@@ -3542,27 +3538,26 @@ msgid "History"
 msgstr "इतिहास"
 
 #: src/resources/gtk/history-dialog.ui:20
-#: src/resources/gtk/location-entry.ui:98
-msgid "Clear"
-msgstr "साफ करें"
+msgid "_Clear"
+msgstr "साफ करें (_C)"
 
-#: src/resources/gtk/history-dialog.ui:31
+#: src/resources/gtk/history-dialog.ui:32
 msgid "Select Items"
 msgstr "वस्तुएं चुनें"
 
-#: src/resources/gtk/history-dialog.ui:76
+#: src/resources/gtk/history-dialog.ui:84
 msgid "Search history"
 msgstr "खोज इतिहास"
 
-#: src/resources/gtk/history-dialog.ui:127
+#: src/resources/gtk/history-dialog.ui:137
 msgid "No History Found"
 msgstr "कोई इतिहास नहीं मिला"
 
-#: src/resources/gtk/history-dialog.ui:128
+#: src/resources/gtk/history-dialog.ui:138
 msgid "Visited pages will be listed here"
 msgstr "देखे गए पृष्ठ यहां सूचीबद्ध किए जाएंगे"
 
-#: src/resources/gtk/history-dialog.ui:159
+#: src/resources/gtk/history-dialog.ui:171
 msgid "_Open"
 msgstr "खोलें (_O)"
 
@@ -3582,6 +3577,10 @@ msgstr "वेबसाइट सुरक्षा स्थिति और �
 #: src/resources/gtk/prefs-appearance-page.ui:59
 msgid "Reader Mode"
 msgstr "पाठक मोड"
+
+#: src/resources/gtk/location-entry.ui:98
+msgid "Clear"
+msgstr "साफ करें"
 
 #: src/resources/gtk/location-entry.ui:111
 msgid "View Available Passwords"
@@ -3631,7 +3630,7 @@ msgstr "दाएं तरफ के टैब बंद करें (_R)"
 msgid "Close _Other Tabs"
 msgstr "अन्य टैब बंद करें (_O)"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:269
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:288
 msgid "_Close"
 msgstr "बंद करें (_C)"
 
@@ -3782,11 +3781,11 @@ msgstr "कोई पासवर्ड नहीं मिला"
 msgid "Saved passwords will be listed here"
 msgstr "सहेजे गए पासवर्ड यहां सूचीबद्ध होंगे"
 
-#: src/resources/gtk/passwords-view.ui:69
+#: src/resources/gtk/passwords-view.ui:73
 msgid "_Copy Password"
 msgstr "पासवर्ड कॉपी करें (_C)"
 
-#: src/resources/gtk/passwords-view.ui:73
+#: src/resources/gtk/passwords-view.ui:77
 msgid "C_opy Username"
 msgstr "उपयोक्तानाम कॉपी करें (_o)"
 
@@ -3849,8 +3848,8 @@ msgstr "एक्सटेंशन को उनकी फाइलों स�
 #: src/resources/gtk/prefs-extensions-page.ui:27
 msgid ""
 "Epiphany is compatible with web extensions for Mozilla Firefox. To find and "
-"add web extensions, visit <a href=\"https://addons.mozilla.org\">addons."
-"mozilla.org</a>"
+"add web extensions, visit <a href=\"https://"
+"addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr ""
 "एपिफेनी मोज़िला फायरफॉक्स के वेब एक्सटेंशन के साथ संगत है। वेब एक्सटेंशन खोजने और जोड़ने के "
 "लिए, <a href='https://addons.mozilla.org'>addons.mozilla.org</a> पर जाएं"
@@ -3880,82 +3879,82 @@ msgid "_Title"
 msgstr "शीर्षक (_T)"
 
 #: src/resources/gtk/prefs-general-page.ui:40
-msgid "_Manage Additional URLs"
-msgstr "अतिरिक्त URL प्रबंधित करें (_M)"
+msgid "Additional _URLs"
+msgstr "अतिरिक्त _URL"
 
-#: src/resources/gtk/prefs-general-page.ui:56
+#: src/resources/gtk/prefs-general-page.ui:54
 msgid "Web Content"
 msgstr "वेब सामग्री"
 
-#: src/resources/gtk/prefs-general-page.ui:59
+#: src/resources/gtk/prefs-general-page.ui:57
 msgid "Block _Advertisements"
 msgstr "विज्ञापन अवरुद्ध करें (_A)"
 
-#: src/resources/gtk/prefs-general-page.ui:65
+#: src/resources/gtk/prefs-general-page.ui:63
 msgid "Block _Popup Windows"
 msgstr "पॉपअप विंडोज़ को अवरुद्ध करें (_P)"
 
-#: src/resources/gtk/prefs-general-page.ui:77
+#: src/resources/gtk/prefs-general-page.ui:75
 msgid "Most _Visited Pages"
 msgstr "सर्वाधिक देखे गए पृष्ठ (_V)"
 
-#: src/resources/gtk/prefs-general-page.ui:89
+#: src/resources/gtk/prefs-general-page.ui:87
 msgid "_Blank Page"
 msgstr "खाली पृष्ठ (_B)"
 
-#: src/resources/gtk/prefs-general-page.ui:102
+#: src/resources/gtk/prefs-general-page.ui:100
 msgid "_Custom"
 msgstr "तदनुकूल (_C)"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:124
 msgid "Ask o_n Download"
 msgstr "डाउनलोड पर पूछें (_n)"
 
-#: src/resources/gtk/prefs-general-page.ui:133
+#: src/resources/gtk/prefs-general-page.ui:131
 msgid "_Download Folder"
 msgstr "डाउनलोड फोल्डर (_D)"
 
-#: src/resources/gtk/prefs-general-page.ui:173
+#: src/resources/gtk/prefs-general-page.ui:171
 msgid "Search Engines"
 msgstr "खोज इंजन"
 
-#: src/resources/gtk/prefs-general-page.ui:181
+#: src/resources/gtk/prefs-general-page.ui:179
 msgid "Session"
 msgstr "सत्र"
 
-#: src/resources/gtk/prefs-general-page.ui:184
+#: src/resources/gtk/prefs-general-page.ui:182
 msgid "Start in _Incognito Mode"
 msgstr "गुप्त मोड में प्रारंभ करें (_I)"
 
-#: src/resources/gtk/prefs-general-page.ui:190
+#: src/resources/gtk/prefs-general-page.ui:188
 msgid "_Restore Tabs on Startup"
 msgstr "शुरुआत पर टैब पुनर्स्थापित करें (_R)"
 
-#: src/resources/gtk/prefs-general-page.ui:198
+#: src/resources/gtk/prefs-general-page.ui:196
 msgid "Browsing"
 msgstr "ब्राउजिंग"
 
-#: src/resources/gtk/prefs-general-page.ui:201
+#: src/resources/gtk/prefs-general-page.ui:199
 msgid "Mouse _Gestures"
 msgstr "माउस जेस्चर (_G)"
 
-#: src/resources/gtk/prefs-general-page.ui:207
+#: src/resources/gtk/prefs-general-page.ui:205
 msgid "S_witch Immediately to New Tabs"
 msgstr "नए टैब पर तुरंत जाएं (_w)"
 
-#: src/resources/gtk/prefs-general-page.ui:213
+#: src/resources/gtk/prefs-general-page.ui:211
 msgid "Touch _Navigation Gestures"
 msgstr "स्पर्श नेविगेशन जेस्चर (_N)"
 
-#: src/resources/gtk/prefs-general-page.ui:236
+#: src/resources/gtk/prefs-general-page.ui:234
 msgid "_Spell Checking"
 msgstr "वर्तनी जांच (_S)"
 
-#: src/resources/gtk/prefs-general-page.ui:244
+#: src/resources/gtk/prefs-general-page.ui:242
 msgid "Developer"
 msgstr "विकासकर्ता"
 
-#: src/resources/gtk/prefs-general-page.ui:247
+#: src/resources/gtk/prefs-general-page.ui:245
 msgid "Show D_eveloper Actions"
 msgstr "विकासकर्ता क्रियाएं दिखाएं"
 
@@ -3980,8 +3979,12 @@ msgid "Intelligent _Tracking Prevention"
 msgstr "बुद्धिमान ट्रैकिंग रोकथाम (_T)"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
-msgid "Allow websites to store cookies, databases, and local storage data"
-msgstr "वेबसाइटों को कुकी, डेटाबेस और स्थानीय संग्रहण डेटा संग्रहीत करने की अनुमति दें"
+msgid ""
+"Allow websites to store cookies, databases, and local storage data. "
+"Disabling website data storage will break many websites."
+msgstr ""
+"वेबसाइटों को कुकी, डेटाबेस और स्थानीय संग्रहण डेटा संग्रहीत करने की अनुमति दें। वेबसाइट डेटा "
+"संग्रहण को अक्षम करने से कई वेबसाइटें सही ढ़ंग से काम नहीं करेंगीं।"
 
 #: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "_Website Data Storage"
@@ -4028,22 +4031,28 @@ msgid "Autofill _Data"
 msgstr "डेटा स्वत: भरें (_D)"
 
 #: src/resources/gtk/privacy-report.ui:10
-msgid "Overview"
-msgstr "अवलोकन"
-
-#: src/resources/gtk/privacy-report.ui:21
 msgid "Privacy Report"
 msgstr "गोपनीयता रिपोर्ट"
 
-#: src/resources/gtk/privacy-report.ui:41
+#: src/resources/gtk/privacy-report.ui:34
 msgid "_Websites"
 msgstr "वेबसाइट (_W)"
 
-#: src/resources/gtk/privacy-report.ui:61
+#: src/resources/gtk/privacy-report.ui:59
 msgid "_Trackers"
 msgstr "ट्रैकर (_T)"
 
-#: src/resources/gtk/privacy-report.ui:90
+#: src/resources/gtk/privacy-report.ui:91
+msgid "No Trackers Blocked"
+msgstr "कोई ट्रैकर अवरुद्ध नहीं किए गए"
+
+#: src/resources/gtk/privacy-report.ui:92
+msgid ""
+"Trackers that tried to collect personal information across websites will "
+"appear here"
+msgstr "वेबसाइटों पर व्यक्तिगत जानकारी एकत्र करने का प्रयास करने वाले ट्रैकर यहां दिखाई देंगे"
+
+#: src/resources/gtk/privacy-report.ui:105
 msgid "Details"
 msgstr "विवरण"
 
@@ -4389,11 +4398,11 @@ msgstr ""
 "उपयोग करते हैं। किसी टैब के नाम पर डबल क्लिक करके उसे खोलें (स्थानीय टैब के अंतर्गत टैब नहीं "
 "खोले जा सकते)।"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:15
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:7
 msgid "Additional URLs"
 msgstr "अतिरिक्त URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:32
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:25
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
 "application. If you omit the URL scheme, the one from the currently loaded "
@@ -4403,22 +4412,18 @@ msgstr ""
 "URL योजना को छोड़ देते हैं, तो वर्तमान में लोड किए गए URL में से एक का उपयोग किया जाएगा।"
 
 # libgnomeui/gnome-href.c:118
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:54
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:35
 msgctxt "Column header in the Additional URLs dialog"
 msgid "URL"
 msgstr "URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:81
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:78
 msgid "Add New URL"
 msgstr "नया URL जोड़ें"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:87
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:84
 msgid "Remove Selected URLs"
 msgstr "चयनित URL हटाएं"
-
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:94
-msgid "C_lear All"
-msgstr "सभी साफ करें (_l)"
 
 #  Translators you should change these links to respect your locale.
 #  * For instance in .nl these should be
@@ -4507,150 +4512,149 @@ msgid "Failed to determine initiating URI"
 msgstr "आरंभिक URI निर्धारित करने में विफल"
 
 #: src/window-commands.c:125
-msgid "GVDB File"
-msgstr "GVDB फाइल"
-
-#: src/window-commands.c:126
 msgid "HTML File"
 msgstr "HTML फाइल"
 
-#: src/window-commands.c:127
+#: src/window-commands.c:126
 msgid "Firefox"
 msgstr "फायरफॉक्स"
 
-#: src/window-commands.c:128 src/window-commands.c:729
+#: src/window-commands.c:127 src/window-commands.c:725
 msgid "Chrome"
 msgstr "क्रोम"
 
-#: src/window-commands.c:129 src/window-commands.c:730
+#: src/window-commands.c:128 src/window-commands.c:726
 msgid "Chromium"
 msgstr "क्रोमियम"
 
-#: src/window-commands.c:144 src/window-commands.c:595
-#: src/window-commands.c:864 src/window-commands.c:906
-msgid "Ch_oose File"
-msgstr "फाइल चुनें (_o)"
+#: src/window-commands.c:170 src/window-commands.c:566
+#: src/window-commands.c:888 src/window-commands.c:928
+msgid "_Select File"
+msgstr "फाइल चुनें (_S)"
 
-#: src/window-commands.c:146 src/window-commands.c:866
+#: src/window-commands.c:172 src/window-commands.c:890
 msgid "I_mport"
 msgstr "आयात करें (_m)"
 
-#: src/window-commands.c:306 src/window-commands.c:396
-#: src/window-commands.c:446 src/window-commands.c:490
-#: src/window-commands.c:513 src/window-commands.c:529
+#: src/window-commands.c:325 src/window-commands.c:414
+#: src/window-commands.c:458 src/window-commands.c:481
+#: src/window-commands.c:497
 msgid "Bookmarks successfully imported!"
 msgstr "बुकमार्क सफलतापूर्वक आयात किए गए!"
 
-#: src/window-commands.c:325
+#: src/window-commands.c:344
 msgid "Select Profile"
 msgstr "प्रोफाइल चुनें"
 
-#: src/window-commands.c:407 src/window-commands.c:457
-#: src/window-commands.c:687 src/window-commands.c:810
-#: src/window-commands.c:1005
+#: src/window-commands.c:425 src/window-commands.c:683
+#: src/window-commands.c:809 src/window-commands.c:1029
 msgid "Choose File"
 msgstr "फाइल चुनें"
 
-#: src/window-commands.c:578
+#: src/window-commands.c:552
 msgid "Import Bookmarks"
 msgstr "बुकमार्क आयात करें"
 
-#: src/window-commands.c:608 src/window-commands.c:919
-msgid "From:"
-msgstr "प्रेषक:"
+#: src/window-commands.c:580 src/window-commands.c:942
+msgid "File Type"
+msgstr "फाइल प्रकार"
 
-#: src/window-commands.c:648
+#: src/window-commands.c:644
 msgid "Bookmarks successfully exported!"
 msgstr "बुकमार्क सफलतापूर्वक निर्यात किए गए!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:698
+#: src/window-commands.c:694
 msgid "bookmarks.html"
 msgstr "बुकमार्क.html"
 
-#: src/window-commands.c:728
+#: src/window-commands.c:724
 msgid "CSV File"
 msgstr "CSV फाइल"
 
-#: src/window-commands.c:773 src/window-commands.c:799
+#: src/window-commands.c:772 src/window-commands.c:798
 msgid "Passwords successfully imported!"
 msgstr "पासवर्ड सफलतापूर्वक आयात किए गए!"
 
-#: src/window-commands.c:890
+#: src/window-commands.c:914
 msgid "Import Passwords"
 msgstr "पासवर्ड आयात करें"
 
-#: src/window-commands.c:966
+#: src/window-commands.c:990
 msgid "Passwords successfully exported!"
 msgstr "पासवर्ड सफलतापूर्वक निर्यात किए गए!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1015
+#: src/window-commands.c:1039
 msgid "passwords.csv"
 msgstr "पासवर्ड.csv"
 
-#: src/window-commands.c:1223
+#: src/window-commands.c:1271
 msgid "Epiphany Canary"
 msgstr "एपिफेनी कैनरी"
 
 #  Translator credits
-#: src/window-commands.c:1246
+#: src/window-commands.c:1294
 msgid "translator-credits"
 msgstr ""
 "राजेश रंजन (rranjan@redhat.com, rajeshkajha@yahoo.com)\n"
 "रविशंकर श्रीवास्तव (raviratlami@yahoo.com)\n"
 "Scrambled777 <weblate.scrambled777@simplelogin.com>"
 
-#: src/window-commands.c:1398
+#: src/window-commands.c:1450
 msgid "Reload Website?"
 msgstr "वेबसाइट पुनः लोड करें?"
 
-#: src/window-commands.c:1999
+#: src/window-commands.c:1998
+msgid "New Web App"
+msgstr "नई वेब ऐप"
+
+#: src/window-commands.c:2050
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "अनुप्रयोग “%s” उपयोग के लिए तैयार है"
 
-#: src/window-commands.c:2002
+#: src/window-commands.c:2053
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "अनुप्रयोग “%s” नहीं बनाया जा सका: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2012
+#: src/window-commands.c:2065
 msgid "Launch"
 msgstr "लांच करें"
 
-#: src/window-commands.c:2078
+#: src/window-commands.c:2151
 msgid "Replace Existing Web App?"
 msgstr "मौजूदा वेब ऐप बदलें?"
 
-#: src/window-commands.c:2081
+#: src/window-commands.c:2154
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "“%s” नाम का एक अनुप्रयोग पहले से मौजूद है, इसे बदलने से यह अधिलेखित हो जाएगा"
 
-#: src/window-commands.c:2086
+#: src/window-commands.c:2159
 msgid "_Replace"
 msgstr "बदलें (_R)"
 
-#: src/window-commands.c:2452
+#: src/window-commands.c:2545
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2456
+#: src/window-commands.c:2549
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2502
+#: src/window-commands.c:2595
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2983
+#: src/window-commands.c:3054
 msgid "Enable Caret Browsing Mode?"
 msgstr "कैरेट ब्राउज़िंग मोड सक्षम करें?"
 
-#: src/window-commands.c:2984
+#: src/window-commands.c:3055
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4660,6 +4664,6 @@ msgstr ""
 "रखती है, जिससे आप अपने कीबोर्ड के साथ इधर-उधर घूम सकते हैं। क्या आप कैरेट ब्राउज़िंग सक्षम "
 "करना चाहते हैं?"
 
-#: src/window-commands.c:2989
+#: src/window-commands.c:3060
 msgid "_Enable"
 msgstr "सक्षम करें (_E)"
