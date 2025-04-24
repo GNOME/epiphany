@@ -27,7 +27,6 @@
 #include "ephy-shell.h"
 
 enum {
-  PASSWORDS_ROW_ACTIVATED,
   CLEAR_DATA_ROW_ACTIVATED,
   AUTOFILL_ROW_ACTIVATED,
 
@@ -45,9 +44,6 @@ struct _PrefsPrivacyPage {
   GtkWidget *search_suggestions_box;
   GtkWidget *enable_google_search_suggestions_row;
 
-  /* Passwords */
-  GtkWidget *remember_passwords_row;
-
   /* Autofill Data */
   GtkWidget *autofill_data_row;
 };
@@ -61,13 +57,6 @@ on_autofill_row_activated (GtkWidget        *row,
                            PrefsPrivacyPage *privacy_page)
 {
   g_signal_emit (privacy_page, signals[AUTOFILL_ROW_ACTIVATED], 0);
-}
-
-static void
-on_passwords_row_activated (GtkWidget        *row,
-                            PrefsPrivacyPage *privacy_page)
-{
-  g_signal_emit (privacy_page, signals[PASSWORDS_ROW_ACTIVATED], 0);
 }
 
 static void
@@ -99,15 +88,6 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
                    G_SETTINGS_BIND_DEFAULT);
 
   /* ======================================================================== */
-  /* ========================== Passwords =================================== */
-  /* ======================================================================== */
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
-                   privacy_page->remember_passwords_row,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-
-  /* ======================================================================== */
   /* ====================== Forms and Autofill ============================== */
   /* ======================================================================== */
   g_settings_bind (web_settings,
@@ -134,13 +114,6 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-privacy-page.ui");
 
-  signals[PASSWORDS_ROW_ACTIVATED] =
-    g_signal_new ("passwords-row-activated",
-                  EPHY_TYPE_PREFS_PRIVACY_PAGE,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
-
   signals[CLEAR_DATA_ROW_ACTIVATED] =
     g_signal_new ("clear-data-row-activated",
                   EPHY_TYPE_PREFS_PRIVACY_PAGE,
@@ -163,15 +136,11 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, search_suggestions_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_google_search_suggestions_row);
 
-  /* Passwords */
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_row);
-
   /* Forms and Autofill */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, autofill_data_row);
 
   /* Template file callbacks */
   gtk_widget_class_bind_template_callback (widget_class, on_autofill_row_activated);
-  gtk_widget_class_bind_template_callback (widget_class, on_passwords_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_data_row_activated);
 }
 

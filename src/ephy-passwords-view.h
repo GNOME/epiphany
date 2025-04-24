@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2013 Red Hat, Inc.
+ *  Copyright © 2025 Jan-Michael Brummer
  *
  *  This file is part of Epiphany.
  *
@@ -20,12 +20,18 @@
 
 #pragma once
 
-#include "ephy-data-view.h"
-#include "ephy-password-manager.h"
+#include "ephy-window.h"
+
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_PASSWORDS_VIEW (ephy_passwords_view_get_type ())
-G_DECLARE_FINAL_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY, PASSWORDS_VIEW, EphyDataView);
+
+G_DECLARE_FINAL_TYPE (EphyPasswordsView, ephy_passwords_view, EPHY, PASSWORDS_VIEW, AdwDialog)
+
+void
+ephy_passwords_show (EphyWindow *window);
 
 G_END_DECLS
+

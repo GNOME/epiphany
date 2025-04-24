@@ -245,6 +245,9 @@ void window_cmd_switch_new_tab                  (GSimpleAction *action,
 void window_cmd_privacy_report                  (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_passwords                       (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_export_passwords                (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

@@ -48,6 +48,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-password-export.h"
 #include "ephy-password-import.h"
+#include "ephy-passwords-view.h"
 #include "ephy-pixbuf-utils.h"
 #include "ephy-prefs-dialog.h"
 #include "ephy-prefs.h"
@@ -3384,4 +3385,14 @@ window_cmd_privacy_report (GSimpleAction *action,
   EphyWindow *window = user_data;
 
   ephy_privacy_report_show (window);
+}
+
+void
+window_cmd_passwords (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+
+  ephy_passwords_show (window);
 }
