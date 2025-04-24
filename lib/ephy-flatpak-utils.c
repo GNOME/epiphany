@@ -114,8 +114,6 @@ ephy_open_uri (const char *uri,
   window = gtk_application_get_active_window (GTK_APPLICATION (application));
   parent = xdp_parent_new_gtk (window);
 
-  g_assert (require_consent);
-
   if (is_dir)
     xdp_portal_open_directory (portal, parent, uri,
                                require_consent ? XDP_OPEN_URI_FLAG_ASK : XDP_OPEN_URI_FLAG_NONE,
