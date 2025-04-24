@@ -224,6 +224,14 @@ ephy_suggestion_get_unescaped_title (EphySuggestion *self)
 }
 
 const char *
+ephy_suggestion_get_subtitle (EphySuggestion *self)
+{
+  g_assert (EPHY_IS_SUGGESTION (self));
+
+  return dzl_suggestion_get_subtitle (DZL_SUGGESTION (self));
+}
+
+const char *
 ephy_suggestion_get_uri (EphySuggestion *self)
 {
   g_assert (EPHY_IS_SUGGESTION (self));

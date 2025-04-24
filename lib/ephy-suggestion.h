@@ -40,6 +40,7 @@ EphySuggestion *ephy_suggestion_new_without_subtitle     (const char *title_mark
                                                           const char *uri);
 const char     *ephy_suggestion_get_unescaped_title      (EphySuggestion *self);
 const char     *ephy_suggestion_get_uri                  (EphySuggestion *self);
+const char     *ephy_suggestion_get_subtitle             (EphySuggestion *self);
 
 void            ephy_suggestion_set_favicon              (EphySuggestion  *self,
                                                           cairo_surface_t *favicon);

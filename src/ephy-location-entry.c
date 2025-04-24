@@ -90,6 +90,9 @@ struct _EphyLocationEntry {
   gboolean show_suggestions;
 
   gboolean select_all_selected;
+  gboolean no_completion;
+
+  gint completion_handle;
 
   gboolean saved_reader_mode_visible_state;
 
@@ -829,6 +832,110 @@ activate_shortcut_cb (EphyLocationEntry *entry,
   return TRUE;
 }
 
+static char *
+compute_prefix (EphyLocationEntry *self,
+                const char        *key)
+{
+  int n_items = g_list_model_get_n_items (G_LIST_MODEL (self->suggestions_model));
+  g_autofree char *prefix = NULL;
+  gint text_offset = 0;
+
+  if (g_str_has_prefix (key, "http://"))
+    key += strlen ("http://");
+  else if (g_str_has_prefix (key, "https://"))
+    key += strlen ("https://");
+
+  for (int idx = 0; idx < n_items; idx++) {
+    g_autoptr (EphySuggestion) suggestion = NULL;
+    g_autofree char *text = NULL;
+    const char *subtitle;
+
+    suggestion = g_list_model_get_item (G_LIST_MODEL (self->suggestions_model), idx);
+    subtitle = ephy_suggestion_get_subtitle (suggestion);
+    if (!subtitle)
+      continue;
+
+    text = g_strdup (subtitle);
+
+    if (g_str_has_prefix (text, "http://"))
+      text_offset = strlen ("http://");
+    else if (g_str_has_prefix (text, "https://"))
+      text_offset = strlen ("https://");
+
+    if (text && g_str_has_prefix (text + text_offset, key)) {
+      if (!prefix) {
+        prefix = g_strdup (text + text_offset);
+      } else {
+        char *p = prefix;
+        char *q = text + text_offset;
+
+        while (*p && *p == *q) {
+          p++;
+          q++;
+        }
+
+        *p = '\0';
+
+        if (p > prefix) {
+          q = g_utf8_find_prev_char (prefix, p);
+
+          switch  (g_utf8_get_char_validated (q, p - q)) {
+            case (gunichar) - 2:
+            case (gunichar) - 1:
+              *q = 0;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+  }
+
+  return g_steal_pointer (&prefix);
+}
+
+static void
+backspace_cb (GtkText           *text,
+              EphyLocationEntry *entry)
+{
+  entry->no_completion = TRUE;
+}
+
+static int
+calc_and_set_prefix (gpointer user_data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
+  char *prefix;
+
+  prefix = compute_prefix (entry, gtk_editable_get_text (GTK_EDITABLE (entry->text)));
+  if (prefix) {
+    int key_len;
+    int prefix_len;
+    const char *key;
+
+    prefix_len = g_utf8_strlen (prefix, -1);
+
+    key = gtk_editable_get_text (GTK_EDITABLE (entry));
+    key_len = g_utf8_strlen (key, -1);
+
+    if (prefix_len > key_len) {
+      int pos = prefix_len;
+
+      g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
+
+      gtk_editable_insert_text (GTK_EDITABLE (entry), prefix + strlen (key), -1, &pos);
+      gtk_editable_select_region (GTK_EDITABLE (entry), key_len, prefix_len);
+
+      g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
+    }
+  }
+
+  entry->completion_handle = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 editable_changed_cb (GtkEditable       *editable,
                      EphyLocationEntry *entry)
@@ -844,6 +951,13 @@ editable_changed_cb (GtkEditable       *editable,
 
     ephy_embed_set_typed_input (embed, text);
   }
+
+  g_clear_handle_id (&entry->completion_handle, g_source_remove);
+
+  if (!entry->no_completion)
+    entry->completion_handle = g_idle_add_full (G_PRIORITY_HIGH, calc_and_set_prefix, entry, NULL);
+
+  entry->no_completion = FALSE;
 
   entry->user_changed = TRUE;
   entry->can_redo = FALSE;
@@ -1588,6 +1702,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, context_menu);
 
   gtk_widget_class_bind_template_callback (widget_class, editable_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, backspace_cb);
   gtk_widget_class_bind_template_callback (widget_class, update_actions);
   gtk_widget_class_bind_template_callback (widget_class, activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, cut_clipboard_cb);
@@ -1674,6 +1789,8 @@ ephy_location_entry_init (EphyLocationEntry *entry)
   update_actions (entry);
   g_signal_connect_object (clipboard, "changed", G_CALLBACK (update_actions),
                            entry, G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (G_OBJECT (entry->text), "backspace", G_CALLBACK (backspace_cb), entry, 0);
 }
 
 static const char *
