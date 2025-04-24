@@ -1183,11 +1183,7 @@ void
 ephy_window_sync_bookmark_state (EphyWindow            *window,
                                  EphyBookmarkIconState  state)
 {
-  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
   GtkWidget *lentry;
-
-  if (action_bar_end)
-    ephy_action_bar_end_set_bookmark_icon_state (EPHY_ACTION_BAR_END (action_bar_end), state);
 
   lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
 
@@ -1200,7 +1196,6 @@ sync_tab_bookmarked_status (EphyWebView *view,
                             GParamSpec  *pspec,
                             EphyWindow  *window)
 {
-  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   EphyEmbedShellMode mode;
@@ -1227,7 +1222,6 @@ sync_tab_bookmarked_status (EphyWebView *view,
                      : EPHY_BOOKMARK_ICON_EMPTY;
   }
 
-  ephy_action_bar_end_set_bookmark_icon_state (EPHY_ACTION_BAR_END (action_bar_end), state);
   ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (widget), state);
 }
 
