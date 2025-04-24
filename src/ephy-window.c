@@ -50,7 +50,7 @@
 #include "ephy-permissions-manager.h"
 #include "ephy-permission-popover.h"
 #include "ephy-prefs.h"
-#include "ephy-security-popover.h"
+#include "ephy-security-dialog.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -3567,14 +3567,6 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
-security_popover_closed_cb (GtkPopover    *popover,
-                            GtkMenuButton *button)
-{
-  gtk_menu_button_popdown (button);
-  gtk_menu_button_set_popover (button, NULL);
-}
-
-static void
 title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
                               GtkMenuButton   *menu_button,
                               gpointer         user_data)
@@ -3585,20 +3577,17 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
   EphySecurityLevel security_level;
-  GtkWidget *security_popover;
+  GtkWidget *security_dialog;
 
   view = ephy_embed_get_web_view (window->active_embed);
   ephy_web_view_get_security_level (view, &security_level, &address, &certificate, &tls_errors);
 
-  security_popover = ephy_security_popover_new (address,
-                                                certificate,
-                                                tls_errors,
-                                                security_level);
+  security_dialog = ephy_security_dialog_new (address,
+                                              certificate,
+                                              tls_errors,
+                                              security_level);
 
-  g_signal_connect (security_popover, "closed",
-                    G_CALLBACK (security_popover_closed_cb), menu_button);
-  gtk_menu_button_set_popover (menu_button, security_popover);
-  gtk_menu_button_popup (menu_button);
+  adw_dialog_present (ADW_DIALOG (security_dialog), GTK_WIDGET (window));
 }
 
 static GtkWidget *

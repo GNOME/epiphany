@@ -44,7 +44,7 @@ libephymain_sources = [
   'ephy-password-popover.c',
   'ephy-passwords-view.c',
   'ephy-privacy-report.c',
-  'ephy-security-popover.c',
+  'ephy-security-dialog.c',
   'ephy-session.c',
   'ephy-shell.c',
   'ephy-suggestion-model.c',

@@ -71,9 +71,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuButton" id="security_button">
+      <object class="GtkButton" id="security_button">
         <property name="tooltip-text" translatable="yes">Website Security Status and Permissions</property>
         <property name="valign">center</property>
+        <signal name="clicked" handler="security_button_clicked_cb" swapped="yes"/>
         <style>
           <class name="entry-icon"/>
           <class name="start"/>

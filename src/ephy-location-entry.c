@@ -857,6 +857,12 @@ editable_changed_cb (GtkEditable       *editable,
 }
 
 static void
+security_button_clicked_cb (EphyLocationEntry *entry)
+{
+  g_signal_emit_by_name (entry, "lock-clicked", NULL);
+}
+
+static void
 reader_mode_clicked_cb (EphyLocationEntry *entry)
 {
   entry->reader_mode_active = !entry->reader_mode_active;
@@ -1003,13 +1009,6 @@ update_reader_icon (EphyLocationEntry *entry)
     name = "ephy-reader-mode-symbolic";
 
   gtk_button_set_icon_name (GTK_BUTTON (entry->reader_mode_button), name);
-}
-
-static void
-create_security_popup_cb (GtkMenuButton     *button,
-                          EphyLocationEntry *entry)
-{
-  g_signal_emit_by_name (entry, "lock-clicked", button);
 }
 
 static void
@@ -1594,6 +1593,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, cut_clipboard_cb);
   gtk_widget_class_bind_template_callback (widget_class, copy_clipboard_cb);
   gtk_widget_class_bind_template_callback (widget_class, reader_mode_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, security_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, suggestions_popover_notify_visible_cb);
   gtk_widget_class_bind_template_callback (widget_class, suggestion_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, update_suggestions_popover);
@@ -1652,11 +1652,6 @@ ephy_location_entry_init (EphyLocationEntry *entry)
   entry->select_all_selected = FALSE;
 
   gtk_widget_init_template (GTK_WIDGET (entry));
-
-  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (entry->security_button),
-                                         (GtkMenuButtonCreatePopupFunc)create_security_popup_cb,
-                                         entry,
-                                         NULL);
 
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
@@ -1770,8 +1765,8 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
     icon_name = ephy_security_level_to_icon_name (security_level);
 
   if (icon_name)
-    gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (entry->security_button),
-                                   icon_name);
+    gtk_button_set_icon_name (GTK_BUTTON (entry->security_button),
+                              icon_name);
 
   gtk_widget_set_visible (entry->security_button, !!icon_name);
 

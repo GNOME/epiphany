@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <adwaita.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
@@ -27,13 +28,13 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SECURITY_POPOVER (ephy_security_popover_get_type())
+#define EPHY_TYPE_SECURITY_DIALOG (ephy_security_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (EphySecurityPopover, ephy_security_popover, EPHY, SECURITY_POPOVER, GtkPopover)
+G_DECLARE_FINAL_TYPE (EphySecurityDialog, ephy_security_dialog, EPHY, SECURITY_DIALOG, AdwDialog)
 
-GtkWidget *ephy_security_popover_new      (const char *address,
-                                           GTlsCertificate *certificate,
-                                           GTlsCertificateFlags tls_errors,
-                                           EphySecurityLevel security_level);
+GtkWidget *ephy_security_dialog_new      (const char           *address,
+                                          GTlsCertificate      *certificate,
+                                          GTlsCertificateFlags  tls_errors,
+                                          EphySecurityLevel     security_level);
 
 G_END_DECLS
