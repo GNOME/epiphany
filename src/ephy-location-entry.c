@@ -91,6 +91,8 @@ struct _EphyLocationEntry {
 
   gboolean select_all_selected;
 
+  gboolean saved_reader_mode_visible_state;
+
   guint dns_prefetch_handle_id;
 
   guint user_changed : 1;
@@ -683,8 +685,16 @@ update_entry_style (EphyLocationEntry *self,
 
   attrs = pango_attr_list_new ();
 
-  if (focus)
+  if (focus) {
+    self->saved_reader_mode_visible_state = gtk_widget_get_visible (self->reader_mode_button);
+
+    if (self->saved_reader_mode_visible_state)
+      ephy_location_entry_set_reader_mode_visible (self, FALSE);
     goto out;
+  }
+
+  if (self->saved_reader_mode_visible_state)
+    ephy_location_entry_set_reader_mode_visible (self, TRUE);
 
   uri = g_uri_parse (text, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!uri)
