@@ -673,13 +673,28 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
   webkit_uri_scheme_request_finish_error (request, error);
 }
 
+static gboolean
+is_private_profile_mode (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ||
+         priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO ||
+         priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
+}
+
+gboolean
+ephy_embed_shell_should_remember_passwords (EphyEmbedShell *shell)
+{
+  return !is_private_profile_mode (shell) && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
+}
+
 static void
 initialize_web_process_extensions (WebKitWebContext *web_context,
                                    EphyEmbedShell   *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autoptr (GVariant) user_data = NULL;
-  gboolean private_profile;
 
 #if DEVELOPER_MODE
   webkit_web_context_set_web_process_extensions_directory (web_context, BUILD_ROOT "/embed/web-process-extension");
@@ -687,12 +702,10 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
   webkit_web_context_set_web_process_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
 #endif
 
-  private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
-  user_data = g_variant_new ("(smsbbv)",
+  user_data = g_variant_new ("(smsbv)",
                              priv->guid,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
-                             g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS),
-                             private_profile,
+                             ephy_embed_shell_should_remember_passwords (shell),
                              priv->web_extension_initialization_data);
   webkit_web_context_set_web_process_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
@@ -776,13 +789,10 @@ remember_passwords_setting_changed_cb (GSettings      *settings,
                                        EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  gboolean should_remember_passwords;
-
-  should_remember_passwords = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
 
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("PasswordManager.SetShouldRememberPasswords",
-                                                                              g_variant_new ("b", should_remember_passwords)));
+                                                                              g_variant_new ("b", ephy_embed_shell_should_remember_passwords (shell))));
 }
 
 static void
@@ -883,11 +893,13 @@ ephy_embed_shell_startup (GApplication *application)
   g_signal_connect_object (priv->network_session, "download-started",
                            G_CALLBACK (download_started_cb), shell, G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
-                           G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
-
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
                            G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
+
+  if (!is_private_profile_mode (shell)) {
+    g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
+                             G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
+  }
 }
 
 static void
