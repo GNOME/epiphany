@@ -156,6 +156,7 @@ struct _EphyWindow {
   GHashTable *action_labels;
   EphyTabView *tab_view;
   AdwTabBar *tab_bar;
+  GtkWidget *action_bar_revealer;
   GtkWidget *action_bar;
   GtkWidget *overlay_split_view;
   GtkWidget *bottom_sheet;
@@ -3956,6 +3957,16 @@ insert_action_group (const char   *prefix,
   gtk_widget_insert_action_group (widget, prefix, group);
 }
 
+static gboolean
+scroll_cb (EphyWindow *self,
+           double      dx,
+           double      dy)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), dy == -1);
+
+  return FALSE;
+}
+
 static void
 ephy_window_constructed (GObject *object)
 {
@@ -3971,6 +3982,7 @@ ephy_window_constructed (GObject *object)
   AdwBreakpoint *breakpoint;
   EphyDownloadsManager *downloads_manager;
   g_autoptr (GtkBuilder) builder = NULL;
+  GtkEventController *scroll_controller;
 
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
@@ -4056,6 +4068,12 @@ ephy_window_constructed (GObject *object)
   window->overview = adw_tab_overview_new ();
   window->fullscreen_box = ephy_fullscreen_box_new ();
 
+  /* Add scroll container to hide action bar during scrolling */
+  scroll_controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL | GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  gtk_event_controller_set_propagation_phase (scroll_controller, GTK_PHASE_CAPTURE);
+  g_signal_connect_object (scroll_controller, "scroll", G_CALLBACK (scroll_cb), window, G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (window), scroll_controller);
+
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/tab-overview-menu.ui");
 
   adw_tab_overview_set_enable_new_tab (ADW_TAB_OVERVIEW (window->overview), TRUE);
@@ -4081,7 +4099,10 @@ ephy_window_constructed (GObject *object)
   /* Setup the toolbar. */
   window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
+  window->action_bar_revealer = gtk_revealer_new ();
   window->action_bar = GTK_WIDGET (ephy_action_bar_new (window));
+  gtk_revealer_set_child (GTK_REVEALER (window->action_bar_revealer), window->action_bar);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (window->action_bar_revealer), TRUE);
   window->toast_overlay = adw_toast_overlay_new ();
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
 
@@ -4093,7 +4114,7 @@ ephy_window_constructed (GObject *object)
     ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
 
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
-  ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar);
+  ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar_revealer);
 
   adw_tab_overview_set_child (ADW_TAB_OVERVIEW (window->overview),
                               GTK_WIDGET (window->fullscreen_box));
