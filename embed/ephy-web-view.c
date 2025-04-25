@@ -2366,6 +2366,32 @@ ephy_web_view_autofill_disable_popup (EphyWebView *web_view)
   web_view->autofill_popup_enabled = FALSE;
 }
 
+static void
+authenticate_succeeded_cb (WebKitAuthenticationRequest *request,
+                           WebKitCredential            *credential)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyPasswordManager *password_manager;
+  g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
+  g_autofree char *origin = NULL;
+
+  if (webkit_credential_get_persistence (credential) != WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT ||
+      !ephy_embed_shell_should_remember_passwords (shell))
+    return;
+
+  security_origin = webkit_authentication_request_get_security_origin (request);
+  origin = webkit_security_origin_to_string (security_origin);
+  password_manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
+  ephy_password_manager_save (password_manager,
+                              origin,
+                              origin,
+                              webkit_credential_get_username (credential),
+                              webkit_credential_get_password (credential),
+                              "org.gnome.Epiphany.HTTPAuthCredentials.Username",
+                              "org.gnome.Epiphany.HTTPAuthCredentials.Password",
+                              TRUE);
+}
+
 typedef struct {
   EphyWebView *web_view;
   WebKitAuthenticationRequest *request;
@@ -2411,32 +2437,6 @@ auth_password_query_finished_cb (GList              *records,
 
   webkit_authentication_request_authenticate (data->request, credential);
   authentication_data_free (data);
-}
-
-static void
-authenticate_succeeded_cb (WebKitAuthenticationRequest *request,
-                           WebKitCredential            *credential)
-{
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  EphyPasswordManager *password_manager;
-  g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
-  g_autofree char *origin = NULL;
-
-  if (webkit_credential_get_persistence (credential) != WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT ||
-      !ephy_embed_shell_should_remember_passwords (shell))
-    return;
-
-  security_origin = webkit_authentication_request_get_security_origin (request);
-  origin = webkit_security_origin_to_string (security_origin);
-  password_manager = ephy_embed_shell_get_password_manager (ephy_embed_shell_get_default ());
-  ephy_password_manager_save (password_manager,
-                              origin,
-                              origin,
-                              webkit_credential_get_username (credential),
-                              webkit_credential_get_password (credential),
-                              "org.gnome.Epiphany.HTTPAuthCredentials.Username",
-                              "org.gnome.Epiphany.HTTPAuthCredentials.Password",
-                              TRUE);
 }
 
 static gboolean
