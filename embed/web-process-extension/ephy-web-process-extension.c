@@ -54,7 +54,6 @@ struct _EphyWebProcessExtension {
   WebKitScriptWorld *script_world;
 
   gboolean should_remember_passwords;
-  gboolean is_private_profile;
 
   GHashTable *frames_map;
   GHashTable *web_extensions;
@@ -778,10 +777,7 @@ js_should_remember_passwords (EphyWebProcessExtension *extension)
 {
   g_assert (EPHY_IS_WEB_PROCESS_EXTENSION (extension));
 
-  /* We currently don't remember passwords in private profiles. But there is
-   * no good reason for this and we should probably change this.
-   */
-  return extension->should_remember_passwords && !extension->is_private_profile;
+  return extension->should_remember_passwords;
 }
 
 static void
@@ -1053,7 +1049,7 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
                                                  js_context,
                                                  js_ephy);
 
-  if (!extension->is_private_profile) {
+  if (!extension->should_remember_passwords) {
     g_autoptr (JSCValue) js_password_manager_ctor = jsc_value_object_get_property (js_ephy, "PasswordManager");
     g_autoptr (JSCValue) js_password_manager = jsc_value_constructor_call (js_password_manager_ctor,
                                                                            G_TYPE_UINT64, webkit_web_page_get_id (page),
@@ -1155,7 +1151,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
                                        WebKitWebProcessExtension *wk_extension,
                                        const char                *guid,
                                        gboolean                   should_remember_passwords,
-                                       gboolean                   is_private_profile,
                                        GVariant                  *web_extensions)
 
 {
@@ -1185,7 +1180,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
   extension->extension = g_object_ref (wk_extension);
 
   extension->should_remember_passwords = should_remember_passwords;
-  extension->is_private_profile = is_private_profile;
 
   extension->permissions_manager = ephy_permissions_manager_new ();
 
