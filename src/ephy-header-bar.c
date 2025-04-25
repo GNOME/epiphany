@@ -426,14 +426,12 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), TRUE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), TRUE);
       gtk_widget_set_visible (header_bar->combined_stop_reload_button, FALSE);
-      gtk_widget_action_set_enabled (GTK_WIDGET (header_bar->window), "app.add-bookmark", FALSE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), FALSE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), FALSE);
       gtk_widget_set_visible (header_bar->combined_stop_reload_button, TRUE);
-      gtk_widget_action_set_enabled (GTK_WIDGET (header_bar->window), "app.add-bookmark", TRUE);
 
       break;
   }

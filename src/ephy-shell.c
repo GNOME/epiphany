@@ -23,7 +23,6 @@
 #include "config.h"
 #include "ephy-shell.h"
 
-#include "ephy-bookmark-properties.h"
 #include "ephy-debug.h"
 #include "ephy-desktop-utils.h"
 #include "ephy-embed-container.h"
@@ -384,18 +383,6 @@ webextension_context_menu_action (GSimpleAction *action,
   ephy_web_extension_manager_handle_context_menu_action (manager, parameter);
 }
 
-static void
-add_bookmark (GSimpleAction *action,
-              GVariant      *parameter,
-              gpointer       user_data)
-{
-  GtkWindow *window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
-  GtkWidget *dialog;
-
-  dialog = ephy_bookmark_properties_new_for_window (EPHY_WINDOW (window));
-  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
-}
-
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -415,7 +402,6 @@ static GActionEntry app_entries[] = {
   { "launch-app", launch_app, "s", NULL, NULL },
   { "webextension-notification", webextension_action, "(ssi)", NULL, NULL },
   { "webextension-context-menu", webextension_context_menu_action, "(sss)", NULL, NULL },
-  { "add-bookmark", add_bookmark, NULL, NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {

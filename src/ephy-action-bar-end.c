@@ -37,6 +37,7 @@
 struct _EphyActionBarEnd {
   GtkBox parent_instance;
 
+  GtkWidget *bookmark_button;
   GtkWidget *bookmarks_button;
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
@@ -224,6 +225,17 @@ on_bookmarks_button (GtkButton *button,
 }
 
 static void
+on_bookmark_button_clicked (GtkButton *button,
+                            gpointer   user_data)
+{
+  GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
+  GtkWidget *dialog;
+
+  dialog = ephy_bookmark_properties_new_for_window (EPHY_WINDOW (window));
+  adw_dialog_present (ADW_DIALOG (dialog), window);
+}
+
+static void
 ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -231,6 +243,9 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar-end.ui");
 
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarEnd,
+                                        bookmark_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
                                         bookmarks_button);
@@ -328,6 +343,8 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
                            G_CALLBACK (show_downloads_cb),
                            object, 0);
 
+  g_signal_connect_object (action_bar_end->bookmark_button, "clicked", G_CALLBACK (on_bookmark_button_clicked), action_bar_end, 0);
+
   extension_manager = ephy_web_extension_manager_get_default ();
   g_signal_connect_object (extension_manager, "show-browser-action",
                            G_CALLBACK (show_browser_action_cb),
@@ -365,6 +382,36 @@ GtkWidget *
 ephy_action_bar_end_get_downloads_revealer (EphyActionBarEnd *action_bar_end)
 {
   return action_bar_end->downloads_revealer;
+}
+
+void
+ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd      *action_bar_end,
+                                             EphyBookmarkIconState  state)
+{
+  g_assert (EPHY_IS_ACTION_BAR_END (action_bar_end));
+
+  switch (state) {
+    case EPHY_BOOKMARK_ICON_HIDDEN:
+      gtk_widget_set_visible (action_bar_end->bookmark_button, FALSE);
+      break;
+    case EPHY_BOOKMARK_ICON_EMPTY:
+      gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->bookmark_button),
+                                "ephy-non-starred-symbolic");
+      /* Translators: tooltip for the empty bookmark button */
+      gtk_widget_set_tooltip_text (action_bar_end->bookmark_button, _("Bookmark Page"));
+      break;
+    case EPHY_BOOKMARK_ICON_BOOKMARKED:
+      gtk_widget_set_visible (action_bar_end->bookmark_button, TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->bookmark_button),
+                                "ephy-starred-symbolic");
+
+      /* Translators: tooltip for the bookmarked button */
+      gtk_widget_set_tooltip_text (action_bar_end->bookmark_button, _("Edit Bookmark"));
+      break;
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 GtkWidget *
@@ -409,6 +456,8 @@ void
 ephy_action_bar_end_set_adaptive_mode (EphyActionBarEnd *action_bar_end,
                                        EphyAdaptiveMode  adaptive_mode)
 {
+  gtk_widget_set_visible (action_bar_end->bookmark_button,
+                          adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
   gtk_widget_set_visible (action_bar_end->overview_button,
                           adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
 }
