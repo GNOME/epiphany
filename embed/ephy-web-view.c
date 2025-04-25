@@ -2414,11 +2414,13 @@ static void
 authenticate_succeeded_cb (WebKitAuthenticationRequest *request,
                            WebKitCredential            *credential)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   EphyPasswordManager *password_manager;
   g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
   g_autofree char *origin = NULL;
 
-  if (webkit_credential_get_persistence (credential) != WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT)
+  if (webkit_credential_get_persistence (credential) != WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT ||
+      !ephy_embed_shell_should_remember_passwords (shell))
     return;
 
   security_origin = webkit_authentication_request_get_security_origin (request);
@@ -2440,6 +2442,7 @@ authenticate_cb (WebKitWebView               *web_view,
                  gpointer                     user_data)
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   EphyPasswordManager *password_manager;
   AuthenticationData *data;
   g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
@@ -2460,8 +2463,8 @@ authenticate_cb (WebKitWebView               *web_view,
     }
   }
 
-  if (webkit_authentication_request_is_retry (request)) {
-    webkit_authentication_request_set_can_save_credentials (request, TRUE);
+  if (webkit_authentication_request_is_retry (request) || !ephy_embed_shell_should_remember_passwords (shell)) {
+    webkit_authentication_request_set_can_save_credentials (request, ephy_embed_shell_should_remember_passwords (shell));
     g_signal_connect_object (request, "authenticated",
                              G_CALLBACK (authenticate_succeeded_cb),
                              ephy_web_view, 0);
