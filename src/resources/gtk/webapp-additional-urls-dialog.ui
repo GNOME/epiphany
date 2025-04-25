@@ -1,66 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="EphyWebappAdditionalURLsDialog" parent="AdwDialog">
-    <property name="content-width">540</property>
-    <property name="content-height">400</property>
-    <property name="default-widget">save_button</property>
+  <template class="EphyWebappAdditionalURLsDialog" parent="AdwNavigationPage">
     <property name="title" translatable="yes">Additional URLs</property>
-    <style>
-      <class name="view"/>
-    </style>
     <property name="child">
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar"/>
         </child>
         <property name="content">
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+          <object class="AdwPreferencesPage">
+            <property name="description" translatable="yes">URLs that start with an additional URL will be opened by this web app</property>
             <child>
-              <object class="GtkLabel">
-                <property name="xalign">0</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="label" translatable="yes">A URL that starts with any of the additional URLs will be opened by the web application. If you omit the URL scheme, the one from the currently loaded URL will be used.</property>
-                <property name="wrap">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkFrame">
-                <property name="margin-start">8</property>
-                <property name="margin-end">8</property>
-                <child type="label">
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes" context="Column header in the Additional URLs dialog">URL</property>
-                    <style>
-                      <class name="heading"/>
-                    </style>
-                    <accessibility>
-                      <relation name="label-for">listview</relation>
-                    </accessibility>
-                  </object>
-                </child>
+              <object class="AdwPreferencesGroup" id="url_group">
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="vexpand">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <child>
-                      <object class="GtkListView" id="listview">
-                        <property name="show-separators">true</property>
-                        <property name="model">
-                          <object class="GtkSingleSelection" id="selection_model">
-                            <property name="autoselect">false</property>
-                            <signal name="selection-changed" handler="on_listview_selection_changed"/>
-                          </object>
-                        </property>
-                        <property name="factory">
-                          <object class="GtkSignalListItemFactory" id="url_cell_factory">
-                            <signal name="setup" handler="on_url_cell_setup"/>
-                            <signal name="bind" handler="on_url_cell_bind"/>
-                            <signal name="teardown" handler="on_url_cell_teardown"/>
-                          </object>
-                        </property>
+                  <object class="AdwEntryRow" id="add_row">
+                    <property name="title" translatable="yes">Additional URL</property>
+                    <property name="input-purpose">url</property>
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="icon-name">list-add-symbolic</property>
+                        <property name="tooltip_text" translatable="yes">Add URL</property>
+                        <signal name="clicked" handler="on_add_clicked"/>
+                        <property name="valign">center</property>
+                        <style>
+                          <class name="flat" />
+                        </style>
                       </object>
                     </child>
                   </object>
@@ -69,42 +33,6 @@
             </child>
           </object>
         </property>
-        <child type="bottom">
-          <object class="GtkActionBar">
-            <property name="revealed">True</property>
-            <child type="start">
-              <object class="GtkButton">
-                <property name="icon_name">list-add-symbolic</property>
-                <property name="tooltip_text" translatable="yes">Add New URL</property>
-                <property name="action-name">webapp-additional-urls.new</property>
-              </object>
-            </child>
-            <child type="start">
-              <object class="GtkButton">
-                <property name="tooltip_text" translatable="yes">Remove Selected URLs</property>
-                <property name="icon_name">list-remove-symbolic</property>
-                <property name="action-name">webapp-additional-urls.forget</property>
-              </object>
-            </child>
-            <child type="end">
-              <object class="GtkButton" id="save_button">
-                <property name="label" translatable="yes">_Save</property>
-                <property name="use_underline">True</property>
-                <property name="action-name">webapp-additional-urls.save-and-close</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-            </child>
-            <child type="end">
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Clear All</property>
-                <property name="use_underline">True</property>
-                <property name="action-name">webapp-additional-urls.forget-all</property>
-              </object>
-            </child>
-          </object>
-        </child>
       </object>
     </property>
   </template>

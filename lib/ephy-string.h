@@ -52,5 +52,7 @@ char     *ephy_string_remove_trailing          (char *string,
 char    **ephy_strv_remove                     (const char * const *strv,
                                                 const char *str);
 
+char    **ephy_strv_append                     (const char * const *strv,
+                                                const char         *str);
 
 G_END_DECLS

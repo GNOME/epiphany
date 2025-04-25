@@ -66,7 +66,6 @@ libephymain_sources = [
   'preferences/prefs-general-page.c',
   'preferences/prefs-privacy-page.c',
   'preferences/webapp-additional-urls-dialog.c',
-  'preferences/webapp-additional-urls-list-item.c',
   'synced-tabs-dialog.c',
   'window-commands.c',
   ephywebextension_src,

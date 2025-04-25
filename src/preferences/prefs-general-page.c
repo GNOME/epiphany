@@ -32,7 +32,6 @@
 #include "ephy-search-engine-listbox.h"
 #include "ephy-shell.h"
 #include "ephy-web-app-utils.h"
-#include "webapp-additional-urls-dialog.h"
 
 #include "gnome-languages.h"
 #include <glib/gi18n.h>
@@ -40,6 +39,11 @@
 enum {
   COL_LANG_NAME,
   COL_LANG_CODE
+};
+
+enum {
+  WEBAPP_ADDITIONAL_URLS_ROW_ACTIVATED,
+  LAST_SIGNAL
 };
 
 struct _PrefsGeneralPage {
@@ -99,6 +103,8 @@ struct _PrefsGeneralPage {
 
   GCancellable *cancellable;
 };
+
+static guint signals[LAST_SIGNAL];
 
 G_DEFINE_FINAL_TYPE (PrefsGeneralPage, prefs_general_page, ADW_TYPE_PREFERENCES_PAGE)
 
@@ -886,16 +892,10 @@ custom_homepage_set_mapping (const GValue       *value,
 }
 
 static void
-on_manage_webapp_additional_urls_row_activated (GtkWidget        *button,
+on_manage_webapp_additional_urls_row_activated (GtkWidget        *row,
                                                 PrefsGeneralPage *general_page)
 {
-  EphyWebappAdditionalURLsDialog *urls_dialog;
-  GtkWindow *window;
-
-  urls_dialog = ephy_webapp_additional_urls_dialog_new ();
-  window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (general_page)));
-
-  adw_dialog_present (ADW_DIALOG (urls_dialog), GTK_WIDGET (window));
+  g_signal_emit (general_page, signals[WEBAPP_ADDITIONAL_URLS_ROW_ACTIVATED], 0);
 }
 
 static void
@@ -908,6 +908,13 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-general-page.ui");
+
+  signals[WEBAPP_ADDITIONAL_URLS_ROW_ACTIVATED] =
+    g_signal_new ("webapp-additional-row-activated",
+                  EPHY_TYPE_PREFS_GENERAL_PAGE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 
   /* Web Application */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, webapp_box);
@@ -960,8 +967,8 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
-  gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, download_folder_row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_row_activated);
 }
 
 static void

@@ -7,7 +7,9 @@
     <property name="search-enabled">true</property>
     <signal name="closed" handler="on_closed"/>
     <child>
-      <object class="PrefsGeneralPage" id="general_page"/>
+      <object class="PrefsGeneralPage" id="general_page">
+        <signal name="webapp-additional-row-activated" handler="on_manage_webapp_additional_urls_row_activated"/>
+    </object>
     </child>
     <child>
       <object class="PrefsPrivacyPage">
