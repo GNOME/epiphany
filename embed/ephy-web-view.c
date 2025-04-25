@@ -2419,6 +2419,19 @@ authentication_data_free (AuthenticationData *data)
 }
 
 static void
+prepare_for_authentication_dialog (EphyWebView                 *web_view,
+                                   WebKitAuthenticationRequest *request)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  webkit_authentication_request_set_can_save_credentials (request, ephy_embed_shell_should_remember_passwords (shell));
+  g_signal_connect_object (request, "authenticated",
+                           G_CALLBACK (authenticate_succeeded_cb),
+                           web_view, 0);
+  web_view->in_auth_dialog = 1;
+}
+
+static void
 auth_password_query_finished_cb (GList              *records,
                                  AuthenticationData *data)
 {
@@ -2430,12 +2443,13 @@ auth_password_query_finished_cb (GList              *records,
     credential = webkit_credential_new (ephy_password_record_get_username (record),
                                         ephy_password_record_get_password (record),
                                         WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
+    webkit_authentication_request_authenticate (data->request, credential);
   } else {
-    /* Provide a non-empty wrong credential to force a retry */
-    credential = webkit_credential_new (" ", "", WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
+    prepare_for_authentication_dialog (data->web_view, data->request);
+    /* Hack: display WebKit's default auth dialog by invoking the default handler, which we previously canceled. */
+    WEBKIT_WEB_VIEW_GET_CLASS (data->web_view)->authenticate (WEBKIT_WEB_VIEW (data->web_view), data->request);
   }
 
-  webkit_authentication_request_authenticate (data->request, credential);
   authentication_data_free (data);
 }
 
@@ -2450,28 +2464,22 @@ authenticate_cb (WebKitWebView               *web_view,
   AuthenticationData *data;
   g_autoptr (WebKitSecurityOrigin) security_origin = NULL;
   g_autofree char *origin = NULL;
+  WebKitAuthenticationScheme scheme = webkit_authentication_request_get_scheme (request);
 
-  if (!webkit_authentication_request_is_retry (request)) {
-    WebKitAuthenticationScheme scheme = webkit_authentication_request_get_scheme (request);
-
-    if (scheme == WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED) {
-      g_clear_pointer (&ephy_web_view->client_certificate_manager, ephy_client_certificate_manager_free);
-      ephy_web_view->client_certificate_manager = ephy_client_certificate_manager_request_certificate (web_view, request);
-      return TRUE;
-    } else if (scheme == WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_PIN_REQUESTED) {
-      g_assert (ephy_web_view->client_certificate_manager);
-      ephy_client_certificate_manager_request_certificate_pin (ephy_web_view->client_certificate_manager, web_view, request);
-      g_clear_pointer (&ephy_web_view->client_certificate_manager, ephy_client_certificate_manager_free);
-      return TRUE;
-    }
+  if (scheme == WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_REQUESTED) {
+    g_clear_pointer (&ephy_web_view->client_certificate_manager, ephy_client_certificate_manager_free);
+    ephy_web_view->client_certificate_manager = ephy_client_certificate_manager_request_certificate (web_view, request);
+    return TRUE;
+  } else if (scheme == WEBKIT_AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE_PIN_REQUESTED) {
+    g_assert (ephy_web_view->client_certificate_manager);
+    ephy_client_certificate_manager_request_certificate_pin (ephy_web_view->client_certificate_manager, web_view, request);
+    g_clear_pointer (&ephy_web_view->client_certificate_manager, ephy_client_certificate_manager_free);
+    return TRUE;
   }
 
-  if (webkit_authentication_request_is_retry (request) || !ephy_embed_shell_should_remember_passwords (shell)) {
-    webkit_authentication_request_set_can_save_credentials (request, ephy_embed_shell_should_remember_passwords (shell));
-    g_signal_connect_object (request, "authenticated",
-                             G_CALLBACK (authenticate_succeeded_cb),
-                             ephy_web_view, 0);
-    ephy_web_view->in_auth_dialog = 1;
+  if (!ephy_embed_shell_should_remember_passwords (shell)) {
+    prepare_for_authentication_dialog (ephy_web_view, request);
+    /* Return FALSE to display WebKit's default auth dialog. */
     return FALSE;
   }
 
