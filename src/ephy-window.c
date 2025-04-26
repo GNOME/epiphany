@@ -3963,6 +3963,15 @@ scroll_cb (EphyWindow *self,
 }
 
 static void
+pan_cb (EphyWindow      *self,
+        GtkPanDirection  direction,
+        gdouble          offset,
+        gpointer         user_data)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), direction == GTK_PAN_DIRECTION_DOWN);
+}
+
+static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
@@ -3978,6 +3987,7 @@ ephy_window_constructed (GObject *object)
   EphyDownloadsManager *downloads_manager;
   g_autoptr (GtkBuilder) builder = NULL;
   GtkEventController *scroll_controller;
+  GtkGesture *pan_gesture;
 
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
@@ -4068,6 +4078,11 @@ ephy_window_constructed (GObject *object)
   gtk_event_controller_set_propagation_phase (scroll_controller, GTK_PHASE_CAPTURE);
   g_signal_connect_object (scroll_controller, "scroll", G_CALLBACK (scroll_cb), window, G_CONNECT_SWAPPED);
   gtk_widget_add_controller (GTK_WIDGET (window), scroll_controller);
+
+  pan_gesture = gtk_gesture_pan_new (GTK_ORIENTATION_VERTICAL);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (pan_gesture), GTK_PHASE_CAPTURE);
+  g_signal_connect_object (pan_gesture, "pan", G_CALLBACK (pan_cb), window, G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (pan_gesture));
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/tab-overview-menu.ui");
 
