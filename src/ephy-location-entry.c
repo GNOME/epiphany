@@ -247,7 +247,7 @@ update_selected_url (EphyLocationEntry *entry)
     if (ephy_suggestion_is_completion (EPHY_SUGGESTION (suggestion))) {
       gtk_editable_set_text (GTK_EDITABLE (entry), ephy_suggestion_get_unescaped_title (EPHY_SUGGESTION (suggestion)));
     } else {
-      gtk_editable_set_text (GTK_EDITABLE (entry), uri);
+      gtk_editable_set_text (GTK_EDITABLE (entry), dzl_suggestion_get_subtitle (suggestion));
     }
   }
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
