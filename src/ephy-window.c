@@ -2484,7 +2484,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
                                         G_CALLBACK (sync_tab_document_type),
                                         window);
   g_signal_handlers_disconnect_by_func (view,
-                                        G_CALLBACK (sync_tab_load_status),
+                                        G_CALLBACK (load_changed_cb),
                                         window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (sync_tab_navigation),
