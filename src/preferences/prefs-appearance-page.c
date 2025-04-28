@@ -50,6 +50,7 @@ struct _PrefsAppearancePage {
   GtkWidget *js_row;
   GtkWidget *js_edit_button;
   GtkWidget *default_zoom_row;
+  GtkWidget *theme_color_row;
 
   GCancellable *cancellable;
 };
@@ -245,6 +246,7 @@ static void
 setup_appearance_page (PrefsAppearancePage *appearance_page)
 {
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  GSettings *ui_settings = ephy_settings_get (EPHY_PREFS_UI_SCHEMA);
   GSettings *reader_settings = ephy_settings_get (EPHY_PREFS_READER_SCHEMA);
 
   /* ======================================================================== */
@@ -325,6 +327,12 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
+  g_settings_bind (ui_settings,
+                   EPHY_PREFS_UI_THEME_COLOR,
+                   appearance_page->theme_color_row,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_USER_JS,
                    appearance_page->js_edit_button,
@@ -381,6 +389,7 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, js_edit_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, default_zoom_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsAppearancePage, theme_color_row);
 
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, reader_font_style_get_name);

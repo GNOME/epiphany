@@ -178,6 +178,8 @@ struct _EphyWindow {
   AdwToast *switch_toast;
   AdwToast *download_start_toast;
   GHashTable *active_permission_popovers;
+  GtkStyleProvider *theme_style_provider;
+  GCancellable *theme_color_cancellable;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -2330,14 +2332,75 @@ destroy_permission_popovers_for_view (EphyWindow  *window,
 }
 
 static void
+set_theme_color (EphyWindow  *window,
+                 EphyWebView *self,
+                 const char  *color)
+{
+  GtkCssProvider *css_provider;
+  g_autofree char *color_str = NULL;
+  const char *ret = ephy_web_view_get_current_theme_color (self);
+
+  if (window->theme_style_provider) {
+    gtk_style_context_remove_provider_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GTK_STYLE_PROVIDER (window->theme_style_provider));
+    g_clear_object (&window->theme_style_provider);
+  }
+
+  if (ret && g_strcmp0 (ret, "null") != 0) {
+    css_provider = gtk_css_provider_new ();
+    color_str = g_strdup_printf ("headerbar { background-color: %s; }", ret);
+    gtk_css_provider_load_from_string (css_provider, color_str);
+  } else {
+    css_provider = gtk_css_provider_new ();
+    color_str = g_strdup_printf ("headerbar { background-color: @theme_bg_color; }");
+    gtk_css_provider_load_from_string (css_provider, color_str);
+  }
+
+  window->theme_style_provider = GTK_STYLE_PROVIDER (css_provider);
+  gtk_css_provider_load_from_string (css_provider, color_str);
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GTK_STYLE_PROVIDER (css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+}
+
+static void
+theme_color_cb (GObject      *source,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+  EphyWebView *web_view = EPHY_WEB_VIEW (source);
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  g_autoptr (GError) error = NULL;
+  char *ret;
+
+  ret = ephy_web_view_get_theme_color_finish (web_view, res, &error);
+  if (error) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+
+    g_debug ("Could not get theme color: %s", error->message);
+    set_theme_color (window, web_view, NULL);
+    return;
+  }
+
+  set_theme_color (window, web_view, ret);
+}
+
+static void
 load_changed_cb (EphyWebView     *view,
                  WebKitLoadEvent  load_event,
                  EphyWindow      *window)
 {
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  gboolean use_theme_color = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_THEME_COLOR);
 
   sync_tab_load_status (view, load_event, window);
   sync_tab_address (view, NULL, window);
+
+  if (use_theme_color && load_event == WEBKIT_LOAD_FINISHED) {
+    g_cancellable_cancel (window->theme_color_cancellable);
+    g_clear_object (&window->theme_color_cancellable);
+
+    window->theme_color_cancellable = g_cancellable_new ();
+    ephy_web_view_get_theme_color (view, window->theme_color_cancellable, theme_color_cb, window);
+  }
 
   if (load_event != WEBKIT_LOAD_STARTED)
     return;
@@ -3134,6 +3197,8 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   embed = EPHY_EMBED (ephy_tab_view_get_nth_page (window->tab_view, page_num));
   view = ephy_embed_get_web_view (embed);
 
+  set_theme_color (window, view, ephy_web_view_get_current_theme_color (view));
+
   /* update new tab */
   ephy_window_set_active_tab (window, embed);
 
@@ -3354,6 +3419,9 @@ ephy_window_dispose (GObject *object)
                           (GHFunc)free_permission_popovers, NULL);
     g_clear_pointer (&window->active_permission_popovers, g_hash_table_unref);
   }
+
+  g_cancellable_cancel (window->theme_color_cancellable);
+  g_clear_object (&window->theme_color_cancellable);
 
   G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
 }
