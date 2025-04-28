@@ -1154,11 +1154,10 @@ init_web_extension_api (WebKitWebContext *web_context,
   webkit_web_context_set_web_process_extensions_directory (web_context, EPHY_WEB_PROCESS_EXTENSIONS_DIR);
 #endif
 
-  user_data = g_variant_new ("(smsbbv)",
+  user_data = g_variant_new ("(smsbv)",
                              ephy_web_extension_get_guid (web_extension),
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
                              FALSE /* should_remember_passwords */,
-                             FALSE /* private_profile */,
                              ephy_web_extension_manager_get_extension_initialization_data (manager));
   webkit_web_context_set_web_process_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
 }
