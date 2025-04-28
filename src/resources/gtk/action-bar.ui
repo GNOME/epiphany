@@ -3,17 +3,91 @@
   <template class="EphyActionBar" parent="AdwBin">
     <child>
       <object class="GtkBox" id="toolbar">
+        <property name="homogeneous">true</property>
         <style>
           <class name="toolbar"/>
         </style>
         <child>
-          <object class="EphyActionBarStart" id="action_bar_start">
-            <property name="hexpand">True</property>
-            <property name="halign">start</property>
+          <object class="GtkButton" id="navigation_back">
+            <property name="action-name">toolbar.navigation-back</property>
+            <property name="icon-name">go-previous-symbolic</property>
+            <!-- Translators: tooltip for the back button -->
+            <property name="tooltip_text" translatable="yes">Back</property>
+            <style>
+              <class name="toolbar-button"/>
+            </style>
+            <child>
+              <object class="GtkGestureClick">
+                <!-- GDK_BUTTON_MIDDLE -->
+                <property name="button">2</property>
+                <signal name="pressed" handler="middle_click_pressed_cb"/>
+                <signal name="released" handler="middle_click_released_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGestureClick">
+                <!-- GDK_BUTTON_SECONDARY -->
+                <property name="button">3</property>
+                <signal name="pressed" handler="right_click_pressed_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGestureLongPress">
+                <signal name="pressed" handler="long_pressed_cb"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
-          <object class="EphyActionBarEnd" id="action_bar_end"/>
+          <object class="GtkButton" id="navigation_forward">
+            <property name="action-name">toolbar.navigation-forward</property>
+            <property name="icon-name">go-next-symbolic</property>
+            <!-- Translators: tooltip for the forward button -->
+            <property name="tooltip_text" translatable="yes">Forward</property>
+            <style>
+              <class name="toolbar-button"/>
+            </style>
+            <child>
+              <object class="GtkGestureClick">
+                <!-- GDK_BUTTON_MIDDLE -->
+                <property name="button">2</property>
+                <signal name="pressed" handler="middle_click_pressed_cb"/>
+                <signal name="released" handler="middle_click_released_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGestureClick">
+                <!-- GDK_BUTTON_SECONDARY -->
+                <property name="button">3</property>
+                <signal name="pressed" handler="right_click_pressed_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGestureLongPress">
+                <signal name="pressed" handler="long_pressed_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="bookmark_button">
+            <property name="icon-name">ephy-non-starred-symbolic</property>
+            <property name="action_name">win.bookmark-page</property>
+            <style>
+              <class name="toolbar-button"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="bookmarks_button">
+            <!-- Translators: tooltip for the bookmarks popover button -->
+            <property name="tooltip_text" translatable="yes">Bookmarks</property>
+            <property name="action_name">win.bookmarks</property>
+            <property name="icon-name">ephy-library-symbolic</property>
+            <style>
+              <class name="toolbar-button"/>
+            </style>
+          </object>
         </child>
         <child>
           <object class="AdwTabButton" id="tab_button">

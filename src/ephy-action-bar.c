@@ -20,6 +20,11 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-embed.h"
+#include "ephy-embed-container.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-utils.h"
+#include "ephy-favicon-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-tab-view.h"
@@ -37,24 +42,378 @@ struct _EphyActionBar {
 
   EphyWindow *window;
   GtkWidget *toolbar;
-  EphyActionBarStart *action_bar_start;
-  EphyActionBarEnd *action_bar_end;
+  GtkWidget *bookmark_button;
   AdwTabButton *tab_button;
+  GtkWidget *navigation_back;
+  GtkWidget *navigation_forward;
+  GCancellable *cancellable;
+  GtkWidget *history_menu;
 };
 
 G_DEFINE_FINAL_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
 
+typedef enum {
+  EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
+  EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD
+} EphyNavigationHistoryDirection;
+
+typedef enum {
+  WEBKIT_HISTORY_BACKWARD,
+  WEBKIT_HISTORY_FORWARD
+} WebKitHistoryType;
+
+#define MAX_LABEL_LENGTH 48
+#define HISTORY_ITEM_DATA_KEY "history-item-data-key"
+
 static void
-sync_chromes_visibility (EphyActionBar *action_bar)
+history_row_enter_cb (GtkEventController *controller,
+                      double              x,
+                      double              y,
+                      EphyActionBarStart *action_bar_start)
 {
-  EphyWindowChrome chrome;
+  GtkWidget *widget;
+  const char *text;
+  GtkRoot *root;
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
 
-  chrome = ephy_window_get_chrome (action_bar->window);
+  widget = gtk_event_controller_get_widget (controller);
+  text = g_object_get_data (G_OBJECT (widget), "link-message");
 
-  gtk_widget_set_visible (ephy_action_bar_start_get_navigation_box (action_bar->action_bar_start),
-                          chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
-  ephy_action_bar_end_set_show_bookmarks_button (action_bar->action_bar_end,
-                                                 chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
+  root = gtk_widget_get_root (GTK_WIDGET (action_bar_start));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (root));
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  ephy_web_view_set_link_message (EPHY_WEB_VIEW (web_view), text);
+}
+
+static void
+history_row_leave_cb (GtkEventController *controller,
+                      EphyActionBarStart *action_bar_start)
+{
+  GtkRoot *root;
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
+
+  root = gtk_widget_get_root (GTK_WIDGET (action_bar_start));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (root));
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  ephy_web_view_set_link_message (EPHY_WEB_VIEW (web_view), NULL);
+}
+
+static GList *
+construct_webkit_history_list (WebKitWebView     *web_view,
+                               WebKitHistoryType  hist_type,
+                               int                limit)
+{
+  WebKitBackForwardList *back_forward_list;
+
+  back_forward_list = webkit_web_view_get_back_forward_list (web_view);
+  return hist_type == WEBKIT_HISTORY_FORWARD ?
+         g_list_reverse (webkit_back_forward_list_get_forward_list_with_limit (back_forward_list, limit)) :
+         webkit_back_forward_list_get_back_list_with_limit (back_forward_list, limit);
+}
+
+static void
+middle_click_handle_on_history_menu_item (EphyEmbed                 *embed,
+                                          WebKitBackForwardListItem *item)
+{
+  EphyEmbed *new_embed = NULL;
+  const gchar *url;
+
+  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
+                                  embed,
+                                  0);
+  g_assert (new_embed != NULL);
+
+  /* Load the new URL */
+  url = webkit_back_forward_list_item_get_original_uri (item);
+  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), url);
+}
+
+static void
+history_row_released_cb (GtkGesture    *gesture,
+                         int            n_click,
+                         double         x,
+                         double         y,
+                         EphyActionBar *action_bar)
+{
+  WebKitBackForwardListItem *item;
+  GtkWidget *widget;
+  guint button;
+  GtkRoot *root;
+  EphyEmbed *embed;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  if (!gtk_widget_contains (widget, x, y)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (button != GDK_BUTTON_PRIMARY && button != GDK_BUTTON_MIDDLE) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+
+  root = gtk_widget_get_root (GTK_WIDGET (action_bar));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (root));
+
+  item = WEBKIT_BACK_FORWARD_LIST_ITEM (g_object_get_data (G_OBJECT (widget), HISTORY_ITEM_DATA_KEY));
+
+  if (button == GDK_BUTTON_MIDDLE) {
+    middle_click_handle_on_history_menu_item (embed, item);
+  } else {
+    WebKitWebView *web_view;
+
+    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    webkit_web_view_go_to_back_forward_list_item (web_view, item);
+
+    gtk_popover_popdown (GTK_POPOVER (action_bar->history_menu));
+  }
+}
+
+static void
+icon_loaded_cb (GObject      *source,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
+  g_autoptr (GtkWidget) image = user_data;
+  g_autoptr (GIcon) favicon = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GdkTexture) icon_texture = webkit_favicon_database_get_favicon_finish (database, result, &error);
+  int scale;
+
+  if (error) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+
+    g_debug ("Could not get icon: %s", error->message);
+    return;
+  }
+
+  if (!icon_texture)
+    return;
+
+  scale = gtk_widget_get_scale_factor (image);
+  favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
+  if (favicon)
+    gtk_image_set_from_gicon (GTK_IMAGE (image), favicon);
+}
+
+static GtkWidget *
+build_history_row (EphyActionBar             *action_bar,
+                   WebKitBackForwardListItem *item)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  const char *uri;
+  g_autofree char *title = NULL;
+  WebKitFaviconDatabase *database;
+  GtkWidget *row, *box, *icon, *label;
+  GtkEventController *controller;
+  GtkGesture *gesture;
+
+  uri = webkit_back_forward_list_item_get_uri (item);
+  title = g_strdup (webkit_back_forward_list_item_get_title (item));
+
+  row = gtk_list_box_row_new ();
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
+
+  icon = gtk_image_new ();
+  gtk_image_set_pixel_size (GTK_IMAGE (icon), 16);
+  gtk_box_append (GTK_BOX (box), icon);
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), MAX_LABEL_LENGTH);
+  gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_box_append (GTK_BOX (box), label);
+
+  g_object_set_data_full (G_OBJECT (row), HISTORY_ITEM_DATA_KEY,
+                          g_object_ref (item), g_object_unref);
+
+  if (title && *title)
+    gtk_label_set_label (GTK_LABEL (label), title);
+  else
+    gtk_label_set_label (GTK_LABEL (label), uri);
+
+  database = ephy_embed_shell_get_favicon_database (shell);
+  webkit_favicon_database_get_favicon (database, uri,
+                                       action_bar->cancellable,
+                                       (GAsyncReadyCallback)icon_loaded_cb,
+                                       g_object_ref (icon));
+
+  g_object_set_data_full (G_OBJECT (row), "link-message",
+                          g_strdup (uri), (GDestroyNotify)g_free);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (history_row_enter_cb), action_bar);
+  g_signal_connect (controller, "leave", G_CALLBACK (history_row_leave_cb), action_bar);
+  gtk_widget_add_controller (row, controller);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "released", G_CALLBACK (history_row_released_cb), action_bar);
+  gtk_widget_add_controller (row, GTK_EVENT_CONTROLLER (gesture));
+
+  return row;
+}
+
+static void
+build_history_menu (EphyActionBar                  *action_bar,
+                    GtkWidget                      *parent,
+                    EphyNavigationHistoryDirection  direction)
+{
+  GtkWidget *popover, *listbox;
+  GtkRoot *root;
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
+  g_autoptr (GList) list = NULL;
+  GList *l;
+
+  root = gtk_widget_get_root (GTK_WIDGET (action_bar));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (root));
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK)
+    list = construct_webkit_history_list (web_view,
+                                          WEBKIT_HISTORY_BACKWARD, 10);
+  else
+    list = construct_webkit_history_list (web_view,
+                                          WEBKIT_HISTORY_FORWARD, 10);
+
+  popover = gtk_popover_new ();
+  gtk_popover_set_has_arrow (GTK_POPOVER (popover), FALSE);
+  gtk_widget_set_halign (popover, GTK_ALIGN_START);
+  gtk_widget_add_css_class (popover, "menu");
+  gtk_widget_set_parent (popover, parent);
+
+  listbox = gtk_list_box_new ();
+  gtk_popover_set_child (GTK_POPOVER (popover), listbox);
+
+  for (l = list; l; l = l->next) {
+    GtkWidget *row = build_history_row (action_bar, l->data);
+
+    gtk_list_box_append (GTK_LIST_BOX (listbox), row);
+  }
+
+  action_bar->history_menu = popover;
+}
+
+static void
+history_menu_closed_cb (EphyActionBar *action_bar)
+{
+  GtkWidget *parent = gtk_widget_get_parent (action_bar->history_menu);
+
+  g_clear_pointer (&action_bar->history_menu, gtk_widget_unparent);
+  gtk_widget_unset_state_flags (parent, GTK_STATE_FLAG_CHECKED);
+
+  g_cancellable_cancel (action_bar->cancellable);
+  g_clear_object (&action_bar->cancellable);
+  action_bar->cancellable = g_cancellable_new ();
+}
+
+static void
+handle_history_menu (EphyActionBar *action_bar,
+                     double         x,
+                     double         y,
+                     GtkGesture    *gesture)
+{
+  GtkWidget *widget;
+  EphyNavigationHistoryDirection direction;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  if (!gtk_widget_contains (widget, x, y)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  if (widget == action_bar->navigation_back)
+    direction = EPHY_NAVIGATION_HISTORY_DIRECTION_BACK;
+  else if (widget == action_bar->navigation_forward)
+    direction = EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+  else
+    g_assert_not_reached ();
+
+  build_history_menu (action_bar, widget, direction);
+
+  gtk_popover_popup (GTK_POPOVER (action_bar->history_menu));
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_CHECKED, FALSE);
+
+  g_signal_connect_swapped (action_bar->history_menu, "closed",
+                            G_CALLBACK (history_menu_closed_cb), action_bar);
+
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+long_pressed_cb (GtkGesture    *gesture,
+                 double         x,
+                 double         y,
+                 EphyActionBar *action_bar)
+{
+  handle_history_menu (action_bar, x, y, gesture);
+}
+
+static void
+right_click_pressed_cb (GtkGesture    *gesture,
+                        int            n_click,
+                        double         x,
+                        double         y,
+                        EphyActionBar *action_bar)
+{
+  handle_history_menu (action_bar, x, y, gesture);
+}
+
+static void
+middle_click_pressed_cb (GtkGesture *gesture)
+{
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+middle_click_released_cb (GtkGesture    *gesture,
+                          int            n_click,
+                          double         x,
+                          double         y,
+                          EphyActionBar *action_bar)
+{
+  GtkWidget *widget;
+  EphyWindow *window;
+  GActionGroup *action_group;
+  GAction *action;
+  const char *action_name;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  if (!gtk_widget_contains (widget, x, y)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  if (widget == action_bar->navigation_back)
+    action_name = "navigation-back-new-tab";
+  else if (widget == action_bar->navigation_forward)
+    action_name = "navigation-forward-new-tab";
+  else
+    g_assert_not_reached ();
+
+  window = EPHY_WINDOW (gtk_widget_get_root (widget));
+  action_group = ephy_window_get_action_group (window, "toolbar");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), action_name);
+  g_action_activate (action, NULL);
 }
 
 static void
@@ -102,12 +461,21 @@ ephy_action_bar_constructed (GObject *object)
 
   view = ephy_window_get_tab_view (action_bar->window);
 
-  g_signal_connect_object (action_bar->window, "notify::chrome",
-                           G_CALLBACK (sync_chromes_visibility), action_bar,
-                           G_CONNECT_SWAPPED);
-
   adw_tab_button_set_view (action_bar->tab_button,
                            ephy_tab_view_get_tab_view (view));
+}
+
+static void
+ephy_action_bar_dispose (GObject *object)
+{
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
+
+  g_clear_pointer (&action_bar->history_menu, gtk_widget_unparent);
+
+  g_cancellable_cancel (action_bar->cancellable);
+  g_clear_object (&action_bar->cancellable);
+
+  G_OBJECT_CLASS (ephy_action_bar_parent_class)->dispose (object);
 }
 
 static void
@@ -119,6 +487,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gobject_class->set_property = ephy_action_bar_set_property;
   gobject_class->get_property = ephy_action_bar_get_property;
   gobject_class->constructed = ephy_action_bar_constructed;
+  gobject_class->dispose = ephy_action_bar_dispose;
 
   object_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
@@ -133,15 +502,19 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar.ui");
 
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBar,
-                                        action_bar_start);
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBar,
-                                        tab_button);
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBar,
-                                        action_bar_end);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, tab_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, bookmark_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_back);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_forward);
+
+  gtk_widget_class_bind_template_callback (widget_class,
+                                           right_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class,
+                                           long_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class,
+                                           middle_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class,
+                                           middle_click_released_cb);
 }
 
 static void
@@ -149,20 +522,11 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 {
   EphyEmbedShellMode mode;
 
-  /* Ensure the types used by the template have been initialized. */
-  EPHY_TYPE_ACTION_BAR_END;
-  EPHY_TYPE_ACTION_BAR_START;
-
   gtk_widget_init_template (GTK_WIDGET (action_bar));
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   gtk_widget_set_visible (GTK_WIDGET (action_bar->tab_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-
-  ephy_action_bar_start_set_adaptive_mode (action_bar->action_bar_start,
-                                           EPHY_ADAPTIVE_MODE_NARROW);
-  ephy_action_bar_end_set_adaptive_mode (action_bar->action_bar_end,
-                                         EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 EphyActionBar *
@@ -173,14 +537,32 @@ ephy_action_bar_new (EphyWindow *window)
                        NULL);
 }
 
-EphyActionBarStart *
-ephy_action_bar_get_action_bar_start (EphyActionBar *action_bar)
+void
+ephy_action_bar_set_bookmark_icon_state (EphyActionBar         *self,
+                                         EphyBookmarkIconState  state)
 {
-  return action_bar->action_bar_start;
-}
+  g_assert (EPHY_IS_ACTION_BAR (self));
 
-EphyActionBarEnd *
-ephy_action_bar_get_action_bar_end (EphyActionBar *action_bar)
-{
-  return action_bar->action_bar_end;
+  switch (state) {
+    case EPHY_BOOKMARK_ICON_HIDDEN:
+      gtk_widget_set_visible (self->bookmark_button, FALSE);
+      break;
+    case EPHY_BOOKMARK_ICON_EMPTY:
+      gtk_widget_set_visible (self->bookmark_button, TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
+                                "ephy-non-starred-symbolic");
+      /* Translators: tooltip for the empty bookmark button */
+      gtk_widget_set_tooltip_text (self->bookmark_button, _("Bookmark Page"));
+      break;
+    case EPHY_BOOKMARK_ICON_BOOKMARKED:
+      gtk_widget_set_visible (self->bookmark_button, TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
+                                "ephy-starred-symbolic");
+
+      /* Translators: tooltip for the bookmarked button */
+      gtk_widget_set_tooltip_text (self->bookmark_button, _("Edit Bookmark"));
+      break;
+    default:
+      g_assert_not_reached ();
+  }
 }
