@@ -597,7 +597,6 @@ on_search_entry_key_pressed (EphyBookmarksDialog   *self,
   return FALSE;
 }
 
-
 static void
 ephy_bookmarks_dialog_finalize (GObject *object)
 {
@@ -765,4 +764,10 @@ void
 ephy_bookmarks_dialog_focus (EphyBookmarksDialog *self)
 {
   gtk_widget_grab_focus (self->search_entry);
+}
+
+void
+ephy_bookmarks_dialog_clear_search (EphyBookmarksDialog *self)
+{
+  gtk_editable_delete_text (GTK_EDITABLE (self->search_entry), 0, -1);
 }

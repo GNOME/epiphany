@@ -4881,4 +4881,6 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
 
   if (state)
     ephy_bookmarks_dialog_focus (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
+  else
+    ephy_bookmarks_dialog_clear_search (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
 }

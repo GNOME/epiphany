@@ -32,4 +32,6 @@ GtkWidget *ephy_bookmarks_dialog_new      (void);
 
 void ephy_bookmarks_dialog_focus (EphyBookmarksDialog *self);
 
+void ephy_bookmarks_dialog_clear_search (EphyBookmarksDialog *self);
+
 G_END_DECLS
