@@ -43,6 +43,11 @@
                   <object class="GtkSearchEntry" id="search_entry">
                     <property name="placeholder-text" translatable="yes">Search bookmarks</property>
                     <signal name="search-changed" handler="on_search_entry_changed"/>
+                    <child>
+                      <object class="GtkEventControllerKey">
+                        <signal name="key-pressed" handler="on_search_entry_key_pressed" object="EphyBookmarksDialog" swapped="yes"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>

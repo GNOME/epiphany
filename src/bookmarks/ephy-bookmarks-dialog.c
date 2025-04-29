@@ -580,6 +580,24 @@ on_search_entry_changed (GtkSearchEntry *entry,
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
 }
 
+static gboolean
+on_search_entry_key_pressed (EphyBookmarksDialog   *self,
+                             guint                  keyval,
+                             guint                  keycode,
+                             GdkModifierType        state,
+                             GtkEventControllerKey *key_controller)
+{
+  if (keyval == GDK_KEY_Escape) {
+    GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
+
+    ephy_window_toggle_bookmarks (EPHY_WINDOW (window));
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+
 static void
 ephy_bookmarks_dialog_finalize (GObject *object)
 {
@@ -608,6 +626,7 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_close_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_entry_key_pressed);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
