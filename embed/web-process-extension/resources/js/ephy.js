@@ -59,7 +59,6 @@ Ephy.getWebAppIcon = function(baseURL)
     let msIconURL = null;
     let largestIconSize = 0;
     let iconColor = null;
-    let ogpIcon = null;
     const links = document.getElementsByTagName('link');
     const metas = document.getElementsByTagName('meta');
 
@@ -106,17 +105,11 @@ Ephy.getWebAppIcon = function(baseURL)
             msIconURL = meta.content;
         else if (meta.name === 'msapplication-TileColor')
             iconColor = meta.content;
-        else if (meta.getAttribute('property') === 'og:image' || meta.getAttribute('itemprop') === 'image')
-            ogpIcon = meta.content;
     }
 
     // msapplication icon.
     if (msIconURL)
         return { 'url' : new URL(msIconURL, baseURL).href, 'color' : iconColor };
-
-    // ogp icon.
-    if (ogpIcon)
-        return { 'url' : new URL(ogpIcon, baseURL).href, 'color' : null };
 
     // html icon without known size
     if (htmlIconURL)
