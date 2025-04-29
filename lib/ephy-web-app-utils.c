@@ -683,9 +683,8 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
 
     file = g_file_new_for_path (profile_dir);
 
-    /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
-    file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
-    app->install_date_uint64 = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+    file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CREATED, G_FILE_QUERY_INFO_NONE, NULL, NULL);
+    app->install_date_uint64 = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_CREATED);
 
     return g_steal_pointer (&app);
   }
@@ -710,9 +709,8 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
 
   file = g_file_new_for_path (app->desktop_path);
 
-  /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
-  file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
-  app->install_date_uint64 = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+  file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CREATED, 0, NULL, NULL);
+  app->install_date_uint64 = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_CREATED);
 
   return g_steal_pointer (&app);
 }
