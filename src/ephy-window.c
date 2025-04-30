@@ -3577,6 +3577,9 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
   EphySecurityLevel security_level;
   GtkWidget *security_dialog;
 
+  if (adw_application_window_get_visible_dialog (ADW_APPLICATION_WINDOW (window)))
+    return;
+
   view = ephy_embed_get_web_view (window->active_embed);
   ephy_web_view_get_security_level (view, &security_level, &address, &certificate, &tls_errors);
 
