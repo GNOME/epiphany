@@ -220,7 +220,7 @@ certificate_button_clicked_cb (GtkButton *button,
                                         self->tls_errors,
                                         self->security_level);
 
-  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (dialog))));
+  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self))));
 }
 
 static void
