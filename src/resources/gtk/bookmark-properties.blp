@@ -1,0 +1,123 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyBookmarkProperties: Adw.Dialog {
+  width-request: 360;
+
+  Adw.NavigationView navigation_view {
+    Adw.NavigationPage {
+      title: _("Bookmark");
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar header_bar {
+          show-end-title-buttons: true;
+        }
+
+        Adw.PreferencesPage {
+          Adw.PreferencesGroup {
+            Adw.EntryRow name_row {
+              title: _("Name");
+            }
+
+            Adw.EntryRow address_row {
+              title: _("Address");
+            }
+          }
+
+          Adw.PreferencesGroup {
+            Adw.ActionRow {
+              title: _("Tags");
+              activatable: true;
+              activated => $on_tags_activated();
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+          }
+
+          Adw.PreferencesGroup {
+            Adw.ButtonRow remove_button {
+              title: _("Remove");
+              action-name: "bookmark-properties.remove-bookmark";
+
+              styles [
+                "destructive-action",
+              ]
+            }
+          }
+        }
+      }
+    }
+
+    Adw.NavigationPage {
+      title: _("Tags");
+      tag: "tags";
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar tag_header_bar {
+          show-end-title-buttons: true;
+        }
+
+        Box {
+          orientation: vertical;
+          spacing: 12;
+
+          ListBox {
+            margin-top: 12;
+            margin-start: 12;
+            margin-end: 12;
+
+            styles [
+              "boxed-list",
+            ]
+
+            Adw.EntryRow add_tag_row {
+              title: _("Add Tag");
+              selectable: false;
+              activates-default: true;
+              entry-activated => $on_add_tag_entry_activated();
+
+              [suffix]
+              Button {
+                icon-name: "list-add-symbolic";
+                action-name: "bookmark-properties.add-tag";
+                valign: center;
+
+                accessibility {
+                  label: _("Add new tag");
+                }
+
+                styles [
+                  "flat",
+                ]
+              }
+            }
+          }
+
+          ScrolledWindow {
+            hscrollbar-policy: never;
+            propagate-natural-height: true;
+
+            child: ListBox tag_list {
+              selection-mode: none;
+              margin-top: 12;
+              margin-bottom: 12;
+              margin-start: 12;
+              margin-end: 12;
+
+              styles [
+                "boxed-list",
+                "undershoot-top",
+              ]
+            };
+          }
+        }
+      }
+    }
+  }
+}
+

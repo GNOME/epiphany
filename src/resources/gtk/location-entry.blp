@@ -1,0 +1,292 @@
+using Gtk 4.0;
+using Gio 2.0;
+
+template $EphyLocationEntry: Widget {
+  valign: center;
+
+  styles [
+    "location-entry",
+  ]
+
+  changed => $editable_changed_cb() swapped;
+
+  Text text {
+    placeholder-text: _("Search for websites, bookmarks, and open tabs");
+    input-hints: no_emoji;
+    max-width-chars: 200;
+    xalign: 0.5;
+    activate => $activate_cb() swapped;
+    cut-clipboard => $cut_clipboard_cb() swapped;
+    copy-clipboard => $copy_clipboard_cb() swapped;
+
+    EventControllerKey {
+      key-pressed => $key_pressed_cb() swapped;
+    }
+
+    GestureClick {
+      button: 0;
+      exclusive: true;
+      propagation-phase: capture;
+      pressed => $text_pressed_cb() swapped;
+    }
+
+    GestureDrag {
+      button: 1;
+      drag-end => $text_drag_end_cb() swapped;
+    }
+
+    ShortcutController {
+      scope: local;
+
+      Shortcut {
+        trigger: "Menu";
+        action: "action(menu.popup-extra)";
+      }
+
+      Shortcut {
+        trigger: "<Shift>F10";
+        action: "action(menu.popup-extra)";
+      }
+    }
+
+    PopoverMenu context_menu {
+      menu-model: context_menu_model;
+      halign: start;
+      has-arrow: false;
+    }
+  }
+
+  ProgressBar progress {
+    css-name: "progress";
+    can-target: false;
+    valign: end;
+    visible: false;
+  }
+
+  Button security_button {
+    tooltip-text: _("Website Security Status and Permissions");
+    valign: center;
+    clicked => $security_button_clicked_cb() swapped;
+
+    styles [
+      "entry-icon",
+      "start",
+    ]
+  }
+
+  Button bookmark_button {
+    valign: center;
+
+    styles [
+      "entry-icon",
+      "end",
+    ]
+  }
+
+  ToggleButton reader_mode_button {
+    tooltip-text: _("Reader Mode");
+    valign: center;
+    visible: false;
+    clicked => $reader_mode_clicked_cb() swapped;
+
+    styles [
+      "entry-icon",
+      "end",
+    ]
+  }
+
+  Button clear_button {
+    tooltip-text: _("Clear");
+    valign: center;
+    visible: false;
+    icon-name: "edit-clear-symbolic";
+    clicked => $clear_button_clicked_cb() swapped;
+
+    styles [
+      "entry-icon",
+      "end",
+    ]
+  }
+
+  MenuButton password_button {
+    tooltip-text: _("View Available Passwords");
+    valign: center;
+    visible: false;
+    icon-name: "dialog-password-symbolic";
+
+    styles [
+      "entry-icon",
+      "end",
+    ]
+  }
+
+  Popover suggestions_popover {
+    has-arrow: false;
+    autohide: false;
+    can-focus: false;
+    notify::visible => $suggestions_popover_notify_visible_cb() swapped;
+
+    child: ScrolledWindow scrolled_window {
+      hscrollbar-policy: never;
+      max-content-height: 400;
+      propagate-natural-height: true;
+
+      child: ListView suggestions_view {
+        activate => $suggestion_activated_cb() swapped;
+
+        model: SingleSelection suggestions_model {
+          autoselect: false;
+          items-changed => $update_suggestions_popover() swapped;
+        };
+
+        factory: BuilderListItemFactory {
+          template ListItem {
+            child: Grid {
+              column-spacing: 6;
+              row-spacing: 3;
+
+              GestureClick {
+                button: 1;
+                exclusive: true;
+                pressed => $item_pressed_cb();
+                released => $item_released_cb();
+              }
+
+              Image {
+                pixel-size: 16;
+                gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.icon)) as <Gio.Icon>;
+
+                layout {
+                  column: "0";
+                  row: "0";
+                }
+              }
+
+              Label {
+                use-markup: true;
+                ellipsize: end;
+                xalign: 0;
+                single-line-mode: true;
+                hexpand: true;
+                label: bind template.item as <$EphySuggestion>.title;
+
+                layout {
+                  column: "1";
+                  row: "0";
+                }
+              }
+
+              Label {
+                use-markup: true;
+                ellipsize: end;
+                xalign: 0;
+                single-line-mode: true;
+                hexpand: true;
+                label: bind template.item as <$EphySuggestion>.subtitle;
+
+                layout {
+                  column: "1";
+                  row: "1";
+                }
+
+                styles [
+                  "dim-label",
+                  "caption",
+                ]
+              }
+
+              Image {
+                pixel-size: 16;
+                gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)) as <Gio.Icon>;
+
+                layout {
+                  column: "2";
+                  row: "0";
+                }
+              }
+            };
+          }
+        };
+      };
+    };
+
+    styles [
+      "menu",
+      "suggestions",
+    ]
+  }
+
+  EventControllerFocus {
+    enter => $focus_enter_cb() swapped;
+    leave => $focus_leave_cb() swapped;
+  }
+
+  GestureClick {
+    propagation-phase: capture;
+    button: 1;
+    exclusive: true;
+    pressed => $click_pressed_cb() swapped;
+    released => $click_released_cb() swapped;
+  }
+
+  GestureLongPress {
+    propagation-phase: capture;
+    touch-only: true;
+    exclusive: true;
+    pressed => $long_press_cb() swapped;
+  }
+}
+
+menu context_menu_model {
+  section {
+    item {
+      label: _("_Undo");
+      action: "edit.undo-extra";
+    }
+
+    item {
+      label: _("_Redo");
+      action: "edit.redo-extra";
+    }
+  }
+
+  section {
+    item {
+      label: _("Cu_t");
+      action: "clipboard.cut";
+    }
+
+    item {
+      label: _("_Copy");
+      action: "clipboard.copy";
+    }
+
+    item {
+      label: _("_Paste");
+      action: "clipboard.paste";
+    }
+
+    item {
+      label: _("Paste and _Go");
+      action: "clipboard.paste-and-go";
+    }
+
+    item {
+      label: _("_Delete");
+      action: "selection.delete";
+    }
+  }
+
+  section {
+    item {
+      label: _("Cl_ear");
+      action: "edit.clear";
+    }
+
+    item {
+      label: _("Select _All");
+      action: "entry.select-all";
+    }
+  }
+}
+

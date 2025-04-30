@@ -1,0 +1,25 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyBookmarkRow: Adw.ActionRow {
+  title-lines: 1;
+  activatable: true;
+
+  [prefix]
+  Image favicon_image {
+    margin-start: 6;
+    pixel-size: 16;
+  }
+
+  [suffix]
+  Button properties_button {
+    icon-name: "emblem-system-symbolic";
+    receives-default: false;
+    valign: center;
+
+    styles [
+      "flat",
+    ]
+  }
+}
+

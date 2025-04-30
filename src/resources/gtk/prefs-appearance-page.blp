@@ -1,0 +1,128 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PrefsAppearancePage: Adw.PreferencesPage {
+  icon-name: "document-edit-symbolic";
+  title: _("Appearance");
+
+  Adw.PreferencesGroup {
+    title: _("Fonts");
+
+    Adw.ExpanderRow use_gnome_fonts_row {
+      show-enable-switch: true;
+      title: _("Use Custom Fonts");
+
+      Adw.ActionRow {
+        activatable: false;
+        title: _("Sans Serif Font");
+
+        FontButton sans_fontbutton {
+          font: "Sans 12";
+          use-font: true;
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        activatable: false;
+        title: _("Serif Font");
+
+        FontButton serif_fontbutton {
+          font: "Sans 12";
+          use-font: true;
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        activatable: false;
+        title: _("Monospace Font");
+
+        FontButton mono_fontbutton {
+          font: "Sans 12";
+          use-font: true;
+          valign: center;
+        }
+      }
+    }
+  }
+
+  Adw.PreferencesGroup reader_mode_box {
+    title: _("Reader Mode");
+
+    Adw.ComboRow reader_mode_font_style {
+      title: _("Font Style");
+      expression: expr $reader_font_style_get_name(item as <Adw.EnumListItem>.value) as <string>;
+
+      model: Adw.EnumListModel {
+        enum-type: typeof<$EphyPrefsReaderFontStyle>;
+      };
+    }
+
+    Adw.ComboRow reader_mode_color_scheme {
+      title: _("Color Scheme");
+      expression: expr $reader_color_scheme_get_name(item as <Adw.EnumListItem>.value) as <string>;
+
+      model: Adw.EnumListModel {
+        enum-type: typeof<$EphyPrefsReaderColorScheme>;
+      };
+    }
+  }
+
+  Adw.PreferencesGroup {
+    title: _("Style");
+
+    Adw.SwitchRow css_row {
+      title: _("Use Custom Stylesheet");
+
+      Button css_edit_button {
+        valign: center;
+        icon-name: "document-edit-symbolic";
+
+        styles [
+          "flat",
+        ]
+      }
+    }
+
+    Adw.SwitchRow js_row {
+      title: _("Use Custom JavaScript");
+
+      Button js_edit_button {
+        valign: center;
+        icon-name: "document-edit-symbolic";
+
+        styles [
+          "flat",
+        ]
+      }
+    }
+
+    Adw.SpinRow default_zoom_row {
+      title: _("Default Zoom Level");
+
+      adjustment: Adjustment zoom_adjustment {
+        lower: 33;
+        upper: 300;
+        step-increment: 1;
+        page-increment: 10;
+      };
+
+      max-width-chars: 5;
+      value: 100;
+      output => $on_default_zoom_row_output();
+      changed => $on_default_zoom_row_changed();
+    }
+  }
+}
+
+SizeGroup {
+  mode: horizontal;
+
+  widgets [
+    sans_fontbutton,
+    serif_fontbutton,
+    mono_fontbutton,
+  ]
+}
+

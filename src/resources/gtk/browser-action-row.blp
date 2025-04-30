@@ -1,0 +1,18 @@
+using Gtk 4.0;
+
+template $EphyBrowserActionRow: ListBoxRow {
+  child: Box {
+    $EphyIndicatorBin badge {
+      Image browser_action_image {
+        pixel-size: 16;
+      }
+    }
+
+    Label title_label {
+      hexpand: true;
+      ellipsize: end;
+      xalign: 0;
+    }
+  };
+}
+

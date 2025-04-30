@@ -1,0 +1,67 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PrefsExtensionsPage: Adw.PreferencesPage {
+  icon-name: "application-x-addon-symbolic";
+  title: _("Extensions");
+
+  Adw.PreferencesGroup {
+    Adw.ActionRow {
+      activatable: true;
+      title: _("Add New Extension");
+      subtitle: _("Extensions must be installed manually from their files");
+      use-underline: true;
+      activated => $on_add_button_clicked();
+
+      [suffix]
+      Image {
+        icon-name: "list-add-symbolic";
+      }
+    }
+
+    Label {
+      wrap: true;
+      use-markup: true;
+      label: _("Epiphany is compatible with web extensions for Mozilla Firefox. To find and add web extensions, visit <a href=\"https://addons.mozilla.org\">addons.mozilla.org</a>");
+      margin-top: 12;
+      xalign: 0;
+
+      styles [
+        "dim-label",
+      ]
+    }
+  }
+
+  Adw.PreferencesGroup {
+    Stack stack {
+      StackPage {
+        name: "list";
+
+        child: ListBox listbox {
+          selection-mode: none;
+
+          styles [
+            "boxed-list",
+          ]
+        };
+      }
+
+      StackPage {
+        name: "empty";
+
+        child: Label {
+          label: _("No Extensions Installed");
+          wrap: true;
+          xalign: 0.5;
+          height-request: 50;
+
+          styles [
+            "card",
+            "dim-label",
+          ]
+        };
+      }
+    }
+  }
+}
+

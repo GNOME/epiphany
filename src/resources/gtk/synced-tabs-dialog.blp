@@ -1,0 +1,59 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SyncedTabsDialog: Adw.Window {
+  height-request: 500;
+  modal: true;
+  destroy-with-parent: true;
+  title: _("Synced Tabs");
+
+  content: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: Box {
+      orientation: vertical;
+      margin-bottom: 15;
+      margin-start: 15;
+      margin-end: 15;
+      spacing: 12;
+
+      Label {
+        xalign: 0;
+        wrap: true;
+        max-width-chars: 50;
+        label: _("Below are the synced open tabs of your other devices that use Firefox Sync with this account. Open a tab by double clicking its name (tabs under Local Tabs cannot be opened).");
+      }
+
+      Box {
+        orientation: vertical;
+        spacing: 6;
+
+        ScrolledWindow {
+          vexpand: true;
+
+          TreeView treeview {
+            headers-visible: false;
+            row-activated => $treeview_row_activated_cb();
+
+            [internal-child selection]
+            TreeSelection {
+              mode: single;
+            }
+
+            TreeViewColumn {
+              CellRendererPixbuf {}
+            }
+
+            TreeViewColumn {
+              CellRendererText {
+                ellipsize: end;
+              }
+            }
+          }
+        }
+      }
+    };
+  };
+}
+

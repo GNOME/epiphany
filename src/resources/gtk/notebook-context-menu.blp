@@ -1,0 +1,62 @@
+using Gtk 4.0;
+
+menu notebook-menu {
+  section {
+    item {
+      label: _("R_eload");
+      action: "toolbar.reload";
+    }
+
+    item {
+      label: _("Reload _All Tabs");
+      action: "tab.reload-all";
+    }
+
+    item {
+      label: _("_Duplicate");
+      action: "tab.duplicate";
+    }
+  }
+
+  section {
+    item {
+      label: _("P_in Tab");
+      action: "tab.pin";
+      hidden-when: "action-disabled";
+    }
+
+    item {
+      label: _("Unp_in Tab");
+      action: "tab.unpin";
+      hidden-when: "action-disabled";
+    }
+
+    item {
+      label: _("_Mute Tab");
+      action: "tab.mute";
+    }
+  }
+
+  section {
+    item {
+      label: _("Close Tabs to the _Left");
+      action: "tab.close-left";
+    }
+
+    item {
+      label: _("Close Tabs to the _Right");
+      action: "tab.close-right";
+    }
+
+    item {
+      label: _("Close _Other Tabs");
+      action: "tab.close-others";
+    }
+
+    item {
+      label: _("_Close");
+      action: "tab.close";
+    }
+  }
+}
+

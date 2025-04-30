@@ -1,0 +1,314 @@
+using Gtk 4.0;
+
+ShortcutsWindow shortcuts-dialog {
+  modal: true;
+
+  ShortcutsSection {
+    section-name: "shortcuts";
+    max-height: 10;
+
+    ShortcutsGroup {
+      title: C_("shortcut window", "General");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "New Window");
+        accelerator: "<Primary>N";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "New Incognito Window");
+        accelerator: "<shift><Primary>N";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Open File");
+        accelerator: "<Primary>O";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Save Page");
+        accelerator: "<Primary>S";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Take Screenshot");
+        accelerator: "<shift><Primary>S";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Print Page");
+        accelerator: "<Primary>P";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Quit");
+        accelerator: "<Primary>Q";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Help");
+        accelerator: "F1";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Open Menu");
+        accelerator: "F10";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Shortcuts");
+        accelerator: "<Primary>question";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Show Downloads List");
+        accelerator: "<shift><Primary>Y";
+      }
+    }
+
+    ShortcutsGroup {
+      title: C_("shortcut window", "Navigation");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Go to Homepage");
+        accelerator: "<alt>Home";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Reload Current Page");
+        accelerator: "F5 <Primary>R";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Reload Bypassing Cache");
+        accelerator: "<shift>F5 <shift><Primary>R";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Stop Loading Current Page");
+        accelerator: "Escape";
+      }
+
+      ShortcutsShortcut go-back-shortcut {
+        title: C_("shortcut window", "Go Back to Previous Page");
+        accelerator: "<alt>Left";
+      }
+
+      ShortcutsShortcut go-forward-shortcut {
+        title: C_("shortcut window", "Go Forward to Next Page");
+        accelerator: "<alt>Right";
+      }
+
+      ShortcutsShortcut go-back-gesture {
+        shortcut-type: gesture_two_finger_swipe_right;
+        title: C_("shortcut window", "Go Back to Previous Page");
+      }
+
+      ShortcutsShortcut go-forward-gesture {
+        shortcut-type: gesture_two_finger_swipe_left;
+        title: C_("shortcut window", "Go Forward to Next Page");
+      }
+    }
+
+    ShortcutsGroup {
+      title: C_("shortcut window", "Tabs");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "New Tab");
+        accelerator: "<Primary>T";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Close Current Tab");
+        accelerator: "<Primary>W";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Reopen Closed Tab");
+        accelerator: "<shift><Primary>T";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Go to Next Tab");
+        accelerator: "<Primary>Page_Down <Primary>Tab";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Go to Previous Tab");
+        accelerator: "<Primary>Page_Up <shift><Primary>Tab";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Move Current Tab to the Left");
+        accelerator: "<shift><Primary>Page_Up";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Move Current Tab to the Right");
+        accelerator: "<shift><Primary>Page_Down";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Duplicate Current Tab");
+        accelerator: "<shift><Primary>K";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "View Open Tabs");
+        accelerator: "<shift><Primary>O";
+      }
+    }
+
+    ShortcutsGroup {
+      title: C_("shortcut window", "Miscellaneous");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "History");
+        accelerator: "<Primary>H";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Clear Website Data");
+        accelerator: "<Primary><Shift>Delete";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Preferences");
+        accelerator: "<Primary>comma";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Bookmark Current Page");
+        accelerator: "<Primary>D";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Show Bookmarks List");
+        accelerator: "<alt><Primary>D";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Import Bookmarks");
+        accelerator: "<Shift><Primary>M";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Export Bookmarks");
+        accelerator: "<Shift><Primary>X";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Toggle Caret Browsing");
+        accelerator: "F7";
+      }
+    }
+
+    ShortcutsGroup shortcuts-web-apps-group {
+      title: C_("shortcut window", "Web App");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Install Site as Web App");
+        accelerator: "<Shift><Primary>A";
+      }
+    }
+
+    ShortcutsGroup {
+      title: C_("shortcut window", "View");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Zoom In");
+        accelerator: "<Primary>plus";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Zoom Out");
+        accelerator: "<Primary>minus";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Reset Zoom");
+        accelerator: "<Primary>0";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Fullscreen");
+        accelerator: "F11";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "View Page Source");
+        accelerator: "<Primary>U";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Toggle Inspector");
+        accelerator: "<shift><Primary>I F12";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Toggle Reader Mode");
+        accelerator: "<alt><Primary>R";
+      }
+    }
+
+    ShortcutsGroup {
+      title: C_("shortcut window", "Editing");
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Cut");
+        accelerator: "<Primary>X";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Copy");
+        accelerator: "<Primary>C";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Paste");
+        accelerator: "<Primary>V";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Undo");
+        accelerator: "<Primary>Z";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Redo");
+        accelerator: "<shift><Primary>Z";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Select All");
+        accelerator: "<Primary>A";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Select Page URL");
+        accelerator: "<Primary>L";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Search With Default Search Engine");
+        accelerator: "<Primary>K";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Find");
+        accelerator: "<Primary>F";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Next Find Result");
+        accelerator: "<Primary>G";
+      }
+
+      ShortcutsShortcut {
+        title: C_("shortcut window", "Previous Find Result");
+        accelerator: "<shift><Primary>G";
+      }
+    }
+  }
+}
+

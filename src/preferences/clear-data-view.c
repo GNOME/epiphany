@@ -36,6 +36,8 @@ struct _ClearDataView {
   GtkWidget *treeview;
   GtkTreeModel *treestore;
   GtkTreeModelFilter *treemodelfilter;
+  GtkTreeViewColumn *active_column;
+  GtkTreeViewColumn *name_column;
 
   GCancellable *cancellable;
 };
@@ -418,8 +420,9 @@ clear_data_view_class_init (ClearDataViewClass *klass)
                                                "/org/gnome/epiphany/gtk/clear-data-view.ui");
 
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treeview);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataView, treestore);
-  gtk_widget_class_bind_template_child (widget_class, ClearDataView, treemodelfilter);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataView, active_column);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataView, name_column);
+
   gtk_widget_class_bind_template_callback (widget_class, item_toggled_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
@@ -429,7 +432,22 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 clear_data_view_init (ClearDataView *clear_data_view)
 {
+  GtkCellRenderer *cell_renderer;
+
   gtk_widget_init_template (GTK_WIDGET (clear_data_view));
+
+  cell_renderer = gtk_cell_renderer_toggle_new ();
+  g_signal_connect (cell_renderer, "toggled", G_CALLBACK (item_toggled_cb), clear_data_view);
+  gtk_tree_view_column_pack_start (clear_data_view->active_column, cell_renderer, TRUE);
+  gtk_tree_view_column_set_attributes (clear_data_view->active_column, cell_renderer, "active", 1, "sensitive", 4, NULL);
+
+  cell_renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (clear_data_view->name_column, cell_renderer, TRUE);
+  gtk_tree_view_column_set_attributes (clear_data_view->name_column, cell_renderer, "text", 2, "sensitive", 4, NULL);
+
+  clear_data_view->treestore = GTK_TREE_MODEL (gtk_tree_store_new (5, G_TYPE_UINT, G_TYPE_BOOLEAN, G_TYPE_STRING, WEBKIT_TYPE_WEBSITE_DATA, G_TYPE_BOOLEAN));
+  clear_data_view->treemodelfilter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (clear_data_view->treestore, NULL));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (clear_data_view->treeview), GTK_TREE_MODEL (clear_data_view->treemodelfilter));
 
   gtk_tree_model_filter_set_visible_func (clear_data_view->treemodelfilter,
                                           (GtkTreeModelFilterVisibleFunc)row_visible_func,

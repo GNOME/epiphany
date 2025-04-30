@@ -1,0 +1,78 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ClearDataView: $EphyDataView {
+  title: _("Website Data");
+  clear-button-label: _("_Clear Data");
+  clear-button-tooltip: _("Remove selected website data");
+  search-description: _("Search website data");
+  empty-title: _("No Website Data Found");
+  empty-description: _("Website data will be listed here");
+  has-search-results: "True";
+  can-clear: "True";
+  clear-button-clicked => $on_clear_button_clicked();
+  notify::search-text => $search_text_changed_cb() swapped;
+
+  ScrolledWindow scrolled_window {
+    Adw.Clamp {
+      margin-start: 6;
+      margin-end: 6;
+
+      Box {
+        orientation: vertical;
+        margin-top: 6;
+        margin-bottom: 6;
+        spacing: 12;
+
+        Box {
+          orientation: vertical;
+          spacing: 6;
+
+          Label {
+            label: _("Clear selected website data:");
+            use-underline: true;
+            xalign: 0;
+            wrap: true;
+            justify: left;
+          }
+
+          ScrolledWindow {
+            vexpand: true;
+            min-content-height: 100;
+
+            styles [
+              "frame",
+            ]
+
+            TreeView treeview {
+              headers-visible: false;
+
+              [internal-child selection]
+              TreeSelection {
+                mode: none;
+              }
+
+              TreeViewColumn active_column {
+              }
+
+              TreeViewColumn name_column {
+              }
+            }
+          }
+        }
+
+        Label {
+          label: _("You cannot undo this action. The data you are choosing to clear will be removed forever.");
+          justify: left;
+          xalign: 0;
+          wrap: true;
+
+          styles [
+            "heading",
+          ]
+        }
+      }
+    }
+  }
+}
+

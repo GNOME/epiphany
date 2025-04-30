@@ -1,0 +1,70 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PrefsPrivacyPage: Adw.PreferencesPage {
+  icon-name: "preferences-system-privacy-symbolic";
+  title: _("Privacy");
+  name: "privacy-page";
+
+  Adw.PreferencesGroup {
+    title: _("Web Tracking");
+
+    Adw.SwitchRow enable_itp_row {
+      title: _("Intelligent _Tracking Prevention");
+      use-underline: true;
+    }
+
+    Adw.SwitchRow enable_website_data_storage_row {
+      subtitle: _("Allow websites to store cookies, databases, and local storage data. Disabling website data storage will break many websites.");
+      title: _("_Website Data Storage");
+      use-underline: true;
+    }
+  }
+
+  Adw.PreferencesGroup search_suggestions_box {
+    title: _("Search Suggestions");
+
+    Adw.SwitchRow enable_google_search_suggestions_row {
+      subtitle: _("Enable search suggestions in the URL entry");
+      title: _("_Google Search Suggestions");
+      use-underline: true;
+    }
+  }
+
+  Adw.PreferencesGroup {
+    title: _("Personal Data");
+
+    Adw.ActionRow {
+      title: _("Website _Data");
+      activatable: true;
+      use-underline: true;
+      activated => $on_clear_data_row_activated();
+
+      [suffix]
+      Image {
+        icon-name: "go-next-symbolic";
+      }
+    }
+  }
+
+  Adw.PreferencesGroup {
+    title: _("Forms and Autofill");
+
+    Adw.SwitchRow autofill_data_row {
+      title: _("_Autofill Forms");
+      use-underline: true;
+    }
+
+    Adw.ActionRow {
+      activatable: true;
+      title: _("Autofill _Data");
+      use-underline: true;
+      activated => $on_autofill_row_activated();
+
+      Image {
+        icon-name: "go-next-symbolic";
+      }
+    }
+  }
+}
+

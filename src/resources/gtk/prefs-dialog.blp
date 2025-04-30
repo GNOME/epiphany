@@ -1,0 +1,21 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyPrefsDialog: Adw.PreferencesDialog {
+  content-width: 640;
+  content-height: 580;
+  search-enabled: true;
+  closed => $on_closed();
+
+  $PrefsGeneralPage general_page {
+    webapp-additional-row-activated => $on_manage_webapp_additional_urls_row_activated();
+  }
+
+  $PrefsPrivacyPage {
+    autofill-row-activated => $on_autofill_row_activated();
+    clear-data-row-activated => $on_clear_data_row_activated();
+  }
+
+  $PrefsAppearancePage {}
+}
+

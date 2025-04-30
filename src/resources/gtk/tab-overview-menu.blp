@@ -1,0 +1,23 @@
+using Gtk 4.0;
+
+menu overview-menu {
+  section {
+    item {
+      label: _("_New Window");
+      action: "app.new-window";
+    }
+
+    item {
+      label: _("New _Incognito Window");
+      action: "app.new-incognito";
+    }
+  }
+
+  section {
+    item {
+      label: _("Reopen Closed _Tab");
+      action: "app.reopen-closed-tab";
+    }
+  }
+}
+

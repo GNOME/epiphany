@@ -1,0 +1,202 @@
+using Gtk 4.0;
+
+menu menu {
+  section {
+    item {
+      custom: "zoom";
+    }
+
+    item {
+      custom: "header";
+    }
+  }
+
+  section {
+    item {
+      label: _("_Run in Background");
+      action: "app.run-in-background";
+      hidden-when: "action-disabled";
+    }
+  }
+
+  section {
+    item {
+      label: _("_New Window");
+      action: "app.new-window";
+    }
+
+    item {
+      label: _("New _Incognito Window");
+      action: "app.new-incognito";
+    }
+
+    item {
+      label: _("Reopen Closed _Tab");
+      action: "app.reopen-closed-tab";
+    }
+  }
+
+  section {
+    item {
+      label: _("Histo_ry");
+      action: "app.history";
+    }
+
+    submenu {
+      label: _("I_mport and Export");
+      ephy-submenu-id: "import-export";
+
+      section {
+        item {
+          label: _("I_mport Bookmarks…");
+          action: "app.import-bookmarks";
+        }
+
+        item {
+          label: _("E_xport Bookmarks…");
+          action: "app.export-bookmarks";
+        }
+      }
+
+      section {
+        item {
+          label: _("Import _Passwords…");
+          action: "app.import-passwords";
+        }
+
+        item {
+          label: _("Export _Passwords…");
+          action: "app.export-passwords";
+        }
+      }
+    }
+
+    submenu {
+      label: _("_Web Apps");
+      ephy-submenu-id: "webapps";
+
+      section {
+        item {
+          label: _("Install as _Web App…");
+          action: "win.save-as-application";
+        }
+
+        item {
+          label: _("Manag_e Web Apps");
+          action: "win.open-application-manager";
+        }
+      }
+    }
+
+    item {
+      label: _("Text Enco_ding…");
+      action: "win.encoding";
+    }
+
+    item {
+      label: _("Pri_vacy Report");
+      action: "win.privacy-report";
+    }
+
+    item {
+      label: _("Passw_ords");
+      action: "win.passwords";
+    }
+  }
+
+  section {
+    item {
+      label: _("Pr_eferences");
+      action: "app.preferences";
+    }
+
+    item {
+      label: _("_Keyboard Shortcuts");
+      action: "app.shortcuts";
+    }
+
+    item {
+      label: _("_Help");
+      action: "app.help";
+    }
+
+    item {
+      label: _("_About Web");
+      action: "app.about";
+    }
+  }
+}
+
+PopoverMenu page-menu-popover {
+  menu-model: menu;
+
+  [zoom]
+  Box zoom-box {
+    orientation: horizontal;
+    homogeneous: true;
+
+    styles [
+      "linked",
+      "page-menu-zoom-box",
+    ]
+
+    Button {
+      tooltip-text: C_("tooltip", "Zoom Out");
+      icon-name: "zoom-out-symbolic";
+      action-name: "win.zoom-out";
+    }
+
+    Button {
+      tooltip-text: _("Restore Zoom");
+      action-name: "win.zoom-normal";
+
+      Label zoom-level {
+        width-chars: 5;
+      }
+    }
+
+    Button {
+      tooltip-text: C_("tooltip", "Zoom In");
+      icon-name: "zoom-in-symbolic";
+      action-name: "win.zoom-in";
+    }
+  }
+
+  [header]
+  Box button-box {
+    orientation: horizontal;
+    spacing: 6;
+    homogeneous: true;
+    margin-top: 6;
+
+    styles [
+      "page-menu-button-box",
+    ]
+
+    Button {
+      tooltip-text: _("Print…");
+      icon-name: "document-print-symbolic";
+      action-name: "win.print";
+    }
+
+    Button {
+      tooltip-text: _("Find…");
+      icon-name: "edit-find-symbolic";
+      action-name: "win.find";
+    }
+
+    Button {
+      tooltip-text: _("Fullscreen");
+      icon-name: "view-fullscreen-symbolic";
+      action-name: "win.fullscreen";
+    }
+
+    Button combined_stop_reload_button {
+      visible: false;
+      tooltip-text: _("Reload");
+      icon-name: "view-refresh-symbolic";
+      action-name: "toolbar.combined-stop-reload";
+    }
+  }
+}
+

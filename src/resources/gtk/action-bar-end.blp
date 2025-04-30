@@ -1,0 +1,119 @@
+using Gtk 4.0;
+
+template $EphyActionBarEnd: Box {
+  spacing: 6;
+
+  Revealer downloads_revealer {
+    transition-type: crossfade;
+
+    MenuButton downloads_button {
+      tooltip-text: _("Downloads");
+      receives-default: true;
+
+      styles [
+        "image-button",
+        "toolbar-button",
+      ]
+
+      Image downloads_icon {
+        valign: center;
+      }
+    }
+  }
+
+  MenuButton browser_actions_button {
+    tooltip-text: _("Extensions");
+    visible: false;
+    receives-default: true;
+    icon-name: "application-x-addon-symbolic";
+
+    styles [
+      "toolbar-button",
+    ]
+
+    popover: Popover browser_actions_popover {
+      width-request: 250;
+
+      styles [
+        "menu",
+      ]
+
+      child: Stack browser_actions_stack {
+        transition-type: slide_left_right;
+        interpolate-size: true;
+        vhomogeneous: false;
+        hhomogeneous: false;
+
+        ScrolledWindow browser_actions_scrolled_window {
+          hscrollbar-policy: never;
+          max-content-height: 360;
+          propagate-natural-height: true;
+
+          child: ListBox browser_actions_listbox {
+            selection-mode: none;
+            row-activated => $browser_actions_row_activated_cb();
+          };
+        }
+
+        Box browser_actions_popup_view_box {
+          orientation: vertical;
+          spacing: 6;
+
+          CenterBox {
+            orientation: horizontal;
+
+            [start]
+            Button {
+              icon-name: "go-previous-symbolic";
+              margin-end: 6;
+              clicked => $browser_actions_popup_view_back_clicked_cb();
+
+              styles [
+                "flat",
+              ]
+            }
+
+            [center]
+            Label browser_actions_popup_view_label {
+              hexpand: true;
+
+              styles [
+                "heading",
+              ]
+            }
+          }
+        }
+      };
+    };
+  }
+
+  Button overview_button {
+    icon-name: "view-grid-symbolic";
+    action-name: "win.tabs-view";
+    tooltip-text: _("View Open Tabs");
+
+    styles [
+      "toolbar-button",
+    ]
+  }
+
+  Button bookmark_button {
+    visible: false;
+    icon-name: "ephy-non-starred-symbolic";
+
+    styles [
+      "toolbar-button",
+    ]
+  }
+
+  Button bookmarks_button {
+    tooltip-text: _("Bookmarks");
+    clicked => $on_bookmarks_button();
+    icon-name: "ephy-library-symbolic";
+
+    styles [
+      "toolbar-button",
+    ]
+  }
+}
+

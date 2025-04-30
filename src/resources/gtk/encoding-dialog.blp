@@ -1,0 +1,124 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyEncodingDialog: Adw.Dialog {
+  title: _("Text Encoding");
+  content-width: 500;
+  content-height: 420;
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: Box {
+      orientation: vertical;
+      spacing: 12;
+      margin-top: 12;
+      margin-bottom: 12;
+      margin-start: 12;
+      margin-end: 12;
+
+      Box {
+        spacing: 6;
+
+        Label {
+          xalign: 0;
+          margin-start: 6;
+          hexpand: true;
+          label: _("Use Encoding Specified by Document");
+          wrap: true;
+        }
+
+        Switch default_switch {
+          valign: start;
+          state-set => $default_switch_toggled_cb();
+        }
+      }
+
+      Stack type_stack {
+        sensitive: false;
+        vexpand: true;
+        interpolate-size: true;
+
+        StackPage {
+          name: "suggested_box";
+
+          child: Box suggested_box {
+            orientation: vertical;
+            spacing: 16;
+
+            Box recent_box {
+              orientation: vertical;
+              spacing: 8;
+
+              Label {
+                xalign: 0;
+                margin-start: 8;
+                label: _("Recent Encodings");
+
+                styles [
+                  "heading",
+                ]
+              }
+
+              Frame {
+                vexpand: true;
+
+                ListBox recent_list_box {
+                  row-activated => $row_activated_cb();
+                }
+              }
+            }
+
+            Box related_box {
+              orientation: vertical;
+              spacing: 8;
+
+              Label {
+                xalign: 0;
+                margin-start: 8;
+                label: _("Related Encodings");
+
+                styles [
+                  "heading",
+                ]
+              }
+
+              Frame {
+                margin-top: 6;
+                margin-bottom: 6;
+                margin-start: 6;
+                margin-end: 6;
+
+                ListBox related_list_box {
+                  row-activated => $row_activated_cb();
+                }
+              }
+            }
+
+            Button {
+              label: _("Show All…");
+              receives-default: false;
+              clicked => $show_all_button_clicked_cb();
+            }
+          };
+        }
+
+        StackPage {
+          name: "scrolled-window";
+
+          child: Frame {
+            ScrolledWindow {
+              hscrollbar-policy: never;
+
+              ListBox list_box {
+                row-activated => $row_activated_cb();
+              }
+            }
+          };
+        }
+      }
+    };
+  };
+}
+

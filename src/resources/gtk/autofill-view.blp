@@ -1,0 +1,101 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyAutoFillView: Adw.NavigationPage {
+  title: _("Autofill Data");
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      [end]
+      Button {
+        use-underline: true;
+        label: _("_Clear All");
+        clicked => $on_clear_all();
+
+        styles [
+          "destructive-action",
+        ]
+      }
+    }
+
+    content: Adw.PreferencesPage {
+      Adw.PreferencesGroup {
+        title: _("Personal");
+
+        Adw.EntryRow first_name {
+          title: _("First Name");
+        }
+
+        Adw.EntryRow last_name {
+          title: _("Last Name");
+        }
+
+        Adw.EntryRow full_name {
+          title: _("Full Name");
+        }
+      }
+
+      Adw.PreferencesGroup {
+        title: _("Contact");
+
+        Adw.EntryRow user_name {
+          title: _("User Name");
+        }
+
+        Adw.EntryRow email {
+          title: _("E-Mail");
+        }
+
+        Adw.EntryRow phone {
+          title: _("Phone");
+        }
+      }
+
+      Adw.PreferencesGroup {
+        title: _("Address");
+
+        Adw.EntryRow street {
+          title: _("Street");
+        }
+
+        Adw.EntryRow organization {
+          title: _("Organization");
+        }
+
+        Adw.EntryRow postal_code {
+          title: _("Postal Code");
+        }
+
+        Adw.EntryRow state {
+          title: _("State");
+        }
+
+        Adw.EntryRow city {
+          title: _("City");
+        }
+
+        Adw.ComboRow country {
+          title: _("Country");
+        }
+      }
+
+      Adw.PreferencesGroup {
+        title: _("Credit Card");
+
+        Adw.ComboRow card_type {
+          title: _("Type");
+        }
+
+        Adw.EntryRow card_owner {
+          title: _("Owner");
+        }
+
+        Adw.EntryRow card_number {
+          title: _("Number");
+        }
+      }
+    };
+  };
+}
+

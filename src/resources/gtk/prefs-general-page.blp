@@ -1,0 +1,223 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PrefsGeneralPage: Adw.PreferencesPage {
+  icon-name: "applications-system-symbolic";
+  title: _("General");
+
+  Adw.PreferencesGroup webapp_box {
+    title: _("Web App");
+
+    Adw.ActionRow webapp_icon_row {
+      activatable: true;
+      title: _("_Icon");
+      use-underline: true;
+      activated => $on_webapp_icon_row_activated();
+
+      Image webapp_icon {
+        width-request: 34;
+      }
+    }
+
+    Adw.EntryRow webapp_url_row {
+      title: _("_Homepage");
+      use-underline: true;
+      changed => $on_webapp_entry_changed();
+    }
+
+    Adw.EntryRow webapp_title_row {
+      title: _("_Title");
+      use-underline: true;
+      changed => $on_webapp_entry_changed();
+    }
+
+    Adw.ActionRow {
+      activatable: true;
+      title: _("Additional _URLs");
+      use-underline: true;
+      activated => $on_manage_webapp_additional_urls_row_activated();
+
+      Image {
+        icon-name: "go-next-symbolic";
+      }
+    }
+  }
+
+  Adw.PreferencesGroup {
+    title: _("Web Content");
+
+    Adw.SwitchRow adblock_allow_row {
+      title: _("Block _Advertisements");
+      use-underline: true;
+    }
+
+    Adw.SwitchRow popups_allow_row {
+      title: _("Block _Popup Windows");
+      use-underline: true;
+    }
+  }
+
+  Adw.PreferencesGroup homepage_box {
+    title: _("Homepage");
+
+    Adw.ActionRow {
+      activatable-widget: new_tab_homepage_radiobutton;
+      title: _("Most _Visited Pages");
+      use-underline: true;
+
+      [prefix]
+      CheckButton new_tab_homepage_radiobutton {
+        valign: center;
+      }
+    }
+
+    Adw.ActionRow {
+      activatable-widget: blank_homepage_radiobutton;
+      title: _("_Blank Page");
+      use-underline: true;
+
+      [prefix]
+      CheckButton blank_homepage_radiobutton {
+        valign: center;
+        group: new_tab_homepage_radiobutton;
+      }
+    }
+
+    Adw.ActionRow {
+      activatable-widget: custom_homepage_radiobutton;
+      title: _("_Custom");
+      use-underline: true;
+
+      [prefix]
+      CheckButton custom_homepage_radiobutton {
+        valign: center;
+        group: new_tab_homepage_radiobutton;
+      }
+
+      Entry custom_homepage_entry {
+        hexpand: true;
+        secondary-icon-name: "edit-clear-symbolic";
+        valign: center;
+      }
+    }
+  }
+
+  Adw.PreferencesGroup download_box {
+    title: _("Downloads");
+
+    Adw.SwitchRow ask_on_download_row {
+      title: _("Ask o_n Download");
+      use-underline: true;
+    }
+
+    Adw.ActionRow download_folder_row {
+      sensitive: bind ask_on_download_row.active inverted;
+      title: _("_Download Folder");
+      use-underline: true;
+      activatable: true;
+      activated => $download_folder_row_activated_cb() swapped;
+
+      Box {
+        spacing: 6;
+
+        Image {
+          icon-name: "folder-symbolic";
+
+          styles [
+            "dim-label",
+          ]
+        }
+
+        Label download_folder_label {
+          ellipsize: end;
+          xalign: 1;
+
+          styles [
+            "dim-label",
+          ]
+        }
+      }
+
+      Image {
+        icon-name: "go-next-symbolic";
+
+        styles [
+          "dim-label",
+        ]
+      }
+    }
+  }
+
+  Adw.PreferencesGroup search_engine_group {
+    title: _("Search Engines");
+
+    $EphySearchEngineListBox {}
+  }
+
+  Adw.PreferencesGroup session_box {
+    title: _("Session");
+
+    Adw.SwitchRow start_in_incognito_mode_row {
+      title: _("Start in _Incognito Mode");
+      use-underline: true;
+    }
+
+    Adw.SwitchRow restore_session_row {
+      title: _("_Restore Tabs on Startup");
+      use-underline: true;
+    }
+  }
+
+  Adw.PreferencesGroup browsing_box {
+    title: _("Browsing");
+
+    Adw.SwitchRow enable_mouse_gesture_row {
+      title: _("Mouse _Gestures");
+      use-underline: true;
+    }
+
+    Adw.SwitchRow enable_switch_to_new_tab {
+      title: _("S_witch Immediately to New Tabs");
+      use-underline: true;
+    }
+
+    Adw.SwitchRow enable_navigation_gestures_row {
+      title: _("Touch _Navigation Gestures");
+      use-underline: true;
+    }
+  }
+
+  Adw.PreferencesGroup lang_group {
+    title: _("Languages");
+
+    ListBox lang_listbox {
+      selection-mode: none;
+
+      styles [
+        "boxed-list",
+      ]
+    }
+  }
+
+  Adw.PreferencesGroup {
+    Adw.SwitchRow enable_spell_checking_row {
+      title: _("_Spell Checking");
+      use-underline: true;
+    }
+  }
+
+  Adw.PreferencesGroup dev_group {
+    title: _("Developer");
+
+    Adw.SwitchRow show_developer_actions_row {
+      title: _("Show D_eveloper Actions");
+      use-underline: true;
+    }
+
+    Adw.SwitchRow always_show_full_url_row {
+      title: _("Always Show Full _URL");
+      use-underline: true;
+    }
+  }
+}
+

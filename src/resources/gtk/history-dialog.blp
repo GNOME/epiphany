@@ -1,0 +1,169 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyHistoryDialog: Adw.Dialog {
+  content-width: 640;
+  content-height: 580;
+  title: _("History");
+
+  Adw.ToolbarView {
+    [top]
+    Stack header_bars_stack {
+      transition-type: crossfade;
+
+      Adw.HeaderBar window_header_bar {
+        [start]
+        Button clear_button {
+          Adw.ButtonContent {
+            label: _("_Clear");
+            use-underline: true;
+            icon-name: "user-trash-symbolic";
+          }
+
+          clicked => $on_clear_button_clicked();
+        }
+
+        [end]
+        Button selection_button {
+          use-underline: true;
+          icon-name: "selection-mode-symbolic";
+          tooltip-text: _("Select Items");
+          clicked => $on_selection_button_clicked();
+        }
+
+        [end]
+        ToggleButton search_button {
+          icon-name: "edit-find-symbolic";
+          tooltip-text: _("Search");
+          active: bind search_bar.search-mode-enabled bidirectional;
+        }
+      }
+
+      Adw.HeaderBar selection_header_bar {
+        show-end-title-buttons: false;
+
+        [start]
+        Button select_all_button {
+          label: _("Select _All");
+          use-underline: true;
+          clicked => $on_select_all_button_clicked();
+        }
+
+        [end]
+        Button selection_cancel_button {
+          use-underline: true;
+          label: _("_Cancel");
+          clicked => $on_selection_cancel_button_clicked();
+        }
+
+        [end]
+        ToggleButton selection_search_button {
+          icon-name: "edit-find-symbolic";
+          tooltip-text: _("Search");
+          active: bind search_bar.search-mode-enabled bidirectional;
+        }
+      }
+    }
+
+    [top]
+    SearchBar search_bar {
+      search-mode-enabled: false;
+      key-capture-widget: template;
+
+      Adw.Clamp {
+        hexpand: true;
+        maximum-size: 400;
+        tightening-threshold: 300;
+
+        SearchEntry search_entry {
+          placeholder-text: _("Search history");
+          search-changed => $on_search_entry_changed();
+        }
+      }
+    }
+
+    content: Adw.ToastOverlay toast_overlay {
+      child: Stack history_presentation_stack {
+        vexpand: true;
+
+        ScrolledWindow history_scrolled_window {
+          edge-reached => $on_edge_reached();
+
+          Viewport {
+            scroll-to-focus: true;
+
+            Adw.Clamp {
+              margin-start: 6;
+              margin-end: 6;
+              maximum-size: 1024;
+
+              ListBox listbox {
+                margin-top: 6;
+                margin-bottom: 6;
+                valign: start;
+                selection-mode: none;
+                activate-on-single-click: true;
+                row-activated => $on_listbox_row_activated();
+
+                styles [
+                  "boxed-list",
+                ]
+              }
+            }
+          }
+        }
+
+        Adw.Spinner loading_spinner {
+          halign: center;
+          valign: center;
+          width-request: 32;
+          height-request: 32;
+        }
+
+        Adw.StatusPage empty_history_message {
+          title: _("No History Found");
+          description: _("Visited pages will be listed here");
+        }
+
+        Adw.StatusPage no_search_results_message {
+          icon-name: "edit-find-symbolic";
+          title: _("No Results Found");
+          description: _("Try a different search");
+        }
+      };
+    };
+
+    [bottom]
+    Revealer action_bar_revealer {
+      transition-type: slide_up;
+      transition-duration: 500;
+
+      ActionBar {
+        [end]
+        Button selection_delete_button {
+          label: _("_Delete");
+          sensitive: false;
+          use-underline: true;
+          clicked => $on_selection_delete_button_clicked();
+
+          styles [
+            "destructive-action",
+          ]
+        }
+
+        Button selection_open_button {
+          label: _("_Open");
+          sensitive: false;
+          use-underline: true;
+          clicked => $on_selection_open_button_clicked();
+        }
+      }
+    }
+  }
+
+  EventControllerKey {
+    key-pressed => $key_pressed_cb() swapped;
+    key-released => $key_released_cb() swapped;
+  }
+}
+

@@ -1,0 +1,86 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyActionBar: Adw.Bin {
+  Box toolbar {
+    homogeneous: true;
+
+    styles [
+      "toolbar",
+    ]
+
+    Button navigation_back {
+      action-name: "toolbar.navigation-back";
+      icon-name: "go-previous-symbolic";
+      tooltip-text: _("Back");
+
+      styles [
+        "toolbar-button",
+      ]
+
+      GestureClick {
+        button: 2;
+        pressed => $middle_click_pressed_cb();
+        released => $middle_click_released_cb();
+      }
+
+      GestureClick {
+        button: 3;
+        pressed => $right_click_pressed_cb();
+      }
+
+      GestureLongPress {
+        pressed => $long_pressed_cb();
+      }
+    }
+
+    Button navigation_forward {
+      action-name: "toolbar.navigation-forward";
+      icon-name: "go-next-symbolic";
+      tooltip-text: _("Forward");
+
+      styles [
+        "toolbar-button",
+      ]
+
+      GestureClick {
+        button: 2;
+        pressed => $middle_click_pressed_cb();
+        released => $middle_click_released_cb();
+      }
+
+      GestureClick {
+        button: 3;
+        pressed => $right_click_pressed_cb();
+      }
+
+      GestureLongPress {
+        pressed => $long_pressed_cb();
+      }
+    }
+
+    Button bookmark_button {
+      icon-name: "ephy-non-starred-symbolic";
+      action-name: "win.bookmark-page";
+
+      styles [
+        "toolbar-button",
+      ]
+    }
+
+    Button bookmarks_button {
+      tooltip-text: _("Bookmarks");
+      action-name: "win.bookmarks";
+      icon-name: "ephy-library-symbolic";
+
+      styles [
+        "toolbar-button",
+      ]
+    }
+
+    Adw.TabButton tab_button {
+      action-name: "win.tabs-view";
+    }
+  }
+}
+

@@ -1,0 +1,14 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphySearchEngineListBox: Adw.Bin {
+  child: ListBox list {
+    selection-mode: none;
+    row-activated => $on_add_search_engine_row_clicked_cb() swapped;
+
+    styles [
+      "boxed-list",
+    ]
+  };
+}
+

@@ -73,6 +73,49 @@ libephymain_sources = [
   enums
 ]
 
+blueprints = custom_target('blueprints',
+  input: files(
+    'resources/gtk/action-bar.blp',
+    'resources/gtk/action-bar-end.blp',
+    'resources/gtk/action-bar-start.blp',
+    'resources/gtk/autofill-view.blp',
+    'resources/gtk/bookmark-properties.blp',
+    'resources/gtk/bookmark-row.blp',
+    'resources/gtk/bookmarks-dialog.blp',
+    'resources/gtk/browser-action-row.blp',
+    'resources/gtk/clear-data-view.blp',
+    'resources/gtk/data-view.blp',
+    'resources/gtk/encoding-dialog.blp',
+    'resources/gtk/encoding-row.blp',
+    'resources/gtk/extension-view.blp',
+    'resources/gtk/firefox-sync-dialog.blp',
+    'resources/gtk/history-dialog.blp',
+    'resources/gtk/lang-row.blp',
+    'resources/gtk/location-entry.blp',
+    'resources/gtk/notebook-context-menu.blp',
+    'resources/gtk/page-menu-popover.blp',
+    'resources/gtk/password-popover.blp',
+    'resources/gtk/passwords-view.blp',
+    'resources/gtk/permission-popover.blp',
+    'resources/gtk/prefs-appearance-page.blp',
+    'resources/gtk/prefs-dialog.blp',
+    'resources/gtk/prefs-extensions-page.blp',
+    'resources/gtk/prefs-general-page.blp',
+    'resources/gtk/prefs-lang-dialog.blp',
+    'resources/gtk/prefs-privacy-page.blp',
+    'resources/gtk/privacy-report.blp',
+    'resources/gtk/search-engine-listbox.blp',
+    'resources/gtk/search-engine-row.blp',
+    'resources/gtk/security-dialog.blp',
+    'resources/gtk/shortcuts-dialog.blp',
+    'resources/gtk/synced-tabs-dialog.blp',
+    'resources/gtk/tab-overview-menu.blp',
+    'resources/gtk/webapp-additional-urls-dialog.blp',
+  ),
+  output: '.',
+  command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
+)
+
 libephymain_deps = [
   config_h,
   ephyembed_dep,
@@ -171,6 +214,7 @@ resource_files = files('resources/epiphany.gresource.xml')
 resources = gnome.compile_resources('epiphany-resources',
     resource_files,
     c_name: 'epiphany',
+    dependencies: blueprints,
     source_dir: 'resources'
 )
 

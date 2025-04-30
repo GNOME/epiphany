@@ -1,0 +1,76 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyDataView: Adw.NavigationPage {
+  child: Adw.ToolbarView box {
+    [top]
+    Adw.HeaderBar header_bar {
+      [end]
+      ToggleButton search_button {
+        icon-name: "edit-find-symbolic";
+        active: bind search_bar.search-mode-enabled bidirectional;
+        tooltip-text: _("Search");
+      }
+    }
+
+    [top]
+    SearchBar search_bar {
+      search-mode-enabled: false;
+      key-capture-widget: template;
+
+      Adw.Clamp {
+        hexpand: true;
+
+        SearchEntry search_entry {
+          placeholder-text: bind template.search-description;
+          search-changed => $on_search_entry_changed();
+        }
+      }
+    }
+
+    Stack stack {
+      vexpand: true;
+
+      StackPage {
+        name: "loading";
+
+        child: Adw.Spinner spinner {
+          halign: center;
+          valign: center;
+          width-request: 32;
+          height-request: 32;
+        };
+      }
+
+      StackPage {
+        name: "empty";
+
+        child: Adw.StatusPage empty_page {};
+      }
+
+      StackPage {
+        name: "no-results";
+
+        child: Adw.StatusPage {
+          icon-name: "edit-find-symbolic";
+          title: _("No Results Found");
+          description: _("Try a different search");
+        };
+      }
+    }
+
+    [bottom]
+    ActionBar {
+      [end]
+      Button clear_button {
+        use-underline: true;
+        clicked => $on_clear_button_clicked() swapped;
+
+        styles [
+          "destructive-action",
+        ]
+      }
+    }
+  };
+}
+

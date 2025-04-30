@@ -1,0 +1,107 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyPrivacyReport: Adw.Dialog {
+  content-height: 600;
+  content-width: 360;
+
+  Adw.NavigationView navigation_view {
+    Adw.NavigationPage {
+      title: _("Privacy Report");
+      tag: "overview";
+
+      child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar headerbar {
+          title-widget: Adw.ViewSwitcher {
+            stack: view_stack;
+            policy: wide;
+          };
+        }
+
+        content: Stack stack {
+          StackPage {
+            name: "privacy-report-page";
+
+            child: Adw.ViewStack view_stack {
+              Adw.ViewStackPage {
+                name: "website";
+                title: _("_Websites");
+                icon-name: "ephy-globe-alt2-symbolic";
+                use-underline: true;
+
+                child: Adw.PreferencesPage website_prefs_page {
+                  Adw.PreferencesGroup {
+                    ListBox website_listbox {
+                      selection-mode: none;
+                      row-activated => $on_website_listbox_activated();
+
+                      styles [
+                        "boxed-list",
+                      ]
+                    }
+                  }
+                };
+              }
+
+              Adw.ViewStackPage {
+                name: "tracker";
+                title: _("_Trackers");
+                icon-name: "ephy-eye-open-negative-filled-symbolic";
+                use-underline: true;
+
+                child: Adw.PreferencesPage tracker_prefs_page {
+                  Adw.PreferencesGroup {
+                    ListBox tracker_listbox {
+                      selection-mode: none;
+                      row-activated => $on_tracker_listbox_activated();
+
+                      styles [
+                        "boxed-list",
+                      ]
+                    }
+                  }
+                };
+              }
+            };
+          }
+
+          StackPage {
+            name: "no-trackers-page";
+
+            child: Adw.StatusPage {
+              icon-name: "ephy-shield-safe-symbolic";
+              title: _("No Trackers Blocked");
+              description: _("Trackers that tried to collect personal information across websites will appear here");
+            };
+          }
+        };
+      };
+    }
+
+    Adw.NavigationPage details_page {
+      title: _("Details");
+      tag: "details";
+
+      child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {}
+
+        content: Adw.PreferencesPage details_prefs_page {
+          description-centered: true;
+
+          Adw.PreferencesGroup {
+            ListBox details_listbox {
+              selection-mode: none;
+
+              styles [
+                "boxed-list",
+              ]
+            }
+          }
+        };
+      };
+    }
+  }
+}
+

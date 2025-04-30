@@ -1,0 +1,35 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyWebappAdditionalURLsDialog: Adw.NavigationPage {
+  title: _("Additional URLs");
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: Adw.PreferencesPage {
+      description: _("URLs that start with an additional URL will be opened by this web app");
+
+      Adw.PreferencesGroup url_group {
+        Adw.EntryRow add_row {
+          title: _("Additional URL");
+          input-purpose: url;
+
+          [suffix]
+          Button {
+            icon-name: "list-add-symbolic";
+            tooltip-text: _("Add URL");
+            clicked => $on_add_clicked();
+            valign: center;
+
+            styles [
+              "flat",
+            ]
+          }
+        }
+      }
+    };
+  };
+}
+

@@ -348,10 +348,12 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
 }
 
 static void
-on_radio_button_active_changed_cb (EphySearchEngineRow *self,
-                                   GParamSpec          *pspec,
-                                   GtkButton           *button)
+on_radio_button_active_changed_cb (GtkButton  *button,
+                                   GParamSpec *pspec,
+                                   gpointer    user_data)
 {
+  EphySearchEngineRow *self = EPHY_SEARCH_ENGINE_ROW (user_data);
+
   if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)) &&
       /* Avoid infinite loop between this callback and on_default_engine_changed_cb() */
       ephy_search_engine_manager_get_default_engine (self->manager) != self->engine)
@@ -368,8 +370,8 @@ on_default_engine_changed_cb (EphySearchEngineManager *manager,
 }
 
 static void
-on_remove_button_clicked_cb (EphySearchEngineRow *row,
-                             GtkButton           *button)
+on_remove_button_clicked_cb (GtkButton           *button,
+                             EphySearchEngineRow *row)
 {
   ephy_search_engine_manager_delete_engine (row->manager, row->engine);
 }

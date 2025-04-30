@@ -1,0 +1,15 @@
+using Gtk 4.0;
+
+template $EphyEncodingRow: Box {
+  halign: center;
+  height-request: 30;
+  spacing: 8;
+
+  Label encoding_label {}
+
+  Image selected_image {
+    visible: false;
+    icon-name: "object-select-symbolic";
+  }
+}
+

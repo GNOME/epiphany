@@ -1,0 +1,122 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphySearchEngineRow: Adw.ExpanderRow {
+  [prefix]
+  CheckButton radio_button {
+    valign: center;
+    tooltip-text: _("Selects Default Search Engine");
+    notify::active => $on_radio_button_active_changed_cb();
+  }
+
+  ListBoxRow {
+    activatable: false;
+
+    Grid {
+      margin-top: 12;
+      margin-bottom: 12;
+      margin-start: 12;
+      margin-end: 12;
+      row-spacing: 6;
+      column-spacing: 12;
+
+      Label {
+        label: _("Name");
+        xalign: 1;
+
+        layout {
+          column: "0";
+          row: "0";
+        }
+      }
+
+      Entry name_entry {
+        hexpand: true;
+
+        layout {
+          column: "1";
+          row: "0";
+        }
+      }
+
+      Label {
+        label: _("Address");
+        xalign: 1;
+
+        layout {
+          column: "0";
+          row: "1";
+        }
+      }
+
+      Entry address_entry {
+        hexpand: true;
+        placeholder-text: "https://www.example.com/search?q=%s";
+        input-purpose: url;
+        secondary-icon-sensitive: false;
+
+        layout {
+          column: "1";
+          row: "1";
+        }
+      }
+
+      Label {
+        label: _("Shortcut");
+        xalign: 1;
+
+        layout {
+          column: "0";
+          row: "2";
+        }
+      }
+
+      Entry bang_entry {
+        hexpand: true;
+        placeholder-text: "!e";
+        input-purpose: url;
+        secondary-icon-sensitive: false;
+
+        layout {
+          column: "1";
+          row: "2";
+        }
+      }
+
+      Label {
+        label: _("To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s");
+        xalign: 0;
+        wrap: true;
+
+        styles [
+          "dim-label",
+        ]
+
+        layout {
+          column: "0";
+          row: "3";
+          column-span: "2";
+        }
+      }
+
+      Button remove_button {
+        halign: end;
+        label: _("R_emove Search Engine");
+        use-underline: true;
+
+        styles [
+          "destructive-action",
+        ]
+
+        clicked => $on_remove_button_clicked_cb();
+
+        layout {
+          column: "0";
+          row: "4";
+          column-span: "2";
+        }
+      }
+    }
+  }
+}
+

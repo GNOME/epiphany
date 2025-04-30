@@ -331,8 +331,13 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 synced_tabs_dialog_init (SyncedTabsDialog *dialog)
 {
+  GtkTreeStore *store;
+
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
+  store = gtk_tree_store_new (3, G_TYPE_ICON, G_TYPE_STRING, G_TYPE_STRING);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (dialog->treeview), GTK_TREE_MODEL (store));
   gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (dialog->treeview), URL_COLUMN);
 
   dialog->database = ephy_embed_shell_get_favicon_database (ephy_embed_shell_get_default ());

@@ -1,0 +1,59 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphySecurityDialog: Adw.Dialog {
+  content-height: 600;
+  content-width: 480;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      title-widget: Adw.ViewSwitcher {
+        stack: stack;
+        policy: wide;
+      };
+    }
+
+    content: Adw.ViewStack stack {
+      Adw.ViewStackPage {
+        name: "security-page";
+        title: _("_Security");
+        icon-name: "ephy-shield-safe-symbolic";
+        use-underline: true;
+
+        child: Adw.StatusPage status_page {
+          child: Button certificate_button {
+            label: _("_View Certificate…");
+            halign: center;
+            use-underline: true;
+            clicked => $certificate_button_clicked_cb();
+
+            styles [
+              "pill",
+            ]
+          };
+        };
+      }
+
+      Adw.ViewStackPage {
+        name: "permissions-page";
+        title: _("_Permissions");
+        icon-name: "ephy-permission-generic-symbolic";
+        use-underline: true;
+
+        child: Adw.PreferencesPage tracker_prefs_page {
+          Adw.PreferencesGroup {
+            ListBox listbox {
+              selection-mode: none;
+
+              styles [
+                "content",
+              ]
+            }
+          }
+        };
+      }
+    };
+  }
+}
+

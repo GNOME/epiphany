@@ -1,0 +1,81 @@
+using Gtk 4.0;
+using Adw 1;
+
+menu menu {
+  section {
+    item {
+      label: _("Open _Inspector");
+      action: "prefs.inspector";
+    }
+  }
+}
+
+template $EphyExtensionView: Adw.NavigationPage {
+  Adw.ToolbarView box {
+    [top]
+    Adw.HeaderBar header_bar {
+      title-widget: Adw.WindowTitle window_title {};
+
+      [end]
+      MenuButton menu_button {
+        menu-model: menu;
+        icon-name: "view-more-symbolic";
+      }
+    }
+
+    Adw.PreferencesPage {
+      Adw.PreferencesGroup {
+        Adw.ActionRow author_row {
+          title: _("Author");
+          visible: false;
+
+          Label author_label {
+            styles [
+              "dim-label",
+            ]
+          }
+        }
+
+        Adw.ActionRow version_row {
+          title: _("Version");
+
+          Label version_label {
+            styles [
+              "dim-label",
+            ]
+          }
+        }
+
+        Adw.ActionRow homepage_row {
+          activatable: true;
+          visible: false;
+          title: _("Homepage");
+          activated => $on_homepage_activated();
+
+          Image {
+            icon-name: "ephy-open-link-symbolic";
+          }
+        }
+      }
+
+      Adw.PreferencesGroup {
+        Adw.SwitchRow enabled_row {
+          title: _("Enabled");
+          notify::active => $on_toggle_extension_enabled() swapped;
+        }
+      }
+
+      Adw.PreferencesGroup {
+        Adw.ButtonRow {
+          title: _("Remove Extension…");
+          activated => $on_remove_row_activated();
+
+          styles [
+            "destructive-action",
+          ]
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,82 @@
+using Gtk 4.0;
+
+template $EphyPermissionPopover: Popover {
+  styles [
+    "message-popover",
+  ]
+
+  Box {
+    orientation: vertical;
+
+    Box {
+      margin-top: 18;
+      margin-bottom: 12;
+      margin-start: 18;
+      margin-end: 18;
+      orientation: vertical;
+      spacing: 6;
+
+      Label permission_title {
+        xalign: 0;
+        margin-bottom: 6;
+
+        styles [
+          "heading",
+        ]
+      }
+
+      Label permission_description {
+        wrap: true;
+        max-width-chars: 40;
+        use-markup: true;
+
+        styles [
+          "dim-label",
+        ]
+      }
+    }
+
+    Separator {}
+
+    Box {
+      styles [
+        "response-area",
+      ]
+
+      Button deny_button {
+        label: _("_Deny");
+        use-underline: true;
+        hexpand: true;
+        clicked => $on_permission_deny();
+
+        styles [
+          "flat",
+        ]
+      }
+
+      Separator {}
+
+      Button allow_button {
+        label: _("_Allow");
+        use-underline: true;
+        hexpand: true;
+        clicked => $on_permission_allow();
+
+        styles [
+          "flat",
+          "suggested",
+        ]
+      }
+    }
+  }
+}
+
+SizeGroup {
+  mode: horizontal;
+
+  widgets [
+    deny_button,
+    allow_button,
+  ]
+}
+
