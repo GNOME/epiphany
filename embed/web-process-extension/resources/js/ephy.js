@@ -13,17 +13,6 @@ Ephy.getAppleMobileWebAppCapable = function()
     return false;
 };
 
-Ephy.getThemeColor = function()
-{
-    for (const meta of document.getElementsByTagName('meta')) {
-        // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
-        if (meta.name === 'theme-color')
-            return meta.getAttribute('content');
-    }
-
-    return null;
-};
-
 Ephy.getWebAppManifestURL = function()
 {
     const manifest = document.head.querySelector('link[rel=manifest]');

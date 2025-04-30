@@ -94,7 +94,6 @@ struct _EphyWebView {
   char *last_committed_address;
   char *loading_message;
   char *link_message;
-  char *theme_color;
   GIcon *icon;
 
   /* Reader mode */
@@ -1443,33 +1442,6 @@ unregister_message_handlers (EphyWebView *view)
 }
 
 static void
-theme_color_cb (GObject      *source,
-                GAsyncResult *res,
-                gpointer      user_data)
-{
-  EphyWebView *web_view = EPHY_WEB_VIEW (source);
-  g_autoptr (GError) error = NULL;
-  char *ret;
-
-  g_clear_pointer (&web_view->theme_color, g_free);
-
-  ret = ephy_web_view_get_theme_color_finish (web_view, res, &error);
-  if (error) {
-    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      return;
-
-    g_debug ("Could not get theme color: %s", error->message);
-    web_view->theme_color = g_strdup ("@theme_bg_color");
-    return;
-  }
-
-  if (g_strcmp0 (ret, "null") == 0)
-    web_view->theme_color = g_strdup ("@theme_bg_color");
-  else
-    web_view->theme_color = g_strdup (ret);
-}
-
-static void
 load_changed_cb (WebKitWebView   *web_view,
                  WebKitLoadEvent  load_event,
                  gpointer         user_data)
@@ -1587,8 +1559,6 @@ load_changed_cb (WebKitWebView   *web_view,
         view->reader_js_timeout = g_idle_add_once (run_readability_js_if_needed, web_view);
 
       g_clear_pointer (&view->client_certificate_manager, ephy_client_certificate_manager_free);
-
-      ephy_web_view_get_theme_color (view, view->cancellable, theme_color_cb, NULL);
       break;
 
     default:
@@ -3409,61 +3379,6 @@ ephy_web_view_get_web_app_mobile_capable_finish (EphyWebView   *view,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
-static void
-get_theme_color_cb (WebKitWebView *view,
-                    GAsyncResult  *result,
-                    GTask         *task)
-{
-  g_autoptr (JSCValue) js_value = NULL;
-  g_autoptr (GError) error = NULL;
-
-  g_assert (g_task_is_valid (result, view));
-  g_assert (g_task_get_source_tag (G_TASK (task)) == ephy_web_view_get_theme_color);
-
-  js_value = webkit_web_view_evaluate_javascript_finish (view, result, &error);
-  if (js_value) {
-    char *retval = jsc_value_to_string (js_value);
-
-    g_task_return_pointer (task, retval, g_free);
-  } else
-    g_task_return_error (task, g_steal_pointer (&error));
-
-  g_object_unref (task);
-}
-
-void
-ephy_web_view_get_theme_color (EphyWebView         *view,
-                               GCancellable        *cancellable,
-                               GAsyncReadyCallback  callback,
-                               gpointer             user_data)
-{
-  GTask *task;
-
-  g_assert (EPHY_IS_WEB_VIEW (view));
-
-  task = g_task_new (view, cancellable, callback, user_data);
-  g_task_set_name (task, "theme color task");
-  g_task_set_source_tag (task, ephy_web_view_get_theme_color);
-  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
-                                       "Ephy.getThemeColor();", -1,
-                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
-                                       NULL,
-                                       cancellable,
-                                       (GAsyncReadyCallback)get_theme_color_cb,
-                                       task);
-}
-
-char *
-ephy_web_view_get_theme_color_finish (EphyWebView   *view,
-                                      GAsyncResult  *result,
-                                      GError       **error)
-{
-  g_assert (g_task_is_valid (result, view));
-
-  return g_task_propagate_pointer (G_TASK (result), error);
-}
-
-
 /**
  * ephy_web_view_get_security_level:
  * @view: an #EphyWebView
@@ -4293,10 +4208,4 @@ ephy_web_view_get_web_app_manifest_url_finish (EphyWebView   *view,
   g_assert (g_task_is_valid (result, view));
 
   return g_task_propagate_pointer (G_TASK (result), error);
-}
-
-const char *
-ephy_web_view_get_current_theme_color (EphyWebView *view)
-{
-  return view->theme_color;
 }

@@ -206,15 +206,4 @@ gboolean ephy_web_view_autofill_popup_enabled                     (EphyWebView  
 
 void ephy_web_view_autofill_disable_popup                         (EphyWebView               *web_view);
 
-void ephy_web_view_get_theme_color                                (EphyWebView         *view,
-                                                                   GCancellable        *cancellable,
-                                                                   GAsyncReadyCallback  callback,
-                                                                   gpointer             user_data);
-
-char *ephy_web_view_get_theme_color_finish                        (EphyWebView   *view,
-                                                                   GAsyncResult  *result,
-                                                                   GError       **error);
-
-const char *ephy_web_view_get_current_theme_color                 (EphyWebView   *view);
-
 G_END_DECLS
