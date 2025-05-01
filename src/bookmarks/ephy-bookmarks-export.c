@@ -83,10 +83,31 @@ add_to_tags_order_table (GVariant   *variant,
                          GHashTable *table)
 {
   const char *tag;
+  GVariantBuilder builder;
+  GVariant *saved_variant;
+  GVariantIter *iter;
+  const char *url;
+  int index;
 
-  g_variant_get (variant, "(sa(si))", &tag, NULL);
+  g_variant_get (variant, "(sa(si))", &tag, &iter);
 
-  gvdb_hash_table_insert_variant (table, tag, variant);
+  /* A duplicate of the variant is stored so Epiphany can still access the
+   * original one while running. */
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sa(si))"));
+  g_variant_builder_add (&builder, "s", tag);
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a(si)"));
+
+  while (g_variant_iter_next (iter, "(si)", &url, &index)) {
+    g_variant_builder_open (&builder, G_VARIANT_TYPE ("(si)"));
+    g_variant_builder_add (&builder, "s", url);
+    g_variant_builder_add (&builder, "i", index);
+    g_variant_builder_close (&builder);
+  }
+  g_variant_iter_free (iter);
+
+  g_variant_builder_close (&builder);
+  saved_variant = g_variant_builder_end (&builder);
+  gvdb_hash_table_insert_variant (table, tag, saved_variant);
 }
 
 static void
@@ -94,11 +115,16 @@ add_to_bookmarks_order_table (GVariant   *variant,
                               GHashTable *table)
 {
   const char *type, *item, *key;
+  int index;
+  GVariant *saved_variant;
 
-  g_variant_get (variant, "(ssi)", &type, &item, NULL);
+  g_variant_get (variant, "(ssi)", &type, &item, &index);
   key = g_strconcat (type, ":", item, NULL);
 
-  gvdb_hash_table_insert_variant (table, key, variant);
+  /* A duplicate of the variant is stored so Epiphany can still access the
+   * original one while running. */
+  saved_variant = g_variant_new ("(ssi)", type, item, index);
+  gvdb_hash_table_insert_variant (table, key, saved_variant);
 }
 
 static void
