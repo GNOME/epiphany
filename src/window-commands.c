@@ -667,6 +667,8 @@ export_bookmarks_file_dialog_cb (GtkFileDialog *dialog,
   filename = g_file_get_path (file);
   ephy_bookmarks_export (g_object_ref (manager),
                          filename,
+                         FALSE,
+                         FALSE,
                          NULL,
                          bookmarks_export_cb,
                          parent);

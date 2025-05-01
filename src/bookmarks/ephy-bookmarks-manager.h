@@ -65,6 +65,8 @@ GSequence   *ephy_bookmarks_manager_get_tags                        (EphyBookmar
 gboolean     ephy_bookmarks_manager_save_sync                       (EphyBookmarksManager  *self,
                                                                      GError               **error);
 void         ephy_bookmarks_manager_save                            (EphyBookmarksManager  *self,
+                                                                     gboolean               with_bookmarks_order,
+                                                                     gboolean               with_tags_order,
                                                                      GCancellable          *cancellable,
                                                                      GAsyncReadyCallback    callback,
                                                                      gpointer               user_data);
@@ -82,6 +84,22 @@ void         ephy_bookmarks_manager_add_to_bookmarks_order          (EphyBookmar
                                                                      int                     index);
 
 void         ephy_bookmarks_manager_clear_bookmarks_order           (EphyBookmarksManager   *self);
+
+void         ephy_bookmarks_manager_add_to_bookmarks_order          (EphyBookmarksManager   *self,
+                                                                     const char             *tag,
+                                                                     const char             *bookmark_url,
+                                                                     int                     index);
+
+GSequence   *ephy_bookmarks_manager_get_tags_order                  (EphyBookmarksManager   *self);
+
+GVariant    *ephy_bookmarks_manager_tags_order_get_tag              (EphyBookmarksManager   *self,
+                                                                     const char             *tag);
+
+void         ephy_bookmarks_manager_tags_order_clear_tag            (EphyBookmarksManager   *self,
+                                                                     const char             *tag);
+
+void         ephy_bookmarks_manager_add_to_tags_order               (EphyBookmarksManager   *self,
+                                                                     GVariant               *variant);
 
 void          ephy_bookmarks_manager_save_warn_on_error_cb          (GObject               *object,
                                                                      GAsyncResult          *result,

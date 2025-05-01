@@ -41,6 +41,7 @@ struct _EphyBookmarksManager {
   GSequence *bookmarks;
   GSequence *tags;
   GSequence *bookmarks_order;
+  GSequence *tags_order;
 
   gchar *gvdb_filename;
 };
@@ -230,6 +231,7 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   self->bookmarks = g_sequence_new (g_object_unref);
   self->tags = g_sequence_new (g_free);
   self->bookmarks_order = g_sequence_new (g_free);
+  self->tags_order = g_sequence_new (g_free);
 
   g_sequence_insert_sorted (self->tags,
                             g_strdup (EPHY_BOOKMARKS_FAVORITES_TAG),
@@ -246,7 +248,7 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 
   ephy_bookmarks_import (self, self->gvdb_filename, NULL);
 
-  ephy_bookmarks_manager_save (self, self->cancellable,
+  ephy_bookmarks_manager_save (self, TRUE, TRUE, self->cancellable,
                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
 }
@@ -337,7 +339,7 @@ ephy_bookmarks_manager_add_bookmark_internal (EphyBookmarksManager *self,
   }
 
   if (should_save)
-    ephy_bookmarks_manager_save (self, self->cancellable,
+    ephy_bookmarks_manager_save (self, FALSE, FALSE, self->cancellable,
                                  (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                  NULL);
 }
@@ -400,7 +402,7 @@ ephy_bookmarks_manager_remove_bookmark_internal (EphyBookmarksManager *self,
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
   g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
 
-  ephy_bookmarks_manager_save (self, self->cancellable,
+  ephy_bookmarks_manager_save (self, FALSE, FALSE, self->cancellable,
                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
 
@@ -640,6 +642,69 @@ ephy_bookmarks_manager_sort_bookmarks_order (EphyBookmarksManager *self)
   g_sequence_sort (self->bookmarks_order, (GCompareDataFunc)sort_bookmarks_order, NULL);
 }
 
+GSequence *
+ephy_bookmarks_manager_get_tags_order (EphyBookmarksManager *self)
+{
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  return self->tags_order;
+}
+
+GVariant *
+ephy_bookmarks_manager_tags_order_get_tag (EphyBookmarksManager *self,
+                                           const char           *tag)
+{
+  GSequenceIter *iter;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  for (iter = g_sequence_get_begin_iter (self->tags_order);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    GVariant *variant = g_sequence_get (iter);
+    const char *variant_tag;
+
+    g_variant_get (variant, "(sa(si))", &variant_tag, NULL);
+
+    if (g_strcmp0 (variant_tag, tag) == 0)
+      return variant;
+  }
+
+  return NULL;
+}
+
+void
+ephy_bookmarks_manager_tags_order_clear_tag (EphyBookmarksManager *self,
+                                             const char           *tag)
+{
+  GSequenceIter *iter;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  for (iter = g_sequence_get_begin_iter (self->tags_order);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    GVariant *variant = g_sequence_get (iter);
+    const char *variant_tag;
+
+    g_variant_get (variant, "(sa(si))", &variant_tag, NULL);
+
+    if (g_strcmp0 (variant_tag, tag) == 0) {
+      g_sequence_remove (iter);
+      return;
+    }
+  }
+}
+
+void
+ephy_bookmarks_manager_add_to_tags_order (EphyBookmarksManager *self,
+                                          GVariant             *variant)
+{
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  g_sequence_append (self->tags_order, variant);
+}
+
 void
 ephy_bookmarks_manager_save_warn_on_error_cb (GObject      *object,
                                               GAsyncResult *result,
@@ -681,6 +746,8 @@ bookmarks_export_cb (GObject      *source_object,
 
 void
 ephy_bookmarks_manager_save (EphyBookmarksManager *self,
+                             gboolean              with_bookmarks_order,
+                             gboolean              with_tags_order,
                              GCancellable         *cancellable,
                              GAsyncReadyCallback   callback,
                              gpointer              user_data)
@@ -689,8 +756,8 @@ ephy_bookmarks_manager_save (EphyBookmarksManager *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  ephy_bookmarks_export (self, self->gvdb_filename,
-                         cancellable, bookmarks_export_cb, task);
+  ephy_bookmarks_export (self, self->gvdb_filename, with_bookmarks_order,
+                         with_tags_order, cancellable, bookmarks_export_cb, task);
 }
 
 gboolean
@@ -735,7 +802,7 @@ ephy_bookmarks_manager_save_sync (EphyBookmarksManager  *self,
   data->main_loop = g_main_loop_new (context, FALSE);
 
   g_main_context_push_thread_default (context);
-  ephy_bookmarks_manager_save (self, NULL, save_to_file_cb, data);
+  ephy_bookmarks_manager_save (self, FALSE, FALSE, NULL, save_to_file_cb, data);
   g_main_loop_run (data->main_loop);
   g_main_context_pop_thread_default (context);
 
@@ -848,7 +915,7 @@ synchronizable_manager_save (EphySynchronizableManager *manager,
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
 
-  ephy_bookmarks_manager_save (self, self->cancellable,
+  ephy_bookmarks_manager_save (self, FALSE, FALSE, self->cancellable,
                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
 }
@@ -938,7 +1005,7 @@ next:
   }
 
   /* Commit changes to file. */
-  ephy_bookmarks_manager_save (self, self->cancellable,
+  ephy_bookmarks_manager_save (self, FALSE, FALSE, self->cancellable,
                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
   g_hash_table_unref (dont_upload);
@@ -1016,7 +1083,7 @@ next:
   }
 
   /* Commit changes to file. */
-  ephy_bookmarks_manager_save (self, self->cancellable,
+  ephy_bookmarks_manager_save (self, FALSE, FALSE, self->cancellable,
                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
 

@@ -79,6 +79,17 @@ add_tag_to_table (const char *tag,
 }
 
 static void
+add_to_tags_order_table (GVariant   *variant,
+                         GHashTable *table)
+{
+  const char *tag;
+
+  g_variant_get (variant, "(sa(si))", &tag, NULL);
+
+  gvdb_hash_table_insert_variant (table, tag, variant);
+}
+
+static void
 add_to_bookmarks_order_table (GVariant   *variant,
                               GHashTable *table)
 {
@@ -159,6 +170,8 @@ write_html_contents_cb (GObject      *source_object,
 void
 ephy_bookmarks_export (EphyBookmarksManager *manager,
                        const char           *filename,
+                       gboolean              with_bookmarks_order,
+                       gboolean              with_tags_order,
                        GCancellable         *cancellable,
                        GAsyncReadyCallback   callback,
                        gpointer              user_data)
@@ -170,13 +183,21 @@ ephy_bookmarks_export (EphyBookmarksManager *manager,
 
     root_table = gvdb_hash_table_new (NULL, NULL);
 
+    if (with_tags_order) {
+      table = gvdb_hash_table_new (root_table, "tags-order");
+      g_sequence_foreach (ephy_bookmarks_manager_get_tags_order (manager), (GFunc)add_to_tags_order_table, table);
+      g_hash_table_unref (table);
+    }
+
     table = gvdb_hash_table_new (root_table, "tags");
     g_sequence_foreach (ephy_bookmarks_manager_get_tags (manager), (GFunc)add_tag_to_table, table);
     g_hash_table_unref (table);
 
-    table = gvdb_hash_table_new (root_table, "bookmarks-order");
-    g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks_order (manager), (GFunc)add_to_bookmarks_order_table, table);
-    g_hash_table_unref (table);
+    if (with_bookmarks_order) {
+      table = gvdb_hash_table_new (root_table, "bookmarks-order");
+      g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks_order (manager), (GFunc)add_to_bookmarks_order_table, table);
+      g_hash_table_unref (table);
+    }
 
     table = gvdb_hash_table_new (root_table, "bookmarks");
     g_sequence_foreach (ephy_bookmarks_manager_get_bookmarks (manager), (GFunc)add_bookmark_to_table, table);

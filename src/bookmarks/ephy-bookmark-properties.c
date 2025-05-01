@@ -388,7 +388,7 @@ ephy_bookmark_properties_finalize (GObject *object)
   if (self->bookmark_is_modified && !self->bookmark_is_removed)
     g_signal_emit_by_name (self->manager, "synchronizable-modified", self->bookmark, FALSE);
 
-  ephy_bookmarks_manager_save (self->manager,
+  ephy_bookmarks_manager_save (self->manager, FALSE, FALSE,
                                ephy_bookmarks_manager_save_warn_on_error_cancellable (self->manager),
                                ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);

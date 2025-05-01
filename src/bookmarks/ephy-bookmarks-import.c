@@ -136,6 +136,22 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
   g_strfreev (list);
   gvdb_table_free (table);
 
+  /* Get tags order table */
+  /* Add tags to the bookmark manager's sequence. */
+  table = gvdb_table_get_table (root_table, "tags-order");
+  if (table) {
+    list = gvdb_table_get_names (table, &length);
+    for (i = 0; i < length; i++) {
+      GVariant *variant = gvdb_table_get_value (table, list[i]);
+      const char *variant_tag;
+
+      g_variant_get (variant, "(sa(si))", &variant_tag, NULL);
+
+      ephy_bookmarks_manager_add_to_tags_order (manager, variant);
+    }
+    g_strfreev (list);
+  }
+
   /* Get bookmarks table */
   table = gvdb_table_get_table (root_table, "bookmarks");
   if (!table) {

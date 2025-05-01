@@ -26,6 +26,8 @@ G_BEGIN_DECLS
 
 void            ephy_bookmarks_export        (EphyBookmarksManager  *manager,
                                               const char            *filename,
+                                              gboolean               with_bookmarks_order,
+                                              gboolean               with_tags_order,
                                               GCancellable          *cancellable,
                                               GAsyncReadyCallback    callback,
                                               gpointer               user_data);
