@@ -658,8 +658,10 @@ export_bookmarks_file_dialog_cb (GtkFileDialog *dialog,
 
   file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
-  if (!file)
+  if (!file) {
+    g_object_unref (parent);
     return;
+  }
 
   filename = g_file_get_path (file);
   ephy_bookmarks_export (g_object_ref (manager),
@@ -1005,6 +1007,8 @@ export_passwords_file_dialog_cb (GtkFileDialog *dialog,
   if (error) {
     if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
       g_warning ("Failed to open file: %s", error->message);
+
+    g_object_unref (parent);
     return;
   }
 
@@ -3287,6 +3291,7 @@ clipboard_text_received_cb (GdkClipboard *clipboard,
   text = gdk_clipboard_read_text_finish (clipboard, res, &error);
   if (error) {
     g_warning ("Failed to the URL from clipboard: %s", error->message);
+    g_object_unref (window);
     return;
   }
 
