@@ -4293,12 +4293,14 @@ static void
 ephy_window_init (EphyWindow *window)
 {
   EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (GtkWindowGroup) window_group = gtk_window_group_new ();
 
   LOG ("EphyWindow initialising %p", window);
 
   window->uid = window_uid++;
   window->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
 
+  gtk_window_group_add_window (window_group, GTK_WINDOW (window));
   ephy_shell_register_window (shell, window);
 }
 
