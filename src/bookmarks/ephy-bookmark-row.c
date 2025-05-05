@@ -62,6 +62,38 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 static void
+move_up_cb (GtkWidget  *self,
+            const char *action_name,
+            GVariant   *parameter)
+{
+  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (self));
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (self)) - 1;
+  GtkListBoxRow *prev_row = gtk_list_box_get_row_at_index (list_box, index);
+
+  if (!prev_row)
+    return;
+
+  g_object_set_data (G_OBJECT (self), "list-box", list_box);
+  g_signal_emit (ADW_ACTION_ROW (self), signals[MOVE_ROW], 0, ADW_ACTION_ROW (prev_row));
+}
+
+static void
+move_down_cb (GtkWidget  *self,
+              const char *action_name,
+              GVariant   *parameter)
+{
+  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (self));
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (self)) + 1;
+  GtkListBoxRow *next_row = gtk_list_box_get_row_at_index (list_box, index);
+
+  if (!next_row)
+    return;
+
+  g_object_set_data (G_OBJECT (self), "list-box", list_box);
+  g_signal_emit (ADW_ACTION_ROW (self), signals[MOVE_ROW], 0, ADW_ACTION_ROW (next_row));
+}
+
+static void
 ephy_bookmark_row_remove_button_clicked_cb (EphyBookmarkRow *row,
                                             GtkButton       *button)
 {
@@ -333,6 +365,9 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+  gtk_widget_class_install_action (widget_class, "row.move-up", NULL, move_up_cb);
+  gtk_widget_class_install_action (widget_class, "row.move-down", NULL, move_down_cb);
 
   signals[MOVE_ROW] = g_signal_lookup ("bmks-move-row", ADW_TYPE_ACTION_ROW);
 

@@ -1,6 +1,19 @@
 using Gtk 4.0;
 using Adw 1;
 
+menu move_menu {
+  section {
+    item {
+      label: _("Move Up");
+      action: "row.move-up";
+    }
+    item {
+      label: _("Move Down");
+      action: "row.move-down";
+    }
+  }
+}
+
 template $EphyBookmarkRow: Adw.ActionRow {
   title-lines: 1;
   activatable: true;
@@ -39,6 +52,19 @@ template $EphyBookmarkRow: Adw.ActionRow {
     icon-name: "document-edit-symbolic";
     receives-default: false;
     valign: center;
+
+    styles [
+      "flat",
+    ]
+  }
+
+  [suffix]
+  MenuButton {
+    icon-name: "view-more-symbolic";
+    receives-default: false;
+    tooltip-text: _("Move Controls");
+    valign: center;
+    menu-model: move_menu;
 
     styles [
       "flat",

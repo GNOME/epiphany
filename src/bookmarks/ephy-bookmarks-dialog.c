@@ -155,8 +155,9 @@ row_moved_cb (AdwActionRow        *row,
   GtkWidget *dest_list_box = gtk_widget_get_parent (GTK_WIDGET (dest_row));
   const char *visible_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
 
-  if (list_box != dest_list_box)
+  if (list_box != dest_list_box) {
     return;
+  }
 
   g_assert (GTK_IS_LIST_BOX (list_box));
   g_assert (GTK_IS_LIST_BOX (dest_list_box));
@@ -434,12 +435,64 @@ tag_row_drop_cb (AdwActionRow *self,
   return TRUE;
 }
 
+static void
+tag_row_move_up_cb (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  GtkWidget *row = GTK_WIDGET (user_data);
+  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (row));
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)) - 1;
+  GtkListBoxRow *prev_row = gtk_list_box_get_row_at_index (list_box, index);
+
+  if (!prev_row)
+    return;
+
+  g_object_set_data (G_OBJECT (row), "list-box", list_box);
+  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_ROW], 0, ADW_ACTION_ROW (prev_row));
+}
+
+static void
+tag_row_move_down_cb (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  GtkWidget *row = GTK_WIDGET (user_data);
+  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (row));
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)) + 1;
+  GtkListBoxRow *next_row = gtk_list_box_get_row_at_index (list_box, index);
+
+  if (!next_row)
+    return;
+
+  g_object_set_data (G_OBJECT (row), "list-box", list_box);
+  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_ROW], 0, ADW_ACTION_ROW (next_row));
+}
+
+static GActionGroup *
+create_tag_row_action_group (GtkWidget *row)
+{
+  const GActionEntry entries[] = {
+    { "move-up", tag_row_move_up_cb },
+    { "move-down", tag_row_move_down_cb },
+  };
+
+  GSimpleActionGroup *group;
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), row);
+
+  return G_ACTION_GROUP (group);
+}
+
 static GtkWidget *
 create_tag_row (EphyBookmarksDialog *self,
                 const char          *tag)
 {
   GtkWidget *row;
   GtkWidget *image;
+  GtkWidget *move_menu_button;
+  GMenu *move_menu;
   GtkWidget *drag_image;
   GtkDragSource *source;
   GtkDropTarget *target;
@@ -462,6 +515,20 @@ create_tag_row (EphyBookmarksDialog *self,
 
   image = gtk_image_new_from_icon_name ("go-next-symbolic");
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
+
+  move_menu_button = gtk_menu_button_new ();
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (move_menu_button), "view-more-symbolic");
+  gtk_widget_set_receives_default (move_menu_button, FALSE);
+  gtk_widget_set_valign (move_menu_button, GTK_ALIGN_CENTER);
+  gtk_widget_set_tooltip_text (move_menu_button, _("Move Controls"));
+  gtk_widget_add_css_class (move_menu_button, "flat");
+
+  gtk_widget_insert_action_group (row, "row", create_tag_row_action_group (row));
+  move_menu = g_menu_new ();
+  g_menu_append (move_menu, _("Move Up"), "row.move-up");
+  g_menu_append (move_menu, _("Move Down"), "row.move-down");
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (move_menu_button), G_MENU_MODEL (move_menu));
+  adw_action_row_add_suffix (ADW_ACTION_ROW (row), move_menu_button);
 
   drag_image = gtk_image_new_from_icon_name ("list-drag-handle-symbolic");
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), drag_image);
@@ -872,6 +939,8 @@ set_row_is_editable (GtkWidget *row,
   gtk_widget_set_visible (drag_handle, is_editable);
   if (EPHY_IS_BOOKMARK_ROW (row))
     gtk_widget_set_visible (buttons_box, is_editable);
+  else
+    gtk_widget_set_visible (gtk_widget_get_last_child (buttons_box), is_editable);
 }
 
 void
