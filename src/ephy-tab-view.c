@@ -238,6 +238,13 @@ ephy_tab_view_close_other (EphyTabView *self)
 }
 
 void
+ephy_tab_view_close_all (EphyTabView *self)
+{
+  ephy_tab_view_close_other (self);
+  ephy_tab_view_close_selected (self);
+}
+
+void
 ephy_tab_view_foreach (EphyTabView         *self,
                        EphyTabViewCallback  callback,
                        gpointer             user_data)

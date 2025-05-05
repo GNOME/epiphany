@@ -383,6 +383,19 @@ webextension_context_menu_action (GSimpleAction *action,
   ephy_web_extension_manager_handle_context_menu_action (manager, parameter);
 }
 
+
+static void
+close_all_tabs (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_close_all_tabs (NULL, NULL, window);
+}
+
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
@@ -402,6 +415,7 @@ static GActionEntry app_entries[] = {
   { "launch-app", launch_app, "s", NULL, NULL },
   { "webextension-notification", webextension_action, "(ssi)", NULL, NULL },
   { "webextension-context-menu", webextension_context_menu_action, "(sss)", NULL, NULL },
+  { "close-all-tabs", close_all_tabs, NULL, NULL, NULL },
 };
 
 static GActionEntry non_incognito_extra_app_entries[] = {

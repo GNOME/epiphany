@@ -87,4 +87,6 @@ void          ephy_tab_view_set_tab_bar       (EphyTabView    *self,
                                                AdwTabBar      *tab_bar);
 void          ephy_tab_view_set_tab_overview  (EphyTabView    *self,
                                                AdwTabOverview *tab_overview);
+void          ephy_tab_view_close_all         (EphyTabView *self);
+
 G_END_DECLS

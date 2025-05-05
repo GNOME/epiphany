@@ -3401,3 +3401,13 @@ window_cmd_passwords (GSimpleAction *action,
 
   ephy_passwords_show (window);
 }
+
+void
+window_cmd_close_all_tabs (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+
+  ephy_tab_view_close_all (ephy_window_get_tab_view (window));
+}
