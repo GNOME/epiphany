@@ -1037,11 +1037,11 @@ activate_cb (EphyLocationEntry *entry)
 }
 
 static void
-item_pressed_cb (GtkListItem *item,
+item_pressed_cb (GtkGesture  *gesture,
                  int          n_click,
                  double       x,
                  double       y,
-                 GtkGesture  *gesture)
+                 GtkListItem *item)
 {
   GtkWidget *widget;
   EphyLocationEntry *entry;
@@ -1055,11 +1055,11 @@ item_pressed_cb (GtkListItem *item,
 }
 
 static void
-item_released_cb (GtkListItem *item,
+item_released_cb (GtkGesture  *gesture,
                   int          n_click,
                   double       x,
                   double       y,
-                  GtkGesture  *gesture)
+                  GtkListItem *item)
 {
   GtkWidget *widget;
   EphyLocationEntry *entry;
