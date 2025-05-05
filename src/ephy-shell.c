@@ -383,7 +383,6 @@ webextension_context_menu_action (GSimpleAction *action,
   ephy_web_extension_manager_handle_context_menu_action (manager, parameter);
 }
 
-
 static void
 close_all_tabs (GSimpleAction *action,
                 GVariant      *parameter,
@@ -394,6 +393,41 @@ close_all_tabs (GSimpleAction *action,
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
   window_cmd_close_all_tabs (NULL, NULL, window);
+}
+
+static void
+on_uninstall_web_web_app_response (GtkWidget *dialog,
+                                   char      *response,
+                                   gpointer   user_data)
+{
+  EphyShell *shell;
+  EphyWebApplication *web_app;
+
+  if (g_strcmp0 (response, "uninstall") != 0)
+    return;
+
+  shell = ephy_shell_get_default ();
+  web_app = ephy_shell_get_webapp (shell);
+
+  ephy_web_application_delete (web_app->id, NULL);
+  ephy_shell_try_quit (shell);
+}
+
+void
+uninstall_web_app (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  AdwDialog *dialog = adw_alert_dialog_new (_("Uninstall Web App?"), _("This web appʼs data will be permanently deleted"));
+  GtkWidget *parent = GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
+
+  adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "cancel", _("_Cancel"));
+  adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "uninstall", _("_Uninstall"));
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "uninstall", ADW_RESPONSE_DESTRUCTIVE);
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "uninstall");
+
+  g_signal_connect (dialog, "response", G_CALLBACK (on_uninstall_web_web_app_response), NULL);
+  adw_dialog_present (dialog, parent);
 }
 
 static GActionEntry app_entries[] = {
@@ -430,6 +464,7 @@ static GActionEntry app_mode_app_entries[] = {
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
   { "run-in-background", NULL, NULL, "false", NULL},
+  { "uninstall-web-app", uninstall_web_app },
 };
 
 #if 0
