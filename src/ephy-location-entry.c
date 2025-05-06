@@ -1987,7 +1987,7 @@ gboolean
 ephy_location_entry_reset (EphyLocationEntry *entry)
 {
   EphyWindow *active_window;
-  EphyEmbed *active_embed;
+  EphyEmbed *active_embed = NULL;
   const char *text, *old_text;
   int position, offset;
   g_autofree char *url = NULL;
@@ -1997,6 +1997,11 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
     active_embed = ephy_window_get_active_embed (active_window);
     if (ephy_embed_get_typed_input (active_embed) && !entry->focused)
       return FALSE;
+  }
+
+  if (active_embed && !gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), NULL, NULL)) {
+    gtk_widget_grab_focus (GTK_WIDGET (active_embed));
+    return TRUE;
   }
 
   g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
