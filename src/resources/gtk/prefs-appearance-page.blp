@@ -98,22 +98,31 @@ template $PrefsAppearancePage: Adw.PreferencesPage {
       }
     }
 
-    Adw.SpinRow default_zoom_row {
+    Adw.ComboRow default_zoom_row {
       title: _("Default Zoom Level");
 
-      adjustment: Adjustment zoom_adjustment {
-        lower: 33;
-        upper: 300;
-        step-increment: 1;
-        page-increment: 10;
-      };
-
-      max-width-chars: 5;
-      value: 100;
-      output => $on_default_zoom_row_output();
-      changed => $on_default_zoom_row_changed();
+      model: zoom_steps;
     }
   }
+}
+
+StringList zoom_steps {
+  strings [
+    "30%",
+    "50%",
+    "67%",
+    "80%",
+    "90%",
+    "100%",
+    "110%",
+    "120%",
+    "133%",
+    "150%",
+    "170%",
+    "200%",
+    "240%",
+    "300%"
+  ]
 }
 
 SizeGroup {

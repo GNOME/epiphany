@@ -27,6 +27,7 @@
 #include "ephy-lib-type-builtins.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-zoom.h"
 
 #include <math.h>
 
@@ -216,29 +217,14 @@ js_edit_button_clicked_cb (GtkWidget           *button,
   g_file_create_async (g_steal_pointer (&js_file), G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, appearance_page->cancellable, js_file_created_cb, appearance_page);
 }
 
-static gboolean
-on_default_zoom_row_output (AdwSpinRow *spin,
-                            gpointer    user_data)
-{
-  g_autofree gchar *text = NULL;
-  gdouble value;
-
-  value = (int)adw_spin_row_get_value (spin);
-  text = g_strdup_printf ("%.f%%", value);
-  gtk_editable_set_text (GTK_EDITABLE (spin), text);
-
-  return TRUE;
-}
-
 static void
-on_default_zoom_row_changed (AdwSpinRow *spin,
-                             gpointer    user_data)
+on_zoom_selected (GtkWidget  *row,
+                  GParamSpec *pspec,
+                  gpointer    user_data)
 {
-  gdouble value;
+  int selected = adw_combo_row_get_selected (ADW_COMBO_ROW (row));
 
-  value = adw_spin_row_get_value (spin);
-  value = round (value) / 100;
-  g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, value);
+  g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL, ephy_zoom_get_value (selected));
 }
 
 static void
@@ -336,8 +322,10 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
                     G_CALLBACK (js_edit_button_clicked_cb),
                     appearance_page);
 
-  adw_spin_row_set_value (ADW_SPIN_ROW (appearance_page->default_zoom_row),
-                          g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL) * 100);
+  adw_combo_row_set_selected (ADW_COMBO_ROW (appearance_page->default_zoom_row),
+                              ephy_zoom_get_index (g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL)));
+
+  g_signal_connect (appearance_page->default_zoom_row, "notify::selected", G_CALLBACK (on_zoom_selected), appearance_page);
 }
 
 static void
@@ -385,8 +373,6 @@ prefs_appearance_page_class_init (PrefsAppearancePageClass *klass)
   /* Signals */
   gtk_widget_class_bind_template_callback (widget_class, reader_font_style_get_name);
   gtk_widget_class_bind_template_callback (widget_class, reader_color_scheme_get_name);
-  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_row_output);
-  gtk_widget_class_bind_template_callback (widget_class, on_default_zoom_row_changed);
 }
 
 static void

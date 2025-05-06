@@ -81,3 +81,23 @@ ephy_zoom_get_changed_zoom_level (float level,
   }
   return new_level;
 }
+
+int
+ephy_zoom_get_index (gdouble value)
+{
+  for (int idx = 0; idx < NUM_ZOOM_STEPS; idx++) {
+    if (zoom_steps[idx] == value)
+      return idx;
+  }
+
+  return 5;
+}
+
+gdouble
+ephy_zoom_get_value (int index)
+{
+  if (index < 0 || index >= NUM_ZOOM_STEPS)
+    return 100;
+
+  return zoom_steps[index];
+}

@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include <config.h>
-
 #include <glib.h>
 #include <glib/gi18n.h>
 
@@ -34,5 +32,9 @@ G_BEGIN_DECLS
 
 float       ephy_zoom_get_changed_zoom_level (float level,
                                               int   steps);
+
+int         ephy_zoom_get_index              (gdouble value);
+
+gdouble     ephy_zoom_get_value              (int index);
 
 G_END_DECLS
