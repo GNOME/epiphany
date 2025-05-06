@@ -58,14 +58,16 @@ enum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void
-on_permission_deny (EphyPermissionPopover *self)
+on_permission_deny (GtkWidget             *button,
+                    EphyPermissionPopover *self)
 {
   gtk_popover_popdown (GTK_POPOVER (self));
   g_signal_emit (self, signals[DENY], 0);
 }
 
 static void
-on_permission_allow (EphyPermissionPopover *self)
+on_permission_allow (GtkWidget             *button,
+                     EphyPermissionPopover *self)
 {
   gtk_popover_popdown (GTK_POPOVER (self));
   g_signal_emit (self, signals[ALLOW], 0);
