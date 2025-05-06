@@ -157,6 +157,7 @@ readability_js_finish_cb (GObject      *object,
   g_autofree gchar *byline = NULL;
   g_autofree gchar *encoded_byline = NULL;
   g_autofree gchar *content = NULL;
+  g_autofree gchar *reading_time = NULL;
   g_autofree gchar *encoded_title = NULL;
   g_autoptr (GString) html = NULL;
   g_autoptr (GBytes) style_css = NULL;
@@ -174,6 +175,7 @@ readability_js_finish_cb (GObject      *object,
 
   byline = readability_get_property_string (value, "byline");
   content = readability_get_property_string (value, "content");
+  reading_time = readability_get_property_string (value, "reading_time");
   title = webkit_web_view_get_title (web_view);
 
   encoded_byline = byline ? ephy_encode_for_html_entity (byline) : g_strdup ("");
@@ -207,13 +209,17 @@ readability_js_finish_cb (GObject      *object,
                           "<i>"
                           "%s"
                           "</i>"
-                          "<hr>",
+                          "<br>"
+                          "<br>",
                           (gchar *)g_bytes_get_data (style_css, NULL),
                           encoded_title,
                           font_style,
                           color_scheme,
                           encoded_title,
                           encoded_byline);
+
+  g_string_append (html, reading_time);
+  g_string_append (html, "<br/><hr/>");
 
   /* We cannot encode the page content because it contains HTML tags inserted by
    * Readability.js. Upstream recommends that we use an XSS sanitizer like

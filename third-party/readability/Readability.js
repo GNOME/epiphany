@@ -2206,6 +2206,81 @@ Readability.prototype = {
   },
 
   /**
+  /* getReadingSpeedForLanguage and _get_reading_time from Firefox mobile/android/android-components/components/feature/readerview/src/main/assets/extensions/readerview/readerview.js
+   *
+   * This Source Code Form is subject to the terms of the Mozilla Public
+   * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   * You can obtain one at http://mozilla.org/MPL/2.0/
+   */
+
+  /**
+   * Returns the reading speed of a selection of languages with likely variance.
+   *
+   * Reading speed estimated from a study done on reading speeds in various languages.
+   * study can be found here: http://iovs.arvojournals.org/article.aspx?articleid=2166061
+   *
+   * @return object with characters per minute and variance. Defaults to English
+   * if no suitable language is found in the collection.
+   */
+  getReadingSpeedForLanguage(lang) {
+    const readingSpeed = new Map([
+      ["en", { cpm: 987, variance: 118 }],
+      ["ar", { cpm: 612, variance: 88 }],
+      ["de", { cpm: 920, variance: 86 }],
+      ["es", { cpm: 1025, variance: 127 }],
+      ["fi", { cpm: 1078, variance: 121 }],
+      ["fr", { cpm: 998, variance: 126 }],
+      ["he", { cpm: 833, variance: 130 }],
+      ["it", { cpm: 950, variance: 140 }],
+      ["ja", { cpm: 357, variance: 56 }],
+      ["nl", { cpm: 978, variance: 143 }],
+      ["pl", { cpm: 916, variance: 126 }],
+      ["pt", { cpm: 913, variance: 145 }],
+      ["ru", { cpm: 986, variance: 175 }],
+      ["sk", { cpm: 885, variance: 145 }],
+      ["sv", { cpm: 917, variance: 156 }],
+      ["tr", { cpm: 1054, variance: 156 }],
+      ["zh", { cpm: 255, variance: 29 }],
+    ]);
+
+    return readingSpeed.has(lang)
+      ? [readingSpeed.get(lang), lang]
+      : [readingSpeed.get("en"), "en"];
+  },
+
+  _get_reading_time: function(length, lang = "en") {
+    const [readingSpeed, readingSpeedLang] = this.getReadingSpeedForLanguage(lang);
+    const charactersPerMinuteLow = readingSpeed.cpm - readingSpeed.variance;
+    const charactersPerMinuteHigh = readingSpeed.cpm + readingSpeed.variance;
+    const readingTimeMinsSlow = Math.ceil(length / charactersPerMinuteLow);
+    const readingTimeMinsFast = Math.ceil(length / charactersPerMinuteHigh);
+
+    // Construct a localized and "humanized" reading time in minutes.
+    // If we have both a fast and slow reading time we'll show both e.g.
+    // "2 - 4 minutes", otherwise we'll just show "4 minutes".
+    try {
+      var parts = new Intl.RelativeTimeFormat(readingSpeedLang).formatToParts(
+        readingTimeMinsSlow,
+        "minute"
+      );
+      if (parts.length == 3) {
+        // No need to use part[0] which represents the literal "in".
+        var readingTime = parts[1].value; // reading time in minutes
+        var minutesLiteral = parts[2].value; // localized singular or plural literal of 'minute'
+        var readingTimeString = `${readingTime} ${minutesLiteral}`;
+        if (readingTimeMinsSlow != readingTimeMinsFast) {
+          readingTimeString = `${readingTimeMinsFast} - ${readingTimeString}`;
+        }
+        return readingTimeString;
+      }
+    } catch (error) {
+      console.error(`Failed to format reading time: ${error}`);
+    }
+
+    return "";
+  },
+
+  /**
    * Runs readability.
    *
    * Workflow:
@@ -2267,7 +2342,8 @@ Readability.prototype = {
       textContent: textContent,
       length: textContent.length,
       excerpt: metadata.excerpt,
-      siteName: metadata.siteName || this._articleSiteName
+      siteName: metadata.siteName || this._articleSiteName,
+      reading_time: this._get_reading_time(textContent.length, this._doc.lang),
     };
   }
 };
