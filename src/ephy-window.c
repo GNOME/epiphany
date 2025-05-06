@@ -875,6 +875,7 @@ static const GActionEntry popup_entries [] = {
   { "copy-link-address", context_cmd_copy_link_address },
   { "copy-email-address", context_cmd_copy_link_address },
   { "send-via-email", context_cmd_send_via_email },
+  { "add-link-to-bookmarks", context_cmd_add_link_to_bookmarks },
 
   /* Images. */
 
@@ -921,6 +922,7 @@ const struct {
   { "select-all", N_("Select _All") },
 
   { "send-via-email", N_("S_end Link by Email…") },
+  { "add-link-to-bookmarks", N_("Add _Link to Bookmarks") },
 
   { "reload", N_("_Reload") },
   { "navigation-back", N_("_Back") },
@@ -1615,6 +1617,8 @@ populate_context_menu (WebKitWebView       *web_view,
     }
     add_action_to_context_menu (context_menu, popup_action_group,
                                 "send-via-email", window);
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "add-link-to-bookmarks", window);
   } else if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
     GList *l;
     gboolean has_guesses = FALSE;

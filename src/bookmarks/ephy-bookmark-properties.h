@@ -38,4 +38,7 @@ GtkWidget *ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *
 
 GtkWidget *ephy_bookmark_properties_new_for_window (EphyWindow *window);
 
+GtkWidget *ephy_bookmark_properties_new_for_link (EphyWindow *window,
+                                                  const char *link);
+
 G_END_DECLS

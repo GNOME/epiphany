@@ -22,6 +22,7 @@
 #include "config.h"
 #include "context-menu-commands.h"
 
+#include "ephy-bookmark-properties.h"
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
@@ -31,6 +32,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
+#include "window-commands.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -545,4 +547,29 @@ context_cmd_open_selection_in_incognito_window (GSimpleAction *action,
 
   open_term = g_variant_get_string (parameter, NULL);
   ephy_open_incognito_window (open_term);
+}
+
+void
+context_cmd_add_link_to_bookmarks (GSimpleAction *action,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
+{
+  WebKitHitTestResult *hit_test_result;
+  guint context;
+  const char *address;
+
+  hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
+  g_assert (hit_test_result != NULL);
+
+  context = webkit_hit_test_result_get_context (hit_test_result);
+
+  if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) {
+    EphyWindow *window = EPHY_WINDOW (user_data);
+    GtkWidget *dialog;
+
+    address = webkit_hit_test_result_get_link_uri (hit_test_result);
+
+    dialog = ephy_bookmark_properties_new_for_link (window, address);
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
+  }
 }

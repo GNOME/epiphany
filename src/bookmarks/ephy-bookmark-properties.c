@@ -525,3 +525,31 @@ ephy_bookmark_properties_new_for_window (EphyWindow *window)
 
   return ephy_bookmark_properties_new (g_steal_pointer (&bookmark));
 }
+
+GtkWidget *
+ephy_bookmark_properties_new_for_link (EphyWindow *window,
+                                       const char *link)
+{
+  g_autoptr (EphyBookmark) bookmark = NULL;
+  EphyBookmarksManager *manager;
+
+  manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+
+  bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, link);
+  if (!bookmark) {
+    g_autofree char *id = NULL;
+    g_autoptr (GSequence) tags = NULL;
+
+    id = ephy_bookmark_generate_random_id ();
+    tags = g_sequence_new (g_free);
+
+    bookmark = ephy_bookmark_new (link,
+                                  link,
+                                  g_steal_pointer (&tags),
+                                  id);
+
+    ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+  }
+
+  return ephy_bookmark_properties_new (g_steal_pointer (&bookmark));
+}

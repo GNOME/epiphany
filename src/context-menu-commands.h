@@ -92,5 +92,7 @@ void context_cmd_open_selection_in_new_window       (GSimpleAction *action,
 void context_cmd_open_selection_in_incognito_window (GSimpleAction *action,
                                                      GVariant      *parameter,
                                                      gpointer       user_data);
-
+void context_cmd_add_link_to_bookmarks              (GSimpleAction *action,
+                                                     GVariant      *parameter,
+                                                     gpointer       user_data);
 G_END_DECLS
