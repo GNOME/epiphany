@@ -515,6 +515,12 @@ row_clicked_cb (GtkGesture          *gesture,
     flags = ephy_link_flags_from_modifiers (modifiers, button == GDK_BUTTON_MIDDLE);
 
     ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (row), flags);
+
+    /* Close the bookmarks sidebar if flags == 0, since this indicates we are not opening the link in a new tab. */
+    if (flags == 0) {
+      EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
+      ephy_window_toggle_bookmarks (window);
+    }
   } else {
     const char *tag = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
     ephy_bookmarks_dialog_show_tag_detail (self, tag);
