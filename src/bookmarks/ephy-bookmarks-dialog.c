@@ -1046,11 +1046,11 @@ on_search_entry_changed (GtkSearchEntry *entry,
 }
 
 static gboolean
-on_search_entry_key_pressed (EphyBookmarksDialog   *self,
+on_search_entry_key_pressed (GtkEventControllerKey *key_controller,
                              guint                  keyval,
                              guint                  keycode,
                              GdkModifierType        state,
-                             GtkEventControllerKey *key_controller)
+                             EphyBookmarksDialog   *self)
 {
   if (keyval == GDK_KEY_Escape) {
     GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
