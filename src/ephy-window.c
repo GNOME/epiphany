@@ -2165,6 +2165,9 @@ decide_navigation_policy (WebKitWebView            *web_view,
     else if (button == GDK_BUTTON_MIDDLE ||
              (button == GDK_BUTTON_PRIMARY && (state == GDK_CONTROL_MASK))) {
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
+
+      if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+        flags |= EPHY_NEW_TAB_JUMP;
     }
     /* New active tab in existing window for control+shift+click */
     else if (button == GDK_BUTTON_PRIMARY && (state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
