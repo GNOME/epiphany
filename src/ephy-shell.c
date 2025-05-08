@@ -1540,10 +1540,12 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 
     if (data->flags & EPHY_NEW_TAB_JUMP && mode != EPHY_EMBED_SHELL_MODE_TEST)
       gtk_window_present (GTK_WINDOW (data->window));
+
+    ephy_window_focus_location_entry (data->window);
   } else {
     ephy_web_view_load_new_tab_page (ephy_embed_get_web_view (embed));
     if (data->flags & EPHY_NEW_TAB_JUMP)
-      ephy_window_activate_location (data->window);
+      ephy_window_focus_location_entry (data->window);
   }
 
   if (!url_is_xpi) {

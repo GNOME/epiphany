@@ -390,7 +390,7 @@ ephy_window_open_link (EphyLink      *link,
   }
 
   if (ephy_web_view_get_is_blank (web_view))
-    ephy_window_activate_location (window);
+    ephy_window_focus_location_entry (window);
   else
     gtk_widget_grab_focus (GTK_WIDGET (new_embed));
 
@@ -4412,13 +4412,13 @@ ephy_window_load_url (EphyWindow *window,
 }
 
 /**
- * ephy_window_activate_location:
+ * ephy_window_focus_location_entry:
  * @window: an #EphyWindow
  *
- * Activates the location entry on @window's header bar.
+ * Focus the location entry on @window's header bar.
  **/
 void
-ephy_window_activate_location (EphyWindow *window)
+ephy_window_focus_location_entry (EphyWindow *window)
 {
   EphyTitleWidget *title_widget;
 

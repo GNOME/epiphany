@@ -2992,7 +2992,7 @@ window_cmd_go_location (GSimpleAction *action,
                         GVariant      *parameter,
                         gpointer       user_data)
 {
-  ephy_window_activate_location (user_data);
+  ephy_window_focus_location_entry (user_data);
 }
 
 void
