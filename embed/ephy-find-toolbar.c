@@ -41,6 +41,7 @@ struct _EphyFindToolbar {
   WebKitFindController *controller;
   GtkWidget *search_bar;
   GtkWidget *entry;
+  GtkWidget *options_button;
   GtkWidget *next;
   GtkWidget *prev;
   guint num_matches;
@@ -48,6 +49,8 @@ struct _EphyFindToolbar {
   guint find_again_source_id;
   guint find_source_id;
   char *find_string;
+  gboolean case_sensitive;
+  gboolean word_action;
 };
 
 G_DEFINE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, ADW_TYPE_BIN)
@@ -121,13 +124,19 @@ static void
 real_find (EphyFindToolbar   *toolbar,
            EphyFindDirection  direction)
 {
-  WebKitFindOptions options = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
+  WebKitFindOptions options = WEBKIT_FIND_OPTIONS_NONE;
 
   if (!g_strcmp0 (toolbar->find_string, ""))
     return;
 
   if (direction == EPHY_FIND_DIRECTION_PREV)
     options |= WEBKIT_FIND_OPTIONS_BACKWARDS;
+
+  if (!toolbar->case_sensitive)
+    options |= WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
+
+  if (toolbar->word_action)
+    options |= WEBKIT_FIND_OPTIONS_AT_WORD_STARTS;
 
   webkit_find_controller_count_matches (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
   webkit_find_controller_search (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
@@ -213,10 +222,37 @@ ephy_find_toolbar_load_changed_cb (WebKitWebView   *web_view,
 }
 
 static void
+on_case_senstive (GSimpleAction   *action,
+                  GVariant        *value,
+                  EphyFindToolbar *toolbar)
+{
+  toolbar->case_sensitive = g_variant_get_boolean (value);
+  g_simple_action_set_state (action, value);
+
+  update_find_string (toolbar);
+}
+
+static void
+on_word_action (GSimpleAction   *action,
+                GVariant        *value,
+                EphyFindToolbar *toolbar)
+{
+  toolbar->word_action = g_variant_get_boolean (value);
+  g_simple_action_set_state (action, value);
+
+  update_find_string (toolbar);
+}
+
+static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
   GtkWidget *clamp;
   GtkWidget *box;
+  GtkWidget *settings_popover;
+  GMenu *model;
+  g_autoptr (GSimpleActionGroup) group = NULL;
+  g_autoptr (GSimpleAction) case_action = NULL;
+  g_autoptr (GSimpleAction) word_action = NULL;
 
   toolbar->search_bar = gtk_search_bar_new ();
   adw_bin_set_child (ADW_BIN (toolbar), toolbar->search_bar);
@@ -234,6 +270,29 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gtk_widget_set_hexpand (GTK_WIDGET (toolbar->entry), TRUE);
   ephy_search_entry_set_placeholder_text (EPHY_SEARCH_ENTRY (toolbar->entry), _("Type to search…"));
   gtk_box_append (GTK_BOX (box), GTK_WIDGET (toolbar->entry));
+
+  /* Options */
+  toolbar->options_button = gtk_menu_button_new ();
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (toolbar->options_button), "emblem-system-symbolic");
+
+  group = g_simple_action_group_new ();
+  case_action = g_simple_action_new_stateful ("case-sensitive", NULL, g_variant_new_boolean (FALSE));
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (case_action));
+  g_signal_connect (case_action, "change-state", G_CALLBACK (on_case_senstive), toolbar);
+
+  word_action = g_simple_action_new_stateful ("match-whole-word", NULL, g_variant_new_boolean (FALSE));
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (word_action));
+  g_signal_connect (word_action, "change-state", G_CALLBACK (on_word_action), toolbar);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (toolbar), "search-options", G_ACTION_GROUP (group));
+
+  model = g_menu_new ();
+  g_menu_append_item (model, g_menu_item_new (_("_Case Sensitive"), "search-options.case-sensitive"));
+  g_menu_append_item (model, g_menu_item_new (_("Match Whole _Word Only"), "search-options.match-whole-word"));
+  settings_popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (model));
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->options_button), settings_popover);
+  gtk_widget_set_tooltip_text (toolbar->options_button, _("Search Options"));
+  gtk_box_append (GTK_BOX (box), toolbar->options_button);
 
   /* Prev */
   toolbar->prev = gtk_button_new_from_icon_name ("go-up-symbolic");
