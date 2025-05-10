@@ -24,8 +24,10 @@
 #include "ephy-debug.h"
 #include "ephy-download.h"
 #include "ephy-file-helpers.h"
+#include "ephy-langs.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-string.h"
 #include "ephy-embed-shell.h"
 
 #include <gio/gio.h>
@@ -889,15 +891,11 @@ sidecar_loaded_cb (GObject      *source_object,
 }
 
 static void
-update_adblock_filter_files_cb (GSettings          *settings,
-                                char               *key,
-                                EphyFiltersManager *manager)
+update_filters (EphyFiltersManager  *manager,
+                char               **uris)
 {
   const gint64 update_time = g_get_real_time () / G_USEC_PER_SEC;
   g_autoptr (GHashTable) old_filters = NULL;
-  g_auto (GStrv) uris = NULL;
-
-  g_assert (manager);
 
   if ((!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) ||
       (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION)) {
@@ -920,7 +918,6 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                             NULL,
                                             (GDestroyNotify)filter_info_free);
 
-  uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
   for (unsigned i = 0; uris[i]; i++) {
     g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
     FilterInfo *filter_info = NULL;
@@ -964,6 +961,19 @@ update_adblock_filter_files_cb (GSettings          *settings,
   g_hash_table_foreach (old_filters,
                         (GHFunc)remove_unused_filter,
                         manager);
+}
+
+static void
+update_adblock_filter_files_cb (GSettings          *settings,
+                                char               *key,
+                                EphyFiltersManager *manager)
+{
+  g_auto (GStrv) uris = NULL;
+
+  g_assert (manager);
+
+  uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+  update_filters (manager, uris);
 }
 
 static void
@@ -1011,6 +1021,60 @@ on_network_metered (GNetworkMonitor    *monitor,
   manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
 }
 
+/* URLs are provided by https://gitlab.com/eyeo/filterlists/contentblockerlists/-/tree/master  */
+struct adblocker_map {
+  const char *lang;
+  const char *url;
+} adblockers[] = {
+  { "cn", "https://easylist-downloads.adblockplus.org/easylist+easylistchina-minified.json"},
+  { "de", "https://easylist-downloads.adblockplus.org/easylist+easylistgermany-minified.json" },
+  { "es", "https://easylist-downloads.adblockplus.org/easylist+easylistspanish-minified.json"},
+  { "fr", "https://easylist-downloads.adblockplus.org/easylist+liste_fr-minified.json"},
+  { "it", "https://easylist-downloads.adblockplus.org/easylist+easylistitaly-minified.json"},
+  { "nl", "https://easylist-downloads.adblockplus.org/easylist+easylistdutch-minified.json"},
+  { NULL, NULL }
+};
+
+#define EASYLIST_DEFAULT "https://easylist-downloads.adblockplus.org/easylist_min_content_blocker.json"
+
+static void
+setup_adblocker_list (EphyFiltersManager *self)
+{
+  g_auto (GStrv) languages = NULL;
+  g_auto (GStrv) filters = NULL;
+  g_auto (GStrv) locale_filters = NULL;
+  int n_languages;
+
+  if (g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS)) {
+    update_adblock_filter_files_cb (NULL, NULL, self);
+    return;
+  }
+
+  languages = ephy_langs_get_languages ();
+  n_languages = g_strv_length (languages);
+
+  locale_filters = g_malloc0_n (2, sizeof (char *));
+  locale_filters[0] = g_strdup (EASYLIST_DEFAULT);
+  locale_filters[1] = NULL;
+
+  for (int lang = 0; lang < n_languages; lang++) {
+    languages[lang] = g_strdelimit (languages[lang], "_", '\0');
+    languages[lang] = g_strdelimit (languages[lang], "-", '\0');
+  }
+
+  for (int lang = 0; lang < n_languages; lang++) {
+    for (int idx = 0; adblockers[idx].lang != NULL; idx++)
+      if (g_ascii_strcasecmp (languages[lang], adblockers[idx].lang) == 0 && !g_strv_contains ((const char * const *)locale_filters, adblockers[idx].url)) {
+        char **tmp = locale_filters;
+
+        locale_filters = ephy_strv_append ((const char * const *)locale_filters, adblockers[idx].url);
+        g_strfreev (tmp);
+      }
+  }
+
+  update_filters (self, locale_filters);
+}
+
 static void
 ephy_filters_manager_constructed (GObject *object)
 {
@@ -1038,7 +1102,7 @@ ephy_filters_manager_constructed (GObject *object)
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
 
-  update_adblock_filter_files_cb (NULL, NULL, manager);
+  setup_adblocker_list (manager);
 
   g_signal_connect_object (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager, 0);
   manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
