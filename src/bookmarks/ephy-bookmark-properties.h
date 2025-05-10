@@ -32,7 +32,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, EPHY, BOOKMARK_PROPERTIES, AdwDialog)
 
-GtkWidget *ephy_bookmark_properties_new                (EphyBookmark *bookmark);
+GtkWidget *ephy_bookmark_properties_new                (EphyBookmark *bookmark,
+                                                        gboolean      bookmark_is_new);
 
 GtkWidget *ephy_bookmark_properties_get_add_tag_button (EphyBookmarkProperties *self);
 

@@ -7,11 +7,32 @@ template $EphyBookmarkProperties: Adw.Dialog {
   Adw.NavigationView navigation_view {
     Adw.NavigationPage {
       title: _("Bookmark");
+      tag: "default";
 
       Adw.ToolbarView {
         [top]
         Adw.HeaderBar header_bar {
           show-end-title-buttons: true;
+
+          [start]
+          Button cancel_button {
+            visible: false;
+            label: _("_Cancel");
+            use-underline: true;
+            action-name: "window.close";
+          }
+
+          [end]
+          Button add_button {
+            visible: false;
+            label: _("_Add");
+            use-underline: true;
+            clicked => $on_add_button_clicked();
+
+            styles [
+              "suggested-action",
+            ]
+          }
         }
 
         Adw.PreferencesPage {
