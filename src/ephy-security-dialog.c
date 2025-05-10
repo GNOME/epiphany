@@ -63,6 +63,7 @@ struct _EphySecurityDialog {
   GtkWidget *access_location_combobox;
   GtkWidget *access_microphone_combobox;
   GtkWidget *access_webcam_combobox;
+  GtkWidget *access_display_combobox;
   GtkWidget *autoplay_combobox;
   GtkWidget *listbox;
   GTlsCertificate *certificate;
@@ -153,6 +154,7 @@ ephy_security_dialog_set_address (EphySecurityDialog *dialog,
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, dialog->access_location_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, dialog->access_microphone_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, dialog->access_webcam_combobox);
+  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_DISPLAY, origin, dialog->access_display_combobox);
   set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY, origin, dialog->autoplay_combobox);
 }
 
@@ -457,6 +459,14 @@ on_access_webcam_combobox_changed (AdwComboRow        *row,
 }
 
 static void
+on_access_display_combobox_changed (AdwComboRow        *row,
+                                    GParamSpec         *psepc,
+                                    EphySecurityDialog *dialog)
+{
+  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_DISPLAY);
+}
+
+static void
 on_autoplay_policy_combobox_changed (AdwComboRow        *row,
                                      GParamSpec         *psepc,
                                      EphySecurityDialog *dialog)
@@ -511,6 +521,7 @@ ephy_security_dialog_init (EphySecurityDialog *dialog)
   dialog->access_location_combobox = add_permission_combobox (dialog, _("Location Access"), on_access_location_combobox_changed, combo_box_size_group, FALSE, NULL);
   dialog->access_microphone_combobox = add_permission_combobox (dialog, _("Microphone Access"), on_access_microphone_combobox_changed, combo_box_size_group, FALSE, NULL);
   dialog->access_webcam_combobox = add_permission_combobox (dialog, _("Webcam Access"), on_access_webcam_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->access_display_combobox = add_permission_combobox (dialog, _("Display Access"), on_access_display_combobox_changed, combo_box_size_group, FALSE, NULL);
   dialog->autoplay_combobox = add_permission_combobox (dialog, _("Media Autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, _("Without Sound"));
 }
 
