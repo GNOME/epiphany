@@ -14,20 +14,22 @@
 # Aefgh39622 <aefgh39622@gmail.com>, 2018.
 # Ryo Nakano <ryonakaknock3@gmail.com>, 2019.
 # sicklylife <translation@sicklylife.jp>, 2019-2020.
+# Tomo Dote <fu7mu4@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2020-08-14 09:59+0000\n"
-"PO-Revision-Date: 2020-08-17 01:50+0900\n"
-"Last-Translator: sicklylife <translation@sicklylife.jp>\n"
+"POT-Creation-Date: 2021-04-04 16:10+0000\n"
+"PO-Revision-Date: 2021-05-04 23:34+0900\n"
+"Last-Translator: Tomo Dote <fu7mu4@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 msgid "GNOME Web"
@@ -58,13 +60,13 @@ msgstr ""
 msgid "The GNOME web site displayed in GNOME Web"
 msgstr "GNOME Web で表示した GNOME のサイト"
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:37
+#: data/org.gnome.Epiphany.appdata.xml.in.in:36
 msgid "The GNOME Project"
 msgstr "The GNOME Project"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:192
 #: embed/ephy-about-handler.c:226 src/ephy-main.c:102 src/ephy-main.c:254
-#: src/ephy-main.c:406 src/window-commands.c:992
+#: src/ephy-main.c:406 src/window-commands.c:1009
 msgid "Web"
 msgstr "Web"
 
@@ -81,11 +83,11 @@ msgstr "ウェブを閲覧します"
 msgid "web;browser;internet;"
 msgstr "web;browser;internet;ウェブ;ブラウザー;インターネット;"
 
-#: data/org.gnome.Epiphany.desktop.in.in:19
+#: data/org.gnome.Epiphany.desktop.in.in:21
 msgid "New Window"
 msgstr "新しいウィンドウ"
 
-#: data/org.gnome.Epiphany.desktop.in.in:23
+#: data/org.gnome.Epiphany.desktop.in.in:25
 msgid "New Incognito Window"
 msgstr "新しい匿名ウィンドウ"
 
@@ -115,6 +117,9 @@ msgid ""
 "\t\t\t\t  ('Google', 'https://www.google.com/search?q=%s', '!g'),\n"
 "\t\t\t\t  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]"
 msgstr ""
+"[(‘DuckDuckGo’, ‘https://duckduckgo.com/?q=%s&t=epiphany', '!ddg’),\n"
+"\t\t\t\t  (‘Google’, ‘https://www.google.com/search?q=%s', '!g’),\n"
+"\t\t\t\t  (‘Bing’, ‘https://www.bing.com/search?q=%s', ‘!b’)]"
 
 #: data/org.gnome.epiphany.gschema.xml:33
 msgid "Default search engines."
@@ -129,21 +134,30 @@ msgstr ""
 "ト) の配列です。"
 
 #: data/org.gnome.epiphany.gschema.xml:38
+msgid "Enable Google Search Suggestions"
+msgstr "Google 検索のサジェスチョンを有効にする"
+
+#: data/org.gnome.epiphany.gschema.xml:39
+msgid "Whether to show Google Search Suggestion in url entry popdown."
+msgstr ""
+"URLのエントリーのポップダウンにGoogle 検索のサジェスチョンを表示するかどうか"
+
+#: data/org.gnome.epiphany.gschema.xml:43
 msgid "Force new windows to be opened in tabs"
 msgstr "新しいウィンドウを強制的にタブで開く"
 
-#: data/org.gnome.epiphany.gschema.xml:39
+#: data/org.gnome.epiphany.gschema.xml:44
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "新しいウィンドウを開く要求があった場合に、新しいウィンドウを開く代わりにタブ"
 "で開きます。"
 
-#: data/org.gnome.epiphany.gschema.xml:46
+#: data/org.gnome.epiphany.gschema.xml:51
 msgid "Whether to automatically restore the last session"
 msgstr "自動的に前回のセッションを復元するかどうか"
 
-#: data/org.gnome.epiphany.gschema.xml:47
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -155,13 +169,13 @@ msgstr ""
 "クラッシュした場合のみセッションを復元します)、“never” (毎回ホームページを表"
 "示します) です。"
 
-#: data/org.gnome.epiphany.gschema.xml:51
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr "セッション復元時にすぐに表示できないタブの読み込みを遅延させる"
 
-#: data/org.gnome.epiphany.gschema.xml:52
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -169,21 +183,23 @@ msgstr ""
 "このオプションを true に設定すると、セッション復元時に、ユーザーがタブを開く"
 "まで該当のタブのページ読み込みを開始しません。"
 
-#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "List of adblock filters"
 msgstr "広告ブロックフィルターの一覧"
 
-#: data/org.gnome.epiphany.gschema.xml:57
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
 msgstr ""
+"Adブロッカーで使用する、JSONフォーマットで書かれたコンテンツフィルタルールの "
+"URLのリスト"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:66
 msgid "Whether to ask for setting browser as default"
-msgstr ""
+msgstr "標準のブラウザに設定するかを尋ねるかどうか"
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:67
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
@@ -191,21 +207,34 @@ msgstr ""
 "このオプションを true に設定すると、Web がデフォルトのブラウザーに設定されて"
 "いない場合、デフォルトにするか確認します。"
 
-#: data/org.gnome.epiphany.gschema.xml:66
+#: data/org.gnome.epiphany.gschema.xml:71
 msgid "Start in incognito mode"
 msgstr "匿名モードで起動する"
 
-#: data/org.gnome.epiphany.gschema.xml:67
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 "このオプションを true に設定すると常にブラウザーを匿名モードで起動します"
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:76
+msgid "Active clear data items."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:77
+msgid ""
+"Selection (bitmask) which clear data items should be active by default. 1 = "
+"Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
+"application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = "
+"Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
+"Prevention data."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "タブのサイズをタブバーの空き領域に合わせて拡大する"
 
-#: data/org.gnome.epiphany.gschema.xml:74
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
@@ -213,24 +242,11 @@ msgstr ""
 "有効にすると、タブバーの利用可能な領域全体を使用するようにタブを拡大します。"
 "この設定は Pantheon デスクトップでは無視します。"
 
-#: data/org.gnome.epiphany.gschema.xml:78
-msgid "The position of the tabs bar."
-msgstr "タブバーの位置"
-
-#: data/org.gnome.epiphany.gschema.xml:79
-msgid ""
-"Controls where the tabs bar is shown. Possible values are “top” (the "
-"default), “bottom”, “left” (vertical tabs with bar on the left) and "
-"“right” (vertical tabs with bar on the right)."
-msgstr ""
-"タブバーが表示される場所を制御します。指定できる値は、“top” (デフォルトの位"
-"置)、“bottom”、“left” (左に位置する縦型)、“right” (右に位置する縦型) です。"
-
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The visibility policy for the tabs bar."
 msgstr "タブバーの表示/非表示のポリシー"
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -242,52 +258,58 @@ msgstr ""
 "す)、“never” (タブバーを表示しません) です。この設定は Pantheon デスクトップ"
 "または“always”を使用している場合は無視します。"
 
-#: data/org.gnome.epiphany.gschema.xml:88
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Keep window open when closing last tab"
-msgstr ""
+msgstr "最後のタブを閉じたときにそのウィンドウを開いたままにする"
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
+"アプリケーションのウィンドウ内の最後のタブを閉じたときに、そのウィンドウを開"
+"いたままにするかどうか"
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Reader mode article font style."
-msgstr ""
+msgstr "リーダーモードの記事のフォントスタイル。"
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
+"リーダーモードでの記事のメインの本文で使用するスタイルを選択する、可能な値"
+"は”sans”または”serif”のいずれか。"
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "Reader mode color scheme."
-msgstr ""
+msgstr "リーダーモードのカラースキーム。"
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
 "dark background)."
 msgstr ""
+"リーダーモードで記事を表示する色のスタイルを選択します。可能な値は”light” (明"
+"るい背景に暗い文字) と “dark” (暗い背景に明るい文字色)"
 
-#: data/org.gnome.epiphany.gschema.xml:107
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "Minimum font size"
 msgstr "最小のフォントサイズ"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:116
 msgid "Use GNOME fonts"
 msgstr "GNOME のシステムフォントを使用する"
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Use GNOME font settings."
 msgstr "GNOME のフォント設定を使用します。"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Custom sans-serif font"
 msgstr "ゴシック体 (Sans-serif)"
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -295,11 +317,11 @@ msgstr ""
 "use-gnome-fonts が設定されている場合に、Sans Serif のデスクトップフォントを書"
 "き換えるための値です。"
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom serif font"
 msgstr "明朝体 (Serif)"
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -307,11 +329,11 @@ msgstr ""
 "use-gnome-fonts が設定されている場合に、Serif のデスクトップフォントを書き換"
 "えるための値です。"
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom monospace font"
 msgstr "等幅 (Monospace)"
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -319,68 +341,62 @@ msgstr ""
 "use-gnome-fonts が設定されている場合に、Monospace のデスクトップフォントを書"
 "き換えるための値です。"
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Use a custom CSS"
 msgstr "カスタム CSS を使用する"
 
-#: data/org.gnome.epiphany.gschema.xml:132
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "ウェブサイト独自の CSS を変更し、カスタムの CSS ファイルを使用します。"
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Use a custom JS"
 msgstr "カスタム JS を使用する"
 
-#: data/org.gnome.epiphany.gschema.xml:137
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Use a custom JS file to modify websites."
 msgstr "カスタムの JS を使用してウェブサイトに変更を加えます。"
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Enable spell checking"
 msgstr "スペルチェックを有効にする"
 
-#: data/org.gnome.epiphany.gschema.xml:142
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid "Spell check any text typed in editable areas."
 msgstr "編集可能領域に入力した任意のテキストをスペルチェックします。"
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Default encoding"
 msgstr "既定の文字エンコーディング"
 
-#: data/org.gnome.epiphany.gschema.xml:147
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr ""
 "既定の文字エンコーディングです。WebKitGTK が理解できる値が指定できます。"
 
-#: data/org.gnome.epiphany.gschema.xml:151
-#: src/resources/gtk/prefs-general-page.ui:351
+#: data/org.gnome.epiphany.gschema.xml:156
+#: src/resources/gtk/prefs-general-page.ui:293
 msgid "Languages"
 msgstr "言語"
 
-#: data/org.gnome.epiphany.gschema.xml:152
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
+"優先する言語です。ロケールコードまたは “system” の配列を指定します。現在のロ"
+"ケールには”system” を指定します。"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Allow popups"
 msgstr "ポップアップを許可する"
 
-#: data/org.gnome.epiphany.gschema.xml:157
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "JavaScript を使用して新しいウィンドウで開くことを許可します (JavaScript が有"
 "効な場合)。"
-
-#: data/org.gnome.epiphany.gschema.xml:161
-msgid "Enable smooth scrolling"
-msgstr "スムーズスクロールを有効にする"
-
-#: data/org.gnome.epiphany.gschema.xml:162
-msgid "Whether to enable smooth scrolling."
-msgstr "スムーズスクロールを有効にするかどうかの設定です。"
 
 #: data/org.gnome.epiphany.gschema.xml:166
 msgid "User agent"
@@ -439,40 +455,32 @@ msgstr ""
 "Google Safe Browsing API v4 経由で動作します。"
 
 #: data/org.gnome.epiphany.gschema.xml:191
-msgid "Google Safe Browsing API key"
-msgstr "Google Safe Browsing API キー"
-
-#: data/org.gnome.epiphany.gschema.xml:192
-msgid "The API key used to access the Google Safe Browsing API v4."
-msgstr "Google Safe Browsing API v4 へのアクセスに使用する API キーです。"
-
-#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:196
 msgid "Allow websites to store local website data"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:202
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:201
 msgid "Default zoom level for new pages"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:205
 msgid "Enable autosearch"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:206
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -480,37 +488,37 @@ msgid ""
 "selected from the dropdown menu."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:210
 msgid "Enable mouse gestures"
 msgstr "マウスジェスチャーを有効にする"
 
-#: data/org.gnome.epiphany.gschema.xml:216
+#: data/org.gnome.epiphany.gschema.xml:211
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:220
+#: data/org.gnome.epiphany.gschema.xml:215
 msgid "Last upload directory"
 msgstr "最近使用したアップロードディレクトリ"
 
-#: data/org.gnome.epiphany.gschema.xml:221
+#: data/org.gnome.epiphany.gschema.xml:216
 msgid "Keep track of last upload directory"
 msgstr "最近使用したアップロードディレクトリを記録します"
 
-#: data/org.gnome.epiphany.gschema.xml:225
+#: data/org.gnome.epiphany.gschema.xml:220
 msgid "Last download directory"
 msgstr "最近使用したダウンロードディレクトリ"
 
-#: data/org.gnome.epiphany.gschema.xml:226
+#: data/org.gnome.epiphany.gschema.xml:221
 msgid "Keep track of last download directory"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:230
+#: data/org.gnome.epiphany.gschema.xml:225
 msgid "Hardware acceleration policy"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:231
+#: data/org.gnome.epiphany.gschema.xml:226
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “on-demand”, "
 "“always”, and “never”. Hardware acceleration may be required to achieve "
@@ -520,53 +528,79 @@ msgid ""
 "required to display 3D transforms."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:230
 msgid "Always ask for download directory"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:236
+#: data/org.gnome.epiphany.gschema.xml:231
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:235
 msgid "Enable immediately switch to new open tab"
 msgstr "新しく開いたタブにすぐに切り替える"
 
-#: data/org.gnome.epiphany.gschema.xml:241
+#: data/org.gnome.epiphany.gschema.xml:236
 msgid "Whether to automatically switch to a new open tab."
 msgstr "自動的に新しく開いたタブに切り替えるかどうかの設定です。"
 
-#: data/org.gnome.epiphany.gschema.xml:247
-msgid "Web application additional URLs"
+#: data/org.gnome.epiphany.gschema.xml:240
+msgid "Enable WebExtensions"
+msgstr "ウェブエクステンションを有効にする"
+
+#: data/org.gnome.epiphany.gschema.xml:241
+msgid ""
+"Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
+"extensions."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:248
-msgid "The list of URLs that should be opened by the web application"
+#: data/org.gnome.epiphany.gschema.xml:245
+msgid "Active WebExtensions"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:246
+msgid "Indicates which WebExtensions are set to active."
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:252
-msgid "WebApp is mobile capable"
+msgid "Web application additional URLs"
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:253
-msgid "Whether to show buttons for navigation."
+msgid "The list of URLs that should be opened by the web application"
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:257
-msgid "Run in background"
+msgid "Show navigation buttons in WebApp"
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:258
+msgid "Whether to show buttons for navigation in WebApp."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:262
+msgid "Run in background"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:267
+msgid "WebApp is system-wide"
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:268
+msgid "If enabled, application cannot be edited or removed."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid "The downloads folder"
 msgstr "ダウンロードフォルダー"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:275
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -574,207 +608,207 @@ msgstr ""
 "ダウンロードしたファイルを保存する先のフォルダーのパス: デフォルトでは“ダウン"
 "ロード”もしくは“デスクトップ”がダウンロードフォルダーに使用されます。"
 
-#: data/org.gnome.epiphany.gschema.xml:272
+#: data/org.gnome.epiphany.gschema.xml:282
 msgid "Window position"
 msgstr "ウィンドウの位置"
 
-#: data/org.gnome.epiphany.gschema.xml:273
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:277
+#: data/org.gnome.epiphany.gschema.xml:287
 msgid "Window size"
 msgstr "ウィンドウのサイズ"
 
-#: data/org.gnome.epiphany.gschema.xml:278
+#: data/org.gnome.epiphany.gschema.xml:288
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Is maximized"
 msgstr "最大化"
 
-#: data/org.gnome.epiphany.gschema.xml:283
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:308
 msgid "Disable forward and back buttons"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:299
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid "Firefox Sync Token Server URL"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:328
 msgid "URL to a custom Firefox Sync token server."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Firefox Sync アカウントサーバーの URL"
 
-#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:333
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "Firefox Sync アカウントサーバーのカスタム URL です。"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid "Currently signed in sync user"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:338
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:342
 msgid "Last sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:343
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:347
 msgid "Sync device ID"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:348
 msgid "The sync device ID of the current device."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:352
 msgid "Sync device name"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:353
 msgid "The sync device name of the current device."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:357
 msgid "The sync frequency in minutes"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:358
 msgid "The number of minutes between two consecutive syncs."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:362
 msgid "Sync data with Firefox"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:363
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:367
 msgid "Enable bookmarks sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:368
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:372
 msgid "Bookmarks sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:373
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:367
-#: data/org.gnome.epiphany.gschema.xml:382
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "Initial sync or normal sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:378
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:382
 msgid "Enable passwords sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:383
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Passwords sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:388
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:393
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Enable history sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:398
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "History sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:403
 msgid "The timestamp at which last history sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:408
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "Enable open tabs sync"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:413
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid "Open tabs sync timestamp"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:418
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -782,12 +816,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -795,12 +829,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -808,12 +842,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -821,11 +855,11 @@ msgid ""
 "make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:439
+#: data/org.gnome.epiphany.gschema.xml:449
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -833,12 +867,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:444
+#: data/org.gnome.epiphany.gschema.xml:454
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:445
+#: data/org.gnome.epiphany.gschema.xml:455
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -846,11 +880,11 @@ msgid ""
 "decision upon request."
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:449
+#: data/org.gnome.epiphany.gschema.xml:459
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 
-#: data/org.gnome.epiphany.gschema.xml:450
+#: data/org.gnome.epiphany.gschema.xml:460
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -871,7 +905,7 @@ msgstr "バージョン %s"
 msgid "About Web"
 msgstr "Web について"
 
-#: embed/ephy-about-handler.c:194 src/window-commands.c:994
+#: embed/ephy-about-handler.c:194 src/window-commands.c:1011
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany テクノロジープレビュー"
 
@@ -881,7 +915,7 @@ msgstr "シンプル、キレイ、ウェブの美しい景色を"
 
 #. Displayed when opening applications without any installed web apps.
 #: embed/ephy-about-handler.c:258 embed/ephy-about-handler.c:259
-#: embed/ephy-about-handler.c:287 embed/ephy-about-handler.c:302
+#: embed/ephy-about-handler.c:290 embed/ephy-about-handler.c:305
 msgid "Applications"
 msgstr "アプリケーション"
 
@@ -889,16 +923,16 @@ msgstr "アプリケーション"
 msgid "List of installed web applications"
 msgstr "インストール済みウェブアプリケーション一覧"
 
-#: embed/ephy-about-handler.c:273
+#: embed/ephy-about-handler.c:276
 msgid "Delete"
 msgstr "削除"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:275
+#: embed/ephy-about-handler.c:278
 msgid "Installed on:"
 msgstr "インストール日:"
 
-#: embed/ephy-about-handler.c:302
+#: embed/ephy-about-handler.c:305
 msgid ""
 "You can add your favorite website by clicking <b>Install Site as Web "
 "Application…</b> within the page menu."
@@ -907,24 +941,24 @@ msgstr ""
 "b> をクリックすると、お気に入りのウェブサイトを追加できます。"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:394
+#: embed/ephy-about-handler.c:397
 msgid "Welcome to Web"
 msgstr "Web へようこそ"
 
-#: embed/ephy-about-handler.c:394
+#: embed/ephy-about-handler.c:397
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "ブラウジングを始めましょう。よく訪れるサイトがここに表示されます。"
 
-#: embed/ephy-about-handler.c:425
-#: embed/web-process-extension/resources/js/overview.js:116
+#: embed/ephy-about-handler.c:428
+#: embed/web-process-extension/resources/js/overview.js:148
 msgid "Remove from overview"
 msgstr "よく見るページ一覧から削除します"
 
-#: embed/ephy-about-handler.c:505 embed/ephy-about-handler.c:506
+#: embed/ephy-about-handler.c:500 embed/ephy-about-handler.c:501
 msgid "Private Browsing"
 msgstr "プライベートブラウジング"
 
-#: embed/ephy-about-handler.c:507
+#: embed/ephy-about-handler.c:502
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -934,14 +968,14 @@ msgstr ""
 "らず、ウィンドウを閉じた時点ですべての格納情報を消去します。なお、ダウンロー"
 "ドしたファイルは保持します。"
 
-#: embed/ephy-about-handler.c:511
+#: embed/ephy-about-handler.c:506
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "匿名モードを使用してあなたの作業内容を隠蔽できるのは、このコンピューターを共"
 "用する他の人に対してだけです。"
 
-#: embed/ephy-about-handler.c:513
+#: embed/ephy-about-handler.c:508
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -968,12 +1002,13 @@ msgid "Download requested"
 msgstr "ダウンロードが要求されました"
 
 #: embed/ephy-download.c:819 lib/widgets/ephy-file-chooser.c:164
+#: src/ephy-web-extension-dialog.c:75 src/ephy-web-extension-dialog.c:242
+#: src/resources/gtk/firefox-sync-dialog.ui:173
 #: src/resources/gtk/history-dialog.ui:96
-#: src/resources/gtk/prefs-lang-dialog.ui:16
-#: src/resources/gtk/prefs-sync-page.ui:153 src/window-commands.c:275
-#: src/window-commands.c:333 src/window-commands.c:377
-#: src/window-commands.c:561 src/window-commands.c:646
-#: src/window-commands.c:807 src/window-commands.c:1874
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:276
+#: src/window-commands.c:334 src/window-commands.c:378
+#: src/window-commands.c:562 src/window-commands.c:647
+#: src/window-commands.c:809 src/window-commands.c:1889
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
@@ -1003,21 +1038,21 @@ msgid "Save file"
 msgstr "ファイルを保存"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "%s を押すとフルスクリーンを解除します"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:534
+#: embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:794
+#: embed/ephy-embed.c:807
 msgid "Web is being controlled by automation."
 msgstr "Web は自動操作されています。"
 
@@ -1379,38 +1414,38 @@ msgstr "後方に出現する文字列を検索します"
 msgid "Find next occurrence of the search string"
 msgstr "前方に出現する文字列を検索します"
 
-#: embed/ephy-reader-handler.c:300 embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:268 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s は有効な URI ではありません"
 
-#: embed/ephy-web-view.c:183 src/window-commands.c:1336
+#: embed/ephy-web-view.c:189 src/window-commands.c:1351
 msgid "Open"
 msgstr "開く"
 
-#: embed/ephy-web-view.c:358
+#: embed/ephy-web-view.c:368
 msgid "Not No_w"
 msgstr "今はしない(_W)"
 
-#: embed/ephy-web-view.c:359
+#: embed/ephy-web-view.c:369
 msgid "_Never Save"
 msgstr "保存しない(_N)"
 
-#: embed/ephy-web-view.c:360 lib/widgets/ephy-file-chooser.c:175
-#: src/resources/gtk/prefs-sync-page.ui:162 src/window-commands.c:645
+#: embed/ephy-web-view.c:370 lib/widgets/ephy-file-chooser.c:175
+#: src/resources/gtk/firefox-sync-dialog.ui:182 src/window-commands.c:646
 msgid "_Save"
 msgstr "保存(_S)"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:367
+#: embed/ephy-web-view.c:377
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "“%s”のパスワードを保存しますか?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:609
+#: embed/ephy-web-view.c:616
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1418,83 +1453,82 @@ msgstr ""
 "警告: このフォームは安全ではありません。入力したパスワードは漏えいする可能性"
 "があります。"
 
-#: embed/ephy-web-view.c:817
+#: embed/ephy-web-view.c:828
 msgid "Web process crashed"
 msgstr "Web のプロセスがクラッシュしました"
 
-#: embed/ephy-web-view.c:820
+#: embed/ephy-web-view.c:831
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "メモリの上限を超えたため Web のプロセスを終了しました"
 
-#: embed/ephy-web-view.c:1020 embed/ephy-web-view.c:1141
+#: embed/ephy-web-view.c:1031 embed/ephy-web-view.c:1152
 #: lib/widgets/ephy-security-popover.c:515
 msgid "Deny"
 msgstr "拒否"
 
-#: embed/ephy-web-view.c:1021 embed/ephy-web-view.c:1142
+#: embed/ephy-web-view.c:1032 embed/ephy-web-view.c:1153
 #: lib/widgets/ephy-security-popover.c:514
 msgid "Allow"
 msgstr "許可"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1034
+#: embed/ephy-web-view.c:1045
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "%s のページがデスクトップ通知を行う権限を要求しています。"
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1039
+#: embed/ephy-web-view.c:1050
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "%s のページがあなたの位置情報を要求しています。"
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1044
+#: embed/ephy-web-view.c:1055
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "%s のページがマイクの使用を要求しています。"
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1049
+#: embed/ephy-web-view.c:1060
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "%s のページがウェブカメラの使用を要求しています。"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: embed/ephy-web-view.c:1054
+#: embed/ephy-web-view.c:1065
 #, c-format
 msgid "The page at %s wants to use your webcam and microphone."
 msgstr "%s のページがウェブカメラとマイクの使用を要求しています。"
 
-#: embed/ephy-web-view.c:1149
+#: embed/ephy-web-view.c:1160
 #, c-format
 msgid "Do you want to allow “%s” to use cookies while browsing “%s”?"
-msgstr ""
-"“%2$s”の閲覧中に“%1$s”が Cookie を使用することを許可しますか?"
+msgstr "“%2$s”の閲覧中に“%1$s”が Cookie を使用することを許可しますか?"
 
-#: embed/ephy-web-view.c:1158
+#: embed/ephy-web-view.c:1169
 #, c-format
 msgid "This will allow “%s” to track your activity."
 msgstr "“%s”があなたのアクティビティを追跡できるようになります。"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1336
+#: embed/ephy-web-view.c:1347
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s”の読み込み中…"
 
-#: embed/ephy-web-view.c:1338 embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1349 embed/ephy-web-view.c:1355
 msgid "Loading…"
 msgstr "読み込み中…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1677
+#: embed/ephy-web-view.c:1700
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "このウェブサイトの提供する識別情報は、異なるウェブサイトのものです。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1682
+#: embed/ephy-web-view.c:1705
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1503,14 +1537,14 @@ msgstr ""
 "てください。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1687
+#: embed/ephy-web-view.c:1710
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "このウェブサイトの識別情報は、信頼された認証局で発行されたものではありませ"
 "ん。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1692
+#: embed/ephy-web-view.c:1715
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1518,7 +1552,7 @@ msgstr ""
 "ます。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1697
+#: embed/ephy-web-view.c:1720
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1527,7 +1561,7 @@ msgstr ""
 "す。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1702
+#: embed/ephy-web-view.c:1725
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1536,7 +1570,7 @@ msgstr ""
 "す。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1707
+#: embed/ephy-web-view.c:1730
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1546,24 +1580,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1770 embed/ephy-web-view.c:1826
+#: embed/ephy-web-view.c:1793 embed/ephy-web-view.c:1849
 #, c-format
 msgid "Problem Loading Page"
 msgstr "ページの読み込み時の問題"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1773
+#: embed/ephy-web-view.c:1796
 msgid "Unable to display this website"
 msgstr "このウェブサイトを表示できません"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1800
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "%s のサイトは利用できないようです。"
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1781
+#: embed/ephy-web-view.c:1804
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1572,7 +1606,7 @@ msgstr ""
 "能性があります。インターネット接続が正常にできていることも確認してください。"
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1814
 #, c-format
 msgid "The precise error was: %s"
 msgstr "エラーの詳細: %s"
@@ -1580,49 +1614,49 @@ msgstr "エラーの詳細: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1796 embed/ephy-web-view.c:1849
-#: embed/ephy-web-view.c:1888 src/resources/gtk/page-menu-popover.ui:129
+#: embed/ephy-web-view.c:1819 embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1911 src/resources/gtk/page-menu-popover.ui:134
 msgid "Reload"
 msgstr "再読み込み"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1799 embed/ephy-web-view.c:1852
-#: embed/ephy-web-view.c:1891
+#: embed/ephy-web-view.c:1822 embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1914
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:1852
 msgid "Oops! There may be a problem"
 msgstr "問題が発生した可能性があります"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1856
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "ページ %s が原因で Web が予期せず終了した可能性があります。"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1840
+#: embed/ephy-web-view.c:1863
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "もし同じ現象が再発するようであれば、%s の開発者に問題を報告してください。"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1877
+#: embed/ephy-web-view.c:1900
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "ページの表示時の問題"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1903
 msgid "Oops!"
 msgstr "おっと!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1883
+#: embed/ephy-web-view.c:1906
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1631,18 +1665,18 @@ msgstr ""
 "他のページにアクセスしてください。"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1917
+#: embed/ephy-web-view.c:1940
 #, c-format
 msgid "Security Violation"
 msgstr "セキュリティ違反"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:1943
 msgid "This Connection is Not Secure"
 msgstr "この接続は安全ではありません"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1924
+#: embed/ephy-web-view.c:1947
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1654,45 +1688,45 @@ msgstr ""
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:2023
-#: embed/ephy-web-view.c:2074
+#: embed/ephy-web-view.c:1957 embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2097
 msgid "Go Back"
 msgstr "戻る"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1937 embed/ephy-web-view.c:2026
-#: embed/ephy-web-view.c:2077
+#: embed/ephy-web-view.c:1960 embed/ephy-web-view.c:2049
+#: embed/ephy-web-view.c:2100
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1940 embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:1963 embed/ephy-web-view.c:2052
 msgid "Accept Risk and Proceed"
 msgstr "リスクを許容して続行"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1944 embed/ephy-web-view.c:2033
+#: embed/ephy-web-view.c:1967 embed/ephy-web-view.c:2056
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:1974
+#: embed/ephy-web-view.c:1997
 #, c-format
 msgid "Security Warning"
 msgstr "セキュリティ警告"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:1977
+#: embed/ephy-web-view.c:2000
 msgid "Unsafe website detected!"
 msgstr "安全でないウェブサイトを検出しました!"
 
-#: embed/ephy-web-view.c:1984
+#: embed/ephy-web-view.c:2007
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1701,7 +1735,7 @@ msgstr ""
 "%s にアクセスすると、コンピューターに害を及ぼす可能性があります。あなたの同意"
 "なしに悪意あるコードがコンピューターにダウンロードされる可能性があります。"
 
-#: embed/ephy-web-view.c:1988
+#: embed/ephy-web-view.c:2011
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1710,7 +1744,7 @@ msgstr ""
 "ウイルスやその他の悪意あるコードを含む有害なウェブコンテンツについて、および"
 "コンピューターを保護する方法については、%s で詳細を確認できます。"
 
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2018
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1721,7 +1755,7 @@ msgstr ""
 "情報など) を入力させようとしたり、ソフトウェアをインストールさせようとしたり"
 "する可能性があります。"
 
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:2023
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1729,7 +1763,7 @@ msgstr ""
 "ソーシャルエンジニアリング (フィッシング) については、%s または %s で詳細を確"
 "認できます。"
 
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2032
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1741,24 +1775,24 @@ msgstr ""
 "ような、あなたのブラウジング体験を損なうプログラムをインストールさせようとす"
 "る可能性があります。"
 
-#: embed/ephy-web-view.c:2014
+#: embed/ephy-web-view.c:2037
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "望ましくないソフトウェアについては、%s で詳細を確認できます。"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2058 embed/ephy-web-view.c:2061
+#: embed/ephy-web-view.c:2081 embed/ephy-web-view.c:2084
 #, c-format
 msgid "File not found"
 msgstr "ファイルが見つかりません"
 
-#: embed/ephy-web-view.c:2065
+#: embed/ephy-web-view.c:2088
 #, c-format
 msgid "%s could not be found."
 msgstr "%s が見つかりませんでした。"
 
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2090
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -1768,24 +1802,24 @@ msgstr ""
 "ファイルを移動していないか、削除していないか、名前を変更していないか確認して"
 "ください。"
 
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2153
 msgid "None specified"
 msgstr "指定なし"
 
-#: embed/ephy-web-view.c:2246
+#: embed/ephy-web-view.c:2269
 msgid "Technical information"
 msgstr "技術情報"
 
-#: embed/ephy-web-view.c:3382
+#: embed/ephy-web-view.c:3463
 msgid "_OK"
 msgstr "OK(_O)"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
-msgstr ""
+msgstr "未指定"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:210
+#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-general-page.ui:185
 msgid "Downloads"
 msgstr "ダウンロード"
 
@@ -1895,13 +1929,13 @@ msgstr "%Y年%B%-e日"
 msgid "Unknown"
 msgstr "不明"
 
-#: lib/sync/ephy-password-import.c:132
+#: lib/sync/ephy-password-import.c:133
 #, c-format
 msgid "Cannot create SQLite connection. Close browser and try again."
 msgstr ""
 "SQLite への接続を作成できません。ブラウザーを閉じて再試行してください。"
 
-#: lib/sync/ephy-password-import.c:141 lib/sync/ephy-password-import.c:151
+#: lib/sync/ephy-password-import.c:142 lib/sync/ephy-password-import.c:152
 #, c-format
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
@@ -1929,9 +1963,9 @@ msgid "Failed to obtain storage credentials."
 msgstr "ストレージの資格情報の取得に失敗しました。"
 
 #: lib/sync/ephy-sync-service.c:863 lib/sync/ephy-sync-service.c:980
-#: lib/sync/ephy-sync-service.c:1755
-msgid "Please visit Preferences and sign in again to continue syncing."
-msgstr "同期を続けるには、設定から再度ログインしてください。"
+#: lib/sync/ephy-sync-service.c:1758
+msgid "Please visit Firefox Sync and sign in again to continue syncing."
+msgstr "同期を続けるには、Firefox Syncを訪問してから再度ログインしてください。"
 
 #: lib/sync/ephy-sync-service.c:970
 msgid "The password of your Firefox account seems to have been changed."
@@ -1939,46 +1973,48 @@ msgstr "お使いの Firefox アカウントのパスワードが変更された
 
 #: lib/sync/ephy-sync-service.c:971
 msgid ""
-"Please visit Preferences and sign in with the new password to continue "
+"Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
-msgstr "同期を続けるには、設定から新しいパスワードでログインしてください。"
+msgstr ""
+"Firefix Sync を訪問して、新しいパスワードでログインして、同期を続けてくださ"
+"い。"
 
 #: lib/sync/ephy-sync-service.c:979
 msgid "Failed to obtain signed certificate."
 msgstr "署名付き証明書の取得に失敗しました。"
 
-#: lib/sync/ephy-sync-service.c:1721 lib/sync/ephy-sync-service.c:1726
+#: lib/sync/ephy-sync-service.c:1724 lib/sync/ephy-sync-service.c:1729
 msgid "Could not find the sync secrets for the current sync user."
-msgstr ""
+msgstr "現在の同期ユーザーの機密が見つかりません。"
 
-#: lib/sync/ephy-sync-service.c:1733 lib/sync/ephy-sync-service.c:1741
+#: lib/sync/ephy-sync-service.c:1736 lib/sync/ephy-sync-service.c:1744
 msgid "The sync secrets for the current sync user are invalid."
-msgstr ""
+msgstr "現在の同期ユーザーの機密の同期は不正です。"
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1849
+#: lib/sync/ephy-sync-service.c:1852
 #, c-format
 msgid "The sync secrets of %s"
-msgstr ""
+msgstr "%sの機密の同期"
 
-#: lib/sync/ephy-sync-service.c:1874
+#: lib/sync/ephy-sync-service.c:1877
 msgid "Failed to upload client record."
-msgstr ""
+msgstr "クライアントの記録のアップロードに失敗しました"
 
-#: lib/sync/ephy-sync-service.c:2073
+#: lib/sync/ephy-sync-service.c:2076
 msgid "Failed to upload crypto/keys record."
-msgstr ""
+msgstr "暗号鍵の記録のアップロードに失敗しました。"
 
-#: lib/sync/ephy-sync-service.c:2180
+#: lib/sync/ephy-sync-service.c:2183
 msgid "Failed to retrieve crypto keys."
 msgstr "暗号鍵の取得に失敗しました。"
 
-#: lib/sync/ephy-sync-service.c:2231
+#: lib/sync/ephy-sync-service.c:2234
 msgid "Failed to upload meta/global record."
-msgstr ""
+msgstr "meta/global の記録のアップロードに失敗しました。"
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2348
+#: lib/sync/ephy-sync-service.c:2351
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1986,15 +2022,15 @@ msgstr ""
 "あなたの Firefox アカウントはバージョン %d のストレージを使用しています。Web "
 "はバージョン %d のみをサポートしています。"
 
-#: lib/sync/ephy-sync-service.c:2359
+#: lib/sync/ephy-sync-service.c:2362
 msgid "Failed to verify storage version."
 msgstr "ストレージのバージョン確認に失敗しました。"
 
-#: lib/sync/ephy-sync-service.c:2415
+#: lib/sync/ephy-sync-service.c:2418
 msgid "Failed to upload device info"
 msgstr "デバイス情報のアップロードに失敗しました"
 
-#: lib/sync/ephy-sync-service.c:2488 lib/sync/ephy-sync-service.c:2566
+#: lib/sync/ephy-sync-service.c:2494 lib/sync/ephy-sync-service.c:2572
 msgid "Failed to retrieve the Sync Key"
 msgstr "同期キーの取得に失敗しました"
 
@@ -2048,7 +2084,7 @@ msgstr ""
 "法で送信されました。"
 
 #: lib/widgets/ephy-downloads-popover.c:235
-#: src/resources/gtk/history-dialog.ui:345
+#: src/resources/gtk/history-dialog.ui:236
 #: src/resources/gtk/passwords-view.ui:27
 msgid "_Clear All"
 msgstr "すべて消去(_C)"
@@ -2112,7 +2148,8 @@ msgstr "キャンセル中…"
 msgid "Starting…"
 msgstr "起動中…"
 
-#: lib/widgets/ephy-file-chooser.c:173 src/resources/gtk/history-dialog.ui:384
+#: lib/widgets/ephy-file-chooser.c:173 src/ephy-web-extension-dialog.c:243
+#: src/resources/gtk/history-dialog.ui:277
 msgid "_Open"
 msgstr "開く(_O)"
 
@@ -2136,36 +2173,36 @@ msgstr "すべてのファイル"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:669 src/ephy-history-dialog.c:563
+#: lib/widgets/ephy-location-entry.c:670 src/ephy-history-dialog.c:564
 msgid "Cl_ear"
 msgstr "消去(_E)"
 
-#: lib/widgets/ephy-location-entry.c:689
+#: lib/widgets/ephy-location-entry.c:690
 msgid "Paste and _Go"
 msgstr "貼り付けて移動(_G)"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:710 src/ephy-window.c:955
+#: lib/widgets/ephy-location-entry.c:711 src/ephy-window.c:964
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
-#: lib/widgets/ephy-location-entry.c:717
+#: lib/widgets/ephy-location-entry.c:718
 msgid "_Redo"
 msgstr "やり直す(_R)"
 
-#: lib/widgets/ephy-location-entry.c:1003
+#: lib/widgets/ephy-location-entry.c:1004
 msgid "Show website security status and permissions"
 msgstr "ウェブサイトのセキュリティステータスや権限を表示します"
 
-#: lib/widgets/ephy-location-entry.c:1005
+#: lib/widgets/ephy-location-entry.c:1006
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "ウェブサイトやブックマークを検索してタブで開きます"
 
-#: lib/widgets/ephy-location-entry.c:1045
+#: lib/widgets/ephy-location-entry.c:1050
 msgid "Bookmark this page"
 msgstr "このページをブックマークします"
 
-#: lib/widgets/ephy-location-entry.c:1064
+#: lib/widgets/ephy-location-entry.c:1069
 msgid "Toggle reader mode"
 msgstr "リーダーモードを切り替えます"
 
@@ -2239,6 +2276,10 @@ msgstr "ウェブカメラへのアクセス"
 msgid "Media autoplay"
 msgstr "メディアの自動再生"
 
+#: lib/widgets/ephy-security-popover.c:579
+msgid "Without Sound"
+msgstr "音声なし"
+
 #: src/bookmarks/ephy-bookmark-row.c:62
 msgid "Bookmark Properties"
 msgstr "ブックマークのプロパティ"
@@ -2270,22 +2311,21 @@ msgstr ""
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Firefox ブックマークを取得できませんでした。"
 
-#: src/bookmarks/ephy-bookmarks-import.c:458
+#: src/bookmarks/ephy-bookmarks-import.c:459
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
-msgstr ""
-"HTML ブックマークデータベースを開くことができませんでした: %s"
+msgstr "HTML ブックマークデータベースを開くことができませんでした: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:469
+#: src/bookmarks/ephy-bookmarks-import.c:470
 msgid "HTML bookmarks database could not be read."
 msgstr "HTML ブックマークデータベースを読み取れませんでした。"
 
-#: src/bookmarks/ephy-bookmarks-import.c:490
+#: src/bookmarks/ephy-bookmarks-import.c:491
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "HTML ブックマークデータベースを解析できませんでした: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:643
+#: src/bookmarks/ephy-bookmarks-import.c:644
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "ブックマークファイルを解析できませんでした:"
@@ -2299,37 +2339,49 @@ msgid "Mobile"
 msgstr "モバイル"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-action-bar-start.c:36 src/ephy-header-bar.c:51
+#: src/ephy-action-bar-start.c:37 src/ephy-header-bar.c:52
 msgid "Reload the current page"
 msgstr "現在のページを再読み込みします"
 
-#: src/ephy-action-bar-start.c:642 src/ephy-header-bar.c:449
+#: src/ephy-action-bar-start.c:646 src/ephy-header-bar.c:475
 msgid "Stop loading the current page"
 msgstr "現在のページの読み込みを中止します"
 
-#: src/ephy-history-dialog.c:139 src/ephy-history-dialog.c:963
+#. Translators: the %s refers to the time at which the last sync was made.
+#. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+#.
+#: src/ephy-firefox-sync-dialog.c:108
+#, c-format
+msgid "Last synchronized: %s"
+msgstr "最終同期日時: %s"
+
+#: src/ephy-firefox-sync-dialog.c:396
+msgid "Something went wrong, please try again later."
+msgstr "問題が発生しました。しばらくしてから再試行してください。"
+
+#: src/ephy-history-dialog.c:140 src/ephy-history-dialog.c:976
 msgid "It is not possible to modify history when in incognito mode."
 msgstr "匿名モードでは履歴を変更することはできません。"
 
-#: src/ephy-history-dialog.c:456
+#: src/ephy-history-dialog.c:457
 msgid "Remove the selected pages from history"
 msgstr "選択したページを履歴から削除します"
 
-#: src/ephy-history-dialog.c:463
+#: src/ephy-history-dialog.c:464
 msgid "Copy URL"
 msgstr "URL をコピー"
 
-#: src/ephy-history-dialog.c:553
+#: src/ephy-history-dialog.c:554
 msgid "Clear browsing history?"
 msgstr "閲覧した履歴を消去しますか?"
 
-#: src/ephy-history-dialog.c:557
+#: src/ephy-history-dialog.c:558
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "閲覧した履歴を消去すると、リンクの履歴がすべて完全に削除されます。"
 
-#: src/ephy-history-dialog.c:966
+#: src/ephy-history-dialog.c:979
 msgid "Remove all history"
 msgstr "すべての履歴を削除します"
 
@@ -2378,275 +2430,340 @@ msgid "Web options"
 msgstr "Web のオプション"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-notebook.c:611 src/resources/gtk/action-bar-start.ui:95
+#: src/ephy-tab-view.c:636 src/resources/gtk/action-bar-start.ui:95
 msgid "Open a new tab"
 msgstr "新しいタブを開きます"
 
-#. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:621
-msgid "View open tabs"
-msgstr "開いているタブを表示します"
+#: src/ephy-web-extension-dialog.c:73
+msgid "Do you really want to remove this extension?"
+msgstr "このエクステンションを本当に削除しますか?"
 
-#: src/ephy-tab-header-bar.c:68
-msgid "Tabs"
-msgstr "タブ"
+#: src/ephy-web-extension-dialog.c:77 src/ephy-web-extension-dialog.c:196
+#: src/resources/gtk/bookmark-properties-grid.ui:176
+msgid "_Remove"
+msgstr "削除(_R)"
 
-#: src/ephy-tab-label.c:340
-msgid "New Tab"
-msgstr "新しいタブ"
+#: src/ephy-web-extension-dialog.c:165
+msgid "Author"
+msgstr "著者"
 
-#: src/ephy-window.c:272
+#: src/ephy-web-extension-dialog.c:174
+msgid "Version"
+msgstr "バージョン"
+
+#: src/ephy-web-extension-dialog.c:183
+#: src/resources/gtk/prefs-general-page.ui:127
+msgid "Homepage"
+msgstr "ホームページ"
+
+#: src/ephy-web-extension-dialog.c:200
+msgid "Remove selected WebExtension"
+msgstr "選択したウェブエクステンションを削除します"
+
+#. Translators: this is the title of a file chooser dialog.
+#: src/ephy-web-extension-dialog.c:239
+msgid "Open File (manifest.json/xpi)"
+msgstr "ファイルを開く (manifest.json/xpi)"
+
+#: src/ephy-window.c:282
 msgid "Do you want to leave this website?"
 msgstr "このウェブサイトから移動しますか?"
 
-#: src/ephy-window.c:273 src/window-commands.c:1185
+#: src/ephy-window.c:283 src/window-commands.c:1199
 msgid "A form you modified has not been submitted."
 msgstr "変更したフォームは送信されていません。"
 
-#: src/ephy-window.c:274 src/window-commands.c:1187
+#: src/ephy-window.c:284 src/window-commands.c:1201
 msgid "_Discard form"
 msgstr "フォームを破棄(_D)"
 
-#: src/ephy-window.c:289
+#: src/ephy-window.c:299
 msgid "There are multiple tabs open."
 msgstr "複数のタブを開いています。"
 
-#: src/ephy-window.c:290
+#: src/ephy-window.c:300
 msgid "If you close this window, all open tabs will be lost"
 msgstr "このウィンドウを閉じると開いているタブは失われます"
 
-#: src/ephy-window.c:291
+#: src/ephy-window.c:301
 msgid "C_lose tabs"
 msgstr "タブを閉じる(_L)"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:965
 msgid "Re_do"
 msgstr "やり直す(_D)"
 
 #. Edit.
-#: src/ephy-window.c:959
+#: src/ephy-window.c:968
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: src/ephy-window.c:960
+#: src/ephy-window.c:969
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:970
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:971
 msgid "_Paste Text Only"
 msgstr "テキストのみ貼り付け(_P)"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:972
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
-#: src/ephy-window.c:965
+#: src/ephy-window.c:974
 msgid "S_end Link by Email…"
 msgstr "リンクをメールで送信(_E)…"
 
-#: src/ephy-window.c:967
+#: src/ephy-window.c:976
 msgid "_Reload"
 msgstr "再読み込み(_R)"
 
-#: src/ephy-window.c:968
+#: src/ephy-window.c:977
 msgid "_Back"
 msgstr "戻る(_B)"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:978
 msgid "_Forward"
 msgstr "進む(_F)"
 
 #. Bookmarks
-#: src/ephy-window.c:972
+#: src/ephy-window.c:981
 msgid "Add Boo_kmark…"
 msgstr "ブックマークの追加(_K)…"
 
 #. Links.
-#: src/ephy-window.c:976
+#: src/ephy-window.c:985
 msgid "Open Link in New _Window"
 msgstr "リンクを新しいウィンドウで開く(_W)"
 
-#: src/ephy-window.c:977
+#: src/ephy-window.c:986
 msgid "Open Link in New _Tab"
 msgstr "リンクを新しいタブで開く(_T)"
 
-#: src/ephy-window.c:978
+#: src/ephy-window.c:987
 msgid "Open Link in I_ncognito Window"
 msgstr "リンクを匿名ウィンドウで開く(_N)"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:988
 msgid "_Save Link As…"
 msgstr "名前を付けてリンク先を保存(_S)…"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:989
 msgid "_Copy Link Address"
 msgstr "リンクをコピー(_C)"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:990
 msgid "_Copy E-mail Address"
 msgstr "メールアドレスをコピー(_C)"
 
 #. Images.
-#: src/ephy-window.c:985
+#: src/ephy-window.c:994
 msgid "View _Image in New Tab"
 msgstr "新しいタブで画像を表示する(_I)"
 
-#: src/ephy-window.c:986
+#: src/ephy-window.c:995
 msgid "Copy I_mage Address"
 msgstr "画像のアドレスをコピー(_M)"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:996
 msgid "_Save Image As…"
 msgstr "名前を付けて画像を保存(_S)…"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:997
 msgid "Set as _Wallpaper"
 msgstr "壁紙に設定する(_W)"
 
 #. Video.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:1001
 msgid "Open Video in New _Window"
 msgstr "新しいウィンドウでビデオを開く(_W)"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:1002
 msgid "Open Video in New _Tab"
 msgstr "新しいタブでビデオを開く(_T)"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:1003
 msgid "_Save Video As…"
 msgstr "名前を付けてビデオを保存(_S)…"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:1004
 msgid "_Copy Video Address"
 msgstr "ビデオのアドレスをコピー(_C)"
 
 #. Audio.
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1008
 msgid "Open Audio in New _Window"
 msgstr "新しいウィンドウで音声を開く(_W)"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1009
 msgid "Open Audio in New _Tab"
 msgstr "新しいタブで音声を開く(_T)"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1010
 msgid "_Save Audio As…"
 msgstr "名前を付けて音声を保存(_S)"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1011
 msgid "_Copy Audio Address"
 msgstr "音声のアドレスをコピー(_C)"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1017
 msgid "Save Pa_ge As…"
 msgstr "名前を付けてページを保存(_S)…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1018
 msgid "_Page Source"
 msgstr "ページのソース(_P)"
 
-#: src/ephy-window.c:1369
+#: src/ephy-window.c:1388
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "ウェブで検索: “%s”"
 
-#: src/ephy-window.c:1398
+#: src/ephy-window.c:1417
 msgid "Open Link"
 msgstr "リンクを開く"
 
-#: src/ephy-window.c:1400
+#: src/ephy-window.c:1419
 msgid "Open Link In New Tab"
 msgstr "リンクを新しいタブで開く"
 
-#: src/ephy-window.c:1402
+#: src/ephy-window.c:1421
 msgid "Open Link In New Window"
 msgstr "リンクを新しいウィンドウで開く"
 
-#: src/ephy-window.c:1404
+#: src/ephy-window.c:1423
 msgid "Open Link In Incognito Window"
 msgstr "リンクを匿名ウィンドウで開く"
 
-#: src/ephy-window.c:3027
+#: src/ephy-window.c:2885
 msgid "Download operation"
 msgstr "ダウンロード操作"
 
-#: src/ephy-window.c:3029
+#: src/ephy-window.c:2887
 msgid "Show details"
 msgstr "詳細を表示"
 
-#: src/ephy-window.c:3031
+#: src/ephy-window.c:2889
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d 個のダウンロードを実行中です"
 
-#: src/ephy-window.c:3653
+#. Translators: tooltip for the tab switcher menu button
+#: src/ephy-window.c:3407
+msgid "View open tabs"
+msgstr "開いているタブを表示します"
+
+#: src/ephy-window.c:3538
 msgid "Set Web as your default browser?"
 msgstr "Web をデフォルトのブラウザーに設定しますか?"
 
-#: src/ephy-window.c:3655
+#: src/ephy-window.c:3540
 msgid "Set Epiphany Technology Preview as your default browser?"
 msgstr "Epiphany テクノロジープレビューをデフォルトのブラウザーに設定しますか?"
 
-#: src/ephy-window.c:3667
+#: src/ephy-window.c:3552
 msgid "_Yes"
 msgstr "はい(_Y)"
 
-#: src/ephy-window.c:3668
+#: src/ephy-window.c:3553
 msgid "_No"
 msgstr "いいえ(_N)"
 
-#: src/popup-commands.c:234
+#: src/popup-commands.c:235
 msgid "Save Link As"
 msgstr "名前を付けてリンク先を保存"
 
-#: src/popup-commands.c:242
+#: src/popup-commands.c:243
 msgid "Save Image As"
 msgstr "名前を付けて画像を保存"
 
-#: src/popup-commands.c:250
+#: src/popup-commands.c:251
 msgid "Save Media As"
 msgstr "名前を付けてメディアを保存"
 
-#: src/preferences/clear-data-view.c:69
+#: src/preferences/clear-data-view.c:70
 msgid "Cookies"
 msgstr "Cookie"
 
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:71
 msgid "HTTP disk cache"
 msgstr "HTTP ディスクキャッシュ"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:72
 msgid "Local storage data"
 msgstr "ローカルストレージデータ"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:73
 msgid "Offline web application cache"
 msgstr "オフラインウェブアプリケーションキャッシュ"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:74
 msgid "IndexedDB databases"
 msgstr "IndexedDB データベース"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:75
 msgid "WebSQL databases"
 msgstr "WebSQL データベース"
 
-#: src/preferences/clear-data-view.c:75
+#: src/preferences/clear-data-view.c:76
 msgid "Plugins data"
 msgstr "プラグインデータ"
 
-#: src/preferences/clear-data-view.c:76
+#: src/preferences/clear-data-view.c:77
 msgid "HSTS policies cache"
 msgstr "HSTS ポリシーキャッシュ"
 
-#: src/preferences/clear-data-view.c:77
+#: src/preferences/clear-data-view.c:78
 msgid "Intelligent Tracking Prevention data"
 msgstr "インテリジェントトラッキング防止機能データ"
+
+#: src/preferences/ephy-search-engine-row.c:199
+msgid "This field is required"
+msgstr "このフィールドは必須です"
+
+#: src/preferences/ephy-search-engine-row.c:204
+msgid "Address must start with either http:// or https://"
+msgstr "アドレスは http:// または https:// で始めなければなりません"
+
+#: src/preferences/ephy-search-engine-row.c:210
+msgid "Address is not a valid URI"
+msgstr "有効な URI ではありません"
+
+#: src/preferences/ephy-search-engine-row.c:217
+#, c-format
+msgid ""
+"Address is not a valid URL. The address should look like https://www.example."
+"com/search?q=%s"
+msgstr ""
+"アドレスは有効な URL ではありません。このアドレスは https://www.example.com/"
+"search?q=%s のようになっていなければなりません"
+
+#: src/preferences/ephy-search-engine-row.c:223
+#, c-format
+msgid "Address must contain the search term represented by %s"
+msgstr "アドレスには、検索項目を表す%sが含まれていなければなりません"
+
+#: src/preferences/ephy-search-engine-row.c:229
+msgid "Address should not contain the search term several times"
+msgstr "アドレスには検索項目を2個以上含めてはなりません"
+
+#: src/preferences/ephy-search-engine-row.c:274
+msgid "This shortcut is already used."
+msgstr "このショートカットは既に使われています。"
+
+#: src/preferences/ephy-search-engine-row.c:422
+msgid "A name is required"
+msgstr "名前が必要です"
+
+#: src/preferences/ephy-search-engine-row.c:424
+msgid "This search engine already exists"
+msgstr "この検索エンジンは存在しています"
 
 #: src/preferences/passwords-view.c:192
 msgid "Delete All Passwords?"
@@ -2655,10 +2772,10 @@ msgstr "すべてのパスワードを削除しますか?"
 #: src/preferences/passwords-view.c:195
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
-"ローカルに保存されているパスワードをすべて消去します。元に戻すことはできま"
-"せん。"
+"ローカルに保存されているパスワードをすべて消去します。元に戻すことはできませ"
+"ん。"
 
-#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:370
+#: src/preferences/passwords-view.c:200 src/resources/gtk/history-dialog.ui:260
 msgid "_Delete"
 msgstr "削除(_D)"
 
@@ -2702,48 +2819,29 @@ msgstr "ライト"
 msgid "Dark"
 msgstr "ダーク"
 
-#: src/preferences/prefs-general-page.c:348
+#: src/preferences/prefs-general-page.c:297
+#: src/resources/gtk/prefs-lang-dialog.ui:13
 msgid "Add Language"
 msgstr "言語を追加"
 
-#: src/preferences/prefs-general-page.c:499
-msgid "Delete language"
-msgstr "言語を削除"
-
-#: src/preferences/prefs-general-page.c:581
-#: src/preferences/prefs-general-page.c:740
+#: src/preferences/prefs-general-page.c:526
+#: src/preferences/prefs-general-page.c:685
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "システム言語 (%s)"
 
-#: src/preferences/prefs-general-page.c:768
+#: src/preferences/prefs-general-page.c:713
 msgid "Select a directory"
 msgstr "ディレクトリの選択"
 
-#: src/preferences/prefs-general-page.c:919
+#: src/preferences/prefs-general-page.c:859
 msgid "Web Application Icon"
 msgstr "ウェブアプリケーションのアイコン"
 
-#: src/preferences/prefs-general-page.c:924
+#: src/preferences/prefs-general-page.c:864
 msgid "Supported Image Files"
 msgstr "サポートしている画像ファイル"
-
-#. Translators: the %s refers to the time at which the last sync was made.
-#. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
-#.
-#: src/preferences/prefs-sync-page.c:107
-#, c-format
-msgid "Last synchronized: %s"
-msgstr "最終同期日時: %s"
-
-#: src/preferences/prefs-sync-page.c:395
-msgid "Something went wrong, please try again later."
-msgstr "問題が発生しました。しばらくしてから再試行してください。"
-
-#: src/preferences/synced-tabs-dialog.c:184
-msgid "Local Tabs"
-msgstr "ローカルタブ"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1540
 msgid "Executes only the n-th migration step"
@@ -2766,12 +2864,12 @@ msgid "Web profile migrator options"
 msgstr "Web プロファイル移行ツールのオプション"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:10
+#: src/resources/gtk/action-bar-end.ui:22
 msgid "View and manage your bookmarks"
 msgstr "ブックマークの表示と管理"
 
 #. Translators: tooltip for the downloads button
-#: src/resources/gtk/action-bar-end.ui:34
+#: src/resources/gtk/action-bar-end.ui:46
 msgid "View downloads"
 msgstr "ダウンロードを表示します"
 
@@ -2800,12 +2898,12 @@ msgid "Bookmark"
 msgstr "ブックマーク"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:31
-#: src/resources/gtk/search-engine-dialog.ui:142
+#: src/resources/gtk/search-engine-row.ui:32
 msgid "Name"
 msgstr "名称"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:59
-#: src/resources/gtk/search-engine-dialog.ui:155
+#: src/resources/gtk/search-engine-row.ui:54
 msgid "Address"
 msgstr "アドレス"
 
@@ -2823,24 +2921,20 @@ msgstr "タグを追加…"
 msgid "_Add"
 msgstr "追加(_A)"
 
-#: src/resources/gtk/bookmark-properties-grid.ui:175
-msgid "_Remove"
-msgstr "削除(_R)"
-
 #: src/resources/gtk/bookmarks-popover.ui:54
 msgid "All"
 msgstr "すべて"
 
-#: src/resources/gtk/bookmarks-popover.ui:166
+#: src/resources/gtk/bookmarks-popover.ui:167
 msgid "No bookmarks yet?"
 msgstr "ブックマークはありません"
 
-#: src/resources/gtk/bookmarks-popover.ui:179
+#: src/resources/gtk/bookmarks-popover.ui:183
 msgid "Bookmark some webpages to view them here."
 msgstr "ウェブページをブックマークすると、ここに表示されます。"
 
 #: src/resources/gtk/clear-data-view.ui:22
-#: src/resources/gtk/prefs-privacy-page.ui:65
+#: src/resources/gtk/prefs-privacy-page.ui:86
 msgid "Personal Data"
 msgstr "個人データ"
 
@@ -2880,11 +2974,11 @@ msgstr ""
 msgid "Search"
 msgstr "検索"
 
-#: src/resources/gtk/data-view.ui:215 src/resources/gtk/history-dialog.ui:299
+#: src/resources/gtk/data-view.ui:117 src/resources/gtk/history-dialog.ui:217
 msgid "No Results Found"
 msgstr "見つかりません"
 
-#: src/resources/gtk/data-view.ui:230 src/resources/gtk/history-dialog.ui:314
+#: src/resources/gtk/data-view.ui:118 src/resources/gtk/history-dialog.ui:218
 msgid "Try a different search"
 msgstr "別のキーワードを試してください"
 
@@ -2908,6 +3002,76 @@ msgstr "関連するエンコーディング"
 msgid "Show all…"
 msgstr "すべて表示…"
 
+#: src/resources/gtk/firefox-sync-dialog.ui:21
+msgid "Firefox Sync"
+msgstr "Firefox Sync"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:35
+msgid ""
+"Sign in with your Firefox account to sync your data with Web and Firefox on "
+"other computers. Web is not Firefox and is not produced or endorsed by "
+"Mozilla."
+msgstr ""
+"Firefox アカウントにログインして、他のコンピューターの Web や Firefox とデー"
+"タを同期します (Firefox の開発元である Mozilla は Web を承認していません)。"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:54
+msgid "Firefox Account"
+msgstr "Firefox アカウント"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:58
+msgid "Logged in"
+msgstr "ログイン済み"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:63
+msgid "Sign _out"
+msgstr "ログアウト(_O)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:76
+msgid "Sync Options"
+msgstr "同期オプション"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:81
+msgid "Sync _Bookmarks"
+msgstr "ブックマークを同期する(_B)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:95
+msgid "Sync _Passwords"
+msgstr "パスワードを同期する(_P)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:109
+msgid "Sync _History"
+msgstr "履歴を同期する(_H)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:123
+msgid "Sync Open _Tabs"
+msgstr "開いているタブを同期する(_T)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:134
+msgid "S_ynced tabs"
+msgstr "同期するタブ(_Y)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:145
+msgid "Frequency"
+msgstr "頻度"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:156
+msgid "Sync _now"
+msgstr "今すぐ同期(_N)"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:168
+msgid "Device name"
+msgstr "デバイス名"
+
+#: src/resources/gtk/firefox-sync-dialog.ui:191
+msgid "_Change"
+msgstr "変更(_C)"
+
+#: src/resources/gtk/history-dialog.ui:30
+#: src/resources/gtk/history-dialog.ui:87
+msgid "History"
+msgstr "履歴"
+
 #: src/resources/gtk/history-dialog.ui:42
 msgid "Select Items"
 msgstr "項目を選択"
@@ -2916,13 +3080,17 @@ msgstr "項目を選択"
 msgid "Search history"
 msgstr "履歴の検索"
 
-#: src/resources/gtk/history-dialog.ui:242
+#: src/resources/gtk/history-dialog.ui:209
 msgid "The History is Empty"
 msgstr "履歴が空です"
 
-#: src/resources/gtk/history-dialog.ui:258
+#: src/resources/gtk/history-dialog.ui:210
 msgid "Visited pages will be listed here"
 msgstr "訪問したページの一覧がここに表示されます"
+
+#: src/resources/gtk/lang-row.ui:39
+msgid "Delete language"
+msgstr "言語を削除"
 
 #: src/resources/gtk/notebook-context-menu.ui:7
 msgid "R_eload"
@@ -2940,27 +3108,27 @@ msgstr "複製(_D)"
 msgid "P_in Tab"
 msgstr "タブを固定(_I)"
 
-#: src/resources/gtk/notebook-context-menu.ui:25
-msgid "Unpi_n Tab"
-msgstr "タブの固定を解除(_N)"
+#: src/resources/gtk/notebook-context-menu.ui:26
+msgid "Unp_in Tab"
+msgstr "タブの固定を解除(_i)"
 
 #: src/resources/gtk/notebook-context-menu.ui:31
-msgid "Reo_pen Closed Tab"
-msgstr "閉じたタブを再度開く(_P)"
+msgid "_Mute Tab"
+msgstr "タブのミュート(_M)"
 
-#: src/resources/gtk/notebook-context-menu.ui:37
+#: src/resources/gtk/notebook-context-menu.ui:38
 msgid "Close Tabs to the _Left"
 msgstr "左のタブを閉じる(_L)"
 
-#: src/resources/gtk/notebook-context-menu.ui:41
+#: src/resources/gtk/notebook-context-menu.ui:42
 msgid "Close Tabs to the _Right"
 msgstr "右のタブを閉じる(_R)"
 
-#: src/resources/gtk/notebook-context-menu.ui:45
+#: src/resources/gtk/notebook-context-menu.ui:46
 msgid "Close _Other Tabs"
 msgstr "他のタブを閉じる(_O)"
 
-#: src/resources/gtk/notebook-context-menu.ui:49
+#: src/resources/gtk/notebook-context-menu.ui:50
 msgid "_Close"
 msgstr "閉じる(_C)"
 
@@ -2969,101 +3137,113 @@ msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "縮小します"
 
-#: src/resources/gtk/page-menu-popover.ui:43
+#: src/resources/gtk/page-menu-popover.ui:42
 msgid "Restore Zoom"
 msgstr "ズームを元に戻します"
 
-#: src/resources/gtk/page-menu-popover.ui:56
+#: src/resources/gtk/page-menu-popover.ui:61
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "拡大します"
 
-#: src/resources/gtk/page-menu-popover.ui:84
+#: src/resources/gtk/page-menu-popover.ui:89
 msgid "Print…"
 msgstr "印刷…"
 
-#: src/resources/gtk/page-menu-popover.ui:99
+#: src/resources/gtk/page-menu-popover.ui:104
 msgid "Find…"
 msgstr "検索…"
 
-#: src/resources/gtk/page-menu-popover.ui:114
+#: src/resources/gtk/page-menu-popover.ui:119
 msgid "Fullscreen"
 msgstr "フルスクリーン"
 
-#: src/resources/gtk/page-menu-popover.ui:172
+#: src/resources/gtk/page-menu-popover.ui:177
 msgid "_Run in Background"
 msgstr "バックグラウンドで実行(_R)"
 
-#: src/resources/gtk/page-menu-popover.ui:191
+#: src/resources/gtk/page-menu-popover.ui:195
 msgid "_New Window"
 msgstr "新しいウィンドウ(_N)"
 
-#: src/resources/gtk/page-menu-popover.ui:199
+#: src/resources/gtk/page-menu-popover.ui:203
 msgid "New _Incognito Window"
 msgstr "新しい匿名ウィンドウ(_I)"
 
-#: src/resources/gtk/page-menu-popover.ui:216
+#: src/resources/gtk/page-menu-popover.ui:220
 msgid "Reopen Closed _Tab"
 msgstr "閉じたタブを再度開く(_T)"
 
-#: src/resources/gtk/page-menu-popover.ui:224
+#: src/resources/gtk/page-menu-popover.ui:228
 msgid "_History"
 msgstr "履歴(_H)"
 
-#: src/resources/gtk/page-menu-popover.ui:240
+#: src/resources/gtk/page-menu-popover.ui:244
 msgid "I_mport and Export"
 msgstr "インポートとエクスポート(_M)"
 
-#: src/resources/gtk/page-menu-popover.ui:257
+#: src/resources/gtk/page-menu-popover.ui:261
 msgid "Install Site as Web _Application…"
 msgstr "ウェブアプリケーションとしてサイトをインストール(_A)…"
 
-#: src/resources/gtk/page-menu-popover.ui:265
+#: src/resources/gtk/page-menu-popover.ui:269
 msgid "Open Appli_cation Manager"
 msgstr "アプリケーションマネージャーを開く(_C)"
 
-#: src/resources/gtk/page-menu-popover.ui:282
+#: src/resources/gtk/page-menu-popover.ui:277
+msgid "E_xtensions"
+msgstr "エクステンション(_x)"
+
+#: src/resources/gtk/page-menu-popover.ui:294
 msgid "_Override Text Encoding…"
 msgstr "テキストエンコーディングを上書き(_O)…"
 
-#: src/resources/gtk/page-menu-popover.ui:298
+#: src/resources/gtk/page-menu-popover.ui:310
 msgid "Pr_eferences"
 msgstr "設定(_E)"
 
-#: src/resources/gtk/page-menu-popover.ui:307
+#: src/resources/gtk/page-menu-popover.ui:319
 msgid "_Keyboard Shortcuts"
 msgstr "キーボードショートカット(_K)"
 
-#: src/resources/gtk/page-menu-popover.ui:316
+#: src/resources/gtk/page-menu-popover.ui:328
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: src/resources/gtk/page-menu-popover.ui:325
+#: src/resources/gtk/page-menu-popover.ui:337
 msgid "_About Web"
 msgstr "Web について(_A)"
 
-#: src/resources/gtk/page-menu-popover.ui:350
+#: src/resources/gtk/page-menu-popover.ui:362
 msgid "Import and Export"
 msgstr "インポートとエクスポート"
 
-#: src/resources/gtk/page-menu-popover.ui:361
+#: src/resources/gtk/page-menu-popover.ui:373
 msgid "I_mport Bookmarks…"
 msgstr "ブックマークをインポート(_M)…"
 
-#: src/resources/gtk/page-menu-popover.ui:369
+#: src/resources/gtk/page-menu-popover.ui:381
 msgid "E_xport Bookmarks…"
 msgstr "ブックマークをエクスポート(_X)…"
 
-#: src/resources/gtk/page-menu-popover.ui:385
-msgid "I_mport Passwords…"
-msgstr "パスワードをインポート(_M)…"
+#: src/resources/gtk/page-menu-popover.ui:397
+msgid "Import _Passwords…"
+msgstr "パスワードをインポート(_P)…"
 
-#: src/resources/gtk/page-row.ui:85
+#: src/resources/gtk/page-menu-popover.ui:413
+msgid "Firefox _Sync"
+msgstr "Firefox Sync(_S)"
+
+#: src/resources/gtk/page-row.ui:87
 msgid "Close page"
 msgstr "ページを閉じます"
 
+#: src/resources/gtk/pages-view.ui:11
+msgid "Tabs"
+msgstr "タブ"
+
 #: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:87
+#: src/resources/gtk/prefs-privacy-page.ui:108
 msgid "Passwords"
 msgstr "パスワード"
 
@@ -3151,97 +3331,85 @@ msgstr "一般"
 msgid "Web Application"
 msgstr "ウェブアプリケーション"
 
-#: src/resources/gtk/prefs-general-page.ui:46
-msgid "Homepage:"
-msgstr "ホームページ:"
+#: src/resources/gtk/prefs-general-page.ui:15
+msgid "_Icon"
+msgstr "アイコン(_I)"
+
+#: src/resources/gtk/prefs-general-page.ui:38
+msgid "_Homepage"
+msgstr "ホームページ(_H)"
+
+#: src/resources/gtk/prefs-general-page.ui:53
+msgid "_Title"
+msgstr "タイトル(_T)"
 
 #: src/resources/gtk/prefs-general-page.ui:68
-msgid "Title:"
-msgstr "タイトル:"
-
-#: src/resources/gtk/prefs-general-page.ui:93
 msgid "_Manage Additional URLs"
 msgstr "追加の URL の管理(_M)"
 
-#: src/resources/gtk/prefs-general-page.ui:118
+#: src/resources/gtk/prefs-general-page.ui:93
 msgid "Web Content"
 msgstr "ウェブのコンテンツ"
 
-#: src/resources/gtk/prefs-general-page.ui:123
+#: src/resources/gtk/prefs-general-page.ui:98
 msgid "Block _Advertisements"
 msgstr "広告をブロックする(_A)"
 
-#: src/resources/gtk/prefs-general-page.ui:137
+#: src/resources/gtk/prefs-general-page.ui:112
 msgid "Block _Popup Windows"
 msgstr "ポップアップをブロックする(_P)"
 
-#: src/resources/gtk/prefs-general-page.ui:152
-msgid "Homepage"
-msgstr "ホームページ"
-
-#: src/resources/gtk/prefs-general-page.ui:157
+#: src/resources/gtk/prefs-general-page.ui:132
 msgid "Most _visited pages"
 msgstr "よく見るページ(_V)"
 
-#: src/resources/gtk/prefs-general-page.ui:171
+#: src/resources/gtk/prefs-general-page.ui:146
 msgid "_Blank page"
 msgstr "空のページ(_B)"
 
-#: src/resources/gtk/prefs-general-page.ui:186
+#: src/resources/gtk/prefs-general-page.ui:161
 msgid "_Custom"
 msgstr "カスタム(_C)"
 
-#: src/resources/gtk/prefs-general-page.ui:215
+#: src/resources/gtk/prefs-general-page.ui:190
 msgid "Ask o_n download"
 msgstr "ダウンロードを確認する(_N)"
 
-#: src/resources/gtk/prefs-general-page.ui:230
+#: src/resources/gtk/prefs-general-page.ui:205
 msgid "_Download folder"
 msgstr "ダウンロードフォルダー(_D)"
 
-#: src/resources/gtk/prefs-general-page.ui:239
+#: src/resources/gtk/prefs-general-page.ui:214
 msgid "Search Engines"
 msgstr "検索エンジン"
 
-#: src/resources/gtk/prefs-general-page.ui:244
-msgid "Manage Search _Engines"
-msgstr "検索エンジンの管理(_E)"
-
-#: src/resources/gtk/prefs-general-page.ui:269
+#: src/resources/gtk/prefs-general-page.ui:225
 msgid "Session"
 msgstr "セッション"
 
-#: src/resources/gtk/prefs-general-page.ui:274
+#: src/resources/gtk/prefs-general-page.ui:230
 msgid "Start in _Incognito Mode"
 msgstr "匿名モードで起動する(_I)"
 
-#: src/resources/gtk/prefs-general-page.ui:288
+#: src/resources/gtk/prefs-general-page.ui:244
 msgid "_Restore Tabs on Startup"
 msgstr "起動時にタブを復元する(_R)"
 
-#: src/resources/gtk/prefs-general-page.ui:303
+#: src/resources/gtk/prefs-general-page.ui:259
 msgid "Browsing"
 msgstr "ブラウジング"
 
-#: src/resources/gtk/prefs-general-page.ui:308
-msgid "Sm_ooth Scrolling"
-msgstr "スムーズスクロール(_O)"
-
-#: src/resources/gtk/prefs-general-page.ui:322
+#: src/resources/gtk/prefs-general-page.ui:264
 msgid "Mouse _Gestures"
 msgstr "マウスジェスチャー(_G)"
 
-#: src/resources/gtk/prefs-general-page.ui:336
+#: src/resources/gtk/prefs-general-page.ui:278
 msgid "S_witch Immediately to New Tabs"
 msgstr "すぐに新しいタブに切り替える(_W)"
 
-#: src/resources/gtk/prefs-general-page.ui:371
+#: src/resources/gtk/prefs-general-page.ui:313
 msgid "_Spell Checking"
 msgstr "スペルチェック(_S)"
-
-#: src/resources/gtk/prefs-lang-dialog.ui:13
-msgid "Add _Language"
-msgstr "言語を追加(_L)"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a language:"
@@ -3270,117 +3438,63 @@ msgstr "インテリジェントトラッキング防止機能(_T)"
 #: src/resources/gtk/prefs-privacy-page.ui:49
 msgid "Allow websites to store cookies, databases, and local storage data."
 msgstr ""
-"ウェブサイトが Cookie、データベース、localStorage のデータを保存できるよ"
-"うになります。"
+"ウェブサイトが Cookie、データベース、localStorage のデータを保存できるように"
+"なります。"
 
 #: src/resources/gtk/prefs-privacy-page.ui:50
 msgid "_Website Data Storage"
 msgstr "ウェブサイトデータストレージ(_W)"
 
+#: src/resources/gtk/prefs-privacy-page.ui:65
+msgid "Search Suggestions"
+msgstr "検索サジェスチョン"
+
 #: src/resources/gtk/prefs-privacy-page.ui:70
+msgid "Enable search suggestions in the URL entry."
+msgstr "URL入力欄で検索のサジェスチョンを有効にする"
+
+#: src/resources/gtk/prefs-privacy-page.ui:71
+msgid "_Google Search Suggestions"
+msgstr "Google検索サジュスチョン(_G)"
+
+#: src/resources/gtk/prefs-privacy-page.ui:91
 msgid "You can clear stored personal data."
 msgstr "保存された個人データを消去できます。"
 
-#: src/resources/gtk/prefs-privacy-page.ui:71
+#: src/resources/gtk/prefs-privacy-page.ui:92
 msgid "Clear Personal _Data"
 msgstr "個人データの消去(_D)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:92
+#: src/resources/gtk/prefs-privacy-page.ui:113
 msgid "_Passwords"
 msgstr "パスワード(_P)"
 
-#: src/resources/gtk/prefs-privacy-page.ui:107
+#: src/resources/gtk/prefs-privacy-page.ui:128
 msgid "_Remember Passwords"
 msgstr "パスワードを保存する(_R)"
 
-#: src/resources/gtk/prefs-sync-page.ui:6
-msgid "Sync"
-msgstr "同期"
+#: src/resources/gtk/search-engine-listbox.ui:18
+msgid "A_dd Search Engine…"
+msgstr "検索エンジンを追加する…(_d)"
 
-#: src/resources/gtk/prefs-sync-page.ui:10
-msgid ""
-"Sign in with your Firefox account to sync your data with Web and Firefox on "
-"other computers. Web is not Firefox and is not produced or endorsed by "
-"Mozilla."
-msgstr ""
-"Firefox アカウントにログインして、他のコンピューターの Web や Firefox とデー"
-"タを同期します (Firefox の開発元である Mozilla は Web を承認していません)。"
+#: src/resources/gtk/search-engine-row.ui:11
+msgid "Selects the default search engine"
+msgstr "既定の検索エンジンを選択する"
 
-#: src/resources/gtk/prefs-sync-page.ui:11
-msgid "Firefox Sync"
-msgstr "Firefox Sync"
+#: src/resources/gtk/search-engine-row.ui:80
+msgid "Shortcut"
+msgstr "ショートカット"
 
-#: src/resources/gtk/prefs-sync-page.ui:30
-msgid "Firefox Account"
-msgstr "Firefox アカウント"
-
-#: src/resources/gtk/prefs-sync-page.ui:34
-msgid "Logged in"
-msgstr "ログイン済み"
-
-#: src/resources/gtk/prefs-sync-page.ui:39
-msgid "Sign _out"
-msgstr "ログアウト(_O)"
-
-#: src/resources/gtk/prefs-sync-page.ui:52
-msgid "Sync Options"
-msgstr "同期オプション"
-
-#: src/resources/gtk/prefs-sync-page.ui:57
-msgid "Sync _Bookmarks"
-msgstr "ブックマークを同期する(_B)"
-
-#: src/resources/gtk/prefs-sync-page.ui:72
-msgid "Sync _Passwords"
-msgstr "パスワードを同期する(_P)"
-
-#: src/resources/gtk/prefs-sync-page.ui:87
-msgid "Sync _History"
-msgstr "履歴を同期する(_H)"
-
-#: src/resources/gtk/prefs-sync-page.ui:102
-msgid "Sync Open _Tabs"
-msgstr "開いているタブを同期する(_T)"
-
-#: src/resources/gtk/prefs-sync-page.ui:114
-msgid "S_ynced tabs"
-msgstr "同期するタブ(_Y)"
-
-#: src/resources/gtk/prefs-sync-page.ui:125
-msgid "Frequency"
-msgstr "頻度"
-
-#: src/resources/gtk/prefs-sync-page.ui:129
-msgid "Sync _now"
-msgstr "今すぐ同期(_N)"
-
-#: src/resources/gtk/prefs-sync-page.ui:148
-msgid "Device name"
-msgstr "デバイス名"
-
-#: src/resources/gtk/prefs-sync-page.ui:171
-msgid "_Change"
-msgstr "変更(_C)"
-
-#: src/resources/gtk/search-engine-dialog.ui:11
-msgid "Manage Search Engines"
-msgstr "検索エンジンの管理"
-
-#: src/resources/gtk/search-engine-dialog.ui:180
-msgid "Bang"
-msgstr ""
-
-#: src/resources/gtk/search-engine-dialog.ui:215
-msgid "Default"
-msgstr "既定"
-
-#: src/resources/gtk/search-engine-dialog.ui:268
+#: src/resources/gtk/search-engine-row.ui:107
 #, c-format
 msgid ""
 "To determine the search address, perform a search using the search engine "
-"that you want to add and check the resulting address. Remove the search term "
-"from the resulting address and replace it with %s."
+"that you want to add and replace the search term with %s."
 msgstr ""
+
+#: src/resources/gtk/search-engine-row.ui:128
+msgid "R_emove Search Engine"
+msgstr "検索エンジンの削除(_e)"
 
 #: src/resources/gtk/shortcuts-dialog.ui:15
 msgctxt "shortcut window"
@@ -3677,37 +3791,50 @@ msgstr ""
 "以下はこのアカウントの別のデバイスで開いたタブです。ダブルクリックで開けます "
 "(ローカルタブの下にあるタブは開けません)。"
 
-#: src/resources/gtk/tab-label.ui:73
-msgid "Close Document"
-msgstr "ドキュメントを閉じます"
-
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:20
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:17
 msgid "Additional URLs"
 msgstr "追加の URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
-msgid "C_lear All"
-msgstr "すべて消去(_L)"
-
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:64
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:25
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
 "application. If you omit the URL scheme, the one from the currently loaded "
 "URL will be used."
 msgstr ""
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:49
 msgctxt "Column header in the Additional URLs dialog"
 msgid "URL"
 msgstr "URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:124
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:74
 msgid "Add new URL"
 msgstr "新しい URL を追加します"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:137
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:87
 msgid "Remove the selected URLs"
 msgstr "選択した URL を削除します"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:101
+msgid "C_lear All"
+msgstr "すべて消去(_L)"
+
+#: src/resources/gtk/web-extensions-dialog.ui:12
+#: src/resources/gtk/web-extensions-dialog.ui:21
+msgid "Extensions"
+msgstr "エクステンション"
+
+#: src/resources/gtk/web-extensions-dialog.ui:26
+msgid "_Add…"
+msgstr "追加…(_A)"
+
+#: src/resources/gtk/web-extensions-dialog.ui:40
+msgid "No Extensions Installed"
+msgstr "エクステンションはインストールされていません"
+
+#: src/resources/gtk/web-extensions-dialog.ui:41
+msgid "Add some extensions to display them here."
+msgstr "エクステンションを追加して、ここに表示します。"
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -3719,82 +3846,86 @@ msgstr "ウェブで検索: “%s”"
 msgid "Load “%s”"
 msgstr "“%s”を読み込む"
 
-#: src/window-commands.c:113
+#: src/synced-tabs-dialog.c:184
+msgid "Local Tabs"
+msgstr "ローカルタブ"
+
+#: src/window-commands.c:114
 msgid "GVDB File"
 msgstr "GVDB ファイル"
 
-#: src/window-commands.c:114
+#: src/window-commands.c:115
 msgid "HTML File"
 msgstr "HTML ファイル"
 
-#: src/window-commands.c:115
+#: src/window-commands.c:116
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:116 src/window-commands.c:695
+#: src/window-commands.c:117 src/window-commands.c:697
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:117 src/window-commands.c:696
+#: src/window-commands.c:118 src/window-commands.c:698
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:131 src/window-commands.c:563
-#: src/window-commands.c:781
+#: src/window-commands.c:132 src/window-commands.c:564
+#: src/window-commands.c:783
 msgid "Ch_oose File"
 msgstr "ファイルを選択(_O)"
 
-#: src/window-commands.c:133 src/window-commands.c:332
-#: src/window-commands.c:376 src/window-commands.c:783
-#: src/window-commands.c:809
+#: src/window-commands.c:134 src/window-commands.c:333
+#: src/window-commands.c:377 src/window-commands.c:785
+#: src/window-commands.c:811
 msgid "I_mport"
 msgstr "インポート(_M)"
 
-#: src/window-commands.c:272
+#: src/window-commands.c:273
 msgid "Select Profile"
 msgstr "プロファイルの選択"
 
-#: src/window-commands.c:277
+#: src/window-commands.c:278
 msgid "_Select"
 msgstr "選択(_S)"
 
-#: src/window-commands.c:329 src/window-commands.c:373
-#: src/window-commands.c:642
+#: src/window-commands.c:330 src/window-commands.c:374
+#: src/window-commands.c:643
 msgid "Choose File"
 msgstr "ファイルの選択"
 
-#: src/window-commands.c:354 src/window-commands.c:398
-#: src/window-commands.c:445 src/window-commands.c:470
-#: src/window-commands.c:495
+#: src/window-commands.c:355 src/window-commands.c:399
+#: src/window-commands.c:446 src/window-commands.c:471
+#: src/window-commands.c:496
 msgid "Bookmarks successfully imported!"
 msgstr "ブックマークが正常にインポートされました。"
 
-#: src/window-commands.c:558
+#: src/window-commands.c:559
 msgid "Import Bookmarks"
 msgstr "ブックマークのインポート"
 
-#: src/window-commands.c:576 src/window-commands.c:822
+#: src/window-commands.c:577 src/window-commands.c:824
 msgid "From:"
 msgstr "インポート元:"
 
-#: src/window-commands.c:622
+#: src/window-commands.c:623
 msgid "Bookmarks successfully exported!"
 msgstr "ブックマークが正常にエクスポートされました。"
 
-#. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:650
-msgid "bookmarks.gvdb"
-msgstr "ブックマーク.gvdb"
+#. Translators: Only translate the part before ".html" (e.g. "bookmarks")
+#: src/window-commands.c:651
+msgid "bookmarks.html"
+msgstr "ブックマーク.html"
 
-#: src/window-commands.c:737
+#: src/window-commands.c:739
 msgid "Passwords successfully imported!"
 msgstr "パスワードが正常にインポートされました。"
 
-#: src/window-commands.c:804
+#: src/window-commands.c:806
 msgid "Import Passwords"
 msgstr "パスワードをインポート"
 
-#: src/window-commands.c:980
+#: src/window-commands.c:997
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3803,11 +3934,11 @@ msgstr ""
 "シンプル、キレイ、ウェブの美しい景色を。\n"
 "Powered by WebKitGTK %d.%d.%d"
 
-#: src/window-commands.c:1004
+#: src/window-commands.c:1021
 msgid "Website"
 msgstr "ウェブサイト"
 
-#: src/window-commands.c:1037
+#: src/window-commands.c:1054
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <takeshi.aihana@gmail.com>\n"
@@ -3825,25 +3956,25 @@ msgstr ""
 "Takuro Ashie <ashie@homa.ne.jp>\n"
 "Yukihiro Nakai <nakai@gnome.gr.jp>"
 
-#: src/window-commands.c:1183
+#: src/window-commands.c:1197
 msgid "Do you want to reload this website?"
 msgstr "このウェブサイトを再読み込みしますか?"
 
-#: src/window-commands.c:1711
+#: src/window-commands.c:1726
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "“%s”という名前のウェブアプリケーションがすでに存在します。置き換えますか?"
 
-#: src/window-commands.c:1714
+#: src/window-commands.c:1729
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/window-commands.c:1716
+#: src/window-commands.c:1731
 msgid "Replace"
 msgstr "置き換える"
 
-#: src/window-commands.c:1720
+#: src/window-commands.c:1735
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3851,51 +3982,51 @@ msgstr ""
 "同じ名前のアプリケーションのファイルがすでに存在します。置き換えると上書きさ"
 "れます。"
 
-#: src/window-commands.c:1812
+#: src/window-commands.c:1827
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "アプリケーション“%s”が使用可能になりました"
 
-#: src/window-commands.c:1815
+#: src/window-commands.c:1830
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "アプリケーション“%s”を作成できませんでした"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:1830
+#: src/window-commands.c:1845
 msgid "Launch"
 msgstr "起動"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1871
+#: src/window-commands.c:1886
 msgid "Create Web Application"
 msgstr "ウェブアプリケーションを作成"
 
-#: src/window-commands.c:1876
+#: src/window-commands.c:1891
 msgid "C_reate"
 msgstr "作成(_R)"
 
-#: src/window-commands.c:2091
+#: src/window-commands.c:2106
 msgid "Save"
 msgstr "保存"
 
-#: src/window-commands.c:2100
+#: src/window-commands.c:2115
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2105
+#: src/window-commands.c:2120
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2110
+#: src/window-commands.c:2125
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2595
+#: src/window-commands.c:2610
 msgid "Enable caret browsing mode?"
 msgstr "キャレットブラウズモードを有効にしますか?"
 
-#: src/window-commands.c:2598
+#: src/window-commands.c:2613
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3905,9 +4036,57 @@ msgstr ""
 "ウェブページ中に移動可能なカーソルを表示し、キーボードで動かすことができるよ"
 "うになります。キャレットブラウズモードを有効にしますか?"
 
-#: src/window-commands.c:2601
+#: src/window-commands.c:2616
 msgid "_Enable"
 msgstr "有効(_E)"
+
+#~ msgid "The position of the tabs bar."
+#~ msgstr "タブバーの位置"
+
+#~ msgid ""
+#~ "Controls where the tabs bar is shown. Possible values are “top” (the "
+#~ "default), “bottom”, “left” (vertical tabs with bar on the left) and "
+#~ "“right” (vertical tabs with bar on the right)."
+#~ msgstr ""
+#~ "タブバーが表示される場所を制御します。指定できる値は、“top” (デフォルトの"
+#~ "位置)、“bottom”、“left” (左に位置する縦型)、“right” (右に位置する縦型) で"
+#~ "す。"
+
+#~ msgid "Enable smooth scrolling"
+#~ msgstr "スムーズスクロールを有効にする"
+
+#~ msgid "Whether to enable smooth scrolling."
+#~ msgstr "スムーズスクロールを有効にするかどうかの設定です。"
+
+#~ msgid "Google Safe Browsing API key"
+#~ msgstr "Google Safe Browsing API キー"
+
+#~ msgid "The API key used to access the Google Safe Browsing API v4."
+#~ msgstr "Google Safe Browsing API v4 へのアクセスに使用する API キーです。"
+
+#~ msgid "Reo_pen Closed Tab"
+#~ msgstr "閉じたタブを再度開く(_P)"
+
+#~ msgid "Homepage:"
+#~ msgstr "ホームページ:"
+
+#~ msgid "Manage Search _Engines"
+#~ msgstr "検索エンジンの管理(_E)"
+
+#~ msgid "Sm_ooth Scrolling"
+#~ msgstr "スムーズスクロール(_O)"
+
+#~ msgid "Add _Language"
+#~ msgstr "言語を追加(_L)"
+
+#~ msgid "Sync"
+#~ msgstr "同期"
+
+#~ msgid "Default"
+#~ msgstr "既定"
+
+#~ msgid "Close Document"
+#~ msgstr "ドキュメントを閉じます"
 
 #~ msgid "Cookie accept"
 #~ msgstr "Cookie を受け入れる"
@@ -4038,9 +4217,6 @@ msgstr "有効(_E)"
 #~ msgid "Cookies left by visited pages will be listed here"
 #~ msgstr "訪問したページの Cookie がここに一覧表示されます"
 
-#~ msgid "History"
-#~ msgstr "履歴"
-
 #~ msgid "_Copy Location"
 #~ msgstr "場所をコピー(_C)"
 
@@ -4055,9 +4231,6 @@ msgstr "有効(_E)"
 
 #~ msgid "Preferences"
 #~ msgstr "設定"
-
-#~ msgid "_Manage Search Engines"
-#~ msgstr "検索エンジンの管理(_M)"
 
 #~ msgid "Clear _Cookies"
 #~ msgstr "Cookie を消去(_C)"
