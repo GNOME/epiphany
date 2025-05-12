@@ -121,7 +121,22 @@ configure_file(
   install_dir: pkgdatadir
 )
 
-install_man('epiphany.1')
+rst2man = find_program('rst2man', 'rst2man.py', required: get_option('man-pages'))
+if rst2man.found()
+  custom_target('man',
+    input: 'epiphany.1.rst',
+    output: 'epiphany.1',
+    command: [
+      rst2man,
+      '--syntax-highlight=none',
+      '@INPUT@',
+    ],
+    capture: true,
+    install: true,
+    install_dir: get_option('prefix') / get_option('mandir') / 'man1',
+    install_tag: 'doc',
+  )
+endif
 
 desktop_file_validate = find_program('desktop-file-validate', required: false)
 if desktop_file_validate.found()
