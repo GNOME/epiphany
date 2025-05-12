@@ -74,6 +74,18 @@ template $EphyLocationEntry: Widget {
     ]
   }
 
+  Button mute_button {
+    tooltip-text: _("Un/Mute");
+    valign: center;
+    visible: false;
+    icon-name: "ephy-audio-muted-symbolic";
+
+    styles [
+      "entry-icon",
+      "end",
+    ]
+  }
+
   Button bookmark_button {
     valign: center;
 

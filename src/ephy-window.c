@@ -1252,6 +1252,16 @@ sync_tab_page_action (EphyWebView *view,
   ephy_web_extension_manager_update_location_entry (manager, window);
 }
 
+static void
+update_indicator_cb (EphyWindow *window)
+{
+  GtkWidget *lentry;
+  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+
+  if (EPHY_IS_LOCATION_ENTRY (lentry))
+    ephy_loation_entry_update_mute_button (EPHY_LOCATION_ENTRY (lentry), window);
+}
+
 static gboolean
 idle_unref_context_event (EphyWindow *window)
 {
@@ -2395,6 +2405,10 @@ ephy_window_connect_active_embed (EphyWindow *window)
                              window, 0);
   }
 
+  g_signal_connect_object (web_view, "notify::is-playing-audio",
+                           G_CALLBACK (update_indicator_cb), window,
+                           G_CONNECT_SWAPPED);
+
   g_signal_connect_object (web_view, "notify::zoom-level",
                            G_CALLBACK (sync_tab_zoom),
                            window, 0);
@@ -2441,6 +2455,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
                            window, 0);
 
   ephy_mouse_gesture_controller_set_web_view (window->mouse_gesture_controller, web_view);
+  update_indicator_cb (window);
 
   g_object_notify (G_OBJECT (window), "active-child");
 }
@@ -2464,6 +2479,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 
   g_signal_handlers_disconnect_by_func (web_view,
                                         G_CALLBACK (progress_update),
+                                        window);
+  g_signal_handlers_disconnect_by_func (web_view,
+                                        G_CALLBACK (update_indicator_cb),
                                         window);
   g_signal_handlers_disconnect_by_func (web_view,
                                         G_CALLBACK (sync_tab_zoom),
@@ -3150,6 +3168,7 @@ tab_view_notify_n_pages_cb (EphyWindow *window)
   int n_pages = ephy_tab_view_get_n_pages (window->tab_view);
   GActionGroup *action_group;
   GAction *action;
+  GtkWidget *lentry;
 
   action_group = ephy_window_get_action_group (window, "tab");
 
@@ -3158,6 +3177,11 @@ tab_view_notify_n_pages_cb (EphyWindow *window)
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "mute");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 0);
+
+  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+
+  if (EPHY_IS_LOCATION_ENTRY (lentry))
+    ephy_location_entry_set_mute_button_can_show (EPHY_LOCATION_ENTRY (lentry), n_pages == 1);
 }
 
 static EphyTabView *

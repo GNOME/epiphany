@@ -30,6 +30,7 @@
 #include "ephy-password-popover.h"
 #include "ephy-permission-popover.h"
 #include "ephy-security-levels.h"
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 
@@ -95,4 +96,9 @@ GListModel     *ephy_location_entry_get_model                  (EphyLocationEntr
 void            ephy_location_entry_set_model                  (EphyLocationEntry *entry,
                                                                 GListModel        *model);
 
+void            ephy_location_entry_set_mute_button_can_show   (EphyLocationEntry *entry,
+                                                                gboolean           visible);
+
+void            ephy_loation_entry_update_mute_button          (EphyLocationEntry *entry,
+                                                                EphyWindow        *window);
 G_END_DECLS

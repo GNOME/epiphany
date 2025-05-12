@@ -63,6 +63,7 @@ struct _EphyLocationEntry {
   GtkWidget *text;
   GtkWidget *progress;
   GtkWidget *security_button;
+  GtkWidget *mute_button;
   GtkWidget *clear_button;
   GtkWidget *password_button;
   GtkWidget *bookmark_button;
@@ -90,6 +91,8 @@ struct _EphyLocationEntry {
 
   gboolean select_all_selected;
   gboolean no_completion;
+
+  gboolean can_show_mute_button;
 
   gint completion_handle;
 
@@ -1249,6 +1252,13 @@ ephy_location_entry_measure (GtkWidget      *widget,
       nat += child_nat;
     }
 
+    if (gtk_widget_should_layout (entry->mute_button)) {
+      gtk_widget_measure (entry->mute_button, orientation, for_size,
+                          &child_min, &child_nat, NULL, NULL);
+      min += child_min;
+      nat += child_nat;
+    }
+
     if (gtk_widget_should_layout (entry->password_button)) {
       gtk_widget_measure (entry->password_button, orientation, for_size,
                           &child_min, &child_nat, NULL, NULL);
@@ -1352,6 +1362,8 @@ ephy_location_entry_size_allocate (GtkWidget *widget,
   }
   allocate_icon (widget, height, baseline, entry->security_button,
                  GTK_PACK_START, &icon_left_pos, &icon_right_pos);
+  allocate_icon (widget, height, baseline, entry->mute_button,
+                 GTK_PACK_END, &icon_left_pos, &icon_right_pos);
   allocate_icon (widget, height, baseline, entry->password_button,
                  GTK_PACK_END, &icon_left_pos, &icon_right_pos);
   allocate_icon (widget, height, baseline, entry->bookmark_button,
@@ -1581,6 +1593,19 @@ on_bookmark_button_clicked (GtkButton *button,
 }
 
 static void
+mute_activated_cb (GtkWidget         *button,
+                   EphyLocationEntry *lentry)
+{
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (lentry)));
+  EphyEmbed *embed = EPHY_EMBED (ephy_window_get_active_embed (window));
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+  gboolean muted = webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
+
+  webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), !muted);
+  ephy_loation_entry_update_mute_button (lentry, window);
+}
+
+static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1702,6 +1727,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, text);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, progress);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, security_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, mute_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, password_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, bookmark_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
@@ -1802,6 +1828,7 @@ ephy_location_entry_init (EphyLocationEntry *entry)
                            entry, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (G_OBJECT (entry->text), "backspace", G_CALLBACK (backspace_cb), entry, 0);
+  g_signal_connect_object (G_OBJECT (entry->mute_button), "clicked", G_CALLBACK (mute_activated_cb), entry, 0);
 }
 
 static const char *
@@ -2343,4 +2370,41 @@ ephy_location_entry_set_model (EphyLocationEntry *entry,
   gtk_single_selection_set_model (entry->suggestions_model, model);
 
   g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_MODEL]);
+}
+
+void
+ephy_location_entry_set_mute_button_can_show (EphyLocationEntry *entry,
+                                              gboolean           visible)
+{
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+  entry->can_show_mute_button = visible;
+
+  ephy_loation_entry_update_mute_button (entry, window);
+}
+
+void
+ephy_loation_entry_update_mute_button (EphyLocationEntry *entry,
+                                       EphyWindow        *window)
+{
+  EphyEmbed *embed = ephy_window_get_active_embed (window);
+  EphyWebView *view;
+  const char *icon_name = NULL;
+
+  if (!embed)
+    return;
+
+  view = ephy_embed_get_web_view (embed);
+  if (webkit_web_view_is_playing_audio (WEBKIT_WEB_VIEW (view))) {
+    if (webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view)))
+      icon_name = "ephy-audio-muted-symbolic";
+    else
+      icon_name = "ephy-audio-playing-symbolic";
+  }
+
+  if (entry->can_show_mute_button && icon_name) {
+    gtk_button_set_icon_name (GTK_BUTTON (entry->mute_button), icon_name);
+    gtk_widget_set_visible (entry->mute_button, TRUE);
+  } else {
+    gtk_widget_set_visible (entry->mute_button, FALSE);
+  }
 }
