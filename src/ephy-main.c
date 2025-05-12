@@ -293,6 +293,11 @@ main (int   argc,
     exit (1);
   }
 
+  if (private_instance == TRUE && profile_directory) {
+    g_print ("Cannot use --private-instance and --profile at the same time\n");
+    exit (1);
+  }
+
   if (automation_mode && (private_instance || incognito_mode || application_mode || profile_directory)) {
     g_print ("Cannot use --automation-mode and --private-instance, --incognito-mode, --application-mode, or --profile at the same time\n");
     exit (1);
