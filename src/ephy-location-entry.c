@@ -78,7 +78,6 @@ struct _EphyLocationEntry {
   GtkWidget *context_menu;
 
   AdwAnimation *focus_animation;
-  gboolean focused;
 
   char *saved_text;
   char *jump_tab;
@@ -129,6 +128,8 @@ static gint signals[LAST_SIGNAL] = { 0 };
 static void ephy_location_entry_editable_init (GtkEditableInterface *iface);
 static void ephy_location_entry_accessible_init (GtkAccessibleInterface *iface);
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
+static void ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
+                                                          const char      *address);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_WIDGET,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
@@ -746,7 +747,17 @@ out:
 static void
 focus_enter_cb (EphyLocationEntry *entry)
 {
-  entry->focused = TRUE;
+  EphyWindow *active_window;
+
+  active_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+  if (active_window) {
+    EphyEmbed *active_embed = ephy_window_get_active_embed (active_window);
+    const char *typed_input = ephy_embed_get_typed_input (active_embed);
+
+    if (g_strcmp0 (typed_input, gtk_editable_get_text (GTK_EDITABLE (entry))) == 0)
+      ephy_location_entry_reset (entry);
+  }
+
   animate_focus (entry, TRUE);
   update_entry_style (entry, TRUE);
 }
@@ -754,19 +765,29 @@ focus_enter_cb (EphyLocationEntry *entry)
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
+  EphyWindow *active_window;
+
   set_show_suggestions (entry, FALSE);
 
   /* Return if the toplevel lost global input focus */
   if (gtk_widget_is_focus (GTK_WIDGET (entry->text)))
     return;
 
-  entry->focused = FALSE;
   ephy_location_entry_reset (entry);
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
     animate_focus (entry, FALSE);
+
+  active_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+  if (active_window) {
+    EphyEmbed *active_embed = ephy_window_get_active_embed (active_window);
+    const char *typed_input = g_strdup (ephy_embed_get_typed_input (active_embed));
+
+    if (typed_input)
+      ephy_location_entry_title_widget_set_address (EPHY_TITLE_WIDGET (entry), typed_input);
+  }
 }
 
 static void
@@ -1986,18 +2007,9 @@ ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 gboolean
 ephy_location_entry_reset (EphyLocationEntry *entry)
 {
-  EphyWindow *active_window;
-  EphyEmbed *active_embed;
   const char *text, *old_text;
   int position, offset;
   g_autofree char *url = NULL;
-
-  active_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
-  if (active_window) {
-    active_embed = ephy_window_get_active_embed (active_window);
-    if (ephy_embed_get_typed_input (active_embed) && !entry->focused)
-      return FALSE;
-  }
 
   g_signal_emit (entry, signals[GET_LOCATION], 0, &url);
   text = url != NULL ? url : "";
