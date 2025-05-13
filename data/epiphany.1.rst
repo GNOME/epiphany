@@ -73,4 +73,5 @@ AUTHOR
 
 Epiphany has been developed by Marco Pesenti Gritti (in memoriam),
 Christian Persch, Xan Lopez, Carlos Garcia Campos, Claudio Saavedra,
-Michael Catanzaro, Jan-Michael Brummer, Patrick Griffis, and many others.
+Michael Catanzaro, Jan-Michael Brummer, Alice Mikhaylenko,
+Patrick Griffis, and many others.
