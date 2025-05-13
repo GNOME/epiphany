@@ -997,6 +997,8 @@ init_lang_listbox (PrefsGeneralPage *general_page)
       }
     }
   }
+
+  language_editor_update_state (general_page);
 }
 
 static void
