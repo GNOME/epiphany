@@ -98,16 +98,16 @@ update_rows_movable (EphyBookmarksDialog *self,
 
   i = 0;
   while ((row = gtk_list_box_get_row_at_index (list_box, i++))) {
-     gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-up", i > 0);
-     gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-down", i < (n_rows - 1));
+    gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-up", i > 0);
+    gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-down", i < (n_rows - 1));
 
     if (EPHY_IS_BOOKMARK_ROW (row)) {
       ephy_bookmark_row_set_movable (EPHY_BOOKMARK_ROW (row), n_rows > 1);
     } else {
       GtkWidget *drag_handle = gtk_widget_get_first_child (gtk_widget_get_first_child (
-                                                           gtk_widget_get_first_child (GTK_WIDGET (row))));
+                                                             gtk_widget_get_first_child (GTK_WIDGET (row))));
       GtkWidget *move_menu_button = gtk_widget_get_last_child (gtk_widget_get_last_child (
-                                                               gtk_widget_get_first_child (GTK_WIDGET (row))));
+                                                                 gtk_widget_get_first_child (GTK_WIDGET (row))));
 
       gtk_widget_set_sensitive (drag_handle, n_rows > 1);
       gtk_widget_set_sensitive (move_menu_button, n_rows > 1);

@@ -140,6 +140,24 @@ get_list_box_length (GtkListBox *list_box)
 }
 
 static void
+language_editor_update_rows_movable (PrefsGeneralPage *general_page,
+                                     GtkListBox       *list_box)
+{
+  GtkListBoxRow *row;
+  int n_rows = get_list_box_length (list_box) - 1;
+  int i = 0;
+
+  while ((row = gtk_list_box_get_row_at_index (list_box, i++))) {
+    if (!EPHY_IS_LANG_ROW (row))
+      continue;
+
+    gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-up", i > 0);
+    gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-down", i < (n_rows - 1));
+    ephy_lang_row_set_movable (EPHY_LANG_ROW (row), n_rows > 1);
+  }
+}
+
+static void
 language_editor_update_pref (PrefsGeneralPage *general_page)
 {
   GVariantBuilder builder;
@@ -245,6 +263,7 @@ language_editor_delete_button_clicked_cb (EphyLangRow      *row,
   gtk_list_box_remove (GTK_LIST_BOX (general_page->lang_listbox), GTK_WIDGET (row));
   language_editor_update_pref (general_page);
   language_editor_update_state (general_page);
+  language_editor_update_rows_movable (general_page, GTK_LIST_BOX (general_page->lang_listbox));
 }
 
 static void
@@ -297,6 +316,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   g_signal_connect (row, "move-row", G_CALLBACK (language_editor_move_row_cb), general_page);
 
   gtk_list_box_insert (GTK_LIST_BOX (general_page->lang_listbox), row, len - 1);
+  language_editor_update_rows_movable (general_page, GTK_LIST_BOX (general_page->lang_listbox));
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

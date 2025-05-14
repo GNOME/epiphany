@@ -32,6 +32,8 @@ struct _EphyLangRow {
 
   GtkWidget *drag_handle;
   GtkWidget *delete_button;
+  GtkWidget *move_menu_button;
+
   char *code;
 };
 
@@ -173,6 +175,7 @@ ephy_lang_row_class_init (EphyLangRowClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, EphyLangRow, drag_handle);
   gtk_widget_class_bind_template_child (widget_class, EphyLangRow, delete_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLangRow, move_menu_button);
 
   gtk_widget_class_bind_template_callback (widget_class, drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, drag_begin_cb);
@@ -219,4 +222,12 @@ ephy_lang_row_set_delete_sensitive (EphyLangRow *self,
                                     gboolean     sensitive)
 {
   gtk_widget_set_sensitive (self->delete_button, sensitive);
+}
+
+void
+ephy_lang_row_set_movable (EphyLangRow *self,
+                           gboolean     movable)
+{
+  gtk_widget_set_sensitive (self->drag_handle, movable);
+  gtk_widget_set_sensitive (self->move_menu_button, movable);
 }

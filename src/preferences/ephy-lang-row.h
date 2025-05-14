@@ -37,4 +37,7 @@ void            ephy_lang_row_set_code                (EphyLangRow *self,
 void            ephy_lang_row_set_delete_sensitive    (EphyLangRow *self,
                                                        gboolean     sensitive);
 
+void            ephy_lang_row_set_movable             (EphyLangRow *self,
+                                                       gboolean     movable);
+
 G_END_DECLS
