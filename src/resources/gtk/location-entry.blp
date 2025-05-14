@@ -65,6 +65,7 @@ template $EphyLocationEntry: Widget {
 
   Button security_button {
     tooltip-text: _("Website Security Status and Permissions");
+    focus-on-click: false;
     valign: center;
     clicked => $security_button_clicked_cb() swapped;
 
@@ -76,6 +77,7 @@ template $EphyLocationEntry: Widget {
 
   Button mute_button {
     tooltip-text: _("Un/Mute");
+    focus-on-click: false;
     valign: center;
     visible: false;
     icon-name: "ephy-audio-muted-symbolic";
@@ -88,6 +90,7 @@ template $EphyLocationEntry: Widget {
 
   Button bookmark_button {
     valign: center;
+    focus-on-click: false;
 
     styles [
       "entry-icon",
@@ -97,6 +100,7 @@ template $EphyLocationEntry: Widget {
 
   ToggleButton reader_mode_button {
     tooltip-text: _("Reader Mode");
+    focus-on-click: false;
     valign: center;
     visible: false;
     clicked => $reader_mode_clicked_cb() swapped;
@@ -109,6 +113,7 @@ template $EphyLocationEntry: Widget {
 
   Button clear_button {
     tooltip-text: _("Clear");
+    focus-on-click: false;
     valign: center;
     visible: false;
     icon-name: "edit-clear-symbolic";
@@ -122,6 +127,7 @@ template $EphyLocationEntry: Widget {
 
   MenuButton password_button {
     tooltip-text: _("View Available Passwords");
+    focus-on-click: false;
     valign: center;
     visible: false;
     icon-name: "dialog-password-symbolic";
