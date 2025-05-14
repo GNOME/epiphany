@@ -40,8 +40,10 @@ struct _EphyBookmarkRow {
   GCancellable *cancellable;
 
   GtkWidget *favicon_image;
+  GtkWidget *drag_handle;
   GtkWidget *remove_button;
   GtkWidget *properties_button;
+  GtkWidget *move_menu_button;
 };
 
 G_DEFINE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, ADW_TYPE_ACTION_ROW)
@@ -373,8 +375,10 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, favicon_image);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, drag_handle);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, remove_button);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, properties_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, move_menu_button);
 
   gtk_widget_class_bind_template_callback (widget_class, drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, drag_begin_cb);
@@ -437,4 +441,12 @@ ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self)
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
   return ephy_bookmark_get_url (self->bookmark);
+}
+
+void
+ephy_bookmark_row_set_movable (EphyBookmarkRow *self,
+                               gboolean         movable)
+{
+  gtk_widget_set_sensitive (self->drag_handle, movable);
+  gtk_widget_set_sensitive (self->move_menu_button, movable);
 }

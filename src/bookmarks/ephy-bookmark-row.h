@@ -40,4 +40,7 @@ const char          *ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self);
 void                 ephy_bookmark_row_open             (EphyBookmarkRow *self,
                                                          EphyLinkFlags    flags);
 
+void                 ephy_bookmark_row_set_movable     (EphyBookmarkRow *self,
+                                                        gboolean         movable);
+
 G_END_DECLS
