@@ -1,6 +1,19 @@
 using Gtk 4.0;
 using Adw 1;
 
+menu move_menu {
+  section {
+    item {
+      label: _("Move Up");
+      action: "row.move-up";
+    }
+    item {
+      label: _("Move Down");
+      action: "row.move-down";
+    }
+  }
+}
+
 template $EphyLangRow: Adw.ActionRow {
   [prefix]
   Image drag_handle {
@@ -11,6 +24,19 @@ template $EphyLangRow: Adw.ActionRow {
       prepare => $drag_prepare_cb() swapped;
       drag-begin => $drag_begin_cb() swapped;
     }
+  }
+
+  [suffix]
+  MenuButton {
+    icon-name: "view-more-symbolic";
+    receives-default: false;
+    tooltip-text: _("Move Controls");
+    valign: center;
+    menu-model: move_menu;
+
+    styles [
+      "flat",
+    ]
   }
 
   [suffix]

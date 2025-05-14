@@ -49,6 +49,36 @@ ephy_lang_row_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_lang_row_parent_class)->dispose (object);
 }
 
+static void
+move_up_cb (GtkWidget  *self,
+            const char *action_name,
+            GVariant   *parameter)
+{
+  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (self));
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (self)) - 1;
+  GtkListBoxRow *prev_row = gtk_list_box_get_row_at_index (list_box, index);
+
+  if (!prev_row)
+    return;
+
+  g_signal_emit (ADW_ACTION_ROW (self), signals[MOVE_ROW], 0, ADW_ACTION_ROW (prev_row));
+}
+
+static void
+move_down_cb (GtkWidget  *self,
+              const char *action_name,
+              GVariant   *parameter)
+{
+  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (self));
+  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (self)) + 1;
+  GtkListBoxRow *next_row = gtk_list_box_get_row_at_index (list_box, index);
+
+  if (!next_row)
+    return;
+
+  g_signal_emit (ADW_ACTION_ROW (self), signals[MOVE_ROW], 0, ADW_ACTION_ROW (next_row));
+}
+
 static GdkContentProvider *
 drag_prepare_cb (EphyLangRow *self,
                  double       x,
@@ -137,6 +167,9 @@ ephy_lang_row_class_init (EphyLangRowClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1, EPHY_TYPE_LANG_ROW);
+
+  gtk_widget_class_install_action (widget_class, "row.move-up", NULL, move_up_cb);
+  gtk_widget_class_install_action (widget_class, "row.move-down", NULL, move_down_cb);
 
   gtk_widget_class_bind_template_child (widget_class, EphyLangRow, drag_handle);
   gtk_widget_class_bind_template_child (widget_class, EphyLangRow, delete_button);
