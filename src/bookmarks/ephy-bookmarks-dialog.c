@@ -73,7 +73,7 @@ static void set_row_is_editable (GtkWidget *row,
 static void ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
                                                    const char          *tag);
 static void populate_tag_detail_list_box (EphyBookmarksDialog *self,
-                                          GVariant            *order);
+                                          GSequence           *order);
 
 static void
 tag_detail_back (EphyBookmarksDialog *self)
@@ -117,27 +117,18 @@ update_tags_order (EphyBookmarksDialog *self)
 {
   GtkListBoxRow *row;
   int i = 0;
-  GVariantBuilder builder;
-  GVariant *variant;
+  GSequence *urls;
 
   ephy_bookmarks_manager_tags_order_clear_tag (self->manager, self->tag_detail_tag);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sa(si))"));
-  g_variant_builder_add (&builder, "s", self->tag_detail_tag);
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a(si)"));
-
+  urls = g_sequence_new (g_free);
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), i++))) {
     const char *bookmark_url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
 
-    g_variant_builder_open (&builder, G_VARIANT_TYPE ("(si)"));
-    g_variant_builder_add (&builder, "s", bookmark_url);
-    g_variant_builder_add (&builder, "i", i - 1);
-    g_variant_builder_close (&builder);
+    g_sequence_append (urls, g_strdup (bookmark_url));
   }
 
-  g_variant_builder_close (&builder);
-  variant = g_variant_builder_end (&builder);
-  ephy_bookmarks_manager_add_to_tags_order (self->manager, variant);
+  ephy_bookmarks_manager_tags_order_add_tag (self->manager, self->tag_detail_tag, urls);
 
   ephy_bookmarks_manager_save (self->manager, FALSE, TRUE,
                                ephy_bookmarks_manager_save_warn_on_error_cancellable (self->manager),
@@ -146,30 +137,24 @@ update_tags_order (EphyBookmarksDialog *self)
 }
 
 static void
-update_tags_order_without_listbox (EphyBookmarksDialog *self,
-                                   const char          *tag,
-                                   gboolean             do_save)
+update_tags_order_without_list_box (EphyBookmarksDialog *self,
+                                    const char          *tag,
+                                    gboolean             do_save)
 {
-  GVariant *variant;
-  GVariantBuilder builder;
-  GVariant *new_variant;
-  GVariantIter *iter;
-  const char *url;
-  int index;
-  g_autoptr (GSequence) added_urls = NULL;
+  GSequence *current_order;
+  GSequenceIter *iter;
+  GSequence *urls;
   GSequence *bookmarks;
-  GSequenceIter *seq_iter;
 
-  variant = ephy_bookmarks_manager_tags_order_get_tag (self->manager, tag);
-  g_variant_get (variant, "(sa(si))", NULL, &iter);
+  current_order = ephy_bookmarks_manager_tags_order_get_tag (self->manager, tag);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sa(si))"));
-  g_variant_builder_add (&builder, "s", tag);
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a(si)"));
-
-  /* Recreate the current variant, removing any bookmarks not in the tag anymore. */
-  added_urls = g_sequence_new (g_free);
-  while (g_variant_iter_next (iter, "(si)", &url, &index)) {
+  /* Add URLs to the sequence from the existing variant. Skip bookmarks that
+   * aren't in the tag anymore. */
+  urls = g_sequence_new (g_free);
+  for (iter = g_sequence_get_begin_iter (current_order);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    const char *url = g_sequence_get (iter);
     EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
 
     if (bookmark == NULL)
@@ -178,42 +163,29 @@ update_tags_order_without_listbox (EphyBookmarksDialog *self,
     if (!ephy_bookmark_has_tag (bookmark, tag))
       continue;
 
-    g_variant_builder_open (&builder, G_VARIANT_TYPE ("(si)"));
-    g_variant_builder_add (&builder, "s", url);
-    g_variant_builder_add (&builder, "i", index);
-    g_variant_builder_close (&builder);
-    g_sequence_append (added_urls, g_strdup (url));
+    g_sequence_append (urls, g_strdup (url));
   }
-  g_variant_iter_free (iter);
+  g_sequence_free (current_order);
 
-  /* Add any bookmarks not already added to the variant. */
+  /* Add any bookmarks not already added to the sequence. */
   bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag);
-  for (seq_iter = g_sequence_get_begin_iter (bookmarks);
-       !g_sequence_iter_is_end (seq_iter);
-       seq_iter = g_sequence_iter_next (seq_iter)) {
-    EphyBookmark *bookmark = g_sequence_get (seq_iter);
-    const char *bookmark_url = ephy_bookmark_get_url (bookmark);
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+    const char *url = ephy_bookmark_get_url (bookmark);
     GSequenceIter *lookup_iter;
 
-    lookup_iter = g_sequence_lookup (added_urls,
-                                     (gpointer)bookmark_url,
+    lookup_iter = g_sequence_lookup (urls,
+                                     (gpointer)url,
                                      (GCompareDataFunc)g_strcmp0,
                                      NULL);
-    if (lookup_iter)
-      continue;
-
-    index++;
-    g_variant_builder_open (&builder, G_VARIANT_TYPE ("(si)"));
-    g_variant_builder_add (&builder, "s", bookmark_url);
-    g_variant_builder_add (&builder, "i", index);
-    g_variant_builder_close (&builder);
+    if (!lookup_iter)
+      g_sequence_append (urls, g_strdup (url));
   }
 
-  g_variant_builder_close (&builder);
-  new_variant = g_variant_builder_end (&builder);
-
   ephy_bookmarks_manager_tags_order_clear_tag (self->manager, tag);
-  ephy_bookmarks_manager_add_to_tags_order (self->manager, new_variant);
+  ephy_bookmarks_manager_tags_order_add_tag (self->manager, tag, urls);
 
   if (do_save) {
     ephy_bookmarks_manager_save (self->manager, FALSE, TRUE,
@@ -333,7 +305,7 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
     gtk_list_box_append (GTK_LIST_BOX (self->tag_detail_list_box), bookmark_row);
     update_tags_order (self);
   } else {
-    update_tags_order_without_listbox (self, tag, TRUE);
+    update_tags_order_without_list_box (self, tag, TRUE);
   }
 
   exists = FALSE;
@@ -412,7 +384,7 @@ ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
     if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag))
       tag_detail_back (self);
   } else {
-    update_tags_order_without_listbox (self, tag, TRUE);
+    update_tags_order_without_list_box (self, tag, TRUE);
   }
 
   /* If the tag no longer contains bookmarks, remove it from the tags list */
@@ -705,7 +677,7 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
       int i = 0;
       gboolean exists = FALSE;
 
-      update_tags_order_without_listbox (self, tag, FALSE);
+      update_tags_order_without_list_box (self, tag, FALSE);
 
       while ((existing_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
         const char *type = g_object_get_data (G_OBJECT (existing_row), "type");
@@ -785,7 +757,7 @@ ephy_bookmarks_dialog_bookmark_removed_cb (EphyBookmarksDialog  *self,
        iter = g_sequence_iter_next (iter)) {
     const char *tag = g_sequence_get (iter);
 
-    update_tags_order_without_listbox (self, tag, FALSE);
+    update_tags_order_without_list_box (self, tag, FALSE);
 
     /* If the tag no longer contains bookmarks, remove it from the tags list */
     if (!ephy_bookmarks_manager_has_bookmarks_with_tag (self->manager, tag)) {
@@ -932,7 +904,7 @@ static void
 ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
                                        const char          *tag)
 {
-  GVariant *tag_order;
+  GSequence *tag_order;
 
   tag_order = ephy_bookmarks_manager_tags_order_get_tag (self->manager, tag);
   if (tag_order != NULL) {
@@ -1185,21 +1157,19 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
 
 static void
 populate_tag_detail_list_box (EphyBookmarksDialog *self,
-                              GVariant            *order)
+                              GSequence           *order)
 {
-  GVariantIter *iter;
-  const char *url;
-  int index;
+  GSequenceIter *iter;
 
-  g_variant_get (order, "(sa(si))", NULL, &iter);
-
-  while (g_variant_iter_next (iter, "(si)", &url, &index)) {
+  for (iter = g_sequence_get_begin_iter (order);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    const char *url = g_sequence_get (iter);
     EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
     GtkWidget *row = create_bookmark_row (bookmark, self);
 
-    gtk_list_box_insert (GTK_LIST_BOX (self->tag_detail_list_box), row, index);
+    gtk_list_box_append (GTK_LIST_BOX (self->tag_detail_list_box), row);
   }
-  g_variant_iter_free (iter);
 }
 
 static void
@@ -1211,7 +1181,7 @@ ephy_bookmarks_dialog_sorted_cb (EphyBookmarksDialog  *self,
     gtk_list_box_remove_all (GTK_LIST_BOX (self->bookmarks_list_box));
     populate_bookmarks_list_box (self);
   } else if (g_strcmp0 (self->tag_detail_tag, view) == 0) {
-    GVariant *order = ephy_bookmarks_manager_tags_order_get_tag (self->manager, view);
+    GSequence *order = ephy_bookmarks_manager_tags_order_get_tag (self->manager, view);
 
     gtk_list_box_remove_all (GTK_LIST_BOX (self->tag_detail_list_box));
     populate_tag_detail_list_box (self, order);

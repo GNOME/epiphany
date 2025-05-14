@@ -92,14 +92,18 @@ void         ephy_bookmarks_manager_add_to_bookmarks_order          (EphyBookmar
 
 GSequence   *ephy_bookmarks_manager_get_tags_order                  (EphyBookmarksManager   *self);
 
-GVariant    *ephy_bookmarks_manager_tags_order_get_tag              (EphyBookmarksManager   *self,
+GSequence   *ephy_bookmarks_manager_tags_order_get_tag              (EphyBookmarksManager   *self,
                                                                      const char             *tag);
 
 void         ephy_bookmarks_manager_tags_order_clear_tag            (EphyBookmarksManager   *self,
                                                                      const char             *tag);
 
-void         ephy_bookmarks_manager_add_to_tags_order               (EphyBookmarksManager   *self,
-                                                                     GVariant               *variant);
+void         ephy_bookmarks_manager_tags_order_add_tag               (EphyBookmarksManager   *self,
+                                                                      const char             *tag,
+                                                                      GSequence              *urls);
+
+void         ephy_bookmarks_manager_tags_order_add_tag_variant       (EphyBookmarksManager   *self,
+                                                                      GVariant               *variant);
 
 void          ephy_bookmarks_manager_save_warn_on_error_cb          (GObject               *object,
                                                                      GAsyncResult          *result,

@@ -147,7 +147,7 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
 
       g_variant_get (variant, "(sa(si))", &variant_tag, NULL);
 
-      ephy_bookmarks_manager_add_to_tags_order (manager, variant);
+      ephy_bookmarks_manager_tags_order_add_tag_variant (manager, variant);
     }
     g_strfreev (list);
   }

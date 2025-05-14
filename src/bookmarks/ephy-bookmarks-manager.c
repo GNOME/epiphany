@@ -650,10 +650,11 @@ ephy_bookmarks_manager_get_tags_order (EphyBookmarksManager *self)
   return self->tags_order;
 }
 
-GVariant *
+GSequence *
 ephy_bookmarks_manager_tags_order_get_tag (EphyBookmarksManager *self,
                                            const char           *tag)
 {
+  GSequence *urls = NULL;
   GSequenceIter *iter;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
@@ -663,14 +664,24 @@ ephy_bookmarks_manager_tags_order_get_tag (EphyBookmarksManager *self,
        iter = g_sequence_iter_next (iter)) {
     GVariant *variant = g_sequence_get (iter);
     const char *variant_tag;
+    GVariantIter *variant_iter;
 
-    g_variant_get (variant, "(sa(si))", &variant_tag, NULL);
+    g_variant_get (variant, "(sa(si))", &variant_tag, &variant_iter);
 
-    if (g_strcmp0 (variant_tag, tag) == 0)
-      return variant;
+    if (g_strcmp0 (variant_tag, tag) == 0) {
+      const char *url;
+
+      urls = g_sequence_new (g_free);
+      while (g_variant_iter_next (variant_iter, "(si)", &url, NULL))
+        g_sequence_append (urls, g_strdup (url));
+    }
+
+    g_variant_iter_free (variant_iter);
+    if (urls)
+      break;
   }
 
-  return NULL;
+  return urls;
 }
 
 void
@@ -697,11 +708,42 @@ ephy_bookmarks_manager_tags_order_clear_tag (EphyBookmarksManager *self,
 }
 
 void
-ephy_bookmarks_manager_add_to_tags_order (EphyBookmarksManager *self,
-                                          GVariant             *variant)
+ephy_bookmarks_manager_tags_order_add_tag (EphyBookmarksManager *self,
+                                           const char           *tag,
+                                           GSequence            *urls)
 {
+  GVariantBuilder builder;
+  GVariant *variant;
+  GSequenceIter *iter;
+
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
 
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sa(si))"));
+  g_variant_builder_add (&builder, "s", tag);
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a(si)"));
+
+  for (iter = g_sequence_get_begin_iter (urls);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    const char *url = g_sequence_get (iter);
+
+    g_variant_builder_open (&builder, G_VARIANT_TYPE ("(si)"));
+    g_variant_builder_add (&builder, "s", url);
+    g_variant_builder_add (&builder, "i", g_sequence_iter_get_position (iter));
+    g_variant_builder_close (&builder);
+  }
+
+  g_variant_builder_close (&builder);
+  variant = g_variant_builder_end (&builder);
+  g_sequence_append (self->tags_order, variant);
+
+  g_sequence_free (urls);
+}
+
+void
+ephy_bookmarks_manager_tags_order_add_tag_variant (EphyBookmarksManager *self,
+                                                   GVariant             *variant)
+{
   g_sequence_append (self->tags_order, variant);
 }
 
