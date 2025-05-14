@@ -1547,6 +1547,7 @@ ephy_location_entry_dispose (GObject *object)
   gtk_widget_unparent (entry->password_button);
   gtk_widget_unparent (entry->bookmark_button);
   gtk_widget_unparent (entry->reader_mode_button);
+  gtk_widget_unparent (entry->mute_button);
   gtk_widget_unparent (entry->clear_button);
   gtk_widget_unparent (entry->suggestions_popover);
 
