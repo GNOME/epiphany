@@ -181,21 +181,23 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
   /* Add URLs to the sequence from the existing variant. Skip bookmarks that
    * aren't in the tag anymore. */
   urls = g_sequence_new (g_free);
-  for (iter = g_sequence_get_begin_iter (current_order);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
-    const char *url = g_sequence_get (iter);
-    EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
+  if (current_order != NULL) {
+    for (iter = g_sequence_get_begin_iter (current_order);
+         !g_sequence_iter_is_end (iter);
+         iter = g_sequence_iter_next (iter)) {
+      const char *url = g_sequence_get (iter);
+      EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
 
-    if (bookmark == NULL)
-      continue;
+      if (bookmark == NULL)
+        continue;
 
-    if (!ephy_bookmark_has_tag (bookmark, tag))
-      continue;
+      if (!ephy_bookmark_has_tag (bookmark, tag))
+        continue;
 
-    g_sequence_append (urls, g_strdup (url));
+      g_sequence_append (urls, g_strdup (url));
+    }
+    g_sequence_free (current_order);
   }
-  g_sequence_free (current_order);
 
   /* Add any bookmarks not already added to the sequence. */
   bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag);
@@ -1235,7 +1237,9 @@ ephy_bookmarks_dialog_sorted_cb (EphyBookmarksDialog  *self,
     GSequence *order = ephy_bookmarks_manager_tags_order_get_tag (self->manager, view);
 
     gtk_list_box_remove_all (GTK_LIST_BOX (self->tag_detail_list_box));
-    populate_tag_detail_list_box (self, order);
+
+    if (order != NULL)
+      populate_tag_detail_list_box (self, order);
   }
 }
 
