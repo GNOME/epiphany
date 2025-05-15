@@ -131,6 +131,7 @@ menu menu {
     item {
       label: _("Uninstall Web App");
       action: "app.uninstall-web-app";
+      hidden-when: "action-disabled";
     }
   }
 }
