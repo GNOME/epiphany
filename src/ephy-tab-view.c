@@ -446,7 +446,13 @@ is_loading_transform_cb (GBinding     *binding,
                          gpointer      user_data)
 {
   EphyEmbed *embed = user_data;
-  g_value_set_boolean (to_value, g_value_get_boolean (from_value) && !ephy_embed_has_load_pending (embed));
+  EphyWebView *web_view = ephy_embed_get_web_view (embed);
+  const char *address = ephy_web_view_get_address (web_view);
+
+  if (g_str_has_prefix (address, "about:") || g_str_has_prefix (address, "ephy-about:"))
+    g_value_set_boolean (to_value, FALSE);
+  else
+    g_value_set_boolean (to_value, g_value_get_boolean (from_value) && !ephy_embed_has_load_pending (embed));
   return TRUE;
 }
 
