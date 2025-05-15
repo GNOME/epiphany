@@ -2027,7 +2027,8 @@ ephy_location_entry_undo_reset (EphyLocationEntry *entry)
  *
  * Restore the @entry to the text corresponding to the current location, this
  * does not fire the user_changed signal. This is called each time the user
- * presses Escape while the location entry is selected.
+ * presses Escape while the location entry is selected. If the entry is already
+ * reset, the web view is focused.
  *
  * Return value: TRUE on success, FALSE otherwise
  *
@@ -2043,6 +2044,14 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
   text = url != NULL ? url : "";
   old_text = gtk_editable_get_text (GTK_EDITABLE (entry));
   old_text = old_text != NULL ? old_text : "";
+
+  if (g_strcmp0 (text, old_text) == 0) {
+    EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+    EphyEmbed *embed = ephy_window_get_active_embed (window);
+    EphyWebView *web_view = ephy_embed_get_web_view (embed);
+
+    gtk_widget_grab_focus (GTK_WIDGET (web_view));
+  }
 
   g_free (entry->saved_text);
   entry->saved_text = g_strdup (old_text);
