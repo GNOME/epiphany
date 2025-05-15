@@ -178,6 +178,8 @@ struct _EphyWindow {
   AdwToast *switch_toast;
   AdwToast *download_start_toast;
   GHashTable *active_permission_popovers;
+  GtkWidget *header_bin_top;
+  GtkWidget *header_bin_bottom;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -511,10 +513,19 @@ ephy_window_set_adaptive_mode (EphyWindow       *window,
 
   sync_chromes_visibility (window);
 
-  if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
+  if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW) {
+    g_object_ref (window->header_bar);
+    adw_bin_set_child (ADW_BIN (window->header_bin_top), NULL);
+    adw_bin_set_child (ADW_BIN (window->header_bin_bottom), window->header_bar);
+    g_object_unref (window->header_bar);
     gtk_widget_add_css_class (GTK_WIDGET (window), "narrow");
-  else
+  } else {
+    g_object_ref (window->header_bar);
+    adw_bin_set_child (ADW_BIN (window->header_bin_bottom), NULL);
+    adw_bin_set_child (ADW_BIN (window->header_bin_top), window->header_bar);
+    g_object_unref (window->header_bar);
     gtk_widget_remove_css_class (GTK_WIDGET (window), "narrow");
+  }
 }
 
 static void
@@ -4319,11 +4330,11 @@ ephy_window_constructed (GObject *object)
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
 
   ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_BOTTOM_URL_BAR))
-    ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
-  else
-    ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bar));
+  window->header_bin_top = adw_bin_new ();
+  adw_bin_set_child (ADW_BIN (window->header_bin_top), window->header_bar);
+  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bin_top));
+  window->header_bin_bottom = adw_bin_new ();
+  ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, GTK_WIDGET (window->header_bin_bottom));
 
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar_revealer);
