@@ -59,6 +59,10 @@ template $EphyActionBar: Adw.Bin {
       }
     }
 
+    Adw.TabButton tab_button {
+      action-name: "win.tabs-view";
+    }
+
     Button bookmark_button {
       icon-name: "ephy-non-starred-symbolic";
       action-name: "win.bookmark-page";
@@ -76,10 +80,6 @@ template $EphyActionBar: Adw.Bin {
       styles [
         "toolbar-button",
       ]
-    }
-
-    Adw.TabButton tab_button {
-      action-name: "win.tabs-view";
     }
   }
 }
