@@ -2067,6 +2067,171 @@ accept_navigation_policy_decision (EphyWindow           *window,
   return TRUE;
 }
 
+static GHashTable *
+load_auto_open_schemes_table (void)
+{
+  g_autoptr (GHashTable) table = NULL;
+  GVariantIter *iter = NULL;
+  char *pref_uri;
+  char *pref_scheme;
+
+  table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  g_settings_get (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_AUTO_OPEN_SCHEMES, "a(ss)", &iter);
+
+  while (g_variant_iter_next (iter, "(ss)", &pref_uri, &pref_scheme))
+    g_hash_table_insert (table, pref_uri, pref_scheme);
+
+  return g_steal_pointer (&table);
+}
+
+static gboolean
+url_should_open_automatically (const char *url,
+                               const char *navigation_uri)
+{
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GVariant) allowed_uris = NULL;
+  g_autoptr (GUri) uri = g_uri_parse (navigation_uri, G_URI_FLAGS_NONE, &error);
+  g_autoptr (GHashTable) table = NULL;
+  const char *pref_scheme;
+
+  if (!uri) {
+    g_warning ("Failed to parse URI %s: %s", navigation_uri, error->message);
+    return FALSE;
+  }
+
+  table = load_auto_open_schemes_table ();
+  pref_scheme = g_hash_table_lookup (table, url);
+  if (g_strcmp0 (pref_scheme, g_uri_get_scheme (uri)) == 0)
+    return TRUE;
+
+  return FALSE;
+}
+
+typedef struct {
+  WebKitURIRequest *request;
+  EphyWindow *window;
+  char *target_scheme;
+  char *opener_uri;
+
+  GtkWidget *always_allow_switch;
+} OpenURLPermissionData;
+
+static OpenURLPermissionData *
+open_url_permission_data_new (const char       *uri,
+                              WebKitURIRequest *request,
+                              EphyWindow       *window)
+{
+  OpenURLPermissionData *data = g_new0 (OpenURLPermissionData, 1);
+  const char *navigation_uri_str;
+  g_autoptr (GUri) navigation_uri = NULL;
+  g_autoptr (GError) error = NULL;
+
+  navigation_uri_str = webkit_uri_request_get_uri (request);
+  navigation_uri = g_uri_parse (navigation_uri_str, G_URI_FLAGS_NONE, &error);
+  if (!navigation_uri) {
+    g_warning ("Could not parse ask permission uri %s: %s", navigation_uri_str, error->message);
+    return NULL;
+  }
+
+  data->opener_uri = g_strdup (uri);
+  data->target_scheme = g_strdup (g_uri_get_scheme (navigation_uri));
+  data->request = g_object_ref (request);
+  data->window = g_object_ref (window);
+
+  return data;
+}
+
+static void
+open_url_permission_data_new_free (OpenURLPermissionData *data)
+{
+  g_clear_pointer (&data->opener_uri, g_free);
+  g_clear_pointer (&data->target_scheme, g_free);
+  g_clear_object (&data->request);
+  g_clear_object (&data->always_allow_switch);
+  g_clear_object (&data->window);
+}
+
+static void
+add_auto_open_scheme (char *openeer_uri,
+                      char *target_scheme)
+{
+  GVariantBuilder builder;
+  GVariant *variant;
+  GHashTable *table = load_auto_open_schemes_table ();
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ss)"));
+  g_hash_table_iter_init (&iter, table);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_variant_builder_add (&builder, "(ss)", key, value);
+
+  g_variant_builder_add (&builder, "(ss)", openeer_uri, target_scheme);
+
+  variant = g_variant_builder_end (&builder);
+  g_settings_set_value (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_AUTO_OPEN_SCHEMES, variant);
+}
+
+static void
+on_open (AdwAlertDialog *self,
+         gchar          *response,
+         gpointer        user_data)
+{
+  OpenURLPermissionData *data = user_data;
+
+  if (g_strcmp0 (response, "open") == 0) {
+    const char *uri = webkit_uri_request_get_uri (data->request);
+    g_autoptr (GFile) file = g_file_new_for_uri (uri);
+    gboolean always_allow = adw_switch_row_get_active (ADW_SWITCH_ROW (data->always_allow_switch));
+
+    if (always_allow)
+      add_auto_open_scheme (data->opener_uri, data->target_scheme);
+
+    ephy_file_launch_uri_handler (file,
+                                  NULL,
+                                  gtk_widget_get_display (GTK_WIDGET (data->window)),
+                                  EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
+  }
+
+  g_clear_pointer (&data, open_url_permission_data_new_free);
+}
+
+static gboolean
+ask_for_permission (gpointer user_data)
+{
+  OpenURLPermissionData *data = user_data;
+  g_autofree char *body = NULL;
+  AdwDialog *dialog;
+  GtkWidget *always_allow_switch;
+  GtkWidget *group;
+
+  /* Additional user interaction is required to prevent malicious websites
+   * from launching URL handler application's on the user's computer without
+   * explicit user consent. Notably, websites can download malicious files
+   * without consent, so they should not be able to also open those files
+   * without user interaction.
+   */
+  body = g_strdup_printf (_("Allow “%s” to open the “%s” link in an external app"), data->opener_uri, data->target_scheme);
+  dialog = adw_alert_dialog_new (_("Open in External App?"), body);
+  adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "cancel", _("_Cancel"));
+  adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "open", _("_Open Link"));
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "open", ADW_RESPONSE_SUGGESTED);
+
+  group = adw_preferences_group_new ();
+  always_allow_switch = adw_switch_row_new ();
+  data->always_allow_switch = g_object_ref (always_allow_switch);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (always_allow_switch), _("Always Allow"));
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), always_allow_switch);
+  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), group);
+  adw_dialog_present (dialog, GTK_WIDGET (data->window));
+
+  g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (on_open), data);
+
+  return G_SOURCE_REMOVE;
+}
+
 static gboolean
 decide_navigation_policy (WebKitWebView            *web_view,
                           WebKitPolicyDecision     *decision,
@@ -2094,24 +2259,29 @@ decide_navigation_policy (WebKitWebView            *web_view,
      * requests unless the user has actually interacted with the website. (This
      * corresponds roughly to "transient activation" in the HTML standard.)
      */
-    if (webkit_navigation_action_is_user_gesture (navigation_action)) {
-      /* Additional user interaction is required to prevent malicious websites
-       * from launching URL handler application's on the user's computer without
-       * explicit user consent. Notably, websites can download malicious files
-       * without consent, so they should not be able to also open those files
-       * without user interaction.
-       */
+    if (!webkit_navigation_action_is_user_gesture (navigation_action)) {
+      g_debug ("The website %s was prevented from navigating to URL %s due to lack of user interaction", webkit_web_view_get_uri (web_view), uri);
+      webkit_policy_decision_ignore (decision);
+      return TRUE;
+    }
+
+    webkit_policy_decision_ignore (decision);
+
+    if (url_should_open_automatically (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), uri)) {
       g_autoptr (GFile) file = g_file_new_for_uri (uri);
+
       ephy_file_launch_uri_handler (file,
                                     NULL,
                                     gtk_widget_get_display (GTK_WIDGET (window)),
-                                    EPHY_FILE_LAUNCH_URI_HANDLER_FILE,
-                                    EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_REQUIRE_USER_INTERACTION);
-    }
+                                    EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
+    } else {
+      OpenURLPermissionData *data = open_url_permission_data_new (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), request, window);
 
-    g_debug ("The website %s was prevented from navigating to URL %s due to lack of user interaction", webkit_web_view_get_uri (web_view), uri);
-    webkit_policy_decision_ignore (decision);
-    return TRUE;
+      if (data)
+        g_idle_add (ask_for_permission, data);
+
+      return TRUE;
+    }
   }
 
   if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION &&

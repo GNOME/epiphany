@@ -442,7 +442,7 @@ ephy_download_do_download_action (EphyDownload           *download,
       break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
-      ret = ephy_file_launch_uri_handler (destination, NULL, NULL, EPHY_FILE_LAUNCH_URI_HANDLER_FILE, EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_NONE);
+      ret = ephy_file_launch_uri_handler (destination, NULL, NULL, EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
       if (!ret)
         ret = ephy_file_browse_to (destination, NULL);
       break;

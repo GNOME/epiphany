@@ -165,7 +165,7 @@ css_file_created_cb (GObject      *source,
     }
   }
 
-  ephy_file_launch_uri_handler (file, "text/css", gtk_widget_get_display (GTK_WIDGET (page)), EPHY_FILE_LAUNCH_URI_HANDLER_FILE, EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_NONE);
+  ephy_file_launch_uri_handler (file, "text/css", gtk_widget_get_display (GTK_WIDGET (page)), EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
 }
 
 static void
@@ -201,7 +201,7 @@ js_file_created_cb (GObject      *source,
     }
   }
 
-  ephy_file_launch_uri_handler (file, "text/javascript", gtk_widget_get_display (GTK_WIDGET (page)), EPHY_FILE_LAUNCH_URI_HANDLER_FILE, EPHY_FILE_LAUNCH_URI_HANDLER_FLAGS_NONE);
+  ephy_file_launch_uri_handler (file, "text/javascript", gtk_widget_get_display (GTK_WIDGET (page)), EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
 }
 
 static void
