@@ -175,6 +175,7 @@ ephy_security_dialog_set_security_level (EphySecurityDialog *dialog,
 
   dialog->security_level = security_level;
 
+  address_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", dialog->hostname);
   adw_status_page_set_title (ADW_STATUS_PAGE (dialog->status_page), dialog->hostname);
 
   switch (security_level) {
