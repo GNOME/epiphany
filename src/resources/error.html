@@ -38,10 +38,9 @@
   </script>
 </head>
 <body class="error-body %s">
-  <span id="msg-icon" style="background-image: url(ephy-resource:///org/gnome/epiphany/page-icons/%s);"></span>
-  <br>
-  <h1 id="msg-title">%s</h1>
-  %s
+  <img class="msg-icon" src="ephy-resource:///org/gnome/epiphany/page-icons/%s"></img>
+  <div id="msg-title">%s</div>
+  <div id="msg-description">%s</div>
   <div id="msg-details" class="%s">
     <details>
       <summary class="clickable">%s</summary>
@@ -51,6 +50,7 @@
       </button>
     </details>
   </div>
+  <br></br>
   <div>
     <button class="btn suggested-action visible" accesskey="%s" onclick="javascript:buttonAction()">
       <strong>%s</strong>

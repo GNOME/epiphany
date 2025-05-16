@@ -83,14 +83,15 @@ html {
     text-align: center;
     font-size: 20pt;
     font-weight: 800;
+    margin-bottom: 12px;
 }
 
-#msg-icon {
+.msg-icon {
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 38px;
     width: 128px;
     height: 128px;
-    background-size: cover;
     opacity: 0.5;
     filter: brightness(0) invert(var(--icon-invert));
 }
@@ -102,6 +103,11 @@ html {
 .danger #msg-icon {
     filter: var(--error-filter);
     opacity: 1;
+}
+
+#msg-description {
+    text-align: center;
+    font-size: 16px;
 }
 
 #msg-details {
@@ -121,8 +127,6 @@ html {
 }
 
 .btn {
-    min-width: 200px;
-    height: 32px;
     margin-top: 15px;
     margin-bottom: 0;
     line-height: 1.42857143;
@@ -131,7 +135,11 @@ html {
     vertical-align: middle;
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding: 10px 32px;
+    border-radius: 9999px;
 }
 
 .btn:focus,
