@@ -51,8 +51,8 @@ enum {
 static gint signals[LAST_SIGNAL] = { 0 };
 
 static void
-on_entry_changed (EphyPasswordPopover *self,
-                  GtkEditable         *entry)
+on_entry_changed (GtkEditable         *entry,
+                  EphyPasswordPopover *self)
 {
   const char *text = gtk_editable_get_text (entry);
 
@@ -64,8 +64,8 @@ on_entry_changed (EphyPasswordPopover *self,
 }
 
 static void
-on_password_never (EphyPasswordPopover *self,
-                   GtkButton           *button)
+on_password_never (GtkButton           *button,
+                   EphyPasswordPopover *self)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (ephy_embed_shell_get_default ());
   EphyPermissionsManager *permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
@@ -79,15 +79,15 @@ on_password_never (EphyPasswordPopover *self,
 }
 
 static void
-on_password_not_now (EphyPasswordPopover *self,
-                     GtkButton           *button)
+on_password_not_now (GtkButton           *button,
+                     EphyPasswordPopover *self)
 {
   g_signal_emit (self, signals[RESPONSE], 0);
 }
 
 static void
-on_password_save (EphyPasswordPopover *self,
-                  GtkButton           *button)
+on_password_save (GtkButton           *button,
+                  EphyPasswordPopover *self)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (ephy_embed_shell_get_default ());
   EphyPasswordManager *password_manager = ephy_embed_shell_get_password_manager (shell);
