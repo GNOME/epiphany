@@ -1051,7 +1051,7 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
                                                  js_context,
                                                  js_ephy);
 
-  if (!extension->should_remember_passwords) {
+  if (extension->should_remember_passwords) {
     g_autoptr (JSCValue) js_password_manager_ctor = jsc_value_object_get_property (js_ephy, "PasswordManager");
     g_autoptr (JSCValue) js_password_manager = jsc_value_constructor_call (js_password_manager_ctor,
                                                                            G_TYPE_UINT64, webkit_web_page_get_id (page),
