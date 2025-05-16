@@ -57,15 +57,41 @@ get_or_create_group (GPtrArray  *groups,
   return group;
 }
 
+typedef struct {
+  WebKitFeature *feature;
+  GtkWidget *reset_button;
+} EphyFeatureSwitchNotifyActiveData;
+
+static EphyFeatureSwitchNotifyActiveData *
+ephy_feature_switch_notify_active_data_new (WebKitFeature *feature,
+                                            GtkWidget     *reset_button)
+{
+  EphyFeatureSwitchNotifyActiveData *data = g_new (EphyFeatureSwitchNotifyActiveData, 1);
+
+  data->feature = feature;
+  data->reset_button = reset_button;
+
+  return data;
+}
+
 static void
-feature_switch_notify_active_cb (GtkSwitch     *swtch,
-                                 GParamSpec    *pspec,
-                                 WebKitFeature *feature)
+ephy_feature_switch_notify_active_data_free (EphyFeatureSwitchNotifyActiveData *data)
+{
+  g_free (data);
+}
+
+static void
+feature_switch_notify_active_cb (GtkSwitch                         *swtch,
+                                 GParamSpec                        *pspec,
+                                 EphyFeatureSwitchNotifyActiveData *data)
 {
   gboolean enabled = gtk_switch_get_active (swtch);
   WebKitSettings *settings = ephy_embed_prefs_get_settings ();
-  if (enabled != webkit_settings_get_feature_enabled (settings, feature))
-    webkit_settings_set_feature_enabled (settings, feature, enabled);
+
+  if (enabled != webkit_settings_get_feature_enabled (settings, data->feature)) {
+    webkit_settings_set_feature_enabled (settings, data->feature, enabled);
+    gtk_widget_set_sensitive (data->reset_button, enabled != webkit_feature_get_default_value (data->feature));
+  }
 }
 
 static void
@@ -79,6 +105,7 @@ feature_switch_reset_cb (GtkWidget     *button,
     GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (parent));
     webkit_settings_set_feature_enabled (settings, feature, enabled);
     gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+    gtk_widget_set_sensitive (button, !enabled);
   }
 }
 
@@ -111,6 +138,8 @@ prefs_features_page_init (PrefsFeaturesPage *self)
       GtkWidget *swtch = gtk_switch_new ();
       GtkWidget *reset = gtk_button_new_from_icon_name ("edit-undo-symbolic");
       GtkWidget *label = gtk_label_new (g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
+      gboolean enabled = webkit_settings_get_feature_enabled (settings, feature);
+      EphyFeatureSwitchNotifyActiveData *data;
 
       adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
       adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row),
@@ -119,8 +148,8 @@ prefs_features_page_init (PrefsFeaturesPage *self)
                                    webkit_feature_get_details (feature));
 
       gtk_widget_set_valign (swtch, GTK_ALIGN_CENTER);
-      gtk_switch_set_active (GTK_SWITCH (swtch),
-                             webkit_settings_get_feature_enabled (settings, feature));
+      gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+      gtk_widget_set_sensitive (reset, enabled != webkit_feature_get_default_value (feature));
 
       gtk_widget_set_tooltip_text (reset, _("Reset to default"));
       gtk_widget_set_valign (reset, GTK_ALIGN_CENTER);
@@ -129,6 +158,8 @@ prefs_features_page_init (PrefsFeaturesPage *self)
       gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
       gtk_widget_add_css_class (label, "dim-label");
       gtk_widget_add_css_class (label, "caption");
+
+      data = ephy_feature_switch_notify_active_data_new (feature, reset);
 
       g_signal_connect_data (reset,
                              "clicked",
@@ -140,8 +171,8 @@ prefs_features_page_init (PrefsFeaturesPage *self)
       g_signal_connect_data (swtch,
                              "notify::active",
                              G_CALLBACK (feature_switch_notify_active_cb),
-                             webkit_feature_ref (feature),
-                             (GClosureNotify)webkit_feature_unref,
+                             data,
+                             (GClosureNotify)ephy_feature_switch_notify_active_data_free,
                              G_CONNECT_DEFAULT);
 
       adw_action_row_add_suffix (ADW_ACTION_ROW (row), label);
