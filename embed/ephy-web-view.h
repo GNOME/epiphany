@@ -208,4 +208,14 @@ void ephy_web_view_autofill_disable_popup                         (EphyWebView  
 
 GListModel *               ephy_web_view_get_opensearch_engines   (EphyWebView               *view);
 
+void ephy_web_view_set_location_entry_position                    (EphyWebView *self,
+                                                                   int          position);
+
+int ephy_web_view_get_location_entry_position                     (EphyWebView *self);
+
+void ephy_web_view_set_location_entry_has_focus                   (EphyWebView *self,
+                                                                   gboolean     focus);
+
+gboolean ephy_web_view_get_location_entry_has_focus               (EphyWebView *self);
+
 G_END_DECLS

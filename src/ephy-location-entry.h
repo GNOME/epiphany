@@ -106,4 +106,9 @@ void            ephy_location_entry_start_change_combined_stop_reload_state (Eph
                                                                              gboolean           loading);
 
 GtkWidget      *ephy_location_entry_get_opensearch_button      (EphyLocationEntry *entry);
+
+gboolean        ephy_location_entry_has_focus                  (EphyLocationEntry *self);
+
+void            ephy_location_entry_set_position               (EphyLocationEntry *self,
+                                                                int                position);
 G_END_DECLS

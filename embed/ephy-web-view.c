@@ -132,6 +132,8 @@ struct _EphyWebView {
   guint unresponsive_process_timeout_id;
 
   guint64 uid;
+  int location_entry_position;
+  gboolean location_entry_has_focus;
 
   EphyClientCertificateManager *client_certificate_manager;
 
@@ -4426,4 +4428,30 @@ ephy_web_view_get_web_app_manifest_url_finish (EphyWebView   *view,
   g_assert (g_task_is_valid (result, view));
 
   return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+void
+ephy_web_view_set_location_entry_position (EphyWebView *self,
+                                           int          position)
+{
+  self->location_entry_position = position;
+}
+
+int
+ephy_web_view_get_location_entry_position (EphyWebView *self)
+{
+  return self->location_entry_position;
+}
+
+void
+ephy_web_view_set_location_entry_has_focus (EphyWebView *self,
+                                            gboolean     focus)
+{
+  self->location_entry_has_focus = focus;
+}
+
+gboolean
+ephy_web_view_get_location_entry_has_focus (EphyWebView *self)
+{
+  return self->location_entry_has_focus;
 }

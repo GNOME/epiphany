@@ -401,8 +401,17 @@ on_focus_enter (GtkEventControllerFocus *controller,
     EphyEmbed *active_embed = ephy_window_get_active_embed (window);
     const char *typed_input = ephy_embed_get_typed_input (active_embed);
 
-    if (typed_input)
+    if (typed_input) {
       ephy_location_entry_title_widget_set_address (EPHY_TITLE_WIDGET (self), typed_input);
+    } else {
+      EphyWebView *web_view = ephy_embed_get_web_view (active_embed);
+      const char *text = ephy_web_view_get_address (web_view);
+
+      if (!ephy_embed_utils_is_no_show_address (text))
+        gtk_editable_set_text (GTK_EDITABLE (self->text), ephy_web_view_get_address (web_view));
+      else
+        gtk_editable_set_text (GTK_EDITABLE (self->text), "");
+    }
   }
 }
 
@@ -1319,6 +1328,9 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   const char *text = "";
   const char *final_text;
 
+  if (ephy_location_entry_has_focus (self))
+    return;
+
   if (address != NULL) {
     if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
       effective_text = g_strdup_printf ("about:%s", address + strlen (EPHY_ABOUT_SCHEME) + 1);
@@ -1717,6 +1729,7 @@ ephy_location_entry_page_action_clear (EphyLocationEntry *self)
 void
 ephy_location_entry_grab_focus_without_selecting (EphyLocationEntry *self)
 {
+  gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (self->text));
 }
 
@@ -1793,4 +1806,19 @@ GtkWidget *
 ephy_location_entry_get_opensearch_button (EphyLocationEntry *entry)
 {
   return entry->opensearch_button;
+}
+
+gboolean
+ephy_location_entry_has_focus (EphyLocationEntry *self)
+{
+  GtkWidget *delegate = GTK_WIDGET (gtk_editable_get_delegate (GTK_EDITABLE (self->text)));
+
+  return gtk_widget_has_focus (delegate);
+}
+
+void
+ephy_location_entry_set_position (EphyLocationEntry *self,
+                                  int                position)
+{
+  gtk_editable_set_position (GTK_EDITABLE (self->text), position);
 }

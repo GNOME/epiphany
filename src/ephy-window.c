@@ -2649,6 +2649,15 @@ ephy_window_connect_active_embed (EphyWindow *window)
     ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_reader_mode_state (view));
   }
 
+  if (ephy_web_view_get_location_entry_has_focus (view)) {
+    /* Grab view to not interfere with location entry signals clearing position */
+    gtk_widget_grab_focus (GTK_WIDGET (view));
+    ephy_location_entry_grab_focus_without_selecting (EPHY_LOCATION_ENTRY (title_widget));
+    ephy_location_entry_set_position (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_location_entry_position (view));
+  } else {
+    gtk_widget_grab_focus (GTK_WIDGET (view));
+  }
+
   sync_tab_security (view, NULL, window);
   sync_tab_document_type (view, NULL, window);
   sync_tab_load_status (view, WEBKIT_LOAD_STARTED, window);
@@ -2732,12 +2741,20 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   EphyEmbed *embed;
   WebKitWebView *web_view;
   EphyWebView *view;
+  EphyTitleWidget *title_widget;
 
   g_assert (window->active_embed != NULL);
 
   embed = window->active_embed;
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
   view = EPHY_WEB_VIEW (web_view);
+
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
+    ephy_web_view_set_location_entry_has_focus (view, ephy_location_entry_has_focus (EPHY_LOCATION_ENTRY (title_widget)));
+    ephy_web_view_set_location_entry_position (view, gtk_editable_get_position (GTK_EDITABLE (title_widget)));
+  }
 
   ephy_embed_detach_notification_container (window->active_embed);
 
