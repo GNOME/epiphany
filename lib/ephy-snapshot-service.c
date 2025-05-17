@@ -84,7 +84,7 @@ thumbnail_filename (const char *uri)
   g_checksum_get_digest (checksum, digest, &digest_len);
   g_assert (digest_len == 16);
 
-  file = g_strconcat (g_checksum_get_string (checksum), ".png", NULL);
+  file = g_strconcat (g_checksum_get_string (checksum), ".jpg", NULL);
 
   g_checksum_free (checksum);
 
@@ -152,7 +152,6 @@ save_thumbnail (GdkPixbuf  *pixbuf,
   int tmp_fd;
   gboolean ret = FALSE;
   GError *error = NULL;
-  const char *width, *height;
 
   if (pixbuf == NULL)
     return FALSE;
@@ -170,26 +169,11 @@ save_thumbnail (GdkPixbuf  *pixbuf,
     goto out;
   close (tmp_fd);
 
-  width = gdk_pixbuf_get_option (pixbuf, "tEXt::Thumb::Image::Width");
-  height = gdk_pixbuf_get_option (pixbuf, "tEXt::Thumb::Image::Height");
-
   error = NULL;
-  if (width != NULL && height != NULL)
-    ret = gdk_pixbuf_save (pixbuf,
-                           tmp_path,
-                           "png", &error,
-                           "tEXt::Thumb::Image::Width", width,
-                           "tEXt::Thumb::Image::Height", height,
-                           "tEXt::Thumb::URI", uri,
-                           "tEXt::Software", "GNOME::Epiphany::ThumbnailFactory",
-                           NULL);
-  else
-    ret = gdk_pixbuf_save (pixbuf,
-                           tmp_path,
-                           "png", &error,
-                           "tEXt::Thumb::URI", uri,
-                           "tEXt::Software", "GNOME::Epiphany::ThumbnailFactory",
-                           NULL);
+  ret = gdk_pixbuf_save (pixbuf,
+                         tmp_path,
+                         "jpeg", &error,
+                         NULL);
 
   if (!ret)
     goto out;
@@ -240,6 +224,13 @@ ephy_snapshot_service_prepare_snapshot (GdkTexture *texture)
                                       EPHY_THUMBNAIL_WIDTH,
                                       new_height,
                                       GDK_INTERP_BILINEAR);
+
+    /* Crop image in case it exceeds our thumbnail height limit */
+    if (new_height > EPHY_THUMBNAIL_HEIGHT) {
+      GdkPixbuf *tmp = gdk_pixbuf_new_subpixbuf (scaled, 0, 0, EPHY_THUMBNAIL_WIDTH, EPHY_THUMBNAIL_HEIGHT);
+      g_clear_object (&scaled);
+      scaled = tmp;
+    }
   }
 
   g_object_unref (snapshot);
