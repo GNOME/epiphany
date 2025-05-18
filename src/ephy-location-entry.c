@@ -916,6 +916,15 @@ backspace_cb (GtkText           *text,
   entry->no_completion = TRUE;
 }
 
+static void
+delete_from_cursor_cb (GtkText           *self,
+                       GtkDeleteType     *type,
+                       gint               count,
+                       EphyLocationEntry *entry)
+{
+  entry->no_completion = TRUE;
+}
+
 static int
 calc_and_set_prefix (gpointer user_data)
 {
@@ -1829,6 +1838,7 @@ ephy_location_entry_init (EphyLocationEntry *entry)
                            entry, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (G_OBJECT (entry->text), "backspace", G_CALLBACK (backspace_cb), entry, 0);
+  g_signal_connect_object (G_OBJECT (entry->text), "delete-from-cursor", G_CALLBACK (delete_from_cursor_cb), entry, 0);
   g_signal_connect_object (G_OBJECT (entry->mute_button), "clicked", G_CALLBACK (mute_activated_cb), entry, 0);
 }
 
