@@ -519,12 +519,14 @@ ephy_window_set_adaptive_mode (EphyWindow       *window,
     adw_bin_set_child (ADW_BIN (window->header_bin_bottom), window->header_bar);
     g_object_unref (window->header_bar);
     gtk_widget_add_css_class (GTK_WIDGET (window), "narrow");
+    gtk_widget_set_visible (window->action_bar_revealer, TRUE);
   } else {
     g_object_ref (window->header_bar);
     adw_bin_set_child (ADW_BIN (window->header_bin_bottom), NULL);
     adw_bin_set_child (ADW_BIN (window->header_bin_top), window->header_bar);
     g_object_unref (window->header_bar);
     gtk_widget_remove_css_class (GTK_WIDGET (window), "narrow");
+    gtk_widget_set_visible (window->action_bar_revealer, FALSE);
   }
 }
 
@@ -4323,9 +4325,10 @@ ephy_window_constructed (GObject *object)
   window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
   window->action_bar_revealer = gtk_revealer_new ();
+  gtk_widget_set_visible (window->action_bar_revealer, FALSE);
   window->action_bar = GTK_WIDGET (ephy_action_bar_new (window));
   gtk_revealer_set_child (GTK_REVEALER (window->action_bar_revealer), window->action_bar);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (window->action_bar_revealer), TRUE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (window->action_bar_revealer), FALSE);
   window->toast_overlay = adw_toast_overlay_new ();
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
 
