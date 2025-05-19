@@ -411,3 +411,13 @@ ephy_synchronizable_iface_init (EphySynchronizableInterface *iface)
   iface->set_server_time_modified = synchronizable_set_server_time_modified;
   iface->to_bso = ephy_synchronizable_default_to_bso;
 }
+
+void
+ephy_password_record_set_username (EphyPasswordRecord *self,
+                                   const char         *username)
+{
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
+
+  g_free (self->username);
+  self->username = g_strdup (username);
+}

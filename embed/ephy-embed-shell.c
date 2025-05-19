@@ -392,7 +392,7 @@ web_process_extension_password_manager_save_real (EphyEmbedShell *shell,
   so we don't need to send the data anywhere */
   if (!is_request) {
     ephy_password_manager_save (priv->password_manager, origin, target_origin, username,
-                                password, username_field, password_field, is_new);
+                                username, password, username_field, password_field, is_new);
     return;
   } else {
     /* User interaction is required, so whatever is handling the EmbedShell should

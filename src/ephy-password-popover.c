@@ -94,7 +94,7 @@ on_password_save (GtkButton           *button,
 
   ephy_password_manager_save (password_manager, self->request_data->origin,
                               self->request_data->target_origin, self->request_data->username,
-                              self->request_data->password, self->request_data->usernameField,
+                              self->request_data->username, self->request_data->password, self->request_data->usernameField,
                               self->request_data->passwordField, self->request_data->isNew);
 
   g_signal_emit (self, signals[RESPONSE], 0);

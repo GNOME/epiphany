@@ -65,6 +65,7 @@ void                 ephy_password_manager_save                     (EphyPasswor
                                                                      const char          *origin,
                                                                      const char          *target_origin,
                                                                      const char          *username,
+                                                                     const char          *new_username,
                                                                      const char          *password,
                                                                      const char          *username_field,
                                                                      const char          *password_field,

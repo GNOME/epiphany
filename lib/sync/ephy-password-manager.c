@@ -90,8 +90,9 @@ typedef struct {
 
 typedef struct {
   EphyPasswordManager *manager;
+  char *username;
   char *password;
-} UpdatePasswordAsyncData;
+} UpdateCredentialsAsyncData;
 
 typedef struct {
   EphyPasswordManager *manager;
@@ -130,26 +131,29 @@ query_async_data_free (QueryAsyncData *data)
   g_free (data);
 }
 
-static UpdatePasswordAsyncData *
-update_password_async_data_new (EphyPasswordManager *manager,
-                                const char          *password)
+static UpdateCredentialsAsyncData *
+update_credentials_async_data_new (EphyPasswordManager *manager,
+                                   const char          *username,
+                                   const char          *password)
 {
-  UpdatePasswordAsyncData *data;
+  UpdateCredentialsAsyncData *data;
 
-  data = g_new0 (UpdatePasswordAsyncData, 1);
+  data = g_new0 (UpdateCredentialsAsyncData, 1);
   data->manager = g_object_ref (manager);
+  data->username = g_strdup (username);
   data->password = g_strdup (password);
 
   return data;
 }
 
 static void
-update_password_async_data_free (UpdatePasswordAsyncData *data)
+update_credentials_async_data_free (UpdateCredentialsAsyncData *data)
 {
   g_assert (data);
 
   g_object_unref (data->manager);
-  g_free (data->password);
+  g_clear_pointer (&data->username, g_free);
+  g_clear_pointer (&data->password, g_free);
   g_free (data);
 }
 
@@ -493,10 +497,10 @@ deduplicate_records (EphyPasswordManager *manager,
 }
 
 static void
-update_password_cb (GList    *records,
-                    gpointer  user_data)
+update_credentials_cb (GList    *records,
+                       gpointer  user_data)
 {
-  UpdatePasswordAsyncData *data = (UpdatePasswordAsyncData *)user_data;
+  UpdateCredentialsAsyncData *data = (UpdateCredentialsAsyncData *)user_data;
   EphyPasswordRecord *record;
 
   /* Since we didn't include ID in our query, there could be multiple records
@@ -507,6 +511,7 @@ update_password_cb (GList    *records,
 
   if (records) {
     record = EPHY_PASSWORD_RECORD (records->data);
+    ephy_password_record_set_username (record, data->username);
     ephy_password_record_set_password (record, data->password);
     ephy_password_manager_store_record (data->manager, record);
     g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
@@ -514,7 +519,7 @@ update_password_cb (GList    *records,
     LOG ("Attempted to update password record that doesn't exist (likely Epiphany bug)");
   }
 
-  update_password_async_data_free (data);
+  update_credentials_async_data_free (data);
 }
 
 void
@@ -522,6 +527,7 @@ ephy_password_manager_save (EphyPasswordManager *self,
                             const char          *origin,
                             const char          *target_origin,
                             const char          *username,
+                            const char          *new_username,
                             const char          *password,
                             const char          *username_field,
                             const char          *password_field,
@@ -543,8 +549,8 @@ ephy_password_manager_save (EphyPasswordManager *self,
     ephy_password_manager_query (self, NULL,
                                  origin, target_origin, username,
                                  username_field, password_field,
-                                 update_password_cb,
-                                 update_password_async_data_new (self, password));
+                                 update_credentials_cb,
+                                 update_credentials_async_data_new (self, new_username, password));
     return;
   }
 

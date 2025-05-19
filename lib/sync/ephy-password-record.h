@@ -41,6 +41,8 @@ const char         *ephy_password_record_get_id                     (EphyPasswor
 const char         *ephy_password_record_get_origin                 (EphyPasswordRecord *self);
 const char         *ephy_password_record_get_target_origin          (EphyPasswordRecord *self);
 const char         *ephy_password_record_get_username               (EphyPasswordRecord *self);
+void                ephy_password_record_set_username               (EphyPasswordRecord *self,
+                                                                     const char         *username);
 const char         *ephy_password_record_get_password               (EphyPasswordRecord *self);
 void                ephy_password_record_set_password               (EphyPasswordRecord *self,
                                                                      const char         *password);

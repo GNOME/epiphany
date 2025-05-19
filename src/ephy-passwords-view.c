@@ -188,6 +188,44 @@ forget_all (GSimpleAction *action,
 }
 
 static void
+on_username_apply (AdwEntryRow *row,
+                   gpointer     user_data)
+{
+  EphyPasswordsView *self = EPHY_PASSWORDS_VIEW (user_data);
+  GtkWidget *expander_row = gtk_widget_get_ancestor (GTK_WIDGET (row), ADW_TYPE_EXPANDER_ROW);
+  EphyPasswordRecord *record = g_object_get_data (G_OBJECT (expander_row), "record");
+
+  ephy_password_manager_save (self->manager,
+                              ephy_password_record_get_origin (record),
+                              ephy_password_record_get_target_origin (record),
+                              ephy_password_record_get_username (record),
+                              gtk_editable_get_text (GTK_EDITABLE (row)),
+                              ephy_password_record_get_password (record),
+                              ephy_password_record_get_username_field (record),
+                              ephy_password_record_get_password_field (record),
+                              FALSE);
+}
+
+static void
+on_password_apply (AdwEntryRow *row,
+                   gpointer     user_data)
+{
+  EphyPasswordsView *self = EPHY_PASSWORDS_VIEW (user_data);
+  GtkWidget *expander_row = gtk_widget_get_ancestor (GTK_WIDGET (row), ADW_TYPE_EXPANDER_ROW);
+  EphyPasswordRecord *record = g_object_get_data (G_OBJECT (expander_row), "record");
+
+  ephy_password_manager_save (self->manager,
+                              ephy_password_record_get_origin (record),
+                              ephy_password_record_get_target_origin (record),
+                              ephy_password_record_get_username (record),
+                              ephy_password_record_get_username (record),
+                              gtk_editable_get_text (GTK_EDITABLE (row)),
+                              ephy_password_record_get_username_field (record),
+                              ephy_password_record_get_password_field (record),
+                              FALSE);
+}
+
+static void
 populate_model_cb (GList    *records,
                    gpointer  user_data)
 {
@@ -218,7 +256,8 @@ populate_model_cb (GList    *records,
     /* Username */
     sub_row = adw_entry_row_new ();
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Username"));
-    gtk_editable_set_editable (GTK_EDITABLE (sub_row), FALSE);
+    adw_entry_row_set_show_apply_button (ADW_ENTRY_ROW (sub_row), TRUE);
+    g_signal_connect (sub_row, "apply", G_CALLBACK (on_username_apply), passwords_view);
     adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
 
     text = ephy_password_record_get_username (record);
@@ -235,7 +274,8 @@ populate_model_cb (GList    *records,
     /* Password */
     sub_row = adw_password_entry_row_new ();
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (sub_row), _("Password"));
-    gtk_editable_set_editable (GTK_EDITABLE (sub_row), FALSE);
+    adw_entry_row_set_show_apply_button (ADW_ENTRY_ROW (sub_row), TRUE);
+    g_signal_connect (sub_row, "apply", G_CALLBACK (on_password_apply), passwords_view);
     adw_expander_row_add_row (ADW_EXPANDER_ROW (row), sub_row);
 
     text = ephy_password_record_get_password (record);
