@@ -758,7 +758,7 @@ focus_enter_cb (EphyLocationEntry *entry)
   active_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
   if (active_window) {
     EphyEmbed *active_embed = ephy_window_get_active_embed (active_window);
-    const char *typed_input = g_strdup (ephy_embed_get_typed_input (active_embed));
+    const char *typed_input = ephy_embed_get_typed_input (active_embed);
 
     if (typed_input)
       ephy_location_entry_title_widget_set_address (EPHY_TITLE_WIDGET (entry), typed_input);
@@ -789,11 +789,11 @@ focus_leave_cb (EphyLocationEntry *entry)
   entry->focused = FALSE;
 
   /* Return if on a new tab and there's text. */
-   if ((ephy_web_view_get_is_blank (view) ||
+  if ((ephy_web_view_get_is_blank (view) ||
        ephy_web_view_is_newtab (view) ||
        ephy_web_view_is_overview (view)) &&
-       g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") != 0)
-     return;
+      g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") != 0)
+    return;
 
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
@@ -1914,11 +1914,11 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
     EphyWebView *view = ephy_embed_get_web_view (embed);
 
     if ((ephy_web_view_get_is_blank (view) ||
-        ephy_web_view_is_newtab (view) ||
-        ephy_web_view_is_overview (view))) {
-      if (g_strcmp0(final_text, "") != 0 && alignment == 0.5)
+         ephy_web_view_is_newtab (view) ||
+         ephy_web_view_is_overview (view))) {
+      if (g_strcmp0 (final_text, "") != 0 && alignment == 0.5)
         animate_focus (entry, TRUE);
-      else if (g_strcmp0(final_text, "") == 0 && alignment != 0.5 && !entry->focused)
+      else if (g_strcmp0 (final_text, "") == 0 && alignment != 0.5 && !entry->focused)
         animate_focus (entry, FALSE);
     } else if (alignment == 0.0) {
       animate_focus (entry, FALSE);
