@@ -1069,8 +1069,12 @@ sync_tab_address (EphyWebView *view,
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_INTERNAL_PAGE, is_internal_page);
 
-  location = g_strdup (ephy_embed_get_typed_input (embed));
-  if (!location)
+  if ((ephy_web_view_get_is_blank (view) ||
+      ephy_web_view_is_newtab (view) ||
+      ephy_web_view_is_overview (view)) &&
+      ephy_embed_get_typed_input (embed) != NULL)
+    location = g_strdup (ephy_embed_get_typed_input (embed));
+  else
     location = calculate_location (typed_address, address);
 
   if (g_strcmp0 (location, current_text) != 0)

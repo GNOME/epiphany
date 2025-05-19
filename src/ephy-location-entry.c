@@ -79,6 +79,7 @@ struct _EphyLocationEntry {
   GtkWidget *context_menu;
 
   AdwAnimation *focus_animation;
+  gboolean focused;
 
   char *saved_text;
   char *jump_tab;
@@ -752,6 +753,8 @@ focus_enter_cb (EphyLocationEntry *entry)
 {
   EphyWindow *active_window;
 
+  entry->focused = TRUE;
+
   active_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
   if (active_window) {
     EphyEmbed *active_embed = ephy_window_get_active_embed (active_window);
@@ -768,11 +771,29 @@ focus_enter_cb (EphyLocationEntry *entry)
 static void
 focus_leave_cb (EphyLocationEntry *entry)
 {
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+  EphyEmbed *embed = EPHY_EMBED (ephy_window_get_active_embed (window));
+  EphyWebView *view;
+
+  if (!embed)
+    return;
+
+  view = ephy_embed_get_web_view (embed);
+
   set_show_suggestions (entry, FALSE);
 
   /* Return if the toplevel lost global input focus */
   if (gtk_widget_is_focus (GTK_WIDGET (entry->text)))
     return;
+
+  entry->focused = FALSE;
+
+  /* Return if on a new tab and there's text. */
+   if ((ephy_web_view_get_is_blank (view) ||
+       ephy_web_view_is_newtab (view) ||
+       ephy_web_view_is_overview (view)) &&
+       g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") != 0)
+     return;
 
   update_entry_style (entry, FALSE);
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, 0);
@@ -1849,6 +1870,8 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   g_autofree char *selection = NULL;
   int start, end;
   const char *final_text;
+  float alignment;
+  EphyWindow *window;
 
   /* Setting a new text will clear the clipboard. This makes it impossible
    * to copy&paste from the location entry of one tab into another tab, see
@@ -1882,6 +1905,26 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   gtk_editable_set_text (GTK_EDITABLE (widget), final_text);
   g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), entry);
   update_entry_style (entry, gtk_widget_has_focus (entry->text));
+
+  alignment = gtk_editable_get_alignment (GTK_EDITABLE (entry));
+  window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (entry)));
+
+  if (window) {
+    EphyEmbed *embed = ephy_window_get_active_embed (window);
+    EphyWebView *view = ephy_embed_get_web_view (embed);
+
+    if ((ephy_web_view_get_is_blank (view) ||
+        ephy_web_view_is_newtab (view) ||
+        ephy_web_view_is_overview (view))) {
+      if (g_strcmp0(final_text, "") != 0 && alignment == 0.5)
+        animate_focus (entry, TRUE);
+      else if (g_strcmp0(final_text, "") == 0 && alignment != 0.5 && !entry->focused)
+        animate_focus (entry, FALSE);
+    } else if (alignment == 0.0) {
+      animate_focus (entry, FALSE);
+    }
+  }
+
 
   set_show_suggestions (entry, FALSE);
   entry->block_update = FALSE;
