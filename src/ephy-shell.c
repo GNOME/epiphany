@@ -525,6 +525,14 @@ ephy_shell_startup (GApplication *application)
   EphyEmbedShellMode mode;
   GAction *action;
 
+#ifdef USE_GRANITE
+  /* Apply elementary stylesheet instead of default Adwaita stylesheet.
+   * This needs to be before calling the parent startup() to work.
+   */
+  if (is_desktop_pantheon ())
+    granite_init ();
+#endif
+
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
 #if USE_GRANITE
@@ -895,11 +903,6 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell->startup_finished = FALSE;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
-
-#ifdef USE_GRANITE
-  if (is_desktop_pantheon ())
-    granite_init ();
-#endif
 }
 
 static void
