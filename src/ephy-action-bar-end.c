@@ -320,8 +320,8 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   if (is_desktop_pantheon ()) {
     gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->bookmarks_button),
                               "user-bookmarks");
-    gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (action_bar_end->overview_button),
-                                   "view-grid");
+    gtk_button_set_icon_name (GTK_BUTTON (action_bar_end->overview_button),
+                              "view-grid");
   }
 
   gtk_widget_set_visible (action_bar_end->overview_button,
