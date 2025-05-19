@@ -1532,6 +1532,11 @@ load_changed_cb (WebKitWebView   *web_view,
 
       if (view->entering_reader_mode) {
         view->entering_reader_mode = FALSE;
+
+        view->is_setting_zoom = TRUE;
+        webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW (view), g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_READER_MODE_ZOOM_LEVEL));
+        view->is_setting_zoom = FALSE;
+
         g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_ENTERING_READER_MODE]);
       }
 
@@ -2276,6 +2281,11 @@ zoom_changed_cb (WebKitWebView *web_view,
 
   if (EPHY_WEB_VIEW (web_view)->is_setting_zoom)
     return;
+
+  if (g_str_has_prefix (ephy_web_view_get_display_address (EPHY_WEB_VIEW (web_view)), "ephy-reader:")) {
+    g_settings_set_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_READER_MODE_ZOOM_LEVEL, zoom);
+    return;
+  }
 
   address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
   if (ephy_embed_utils_address_has_web_scheme (address)) {
