@@ -2454,6 +2454,8 @@ take_snapshot_full_cb (GObject      *source,
   g_autoptr (GError) error = NULL;
   g_autoptr (GdkTexture) texture = NULL;
   g_autofree char *file = user_data;
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
   if (!file)
     return;
@@ -2465,6 +2467,8 @@ take_snapshot_full_cb (GObject      *source,
   }
 
   gdk_texture_save_to_png (texture, file);
+
+  ephy_window_show_toast (window, _("Screenshot finished"));
 }
 
 void

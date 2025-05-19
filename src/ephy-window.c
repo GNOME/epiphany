@@ -5150,3 +5150,11 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
     ephy_bookmarks_dialog_clear_search (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
   }
 }
+
+void
+ephy_window_show_toast (EphyWindow *window,
+                        const char *text)
+{
+  AdwToast *toast = adw_toast_new (text);
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
+}
