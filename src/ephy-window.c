@@ -3233,6 +3233,21 @@ run_downloads_in_background (EphyWindow *window,
 }
 
 static gboolean
+check_and_run_downloads_in_background (EphyWindow *self)
+{
+  EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+
+  if (ephy_downloads_manager_has_active_downloads (manager)) {
+    GList *list = ephy_downloads_manager_get_downloads (manager);
+    run_downloads_in_background (self, g_list_length (list));
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+static gboolean
 tab_view_close_page_cb (AdwTabView *tab_view,
                         AdwTabPage *page,
                         EphyWindow *window)
@@ -3253,11 +3268,7 @@ tab_view_close_page_cb (AdwTabView *tab_view,
 
     /* Last window, check ongoing downloads before closing the tab */
     if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
-      EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-
-      if (ephy_downloads_manager_has_active_downloads (manager)) {
-        GList *list = ephy_downloads_manager_get_downloads (manager);
-        run_downloads_in_background (window, g_list_length (list));
+      if (check_and_run_downloads_in_background (window)) {
         adw_tab_view_close_page_finish (tab_view, page, FALSE);
         return GDK_EVENT_STOP;
       }
@@ -4867,7 +4878,8 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
    * have modified forms, they will be lost and the user will not be warned.
    */
 
-  finish_window_close_after_modified_forms_check (data);
+  if (!check_and_run_downloads_in_background (data->window))
+    finish_window_close_after_modified_forms_check (data);
 }
 
 static void
@@ -4993,14 +5005,8 @@ ephy_window_close (EphyWindow *window)
     return FALSE;
   }
 
-  /* If this is the last window, check ongoing downloads and save its state in the session. */
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
-    EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
-
-    if (ephy_downloads_manager_has_active_downloads (manager)) {
-      GList *list = ephy_downloads_manager_get_downloads (manager);
-      run_downloads_in_background (window, g_list_length (list));
-
+    if (check_and_run_downloads_in_background (window)) {
       /* stop window close */
       return FALSE;
     }
