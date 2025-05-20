@@ -1920,7 +1920,7 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
         animate_focus (entry, TRUE);
       else if (g_strcmp0 (final_text, "") == 0 && alignment != 0.5 && !entry->focused)
         animate_focus (entry, FALSE);
-    } else if (alignment == 0.0) {
+    } else if (alignment == 0.0 && !entry->focused) {
       animate_focus (entry, FALSE);
     }
   }
