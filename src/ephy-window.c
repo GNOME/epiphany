@@ -68,6 +68,7 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <libportal-gtk4/portal-gtk4.h>
 #include <stdlib.h>
 
 #include <webkit/webkit.h>
@@ -180,6 +181,7 @@ struct _EphyWindow {
   GHashTable *active_permission_popovers;
   GtkWidget *header_bin_top;
   GtkWidget *header_bin_bottom;
+  GCancellable *cancellable;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -658,12 +660,64 @@ handle_key_cb (EphyWindow            *window,
 }
 #endif
 
+static void
+on_set_background_status (GObject      *source_object,
+                          GAsyncResult *res,
+                          gpointer      user_data)
+{
+  XdpPortal *portal = XDP_PORTAL (source_object);
+  g_autoptr (GError) error = NULL;
+
+  if (!xdp_portal_set_background_status_finish (portal, res, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Could not set background status: %s", error->message);
+    return;
+  }
+}
+
+static void
+on_request_background (GObject      *source_object,
+                       GAsyncResult *res,
+                       gpointer      user_data)
+{
+  XdpPortal *portal = XDP_PORTAL (source_object);
+  g_autoptr (GError) error = NULL;
+  GtkWidget *window;
+  EphyWindow *ephy_window;
+  EphyEmbed *embed;
+  g_autofree char *status = NULL;
+
+  if (!xdp_portal_request_background_finish (portal, res, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Could not request background: %s", error->message);
+    return;
+  }
+
+  window = GTK_WIDGET (user_data);
+  gtk_widget_set_visible (window, FALSE);
+
+  ephy_window = EPHY_WINDOW (window);
+  embed = ephy_window_get_active_embed (ephy_window);
+
+  status = g_strdup (ephy_embed_get_title (embed));
+
+  /* 96 is a limit by freedesktop portal */
+  if (strlen (status) > 96)
+    status[95] = '\0';
+
+  xdp_portal_set_background_status (portal, status, ephy_window->cancellable, on_set_background_status, NULL);
+}
+
 static gboolean
 ephy_window_close_request (GtkWindow *window)
 {
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) &&
       g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
-    gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
+    g_autoptr (XdpPortal) portal = xdp_portal_new ();
+    g_autoptr (XdpParent) parent_window = xdp_parent_new_gtk (GTK_WINDOW (window));
+    EphyWindow *ephy_window = EPHY_WINDOW (window);
+
+    xdp_portal_request_background (portal, parent_window, NULL, NULL, XDP_BACKGROUND_FLAG_NONE, ephy_window->cancellable, on_request_background, window);
     return TRUE;
   }
 
@@ -3565,6 +3619,9 @@ ephy_window_dispose (GObject *object)
   /* Only do these once */
   if (window->closing == FALSE) {
     window->closing = TRUE;
+
+    g_cancellable_cancel (window->cancellable);
+    g_clear_object (&window->cancellable);
 
     _ephy_window_set_context_event (window, NULL);
 
