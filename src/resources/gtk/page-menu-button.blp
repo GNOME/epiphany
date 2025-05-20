@@ -1,6 +1,14 @@
 using Gtk 4.0;
+using Adw 1;
 
-menu menu {
+template $EphyPageMenuButton: Adw.Bin {
+  child: MenuButton menu_button {
+    icon-name: "open-menu-symbolic";
+    tooltip-text: _("Main Menu");
+  };
+}
+
+menu page_menu {
   section {
     item {
       custom: "zoom";
@@ -141,8 +149,8 @@ menu menu {
   }
 }
 
-PopoverMenu page-menu-popover {
-  menu-model: menu;
+PopoverMenu page_menu_popover {
+  menu-model: page_menu;
 
   [zoom]
   Box zoom-box {
@@ -164,7 +172,7 @@ PopoverMenu page-menu-popover {
       tooltip-text: _("Restore Zoom");
       action-name: "win.zoom-normal";
 
-      Label zoom-level {
+      Label zoom_level {
         width-chars: 5;
       }
     }
@@ -177,7 +185,7 @@ PopoverMenu page-menu-popover {
   }
 
   [header]
-  Box button-box {
+  Box button_box {
     orientation: horizontal;
     spacing: 6;
     homogeneous: true;
@@ -207,7 +215,7 @@ PopoverMenu page-menu-popover {
 
     Button combined_stop_reload_button {
       visible: false;
-      tooltip-text: _("Reload");
+      tooltip-text: _("Reload the current page");
       icon-name: "view-refresh-symbolic";
       action-name: "toolbar.combined-stop-reload";
     }

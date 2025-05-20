@@ -25,6 +25,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-favicon-helpers.h"
+#include "ephy-page-menu-button.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-tab-view.h"
@@ -43,6 +44,7 @@ struct _EphyActionBar {
   EphyWindow *window;
   GtkWidget *toolbar;
   GtkWidget *bookmark_button;
+  GtkWidget *menu_button;
   AdwTabButton *tab_button;
   GtkWidget *navigation_back;
   GtkWidget *navigation_forward;
@@ -506,6 +508,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, bookmark_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_back);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_forward);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, menu_button);
 
   gtk_widget_class_bind_template_callback (widget_class,
                                            right_click_pressed_cb);
@@ -527,6 +530,8 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   gtk_widget_set_visible (GTK_WIDGET (action_bar->tab_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  ephy_page_menu_button_show_combined_stop_reload_button (EPHY_PAGE_MENU_BUTTON (action_bar->menu_button), TRUE);
 }
 
 EphyActionBar *
@@ -565,4 +570,20 @@ ephy_action_bar_set_bookmark_icon_state (EphyActionBar         *self,
     default:
       g_assert_not_reached ();
   }
+}
+
+void
+ephy_action_bar_set_zoom_level (EphyActionBar *self,
+                                gdouble        zoom)
+{
+  g_autofree gchar *zoom_level = g_strdup_printf ("%2.0f%%", zoom * 100);
+
+  ephy_page_menu_button_set_zoom_level (EPHY_PAGE_MENU_BUTTON (self->menu_button), zoom_level);
+}
+
+void
+ephy_action_bar_change_combined_stop_reload_state (EphyActionBar *self,
+                                                   gboolean       loading)
+{
+  ephy_page_menu_button_change_combined_stop_reload_state (EPHY_PAGE_MENU_BUTTON (self->menu_button), loading);
 }

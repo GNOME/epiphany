@@ -28,6 +28,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-location-entry.h"
+#include "ephy-page-menu-button.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
@@ -46,9 +47,6 @@ enum {
 };
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
-
-/* Translators: tooltip for the refresh button */
-static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page");
 
 struct _EphyHeaderBar {
   AdwBin parent_instance;
@@ -145,67 +143,13 @@ fullscreen_changed_cb (EphyHeaderBar *header_bar)
   }
 }
 
-static gboolean
-remove_menu_item (GMenu      *menu,
-                  const char *action_name)
-{
-  int i, n;
-
-  n = g_menu_model_get_n_items (G_MENU_MODEL (menu));
-
-  for (i = 0; i < n; i++) {
-    g_autofree char *item_action = NULL;
-    g_autofree char *submenu_id = NULL;
-    g_autoptr (GMenuModel) section = NULL;
-
-    g_menu_model_get_item_attribute (G_MENU_MODEL (menu),
-                                     i,
-                                     G_MENU_ATTRIBUTE_ACTION,
-                                     "s",
-                                     &item_action);
-
-    if (!g_strcmp0 (action_name, item_action)) {
-      g_menu_remove (menu, i);
-      return TRUE;
-    }
-
-    /* FIXME: this isn't particularly great. Maybe we should have custom
-     * attributes for everything like show-in-app-mode etc? */
-    g_menu_model_get_item_attribute (G_MENU_MODEL (menu),
-                                     i,
-                                     "ephy-submenu-id",
-                                     "s",
-                                     &submenu_id);
-
-    if (!g_strcmp0 (action_name, submenu_id)) {
-      g_menu_remove (menu, i);
-      return TRUE;
-    }
-
-    section = g_menu_model_get_item_link (G_MENU_MODEL (menu),
-                                          i,
-                                          G_MENU_LINK_SECTION);
-
-    if (!G_IS_MENU (section))
-      continue;
-
-    if (remove_menu_item (G_MENU (section), action_name))
-      return TRUE;
-  }
-
-  return FALSE;
-}
-
 static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-  GtkWidget *button;
   GtkWidget *event_box;
-  GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
   GtkSizeGroup *downloads_size_group;
-  GMenu *menu;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
@@ -266,62 +210,10 @@ ephy_header_bar_constructed (GObject *object)
                            GTK_WIDGET (header_bar->restore_button));
 
   /* Page Menu */
-  button = gtk_menu_button_new ();
-  header_bar->page_menu_button = button;
-  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (button), "open-menu-symbolic");
-  gtk_widget_set_tooltip_text (button, _("Main Menu"));
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
-  menu = G_MENU (gtk_builder_get_object (builder, "menu"));
-  header_bar->page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
-  header_bar->zoom_level_label = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
+  header_bar->page_menu_button = GTK_WIDGET (ephy_page_menu_button_new ());
+  ephy_page_menu_button_show_combined_stop_reload_button (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button), FALSE);
 
-  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    remove_menu_item (menu, "app.new-incognito");
-    remove_menu_item (menu, "app.reopen-closed-tab");
-    remove_menu_item (menu, "win.save-as-application");
-    remove_menu_item (menu, "win.open-application-manager");
-    remove_menu_item (menu, "win.encoding");
-    remove_menu_item (menu, "app.shortcuts");
-    remove_menu_item (menu, "app.help");
-    remove_menu_item (menu, "app.firefox-sync-dialog");
-    remove_menu_item (menu, "import-export");
-    remove_menu_item (menu, "webapps");
-  } else if (ephy_is_running_inside_sandbox ()) {
-    remove_menu_item (menu, "app.run-in-background");
-    remove_menu_item (menu, "app.quit");
-
-    if (is_desktop_pantheon ())
-      remove_menu_item (menu, "app.help");
-  } else {
-    remove_menu_item (menu, "app.run-in-background");
-    remove_menu_item (menu, "app.quit");
-  }
-
-  if (!ephy_can_install_web_apps ()) {
-    remove_menu_item (menu, "win.save-as-application");
-    remove_menu_item (menu, "win.open-application-manager");
-  }
-
-  header_bar->combined_stop_reload_button = GTK_WIDGET (gtk_builder_get_object (builder, "combined_stop_reload_button"));
-  gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
-
-  if (is_desktop_pantheon ()) {
-    GtkWidget *button_box;
-
-    remove_menu_item (menu, "app.about");
-
-    gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (button), "open-menu");
-    gtk_widget_add_css_class (button, "toolbar-button");
-
-    button_box = GTK_WIDGET (gtk_builder_get_object (builder, "button-box"));
-    gtk_widget_add_css_class (button_box, "linked");
-    gtk_box_set_spacing (GTK_BOX (button_box), 0);
-  }
-
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->page_menu_popover);
-  g_object_unref (builder);
-
-  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar), button);
+  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar), header_bar->page_menu_button);
 
   /* End action elements */
   header_bar->action_bar_end = ephy_action_bar_end_new ();
@@ -427,13 +319,15 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), TRUE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), TRUE);
-      gtk_widget_set_visible (header_bar->combined_stop_reload_button, FALSE);
+      gtk_widget_set_visible (header_bar->page_menu_button, TRUE);
+      adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), TRUE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), FALSE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), FALSE);
-      gtk_widget_set_visible (header_bar->combined_stop_reload_button, TRUE);
+      gtk_widget_set_visible (header_bar->page_menu_button, FALSE);
+      adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), FALSE);
 
       break;
   }
@@ -446,18 +340,7 @@ void
 ephy_header_bar_start_change_combined_stop_reload_state (EphyHeaderBar *header_bar,
                                                          gboolean       loading)
 {
-  if (loading) {
-    gtk_button_set_icon_name (GTK_BUTTON (header_bar->combined_stop_reload_button),
-                              "process-stop-symbolic");
-    /* Translators: tooltip for the stop button */
-    gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button,
-                                 _("Stop loading the current page"));
-  } else {
-    gtk_button_set_icon_name (GTK_BUTTON (header_bar->combined_stop_reload_button),
-                              "view-refresh-symbolic");
-    gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button,
-                                 _(REFRESH_BUTTON_TOOLTIP));
-  }
+  ephy_page_menu_button_change_combined_stop_reload_state (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button), loading);
 }
 
 void
@@ -466,5 +349,5 @@ ephy_header_bar_set_zoom_level (EphyHeaderBar *header_bar,
 {
   g_autofree gchar *zoom_level = g_strdup_printf ("%2.0f%%", zoom * 100);
 
-  gtk_label_set_label (GTK_LABEL (header_bar->zoom_level_label), zoom_level);
+  ephy_page_menu_button_set_zoom_level (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button), zoom_level);
 }

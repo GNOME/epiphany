@@ -799,6 +799,8 @@ change_combined_stop_reload_state (GSimpleAction *action,
                                                            g_variant_get_boolean (loading));
   ephy_header_bar_start_change_combined_stop_reload_state (header_bar,
                                                            g_variant_get_boolean (loading));
+  ephy_action_bar_change_combined_stop_reload_state (EPHY_ACTION_BAR (window->action_bar),
+                                                     g_variant_get_boolean (loading));
 
   g_simple_action_set_state (action, loading);
 }
@@ -1099,6 +1101,7 @@ sync_tab_zoom (WebKitWebView *web_view,
   zoom = webkit_web_view_get_zoom_level (web_view);
 
   ephy_header_bar_set_zoom_level (EPHY_HEADER_BAR (window->header_bar), zoom);
+  ephy_action_bar_set_zoom_level (EPHY_ACTION_BAR (window->action_bar), zoom);
 
   if (zoom >= ZOOM_MAXIMAL)
     can_zoom_in = FALSE;

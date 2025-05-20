@@ -41,4 +41,10 @@ EphyActionBarEnd   *ephy_action_bar_get_action_bar_end   (EphyActionBar *action_
 void              ephy_action_bar_set_bookmark_icon_state (EphyActionBar         *self,
                                                            EphyBookmarkIconState  state);
 
+void               ephy_action_bar_set_zoom_level         (EphyActionBar *header_bar,
+                                                           gdouble        zoom);
+
+void               ephy_action_bar_change_combined_stop_reload_state (EphyActionBar *self,
+                                                                      gboolean       loading);
+
 G_END_DECLS
