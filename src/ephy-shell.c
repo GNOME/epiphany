@@ -562,7 +562,9 @@ run_in_background_set_mapping (const GValue       *value,
                                gpointer            user_data)
 {
   GVariant *var = g_value_get_variant (value);
+  EphyShell *shell = EPHY_SHELL (user_data);
 
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (GTK_APPLICATION (shell)), "quit", g_variant_get_boolean (var));
   return g_variant_new_boolean (g_variant_get_boolean (var));
 }
 
@@ -661,7 +663,7 @@ ephy_shell_startup (GApplication *application)
                                   G_SETTINGS_BIND_DEFAULT,
                                   run_in_background_get_mapping,
                                   run_in_background_set_mapping,
-                                  NULL,
+                                  shell,
                                   NULL);
   }
 

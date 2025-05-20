@@ -288,11 +288,13 @@ ephy_header_bar_constructed (GObject *object)
     remove_menu_item (menu, "webapps");
   } else if (ephy_is_running_inside_sandbox ()) {
     remove_menu_item (menu, "app.run-in-background");
+    remove_menu_item (menu, "app.quit");
 
     if (is_desktop_pantheon ())
       remove_menu_item (menu, "app.help");
   } else {
     remove_menu_item (menu, "app.run-in-background");
+    remove_menu_item (menu, "app.quit");
   }
 
   if (!ephy_can_install_web_apps ()) {
