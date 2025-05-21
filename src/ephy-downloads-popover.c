@@ -52,6 +52,8 @@ download_box_row_activated_cb (EphyDownloadsPopover *popover,
 
   ephy_download_do_download_action (download,
                                     EPHY_DOWNLOAD_ACTION_OPEN);
+
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 
 static void
