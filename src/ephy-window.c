@@ -1234,11 +1234,15 @@ sync_tab_navigation (EphyWebView *view,
                      GParamSpec  *pspec,
                      EphyWindow  *window)
 {
+  GtkWidget *lentry;
+
   if (window->closing)
     return;
 
-  _ephy_window_set_navigation_flags (window,
-                                     ephy_web_view_get_navigation_flags (view));
+  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+  ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (lentry), FALSE);
+
+  _ephy_window_set_navigation_flags (window, ephy_web_view_get_navigation_flags (view));
 }
 
 static void
