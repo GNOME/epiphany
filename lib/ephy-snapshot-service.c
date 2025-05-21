@@ -91,34 +91,6 @@ thumbnail_filename (const char *uri)
   return file;
 }
 
-static gboolean
-thumbnail_is_valid (GdkPixbuf  *pixbuf,
-                    const char *uri)
-{
-  const char *thumb_uri;
-
-  thumb_uri = gdk_pixbuf_get_option (pixbuf, "tEXt::Thumb::URI");
-  if (g_strcmp0 (uri, thumb_uri) != 0)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-validate_thumbnail_path (const char *path,
-                         const char *uri)
-{
-  GdkPixbuf *pixbuf;
-
-  pixbuf = gdk_pixbuf_new_from_file (path, NULL);
-  if (pixbuf == NULL || !thumbnail_is_valid (pixbuf, uri))
-    return FALSE;
-
-  g_object_unref (pixbuf);
-
-  return TRUE;
-}
-
 static char *
 thumbnail_directory (void)
 {
@@ -581,14 +553,19 @@ get_snapshot_path_for_url_thread (GTask               *task,
                                   SnapshotAsyncData   *data,
                                   GCancellable        *cancellable)
 {
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GError) error = NULL;
   char *path;
 
   path = thumbnail_path (data->url);
-  if (!validate_thumbnail_path (path, data->url)) {
+
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
+  if (pixbuf == NULL) {
     g_task_return_new_error (task,
                              EPHY_SNAPSHOT_SERVICE_ERROR,
                              EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
-                             "Snapshot for url \"%s\" not found in disk cache", data->url);
+                             "Snapshot for url \"%s\" not found in disk cache: %s",
+                             data->url, error->message);
     g_free (path);
     return;
   }
