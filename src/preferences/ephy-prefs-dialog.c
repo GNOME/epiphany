@@ -152,7 +152,7 @@ sync_features (EphyPrefsDialog *self)
   gboolean enable_features = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_WEBKIT_FEATURES_PANEL);
 
   if (enable_features && !self->features_page) {
-    self->features_page = g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, NULL);
+    self->features_page = g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, "dialog", self, NULL);
     adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (self),
                                 ADW_PREFERENCES_PAGE (self->features_page));
   } else if (self->features_page) {
@@ -185,6 +185,7 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
 {
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
+  gtk_widget_set_size_request (GTK_WIDGET (dialog), 360, 200);
   sync_extensions (dialog);
   g_signal_connect_object (EPHY_SETTINGS_WEB,
                            "changed::" EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS,
@@ -194,7 +195,7 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
 
 #if TECH_PREVIEW
   adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (dialog),
-                              g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, NULL));
+                              g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, "dialog", dialog, NULL));
 #else
   sync_features (dialog);
   g_signal_connect_object (EPHY_SETTINGS_UI,

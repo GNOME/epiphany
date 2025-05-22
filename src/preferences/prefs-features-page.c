@@ -20,23 +20,79 @@
 
 #include "prefs-features-page.h"
 
+#include "ephy-adaptive-mode.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-lib-type-builtins.h"
+#include "ephy-prefs-dialog.h"
 #include "ephy-settings.h"
 #include <webkit/webkit.h>
 
 struct _PrefsFeaturesPage {
   AdwPreferencesPage parent_instance;
+
+  EphyPrefsDialog *dialog;
+  gboolean adaptive_mode;
 };
 
 G_DEFINE_FINAL_TYPE (PrefsFeaturesPage, prefs_features_page, ADW_TYPE_PREFERENCES_PAGE)
 
-static void
-prefs_features_page_class_init (PrefsFeaturesPageClass *klass)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+enum {
+  PROP_0,
+  PROP_DIALOG,
+  PROP_ADAPTIVE_MODE,
+  PROP_LAST
+};
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/gtk/prefs-features-page.ui");
+static GParamSpec *properties[PROP_LAST];
+
+static void
+prefs_feature_page_set_adaptive_mode (PrefsFeaturesPage *self,
+                                      EphyAdaptiveMode   mode)
+{
+  self->adaptive_mode = mode;
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ADAPTIVE_MODE]);
+}
+
+static void
+prefs_feature_page_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (object);
+
+  switch (prop_id) {
+    case PROP_DIALOG:
+      self->dialog = g_value_get_object (value);
+      break;
+    case PROP_ADAPTIVE_MODE:
+      prefs_feature_page_set_adaptive_mode (self, g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
+prefs_feature_page_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (object);
+
+  switch (prop_id) {
+    case PROP_DIALOG:
+      g_value_set_object (value, self->dialog);
+      break;
+    case PROP_ADAPTIVE_MODE:
+      g_value_set_enum (value, self->adaptive_mode);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 static AdwPreferencesGroup *
@@ -117,17 +173,52 @@ compare_groups_cb (AdwPreferencesGroup **a,
                  adw_preferences_group_get_title (*b));
 }
 
-static void
-prefs_features_page_init (PrefsFeaturesPage *self)
+gboolean
+feature_status_transform_cb (GBinding     *binding,
+                             const GValue *from_value,
+                             GValue       *to_value,
+                             gpointer      user_data)
 {
+  EphyAdaptiveMode mode = g_value_get_enum (from_value);
+  g_value_set_boolean (to_value, mode != EPHY_ADAPTIVE_MODE_NARROW);
+  return TRUE;
+}
+
+gboolean
+subtitle_transform_cb (GBinding     *binding,
+                       const GValue *from_value,
+                       GValue       *to_value,
+                       gpointer      user_data)
+{
+  EphyAdaptiveMode mode = g_value_get_enum (from_value);
+  WebKitFeature *feature = user_data;
+  g_autoptr (GEnumClass) status_enum = g_type_class_ref (WEBKIT_TYPE_FEATURE_STATUS);
+
+  if (mode == EPHY_ADAPTIVE_MODE_NARROW)
+    g_value_set_string (to_value, g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
+  else
+    g_value_set_string (to_value, webkit_feature_get_details (feature));
+
+  return TRUE;
+}
+
+static void
+prefs_feature_page_constructed (GObject *object)
+{
+  PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (object);
   g_autoptr (GPtrArray) groups = g_ptr_array_new_full (10, NULL);
   g_autoptr (GEnumClass) status_enum = g_type_class_ref (WEBKIT_TYPE_FEATURE_STATUS);
   g_autoptr (WebKitFeatureList) feature_list = webkit_settings_get_all_features ();
+  AdwBreakpoint *breakpoint;
   WebKitSettings *settings = ephy_embed_prefs_get_settings ();
   gboolean show_internal = g_settings_get_boolean (EPHY_SETTINGS_UI,
                                                    EPHY_PREFS_UI_WEBKIT_INTERNAL_FEATURES);
 
+  G_OBJECT_CLASS (prefs_features_page_parent_class)->constructed (object);
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  prefs_feature_page_set_adaptive_mode (self, EPHY_ADAPTIVE_MODE_NORMAL);
 
   for (size_t i = 0; i < webkit_feature_list_get_length (feature_list); i++) {
     WebKitFeature *feature = webkit_feature_list_get (feature_list, i);
@@ -140,6 +231,9 @@ prefs_features_page_init (PrefsFeaturesPage *self)
       GtkWidget *label = gtk_label_new (g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
       gboolean enabled = webkit_settings_get_feature_enabled (settings, feature);
       EphyFeatureSwitchNotifyActiveData *data;
+
+      g_object_bind_property_full (self, "adaptive-mode", label, "visible", G_BINDING_SYNC_CREATE, feature_status_transform_cb, NULL, self, NULL);
+      g_object_bind_property_full (self, "adaptive-mode", row, "subtitle", G_BINDING_SYNC_CREATE, subtitle_transform_cb, NULL, feature, NULL);
 
       adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
       adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row),
@@ -189,4 +283,49 @@ prefs_features_page_init (PrefsFeaturesPage *self)
     AdwPreferencesGroup *group = g_ptr_array_index (groups, i);
     adw_preferences_page_add (ADW_PREFERENCES_PAGE (self), group);
   }
+
+  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 600px"));
+  adw_breakpoint_add_setters (breakpoint,
+                              G_OBJECT (self), "adaptive-mode", EPHY_ADAPTIVE_MODE_NARROW,
+                              NULL);
+
+  adw_dialog_add_breakpoint (ADW_DIALOG (self->dialog), breakpoint);
+}
+
+static void
+prefs_features_page_class_init (PrefsFeaturesPageClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/epiphany/gtk/prefs-features-page.ui");
+
+  object_class->get_property = prefs_feature_page_get_property;
+  object_class->set_property = prefs_feature_page_set_property;
+  object_class->constructed = prefs_feature_page_constructed;
+
+  properties[PROP_DIALOG] = g_param_spec_object ("dialog",
+                                                 NULL,
+                                                 NULL,
+                                                 EPHY_TYPE_PREFS_DIALOG,
+                                                 G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
+                                                 G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_ADAPTIVE_MODE] = g_param_spec_enum ("adaptive-mode",
+                                                      NULL,
+                                                      NULL,
+                                                      EPHY_TYPE_ADAPTIVE_MODE,
+                                                      EPHY_ADAPTIVE_MODE_NORMAL,
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class,
+                                     PROP_LAST,
+                                     properties);
+}
+
+static void
+prefs_features_page_init (PrefsFeaturesPage *self)
+{
 }
