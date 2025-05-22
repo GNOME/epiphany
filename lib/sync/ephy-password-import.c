@@ -377,6 +377,7 @@ ephy_password_import_from_csv (EphyPasswordManager  *manager,
     const gchar *host = NULL;
     gint port;
     gboolean exists;
+    g_autoptr (GError) error = NULL;
 
     row = rows[i];
 
@@ -399,11 +400,30 @@ ephy_password_import_from_csv (EphyPasswordManager  *manager,
       }
     }
 
-    uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
+    /* username is optional. URL and password are not. */
+    if (!url) {
+      g_warning ("ephy-password-input: ignoring password record with username=%s due to missing URL", username);
+      continue;
+    }
+    if (!decrypted_password) {
+      g_warning ("ephy-password-input: ignoring password record with URL=%s and username=%s due to missing password", url, username);
+      continue;
+    }
+
+    uri = g_uri_parse (url, G_URI_FLAGS_NONE, &error);
+    if (!uri) {
+      g_warning ("ephy-password-input: ignoring password record: failed to parse URL %s: %s", url, error->message);
+      continue;
+    }
 
     scheme = g_uri_get_scheme (uri);
     host = g_uri_get_host (uri);
     port = g_uri_get_port (uri);
+
+    if (!host) {
+      g_warning ("ephy-password-input: ignoring password record: URL %s has no host", url);
+      continue;
+    }
 
     if (port > 0)
       secure_origin = g_strdup_printf ("%s://%s:%d", scheme, host, port);
