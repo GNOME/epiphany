@@ -46,6 +46,7 @@
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
+#include "ephy-page-menu-button.h"
 #include "ephy-password-export.h"
 #include "ephy-password-import.h"
 #include "ephy-passwords-view.h"
@@ -1546,11 +1547,11 @@ window_cmd_page_menu (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyHeaderBar *header_bar;
-  GtkMenuButton *button;
+  EphyPageMenuButton *button;
 
   header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-  button = GTK_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
-  gtk_menu_button_popup (button);
+  button = EPHY_PAGE_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
+  ephy_page_menu_button_popup (button);
 }
 
 void
@@ -2770,11 +2771,11 @@ static void
 dismiss_page_popover (EphyWindow *window)
 {
   EphyHeaderBar *header_bar;
-  GtkMenuButton *button;
+  EphyPageMenuButton *button;
 
   header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-  button = GTK_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
-  gtk_menu_button_popdown (button);
+  button = EPHY_PAGE_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
+  ephy_page_menu_button_popdown (button);
 }
 
 void

@@ -190,3 +190,15 @@ ephy_page_menu_button_show_combined_stop_reload_button (EphyPageMenuButton *self
 {
   gtk_widget_set_visible (self->combined_stop_reload_button, show);
 }
+
+void
+ephy_page_menu_button_popup (EphyPageMenuButton *self)
+{
+  gtk_menu_button_popup (GTK_MENU_BUTTON (self->menu_button));
+}
+
+void
+ephy_page_menu_button_popdown (EphyPageMenuButton *self)
+{
+  gtk_menu_button_popdown (GTK_MENU_BUTTON (self->menu_button));
+}

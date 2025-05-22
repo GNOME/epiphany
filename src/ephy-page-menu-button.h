@@ -40,4 +40,7 @@ void                  ephy_page_menu_button_change_combined_stop_reload_state (E
 void                  ephy_page_menu_button_show_combined_stop_reload_button (EphyPageMenuButton *self,
                                                                               gboolean            show);
 
+void                  ephy_page_menu_button_popup          (EphyPageMenuButton *self);
+void                  ephy_page_menu_button_popdown        (EphyPageMenuButton *self);
+
 G_END_DECLS
