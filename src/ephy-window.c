@@ -4367,12 +4367,6 @@ ephy_window_constructed (GObject *object)
   window->overview = adw_tab_overview_new ();
   window->fullscreen_box = ephy_fullscreen_box_new ();
 
-  /* Add scroll container to hide action bar during scrolling */
-  scroll_controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL | GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
-  gtk_event_controller_set_propagation_phase (scroll_controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_object (scroll_controller, "scroll", G_CALLBACK (scroll_cb), window, G_CONNECT_SWAPPED);
-  gtk_widget_add_controller (GTK_WIDGET (window), scroll_controller);
-
   pan_gesture = gtk_gesture_pan_new (GTK_ORIENTATION_VERTICAL);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (pan_gesture), GTK_PHASE_CAPTURE);
   g_signal_connect_object (pan_gesture, "pan", G_CALLBACK (pan_cb), window, G_CONNECT_SWAPPED);
@@ -4410,6 +4404,12 @@ ephy_window_constructed (GObject *object)
   gtk_revealer_set_reveal_child (GTK_REVEALER (window->action_bar_revealer), FALSE);
   window->toast_overlay = adw_toast_overlay_new ();
   adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
+
+  /* Add scroll container to hide action bar during scrolling */
+  scroll_controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL | GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  gtk_event_controller_set_propagation_phase (scroll_controller, GTK_PHASE_CAPTURE);
+  g_signal_connect_object (scroll_controller, "scroll", G_CALLBACK (scroll_cb), window, G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (window->tab_view), scroll_controller);
 
   ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
   window->header_bin_top = adw_bin_new ();
