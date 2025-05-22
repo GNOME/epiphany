@@ -34,6 +34,7 @@ typedef struct {
   GtkWidget *stack;
   GtkWidget *empty_page;
   GtkWidget *spinner;
+  GtkWidget *options_menu_button;
 
   gboolean is_loading : 1;
   gboolean has_data : 1;
@@ -366,6 +367,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, spinner);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, stack);
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, options_menu_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
@@ -623,4 +625,14 @@ ephy_data_view_get_search_text (EphyDataView *self)
   priv = ephy_data_view_get_instance_private (self);
 
   return priv->search_text;
+}
+
+void
+ephy_data_view_set_options_menu (EphyDataView *self,
+                                 GMenuModel   *model)
+{
+  EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
+
+  gtk_widget_set_visible (priv->options_menu_button, model != NULL);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->options_menu_button), model);
 }

@@ -5,11 +5,18 @@ template $EphyDataView: Adw.NavigationPage {
   child: Adw.ToolbarView box {
     [top]
     Adw.HeaderBar header_bar {
-      [end]
+      [start]
       ToggleButton search_button {
         icon-name: "edit-find-symbolic";
         active: bind search_bar.search-mode-enabled bidirectional;
         tooltip-text: _("Search");
+      }
+
+      [end]
+      MenuButton options_menu_button {
+        icon-name: "view-more-symbolic";
+        tooltip-text: _("Options");
+        visible: false;
       }
     }
 

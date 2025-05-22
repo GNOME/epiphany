@@ -38,6 +38,7 @@ struct _EphyPasswordsView {
 
   GActionGroup *action_group;
   GCancellable *cancellable;
+  GMenu *options_menu;
 };
 
 G_DEFINE_FINAL_TYPE (EphyPasswordsView, ephy_passwords_view, ADW_TYPE_DIALOG)
@@ -130,6 +131,7 @@ ephy_passwords_view_class_init (EphyPasswordsViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, toast_overlay);
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, data_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, options_menu);
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
 }
 
@@ -381,6 +383,8 @@ ephy_passwords_view_init (EphyPasswordsView *self)
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (self->listbox), GTK_SELECTION_NONE);
 
   populate_model (self);
+
+  ephy_data_view_set_options_menu (EPHY_DATA_VIEW (self->data_view), G_MENU_MODEL (self->options_menu));
 }
 
 void

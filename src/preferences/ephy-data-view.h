@@ -59,4 +59,7 @@ void     ephy_data_view_set_can_clear (EphyDataView *self,
 
 const gchar *ephy_data_view_get_search_text (EphyDataView *self);
 
+void      ephy_data_view_set_options_menu (EphyDataView *self,
+                                           GMenuModel   *model);
+
 G_END_DECLS
