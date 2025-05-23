@@ -119,7 +119,7 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
 static void
 hide_timeout_cb (EphyHeaderBar *header_bar)
 {
-  gtk_menu_button_popdown (GTK_MENU_BUTTON (header_bar->page_menu_button));
+  ephy_page_menu_button_popdown (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button));
 
   header_bar->popover_hide_timeout_id = 0;
 }
