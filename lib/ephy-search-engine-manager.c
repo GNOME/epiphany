@@ -35,6 +35,7 @@ struct _EphySearchEngineManager {
   GPtrArray *engines;
 
   EphySearchEngine *default_engine; /* unowned */
+  EphySearchEngine *incognito_engine; /* unowned */
 
   /* This is just to speed things up. It updates based on each search engine's
    * notify::bang signal, so it is never out of sync because signal callbacks
@@ -54,6 +55,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphySearchEngineManager, ephy_search_engine_manag
 enum {
   PROP_0,
   PROP_DEFAULT_ENGINE,
+  PROP_INCOGNITO_ENGINE,
   N_PROPS
 };
 
@@ -104,6 +106,7 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
   g_autoptr (GVariantIter) iter = NULL;
   GVariant *variant;
   g_autofree char *default_engine_name = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
+  g_autofree char *incognito_engine_name = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE);
 
   g_settings_get (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, "aa{sv}", &iter);
 
@@ -145,6 +148,8 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
     ephy_search_engine_manager_add_engine (manager, search_engine);
     if (g_strcmp0 (ephy_search_engine_get_name (search_engine), default_engine_name) == 0)
       ephy_search_engine_manager_set_default_engine (manager, search_engine);
+    if (g_strcmp0 (ephy_search_engine_get_name (search_engine), incognito_engine_name) == 0)
+      ephy_search_engine_manager_set_incognito_engine (manager, search_engine);
 
     g_variant_unref (variant);
   }
@@ -156,6 +161,7 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
   if (G_UNLIKELY (manager->engines->len == 0)) {
     g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
     g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
+    g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE);
     load_search_engines_from_settings (manager);
 
     g_warning ("Having no search engine is forbidden. Resetting to default ones instead.");
@@ -165,6 +171,11 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
   if (G_UNLIKELY (!manager->default_engine)) {
     g_warning ("Could not find default search engine set in the gsettings within all available search engines! Setting the first one as fallback.");
     ephy_search_engine_manager_set_default_engine (manager, manager->engines->pdata[0]);
+  }
+
+  if (G_UNLIKELY (!manager->incognito_engine)) {
+    g_warning ("Could not find incognito search engine set in the gsettings within all available search engines! Setting the first one as fallback.");
+    ephy_search_engine_manager_set_incognito_engine (manager, manager->engines->pdata[0]);
   }
 }
 
@@ -194,6 +205,9 @@ ephy_search_engine_manager_get_property (GObject    *object,
     case PROP_DEFAULT_ENGINE:
       g_value_take_object (value, ephy_search_engine_manager_get_default_engine (self));
       break;
+    case PROP_INCOGNITO_ENGINE:
+      g_value_take_object (value, ephy_search_engine_manager_get_incognito_engine (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -210,6 +224,9 @@ ephy_search_engine_manager_set_property (GObject      *object,
   switch (prop_id) {
     case PROP_DEFAULT_ENGINE:
       ephy_search_engine_manager_set_default_engine (self, g_value_get_object (value));
+      break;
+    case PROP_INCOGNITO_ENGINE:
+      ephy_search_engine_manager_set_incognito_engine (self, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -238,6 +255,13 @@ ephy_search_engine_manager_class_init (EphySearchEngineManagerClass *klass)
 
   properties [PROP_DEFAULT_ENGINE] =
     g_param_spec_object ("default-engine",
+                         NULL, NULL,
+                         EPHY_TYPE_SEARCH_ENGINE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY));
+  properties [PROP_INCOGNITO_ENGINE] =
+    g_param_spec_object ("incognito-engine",
                          NULL, NULL,
                          EPHY_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READWRITE |
@@ -325,6 +349,43 @@ ephy_search_engine_manager_set_default_engine (EphySearchEngineManager *manager,
 }
 
 /**
+ * ephy_search_engine_manager_get_incognito_engine:
+ *
+ * Returns: (transfer none): the incognito search engine for @manager.
+ */
+EphySearchEngine *
+ephy_search_engine_manager_get_incognito_engine (EphySearchEngineManager *manager)
+{
+  g_assert (EPHY_IS_SEARCH_ENGINE (manager->incognito_engine));
+
+  return manager->incognito_engine;
+}
+
+/**
+ * ephy_search_engine_manager_set_incognito_engine:
+ * @engine: (transfer none): the search engine to set as incognito engine for @manager.
+ *   This search engine must already be added to the search engine manager.
+ *
+ * Note that you must call ephy_search_engine_manager_save_to_settings() when
+ * appropriate to save it. It isn't done automatically because we don't save
+ * the search engines themselves on every change, as that would be pretty expensive
+ * when typing the information, so it's better if the incognito search engine and
+ * the search engines themselves are always kept in sync, in case there's an issue
+ * somewhere in the code where it doesn't save one part or another.
+ */
+void
+ephy_search_engine_manager_set_incognito_engine (EphySearchEngineManager *manager,
+                                                 EphySearchEngine        *engine)
+{
+  g_assert (EPHY_IS_SEARCH_ENGINE (engine));
+  /* Improper input validation if that happens in our code. */
+  g_assert (g_ptr_array_find (manager->engines, engine, NULL));
+
+  manager->incognito_engine = engine;
+  g_object_notify_by_pspec (G_OBJECT (manager), properties[PROP_INCOGNITO_ENGINE]);
+}
+
+/**
  * ephy_search_engine_manager_add_engine:
  * @engine: The search engine to add to @manager. @manager will take a reference
  *   on it.
@@ -400,6 +461,15 @@ ephy_search_engine_manager_delete_engine (EphySearchEngineManager *manager,
      * so we're sure we'll still have a valid default search engine at any time.
      */
     ephy_search_engine_manager_set_default_engine (manager, manager->engines->pdata[0]);
+  }
+
+  if (engine == manager->incognito_engine) {
+    g_assert (manager->engines->len != 0);
+
+    /* Just set the first search engine in the sorted array as new incognito search engine
+     * so we're sure we'll still have a valid incognito search engine at any time.
+     */
+    ephy_search_engine_manager_set_incognito_engine (manager, manager->engines->pdata[0]);
   }
 
   /* Drop temporary ref. */
@@ -637,4 +707,6 @@ ephy_search_engine_manager_save_to_settings (EphySearchEngineManager *manager)
 
   g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE,
                         g_variant_new_string (ephy_search_engine_get_name (manager->default_engine)));
+  g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE,
+                        g_variant_new_string (ephy_search_engine_get_name (manager->incognito_engine)));
 }

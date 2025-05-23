@@ -681,7 +681,11 @@ google_search_suggestions_cb (SoupSession  *session,
 
   shell = ephy_embed_shell_get_default ();
   manager = ephy_embed_shell_get_search_engine_manager (shell);
-  engine = ephy_search_engine_manager_get_default_engine (manager);
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    engine = ephy_search_engine_manager_get_incognito_engine (manager);
+  else
+    engine = ephy_search_engine_manager_get_default_engine (manager);
 
   node = json_from_string (g_bytes_get_data (body, NULL), NULL);
   if (!node || !JSON_NODE_HOLDS_ARRAY (node)) {

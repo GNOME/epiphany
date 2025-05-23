@@ -36,7 +36,6 @@ struct _EphySearchEngineRow {
   GtkWidget *address_entry;
   GtkWidget *bang_entry;
   GtkWidget *remove_button;
-  GtkWidget *radio_button;
 
   EphySearchEngine *engine;
   EphySearchEngineManager *manager;
@@ -74,22 +73,6 @@ ephy_search_engine_row_new (EphySearchEngine        *engine,
                        "search-engine", engine,
                        "manager", manager,
                        NULL);
-}
-
-/**
- * ephy_search_engine_row_set_radio_button_group:
- *
- * Adds @self's radio button to group @radio_button_group.
- *
- * @self: an #EphySearchEngineRow
- * @radio_button_group: the group to add @self's radio button to
- */
-void
-ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
-                                               GtkCheckButton      *radio_button_group)
-{
-  gtk_check_button_set_group (GTK_CHECK_BUTTON (self->radio_button),
-                              radio_button_group);
 }
 
 /***** Private implementation *****/
@@ -348,28 +331,6 @@ on_name_entry_text_changed_cb (EphySearchEngineRow *row,
 }
 
 static void
-on_radio_button_active_changed_cb (GtkButton  *button,
-                                   GParamSpec *pspec,
-                                   gpointer    user_data)
-{
-  EphySearchEngineRow *self = EPHY_SEARCH_ENGINE_ROW (user_data);
-
-  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)) &&
-      /* Avoid infinite loop between this callback and on_default_engine_changed_cb() */
-      ephy_search_engine_manager_get_default_engine (self->manager) != self->engine)
-    ephy_search_engine_manager_set_default_engine (self->manager, self->engine);
-}
-
-static void
-on_default_engine_changed_cb (EphySearchEngineManager *manager,
-                              GParamSpec              *pspec,
-                              EphySearchEngineRow     *self)
-{
-  if (ephy_search_engine_manager_get_default_engine (manager) == self->engine)
-    gtk_check_button_set_active (GTK_CHECK_BUTTON (self->radio_button), TRUE);
-}
-
-static void
 on_remove_button_clicked_cb (GtkButton           *button,
                              EphySearchEngineRow *row)
 {
@@ -442,9 +403,6 @@ on_ephy_search_engine_row_constructed (GObject *object)
   on_manager_items_changed_cb (self->manager, 0, 0, g_list_model_get_n_items (G_LIST_MODEL (self->manager)), self);
   g_signal_connect_object (self->manager, "items-changed", G_CALLBACK (on_manager_items_changed_cb), self, 0);
 
-  on_default_engine_changed_cb (self->manager, NULL, self);
-  g_signal_connect_object (self->manager, "notify::default-engine", G_CALLBACK (on_default_engine_changed_cb), self, 0);
-
   G_OBJECT_CLASS (ephy_search_engine_row_parent_class)->constructed (object);
 }
 
@@ -469,13 +427,11 @@ ephy_search_engine_row_class_init (EphySearchEngineRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/search-engine-row.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, radio_button);
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, name_entry);
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, address_entry);
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, bang_entry);
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineRow, remove_button);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_radio_button_active_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked_cb);
 }
 

@@ -329,7 +329,11 @@ ephy_embed_utils_autosearch_address (const char *search_key)
 
   shell = ephy_embed_shell_get_default ();
   manager = ephy_embed_shell_get_search_engine_manager (shell);
-  engine = ephy_search_engine_manager_get_default_engine (manager);
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    engine = ephy_search_engine_manager_get_incognito_engine (manager);
+  else
+    engine = ephy_search_engine_manager_get_default_engine (manager);
   g_assert (engine != NULL);
 
   return ephy_search_engine_build_search_address (engine, search_key);

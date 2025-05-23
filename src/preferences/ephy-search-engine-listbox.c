@@ -317,8 +317,6 @@ create_search_engine_row (EphySearchEngine        *engine,
 
   g_signal_connect_object (engine, "notify::name", G_CALLBACK (on_search_engine_name_changed_cb), self, 0);
 
-  ephy_search_engine_row_set_radio_button_group (row,
-                                                 GTK_CHECK_BUTTON (self->radio_buttons_group));
   g_signal_connect (row,
                     "notify::expanded",
                     G_CALLBACK (on_row_expand_state_changed_cb),
@@ -402,18 +400,6 @@ ephy_search_engine_list_box_init (EphySearchEngineListBox *self)
                            (GtkListBoxCreateWidgetFunc)list_box_create_row_func,
                            self, NULL);
   self->is_model_initially_loaded = TRUE;
-
-  /* When the row's radio button gets parented all the way up to the window,
-   * it seems like GTK sets one of the radio button in the group as clicked,
-   * but messes things up somewhere. Whatever we do to click or not click this
-   * particular radio button when creating our row widget depending on whether
-   * it is the default engine, all the rows end up not "ticked". To circumvent
-   * this, just trick the manager into sending a dummy notify:: signal so that
-   * the row which matches the default engine updates its own radio button state.
-   * This is the cleanest way I found to workaround the issue.
-   */
-  ephy_search_engine_manager_set_default_engine (self->manager,
-                                                 ephy_search_engine_manager_get_default_engine (self->manager));
 
   on_list_box_manager_items_changed_cb (G_LIST_MODEL (self->manager),
                                         0,

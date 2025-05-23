@@ -2,13 +2,6 @@ using Gtk 4.0;
 using Adw 1;
 
 template $EphySearchEngineRow: Adw.ExpanderRow {
-  [prefix]
-  CheckButton radio_button {
-    valign: center;
-    tooltip-text: _("Selects Default Search Engine");
-    notify::active => $on_radio_button_active_changed_cb();
-  }
-
   ListBoxRow {
     activatable: false;
 

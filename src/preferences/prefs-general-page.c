@@ -75,6 +75,9 @@ struct _PrefsGeneralPage {
   GtkWidget *download_folder_label;
 
   /* Search Engines */
+  GtkWidget *default_search_engines;
+  GtkWidget *standard_search_engine;
+  GtkWidget *incognito_search_engine;
   GtkWidget *search_engine_group;
 
   /* Session */
@@ -961,6 +964,9 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, download_folder_label);
 
   /* Search Engines */
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, default_search_engines);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, standard_search_engine);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, incognito_search_engine);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
 
   /* Session */
@@ -1019,6 +1025,123 @@ init_lang_listbox (PrefsGeneralPage *general_page)
   }
 
   language_editor_update_state (general_page);
+}
+
+static gboolean
+default_search_engine_get_mapping (GValue   *value,
+                                   GVariant *variant,
+                                   gpointer  user_data)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  const char *text = g_variant_get_string (variant, NULL);
+
+  g_assert (text);
+
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (manager)); i++) {
+    EphySearchEngine *engine = g_list_model_get_item (G_LIST_MODEL (manager), i);
+
+    if (g_strcmp0 (ephy_search_engine_get_name (engine), text) == 0) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+default_search_engine_set_mapping (const GValue       *value,
+                                   const GVariantType *expected_type,
+                                   gpointer            user_data)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  EphySearchEngine *engine;
+  guint i = g_value_get_uint (value);
+
+  if (i >= g_list_model_get_n_items (G_LIST_MODEL (manager)))
+    return NULL;
+
+  engine = g_list_model_get_item (G_LIST_MODEL (manager), i);
+  g_assert (engine);
+
+  ephy_search_engine_manager_set_default_engine (manager, engine);
+  return g_variant_new_string (ephy_search_engine_get_name (engine));
+}
+
+static gboolean
+incognito_search_engine_get_mapping (GValue   *value,
+                                     GVariant *variant,
+                                     gpointer  user_data)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  const char *text = g_variant_get_string (variant, NULL);
+
+  g_assert (text);
+
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (manager)); i++) {
+    EphySearchEngine *engine = g_list_model_get_item (G_LIST_MODEL (manager), i);
+
+    if (g_strcmp0 (ephy_search_engine_get_name (engine), text) == 0) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+incognito_search_engine_set_mapping (const GValue       *value,
+                                     const GVariantType *expected_type,
+                                     gpointer            user_data)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  EphySearchEngine *engine;
+  guint i = g_value_get_uint (value);
+
+  if (i >= g_list_model_get_n_items (G_LIST_MODEL (manager)))
+    return NULL;
+
+  engine = g_list_model_get_item (G_LIST_MODEL (manager), i);
+  g_assert (engine);
+
+  ephy_search_engine_manager_set_incognito_engine (manager, engine);
+  return g_variant_new_string (ephy_search_engine_get_name (engine));
+}
+
+static void
+init_search_engines (PrefsGeneralPage *general_page)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  GtkExpression *expression;
+
+  /* Default */
+  expression = gtk_property_expression_new (EPHY_TYPE_SEARCH_ENGINE, NULL, "name");
+  adw_combo_row_set_expression (ADW_COMBO_ROW (general_page->standard_search_engine), expression);
+  adw_combo_row_set_model (ADW_COMBO_ROW (general_page->standard_search_engine), G_LIST_MODEL (manager));
+
+  g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
+                                EPHY_PREFS_DEFAULT_SEARCH_ENGINE,
+                                general_page->standard_search_engine,
+                                "selected",
+                                G_SETTINGS_BIND_DEFAULT,
+                                default_search_engine_get_mapping,
+                                default_search_engine_set_mapping,
+                                NULL, NULL);
+
+  /* Incognito */
+  expression = gtk_property_expression_new (EPHY_TYPE_SEARCH_ENGINE, NULL, "name");
+  adw_combo_row_set_expression (ADW_COMBO_ROW (general_page->incognito_search_engine), expression);
+  adw_combo_row_set_model (ADW_COMBO_ROW (general_page->incognito_search_engine), G_LIST_MODEL (manager));
+
+  g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
+                                EPHY_PREFS_INCOGNITO_SEARCH_ENGINE,
+                                general_page->incognito_search_engine,
+                                "selected",
+                                G_SETTINGS_BIND_DEFAULT,
+                                incognito_search_engine_get_mapping,
+                                incognito_search_engine_set_mapping,
+                                NULL, NULL);
 }
 
 static void
@@ -1193,6 +1316,7 @@ setup_general_page (PrefsGeneralPage *general_page)
                    G_SETTINGS_BIND_DEFAULT);
 
   init_lang_listbox (general_page);
+  init_search_engines (general_page);
 }
 
 static void
@@ -1215,6 +1339,8 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
   gtk_widget_set_visible (general_page->webapp_icon_row, !ephy_is_running_inside_sandbox ());
   gtk_widget_set_visible (general_page->webapp_url_row, !ephy_is_running_inside_sandbox ());
   gtk_widget_set_visible (general_page->webapp_title_row, !ephy_is_running_inside_sandbox ());
+  gtk_widget_set_visible (general_page->default_search_engines,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (general_page->search_engine_group,

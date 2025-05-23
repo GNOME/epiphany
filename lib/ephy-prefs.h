@@ -163,6 +163,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_START_IN_INCOGNITO_MODE            "start-in-incognito-mode"
 #define EPHY_PREFS_ACTIVE_CLEAR_DATA_ITEMS            "active-clear-data-items"
 #define EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS      "use-google-search-suggestions"
+#define EPHY_PREFS_INCOGNITO_SEARCH_ENGINE            "incognito-search-engine"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"

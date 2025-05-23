@@ -149,8 +149,18 @@ template $PrefsGeneralPage: Adw.PreferencesPage {
   }
 
   Adw.PreferencesGroup search_engine_group {
-    title: _("Search Engines");
+    title: _("Search");
 
+    Adw.ComboRow standard_search_engine {
+      title: _("Search Engine");
+    }
+
+    Adw.ComboRow incognito_search_engine {
+      title: _("Incognito Search Engine");
+    }
+  }
+
+  Adw.PreferencesGroup default_search_engines {
     $EphySearchEngineListBox {}
   }
 

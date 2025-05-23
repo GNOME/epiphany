@@ -36,6 +36,9 @@ EphySearchEngineManager *ephy_search_engine_manager_new                 (void);
 EphySearchEngine        *ephy_search_engine_manager_get_default_engine  (EphySearchEngineManager *manager);
 void                     ephy_search_engine_manager_set_default_engine  (EphySearchEngineManager *manager,
                                                                          EphySearchEngine        *engine);
+EphySearchEngine        *ephy_search_engine_manager_get_incognito_engine  (EphySearchEngineManager *manager);
+void                     ephy_search_engine_manager_set_incognito_engine  (EphySearchEngineManager *manager,
+                                                                           EphySearchEngine        *engine);
 void                     ephy_search_engine_manager_add_engine          (EphySearchEngineManager *manager,
                                                                          EphySearchEngine        *engine);
 void                     ephy_search_engine_manager_delete_engine       (EphySearchEngineManager *manager,
