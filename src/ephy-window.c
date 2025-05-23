@@ -1240,7 +1240,8 @@ sync_tab_navigation (EphyWebView *view,
     return;
 
   lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-  ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (lentry), FALSE);
+  if (EPHY_IS_LOCATION_ENTRY (lentry))
+    ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (lentry), FALSE);
 
   _ephy_window_set_navigation_flags (window, ephy_web_view_get_navigation_flags (view));
 }
