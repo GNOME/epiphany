@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_LOCATION_ENTRY (ephy_location_entry_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkWidget)
+G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkBox)
 
 
 GtkWidget      *ephy_location_entry_new                        (void);

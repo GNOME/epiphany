@@ -64,40 +64,21 @@ tabbar .end-action > revealer > menubutton:dir(rtl) {
 }
 
 /* location entry */
+.location-entry {
+  margin: 0;
+}
+
 .narrow .location-entry {
   font-size: small;
 }
 
-.entry-icon,
-.entry-icon > button {
+.entry-icon {
   margin: 0;
+}
+
+.entry-icon > button {
   padding: 0;
   min-height: 0;
-  background: none;
-}
-
-.entry-icon {
-  /* FIXME hc .85 */
-  opacity: .7;
-}
-
-.entry-icon:hover {
-  opacity: 1;
-}
-
-.entry-icon:active {
-  /* FIXME hc .9 */
-  opacity: .8;
-}
-
-.entry-icon.start:dir(ltr),
-.entry-icon.end:dir(rtl) {
-  margin-right: 6px;
-}
-
-.entry-icon.start:dir(rtl),
-.entry-icon.end:dir(ltr) {
-  margin-left: 6px;
 }
 
 .entry-icon:checked {

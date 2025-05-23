@@ -790,8 +790,7 @@ update_edit_actions_sensitivity (EphyWindow *window,
     can_cut = has_selection;
     can_copy = has_selection;
     can_paste = TRUE;
-    can_undo = EPHY_IS_LOCATION_ENTRY (title_widget) &&
-               ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (title_widget));
+    can_undo = EPHY_IS_LOCATION_ENTRY (title_widget);
     can_redo = EPHY_IS_LOCATION_ENTRY (title_widget) &&
                ephy_location_entry_get_can_redo (EPHY_LOCATION_ENTRY (title_widget));
   } else {

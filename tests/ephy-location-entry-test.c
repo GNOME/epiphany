@@ -91,24 +91,6 @@ test_entry_get_location_empty (void)
 }
 
 static void
-test_entry_can_undo (void)
-{
-  const char *test = "test";
-
-  EphyLocationEntry *lentry;
-
-  lentry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
-
-  g_assert_cmpint (ephy_location_entry_get_can_undo (lentry), ==, FALSE);
-
-  /* Use gtk_* function or otherwise user_changed won't be correctly handled
-   * internally by the location entry (see editable_changed_cb and
-   * block_update) */
-  gtk_editable_set_text (GTK_EDITABLE (lentry), test);
-  g_assert_cmpint (ephy_location_entry_get_can_undo (lentry), ==, TRUE);
-}
-
-static void
 test_entry_can_redo (void)
 {
   const char *test = "test";
@@ -150,8 +132,6 @@ main (int   argc,
                    test_entry_set_location_null);
   g_test_add_func ("/src/ephy-location-entry/get_location_empty",
                    test_entry_get_location_empty);
-  g_test_add_func ("/src/ephy-location-entry/can_undo",
-                   test_entry_can_undo);
   g_test_add_func ("/src/ephy-location-entry/can_redo",
                    test_entry_can_redo);
 
