@@ -9,19 +9,22 @@ template $EphyWebappAdditionalURLsDialog: Adw.NavigationPage {
     Adw.HeaderBar {}
 
     content: Adw.PreferencesPage {
-      description: _("URLs that start with an additional URL will be opened by this web app");
+      description: _("URLs that start with the same base domain (example.com) will be opened by this web app");
 
       Adw.PreferencesGroup url_group {
         Adw.EntryRow add_row {
-          title: _("Additional URL");
+          title: _("Base Domain");
           input-purpose: url;
+          changed => $on_add_row_changed();
+          entry-activated => $on_add_row_entry_activated();
 
           [suffix]
-          Button {
+          Button add_button {
             icon-name: "list-add-symbolic";
             tooltip-text: _("Add URL");
             clicked => $on_add_clicked();
             valign: center;
+            sensitive: false;
 
             styles [
               "flat",

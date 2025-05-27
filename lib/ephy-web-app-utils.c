@@ -35,6 +35,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <libportal-gtk4/portal-gtk4.h>
+#include <libsoup/soup.h>
 #include <glib/gi18n.h>
 #include <gio/gunixoutputstream.h>
 
@@ -890,11 +891,16 @@ ephy_web_application_initialize_settings (const char                *profile_dir
 }
 
 static gboolean
-urls_have_same_origin (const char *a_url,
-                       const char *b_url)
+urls_have_same_base_domain (const char *a_url,
+                            const char *b_url)
 {
   g_autoptr (GUri) a_uri = NULL;
   g_autoptr (GUri) b_uri = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autofree char *lower_host_a = NULL;
+  g_autofree char *lower_host_b = NULL;
+  const char *a_base;
+  const char *b_base;
 
   a_uri = g_uri_parse (a_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!a_uri || !g_uri_get_host (a_uri))
@@ -910,7 +916,22 @@ urls_have_same_origin (const char *a_url,
   if (g_uri_get_port (a_uri) != g_uri_get_port (b_uri))
     return FALSE;
 
-  return g_ascii_strcasecmp (g_uri_get_host (a_uri), g_uri_get_host (b_uri)) == 0;
+  /* Compare base domains */
+  lower_host_a = g_utf8_strdown (g_uri_get_host (a_uri), -1);
+  a_base = soup_tld_get_base_domain (lower_host_a, &error);
+  if (error) {
+    g_warning ("Could not get base domain from %s", g_uri_get_host (a_uri));
+    return FALSE;
+  }
+
+  lower_host_b = g_utf8_strdown (g_uri_get_host (b_uri), -1);
+  b_base = soup_tld_get_base_domain (lower_host_b, &error);
+  if (error) {
+    g_warning ("Could not get base domain from %s", g_uri_get_host (b_uri));
+    return FALSE;
+  }
+
+  return g_ascii_strcasecmp (a_base, b_base) == 0;
 }
 
 gboolean
@@ -928,7 +949,7 @@ ephy_web_application_is_uri_allowed (const char *uri)
   if (g_str_has_prefix (uri, "blob:") || g_str_has_prefix (uri, "data:"))
     return TRUE;
 
-  if (urls_have_same_origin (uri, webapp->url))
+  if (urls_have_same_base_domain (uri, webapp->url))
     return TRUE;
 
   if (g_strcmp0 (uri, "about:blank") == 0)
@@ -945,9 +966,9 @@ ephy_web_application_is_uri_allowed (const char *uri)
 
       url = g_strdup_printf ("%s://%s", scheme, urls[i]);
 
-      matched = g_str_has_prefix (uri, url);
+      matched = urls_have_same_base_domain (uri, url);
     } else {
-      matched = g_str_has_prefix (uri, urls[i]);
+      matched = urls_have_same_base_domain (uri, urls[i]);
     }
   }
 
