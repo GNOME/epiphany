@@ -112,6 +112,21 @@ is_this_a_slot_nobody_loves (GckSlot *slot)
 }
 
 static void
+on_session_logout (GObject      *obj,
+                   GAsyncResult *res,
+                   gpointer      user_data)
+{
+  g_autoptr (GError) error = NULL;
+  GckSession *session = GCK_SESSION (obj);
+
+  if (!gck_session_logout_finish (session, res, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error during client certificate session logout: %s", error->message);
+    return;
+  }
+}
+
+static void
 object_details_cb (GObject      *source_object,
                    GAsyncResult *res,
                    gpointer      user_data)
@@ -180,6 +195,7 @@ object_details_cb (GObject      *source_object,
 
     credential = webkit_credential_new_for_certificate (tls_cert, WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
     webkit_authentication_request_authenticate (self->request, credential);
+    gck_session_logout_async (self->session, self->cancellable, on_session_logout, self);
   } else {
     process_next_object (self);
   }
@@ -196,6 +212,7 @@ process_next_object (EphyClientCertificateManager *self)
 
   if (!self->objects) {
     cancel_authentication (self);
+    gck_session_logout_async (self->session, self->cancellable, on_session_logout, self);
     return;
   }
 
