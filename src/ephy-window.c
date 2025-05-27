@@ -4263,7 +4263,7 @@ scroll_cb (EphyWindow *self,
            double      dx,
            double      dy)
 {
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), dy == -1);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->action_bar_revealer), dy < 0);
 
   return FALSE;
 }
