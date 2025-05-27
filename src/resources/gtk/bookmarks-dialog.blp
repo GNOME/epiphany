@@ -31,6 +31,13 @@ template $EphyBookmarksDialog: Adw.Bin {
         icon-name: "view-sidebar-end-symbolic";
         clicked => $on_close_button_clicked();
       }
+
+      [end]
+      MenuButton options_menu_button {
+        icon-name: "view-more-symbolic";
+        tooltip-text: _("Options");
+        menu-model: options_menu;
+      }
     }
 
     content: Adw.ToastOverlay toast_overlay {
@@ -167,3 +174,16 @@ template $EphyBookmarksDialog: Adw.Bin {
   }
 }
 
+menu options_menu {
+  section {
+    item {
+      label: _("I_mport…");
+      action: "app.import-bookmarks";
+    }
+
+    item {
+      label: _("E_xport…");
+      action: "app.export-bookmarks";
+    }
+}
+}
