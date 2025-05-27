@@ -2334,16 +2334,6 @@ decide_navigation_policy (WebKitWebView            *web_view,
   uri = webkit_uri_request_get_uri (request);
 
   if (!ephy_embed_utils_address_has_web_scheme (uri)) {
-    /* User gesture is required to prevent websites from spamming open URL
-     * requests unless the user has actually interacted with the website. (This
-     * corresponds roughly to "transient activation" in the HTML standard.)
-     */
-    if (!webkit_navigation_action_is_user_gesture (navigation_action)) {
-      g_debug ("The website %s was prevented from navigating to URL %s due to lack of user interaction", webkit_web_view_get_uri (web_view), uri);
-      webkit_policy_decision_ignore (decision);
-      return TRUE;
-    }
-
     webkit_policy_decision_ignore (decision);
 
     if (url_should_open_automatically (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), uri)) {
@@ -2354,13 +2344,21 @@ decide_navigation_policy (WebKitWebView            *web_view,
                                     gtk_widget_get_display (GTK_WIDGET (window)),
                                     EPHY_FILE_LAUNCH_URI_HANDLER_FILE);
     } else {
-      OpenURLPermissionData *data = open_url_permission_data_new (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), request, window);
+      OpenURLPermissionData *data;
 
+      /* User gesture is required to prevent websites from spamming open URL
+       * requests unless the user has actually interacted with the website. (This
+       * corresponds roughly to "transient activation" in the HTML standard.)
+       */
+      if (!webkit_navigation_action_is_user_gesture (navigation_action))
+        return TRUE;
+
+      data = open_url_permission_data_new (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), request, window);
       if (data)
         g_idle_add (ask_for_permission, data);
-
-      return TRUE;
     }
+
+    return TRUE;
   }
 
   if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION &&
