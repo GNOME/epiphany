@@ -172,6 +172,9 @@ ephy_shell_startup_continue (EphyShell               *shell,
     ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
   }
 
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) == EPHY_EMBED_SHELL_MODE_KIOSK)
+    gtk_window_fullscreen (GTK_WINDOW (active_window));
+
   shell->startup_finished = TRUE;
 }
 
@@ -1507,8 +1510,8 @@ open_uris_data_new (EphyShell        *shell,
   data->session = session ? g_object_ref (session) : NULL;
   data->uris = g_strdupv ((char **)uris);
 
-  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                                                EPHY_PREFS_LOCKDOWN_FULLSCREEN);
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                        ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) == EPHY_EMBED_SHELL_MODE_KIOSK;
 
   if (startup_mode == EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();

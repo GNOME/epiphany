@@ -57,6 +57,7 @@ static gboolean automation_mode = FALSE;
 static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
 static char *search_term = NULL;
+static gboolean kiosk_mode = FALSE;
 
 static EphyShell *ephy_shell = NULL;
 static int shutdown_signum = 0;
@@ -150,6 +151,7 @@ static const GOptionEntry option_entries[] = {
     &application_to_delete, NULL, NULL
   },
   { "search", 0, 0, G_OPTION_ARG_STRING, &search_term, NULL, NULL},
+  { "kiosk-mode", 0, 0, G_OPTION_ARG_NONE, &kiosk_mode, NULL, NULL},
   { NULL }
 };
 
@@ -417,6 +419,8 @@ main (int   argc,
      * represented by the BROWSER mode.
      */
     mode = EPHY_EMBED_SHELL_MODE_STANDALONE;
+  } else if (kiosk_mode) {
+    mode = EPHY_EMBED_SHELL_MODE_KIOSK;
   } else {
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
 

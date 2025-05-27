@@ -416,7 +416,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyWindow, ephy_window, ADW_TYPE_APPLICATION_WIN
 static void
 sync_chromes_visibility (EphyWindow *window)
 {
-  gboolean show_tabsbar, is_wide, fullscreen;
+  gboolean show_tabsbar, is_wide, fullscreen, fullscreen_lockdown;
 
   if (window->closing)
     return;
@@ -425,13 +425,18 @@ sync_chromes_visibility (EphyWindow *window)
   is_wide = window->adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL;
   fullscreen = gtk_window_is_fullscreen (GTK_WINDOW (window));
 
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                        ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
+
   gtk_widget_set_visible (GTK_WIDGET (window->header_bar),
-                          !fullscreen || window->show_fullscreen_header_bar);
-  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar),
-                          show_tabsbar && is_wide && !(window->is_popup) &&
+                          !fullscreen_lockdown &&
                           (!fullscreen || window->show_fullscreen_header_bar));
+  gtk_widget_set_visible (GTK_WIDGET (window->tab_bar),
+                          !fullscreen_lockdown &&
+                          (show_tabsbar && is_wide && !(window->is_popup) &&
+                           (!fullscreen || window->show_fullscreen_header_bar)));
   gtk_widget_set_visible (GTK_WIDGET (window->action_bar),
-                          !is_wide &&
+                          !fullscreen_lockdown && !is_wide &&
                           (!fullscreen || window->show_fullscreen_header_bar));
 }
 
@@ -1584,9 +1589,12 @@ populate_context_menu (WebKitWebView       *web_view,
   const char *uri = NULL;
   GdkEvent *event = NULL;
   GdkModifierType state = 0;
+  gboolean fullscreen_lockdown;
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_CONTEXT_MENU))
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                        ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
+
+  if (fullscreen_lockdown || g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_CONTEXT_MENU))
     return GDK_EVENT_STOP;
 
   window_action_group = ephy_window_get_action_group (window, "win");
@@ -3315,8 +3323,13 @@ tab_view_close_page_cb (AdwTabView *tab_view,
   EphyEmbed *embed = EPHY_EMBED (adw_tab_page_get_child (page));
 
   if (ephy_tab_view_get_n_pages (window->tab_view) == 1) {
-    if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                                EPHY_PREFS_LOCKDOWN_QUIT)) {
+    gboolean fullscreen_lockdown;
+
+    fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                          ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
+
+    if (fullscreen_lockdown || g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                                                       EPHY_PREFS_LOCKDOWN_QUIT)) {
       adw_tab_view_close_page_finish (tab_view, page, FALSE);
       return GDK_EVENT_STOP;
     }
@@ -5026,11 +5039,14 @@ gboolean
 ephy_window_close (EphyWindow *window)
 {
   EphySession *session;
+  gboolean fullscreen_lockdown;
+
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                        ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
 
   /* We ignore the delete_event if the disable_quit lockdown has been set
    */
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT))
+  if (fullscreen_lockdown || g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_QUIT))
     return FALSE;
 
   if (window->checking_modified_forms) {

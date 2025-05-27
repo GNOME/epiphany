@@ -3091,7 +3091,14 @@ window_cmd_change_fullscreen_state (GSimpleAction *action,
                                     gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   gboolean active;
+  gboolean fullscreen_lockdown;
+
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                        ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) == EPHY_EMBED_SHELL_MODE_KIOSK;
+  if (fullscreen_lockdown)
+    return;
 
   dismiss_page_popover (window);
 
@@ -3154,6 +3161,12 @@ window_cmd_tabs_close (GSimpleAction *action,
 {
   EphyWindow *window = user_data;
   EphyTabView *tab_view;
+  gboolean fullscreen_lockdown;
+
+  fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
+                        ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
+  if (fullscreen_lockdown)
+    return;
 
   tab_view = ephy_window_get_tab_view (window);
 

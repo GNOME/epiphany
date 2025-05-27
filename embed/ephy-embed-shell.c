@@ -764,8 +764,8 @@ download_started_cb (EphyEmbedShell *shell,
   gboolean ephy_download_set;
 
   /* Is download locked down? */
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK)) {
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK) ||
+      ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_KIOSK) {
     webkit_download_cancel (download);
     return;
   }
