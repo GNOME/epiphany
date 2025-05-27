@@ -174,10 +174,10 @@ object_details_cb (GObject      *source_object,
       g_clear_error (&error);
 
       process_next_object (self);
-    } else {
-      credential = webkit_credential_new_for_certificate (tls_cert, WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
+      return;
     }
 
+    credential = webkit_credential_new_for_certificate (tls_cert, WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
     webkit_authentication_request_authenticate (self->request, credential);
   } else {
     process_next_object (self);
