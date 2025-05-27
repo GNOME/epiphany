@@ -39,6 +39,7 @@ struct EphyClientCertificateManager {
   GList *objects;
   char *password;
   char *current_label;
+  WebKitCredentialPersistence persistence;
 };
 
 typedef struct {
@@ -194,9 +195,7 @@ process_next_object (EphyClientCertificateManager *self)
   };
 
   if (!self->objects) {
-    g_autoptr (WebKitCredential) credential = NULL;
-    credential = webkit_credential_new (" ", "", WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
-    webkit_authentication_request_authenticate (self->request, credential);
+    cancel_authentication (self);
     return;
   }
 
@@ -371,11 +370,38 @@ on_radio_button_toggled (GtkWidget *button,
 }
 
 static void
+on_remember_decision_selected (AdwComboRow                  *row,
+                               GParamSpec                   *psepc,
+                               EphyClientCertificateManager *self)
+{
+  WebKitCredentialPersistence persistence;
+
+  switch (adw_combo_row_get_selected (row)) {
+    default:
+    case 0:
+      persistence = WEBKIT_CREDENTIAL_PERSISTENCE_NONE;
+      break;
+    case 1:
+      persistence = WEBKIT_CREDENTIAL_PERSISTENCE_FOR_SESSION;
+      break;
+    case 2:
+      persistence = WEBKIT_CREDENTIAL_PERSISTENCE_PERMANENT;
+      break;
+  }
+
+  self->persistence = persistence;
+}
+
+static void
 certificate_selection_dialog (EphyClientCertificateManager *self)
 {
   AdwDialog *dialog;
+  GtkWidget *box;
   GtkWidget *listbox;
+  GtkWidget *option_listbox;
   GtkWidget *check_button_group = NULL;
+  GtkWidget *remember_decision_combo_row;
+  GtkStringList *list;
   g_autofree char *body = NULL;
   const char *realm = webkit_authentication_request_get_realm (self->request);
 
@@ -386,6 +412,7 @@ certificate_selection_dialog (EphyClientCertificateManager *self)
   }
 
   dialog = adw_alert_dialog_new (_("Select certificate"), NULL);
+  gtk_widget_set_size_request (GTK_WIDGET (dialog), 360, -1);
 
   if (strlen (realm) > 0)
     body = g_strdup_printf (_("The website %s:%d requests that you provide a certificate for authentication for %s."),
@@ -435,7 +462,27 @@ certificate_selection_dialog (EphyClientCertificateManager *self)
     gtk_list_box_append (GTK_LIST_BOX (listbox), row);
   }
 
-  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), listbox);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  gtk_box_append (GTK_BOX (box), listbox);
+
+  option_listbox = gtk_list_box_new ();
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (option_listbox), GTK_SELECTION_NONE);
+  gtk_widget_add_css_class (option_listbox, "content");
+  remember_decision_combo_row = adw_combo_row_new ();
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (remember_decision_combo_row), _("Remember Decision"));
+
+  list = gtk_string_list_new (NULL);
+  gtk_string_list_append (list, _("Never"));
+  gtk_string_list_append (list, _("For Session"));
+  gtk_string_list_append (list, _("Permanently"));
+
+  adw_combo_row_set_model (ADW_COMBO_ROW (remember_decision_combo_row), G_LIST_MODEL (list));
+  g_signal_connect (remember_decision_combo_row, "notify::selected", G_CALLBACK (on_remember_decision_selected), self);
+  adw_combo_row_set_selected (ADW_COMBO_ROW (remember_decision_combo_row), 1);
+  gtk_list_box_append (GTK_LIST_BOX (option_listbox), remember_decision_combo_row);
+  gtk_box_append (GTK_BOX (box), option_listbox);
+
+  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), box);
 
   g_signal_connect (dialog, "response", G_CALLBACK (certificate_selection_dialog_response_cb), self);
 
@@ -517,10 +564,10 @@ ephy_client_certificate_manager_request_certificate_pin (EphyClientCertificateMa
 {
   g_autoptr (WebKitCredential) credential = NULL;
 
-  if (g_strcmp0 (webkit_web_view_get_uri (self->web_view), webkit_web_view_get_uri (web_view)) == 0 && self->password)
-    credential = webkit_credential_new_for_certificate_pin (self->password, WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
-  else
-    credential = webkit_credential_new (" ", "", WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
-
-  webkit_authentication_request_authenticate (request, credential);
+  if (g_strcmp0 (webkit_web_view_get_uri (self->web_view), webkit_web_view_get_uri (web_view)) == 0 && self->password) {
+    credential = webkit_credential_new_for_certificate_pin (self->password, self->persistence);
+    webkit_authentication_request_authenticate (request, credential);
+  } else {
+    cancel_authentication (self);
+  }
 }
