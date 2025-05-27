@@ -39,8 +39,8 @@ stages:
 
 .fedora.container.common:
   variables:
-    FDO_DISTRIBUTION_TAG: '2024-07-09.1'
-    FDO_DISTRIBUTION_VERSION: 'latest'
+    FDO_DISTRIBUTION_TAG: '2025-05-19.1'
+    FDO_DISTRIBUTION_VERSION: '42'
 
 build.container.fedora@x86_64:
   extends:
@@ -53,6 +53,7 @@ build.container.fedora@x86_64:
     FDO_DISTRIBUTION_PACKAGES: >-
       colordiff
       diffutils
+      python3
       uncrustify
 
 check-code-style:
