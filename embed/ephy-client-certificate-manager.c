@@ -193,7 +193,7 @@ object_details_cb (GObject      *source_object,
       return;
     }
 
-    credential = webkit_credential_new_for_certificate (tls_cert, WEBKIT_CREDENTIAL_PERSISTENCE_NONE);
+    credential = webkit_credential_new_for_certificate (tls_cert, self->persistence);
     webkit_authentication_request_authenticate (self->request, credential);
     gck_session_logout_async (self->session, self->cancellable, on_session_logout, self);
   } else {
