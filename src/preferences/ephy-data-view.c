@@ -340,13 +340,6 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-  /**
-   * EphyLocationEntry::user-changed:
-   * @entry: the object on which the signal is emitted
-   *
-   * Emitted when the user changes the contents of the internal #GtkEntry
-   *
-   */
   signals[CLEAR_BUTTON_CLICKED] =
     g_signal_new ("clear-button-clicked",
                   G_OBJECT_CLASS_TYPE (klass),
