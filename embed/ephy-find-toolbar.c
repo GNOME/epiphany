@@ -259,11 +259,12 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
   clamp = GTK_WIDGET (adw_clamp_new ());
   gtk_widget_set_hexpand (clamp, TRUE);
-  adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 400);
+  adw_clamp_set_maximum_size (ADW_CLAMP (clamp), 600);
   adw_clamp_set_tightening_threshold (ADW_CLAMP (clamp), 300);
   gtk_search_bar_set_child (GTK_SEARCH_BAR (toolbar->search_bar), clamp);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (box, "linked");
   adw_clamp_set_child (ADW_CLAMP (clamp), box);
 
   toolbar->entry = ephy_search_entry_new ();
