@@ -867,7 +867,7 @@ Ephy.FormManager = class FormManager
     }
 
     #handlePasswordQuerySuccessResponse(formAuth, authInfo) {
-        Ephy.log('Recieved success on password query for user ' + authInfo.username + ' with password (hidden)');
+        Ephy.log('Received success on password query for user ' + authInfo.username + ' with password (hidden)');
 
         if (formAuth.usernameNode && authInfo.username) {
             this.#elementBeingAutoFilled = formAuth.usernameNode;
