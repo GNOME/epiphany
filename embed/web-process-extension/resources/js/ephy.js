@@ -866,6 +866,56 @@ Ephy.FormManager = class FormManager
         return formAuth;
     }
 
+    #protectFormElement(element, value) {
+        // Some misguided websites attempt to subvert password managers by
+        // deleting autofilled values. If any FormManager has autofilled into an
+        // input element, we should block the website from clearing it.
+        //
+        // Unfortunately this cannot be detected via an input or change event,
+        // because HTMLInputElement only fires these events when the form values
+        // are modified by the user, not when modified programmatically by
+        // JavaScript.
+        //
+        // I tried using Object.defineProperty() to override the input element's
+        // set function, as recommended by https://stackoverflow.com/a/55033939,
+        // but this does not work. I'm not sure why.
+        //
+        // HTMLInputElement actually already has code to detect this scenario.
+        // If the value is cleared by JavaScript rather than by the user, it
+        // will call WebChromeClient::didProgrammaticallyClearTextFormControl.
+        // Currently WebKit doesn't do anything with that event, but we could
+        // pretty easily plumb it to InjectedBundlePageFormClient ->
+        // APIInjectedBundleFormClient -> WebKitWebFormManager and create a
+        // signal there for Epiphany to watch. This would probably be ideal.
+        //
+        // But it's even easier to just poll the element on an interval for a
+        // few seconds. In practice, websites that try to clobber the autofilled
+        // value will do so immediately. Wakeups are awful for battery life, so
+        // stop after 5 seconds.
+        let id = setInterval(() => {
+            if (element.value === '') {
+                Ephy.log(`Protected input ${element.id} has been cleared, re-autofilling...`);
+                element.value = value;
+            }
+        }, 50); // 50 milliseconds
+
+        setTimeout(() => {
+            if (id !== 0) {
+                clearInterval(id);
+                id = 0;
+            }
+        }, 5000); // 5 seconds
+
+        // Stop monitoring if the user edits the field, so we don't
+        // re-autocomplete an autocompletion deleted by the user.
+        element.addEventListener('input', (event) => {
+            if (id !== 0) {
+                clearInterval(id);
+                id = 0;
+            }
+        });
+    }
+
     #handlePasswordQuerySuccessResponse(formAuth, authInfo) {
         Ephy.log('Received success on password query for user ' + authInfo.username + ' with password (hidden)');
 
@@ -873,12 +923,14 @@ Ephy.FormManager = class FormManager
             this.#elementBeingAutoFilled = formAuth.usernameNode;
             Ephy.autoFill(formAuth.usernameNode, authInfo.username);
             this.#elementBeingAutoFilled = null;
+            this.#protectFormElement(formAuth.usernameNode, authInfo.username);
         }
 
         if (authInfo.password) {
             this.#elementBeingAutoFilled = formAuth.passwordNode;
             Ephy.autoFill(formAuth.passwordNode, authInfo.password);
             this.#elementBeingAutoFilled = null;
+            this.#protectFormElement(formAuth.passwordNode, authInfo.password);
         }
     }
 };
