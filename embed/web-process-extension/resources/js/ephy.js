@@ -922,6 +922,7 @@ Ephy.FormManager = class FormManager
         if (formAuth.usernameNode && authInfo.username) {
             this.#elementBeingAutoFilled = formAuth.usernameNode;
             Ephy.autoFill(formAuth.usernameNode, authInfo.username);
+            Ephy.log(`Autofilled usernameNode ${formAuth.usernameNode.id} with username ${authInfo.username}`);
             this.#elementBeingAutoFilled = null;
             this.#protectFormElement(formAuth.usernameNode, authInfo.username);
         }
@@ -929,6 +930,7 @@ Ephy.FormManager = class FormManager
         if (authInfo.password) {
             this.#elementBeingAutoFilled = formAuth.passwordNode;
             Ephy.autoFill(formAuth.passwordNode, authInfo.password);
+            Ephy.log(`Autofilled passwordNode ${formAuth.passwordNode.id} with password (hidden)`);
             this.#elementBeingAutoFilled = null;
             this.#protectFormElement(formAuth.passwordNode, authInfo.password);
         }
