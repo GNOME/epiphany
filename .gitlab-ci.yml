@@ -4,11 +4,11 @@ include:
   - component: gitlab.gnome.org/GNOME/citemplates/release-service@master
     inputs:
       dist-job-name: "flatpak"
-      tarball-artifact-path: "${TARBALL_ARTIFACT_PATH}"
   - project: 'Infrastructure/freedesktop-ci-templates'
     file: 'templates/fedora.yml'
     ref: 'b61a03cabbf308e81289f7aaaf0b5a80a34ffb99'
-  - component: "gitlab.gnome.org/GNOME/citemplates/gnomeos-basic-ci@master"
+  - component: "gitlab.gnome.org/alatiera/citemplates/gnomeos-basic-ci@alatiera/git-trust"
+
     inputs:
       job-stage: "test"
       scan-build: "disabled"
@@ -31,7 +31,6 @@ variables:
   FLATPAK_MODULE: 'epiphany'
   APP_ID: 'org.gnome.Epiphany.Devel'
   FDO_UPSTREAM_REPO: GNOME/epiphany
-  TARBALL_ARTIFACT_PATH: ".flatpak-builder/build/${FLATPAK_MODULE}/_flatpak_build/meson-dist/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
 
 stages:
   - prepare
