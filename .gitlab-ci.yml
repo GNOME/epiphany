@@ -8,6 +8,10 @@ include:
   - project: 'Infrastructure/freedesktop-ci-templates'
     file: 'templates/fedora.yml'
     ref: 'b61a03cabbf308e81289f7aaaf0b5a80a34ffb99'
+  - component: "gitlab.gnome.org/GNOME/citemplates/gnomeos-basic-ci@master"
+    inputs:
+      job-stage: "test"
+      scan-build: "disabled"
 
 cache:
   paths:
