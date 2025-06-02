@@ -3452,7 +3452,7 @@ tab_view_notify_n_pages_cb (EphyWindow *window)
   lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
 
   if (EPHY_IS_LOCATION_ENTRY (lentry))
-    ephy_location_entry_set_mute_button_can_show (EPHY_LOCATION_ENTRY (lentry), n_pages == 1);
+    ephy_location_entry_set_mute_button_can_show (EPHY_LOCATION_ENTRY (lentry), n_pages == 1 || window->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 static EphyTabView *
