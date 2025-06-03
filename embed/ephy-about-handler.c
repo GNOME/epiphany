@@ -262,13 +262,17 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                             "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                             "<script>"
+                            "  function launchWebApp(appID, appName) {"
+                            "    window.webkit.messageHandlers.aboutApps.postMessage({action: 'launch', app: appID, name: appName, page: %" G_GUINT64_FORMAT "});"
+                            "  }"
                             "  function deleteWebApp(appID, appName) {"
-                            "    window.webkit.messageHandlers.aboutApps.postMessage({app: appID, name: appName, page: %" G_GUINT64_FORMAT "});"
+                            "    window.webkit.messageHandlers.aboutApps.postMessage({action: 'remove', app: appID, name: appName, page: %" G_GUINT64_FORMAT "});"
                             "  }"
                             "</script>"
                             "</head><div id=\"applications\"><body class=\"applications-body\"><h1>%s</h1>"
                             "<p>%s</p>",
                             _("Apps"),
+                            webkit_web_view_get_page_id (view),
                             webkit_web_view_get_page_id (view),
                             _("Apps"),
                             _("List of installed web apps"));
@@ -317,10 +321,13 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                               "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
                               "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
                               "<td class=\"input\"><input type=\"button\" value=\"%s\" "
+                              "onclick=\"const appRow = this.closest('tr'); launchWebApp(appRow.id, appRow.querySelector('.appname').innerText);\" "
+                              "class=\"suggested-action\"></td>  "
+                              "<td class=\"input\"><input type=\"button\" value=\"%s\" "
                               "onclick=\"const appRow = this.closest('tr'); deleteWebApp(appRow.id, appRow.querySelector('.appname').innerText);\" "
                               "class=\"destructive-action\"></td>"
                               "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
-                              app->id, encoded_icon_path, encoded_name, encoded_url, _("Delete"),
+                              app->id, encoded_icon_path, encoded_name, encoded_url, _("Launch"), _("Delete"),
                               /* Note for translators: this refers to the installation date. */
                               _("Installed on:"), install_date);
     }

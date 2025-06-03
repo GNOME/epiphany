@@ -186,6 +186,21 @@ html.epiphany-html {
 
 /* about:applications */
 
+.suggested-action {
+    color: white;
+    background-color: #3584e4;
+    border: none;
+    border-radius: 5px;
+}
+
+.suggested-action:hover,
+.suggested-action:focus,
+.suggested-action:active,
+.suggested-action.active {
+    color: white;
+    background-color: #3987e5;
+}
+
 .destructive-action {
     color: white;
     background-color: #e01b24;
@@ -220,6 +235,7 @@ html.epiphany-html {
 .applications-body td.date { width: auto; text-align: right; font-size: small; }
 .applications-body .appname { font-weight: bold; }
 .applications-body .appurl, td.date { opacity: 0.55; /* Adwaita's dim-label */ }
+.applications-body .suggested-action { width: auto; padding: 10px;  margin-right: 6px;}
 .applications-body .destructive-action { width: auto; padding: 10px; }
 .applications-body .appurl, .applications-body .appurl { overflow-wrap: anywhere;}
 

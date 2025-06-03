@@ -1313,14 +1313,27 @@ about_apps_message_received_cb (WebKitUserContentManager *ucm,
                                 JSCValue                 *message,
                                 EphyWebView              *view)
 {
+  g_autoptr (JSCValue) action_object = NULL;
   g_autoptr (JSCValue) page_id_object = NULL;
   g_autoptr (JSCValue) app_id_object = NULL;
   g_autoptr (JSCValue) app_name_object = NULL;
+  g_autofree char *action = NULL;
   g_autofree char *app_id = NULL;
   g_autofree char *app_name = NULL;
   guint64 page_id = 0;
   AdwDialog *dialog;
   EphyWebApplicationDeleteData *data;
+
+  action_object = jsc_value_object_get_property (message, "action");
+  if (!action_object)
+    return;
+
+  action = jsc_value_to_string (action_object);
+
+  if (g_strcmp0 (action, "launch") != 0 && g_strcmp0 (action, "remove") != 0) {
+    g_warning ("Unknown web app action called: %s", action);
+    return;
+  }
 
   page_id_object = jsc_value_object_get_property (message, "page");
   if (!page_id_object)
@@ -1338,28 +1351,32 @@ about_apps_message_received_cb (WebKitUserContentManager *ucm,
   app_name_object = jsc_value_object_get_property (message, "name");
   app_name = jsc_value_to_string (app_name_object);
 
-  data = ephy_web_application_delete_data_new (WEBKIT_WEB_VIEW (view), g_steal_pointer (&app_id));
+  if (g_strcmp0 (action, "remove") == 0) {
+    data = ephy_web_application_delete_data_new (WEBKIT_WEB_VIEW (view), g_steal_pointer (&app_id));
 
-  dialog = adw_alert_dialog_new (_("Delete Web App?"), NULL);
+    dialog = adw_alert_dialog_new (_("Delete Web App?"), NULL);
 
-  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
-                                _("“%s” will be removed. You will have to re-install the website as an app from the menu to use it again."),
-                                app_name);
+    adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
+                                  _("“%s” will be removed. You will have to re-install the website as an app from the menu to use it again."),
+                                  app_name);
 
-  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
-                                  "cancel", _("_Cancel"),
-                                  "delete", _("_Delete"),
-                                  NULL);
+    adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                    "cancel", _("_Cancel"),
+                                    "delete", _("_Delete"),
+                                    NULL);
 
-  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "delete",
-                                            ADW_RESPONSE_DESTRUCTIVE);
+    adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "delete",
+                                              ADW_RESPONSE_DESTRUCTIVE);
 
-  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
-  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
+    adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "cancel");
+    adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "cancel");
 
-  g_signal_connect_swapped (dialog, "response::delete", G_CALLBACK (web_application_delete_response_cb), data);
+    g_signal_connect_swapped (dialog, "response::delete", G_CALLBACK (web_application_delete_response_cb), data);
 
-  adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (view))));
+    adw_dialog_present (dialog, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (view))));
+  } else if (g_strcmp0 (action, "launch") == 0) {
+    ephy_web_application_launch (app_id);
+  }
 }
 
 void
