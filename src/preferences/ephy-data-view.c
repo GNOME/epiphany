@@ -25,6 +25,7 @@
 #include <ctype.h>
 
 typedef struct {
+  GtkWidget *toast_overlay;
   GtkWidget *box;
   GtkWidget *child;
   GtkWidget *clear_button;
@@ -352,6 +353,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/data-view.ui");
 
+  gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, toast_overlay);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, box);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, clear_button);
   gtk_widget_class_bind_template_child_private (widget_class, EphyDataView, empty_page);
@@ -414,6 +416,18 @@ ephy_data_view_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = ephy_data_view_add_child;
+}
+
+AdwToastOverlay *
+ephy_data_view_get_toast_overlay (EphyDataView *self)
+{
+  EphyDataViewPrivate *priv;
+
+  g_assert (EPHY_IS_DATA_VIEW (self));
+
+  priv = ephy_data_view_get_instance_private (self);
+
+  return ADW_TOAST_OVERLAY (priv->toast_overlay);
 }
 
 const gchar *

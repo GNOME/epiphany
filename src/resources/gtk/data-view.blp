@@ -35,36 +35,38 @@ template $EphyDataView: Adw.NavigationPage {
       }
     }
 
-    Stack stack {
-      vexpand: true;
+    content: Adw.ToastOverlay toast_overlay {
+      child: Stack stack {
+        vexpand: true;
 
-      StackPage {
-        name: "loading";
+        StackPage {
+          name: "loading";
 
-        child: Adw.Spinner spinner {
-          halign: center;
-          valign: center;
-          width-request: 32;
-          height-request: 32;
-        };
-      }
+          child: Adw.Spinner spinner {
+            halign: center;
+            valign: center;
+            width-request: 32;
+            height-request: 32;
+          };
+        }
 
-      StackPage {
-        name: "empty";
+        StackPage {
+          name: "empty";
 
-        child: Adw.StatusPage empty_page {};
-      }
+          child: Adw.StatusPage empty_page {};
+        }
 
-      StackPage {
-        name: "no-results";
+        StackPage {
+          name: "no-results";
 
-        child: Adw.StatusPage {
-          icon-name: "edit-find-symbolic";
-          title: _("No Results Found");
-          description: _("Try a different search");
-        };
-      }
-    }
+          child: Adw.StatusPage {
+            icon-name: "edit-find-symbolic";
+            title: _("No Results Found");
+            description: _("Try a different search");
+          };
+        }
+      };
+    };
 
     [bottom]
     ActionBar {

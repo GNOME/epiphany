@@ -33,6 +33,8 @@ struct _EphyDataViewClass
   AdwNavigationPageClass parent_class;
 };
 
+AdwToastOverlay *ephy_data_view_get_toast_overlay (EphyDataView *self);
+
 const gchar *ephy_data_view_get_clear_button_label (EphyDataView *self);
 void         ephy_data_view_set_clear_button_label (EphyDataView *self,
                                                     const gchar  *label);
