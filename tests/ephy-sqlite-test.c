@@ -125,6 +125,7 @@ create_table_and_insert_row (EphySQLiteConnection *connection)
 
   /* Step will return false here since there is only one row. */
   g_assert_false (ephy_sqlite_statement_step (statement, &error));
+  g_assert_no_error (error);
   g_object_unref (statement);
 }
 
