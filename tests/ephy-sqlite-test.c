@@ -53,6 +53,7 @@ test_create_connection (void)
 
   g_free (temporary_file);
   g_object_unref (connection);
+  g_error_free (error);
 }
 
 static void
@@ -76,6 +77,7 @@ test_create_statement (void)
   statement = ephy_sqlite_connection_create_statement (connection, "BLAHBLAHBLAHBA", &error);
   g_assert_null (statement);
   g_assert_nonnull (error);
+  g_clear_error (&error);
 
   ephy_sqlite_connection_close (connection);
   ephy_sqlite_connection_delete_database (connection);
@@ -184,6 +186,7 @@ test_bind_data (void)
   g_assert_cmpint (ephy_sqlite_statement_get_column_count (statement), ==, 2);
   g_assert_cmpint (ephy_sqlite_statement_get_column_as_int (statement, 0), ==, 3);
   g_assert_cmpstr (ephy_sqlite_statement_get_column_as_string (statement, 1), ==, "foo");
+  g_object_unref (statement);
 
   ephy_sqlite_connection_close (connection);
   ephy_sqlite_connection_delete_database (connection);
