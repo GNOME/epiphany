@@ -420,7 +420,7 @@ perform_complex_url_query (EphyHistoryService *service,
 
   /* Get the most visited site that contains 'k'. */
   query = ephy_history_query_new ();
-  query->substring_list = g_list_prepend (query->substring_list, (gpointer)"k");
+  query->substring_list = g_list_prepend (query->substring_list, g_strdup ("k"));
   query->limit = 1;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
 
@@ -430,6 +430,7 @@ perform_complex_url_query (EphyHistoryService *service,
                               30, 30, 0);
 
   ephy_history_service_query_urls (service, query, NULL, verify_complex_url_query, url);
+  ephy_history_query_free (query);
 }
 
 static void
@@ -440,8 +441,8 @@ test_complex_url_query (void)
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
-
   ephy_history_service_add_visits (service, visits, NULL, perform_complex_url_query, NULL);
+  ephy_history_page_visit_list_free (visits);
 
   g_object_set_data (G_OBJECT (service), "main-loop", loop);
   g_main_loop_run (loop);
@@ -460,7 +461,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
 
   /* Get the most visited site that contains 'k' that was visited since timestamp 500. */
   query = ephy_history_query_new ();
-  query->substring_list = g_list_prepend (query->substring_list, (gpointer)"k");
+  query->substring_list = g_list_prepend (query->substring_list, g_strdup ("k"));
   query->limit = 1;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->from = 500;
@@ -471,6 +472,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
                               2, 2, 0);
 
   ephy_history_service_query_urls (service, query, NULL, verify_complex_url_query, url);
+  ephy_history_query_free (query);
 }
 
 static void
@@ -481,8 +483,8 @@ test_complex_url_query_with_time_range (void)
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
-
   ephy_history_service_add_visits (service, visits, NULL, perform_complex_url_query_with_time_range, NULL);
+  ephy_history_page_visit_list_free (visits);
 
   g_object_set_data (G_OBJECT (service), "main-loop", loop);
   g_main_loop_run (loop);
@@ -516,11 +518,12 @@ perform_query_after_clear (EphyHistoryService *service,
 
   /* Get 10 random sites, the query should fail. */
   query = ephy_history_query_new ();
-  query->substring_list = g_list_prepend (query->substring_list, (gpointer)"gnome");
+  query->substring_list = g_list_prepend (query->substring_list, g_strdup ("gnome"));
   query->limit = 10;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
 
   ephy_history_service_query_urls (service, query, NULL, verify_query_after_clear, user_data);
+  ephy_history_query_free (query);
 }
 
 static void
@@ -531,6 +534,8 @@ test_clear (void)
   GList *visits = create_test_page_visit_list ();
 
   ephy_history_service_add_visits (service, visits, NULL, NULL, NULL);
+  ephy_history_page_visit_list_free (visits);
+
   ephy_history_service_clear (service, NULL, perform_query_after_clear, loop);
 
   g_main_loop_run (loop);
