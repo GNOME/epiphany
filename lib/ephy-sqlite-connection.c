@@ -144,7 +144,7 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
                                                                         : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
                        NULL) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
-    self->database = NULL;
+    ephy_sqlite_connection_close (self);
     return FALSE;
   }
 
