@@ -895,7 +895,7 @@ Ephy.FormManager = class FormManager
         let id = setInterval(() => {
             if (element.value === '') {
                 Ephy.log(`Protected input ${element.id} has been cleared, re-autofilling...`);
-                element.value = value;
+                Ephy.autoFill(element, value);
             }
         }, 50); // 50 milliseconds
 
