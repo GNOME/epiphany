@@ -205,61 +205,72 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
     #showMenu(showAll)
     {
         const mainDiv = document.createElement('div');
+        const styles = `
+          .ephy-dropdown {
+            position: absolute;
+            display: inline-block;
+          }
+
+          .ephy-dropdown-content {
+            display: block;
+            position: absolute;
+            padding: 0;
+            background-color: #ffffff;
+            background-clip: padding-box;
+            border-style: solid;
+            border-color: #e0e0e0;
+            border-radius: 9px;
+            border-width: 1px;
+            min-width: 160px;
+            box-shadow: 0 1px 2px transparentize(black, 0.7);
+            z-index: 1;
+          }
+
+          /* Links inside the dropdown */
+          .ephy-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+          }
+
+          /* Change color of dropdown links on hover */
+          .ephy-dropdown-content a:hover {background-color: #f1f1f1}
+        `;
+
+        let styleSheet = document.createElement("style")
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+
         mainDiv.id = 'ephy-user-choices-container';
 
         const elementRect = this.#userElement.getBoundingClientRect();
 
-        // 2147483647 is the maximum value browsers will take for z-index.
-        // See http://stackoverflow.com/questions/8565821/css-max-z-index-value
-        mainDiv.style.cssText = 'position: absolute;' +
-            'z-index: 2147483647;' +
-            'cursor: default;' +
-            'background-color: white;' +
-            'box-shadow: 5px 5px 5px rgba(0,0,0,0.2);' +
-            'border-top: 0px;' +
-            'border-radius: 8px;' +
-            'padding: 12px 0px;' +
-            '-webkit-user-modify: read-only ! important;';
+        mainDiv.className = 'ephy-dropdown';
         mainDiv.style.width = this.#userElement.offsetWidth + 'px';
         mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
         mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
 
-        const ul = document.createElement('ul');
-        ul.style.cssText = 'margin: 0; padding: 0;';
-        ul.tabindex = -1;
-        mainDiv.appendChild(ul);
+        const innerDiv = document.createElement('div');
+        innerDiv.className = 'ephy-dropdown-content';
+        mainDiv.appendChild(innerDiv);
 
         this.#selected = null;
         for (const user of this.#users) {
             if (!showAll && !user.startsWith(this.#userElement.value))
                 continue;
 
-            const li = document.createElement('li');
-            li.style.cssText = 'list-style-type: none ! important;' +
-                'background-image: none ! important;' +
-                'padding: 3px 6px ! important;' +
-                'color: black;' +
-                'margin: 0px;';
-            // FIXME: selection colors.
-            li.tabindex = -1;
-            ul.appendChild(li);
+            const link = document.createElement('a');
+            innerDiv.appendChild(link);
 
             if (user === this.#userElement.value)
-                this.#selected = li;
+                this.#selected = link;
 
-            const anchor = document.createElement('a');
-            anchor.style.cssText = 'font-weight: normal ! important;' +
-                'font-family: sans ! important;' +
-                'text-decoration: none ! important;' +
-                'color: black;' +
-                '-webkit-user-modify: read-only ! important;';
-            // FIXME: selection colors.
-            anchor.textContent = user;
-            li.appendChild(anchor);
+            link.textContent = user;
 
-            li.addEventListener('mousedown', event => {
+            link.addEventListener('mousedown', event => {
                 this.#userElement.value = user;
-                this.#selected = li;
+                this.#selected = link;
                 this.#removeMenu();
                 this.#usernameSelected();
             }, true);
