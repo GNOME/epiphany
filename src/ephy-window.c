@@ -27,6 +27,7 @@
 #include "context-menu-commands.h"
 #include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
+#include "ephy-add-opensearch-engine-button.h"
 #include "ephy-bookmark-states.h"
 #include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmarks-manager.h"
@@ -2638,8 +2639,14 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
-  if (EPHY_IS_LOCATION_ENTRY (title_widget))
+  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
+    GListModel *model = ephy_web_view_get_opensearch_engines (view);
+    EphyAddOpensearchEngineButton *opensearch_button =
+      EPHY_ADD_OPENSEARCH_ENGINE_BUTTON (ephy_location_entry_get_opensearch_button (EPHY_LOCATION_ENTRY (title_widget)));
+    ephy_add_opensearch_engine_button_set_model (opensearch_button, model);
+
     ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_reader_mode_state (view));
+  }
 
   sync_tab_security (view, NULL, window);
   sync_tab_document_type (view, NULL, window);

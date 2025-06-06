@@ -35,6 +35,7 @@ EphySuggestionModel *ephy_suggestion_model_new                     (EphyHistoryS
 void                 ephy_suggestion_model_query_async             (EphySuggestionModel   *self,
                                                                     const gchar           *query,
                                                                     gboolean               include_search_engines,
+                                                                    gboolean               include_search_engines_suggestions,
                                                                     GCancellable          *cancellable,
                                                                     GAsyncReadyCallback    callback,
                                                                     gpointer               user_data);

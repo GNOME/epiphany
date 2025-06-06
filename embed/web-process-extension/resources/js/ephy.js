@@ -2,6 +2,12 @@
 
 var Ephy = {};
 
+Ephy.getOpenSearchLinks = function()
+{
+    const nodes_list = document.querySelectorAll('link[rel="search"][type="application/opensearchdescription+xml"][href][title]');
+    return Array.from(nodes_list).map(node => ({'href': node.href, 'title': node.title}));
+};
+
 Ephy.getAppleMobileWebAppCapable = function()
 {
     for (const meta of document.getElementsByTagName('meta')) {

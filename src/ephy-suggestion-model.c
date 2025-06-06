@@ -31,6 +31,7 @@
 #include "dzl-fuzzy-mutable-index.h"
 #include <glib/gi18n.h>
 
+#define MAX_SEARCH_ENGINES_SUGGESTIONS 5
 #define MAX_URL_ENTRIES             25
 
 struct _EphySuggestionModel {
@@ -365,7 +366,7 @@ typedef struct {
   GSequence *tabs;
   GSequence *bookmarks;
   GSequence *history;
-  GSequence *google_suggestions;
+  GSequence *search_engine_suggestions;
   int active_sources;
 } QueryData;
 
@@ -380,7 +381,7 @@ query_data_new (const char *query,
   data->tabs = g_sequence_new (g_object_unref);
   data->bookmarks = g_sequence_new (g_object_unref);
   data->history = g_sequence_new (g_object_unref);
-  data->google_suggestions = g_sequence_new (g_object_unref);
+  data->search_engine_suggestions = g_sequence_new (g_object_unref);
 
   /* Split the search string. */
   if (strlen (query) > 1 && query[1] == ' ' &&
@@ -407,7 +408,7 @@ query_data_free (QueryData *data)
   g_clear_pointer (&data->tabs, g_sequence_free);
   g_clear_pointer (&data->bookmarks, g_sequence_free);
   g_clear_pointer (&data->history, g_sequence_free);
-  g_clear_pointer (&data->google_suggestions, g_sequence_free);
+  g_clear_pointer (&data->search_engine_suggestions, g_sequence_free);
   g_clear_pointer (&data->query, g_free);
   g_free (data);
 }
@@ -454,7 +455,7 @@ query_collection_done (EphySuggestionModel *self,
       added++;
     }
 
-    for (GSequenceIter *iter = g_sequence_get_begin_iter (data->google_suggestions); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+    for (GSequenceIter *iter = g_sequence_get_begin_iter (data->search_engine_suggestions); !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
       EphySuggestion *tmp = g_sequence_get (iter);
 
       if (append_suggestion (self, tmp))
@@ -651,100 +652,72 @@ history_query_completed_cb (EphyHistoryService *service,
 }
 
 static void
-google_search_suggestions_cb (SoupSession  *session,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+search_engine_suggestions_loaded_cb (SoupSession  *session,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
   GTask *task = G_TASK (user_data);
   EphySuggestionModel *self = g_task_get_source_object (task);
-  EphyEmbedShell *shell;
-  EphySearchEngineManager *manager;
-  QueryData *data;
-  JsonNode *node;
-  JsonArray *array;
-  JsonArray *suggestions;
-  EphySearchEngine *engine;
-  int added = 0;
-  g_autoptr (GBytes) body = NULL;
+  g_autoptr (GSequence) suggestions = NULL;
+  g_autoptr (GError) error = NULL;
+  QueryData *data = g_task_get_task_data (task);
 
-  SoupMessage *msg;
-
-  body = soup_session_send_and_read_finish (session, result, NULL);
-  if (!body)
-    goto out;
-
-  msg = soup_session_get_async_result_message (session, result);
-  if (soup_message_get_status (msg) != 200)
-    goto out;
-
-  /* FIXME: we don't have a way to get the status code */
-
-  shell = ephy_embed_shell_get_default ();
-  manager = ephy_embed_shell_get_search_engine_manager (shell);
-
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO)
-    engine = ephy_search_engine_manager_get_incognito_engine (manager);
-  else
-    engine = ephy_search_engine_manager_get_default_engine (manager);
-
-  node = json_from_string (g_bytes_get_data (body, NULL), NULL);
-  if (!node || !JSON_NODE_HOLDS_ARRAY (node)) {
-    g_warning ("Google search suggestion response is not a valid JSON object: %s", (const char *)g_bytes_get_data (body, NULL));
-    goto out;
-  }
-
-  array = json_node_get_array (node);
-  suggestions = json_array_get_array_element (array, 1);
-  data = g_task_get_task_data (task);
-
-  for (guint i = 0; i < json_array_get_length (suggestions) && added < 5; i++) {
-    EphySuggestion *suggestion;
-    const char *str = json_array_get_string_element (suggestions, i);
-    g_autofree char *address = NULL;
-    g_autofree char *escaped_title = NULL;
-    g_autofree char *markup = NULL;
-
-    address = ephy_search_engine_build_search_address (engine, str);
-    escaped_title = g_markup_escape_text (str, -1);
-    markup = dzl_fuzzy_highlight (escaped_title, str, FALSE);
-    suggestion = ephy_suggestion_new (markup, escaped_title, address, TRUE);
-
-    g_sequence_append (data->google_suggestions, g_steal_pointer (&suggestion));
-    added++;
-  }
-
-out:
-  query_collection_done (self, g_steal_pointer (&task));
-}
-
-static void
-google_search_suggestions_query (EphySuggestionModel *self,
-                                 const gchar         *query,
-                                 GTask               *task)
-{
-  SoupMessage *msg;
-  g_auto (GStrv) split = g_strsplit (query, " ", -1);
-  g_autofree char *url = NULL;
-  g_autofree char *escaped_query = NULL;
-
-  if (g_strv_length (split) < 2) {
-    query_collection_done (self, g_steal_pointer (&task));
+  suggestions = ephy_search_engine_load_suggestions_finish (result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning (_("Could not load search engines suggestions: %s"), error->message);
+    query_collection_done (self, task);
     return;
   }
 
-  escaped_query = g_markup_escape_text (query, -1);
-  url = g_strdup_printf ("http://suggestqueries.google.com/complete/search?client=firefox&q=%s", escaped_query);
-  msg = soup_message_new (SOUP_METHOD_GET, url);
-  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
-                                    (GAsyncReadyCallback)google_search_suggestions_cb,
-                                    g_steal_pointer (&task));
-  g_object_unref (msg);
+  g_assert (g_sequence_get_length (data->search_engine_suggestions) == 0);
+  g_assert (suggestions);
+  /* Nicer than looping manually. */
+  g_sequence_move_range (g_sequence_get_end_iter (data->search_engine_suggestions),
+                         g_sequence_get_begin_iter (suggestions),
+                         g_sequence_get_iter_at_pos (suggestions, MAX_SEARCH_ENGINES_SUGGESTIONS));
+  query_collection_done (self, task);
+}
+
+static void
+search_engine_suggestions_query (EphySuggestionModel *self,
+                                 const gchar         *query,
+                                 GTask               *task)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  g_autofree char *built_suggestions_url = NULL;
+  EphySearchEngine *engine = NULL;
+
+  built_suggestions_url = ephy_search_engine_manager_parse_bang_suggestions (manager, query, &engine);
+  /* If it was not a bang search, then use the default search engine. */
+  if (!built_suggestions_url) {
+    engine = ephy_search_engine_manager_get_default_engine (manager);
+    if (!ephy_search_engine_get_suggestions_url (engine)) {
+      query_collection_done (self, task);
+      return;
+    }
+
+    built_suggestions_url = ephy_search_engine_build_suggestions_address (engine, query);
+  } else {
+    /* Finding a matching engine from the bang doesn't mean the engine has
+     * suggestions support, so make sure we stop here if it doesn't.
+     */
+    if (!ephy_search_engine_get_suggestions_url (engine)) {
+      query_collection_done (self, task);
+      return;
+    }
+  }
+  ephy_search_engine_load_suggestions_async (built_suggestions_url, engine,
+                                             g_task_get_cancellable (task),
+                                             (GAsyncReadyCallback)search_engine_suggestions_loaded_cb,
+                                             task);
 }
 
 void
 ephy_suggestion_model_query_async (EphySuggestionModel *self,
                                    const gchar         *query,
                                    gboolean             include_search_engines,
+                                   gboolean             include_search_engines_suggestions,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
@@ -762,10 +735,14 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   data = query_data_new (query, include_search_engines);
   g_task_set_task_data (task, data, (GDestroyNotify)query_data_free);
 
-  /* Google Search Suggestions */
   if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_SUGGESTIONS) {
-    if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS))
-      google_search_suggestions_query (self, query, task);
+    gboolean is_possible_url = FALSE;
+
+    if (strstr (query, " ") == NULL && strstr (query, "."))
+      is_possible_url = TRUE;
+
+    if (include_search_engines_suggestions && !is_possible_url && strlen (query) > 1 && g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_SEARCH_SUGGESTIONS))
+      search_engine_suggestions_query (self, query, task);
     else
       query_collection_done (self, task);
   }

@@ -42,7 +42,7 @@ struct _PrefsPrivacyPage {
 
   /* Search Suggestions */
   GtkWidget *search_suggestions_box;
-  GtkWidget *enable_google_search_suggestions_row;
+  GtkWidget *enable_search_suggestions_row;
 
   /* Autofill Data */
   GtkWidget *autofill_data_row;
@@ -100,8 +100,8 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
   /* ========================== Search Suggestions ========================== */
   /* ======================================================================== */
   g_settings_bind (EPHY_SETTINGS_MAIN,
-                   EPHY_PREFS_USE_GOOGLE_SEARCH_SUGGESTIONS,
-                   privacy_page->enable_google_search_suggestions_row,
+                   EPHY_PREFS_USE_SEARCH_SUGGESTIONS,
+                   privacy_page->enable_search_suggestions_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 }
@@ -134,7 +134,7 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
 
   /* Search Suggestions */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, search_suggestions_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_google_search_suggestions_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_search_suggestions_row);
 
   /* Forms and Autofill */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, autofill_data_row);

@@ -23,6 +23,7 @@
 
 #include <adwaita.h>
 #include "ephy-search-engine-manager.h"
+#include "ephy-search-engine.h"
 
 G_BEGIN_DECLS
 
@@ -32,9 +33,10 @@ G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_
 
 EphySearchEngineRow *ephy_search_engine_row_new                    (EphySearchEngine        *engine,
                                                                     EphySearchEngineManager *manager);
-void                 ephy_search_engine_row_set_can_remove         (EphySearchEngineRow *self,
-                                                                    gboolean             can_remove);
+EphySearchEngine    *ephy_search_engine_row_get_engine             (EphySearchEngineRow     *self);
 void                 ephy_search_engine_row_set_radio_button_group (EphySearchEngineRow *self,
                                                                     GtkCheckButton      *radio_button_group);
+void                 ephy_search_engine_row_focus_bang_entry       (EphySearchEngineRow *self);
+void                 ephy_search_engine_row_focus_name_entry       (EphySearchEngineRow *self);
 
 G_END_DECLS

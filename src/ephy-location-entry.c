@@ -69,6 +69,7 @@ struct _EphyLocationEntry {
   GtkWidget *security_button;
   GtkWidget *mute_button;
   GtkWidget *password_button;
+  GtkWidget *opensearch_button;
   GtkWidget *bookmark_button;
   GtkWidget *reader_mode_button;
   GtkWidget *spinner;
@@ -1209,6 +1210,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button_label);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, combined_stop_reload_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, opensearch_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
@@ -1747,4 +1749,10 @@ ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *
     gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button), "view-refresh-symbolic");
     gtk_widget_set_tooltip_text (self->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
   }
+}
+
+GtkWidget *
+ephy_location_entry_get_opensearch_button (EphyLocationEntry *entry)
+{
+  return entry->opensearch_button;
 }

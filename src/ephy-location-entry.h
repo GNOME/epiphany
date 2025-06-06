@@ -104,4 +104,6 @@ void            ephy_loation_entry_update_mute_button          (EphyLocationEntr
 
 void            ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *self,
                                                                              gboolean           loading);
+
+GtkWidget      *ephy_location_entry_get_opensearch_button      (EphyLocationEntry *entry);
 G_END_DECLS

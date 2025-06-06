@@ -44,6 +44,8 @@ const char     *ephy_suggestion_get_subtitle             (EphySuggestion *self);
 
 void            ephy_suggestion_set_favicon              (EphySuggestion  *self,
                                                           cairo_surface_t *favicon);
+void            ephy_suggestion_set_icon                 (EphySuggestion  *self,
+                                                          const char      *icon_name);
 void            ephy_suggestion_set_secondary_icon       (EphySuggestion  *self,
                                                           const char      *icon_name);
 gboolean        ephy_suggestion_is_completion            (EphySuggestion *self);

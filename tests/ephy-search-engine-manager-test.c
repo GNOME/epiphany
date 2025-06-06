@@ -22,6 +22,34 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-settings.h"
+
+static void
+test_search_bang_for_name (void)
+{
+  struct {
+    char *name;
+    char *expected_bang;
+  } test_results[] = {
+    {"", ""},
+    {"  (  ( ", ""},
+    {"  DuckDuckGo   ", "!ddg"},
+    {"DuckDuck go", "!ddg"},
+    {"DuckDuck Go", "!ddg"},
+    {"duck duck go", "!ddg"},
+    {"duckduckgo", "!d"},
+    {"Wikipedia (en)", "!we"},
+    {"Wikipedia(en)", "!we"},
+  };
+
+  for (guint i = 0; i < G_N_ELEMENTS (test_results); i++) {
+    g_autofree char *built_bang = ephy_search_engine_build_bang_for_name (test_results[i].name);
+
+    g_message ("Testing bang %s for name %s in %s", test_results[i].expected_bang,
+               test_results[i].name, __func__);
+    g_assert_cmpstr (test_results[i].expected_bang, ==, built_bang);
+  }
+}
 
 static void
 test_search_engine_manager (void)
@@ -158,35 +186,8 @@ test_search_engine_manager (void)
   ephy_search_engine_manager_add_engine (manager, wikipedia);
   g_assert_true (ephy_search_engine_manager_get_default_engine (manager) == ddg);
 
-  /* Drop our manager and recreate it to check if saving works, and that
-   * saving isn't done when we drop the manager too (i.e. automatic saving).
-   */
   g_clear_object (&manager);
-  manager = ephy_search_engine_manager_new ();
-  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (manager)), ==, G_N_ELEMENTS (expected_engines));
-  /* It's fine for us to keep on using the previously built (then unref-ed
-   * by @manager) search engines as add_engine() takes a new reference on
-   * them, and we keep one here with g_autoptr().
-   */
-  for (guint i = 0; i < G_N_ELEMENTS (expected_engines); i++) {
-    g_autoptr (EphySearchEngine) saved_engine = g_list_model_get_item (G_LIST_MODEL (manager), i);
-
-    g_assert_true (EPHY_IS_SEARCH_ENGINE (saved_engine));
-    /* Just make sure @manager didn't completely drop all references to the
-     * engines we previously created and kept.
-     */
-    g_assert_true (EPHY_IS_SEARCH_ENGINE (expected_engines[i]));
-
-    g_assert_cmpstr (ephy_search_engine_get_name (saved_engine), ==, ephy_search_engine_get_name (expected_engines[i]));
-    g_assert_cmpstr (ephy_search_engine_get_url (saved_engine), ==, ephy_search_engine_get_url (expected_engines[i]));
-    g_assert_cmpstr (ephy_search_engine_get_bang (saved_engine), ==, ephy_search_engine_get_bang (expected_engines[i]));
-  }
-  /* Check if it also kept the default engine _from the point where we
-   * explicitly saved @manager's settings_, but didn't save it afterwards
-   * (as that's only a simple GSettings value so it would be tempting to
-   * save it right away in ephy_search_engine_manager_set_default_engine().
-   */
-  g_assert_cmpstr (ephy_search_engine_get_name (ephy_search_engine_manager_get_default_engine (manager)), ==, ephy_search_engine_get_name (wikipedia));
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
 }
 
 static void
@@ -275,6 +276,30 @@ test_parse_bang_search (void)
   ephy_search_engine_manager_delete_engine (manager, placeholder_engine);
 }
 
+static void
+test_opensearch (void)
+{
+  g_autoptr (EphySearchEngineManager) manager = ephy_search_engine_manager_new ();
+  g_autoptr (EphySearchEngine) opensearch = NULL;
+  g_autofree char *built_suggestions_address = NULL;
+
+  g_assert_true (EPHY_IS_SEARCH_ENGINE_MANAGER (manager));
+
+  opensearch = g_object_new (EPHY_TYPE_SEARCH_ENGINE, NULL);
+  g_assert_true (EPHY_IS_SEARCH_ENGINE (opensearch));
+
+  g_assert_null (ephy_search_engine_get_suggestions_url (opensearch));
+  ephy_search_engine_set_suggestions_url (opensearch, "https://www.opensearch.test/s=%%s");
+  g_assert_cmpstr (ephy_search_engine_get_suggestions_url (opensearch), ==, "https://www.opensearch.test/s=%%s");
+
+  g_assert_null (ephy_search_engine_get_opensearch_url (opensearch));
+  ephy_search_engine_set_opensearch_url (opensearch, "https://www.opensearch.test/url");
+  g_assert_cmpstr (ephy_search_engine_get_opensearch_url (opensearch), ==, "https://www.opensearch.test/url");
+
+  built_suggestions_address = ephy_search_engine_build_suggestions_address (opensearch, "test search");
+  g_assert_cmpstr ("https://www.opensearch.test/s=%test+search", ==, built_suggestions_address);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -292,8 +317,10 @@ main (int   argc,
     return -1;
   }
 
+  g_test_add_func ("/lib/search-engine-manager/test_search_bang_for_name", test_search_bang_for_name);
   g_test_add_func ("/lib/search-engine-manager/test_search_engine_manager", test_search_engine_manager);
   g_test_add_func ("/lib/search-engine-manager/test_parse_bang_search", test_parse_bang_search);
+  g_test_add_func ("/lib/search-engine-manager/test_opensearch", test_opensearch);
 
   ret = g_test_run ();
 

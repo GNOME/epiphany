@@ -72,7 +72,12 @@ tabbar .end-action > revealer > menubutton:dir(rtl) {
   font-size: small;
 }
 
-.entry-icon {
+.entry-icon,
+.entry-icon button
+/* For the opensearch button because opensearch_button.entry_icon > menubutton > button
+ * not menubutton.entry_icon > button like the other ones.
+ */
+.entry-icon menubutton {
   margin: 0;
 }
 

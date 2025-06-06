@@ -53,6 +53,7 @@ struct _EphyLocationController {
   gboolean editable;
   gboolean sync_address_is_blocked;
   EphySearchEngineManager *search_engine_manager;
+  GCancellable *suggestion_cancellable;
 };
 
 static void ephy_location_controller_finalize (GObject *object);
@@ -184,12 +185,21 @@ user_changed_cb (GtkWidget              *widget,
                  EphyLocationController *controller)
 {
   GListModel *model;
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   LOG ("user_changed_cb, address %s", address);
 
   model = ephy_location_entry_get_model (EPHY_LOCATION_ENTRY (controller->title_widget));
 
-  ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model), address, TRUE, NULL, NULL, NULL);
+  g_cancellable_cancel (controller->suggestion_cancellable);
+  g_clear_object (&controller->suggestion_cancellable);
+  controller->suggestion_cancellable = g_cancellable_new ();
+  ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model),
+                                     address,
+                                     TRUE,
+                                     mode != EPHY_EMBED_SHELL_MODE_PRIVATE && mode != EPHY_EMBED_SHELL_MODE_INCOGNITO,
+                                     controller->suggestion_cancellable,
+                                     NULL, NULL);
 }
 
 static void
@@ -472,6 +482,7 @@ ephy_location_controller_init (EphyLocationController *controller)
   controller->sync_address_is_blocked = FALSE;
   shell = ephy_embed_shell_get_default ();
   controller->search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
+  controller->suggestion_cancellable = g_cancellable_new ();
 }
 
 static void
@@ -480,6 +491,8 @@ ephy_location_controller_finalize (GObject *object)
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 
   g_free (controller->address);
+  g_cancellable_cancel (controller->suggestion_cancellable);
+  g_clear_object (&controller->suggestion_cancellable);
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->finalize (object);
 }

@@ -40,6 +40,7 @@
 #include "ephy-filters-manager.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
+#include "ephy-opensearch-autodiscovery-link.h"
 #include "ephy-output-encoding.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
@@ -95,6 +96,7 @@ struct _EphyWebView {
   char *loading_message;
   char *link_message;
   GIcon *icon;
+  GListStore *opensearch_engines;
 
   /* Reader mode */
   gboolean entering_reader_mode;
@@ -1458,6 +1460,148 @@ unregister_message_handlers (EphyWebView *view)
   view->message_handlers_to_unregister = 0;
 }
 
+static int
+sort_opensearch_engines_list_func (gconstpointer a,
+                                   gconstpointer b,
+                                   gpointer      user_data)
+{
+  EphyOpensearchAutodiscoveryLink *link_a = (EphyOpensearchAutodiscoveryLink *)a;
+  EphyOpensearchAutodiscoveryLink *link_b = (EphyOpensearchAutodiscoveryLink *)b;
+
+  return g_strcmp0 (
+    ephy_opensearch_autodiscovery_link_get_name (link_a),
+    ephy_opensearch_autodiscovery_link_get_name (link_b));
+}
+
+static char *
+get_js_object_string_property (JSCValue   *js_value,
+                               const char *property)
+{
+  g_autoptr (JSCValue) prop_value = jsc_value_object_get_property (js_value, property);
+  char *s;
+
+  g_assert (jsc_value_is_string (prop_value));
+
+  s = jsc_value_to_string (prop_value);
+  g_assert (s != NULL);
+
+  return s;
+}
+
+static void
+get_opensearch_links_cb (WebKitWebView *web_view,
+                         GAsyncResult  *result,
+                         gpointer       user_data)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  g_autoptr (GError) error = NULL;
+  g_autoptr (JSCValue) js_array = NULL;
+  g_autoptr (JSCValue) array_len_value = NULL;
+  g_autoptr (GPtrArray) links_array = NULL;
+  guint len;
+
+  js_array = webkit_web_view_evaluate_javascript_finish (web_view, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Couldn't run javascript to get list of OpenSearch Descriptions links: %s %s", webkit_web_view_get_uri (web_view), error->message);
+    return;
+  }
+
+  g_assert (jsc_value_is_array (js_array));
+  /* JavaScriptCore doesn't have API to get a G(Ptr)Array from a Javascript
+   * array, so we need to iterate manually.
+   */
+  array_len_value = jsc_value_object_get_property (js_array, "length");
+  len = jsc_value_to_int32 (array_len_value);
+
+  links_array = g_ptr_array_new_with_free_func (g_object_unref);
+  for (guint i = 0; i < len; i++) {
+    g_autoptr (JSCValue) link_object =
+      jsc_value_object_get_property_at_index (js_array, i);
+    g_autofree char *href = NULL;
+    g_autofree char *name = NULL;
+    g_autofree char *resolved_url = NULL;
+    g_autoptr (EphyOpensearchAutodiscoveryLink) autodiscovery_link = NULL;
+    g_autoptr (GError) error = NULL;
+    const char *scheme;
+
+    g_assert (jsc_value_is_object (link_object));
+
+    href = get_js_object_string_property (link_object, "href");
+    name = get_js_object_string_property (link_object, "title");
+
+    /* No point in continuing if we can't find the description file or
+     * just can't display any useful name for it, or if the URL isn't well formed.
+     */
+    if (name[0] == '\0') {
+      g_warning ("Skipping opensearch autodiscovery link with href=%s because title is empty.",
+                 href);
+      continue;
+    }
+    if (href[0] == '\0') {
+      g_warning ("Skipping opensearch autodiscovery link with title=%s because href is empty.",
+                 name);
+      continue;
+    }
+    resolved_url = g_uri_resolve_relative (webkit_web_view_get_uri (web_view),
+                                           href,
+                                           G_URI_FLAGS_NONE,
+                                           &error);
+    if (!resolved_url) {
+      g_warning ("Couldn't resolve relative href=%s attribute of opensearch autodiscovery link with name=%s: %s",
+                 href, name, error->message);
+      continue;
+    }
+    if (!g_uri_is_valid (resolved_url, 0, &error)) {
+      g_warning ("Resolved opensearch autodiscovery link's href %s isn't a valid URI: %s",
+                 resolved_url, error->message);
+      continue;
+    }
+    scheme = g_uri_peek_scheme (resolved_url);
+    if (!(g_strcmp0 (scheme, "http") == 0 || g_strcmp0 (scheme, "https") == 0)) {
+      g_warning ("Invalid href URI scheme for opensearch autodiscovery link %s.", resolved_url);
+      continue;
+    }
+
+    autodiscovery_link = ephy_opensearch_autodiscovery_link_new (name, resolved_url);
+    g_ptr_array_add (links_array, g_steal_pointer (&autodiscovery_link));
+  }
+
+  /* When we've reached that point, it means we've loaded a new page, so it
+   * doesn't make sense to keep the previous search engines in the list model.
+   * Instead, we just replace all of them with the new ones we found, all
+   * in one go.
+   */
+  g_list_store_splice (view->opensearch_engines,
+                       0,
+                       g_list_model_get_n_items (G_LIST_MODEL (view->opensearch_engines)),
+                       links_array->pdata, links_array->len);
+  g_list_store_sort (view->opensearch_engines,
+                     sort_opensearch_engines_list_func,
+                     NULL);
+  g_signal_emit_by_name (view, "search-engines-loaded");
+}
+
+static void
+on_document_loaded_cb (WebKitWebView *web_view)
+{
+  EphyWebView *view = EPHY_WEB_VIEW (web_view);
+
+  /* Only query the list of search engines once we've finished loading the page and hence have a full DOM. */
+  if (view->document_type == EPHY_WEB_VIEW_DOCUMENT_HTML &&
+      !ephy_web_view_get_is_blank (view) &&
+      !ephy_web_view_is_newtab (view) &&
+      !ephy_web_view_is_overview (view)) {
+    /* Update the list of autodiscovered OpenSearch engines. */
+    webkit_web_view_evaluate_javascript (web_view,
+                                         "Ephy.getOpenSearchLinks();", -1,
+                                         ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                         NULL, NULL,
+                                         (GAsyncReadyCallback)get_opensearch_links_cb,
+                                         view->cancellable);
+  }
+}
+
 static void
 load_changed_cb (WebKitWebView   *web_view,
                  WebKitLoadEvent  load_event,
@@ -2703,6 +2847,14 @@ user_message_received_cb (WebKitWebView     *web_view,
   if (g_strcmp0 (name, "EphyAutoFill.GetFieldValue") == 0)
     return ephy_autofill_get_field_value (web_view, message);
 
+  /* We don't have appropriate API here to know when the document is done loading,
+   * so the web process extension must tell us when that happens instead.
+   */
+  if (g_strcmp0 (name, "DocumentLoaded") == 0) {
+    on_document_loaded_cb (web_view);
+    return TRUE;
+  }
+
   return FALSE;
 }
 
@@ -2887,6 +3039,26 @@ const char *
 ephy_web_view_get_display_address (EphyWebView *view)
 {
   return view->display_address ? view->display_address : "about:blank";
+}
+
+/**
+ * ephy_web_view_get_opensearch_engines:
+ * @view: an #EphyWebView
+ *
+ * Return the list of OpenSearch search engines that were detected in the
+ * current page, with the link tags autodiscovery mechanism. This list
+ * is filled when loading a page, so it might be empty at first when you
+ * first get it. It of course changes its whole content when loading a
+ * new page in this web view.
+ *
+ * Returns: (transfer none):
+ *          A #GListModel containing an #EphyOpenSearchAutodiscoveryLink for each
+ *          detected OpenSearch engine.
+ */
+GListModel *
+ephy_web_view_get_opensearch_engines (EphyWebView *view)
+{
+  return G_LIST_MODEL (view->opensearch_engines);
 }
 
 /**
@@ -3752,6 +3924,7 @@ ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
 
+  g_clear_object (&view->opensearch_engines);
   g_clear_object (&view->certificate);
   g_clear_object (&view->file_monitor);
   g_clear_object (&view->icon);
@@ -3826,6 +3999,8 @@ ephy_web_view_init (EphyWebView *web_view)
   shell = ephy_embed_shell_get_default ();
 
   web_view->uid = web_view_uid++;
+
+  web_view->opensearch_engines = g_list_store_new (EPHY_TYPE_OPENSEARCH_AUTODISCOVERY_LINK);
 
   web_view->is_blank = TRUE;
   web_view->ever_committed = FALSE;
@@ -4141,6 +4316,21 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                 EPHY_TYPE_PERMISSION_TYPE,
                 WEBKIT_TYPE_PERMISSION_REQUEST,
                 G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+  * EphyWebView::search-engines-loaded:
+  * @view: the #EphyWebView that sent the signal
+  *
+  * The ::search-engines-loaded signal is emitted when the @view has finished
+  * autodiscovering the OpenSearch search engines for this URL. This happens just
+  * after the document has finished loading. See ephy_web_view_get_opensearch_engines().
+  **/
+  g_signal_new ("search-engines-loaded",
+                EPHY_TYPE_WEB_VIEW,
+                G_SIGNAL_RUN_FIRST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                0);
 }
 
 /**

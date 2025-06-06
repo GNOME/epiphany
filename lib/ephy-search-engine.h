@@ -21,7 +21,10 @@
 
 #pragma once
 
+#include "ephy-opensearch-autodiscovery-link.h"
+
 #include <glib-object.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -36,16 +39,34 @@ G_DECLARE_FINAL_TYPE (EphySearchEngine, ephy_search_engine, EPHY, SEARCH_ENGINE,
  * have a reasonable default value (i.e. empty or NULL).
  */
 
-const char *ephy_search_engine_get_name             (EphySearchEngine *self);
-void        ephy_search_engine_set_name             (EphySearchEngine *self,
-                                                     const char       *name);
-const char *ephy_search_engine_get_url              (EphySearchEngine *self);
-void        ephy_search_engine_set_url              (EphySearchEngine *self,
-                                                     const char       *url);
-const char *ephy_search_engine_get_bang             (EphySearchEngine *self);
-void        ephy_search_engine_set_bang             (EphySearchEngine *self,
-                                                     const char       *bang);
-char       *ephy_search_engine_build_search_address (EphySearchEngine *self,
-                                                     const char       *search_query);
+const char *ephy_search_engine_get_name                  (EphySearchEngine *self);
+void        ephy_search_engine_set_name                  (EphySearchEngine *self,
+                                                          const char       *name);
+const char *ephy_search_engine_get_url                   (EphySearchEngine *self);
+void        ephy_search_engine_set_url                   (EphySearchEngine *self,
+                                                          const char       *url);
+const char *ephy_search_engine_get_bang                  (EphySearchEngine *self);
+void        ephy_search_engine_set_bang                  (EphySearchEngine *self,
+                                                          const char       *bang);
+const char *ephy_search_engine_get_suggestions_url       (EphySearchEngine *self);
+void        ephy_search_engine_set_suggestions_url       (EphySearchEngine *self,
+                                                          const char       *suggestions_url);
+const char *ephy_search_engine_get_opensearch_url        (EphySearchEngine *self);
+void        ephy_search_engine_set_opensearch_url        (EphySearchEngine *self,
+                                                          const char       *opensearch_url);
+char       *ephy_search_engine_build_search_address      (EphySearchEngine *self,
+                                                          const char       *search_query);
+char       *ephy_search_engine_build_suggestions_address (EphySearchEngine *self,
+                                                          const char       *search_query);
+char       *ephy_search_engine_build_bang_for_name       (const char *name);
+void        ephy_search_engine_load_suggestions_async    (const char          *built_suggestions_url,
+                                                          EphySearchEngine    *engine,
+                                                          GCancellable        *cancellable,
+                                                          GAsyncReadyCallback  callback,
+                                                          gpointer             user_data);
+GSequence  *ephy_search_engine_load_suggestions_finish   (GAsyncResult *result,
+                                                          GError      **error);
+gboolean    ephy_search_engine_matches_by_autodiscovery_link (EphySearchEngine                *self,
+                                                              EphyOpensearchAutodiscoveryLink *autodiscovery_link);
 
 G_END_DECLS

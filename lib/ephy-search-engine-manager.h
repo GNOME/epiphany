@@ -49,6 +49,9 @@ gboolean                 ephy_search_engine_manager_has_bang            (EphySea
                                                                          const char              *bang);
 char                    *ephy_search_engine_manager_parse_bang_search   (EphySearchEngineManager *manager,
                                                                          const char              *search);
+char                    *ephy_search_engine_manager_parse_bang_suggestions (EphySearchEngineManager *manager,
+                                                                            const char              *search,
+                                                                            EphySearchEngine       **out_engine);
 void                     ephy_search_engine_manager_save_to_settings    (EphySearchEngineManager *manager);
 
 G_END_DECLS

@@ -2,114 +2,29 @@ using Gtk 4.0;
 using Adw 1;
 
 template $EphySearchEngineRow: Adw.ExpanderRow {
-  ListBoxRow {
-    activatable: false;
+  [suffix]
+  Button remove_button {
+    valign: center;
+    icon-name: "edit-delete-symbolic";
+    tooltip-text: _("Remove");
+    clicked => $on_remove_button_clicked_cb();
 
-    Grid {
-      margin-top: 12;
-      margin-bottom: 12;
-      margin-start: 12;
-      margin-end: 12;
-      row-spacing: 6;
-      column-spacing: 12;
+    styles [
+      "flat",
+    ]
+  }
 
-      Label {
-        label: _("Name");
-        xalign: 1;
+  Adw.EntryRow name_entry {
+    title: _("Name");
+  }
 
-        layout {
-          column: "0";
-          row: "0";
-        }
-      }
+  Adw.EntryRow address_entry {
+    title: _("Address");
+    input-purpose: url;
+  }
 
-      Entry name_entry {
-        hexpand: true;
-
-        layout {
-          column: "1";
-          row: "0";
-        }
-      }
-
-      Label {
-        label: _("Address");
-        xalign: 1;
-
-        layout {
-          column: "0";
-          row: "1";
-        }
-      }
-
-      Entry address_entry {
-        hexpand: true;
-        placeholder-text: "https://www.example.com/search?q=%s";
-        input-purpose: url;
-        secondary-icon-sensitive: false;
-
-        layout {
-          column: "1";
-          row: "1";
-        }
-      }
-
-      Label {
-        label: _("Shortcut");
-        xalign: 1;
-
-        layout {
-          column: "0";
-          row: "2";
-        }
-      }
-
-      Entry bang_entry {
-        hexpand: true;
-        placeholder-text: "!e";
-        input-purpose: url;
-        secondary-icon-sensitive: false;
-
-        layout {
-          column: "1";
-          row: "2";
-        }
-      }
-
-      Label {
-        label: _("To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s");
-        xalign: 0;
-        wrap: true;
-
-        styles [
-          "dim-label",
-        ]
-
-        layout {
-          column: "0";
-          row: "3";
-          column-span: "2";
-        }
-      }
-
-      Button remove_button {
-        halign: end;
-        label: _("R_emove Search Engine");
-        use-underline: true;
-
-        styles [
-          "destructive-action",
-        ]
-
-        clicked => $on_remove_button_clicked_cb();
-
-        layout {
-          column: "0";
-          row: "4";
-          column-span: "2";
-        }
-      }
-    }
+  Adw.EntryRow bang_entry {
+    title: _("Shortcut");
   }
 }
 

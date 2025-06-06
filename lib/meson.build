@@ -24,6 +24,8 @@ libephymisc_sources = [
   'ephy-langs.c',
   'ephy-notification.c',
   'ephy-notification-container.c',
+  'ephy-opensearch-autodiscovery-link.c',
+  'ephy-opensearch-engine.c',
   'ephy-output-encoding.c',
   'ephy-permissions-manager.c',
   'ephy-pixbuf-utils.c',

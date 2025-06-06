@@ -57,12 +57,6 @@ static gboolean
 on_closed (EphyPrefsDialog *prefs_dialog)
 {
   prefs_general_page_on_pd_close_request (prefs_dialog->general_page);
-
-  /* To avoid any unnecessary IO when typing changes in the search engine
-   * list row's entries, only save when closing the prefs dialog.
-   */
-  ephy_search_engine_manager_save_to_settings (ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ()));
-
   return GDK_EVENT_PROPAGATE;
 }
 

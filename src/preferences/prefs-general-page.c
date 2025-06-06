@@ -79,6 +79,7 @@ struct _PrefsGeneralPage {
   GtkWidget *standard_search_engine;
   GtkWidget *incognito_search_engine;
   GtkWidget *search_engine_group;
+  EphySearchEngineListBox *search_engine_list_box;
 
   /* Session */
   GtkWidget *session_box;
@@ -739,6 +740,13 @@ prefs_general_page_on_pd_close_request (PrefsGeneralPage *general_page)
   }
 }
 
+/* Used by EphyAddOpenSearchButton to scroll to the just added engine. */
+EphySearchEngineListBox *
+prefs_general_page_get_search_engine_list_box (PrefsGeneralPage *general_page)
+{
+  return general_page->search_engine_list_box;
+}
+
 static void
 on_webapp_icon_row_activated (GtkWidget        *button,
                               PrefsGeneralPage *general_page)
@@ -922,6 +930,47 @@ on_manage_webapp_additional_urls_row_activated (GtkWidget        *row,
 }
 
 static void
+search_engine_row_expanded_cb (GObject  *object,
+                               gpointer  user_data)
+{
+  EphySearchEngineRow *row = EPHY_SEARCH_ENGINE_ROW (object);
+
+  ephy_search_engine_row_focus_name_entry (row);
+  g_signal_handlers_disconnect_by_func (object, search_engine_row_expanded_cb, user_data);
+}
+
+#define EMPTY_NEW_SEARCH_ENGINE_NAME (_("New search engine"))
+static void
+on_add_search_engine_button_clicked_cb (GtkButton *button,
+                                        gpointer   user_data)
+{
+  PrefsGeneralPage *page = EPHY_PREFS_GENERAL_PAGE (user_data);
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  EphySearchEngine *old_empty_engine = ephy_search_engine_manager_find_engine_by_name (manager, EMPTY_NEW_SEARCH_ENGINE_NAME);
+
+  if (old_empty_engine) {
+    EphySearchEngineRow *row =
+      ephy_search_engine_list_box_find_row_for_engine (page->search_engine_list_box, old_empty_engine);
+
+    /* Change the focus to an arbitrary widget we have available here first,
+     * because the scroll-to-focus feature won't work if the focus is grabbed on
+     * an already focused widget.
+     */
+    ephy_search_engine_row_focus_bang_entry (row);
+    adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), FALSE);
+    adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), TRUE);
+    g_signal_connect (row, "fully-expanded", G_CALLBACK (search_engine_row_expanded_cb), NULL);
+  } else {
+    g_autoptr (EphySearchEngine) empty_engine =
+      g_object_new (EPHY_TYPE_SEARCH_ENGINE,
+                    "name", EMPTY_NEW_SEARCH_ENGINE_NAME,
+                    "url", "https://www.example.com/search?q=%s",
+                    NULL);
+    ephy_search_engine_manager_add_engine (manager, empty_engine);
+  }
+}
+
+static void
 prefs_general_page_class_init (PrefsGeneralPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -968,6 +1017,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, standard_search_engine);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, incognito_search_engine);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_group);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, search_engine_list_box);
 
   /* Session */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, session_box);
@@ -995,6 +1045,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, download_folder_row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_add_search_engine_button_clicked_cb);
 }
 
 static void

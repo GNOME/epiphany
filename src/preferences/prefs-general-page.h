@@ -23,6 +23,7 @@
 #include <adwaita.h>
 
 #include "ephy-prefs-dialog.h"
+#include "ephy-search-engine-listbox.h"
 
 G_BEGIN_DECLS
 
@@ -31,5 +32,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (PrefsGeneralPage, prefs_general_page, EPHY, PREFS_GENERAL_PAGE, AdwPreferencesPage)
 
 void prefs_general_page_on_pd_close_request (PrefsGeneralPage *general_page);
+EphySearchEngineListBox *prefs_general_page_get_search_engine_list_box (PrefsGeneralPage *general_page);
 
 G_END_DECLS

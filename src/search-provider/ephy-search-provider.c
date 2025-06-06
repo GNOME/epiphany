@@ -117,6 +117,7 @@ gather_results_async (EphySearchProvider   *self,
   ephy_suggestion_model_query_async (self->model,
                                      search_string,
                                      FALSE,
+                                     FALSE,
                                      cancellable,
                                      (GAsyncReadyCallback)on_model_updated,
                                      task);

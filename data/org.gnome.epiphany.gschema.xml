@@ -31,9 +31,9 @@
 			<default>
 				<![CDATA[
 				[
-					{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q=%s&t=epiphany&kd=-1'>, 'bang': <'!ddg'>},
-					{'name': <'Google'>, 'url': <'https://www.google.com/search?q=%s'>, 'bang': <'!g'>},
-					{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>}
+					{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q=%s&t=epiphany&kd=-1'>, 'bang': <'!ddg'>, 'opensearch_url': <'https://duckduckgo.com/opensearch.xml'>, 'suggestions_url': <'https://duckduckgo.com/ac/?q=%s&type=list'>},
+					{'name': <'Google'>, 'url': <'https://www.google.com/search?q=%s'>, 'bang': <'!g'>, 'opensearch_url': <'https://www.google.com/searchdomaincheck?format=opensearch'>, 'suggestions_url': <'https://www.google.com/complete/search?q=%s&inputencoding=UTF-8&outputencoding=UTF-8&client=firefox'>},
+					{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>, 'suggestions_url': <'https://www.bing.com/osjson.aspx?query=%s'>}
 				]
 			]]></default>
 			<summary>List of the search engines.</summary>
@@ -45,10 +45,10 @@
 			  bang (shortcut word) of the search engine.
 			</description>
 		</key>
-		<key type="b" name="use-google-search-suggestions">
-			<default>false</default>
-			<summary>Enable Google Search Suggestions</summary>
-			<description>Whether to show Google Search Suggestion in url entry popdown.</description>
+		<key type="b" name="use-search-suggestions">
+			<default>true</default>
+			<summary>Enable Search Suggestions</summary>
+			<description>Whether to show Search Suggestion in url entry popdown.</description>
 		</key>
 		<key type="b" name="new-windows-in-tabs">
 			<default>true</default>

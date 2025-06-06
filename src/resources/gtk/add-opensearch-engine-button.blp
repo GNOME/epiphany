@@ -1,0 +1,20 @@
+using Gtk 4.0;
+
+template $EphyAddOpensearchEngineButton: Gtk.Button {
+  tooltip-text: _("Add Search Engine");
+  icon-name: "ephy-loupe-plus-symbolic";
+  clicked => $on_clicked();
+  styles [ "flat" ]
+}
+
+Popover popover {
+  styles [
+    "menu",
+  ]
+
+  child: ListBox list_box {
+    selection-mode: none;
+    row-activated => $on_opensearch_row_activated();
+  };
+}
+

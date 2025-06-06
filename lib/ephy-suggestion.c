@@ -260,3 +260,10 @@ ephy_suggestion_is_completion (EphySuggestion *self)
 {
   return self->is_completion;
 }
+
+void
+ephy_suggestion_set_icon (EphySuggestion *self,
+                          const char     *icon_name)
+{
+  dzl_suggestion_set_icon_name (DZL_SUGGESTION (self), icon_name);
+}

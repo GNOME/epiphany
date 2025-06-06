@@ -329,6 +329,43 @@ typedef struct {
 } WebExtensionData;
 
 static void
+on_document_loaded_message_sent_cb (WebKitWebPage *web_page,
+                                    GAsyncResult  *result,
+                                    gpointer       user_data)
+{
+  g_autoptr (WebKitUserMessage) msg = NULL;
+  g_autoptr (GError) error = NULL;
+
+  msg = webkit_web_page_send_message_to_view_finish (web_page, result, &error);
+  if (!msg) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+        /* We do not expect the message to be "handled" since it's WebKit's
+         * way of saying there was no reply, which is expected for this use case.
+         */
+        !g_error_matches (error, WEBKIT_USER_MESSAGE_ERROR, WEBKIT_USER_MESSAGE_UNHANDLED_MESSAGE))
+      g_warning ("Error sending DocumentLoaded message from web process extension to WebView: %s", error->message);
+    return;
+  }
+}
+
+/* We don't directly have API on the main epiphany side to know when the DOM
+ * has finished loading, so just we need to use the API we have on the web process
+ * extension's side to make epiphany aware of it
+ */
+static void
+on_document_loaded_cb (WebKitWebPage           *page,
+                       EphyWebProcessExtension *extension)
+{
+  g_autoptr (WebKitUserMessage) msg = webkit_user_message_new ("DocumentLoaded", NULL);
+
+  webkit_web_page_send_message_to_view (page,
+                                        g_steal_pointer (&msg),
+                                        extension->cancellable,
+                                        (GAsyncReadyCallback)on_document_loaded_message_sent_cb,
+                                        NULL);
+}
+
+static void
 content_script_window_object_cleared_cb (WebKitScriptWorld *world,
                                          WebKitWebPage     *page,
                                          WebKitFrame       *frame,
@@ -523,6 +560,9 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                              web_page, G_CONNECT_SWAPPED);
     g_signal_connect (web_page, "user-message-received",
                       G_CALLBACK (web_page_received_message),
+                      extension);
+    g_signal_connect (web_page, "document-loaded",
+                      G_CALLBACK (on_document_loaded_cb),
                       extension);
   }
 }

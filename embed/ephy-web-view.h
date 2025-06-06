@@ -206,4 +206,6 @@ gboolean ephy_web_view_autofill_popup_enabled                     (EphyWebView  
 
 void ephy_web_view_autofill_disable_popup                         (EphyWebView               *web_view);
 
+GListModel *               ephy_web_view_get_opensearch_engines   (EphyWebView               *view);
+
 G_END_DECLS
