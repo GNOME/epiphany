@@ -22,17 +22,6 @@
 			<summary>Default search engine.</summary>
 			<description>Name of the search engine selected by default.</description>
 		</key>
-		<!-- As much as it can be annoying, there is just no way of migrating from a GVariant type to
-			an other one while keeping the previous key name, as GSettings enforces the new
-			key type way too much. It detects the previous value isn't an aa{sv} and instead
-			replaces it with the default value as fallback. It would erase all search engines
-			one might have, which is of course unacceptable. So despite "search-engine-providers"
-			being less nice than "search-engines", we need to change name to be able to migrate. -->
-		<!-- FIXME: Remove this deprecated key when dropping its migrator in the future. -->
-		<key type="a(sss)" name="search-engines">
-			<summary>Deprecated. Please use search-engine-providers instead.</summary>
-			<default>[]</default>
-		</key>
 		<key type="aa{sv}" name="search-engine-providers">
 			<default>
 				<![CDATA[
