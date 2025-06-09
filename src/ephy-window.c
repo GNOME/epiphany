@@ -4895,17 +4895,15 @@ ephy_window_get_header_bar (EphyWindow *window)
 
 typedef struct {
   EphyWindow *window;
-  GCancellable *cancellable;
 
   guint embeds_to_check;
-  EphyEmbed *modified_embed;
+  GList *modified_embeds;
 } WindowHasModifiedFormsData;
 
 static void
 window_has_modified_forms_data_free (WindowHasModifiedFormsData *data)
 {
-  g_object_unref (data->cancellable);
-
+  g_clear_list (&data->modified_embeds, NULL);
   g_free (data);
 }
 
@@ -4935,19 +4933,21 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
   data->window->checking_modified_forms = FALSE;
   g_clear_handle_id (&data->window->modified_forms_timeout_id, g_source_remove);
 
-  if (data->modified_embed) {
+  if (data->modified_embeds) {
     AdwDialog *dialog;
 
-    /* jump to the first tab with modified forms */
+    /* Jump to the current tab with modified forms */
     impl_set_active_child (EPHY_EMBED_CONTAINER (data->window),
-                           data->modified_embed);
+                           data->modified_embeds->data);
+
+    data->modified_embeds = data->modified_embeds->next;
 
     dialog = construct_confirm_close_dialog (data->window,
                                              _("Leave Website?"),
                                              _("A form was modified and has not been submitted"),
                                              _("_Discard Form"));
     g_signal_connect_swapped (dialog, "response::accept",
-                              G_CALLBACK (finish_window_close_after_modified_forms_check),
+                              G_CALLBACK (continue_window_close_after_modified_forms_check),
                               data);
     g_signal_connect_swapped (dialog, "response::cancel",
                               G_CALLBACK (window_has_modified_forms_data_free),
@@ -4956,10 +4956,6 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
 
     return;
   }
-
-  /* FIXME: We only checked the first tab with modified forms. If more tabs
-   * have modified forms, they will be lost and the user will not be warned.
-   */
 
   if (!check_and_run_downloads_in_background (data->window))
     finish_window_close_after_modified_forms_check (data);
@@ -4974,15 +4970,8 @@ window_has_modified_forms_cb (EphyWebView                *view,
 
   data->embeds_to_check--;
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
-  if (has_modified_forms) {
-    /* Cancel all others
-     *
-     * FIXME: If more tabs have modified forms, they will be lost and the user
-     * will not be warned.
-     */
-    g_cancellable_cancel (data->cancellable);
-    data->modified_embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
-  }
+  if (has_modified_forms)
+    data->modified_embeds = g_list_prepend (data->modified_embeds, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view));
 
   if (data->embeds_to_check > 0)
     return;
@@ -5002,7 +4991,6 @@ ephy_window_check_modified_forms (EphyWindow *window)
 
   data = g_new0 (WindowHasModifiedFormsData, 1);
   data->window = window;
-  data->cancellable = g_cancellable_new ();
   data->embeds_to_check = ephy_tab_view_get_n_pages (window->tab_view);
 
   tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
@@ -5017,7 +5005,7 @@ ephy_window_check_modified_forms (EphyWindow *window)
     EphyEmbed *embed = (EphyEmbed *)l->data;
 
     ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
-                                      data->cancellable,
+                                      NULL,
                                       (GAsyncReadyCallback)window_has_modified_forms_cb,
                                       data);
   }
