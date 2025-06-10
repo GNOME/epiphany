@@ -299,18 +299,6 @@ show_preferences (GSimpleAction *action,
 }
 
 static void
-show_shortcuts (GSimpleAction *action,
-                GVariant      *parameter,
-                gpointer       user_data)
-{
-  GtkWindow *window;
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
-
-  window_cmd_show_shortcuts (NULL, NULL, EPHY_WINDOW (window));
-}
-
-static void
 show_help (GSimpleAction *action,
            GVariant      *parameter,
            gpointer       user_data)
@@ -444,7 +432,6 @@ static GActionEntry app_entries[] = {
   { "firefox-sync-dialog", show_firefox_sync, NULL, NULL, NULL },
   { "clear-data-view", show_clear_data_view, NULL, NULL, NULL},
   { "preferences", show_preferences, NULL, NULL, NULL },
-  { "shortcuts", show_shortcuts, NULL, NULL, NULL },
   { "help", show_help, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
@@ -649,7 +636,6 @@ ephy_shell_startup (GApplication *application)
     set_accel_for_action (shell, "app.reopen-closed-tab", "<Primary><Shift>t");
     set_accel_for_action (shell, "app.import-bookmarks", "<Primary><Shift>m");
     set_accel_for_action (shell, "app.export-bookmarks", "<Primary><Shift>x");
-    set_accel_for_action (shell, "app.shortcuts", "<Primary>question");
     set_accel_for_action (shell, "app.help", "F1");
   } else {
     shell->webapp = ephy_web_application_for_profile_directory (ephy_profile_dir (), EPHY_WEB_APP_NO_TMP_ICON);
