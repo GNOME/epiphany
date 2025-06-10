@@ -51,6 +51,7 @@ struct _PrefsAppearancePage {
   GtkWidget *js_row;
   GtkWidget *js_edit_button;
   GtkWidget *default_zoom_row;
+  GtkFontDialog *font_dialog;
 
   GCancellable *cancellable;
 };
@@ -143,6 +144,27 @@ reader_color_scheme_set_mapping (const GValue       *value,
     default:
       return g_variant_new_string ("crashed");
   }
+}
+
+static gboolean
+font_desc_get_mapping (GValue   *value,
+                       GVariant *variant,
+                       gpointer  user_data)
+{
+  const char *font_string = g_variant_get_string (variant, NULL);
+  g_autoptr (PangoFontDescription) desc = pango_font_description_from_string (font_string);
+  g_value_take_boxed (value, g_steal_pointer (&desc));
+  return TRUE;
+}
+
+static GVariant *
+font_desc_set_mapping (const GValue       *value,
+                       const GVariantType *expected_type,
+                       gpointer            user_data)
+{
+  PangoFontDescription *desc = g_value_get_boxed (value);
+  g_autofree char *font_string = pango_font_description_to_string (desc);
+  return g_variant_new_string (font_string);
 }
 
 static void
@@ -242,23 +264,37 @@ setup_appearance_page (PrefsAppearancePage *appearance_page)
                    "enable-expansion",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
 
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_SANS_SERIF_FONT,
-                   appearance_page->sans_fontbutton,
-                   "font",
-                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind_with_mapping (web_settings,
+                                EPHY_PREFS_WEB_SANS_SERIF_FONT,
+                                appearance_page->sans_fontbutton,
+                                "font-desc",
+                                G_SETTINGS_BIND_DEFAULT,
+                                font_desc_get_mapping,
+                                font_desc_set_mapping,
+                                NULL, NULL);
 
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_SERIF_FONT,
-                   appearance_page->serif_fontbutton,
-                   "font",
-                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind_with_mapping (web_settings,
+                                EPHY_PREFS_WEB_SERIF_FONT,
+                                appearance_page->serif_fontbutton,
+                                "font-desc",
+                                G_SETTINGS_BIND_DEFAULT,
+                                font_desc_get_mapping,
+                                font_desc_set_mapping,
+                                NULL, NULL);
 
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_MONOSPACE_FONT,
-                   appearance_page->mono_fontbutton,
-                   "font",
-                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind_with_mapping (web_settings,
+                                EPHY_PREFS_WEB_MONOSPACE_FONT,
+                                appearance_page->mono_fontbutton,
+                                "font-desc",
+                                G_SETTINGS_BIND_DEFAULT,
+                                font_desc_get_mapping,
+                                font_desc_set_mapping,
+                                NULL, NULL);
+
+  appearance_page->font_dialog = gtk_font_dialog_new ();
+  gtk_font_dialog_button_set_dialog (GTK_FONT_DIALOG_BUTTON (appearance_page->sans_fontbutton), appearance_page->font_dialog);
+  gtk_font_dialog_button_set_dialog (GTK_FONT_DIALOG_BUTTON (appearance_page->serif_fontbutton), appearance_page->font_dialog);
+  gtk_font_dialog_button_set_dialog (GTK_FONT_DIALOG_BUTTON (appearance_page->mono_fontbutton), appearance_page->font_dialog);
 
   /* ======================================================================== */
   /* ========================== Reader Mode ================================= */
@@ -337,6 +373,8 @@ prefs_appearance_page_dispose (GObject *object)
     g_cancellable_cancel (page->cancellable);
     g_clear_object (&page->cancellable);
   }
+
+  g_clear_object (&page->font_dialog);
 
   G_OBJECT_CLASS (prefs_appearance_page_parent_class)->dispose (object);
 }
