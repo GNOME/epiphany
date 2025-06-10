@@ -1013,7 +1013,6 @@ on_url_button_clicked (GtkButton *button,
 static void
 on_icon_press (GtkEntry             *entry,
                GtkEntryIconPosition  icon_pos,
-               GdkEvent             *event,
                gpointer              user_data)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
