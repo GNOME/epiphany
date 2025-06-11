@@ -26,6 +26,7 @@ template $EphyLocationEntry: Box {
         Button url_button {
           child: Label url_button_label {
             ellipsize: end;
+            styles [ "location-entry" ]
           };
           clicked => $on_url_button_clicked();
           hexpand: true;
