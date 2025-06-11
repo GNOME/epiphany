@@ -7,197 +7,221 @@ template $EphyLocationEntry: Box {
 
   Stack stack {
     transition-type: crossfade;
+
     StackPage {
       name: "display";
 
-      child: Box {
-        styles [
-          "linked"
-        ]
-
-        [start]
-        Button security_button {
-          tooltip-text: _("Website Security Status and Permissions");
-          focus-on-click: false;
-          clicked => $on_security_button_clicked() swapped;
-          styles [ "entry-icon" ]
-        }
-
-        Button url_button {
-          child: Label url_button_label {
-            ellipsize: end;
-            styles [ "location-entry" ]
-          };
-          clicked => $on_url_button_clicked();
-          hexpand: true;
-          styles [ "entry-icon", "text-button" ]
-        }
-
-        [end]
-        Button mute_button {
-          tooltip-text: _("Un/Mute");
-          visible: false;
-          focus-on-click: false;
-          icon-name: "ephy-audio-muted-symbolic";
-          clicked => $on_mute_button_clicked();
-          styles [ "entry-icon" ]
-        }
-
-        [end]
-        Button reader_mode_button {
-          tooltip-text: _("Reader Mode");
-          focus-on-click: false;
-          visible: false;
-          clicked => $on_reader_mode_clicked() swapped;
-          styles [ "entry-icon" ]
-        }
-
-        [end]
-        $EphyAddOpensearchEngineButton opensearch_button {
-          valign: center;
-          focus-on-click: false;
-          visible: false;
-
+      child: Overlay overlay {
+        Box {
           styles [
-            "entry-icon",
-            "end",
+            "linked",
           ]
-        }
 
-        [end]
-        Button bookmark_button {
-          focus-on-click: false;
-          clicked => $on_bookmark_button_clicked();
-          styles [ "entry-icon" ]
-        }
+          [start]
+          Button security_button {
+            tooltip-text: _("Website Security Status and Permissions");
+            focus-on-click: false;
+            clicked => $on_security_button_clicked() swapped;
 
-        [end]
-        MenuButton password_button {
-          tooltip-text: _("View Available Passwords");
-          focus-on-click: false;
-          visible: false;
-          icon-name: "dialog-password-symbolic";
-          styles [ "entry-icon" ]
-        }
+            styles [
+              "entry-icon",
+            ]
+          }
 
-        [end]
-        Button spinner {
-          child: Adw.Spinner {
-          };
+          Button url_button {
+            child: Label url_button_label {
+              ellipsize: end;
+            };
 
-          styles [ "entry-icon" ]
-        }
+            clicked => $on_url_button_clicked();
+            hexpand: true;
 
-        [end]
-        Button combined_stop_reload_button {
-          action-name: "toolbar.combined-stop-reload";
-          icon-name: "view-refresh-symbolic";
+            styles [
+              "entry-icon",
+              "text-button",
+            ]
+          }
 
-          styles [ "entry-icon" ]
+          [end]
+          Button mute_button {
+            tooltip-text: _("Un/Mute");
+            visible: false;
+            focus-on-click: false;
+            icon-name: "ephy-audio-muted-symbolic";
+            clicked => $on_mute_button_clicked();
 
-          GestureClick {
-            button: 2;
-            pressed => $middle_click_pressed_cb();
-            released => $middle_click_released_cb();
+            styles [
+              "entry-icon",
+            ]
+          }
+
+          [end]
+          Button reader_mode_button {
+            tooltip-text: _("Reader Mode");
+            focus-on-click: false;
+            visible: false;
+            clicked => $on_reader_mode_clicked() swapped;
+
+            styles [
+              "entry-icon",
+            ]
+          }
+
+          [end]
+          $EphyAddOpensearchEngineButton opensearch_button {
+            valign: center;
+            focus-on-click: false;
+            visible: false;
+
+            styles [
+              "entry-icon",
+              "end",
+            ]
+          }
+
+          [end]
+          Button bookmark_button {
+            focus-on-click: false;
+            clicked => $on_bookmark_button_clicked();
+
+            styles [
+              "entry-icon",
+            ]
+          }
+
+          [end]
+          MenuButton password_button {
+            tooltip-text: _("View Available Passwords");
+            focus-on-click: false;
+            visible: false;
+            icon-name: "dialog-password-symbolic";
+
+            styles [
+              "entry-icon",
+            ]
+          }
+
+          [end]
+          Button combined_stop_reload_button {
+            action-name: "toolbar.combined-stop-reload";
+            icon-name: "view-refresh-symbolic";
+
+            styles [ "entry-icon" ]
+
+            GestureClick {
+              button: 2;
+              pressed => $middle_click_pressed_cb();
+              released => $middle_click_released_cb();
+            }
+          }
+
+          Popover suggestions_popover {
+            has-arrow: false;
+            autohide: false;
+            can-focus: false;
+            margin-bottom: 2;
+            margin-top: 2;
+            notify::visible => $on_suggestions_popover_notify_visible() swapped;
+
+            child: ScrolledWindow scrolled_window {
+              hscrollbar-policy: never;
+              max-content-height: 400;
+              propagate-natural-height: true;
+
+              child: ListView suggestions_view {
+                activate => $on_suggestion_activated() swapped;
+
+                model: SingleSelection suggestions_model {
+                  autoselect: false;
+                  can-unselect: true;
+                  items-changed => $update_suggestions_popover() swapped;
+                };
+
+                factory: BuilderListItemFactory {
+                  template ListItem {
+                    child: Grid {
+                      column-spacing: 6;
+                      row-spacing: 3;
+
+                      GestureClick {
+                        button: 1;
+                        exclusive: true;
+                        pressed => $on_item_pressed();
+                        released => $on_item_released();
+                      }
+
+                      Image {
+                        pixel-size: 16;
+                        gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.icon)) as <Gio.Icon>;
+
+                        layout {
+                          column: "0";
+                          row: "0";
+                        }
+                      }
+
+                      Label {
+                        use-markup: true;
+                        ellipsize: end;
+                        xalign: 0;
+                        single-line-mode: true;
+                        hexpand: true;
+                        label: bind template.item as <$EphySuggestion>.title;
+
+                        layout {
+                          column: "1";
+                          row: "0";
+                        }
+                      }
+
+                      Label {
+                        use-markup: true;
+                        ellipsize: end;
+                        xalign: 0;
+                        single-line-mode: true;
+                        hexpand: true;
+                        label: bind template.item as <$EphySuggestion>.subtitle;
+
+                        layout {
+                          column: "1";
+                          row: "1";
+                        }
+
+                        styles [
+                          "dim-label",
+                          "caption",
+                        ]
+                      }
+
+                      Image {
+                        pixel-size: 16;
+                        gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)) as <Gio.Icon>;
+
+                        layout {
+                          column: "2";
+                          row: "0";
+                        }
+                      }
+                    };
+                  }
+                };
+              };
+            };
+
+            styles [
+              "menu",
+              "suggestions",
+            ]
           }
         }
 
-        Popover suggestions_popover {
-          has-arrow: false;
-          autohide: false;
-          can-focus: false;
-          margin-bottom: 2;
-          margin-top: 2;
-          notify::visible => $on_suggestions_popover_notify_visible() swapped;
-
-          child: ScrolledWindow scrolled_window {
-            hscrollbar-policy: never;
-            max-content-height: 400;
-            propagate-natural-height: true;
-
-            child: ListView suggestions_view {
-              activate => $on_suggestion_activated() swapped;
-
-              model: SingleSelection suggestions_model {
-                autoselect: false;
-                can-unselect: true;
-                items-changed => $update_suggestions_popover() swapped;
-              };
-
-              factory: BuilderListItemFactory {
-                template ListItem {
-                  child: Grid {
-                    column-spacing: 6;
-                    row-spacing: 3;
-
-                    GestureClick {
-                      button: 1;
-                      exclusive: true;
-                      pressed => $on_item_pressed();
-                      released => $on_item_released();
-                    }
-
-                    Image {
-                      pixel-size: 16;
-                      gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.icon)) as <Gio.Icon>;
-
-                      layout {
-                        column: "0";
-                        row: "0";
-                      }
-                    }
-
-                    Label {
-                      use-markup: true;
-                      ellipsize: end;
-                      xalign: 0;
-                      single-line-mode: true;
-                      hexpand: true;
-                      label: bind template.item as <$EphySuggestion>.title;
-
-                      layout {
-                        column: "1";
-                        row: "0";
-                      }
-                    }
-
-                    Label {
-                      use-markup: true;
-                      ellipsize: end;
-                      xalign: 0;
-                      single-line-mode: true;
-                      hexpand: true;
-                      label: bind template.item as <$EphySuggestion>.subtitle;
-
-                      layout {
-                        column: "1";
-                        row: "1";
-                      }
-
-                      styles [
-                        "dim-label",
-                        "caption",
-                      ]
-                    }
-
-                    Image {
-                      pixel-size: 16;
-                      gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)) as <Gio.Icon>;
-
-                      layout {
-                        column: "2";
-                        row: "0";
-                      }
-                    }
-                  };
-                }
-              };
-            };
-          };
+        [overlay]
+        ProgressBar progress_bar {
+          valign: end;
 
           styles [
-            "menu",
-            "suggestions",
+            "osd",
+            "progress-indicator",
           ]
         }
       };

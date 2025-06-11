@@ -65,6 +65,7 @@ struct _EphyLocationEntry {
   GtkWidget *stack;
 
   /* Display */
+  GtkWidget *url_button;
   GtkWidget *url_button_label;
   GtkWidget *security_button;
   GtkWidget *mute_button;
@@ -72,8 +73,8 @@ struct _EphyLocationEntry {
   GtkWidget *opensearch_button;
   GtkWidget *bookmark_button;
   GtkWidget *reader_mode_button;
-  GtkWidget *spinner;
   GtkWidget *combined_stop_reload_button;
+  GtkWidget *progress_bar;
   GList *page_actions;
   GList *permission_buttons;
 
@@ -90,6 +91,11 @@ struct _EphyLocationEntry {
   char *saved_text;
   char *jump_tab;
 
+  guint progress_timeout;
+  guint target_progress;
+  guint current_progress;
+  gdouble progress_fraction;
+
   gboolean insert_completion;
   gboolean reader_mode_active;
   gboolean can_show_mute_button;
@@ -101,6 +107,8 @@ struct _EphyLocationEntry {
   EphySecurityLevel security_level;
   EphyAdaptiveMode adaptive_mode;
   EphyBookmarkIconState icon_state;
+
+  GtkCssProvider *css_provider;
 };
 
 enum {
@@ -1001,6 +1009,7 @@ ephy_location_entry_dispose (GObject *object)
     self->text = NULL;
   }
 
+  g_clear_handle_id (&self->progress_timeout, g_source_remove);
   ephy_location_entry_page_action_clear (self);
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
@@ -1253,9 +1262,10 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_model);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_view);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button_label);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, spinner);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, combined_stop_reload_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, opensearch_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, progress_bar);
 
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
@@ -1685,12 +1695,72 @@ ephy_location_entry_get_reader_mode_state (EphyLocationEntry *self)
   return self->reader_mode_active;
 }
 
+static void
+progress_hide (gpointer user_data)
+{
+  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
+
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), 0);
+  gtk_widget_set_visible (self->progress_bar, FALSE);
+
+  g_clear_handle_id (&self->progress_timeout, g_source_remove);
+}
+
+static void
+ephy_location_entry_set_fraction_internal (gpointer user_data)
+{
+  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
+  gint ms;
+  gdouble progress;
+  gdouble current;
+
+  self->progress_timeout = 0;
+  current = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (self->progress_bar));
+
+  /* Try to animated progress update, so increase by 0.25 and only if the change is big
+   * enough update it immediately.
+   */
+  if ((self->progress_fraction - current) > 0.5 || self->progress_fraction == 1.0)
+    ms = 10;
+  else
+    ms = 25;
+
+  progress = current + 0.025;
+  if (progress < self->progress_fraction) {
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), progress);
+    self->progress_timeout = g_timeout_add_once (ms, ephy_location_entry_set_fraction_internal, self);
+  } else {
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), self->progress_fraction);
+    if (self->progress_fraction == 1.0)
+      self->progress_timeout = g_timeout_add_once (500, progress_hide, self);
+  }
+
+  gtk_widget_set_visible (self->progress_bar, TRUE);
+}
+
 void
 ephy_location_entry_set_progress (EphyLocationEntry *self,
                                   gdouble            fraction,
                                   gboolean           loading)
 {
-  gtk_widget_set_visible (self->spinner, loading && fraction != 1.0);
+  gdouble current_progress;
+
+  g_clear_handle_id (&self->progress_timeout, g_source_remove);
+
+  if (!loading) {
+    /* Setting progress to 0 when it is already 0 can actually cause the
+     * progress bar to be shown. Yikes....
+     */
+    current_progress = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (self->progress_bar));
+    if (current_progress != 0.0) {
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), 0.0);
+      gtk_widget_set_visible (self->progress_bar, FALSE);
+    }
+    return;
+  }
+
+  self->progress_fraction = fraction;
+  ephy_location_entry_set_fraction_internal (self);
 }
 
 void
