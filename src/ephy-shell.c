@@ -1457,6 +1457,10 @@ ephy_shell_set_windows_with_modified_forms (EphyShell *shell,
 
   if (!shell->windows_with_modified_forms && shell->checking_modified_forms) {
     GList *windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+    EphySession *session = ephy_shell_get_session (shell);
+
+    if (session)
+      ephy_session_close (session);
 
     shell->checking_modified_forms = FALSE;
     while (windows) {
@@ -1489,9 +1493,6 @@ ephy_shell_close_all_windows (EphyShell *shell)
 
   g_assert (EPHY_IS_SHELL (shell));
 
-  if (session)
-    ephy_session_close (session);
-
   windows = gtk_application_get_windows (GTK_APPLICATION (shell));
   shell->checking_modified_forms = TRUE;
   shell->windows_with_modified_forms = ephy_shell_get_n_windows (shell);
@@ -1500,13 +1501,13 @@ ephy_shell_close_all_windows (EphyShell *shell)
 
     windows = windows->next;
 
-     /* Check if the window already has modified forms. This prevents
-     * showing the modified forms dialog multiple times, which could happen
-     * if the user attempts to quit multiple times. */
-      if (ephy_window_get_has_modified_forms (window)) {
-        retval = FALSE;
-        continue;
-      }
+    /* Check if the window already has modified forms. This prevents
+    * showing the modified forms dialog multiple times, which could happen
+    * if the user attempts to quit multiple times. */
+    if (ephy_window_get_has_modified_forms (window)) {
+      retval = FALSE;
+      continue;
+    }
 
     if (!ephy_window_close (window, FALSE))
       retval = FALSE;
@@ -1518,6 +1519,9 @@ ephy_shell_close_all_windows (EphyShell *shell)
     g_application_withdraw_notification (G_APPLICATION (shell), shell->open_notification_id);
     g_clear_pointer (&shell->open_notification_id, g_free);
   }
+
+  if (session && retval)
+    ephy_session_close (session);
 
   return retval;
 }
