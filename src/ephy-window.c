@@ -198,6 +198,7 @@ struct _EphyWindow {
   guint updating_address : 1;
   guint force_close : 1;
   guint checking_modified_forms : 1;
+  guint has_modified_forms : 1;
   guint confirmed_close_with_multiple_tabs : 1;
   guint present_on_insert : 1;
 
@@ -727,7 +728,7 @@ ephy_window_close_request (GtkWindow *window)
     return TRUE;
   }
 
-  if (!ephy_window_close (EPHY_WINDOW (window)))
+  if (!ephy_window_close (EPHY_WINDOW (window), TRUE))
     return TRUE;
 
   return FALSE;
@@ -4918,13 +4919,29 @@ window_has_modified_forms_data_free (WindowHasModifiedFormsData *data)
   g_free (data);
 }
 
-static void
-force_close_window_cb (EphyWindow *window)
+void
+ephy_window_force_close (EphyWindow *window)
 {
-  window->force_close = TRUE;
-  ephy_window_close (window);
-  window->force_close = FALSE;
-  g_object_unref (window);
+  EphyShell *shell = ephy_shell_get_default ();
+
+  if (!ephy_shell_get_checking_modified_forms (shell)) {
+    window->force_close = TRUE;
+    ephy_window_close (window, TRUE);
+    window->force_close = FALSE;
+    g_object_unref (window);
+  } else {
+    int windows = ephy_shell_get_windows_with_modified_forms (shell);
+
+    ephy_shell_set_windows_with_modified_forms (shell, windows - 1);
+  }
+}
+
+guint
+ephy_window_get_has_modified_forms (EphyWindow *window)
+{
+  g_assert (EPHY_IS_WINDOW (window));
+
+  return window->has_modified_forms;
 }
 
 static void
@@ -4934,7 +4951,19 @@ finish_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data
    * AdwAlertDialog that's displaying the close confirmation warning gets
    * destroyed first.
    */
-  g_idle_add_once ((GSourceOnceFunc)force_close_window_cb, g_object_ref (data->window));
+  g_idle_add_once ((GSourceOnceFunc)ephy_window_force_close, g_object_ref (data->window));
+  data->window->has_modified_forms = FALSE;
+  window_has_modified_forms_data_free (data);
+}
+
+static void
+stop_window_close_after_modified_forms_check (WindowHasModifiedFormsData *data)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+
+  data->window->has_modified_forms = FALSE;
+  ephy_shell_set_checking_modified_forms (shell, FALSE);
+  ephy_shell_set_windows_with_modified_forms (shell, 0);
   window_has_modified_forms_data_free (data);
 }
 
@@ -4961,7 +4990,7 @@ continue_window_close_after_modified_forms_check (WindowHasModifiedFormsData *da
                               G_CALLBACK (continue_window_close_after_modified_forms_check),
                               data);
     g_signal_connect_swapped (dialog, "response::cancel",
-                              G_CALLBACK (window_has_modified_forms_data_free),
+                              G_CALLBACK (stop_window_close_after_modified_forms_check),
                               data);
     adw_dialog_present (dialog, GTK_WIDGET (data->window));
 
@@ -4981,8 +5010,10 @@ window_has_modified_forms_cb (EphyWebView                *view,
 
   data->embeds_to_check--;
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
-  if (has_modified_forms)
+  if (has_modified_forms) {
     data->modified_embeds = g_list_prepend (data->modified_embeds, EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view));
+    data->window->has_modified_forms = TRUE;
+  }
 
   if (data->embeds_to_check > 0)
     return;
@@ -5035,14 +5066,15 @@ window_close_with_multiple_tabs_cb (EphyWindow *window)
  * ephy_window_close:
  * @window: an #EphyWindow
  *
- * Try to close the window. The window might refuse to close
- * if there are ongoing download operations or unsubmitted
- * modifed forms.
+ * Try to close the window if do_close is TRUE. The window might refuse to close
+ * if there are ongoing download operations or unsubmitted modifed forms.
+ * If do_close is FALSE, this is used to see if a window can close.
  *
  * Returns: %TRUE if the window is closed, or %FALSE otherwise
  **/
 gboolean
-ephy_window_close (EphyWindow *window)
+ephy_window_close (EphyWindow *window,
+                   gboolean    do_close)
 {
   EphySession *session;
   gboolean fullscreen_lockdown;
@@ -5100,7 +5132,8 @@ ephy_window_close (EphyWindow *window)
       ephy_session_close (session);
   }
 
-  gtk_window_destroy (GTK_WINDOW (window));
+  if (do_close)
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return TRUE;
 }
