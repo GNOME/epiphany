@@ -72,6 +72,7 @@ struct _EphyLocationEntry {
   GtkWidget *bookmark_button;
   GtkWidget *reader_mode_button;
   GtkWidget *spinner;
+  GtkWidget *combined_stop_reload_button;
   GList *page_actions;
   GList *permission_buttons;
 
@@ -1048,6 +1049,37 @@ on_delete_text (GtkEditable *editable,
 }
 
 static void
+middle_click_pressed_cb (GtkGesture *gesture)
+{
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+middle_click_released_cb (GtkGesture        *gesture,
+                          int                n_click,
+                          double             x,
+                          double             y,
+                          EphyLocationEntry *self)
+{
+  GtkWidget *widget;
+  EphyWindow *window;
+  GActionGroup *action_group;
+  GAction *action;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  if (!gtk_widget_contains (widget, x, y)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+    return;
+  }
+
+  window = EPHY_WINDOW (gtk_widget_get_root (widget));
+  action_group = ephy_window_get_action_group (window, "toolbar");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "duplicate-tab");
+  g_action_activate (action, NULL);
+}
+
+static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1169,6 +1201,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_view);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button_label);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, spinner);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, combined_stop_reload_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
@@ -1188,6 +1221,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_delete_text);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
   gtk_widget_class_bind_template_callback (widget_class, update_suggestions_popover);
+  gtk_widget_class_bind_template_callback (widget_class, middle_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, middle_click_released_cb);
 
   gtk_widget_class_install_action (widget_class, "clipboard.paste-and-go", NULL, (GtkWidgetActionActivateFunc)paste_and_go_activate);
 
@@ -1690,5 +1725,22 @@ ephy_loation_entry_update_mute_button (EphyLocationEntry *self,
     gtk_widget_set_visible (self->mute_button, TRUE);
   } else {
     gtk_widget_set_visible (self->mute_button, FALSE);
+  }
+}
+
+/* Translators: tooltip for the refresh button */
+static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload");
+
+void
+ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *self,
+                                                             gboolean           loading)
+{
+  if (loading) {
+    gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button), "process-stop-symbolic");
+    /* Translators: tooltip for the stop button */
+    gtk_widget_set_tooltip_text (self->combined_stop_reload_button, _("Stop"));
+  } else {
+    gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button), "view-refresh-symbolic");
+    gtk_widget_set_tooltip_text (self->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
   }
 }

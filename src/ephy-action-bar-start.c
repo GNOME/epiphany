@@ -585,11 +585,12 @@ ephy_action_bar_start_set_adaptive_mode (EphyActionBarStart *action_bar,
                                          EphyAdaptiveMode    adaptive_mode)
 {
   GValue val = G_VALUE_INIT;
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   g_value_init (&val, G_TYPE_INT);
 
   gtk_widget_set_visible (action_bar->new_tab_button, adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
-  gtk_widget_set_visible (action_bar->combined_stop_reload_button, adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
+  gtk_widget_set_visible (action_bar->combined_stop_reload_button, mode == EPHY_EMBED_SHELL_MODE_APPLICATION && adaptive_mode == EPHY_ADAPTIVE_MODE_NORMAL);
 
   if (adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
     g_value_set_int (&val, 42);
