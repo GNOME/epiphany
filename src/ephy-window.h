@@ -67,9 +67,10 @@ const char       *ephy_window_get_location        (EphyWindow *window);
 
 GtkWidget        *ephy_window_get_header_bar      (EphyWindow *window);
 
-gboolean          ephy_window_close               (EphyWindow *window,
-                                                   gboolean    do_close);
-void              ephy_window_force_close         (EphyWindow *window);
+gboolean          ephy_window_can_close           (EphyWindow *window);
+gboolean          ephy_window_close               (EphyWindow *window);
+
+void              ephy_window_handle_quit_with_modified_forms (EphyWindow *window);
 
 guint             ephy_window_get_has_modified_forms (EphyWindow *window);
 

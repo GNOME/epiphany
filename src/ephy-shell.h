@@ -108,9 +108,9 @@ GObject                 *ephy_shell_get_prefs_dialog        (EphyShell        *s
 gboolean                 ephy_shell_get_checking_modified_forms     (EphyShell        *shell);
 void                     ephy_shell_set_checking_modified_forms     (EphyShell        *shell,
                                                                      gboolean          is_checking);
-int                      ephy_shell_get_windows_with_modified_forms (EphyShell        *shell);
-void                     ephy_shell_set_windows_with_modified_forms (EphyShell        *shell,
-                                                                     int               windows);
+int                      ephy_shell_get_num_windows_with_modified_forms (EphyShell        *shell);
+void                     ephy_shell_set_num_windows_with_modified_forms (EphyShell        *shell,
+                                                                         int               windows);
 
 guint                    ephy_shell_get_n_windows           (EphyShell        *shell);
 gboolean                 ephy_shell_close_all_windows       (EphyShell        *shell);
