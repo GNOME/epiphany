@@ -374,6 +374,11 @@ update_url_button_style (EphyLocationEntry *self)
   }
 
 out:
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
+    gtk_label_set_xalign (GTK_LABEL (self->url_button_label), 0);
+  else
+    gtk_label_set_xalign (GTK_LABEL (self->url_button_label), 0.5);
+
   gtk_label_set_text (GTK_LABEL (self->url_button_label), text);
   gtk_label_set_attributes (GTK_LABEL (self->url_button_label), attrs);
 }
@@ -406,6 +411,8 @@ on_focus_leave (GtkEventControllerFocus *controller,
   }
 
   gtk_popover_popdown (GTK_POPOVER (self->suggestions_popover));
+
+  update_url_button_style (self);
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "display");
 }
@@ -726,7 +733,6 @@ on_suggestion_activated (EphyLocationEntry *self,
   text = ephy_suggestion_get_uri (suggestion);
 
   ephy_location_entry_set_text (self, self->jump_tab ? self->jump_tab : text);
-  update_url_button_style (self);
 
   g_clear_pointer (&self->jump_tab, g_free);
 
@@ -745,7 +751,6 @@ on_activate (EphyLocationEntry *self)
       return;
     }
   }
-  update_url_button_style (self);
 
   emit_activate (self, 0);
 }
@@ -1254,9 +1259,6 @@ ephy_location_entry_init (EphyLocationEntry *self)
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "delete-text", G_CALLBACK (on_delete_text), self, 0);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ALWAYS_SHOW_FULL_URL))
-    gtk_editable_set_alignment (GTK_EDITABLE (self), 0.0);
 
   update_reader_icon (self);
   g_signal_connect_object (gtk_settings_get_default (), "notify::gtk-icon-theme-name", G_CALLBACK (update_reader_icon), self, G_CONNECT_SWAPPED);
