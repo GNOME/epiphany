@@ -410,6 +410,8 @@ on_focus_leave (GtkEventControllerFocus *controller,
     return;
   }
 
+  g_clear_handle_id (&self->idle_id, g_source_remove);
+
   gtk_popover_popdown (GTK_POPOVER (self->suggestions_popover));
 
   update_url_button_style (self);
