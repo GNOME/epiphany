@@ -218,7 +218,7 @@ readability_js_finish_cb (GObject      *object,
                           encoded_title,
                           encoded_byline);
 
-  g_string_append (html, reading_time);
+  g_string_append (html, reading_time ? reading_time : "");
   g_string_append (html, "<br/><hr/>");
 
   /* We cannot encode the page content because it contains HTML tags inserted by
@@ -233,7 +233,7 @@ readability_js_finish_cb (GObject      *object,
    * not supposed to contain markup, and Readability.js unescapes them before
    * returning them to us.
    */
-  g_string_append (html, content);
+  g_string_append (html, content ? content : "");
   g_string_append (html, "</article>");
   g_string_append (html, "</body>");
 
