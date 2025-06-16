@@ -1526,8 +1526,18 @@ ephy_shell_close_all_windows (EphyShell *shell)
     g_clear_pointer (&shell->open_notification_id, g_free);
   }
 
-  if (session && retval)
-    ephy_session_close (session);
+  if (retval) {
+    if (session)
+      ephy_session_close (session);
+
+    windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+    while (windows) {
+      EphyWindow *window = EPHY_WINDOW (windows->data);
+
+      windows = windows->next;
+      ephy_window_close (window);
+    }
+  }
 
   return retval;
 }
