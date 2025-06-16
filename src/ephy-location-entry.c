@@ -267,6 +267,12 @@ update_suggestions_popover (EphyLocationEntry *self)
 {
   guint n_items;
 
+  /* Skip item-changed updates when we are no longer in edit mode */
+  if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->stack)), "edit") != 0 ||
+      !gtk_widget_has_focus (GTK_WIDGET (gtk_editable_get_delegate (GTK_EDITABLE (self->text))))) {
+    return;
+  }
+
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->suggestions_model));
 
   if (n_items > 0) {
