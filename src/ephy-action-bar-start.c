@@ -108,12 +108,16 @@ middle_click_handle_on_history_menu_item (EphyEmbed                 *embed,
                                           WebKitBackForwardListItem *item)
 {
   EphyEmbed *new_embed = NULL;
+  EphyNewTabFlags flags = 0;
   const gchar *url;
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+    flags |= EPHY_NEW_TAB_JUMP;
 
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                                   embed,
-                                  0);
+                                  flags);
   g_assert (new_embed != NULL);
 
   /* Load the new URL */
@@ -157,6 +161,9 @@ history_row_released_cb (GtkGesture         *gesture,
 
   if (button == GDK_BUTTON_MIDDLE) {
     middle_click_handle_on_history_menu_item (embed, item);
+
+    if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+      gtk_popover_popdown (GTK_POPOVER (action_bar_start->history_menu));
   } else {
     WebKitWebView *web_view;
 
