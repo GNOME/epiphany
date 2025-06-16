@@ -90,7 +90,7 @@ struct _EphyLocationEntry {
   char *saved_text;
   char *jump_tab;
 
-  gboolean no_completion;
+  gboolean insert_completion;
   gboolean reader_mode_active;
   gboolean can_show_mute_button;
 
@@ -713,10 +713,8 @@ on_editable_changed (GtkEditable *editable,
     ephy_embed_set_typed_input (embed, text);
   }
 
-  if (!self->no_completion)
+  if (self->insert_completion)
     self->idle_id = g_idle_add_full (G_PRIORITY_HIGH, calc_and_set_prefix, self, NULL);
-
-  self->no_completion = FALSE;
 }
 
 static void
@@ -1071,14 +1069,24 @@ on_mute_button_clicked (GtkWidget         *button,
 }
 
 static void
+on_insert_text (GtkEditable *editable,
+                gchar       *text,
+                gint         length,
+                gint        *position,
+                gpointer     user_data)
+{
+  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
+  self->insert_completion = TRUE;
+}
+
+static void
 on_delete_text (GtkEditable *editable,
                 gint         start_pos,
                 gint         end_pos,
                 gpointer     user_data)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (user_data);
-
-  self->no_completion = TRUE;
+  self->insert_completion = FALSE;
 }
 
 static void
@@ -1252,6 +1260,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_icon_press);
   gtk_widget_class_bind_template_callback (widget_class, on_bookmark_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_mute_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_insert_text);
   gtk_widget_class_bind_template_callback (widget_class, on_delete_text);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
   gtk_widget_class_bind_template_callback (widget_class, update_suggestions_popover);
@@ -1288,6 +1297,7 @@ ephy_location_entry_init (EphyLocationEntry *self)
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "delete-text", G_CALLBACK (on_delete_text), self, 0);
+  g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "insert-text", G_CALLBACK (on_insert_text), self, 0);
 
   update_reader_icon (self);
   g_signal_connect_object (gtk_settings_get_default (), "notify::gtk-icon-theme-name", G_CALLBACK (update_reader_icon), self, G_CONNECT_SWAPPED);
