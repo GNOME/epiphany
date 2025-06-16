@@ -576,12 +576,6 @@ compute_prefix (EphyLocationEntry *self,
 {
   int n_items = g_list_model_get_n_items (G_LIST_MODEL (self->suggestions_model));
   g_autofree char *prefix = NULL;
-  gint text_offset = 0;
-
-  if (g_str_has_prefix (key, "http://"))
-    key += strlen ("http://");
-  else if (g_str_has_prefix (key, "https://"))
-    key += strlen ("https://");
 
   for (int idx = 0; idx < n_items; idx++) {
     g_autoptr (EphySuggestion) suggestion = NULL;
@@ -593,38 +587,63 @@ compute_prefix (EphyLocationEntry *self,
     if (!subtitle)
       continue;
 
-    text = g_strdup (subtitle);
+    if (g_str_has_prefix (subtitle, key)) {
+      text = g_strdup (subtitle);
+    } else {
+      g_autoptr (GError) error = NULL;
+      g_autoptr (GUri) uri = g_uri_parse (subtitle, G_URI_FLAGS_PARSE_RELAXED, &error);
+      g_autofree char *lower_host = NULL;
+      const char *base;
 
-    if (g_str_has_prefix (text, "http://"))
-      text_offset = strlen ("http://");
-    else if (g_str_has_prefix (text, "https://"))
-      text_offset = strlen ("https://");
+      if (error) {
+        LOG ("Could not parse url: %s", error->message);
+        continue;
+      }
 
-    if (text && g_str_has_prefix (text + text_offset, key)) {
-      if (!prefix) {
-        prefix = g_strdup (text + text_offset);
+      if (!g_uri_get_host (uri))
+        continue;
+
+      lower_host = g_utf8_strdown (g_uri_get_host (uri), -1);
+      base = soup_tld_get_base_domain (lower_host, &error);
+      if (error) {
+        /* This can happen with internal urls, so fallback to full host */
+        LOG ("Could not get base domain from %s: %s", lower_host, error->message);
+        text = g_strdup (lower_host);
       } else {
-        char *p = prefix;
-        char *q = text + text_offset;
-
-        while (*p && *p == *q) {
-          p++;
-          q++;
+        if (g_str_has_prefix (base, key)) {
+          text = g_strdup (base);
+        } else if (g_str_has_prefix (lower_host, key)) {
+          text = g_strdup (lower_host);
         }
+      }
+    }
 
-        *p = '\0';
+    if (!text)
+      continue;
 
-        if (p > prefix) {
-          q = g_utf8_find_prev_char (prefix, p);
+    if (!prefix) {
+      prefix = g_strdup (text);
+    } else {
+      char *p = prefix;
+      char *q = text;
 
-          switch  (g_utf8_get_char_validated (q, p - q)) {
-            case (gunichar) - 2:
-            case (gunichar) - 1:
-              *q = 0;
-              break;
-            default:
-              break;
-          }
+      while (*p && *p == *q) {
+        p++;
+        q++;
+      }
+
+      *p = '\0';
+
+      if (p > prefix) {
+        q = g_utf8_find_prev_char (prefix, p);
+
+        switch  (g_utf8_get_char_validated (q, p - q)) {
+          case (gunichar) - 2:
+          case (gunichar) - 1:
+            *q = 0;
+            break;
+          default:
+            break;
         }
       }
     }
