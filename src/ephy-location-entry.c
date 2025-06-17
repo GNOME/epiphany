@@ -73,6 +73,7 @@ struct _EphyLocationEntry {
   GtkWidget *reader_mode_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *progress_bar;
+  GtkWidget *context_menu;
   GList *page_actions;
 
   /* Edit */
@@ -98,7 +99,8 @@ struct _EphyLocationEntry {
 
   gint idle_id;
   guint dns_prefetch_handle_id;
-  guint can_redo : 1;
+  gboolean can_redo;
+  gboolean user_changed;
 
   EphySecurityLevel security_level;
   EphyAdaptiveMode adaptive_mode;
@@ -707,6 +709,50 @@ calc_and_set_prefix (gpointer user_data)
 }
 
 static void
+update_actions (EphyLocationEntry *self)
+{
+  GdkClipboard *clipboard;
+  GtkEntryBuffer *buffer;
+  gboolean has_clipboard;
+  gboolean has_selection;
+  gboolean has_content;
+  gboolean editable;
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
+  buffer = gtk_entry_get_buffer (GTK_ENTRY (self->text));
+
+  has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), G_TYPE_STRING);
+  has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (self->text), NULL, NULL);
+  has_content = buffer && (gtk_entry_buffer_get_length (buffer) > 0);
+  editable = gtk_editable_get_editable (GTK_EDITABLE (self->text));
+
+  /* This is a copy of the GtkText logic. We need it as GtkText normally
+   * refreshes these actions upon opening context menu, and we don't allow it
+   * to do that and show our own menu instead.
+   */
+  gtk_widget_action_set_enabled (self->text, "clipboard.cut",
+                                 editable && has_selection);
+  gtk_widget_action_set_enabled (self->text, "clipboard.copy",
+                                 has_selection);
+  gtk_widget_action_set_enabled (self->text, "clipboard.paste",
+                                 editable && has_clipboard);
+
+  gtk_widget_action_set_enabled (self->text, "selection.delete",
+                                 editable && has_selection);
+  gtk_widget_action_set_enabled (self->text, "entry.select-all",
+                                 has_content);
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.paste-and-go",
+                                 editable && has_clipboard);
+  gtk_widget_action_set_enabled (self->text, "edit.clear",
+                                 has_content);
+  gtk_widget_action_set_enabled (self->text, "edit.undo-extra",
+                                 self->user_changed);
+  gtk_widget_action_set_enabled (self->text, "edit.redo-extra",
+                                 self->can_redo);
+}
+
+static void
 on_editable_changed (GtkEditable *editable,
                      GtkEntry    *entry)
 {
@@ -853,9 +899,114 @@ update_reader_icon (EphyLocationEntry *self)
 }
 
 static void
-paste_received (GdkClipboard      *clipboard,
-                GAsyncResult      *result,
-                EphyLocationEntry *self)
+show_context_menu (EphyLocationEntry *self,
+                   double             x,
+                   double             y)
+{
+  update_actions (self);
+
+  if (x != -1 && y != -1) {
+    GdkRectangle rect = { x, y, 1, 1 };
+    gtk_popover_set_pointing_to (GTK_POPOVER (self->context_menu), &rect);
+  } else {
+    gtk_popover_set_pointing_to (GTK_POPOVER (self->context_menu), NULL);
+  }
+
+  gtk_popover_popup (GTK_POPOVER (self->context_menu));
+}
+
+static void
+on_entry_pressed (EphyLocationEntry *self,
+                  int                n_click,
+                  double             x,
+                  double             y,
+                  GtkGesture        *gesture)
+{
+  GdkEventSequence *current;
+  GdkEvent *event;
+
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (gesture, current);
+
+  if (gdk_event_triggers_context_menu (event)) {
+    show_context_menu (self, x, y);
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+  }
+}
+
+static void
+do_copy (EphyLocationEntry *self,
+         gboolean           cut)
+{
+  int start;
+  int end;
+  gboolean has_selection;
+
+  has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (self->text), &start, &end);
+
+  if (has_selection) {
+    GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
+    g_autofree char *text = NULL;
+    const char *selected_text;
+
+    text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (self->text)));
+    *g_utf8_offset_to_pointer (text, end) = '\0';
+    selected_text = g_utf8_offset_to_pointer (text, start);
+    gdk_clipboard_set_text (clipboard, selected_text);
+
+    if (cut)
+      gtk_editable_delete_text (GTK_EDITABLE (self->text), start, end);
+  }
+}
+
+static void
+cut_activate (EphyLocationEntry *self)
+{
+  do_copy (self, TRUE);
+}
+
+static void
+copy_activate (EphyLocationEntry *self)
+{
+  do_copy (self, FALSE);
+}
+
+static void
+on_paste_text_ready (GdkClipboard      *clipboard,
+                     GAsyncResult      *result,
+                     EphyLocationEntry *self)
+{
+  g_autofree char *text = NULL;
+  int position;
+
+  text = gdk_clipboard_read_text_finish (GDK_CLIPBOARD (clipboard), result, NULL);
+  if (text == NULL) {
+    gtk_widget_error_bell (GTK_WIDGET (self));
+    return;
+  }
+
+  gtk_editable_delete_selection (GTK_EDITABLE (self));
+
+  position = gtk_editable_get_position (GTK_EDITABLE (self->text));
+  gtk_editable_insert_text (GTK_EDITABLE (self->text), text, -1, &position);
+
+  g_object_unref (self);
+}
+
+static void
+paste_activate (EphyLocationEntry *self)
+{
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
+
+  gdk_clipboard_read_text_async (clipboard, NULL,
+                                 (GAsyncReadyCallback)on_paste_text_ready,
+                                 g_object_ref (self));
+}
+
+static void
+on_paste_and_go_text_ready (GdkClipboard      *clipboard,
+                            GAsyncResult      *result,
+                            EphyLocationEntry *self)
 {
   g_autofree char *text = NULL;
 
@@ -877,8 +1028,32 @@ paste_and_go_activate (EphyLocationEntry *self)
   GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
 
   gdk_clipboard_read_text_async (clipboard, NULL,
-                                 (GAsyncReadyCallback)paste_received,
+                                 (GAsyncReadyCallback)on_paste_and_go_text_ready,
                                  g_object_ref (self));
+}
+
+static void
+clear_activate (EphyLocationEntry *self)
+{
+  gtk_editable_set_text (GTK_EDITABLE (self->text), "");
+}
+
+static void
+select_all_activate (EphyLocationEntry *self)
+{
+  gtk_editable_select_region (GTK_EDITABLE (self), 0, -1);
+}
+
+static void
+menu_popup_activate (EphyLocationEntry *self)
+{
+  show_context_menu (self, -1, -1);
+}
+
+static void
+delete_activate (EphyLocationEntry *self)
+{
+  gtk_editable_delete_selection (GTK_EDITABLE (self));
 }
 
 static gboolean
@@ -995,6 +1170,9 @@ ephy_location_entry_dispose (GObject *object)
   }
 
   g_clear_handle_id (&self->progress_timeout, g_source_remove);
+
+  g_clear_pointer (&self->context_menu, gtk_widget_unparent);
+
   ephy_location_entry_page_action_clear (self);
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
@@ -1222,6 +1400,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, opensearch_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, progress_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, context_menu);
 
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
@@ -1237,12 +1416,33 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_icon_press);
   gtk_widget_class_bind_template_callback (widget_class, on_insert_text);
   gtk_widget_class_bind_template_callback (widget_class, on_delete_text);
+  gtk_widget_class_bind_template_callback (widget_class, on_entry_pressed);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
   gtk_widget_class_bind_template_callback (widget_class, update_suggestions_popover);
   gtk_widget_class_bind_template_callback (widget_class, middle_click_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, middle_click_released_cb);
 
-  gtk_widget_class_install_action (widget_class, "clipboard.paste-and-go", NULL, (GtkWidgetActionActivateFunc)paste_and_go_activate);
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
+                                   (GtkWidgetActionActivateFunc)cut_activate);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
+                                   (GtkWidgetActionActivateFunc)copy_activate);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
+                                   (GtkWidgetActionActivateFunc)paste_activate);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste-and-go", NULL,
+                                   (GtkWidgetActionActivateFunc)paste_and_go_activate);
+  gtk_widget_class_install_action (widget_class, "edit.clear", NULL,
+                                   (GtkWidgetActionActivateFunc)clear_activate);
+  /* FIXME: don't like this. Just do normal undo/redo */
+  gtk_widget_class_install_action (widget_class, "edit.undo-extra", NULL,
+                                   (GtkWidgetActionActivateFunc)ephy_location_entry_reset);
+  gtk_widget_class_install_action (widget_class, "edit.redo-extra", NULL,
+                                   (GtkWidgetActionActivateFunc)ephy_location_entry_undo_reset);
+  gtk_widget_class_install_action (widget_class, "entry.select-all", NULL,
+                                   (GtkWidgetActionActivateFunc)select_all_activate);
+  gtk_widget_class_install_action (widget_class, "menu.popup-extra", NULL,
+                                   (GtkWidgetActionActivateFunc)menu_popup_activate);
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
+                                   (GtkWidgetActionActivateFunc)delete_activate);
 
   register_activate_shortcuts (widget_class, GDK_CONTROL_MASK);
   register_activate_shortcuts (widget_class, GDK_ALT_MASK);

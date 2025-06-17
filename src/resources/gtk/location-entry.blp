@@ -210,14 +210,73 @@ template $EphyLocationEntry: Box {
           enter => $on_focus_enter();
           leave => $on_focus_leave();
         }
+
+        GestureClick {
+          button: 0;
+          exclusive: true;
+          propagation-phase: capture;
+          pressed => $on_entry_pressed() swapped;
+        }
+
+        PopoverMenu context_menu {
+          menu-model: context_menu_model;
+          halign: start;
+          has-arrow: false;
+        }
       };
     }
   }
 }
 
 menu context_menu_model {
-  item {
-    label: _("Paste and _Go");
-    action: "clipboard.paste-and-go";
+  section {
+    item {
+      label: _("_Undo");
+      action: "edit.undo-extra";
+    }
+
+    item {
+      label: _("_Redo");
+      action: "edit.redo-extra";
+    }
+  }
+
+  section {
+    item {
+      label: _("Cu_t");
+      action: "clipboard.cut";
+    }
+
+    item {
+      label: _("_Copy");
+      action: "clipboard.copy";
+    }
+
+    item {
+      label: _("_Paste");
+      action: "clipboard.paste";
+    }
+
+    item {
+      label: _("Paste and _Go");
+      action: "clipboard.paste-and-go";
+    }
+
+    item {
+      label: _("_Delete");
+      action: "selection.delete";
+    }
+  }
+
+  section {
+    item {
+      label: _("Cl_ear");
+      action: "edit.clear";
+    }
+
+    item {
+      label: _("Select _All");
+      action: "entry.select-all";
+    }
   }
 }
