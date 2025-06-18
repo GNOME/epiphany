@@ -175,11 +175,13 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
   if (G_UNLIKELY (!manager->default_engine)) {
     g_warning ("Could not find default search engine set in the gsettings within all available search engines! Setting the first one as fallback.");
     ephy_search_engine_manager_set_default_engine (manager, manager->engines->pdata[0]);
+    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE, ephy_search_engine_get_name (manager->engines->pdata[0]));
   }
 
   if (G_UNLIKELY (!manager->incognito_engine)) {
     g_warning ("Could not find incognito search engine set in the gsettings within all available search engines! Setting the first one as fallback.");
     ephy_search_engine_manager_set_incognito_engine (manager, manager->engines->pdata[0]);
+    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE, ephy_search_engine_get_name (manager->engines->pdata[0]));
   }
 }
 
