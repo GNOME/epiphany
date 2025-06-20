@@ -210,6 +210,21 @@ search_entry_changed_cb (GtkEditable     *entry,
   update_find_string (toolbar);
 }
 
+static gboolean
+key_pressed_cb (EphyFindToolbar       *toolbar,
+                guint                  keyval,
+                guint                  keycode,
+                GdkModifierType        state,
+                GtkEventControllerKey *key_controller)
+{
+  if (keyval == GDK_KEY_Escape) {
+    ephy_find_toolbar_close (toolbar);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 static void
 ephy_find_toolbar_load_changed_cb (WebKitWebView   *web_view,
                                    WebKitLoadEvent  load_event,
@@ -251,6 +266,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   GtkWidget *clamp;
   GtkWidget *box;
   GtkWidget *settings_popover;
+  GtkEventController *event_controller;
   GMenu *model;
   g_autoptr (GSimpleActionGroup) group = NULL;
   g_autoptr (GSimpleAction) case_action = NULL;
@@ -326,6 +342,12 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
                             G_CALLBACK (ephy_find_toolbar_find_previous), toolbar);
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (toolbar->search_bar),
                                 GTK_EDITABLE (toolbar->entry));
+
+  /* Event controller for Escape key */
+  event_controller = gtk_event_controller_key_new ();
+  gtk_widget_add_controller (GTK_WIDGET (toolbar), event_controller);
+  g_signal_connect_swapped (event_controller, "key-pressed",
+                            G_CALLBACK (key_pressed_cb), toolbar);
 
   search_entry_changed_cb (GTK_EDITABLE (toolbar->entry), toolbar);
 
