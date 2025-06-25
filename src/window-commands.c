@@ -2433,11 +2433,33 @@ take_snapshot (EphyEmbed *embed,
                                 g_filename_from_uri (file, NULL, NULL));
 }
 
+typedef struct {
+  EphyEmbed *embed;
+  char *suggested_filename;
+} SaveDialogAsyncData;
+
+static SaveDialogAsyncData *
+save_dialog_async_data_new (EphyEmbed  *embed,
+                            const char *suggested_filename)
+{
+  SaveDialogAsyncData *data = g_new (SaveDialogAsyncData, 1);
+  data->embed = g_object_ref (embed);
+  data->suggested_filename = g_strdup (suggested_filename);
+  return data;
+}
 
 static void
-save_dialog_cb (GtkFileDialog *dialog,
-                GAsyncResult  *result,
-                EphyEmbed     *embed)
+save_dialog_async_data_free (SaveDialogAsyncData *data)
+{
+  g_object_unref (data->embed);
+  g_free (data->suggested_filename);
+  g_free (data);
+}
+
+static void
+save_dialog_cb (GtkFileDialog       *dialog,
+                GAsyncResult        *result,
+                SaveDialogAsyncData *data)
 {
   g_autoptr (GFile) file = NULL;
   g_autoptr (GFile) current_file = NULL;
@@ -2448,17 +2470,20 @@ save_dialog_cb (GtkFileDialog *dialog,
   file = gtk_file_dialog_save_finish (dialog, result, NULL);
 
   if (!file)
-    return;
+    goto out;
 
   uri = g_file_get_uri (file);
   if (uri != NULL) {
     converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
     if (converted != NULL) {
-      if (g_str_has_suffix (converted, ".png")) {
-        take_snapshot (embed, converted);
+      /* Easter egg: allow power users to take a screenshot of anything that's
+       * not a PNG by changing the suffix to .png.
+       */
+      if (g_str_has_suffix (converted, ".png") && !g_str_has_suffix (data->suggested_filename, ".png")) {
+        take_snapshot (data->embed, converted);
       } else {
-        EphyWebView *web_view = ephy_embed_get_web_view (embed);
+        EphyWebView *web_view = ephy_embed_get_web_view (data->embed);
         ephy_web_view_save (web_view, converted);
       }
     }
@@ -2469,6 +2494,9 @@ save_dialog_cb (GtkFileDialog *dialog,
   g_settings_set_string (EPHY_SETTINGS_WEB,
                          EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY,
                          current_path);
+
+out:
+  save_dialog_async_data_free (data);
 }
 
 void
@@ -2519,7 +2547,7 @@ window_cmd_save_as (GSimpleAction *action,
                         GTK_WINDOW (window),
                         NULL,
                         (GAsyncReadyCallback)save_dialog_cb,
-                        embed);
+                        save_dialog_async_data_new (embed, suggested_filename));
 }
 
 void
