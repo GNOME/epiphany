@@ -1,3 +1,310 @@
+49.alpha - June 26, 2025
+========================
+
+* This release contains a major redesign of the address bar (the "location entry")
+* The list of changes below includes changes since 48.0
+* Bugs fixed:
+  - #463 Do not close any windows, and do not close the EphySession, before user
+    has responded to all unsubmitted form warning dialogs (ARAKHNID)
+  - #506 Option for separate search engine in Incognito (Jan-Michael Brummer)
+  - #815 Deletion of bigger numbers of bookmarks is unintuitive (ARAKHNID)
+  - #1248 No success/failure indication after clearing personal data (ARAKHNID)
+  - #1336 Inconsistently possible to delete only configured language (Jan-
+    Michael Brummer)
+  - #1343 switch immediately to new tab option does not work when middle
+    clicking (Jan-Michael Brummer)
+  - #1425 Add kiosk mode (Jan-Michael Brummer)
+  - #1457 Review use of run_downloads_in_background() in ephy-window.c (Jan-
+    Michael Brummer)
+  - #1468 Rejecting a modified form close confirmation warning has different
+    results depending on how window is closed (ARAKHNID)
+  - #1479 help: pref-cookies.page contains some outdated information (Michael
+    Catanzaro)
+  - #1496 Support adding opensearch XML search engine with autodiscovery (Jan-
+    Michael Brummer)
+  - #1592 Use the location portal (Jan-Michael Brummer)
+  - #1652 Web app not able to easily be deleted due to URL length (Jan-Michael
+    Brummer)
+  - #1673 (Feature Request): Unmuting a non-tabbed page (Jan-Michael Brummer)
+  - #1949 Passwords dialog has edit buttons for username and password, but they
+    are always insensitive (Jan-Michael Brummer)
+  - #1964 Provide a reading time estimate in reader mode (Jan-Michael Brummer)
+  - #2018 Unicode characters in suggestions become percent-encoded in address
+    bar (Jan-Michael Brummer)
+  - #2020 Do not hide and remove search content when changing pages. (ARAKHNID)
+  - #2086 quitting Web with an unsubmitted form makes other windows disappear
+    for the current session (ARAKHNID)
+  - #2129 Locale-specific adblock lists (Jan-Michael Brummer)
+  - #2174 "Oops" status page looks doesn't look like an AdwStatusPage (Jan-
+    Michael Brummer)
+  - #2190 enhancement: focus webview on esc key in chrome? (ARAKHNID, Jan-
+    Michael Brummer)
+  - #2242 feature: bookmark a link from the context menu (Jan-Michael Brummer)
+  - #2328 Modernize permissions popover (Jan-Michael Brummer)
+  - #2347 Use the distinctive "in construction" development version window
+    headerbar styling (Jan-Michael Brummer)
+  - #2348 Remove Passwords from preferences dialog (Jan-Michael Brummer)
+  - #2365 Implement style changes to password manager username list (Jan-Michael
+    Brummer)
+  - #2422 Opening with --new-window opens windows without a focus on url field
+    (Jan-Michael Brummer)
+  - #2432 [Enhancement] Clicking link in bookmarks sidebar should close sidebar
+    (Jan-Michael Brummer)
+  - #2440 Store small cropped no-transparency thumbnails (for "Most visited
+    pages"), not full-page-height transparent thumbnails (Jan-Michael Brummer)
+  - #2453 Manage Additional URLs dialog should operate on base domains (Jan-
+    Michael Brummer)
+  - #2459 Feature Request: Add button to uninstall web app from the hamburger
+    menu of the web app window (Jan-Michael Brummer)
+  - #2492 Reader mode's zoom level is not applied and saved independently from
+    the regular original pages (Jan-Michael Brummer)
+  - #2493 Feature Request: allow case-sensitive/whole word search when searching
+    on page (Jan-Michael Brummer)
+  - #2497 webapps: string "Run in background" should be specified to be a toggle
+    rather than an action (Jan-Michael Brummer)
+  - #2499 Allow launching web apps from Epiphany (Jan-Michael Brummer)
+  - #2505 "default zoom" in settings changes by -1/+1 when using the buttons or
+    arrow keys (Jan-Michael Brummer)
+  - #2517 The downloads popover should close when a file is opened (Jan-Michael
+    Brummer)
+  - #2520 Crash when trying to select download location (Michael Catanzaro)
+  - #2532 Crash in escape_csv_field() when exporting passwords (Michael
+    Catanzaro)
+  - #2561 Adding WhatsApp as a web app crashes (Michael Catanzaro)
+  - #2581 Opening a new blank tab should not show spinner (Jan-Michael Brummer)
+  - #2590 "Select all" string consistency with GNOME (ARAKHNID)
+  - #2596 Pressing Escape key in addressbar resets the cursor to beginning of
+    the widget (ARAKHNID)
+  - #2604 "Installed on" label shown in about:applications reflects the usage /
+    access time, not creation time (Jan-Michael Brummer)
+  - #2608 Support the FreeDesktop background app API for sandboxed applications
+    (using portals) (Jan-Michael Brummer)
+  - #2609 Offer an explicit "Quit" menu action when "Run in background" is
+    enabled for a webapp (Jan-Michael Brummer)
+  - #2610 Port "Manage Additional URLs" to modern widgets (Jan-Michael Brummer)
+  - #2624 Epiphay shouldn't show the privacy dialog in incognito mode (Michael
+    Catanzaro)
+  - #2625 address bar looks a bit off in narrow mode (Jan-Michael Brummer)
+  - #2640 [UI/UX Enhancement] Add bookmark UI is very confusing (ARAKHNID)
+  - #2641 (CVE-2025-3839) Require user interaction before opening URL in
+    external application (Michael Catanzaro)
+  - #2643 Cannot open multiple instances of a web app anymore ("New window"
+    kills the running instance) (Michael Catanzaro)
+  - #2644 Add Epiphany-level confirmation dialog before opening URL in external
+    application (Jan-Michael Brummer)
+  - #2650 48.2 clicking a downloaded file crashes the browser (Michael
+    Catanzaro)
+  - #2651 Incognito Epiphany shouldn't automatically use saved HTTP Auth
+    passwords from the regular Epiphany session(s) (Michael Catanzaro)
+  - #2652 "Add Bookmark" menu option appears on startup in normal mode (Michael
+    Catanzaro)
+  - #2655 Can't exit bookmarks sidebar with Escape if search bar is focused
+    (ARAKHNID)
+  - #2656 Able to open multiple certificate dialogs (ARAKHNID)
+  - #2657 Add Close All Tabs button to Tab Overview (Jan-Michael Brummer)
+  - #2661 Crash on quit if the export dialog is dismissed before (Balló György)
+  - #2662 Crash when pressing search suggestion (Jan-Michael Brummer)
+  - #2665 User-entered text may be displayed when location entry is not focused
+    (ARAKHNID)
+  - #2666 URL bar gets activated when clicking "Website security status and
+    permissions" (Jan-Michael Brummer)
+  - #2667 Header bar is too tall in web app mode (Jan-Michael Brummer)
+  - #2670 Use breakpoints in WebKit features preferences page (Jan-Michael
+    Brummer)
+  - #2671 Autocomplete in URL bar interferes with Ctrl+backspace (Jan-Michael
+    Brummer)
+  - #2673 Crash in update_tags_order_without_list_box() (ARAKHNID)
+  - #2676 Text in address bar is cleared when you switch window (ARAKHNID)
+  - #2677 No actionable visual indication of completion after using the "Take
+    Screenshot…" feature (Jan-Michael Brummer)
+  - #2678 Unexpected GtkBox under the WebView (Jan-Michael Brummer)
+  - #2682 Overview thumbnails invalidated after restarting Epiphany (Jan-Michael
+    Brummer)
+  - #2687 Unable to horizontally scroll tab bar with touchpad (Jan-Michael
+    Brummer)
+  - #2703 Suggestions dropdown not dismissed after loading page (Jan-Michael
+    Brummer)
+  - #2705 regression: 2-finger back/forward touchpad gesture doesn't work (Jan-
+    Michael Brummer)
+  - #2706 Crash when reading time estimate fails (Jan-Michael Brummer)
+  - #2709 Location entry autocompletion is only offered after every second
+    character is entered (Jan-Michael Brummer)
+  - #2710 Middle-clicking on Back history item does not respect "Switch
+    Immediately to New Tabs" setting (ARAKHNID)
+  - !1323 preferences: Add new WebKit features page (Adrian Perez de Castro)
+  - !1447 Add option to move url bar to bottom (Jan-Michael Brummer)
+  - !1615 Remove AdGuard YouTube content script (Michael Catanzaro)
+  - !1716 Code cleanup (ARAKHNID)
+  - !1717 location-entry: Prettify address when not focused V2 (Jamie
+    Gravendeel)
+  - !1718 css: Update to GNOME 48 (Jamie Gravendeel)
+  - !1719 Fix typed input not showing on address bar unfocus (ARAKHNID)
+  - !1720 privacy-page: Move AdwButtonRow to AdwActionRow (Jamie Gravendeel)
+  - !1721 window: fix crash when force closing window without session (Michael
+    Catanzaro)
+  - !1722 Several fixes for password export (Michael Catanzaro)
+  - !1725 permission-popover: Fix origin memory leak (Philippe Normand)
+  - !1726 Add support for Display device permission requests (Philippe Normand)
+  - !1727 location-entry: use attribute shape instead of size for hidden text
+    (two)
+  - !1728 Disable privacy report in incognito mode (Michael Catanzaro)
+  - !1729 Remove Granite support from Tech Preview and Canary (Michael
+    Catanzaro)
+  - !1730 find-toolbar: fix crash on load-changed (Michael Catanzaro)
+  - !1731 Require user interaction before websites can open external URLs
+    (Michael Catanzaro)
+  - !1737 Hide reader mode button in focused location entry (Jan-Michael
+    Brummer)
+  - !1739 Move add bookmark to page menu in narrow mode (Jan-Michael Brummer)
+  - !1741 Add inline completion to location entry (Jan-Michael Brummer)
+  - !1742 Automatically set visibility of action bar (Jan-Michael Brummer)
+  - !1745 Improvements to HTTP authentication (Michael Catanzaro)
+  - !1746 Add pan gesture to hide/show action bar (Jan-Michael Brummer)
+  - !1750 appstream: Fix app id (Sophie Herold)
+  - !1751 web-extension-manager: fix web process extension init regression
+    (Michael Catanzaro)
+  - !1752 Fixes for ephy_window_disconnect_active_embed (Michael Catanzaro)
+  - !1754 Redesign bottom action bar (Jan-Michael Brummer)
+  - !1755 Don't consider og:image for web app icon (Michael Catanzaro)
+  - !1756 Exit bookmarks dialog with Esc with search focused (ARAKHNID)
+  - !1757 WebExtensions: Implement runtime.getManifest() (Jan-Michael Brummer)
+  - !1760 Fix certificate dialog being non-modal (ARAKHNID)
+  - !1761 Bookmarks editing mode (take two) (ARAKHNID)
+  - !1763 window: Put each main window into its own group (Balló György)
+  - !1769 Fix permission popover crash (Jan-Michael Brummer)
+  - !1779 Fix crash on escape press in bookmarks dialog (ARAKHNID)
+  - !1789 Re-add Display Access permission to security dialog (Dexter Reed)
+  - !1792 Add function to update tags order without listbox (ARAKHNID)
+  - !1793 readability: fix another typo in the reading speed estimate table
+    (Michael Catanzaro)
+  - !1794 Rewrite manpage using rst2man (Michael Catanzaro)
+  - !1795 Exit with error if -p and --profile are used together (Michael
+    Catanzaro)
+  - !1801 Add missing maintainer to man page (Michael Catanzaro)
+  - !1802 Move tags order variant logic to bookmarks manager (ARAKHNID)
+  - !1803 Add move controls menu to language rows (ARAKHNID)
+  - !1804 Fix warning on location entry dispose (ARAKHNID)
+  - !1807 Only show uninstall web app action in web app mode (ARAKHNID)
+  - !1810 Show url bar on bottom in narrow mode (Jan-Michael Brummer)
+  - !1812 Fix missing address text in security dialog (Jan-Michael Brummer)
+  - !1813 Move overview button to center in narrow mode (Jan-Michael Brummer)
+  - !1814 Fix logic error breaking the password manager (Michael Catanzaro)
+  - !1816 Fix crash in password popover (ARAKHNID)
+  - !1817 Make reset button insensitive if WebKit feature value is default
+    (ARAKHNID)
+  - !1818 shell: Fix startup crash on Pantheon (Ryo Nakano)
+  - !1819 action-bar-end: Fix startup crash on Pantheon (Bobby Rong)
+  - !1822 Actually only show typed input when address bar is focused (ARAKHNID)
+  - !1824 Port PrefsFeaturesPage to Blueprint (ARAKHNID)
+  - !1829 ci: generate new image for style checker (Michael Catanzaro)
+  - !1832 Fix text getting centered when resetting address (ARAKHNID)
+  - !1835 Remove breaks in error page before buttons (Jan-Michael Brummer)
+  - !1836 Reset reader mode on state (Jan-Michael Brummer)
+  - !1842 Fix crash when opening Find bar (Michael Catanzaro)
+  - !1843 ephy-password-import: improve robustness (Michael Catanzaro)
+  - !1847 Add options menu to passwords dialog (Jan-Michael Brummer)
+  - !1848 Fix crash in sync_tab_navigation (Jan-Michael Brummer)
+  - !1851 Move page menu bookmarks functions to bookmarks dialog (Jan-Michael
+    Brummer)
+  - !1852 Automatically open trusted schemes without interaction (Jan-Michael
+    Brummer)
+  - !1853 Fix PKCS #11 login for invalid cert/priv pairs (Jan-Michael Brummer)
+  - !1854 Add PKCS #11 session logout (Jan-Michael Brummer)
+  - !1855 Fix incorrect blueprint name in POTFILES (Jan-Michael Brummer)
+  - !1856 Add PKCS #11 persistence option (Jan-Michael Brummer)
+  - !1858 Fix revealing of bottom action bar (Jan-Michael Brummer)
+  - !1859 Remove wrong inline description in data view (Jan-Michael Brummer)
+  - !1860 Fix setting pkcs #11 persistence for certificate (Jan-Michael Brummer)
+  - !1861 Improve search bar UI (Jan-Michael Brummer)
+  - !1864 Require meson 1.1 and rename meson_options.txt (Michael Catanzaro)
+  - !1865 Protect forms that are autofilled by the password manager (Michael
+    Catanzaro)
+  - !1867 Fix gschema string typo (Anders Jonsson)
+  - !1869 Fix mute button not appearing in single tab narrow mode (Jan-Michael
+    Brummer)
+  - !1870 Add data cleared toast to clear data view (ARAKHNID)
+  - !1872 Revert "Improve search bar UI" (Jan-Michael Brummer)
+  - !1874 Dispatch events when re-autofilling protected password form element
+    (Michael Catanzaro)
+  - !1875 Fix leaks in SQLite and history tests (Michael Catanzaro)
+  - !1878 Delete old profile migrators (Michael Catanzaro)
+  - !1879 Check all tabs for modified forms (ARAKHNID)
+  - !1880 prefs-appearance-page: migrate from GtkFontButton to
+    GtkFontDialogButton (Michael Catanzaro)
+  - !1881 Remove the shortcuts dialog (Michael Catanzaro)
+  - !1882 location-entry: fix crash when pressing Clear button (Michael
+    Catanzaro)
+  - !1884 Restore small font in narrow mode location entry (Jan-Michael Brummer)
+  - !1885 Move combined stop reload button to location entry (Jan-Michael
+    Brummer)
+  - !1886 Remove keyboard shortcuts menu item (Michael Catanzaro)
+  - !1887 Don't close windows until all forms are discarded (ARAKHNID)
+  - !1888 Fix alignment of full urls in location entry (Jan-Michael Brummer)
+  - !1889 Remove autocompletion handle on focus leave (Jan-Michael Brummer)
+  - !1891 Improve inline completion (Jan-Michael Brummer)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Belarusian (Vasil Pupkin)
+  - Catalan (Jordi Mas)
+  - Chinese (Taiwan) (Cheng-Chia Tseng)
+  - English (United Kingdom) (Andi Chandler)
+  - Friulian (Fabio Tomat)
+  - Georgian (Ekaterine Papava)
+  - Hebrew (Yaron Shahrabani, Yosef Or Boczko)
+  - Hindi (Scrambled 777)
+  - Interlingua (International Auxiliary Language Association) (Emilio
+    Sepúlveda)
+  - Japanese (Takayuki KUSANO, Seiji Iizuka, Takayuki Maeda)
+  - Persian (Danial Behzadi)
+  - Portuguese (Brazil) (Nilton Perim Neto, Álvaro Burns)
+  - Romanian (Antonio Marin)
+  - Slovak (Peter Mráz)
+  - Slovenian (Martin)
+  - Spanish (Daniel Mustieles)
+  - Ukrainian (Yuri Chornoivan)
+
+48.3 - April 24, 2025
+=====================
+
+Fix crash when opening downloaded file (#2650)
+
+48.2 - April 22, 2025
+=====================
+
+Fix crash when opening incognito window (#2647)
+
+48.1 - April 21, 2025
+=====================
+
+* This release notably fixes CVE-2025-3839.
+
+* Bugs fixed:
+  - #2520 Crash when trying to select download location (Michael Catanzaro)
+  - #2532 Crash in escape_csv_field() when exporting passwords (Michael
+    Catanzaro)
+  - #2561 Adding WhatsApp as a web app crashes (Michael Catanzaro)
+  - #2596 Pressing Escape key in addressbar resets the cursor to beginning of
+    the widget (ARAKHNID)
+  - #2624 Epiphay shouldn't show the privacy dialog in incognito mode (Michael
+    Catanzaro)
+  - #2641 (CVE-2025-3839) Require user interaction before opening URL in
+    external application (Michael Catanzaro)
+  - !1716 Code cleanup (ARAKHNID)
+  - !1721 window: fix crash when force closing window without session (Michael
+    Catanzaro)
+  - !1722 Several fixes for password export (Michael Catanzaro)
+  - !1729 Remove Granite support from Tech Preview and Canary (Michael
+    Catanzaro)
+  - !1730 find-toolbar: fix crash on load-changed (Michael Catanzaro)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Belarusian (Vasil Pupkin)
+  - English (United Kingdom) (Andi Chandler)
+  - German (Philipp Kiemle)
+  - Spanish (Daniel Mustieles)
+
 48.0 - March 13, 2025
 =====================
 
