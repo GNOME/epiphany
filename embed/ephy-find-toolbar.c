@@ -273,6 +273,20 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   ephy_search_entry_set_placeholder_text (EPHY_SEARCH_ENTRY (toolbar->entry), _("Type to search…"));
   gtk_box_append (GTK_BOX (box), GTK_WIDGET (toolbar->entry));
 
+  /* Prev */
+  toolbar->prev = gtk_button_new_from_icon_name ("go-up-symbolic");
+  gtk_widget_set_tooltip_text (toolbar->prev,
+                               _("Find previous occurrence of the search string"));
+  gtk_box_append (GTK_BOX (box), toolbar->prev);
+  gtk_widget_set_sensitive (toolbar->prev, FALSE);
+
+  /* Next */
+  toolbar->next = gtk_button_new_from_icon_name ("go-down-symbolic");
+  gtk_widget_set_tooltip_text (toolbar->next,
+                               _("Find next occurrence of the search string"));
+  gtk_box_append (GTK_BOX (box), toolbar->next);
+  gtk_widget_set_sensitive (toolbar->next, FALSE);
+
   /* Options */
   toolbar->options_button = gtk_menu_button_new ();
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (toolbar->options_button), "emblem-system-symbolic");
@@ -295,20 +309,6 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->options_button), settings_popover);
   gtk_widget_set_tooltip_text (toolbar->options_button, _("Search Options"));
   gtk_box_append (GTK_BOX (box), toolbar->options_button);
-
-  /* Prev */
-  toolbar->prev = gtk_button_new_from_icon_name ("go-up-symbolic");
-  gtk_widget_set_tooltip_text (toolbar->prev,
-                               _("Find previous occurrence of the search string"));
-  gtk_box_append (GTK_BOX (box), toolbar->prev);
-  gtk_widget_set_sensitive (toolbar->prev, FALSE);
-
-  /* Next */
-  toolbar->next = gtk_button_new_from_icon_name ("go-down-symbolic");
-  gtk_widget_set_tooltip_text (toolbar->next,
-                               _("Find next occurrence of the search string"));
-  gtk_box_append (GTK_BOX (box), toolbar->next);
-  gtk_widget_set_sensitive (toolbar->next, FALSE);
 
   /* connect signals */
   g_signal_connect_after (toolbar->entry, "changed",
