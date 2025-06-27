@@ -116,45 +116,24 @@ get_or_create_group (GPtrArray  *groups,
   return group;
 }
 
-typedef struct {
-  WebKitFeature *feature;
-  GtkWidget *reset_button;
-} EphyFeatureSwitchNotifyActiveData;
-
-static EphyFeatureSwitchNotifyActiveData *
-ephy_feature_switch_notify_active_data_new (WebKitFeature *feature,
-                                            GtkWidget     *reset_button)
-{
-  EphyFeatureSwitchNotifyActiveData *data = g_new (EphyFeatureSwitchNotifyActiveData, 1);
-
-  data->feature = feature;
-  data->reset_button = reset_button;
-
-  return data;
-}
-
 static void
-ephy_feature_switch_notify_active_data_free (EphyFeatureSwitchNotifyActiveData *data)
-{
-  g_free (data);
-}
-
-static void
-feature_switch_notify_active_cb (GtkSwitch                         *swtch,
-                                 GParamSpec                        *pspec,
-                                 EphyFeatureSwitchNotifyActiveData *data)
+feature_switch_notify_active_cb (GtkSwitch  *swtch,
+                                 GParamSpec *pspec,
+                                 GtkWidget  *reset_button)
 {
   gboolean enabled = gtk_switch_get_active (swtch);
-  gboolean is_default = enabled == webkit_feature_get_default_value (data->feature);
+  GtkWidget *row = gtk_widget_get_ancestor (reset_button, ADW_TYPE_ACTION_ROW);
+  WebKitFeature *feature = g_object_get_data (G_OBJECT (row), "feature");
+  gboolean is_default = enabled == webkit_feature_get_default_value (feature);
   WebKitSettings *settings = ephy_embed_prefs_get_settings ();
 
-  if (enabled != webkit_settings_get_feature_enabled (settings, data->feature)) {
+  if (enabled != webkit_settings_get_feature_enabled (settings, feature)) {
     PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (gtk_widget_get_ancestor (
-                                                        data->reset_button,
-                                                        EPHY_TYPE_PREFS_FEATURES_PAGE));
+                                                          reset_button,
+                                                          EPHY_TYPE_PREFS_FEATURES_PAGE));
 
-    webkit_settings_set_feature_enabled (settings, data->feature, enabled);
-    gtk_widget_set_sensitive (data->reset_button, !is_default);
+    webkit_settings_set_feature_enabled (settings, feature, enabled);
+    gtk_widget_set_sensitive (reset_button, !is_default);
 
     if (is_default && self->non_default_values)
       self->non_default_values--;
@@ -173,8 +152,9 @@ feature_switch_reset_cb (GtkWidget     *button,
 
   if (enabled != webkit_settings_get_feature_enabled (settings, feature)) {
     GtkWidget *parent = gtk_widget_get_ancestor (button, ADW_TYPE_ACTION_ROW);
-    PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (gtk_widget_get_ancestor (button,
-                                                        EPHY_TYPE_PREFS_FEATURES_PAGE));
+    PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (gtk_widget_get_ancestor (
+                                                          button,
+                                                          EPHY_TYPE_PREFS_FEATURES_PAGE));
 
     GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (parent));
     webkit_settings_set_feature_enabled (settings, feature, enabled);
@@ -328,7 +308,6 @@ prefs_feature_page_constructed (GObject *object)
       GtkWidget *reset = gtk_button_new_from_icon_name ("edit-undo-symbolic");
       GtkWidget *label = gtk_label_new (g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
       gboolean enabled = webkit_settings_get_feature_enabled (settings, feature);
-      EphyFeatureSwitchNotifyActiveData *data;
 
       g_object_bind_property_full (self, "adaptive-mode", label, "visible", G_BINDING_SYNC_CREATE, feature_status_transform_cb, NULL, self, NULL);
       g_object_bind_property_full (self, "adaptive-mode", row, "subtitle", G_BINDING_SYNC_CREATE, subtitle_transform_cb, NULL, feature, NULL);
@@ -352,8 +331,6 @@ prefs_feature_page_constructed (GObject *object)
       gtk_widget_add_css_class (label, "dim-label");
       gtk_widget_add_css_class (label, "caption");
 
-      data = ephy_feature_switch_notify_active_data_new (feature, reset);
-
       g_signal_connect_data (reset,
                              "clicked",
                              G_CALLBACK (feature_switch_reset_cb),
@@ -364,8 +341,8 @@ prefs_feature_page_constructed (GObject *object)
       g_signal_connect_data (swtch,
                              "notify::active",
                              G_CALLBACK (feature_switch_notify_active_cb),
-                             data,
-                             (GClosureNotify)ephy_feature_switch_notify_active_data_free,
+                             reset,
+                             (GClosureNotify)webkit_feature_unref,
                              G_CONNECT_DEFAULT);
 
       adw_action_row_add_suffix (ADW_ACTION_ROW (row), label);
