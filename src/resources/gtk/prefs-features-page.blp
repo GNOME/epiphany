@@ -4,5 +4,13 @@ using Adw 1;
 template $PrefsFeaturesPage: Adw.PreferencesPage {
   icon-name: "applications-engineering-symbolic";
   title: _("Features");
+
+  Adw.PreferencesGroup {
+    Adw.ButtonRow reset_all_row {
+      title: _("Reset All");
+      sensitive: false;
+      activated => $reset_all_row_activated_cb();
+    }
+  }
 }
 

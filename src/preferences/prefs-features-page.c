@@ -31,6 +31,9 @@ struct _PrefsFeaturesPage {
   AdwPreferencesPage parent_instance;
 
   EphyPrefsDialog *dialog;
+  GtkWidget *reset_all_row;
+  int non_default_values;
+
   gboolean adaptive_mode;
 };
 
@@ -142,11 +145,22 @@ feature_switch_notify_active_cb (GtkSwitch                         *swtch,
                                  EphyFeatureSwitchNotifyActiveData *data)
 {
   gboolean enabled = gtk_switch_get_active (swtch);
+  gboolean is_default = enabled == webkit_feature_get_default_value (data->feature);
   WebKitSettings *settings = ephy_embed_prefs_get_settings ();
 
   if (enabled != webkit_settings_get_feature_enabled (settings, data->feature)) {
+    PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (gtk_widget_get_ancestor (
+                                                        data->reset_button,
+                                                        EPHY_TYPE_PREFS_FEATURES_PAGE));
+
     webkit_settings_set_feature_enabled (settings, data->feature, enabled);
-    gtk_widget_set_sensitive (data->reset_button, enabled != webkit_feature_get_default_value (data->feature));
+    gtk_widget_set_sensitive (data->reset_button, !is_default);
+
+    if (is_default && self->non_default_values)
+      self->non_default_values--;
+    else if (!is_default)
+      self->non_default_values++;
+    gtk_widget_set_sensitive (self->reset_all_row, self->non_default_values);
   }
 }
 
@@ -156,12 +170,18 @@ feature_switch_reset_cb (GtkWidget     *button,
 {
   WebKitSettings *settings = ephy_embed_prefs_get_settings ();
   gboolean enabled = webkit_feature_get_default_value (feature);
+
   if (enabled != webkit_settings_get_feature_enabled (settings, feature)) {
     GtkWidget *parent = gtk_widget_get_ancestor (button, ADW_TYPE_ACTION_ROW);
+    PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (gtk_widget_get_ancestor (button,
+                                                        EPHY_TYPE_PREFS_FEATURES_PAGE));
+
     GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (parent));
     webkit_settings_set_feature_enabled (settings, feature, enabled);
     gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
     gtk_widget_set_sensitive (button, !enabled);
+    self->non_default_values--;
+    gtk_widget_set_sensitive (self->reset_all_row, self->non_default_values);
   }
 }
 
@@ -203,6 +223,84 @@ subtitle_transform_cb (GBinding     *binding,
 }
 
 static void
+reset_all_toast_button_clicked_cb (PrefsFeaturesPage *self)
+{
+  WebKitSettings *settings = ephy_embed_prefs_get_settings ();
+  AdwPreferencesGroup *group;
+  int i = 1;
+
+  while ((group = adw_preferences_page_get_group (ADW_PREFERENCES_PAGE (self), i++))) {
+    GtkWidget *row;
+    int j = 0;
+
+    while ((row = adw_preferences_group_get_row (group, j++))) {
+      GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (row));
+      GtkWidget *button = gtk_widget_get_last_child (gtk_widget_get_last_child (gtk_widget_get_first_child (row)));
+      WebKitFeature *feature = g_object_get_data (G_OBJECT (row), "feature");
+      const char *prev_value = g_object_steal_data (G_OBJECT (row), "prev-value");
+      gboolean enabled;
+
+      if (!prev_value)
+        continue;
+
+      enabled = !g_strcmp0 (prev_value, "active");
+      webkit_settings_set_feature_enabled (settings, feature, enabled);
+      gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+      gtk_widget_set_sensitive (button, TRUE);
+      self->non_default_values++;
+    }
+  }
+
+  gtk_widget_set_sensitive (self->reset_all_row, TRUE);
+}
+
+
+static void
+reset_all_row_activated_cb (AdwButtonRow      *row,
+                            PrefsFeaturesPage *self)
+{
+  WebKitSettings *settings = ephy_embed_prefs_get_settings ();
+  AdwPreferencesGroup *group;
+  int i = 1;
+  AdwToast *toast;
+
+  while ((group = adw_preferences_page_get_group (ADW_PREFERENCES_PAGE (self), i++))) {
+    GtkWidget *row;
+    int j = 0;
+
+    while ((row = adw_preferences_group_get_row (group, j++))) {
+      GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (row));
+      GtkWidget *button = gtk_widget_get_last_child (gtk_widget_get_last_child (gtk_widget_get_first_child (row)));
+      WebKitFeature *feature = g_object_get_data (G_OBJECT (row), "feature");
+      gboolean active = gtk_switch_get_active (GTK_SWITCH (swtch));
+      gboolean enabled = webkit_feature_get_default_value (feature);
+
+      if (active == enabled)
+        continue;
+
+      if (active)
+        g_object_set_data (G_OBJECT (row), "prev-value", "active");
+      else
+        g_object_set_data (G_OBJECT (row), "prev-value", "inactive");
+
+      webkit_settings_set_feature_enabled (settings, feature, enabled);
+      gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+      gtk_widget_set_sensitive (button, FALSE);
+    }
+  }
+
+  self->non_default_values = 0;
+  gtk_widget_set_sensitive (self->reset_all_row, FALSE);
+
+  toast = adw_toast_new (_("All values reset"));
+  adw_toast_set_button_label (toast, _("_Undo"));
+  g_signal_connect_object (toast, "button-clicked",
+                           G_CALLBACK (reset_all_toast_button_clicked_cb), self,
+                           G_CONNECT_SWAPPED);
+  adw_preferences_dialog_add_toast (ADW_PREFERENCES_DIALOG (self->dialog), toast);
+}
+
+static void
 prefs_feature_page_constructed (GObject *object)
 {
   PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (object);
@@ -240,6 +338,7 @@ prefs_feature_page_constructed (GObject *object)
                                      webkit_feature_get_name (feature));
       adw_action_row_set_subtitle (ADW_ACTION_ROW (row),
                                    webkit_feature_get_details (feature));
+      g_object_set_data (G_OBJECT (row), "feature", feature);
 
       gtk_widget_set_valign (swtch, GTK_ALIGN_CENTER);
       gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
@@ -300,6 +399,9 @@ prefs_features_page_class_init (PrefsFeaturesPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-features-page.ui");
+  gtk_widget_class_bind_template_child (widget_class, PrefsFeaturesPage, reset_all_row);
+
+  gtk_widget_class_bind_template_callback (widget_class, reset_all_row_activated_cb);
 
   object_class->get_property = prefs_feature_page_get_property;
   object_class->set_property = prefs_feature_page_set_property;
