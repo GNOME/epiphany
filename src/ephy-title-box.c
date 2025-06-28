@@ -32,6 +32,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  LOCK_CLICKED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 struct _EphyTitleBox {
   AdwBin parent_instance;
 
@@ -52,7 +59,7 @@ static void
 create_security_popup_cb (GtkMenuButton *button,
                           EphyTitleBox  *title_box)
 {
-  g_signal_emit_by_name (title_box, "lock-clicked", button);
+  g_signal_emit (title_box, signals[LOCK_CLICKED], 0, button);
 }
 
 static void
@@ -208,6 +215,8 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
+
+  signals[LOCK_CLICKED] = g_signal_lookup ("lock-clicked", EPHY_TYPE_TITLE_WIDGET);
 }
 
 static void

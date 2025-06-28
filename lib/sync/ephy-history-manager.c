@@ -45,6 +45,14 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
+enum {
+  SYNCHRONIZABLE_DELETED,
+  SYNCHRONIZABLE_MODIFIED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 typedef struct {
   EphyHistoryManager *manager;
   gboolean is_initial;
@@ -95,7 +103,7 @@ url_visited_cb (EphyHistoryService *service,
     return;
 
   record = ephy_history_record_new (url->sync_id, url->title, url->url, url->last_visit_time);
-  g_signal_emit_by_name (self, "synchronizable-modified", record, TRUE);
+  g_signal_emit (self, signals[SYNCHRONIZABLE_MODIFIED], 0, record, TRUE);
   g_object_unref (record);
 }
 
@@ -110,7 +118,7 @@ url_deleted_cb (EphyHistoryService *service,
     return;
 
   record = ephy_history_record_new (url->sync_id, url->title, url->url, url->last_visit_time);
-  g_signal_emit_by_name (self, "synchronizable-deleted", record);
+  g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, record);
   g_object_unref (record);
 }
 
@@ -191,6 +199,12 @@ ephy_history_manager_class_init (EphyHistoryManagerClass *klass)
                          NULL, NULL,
                          EPHY_TYPE_HISTORY_SERVICE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  signals[SYNCHRONIZABLE_DELETED] = g_signal_lookup ("synchronizable-deleted",
+                                                     EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
+
+  signals[SYNCHRONIZABLE_MODIFIED] = g_signal_lookup ("synchronizable-modified",
+                                                      EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
@@ -367,7 +381,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
       record = g_hash_table_lookup (records_ht_url, remote_url);
       if (record) {
         /* Different ID, same URL. Keep local ID. */
-        g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
+        g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
         g_ptr_array_add (to_upload, g_object_ref (l->data));
         g_hash_table_remove (records_ht_id, ephy_history_record_get_id (record));
@@ -450,7 +464,7 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager *self,
       record = g_hash_table_lookup (records_ht_url, remote_url);
       if (record) {
         /* Different ID, same URL. Keep local ID. */
-        g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
+        g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
         g_ptr_array_add (to_upload, g_object_ref (l->data));
       } else {

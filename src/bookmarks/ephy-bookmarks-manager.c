@@ -65,6 +65,8 @@ enum {
   TAG_CREATED,
   TAG_DELETED,
   SORTED,
+  SYNCHRONIZABLE_DELETED,
+  SYNCHRONIZABLE_MODIFIED,
   LAST_SIGNAL
 };
 
@@ -215,6 +217,12 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_STRING);
+
+  signals[SYNCHRONIZABLE_DELETED] = g_signal_lookup ("synchronizable-deleted",
+                                                     EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
+
+  signals[SYNCHRONIZABLE_MODIFIED] = g_signal_lookup ("synchronizable-modified",
+                                                      EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
 }
 
 static void
@@ -352,7 +360,7 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   g_assert (EPHY_IS_BOOKMARK (bookmark));
 
   ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, TRUE);
-  g_signal_emit_by_name (self, "synchronizable-modified", bookmark, FALSE);
+  g_signal_emit (self, signals[SYNCHRONIZABLE_MODIFIED], 0, bookmark, FALSE);
 }
 
 void
@@ -369,7 +377,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
     EphyBookmark *bookmark = g_sequence_get (iter);
 
     ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, FALSE);
-    g_signal_emit_by_name (self, "synchronizable-modified", bookmark, FALSE);
+    g_signal_emit (self, signals[SYNCHRONIZABLE_MODIFIED], 0, bookmark, FALSE);
   }
 }
 
@@ -416,7 +424,7 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
 
-  g_signal_emit_by_name (self, "synchronizable-deleted", bookmark);
+  g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, bookmark);
   ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
 }
 

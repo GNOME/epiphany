@@ -70,6 +70,14 @@ struct _EphyPasswordManager {
   GHashTable *cache;
 };
 
+enum {
+  SYNCHRONIZABLE_DELETED,
+  SYNCHRONIZABLE_MODIFIED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 static void ephy_password_manager_forget_record (EphyPasswordManager *self,
                                                  EphyPasswordRecord  *record,
                                                  EphyPasswordRecord  *replacement,
@@ -361,6 +369,12 @@ ephy_password_manager_class_init (EphyPasswordManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ephy_password_manager_dispose;
+
+  signals[SYNCHRONIZABLE_DELETED] = g_signal_lookup ("synchronizable-deleted",
+                                                     EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
+
+  signals[SYNCHRONIZABLE_MODIFIED] = g_signal_lookup ("synchronizable-modified",
+                                                      EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
 }
 
 static void
@@ -514,7 +528,7 @@ update_credentials_cb (GList    *records,
     ephy_password_record_set_username (record, data->username);
     ephy_password_record_set_password (record, data->password);
     ephy_password_manager_store_record (data->manager, record);
-    g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
+    g_signal_emit (data->manager, signals[SYNCHRONIZABLE_MODIFIED], 0, record, FALSE);
   } else {
     LOG ("Attempted to update password record that doesn't exist (likely Epiphany bug)");
   }
@@ -562,7 +576,7 @@ ephy_password_manager_save (EphyPasswordManager *self,
                                      username_field, password_field,
                                      timestamp, timestamp);
   ephy_password_manager_store_record (self, record);
-  g_signal_emit_by_name (self, "synchronizable-modified", record, FALSE);
+  g_signal_emit (self, signals[SYNCHRONIZABLE_MODIFIED], 0, record, FALSE);
 
   g_free (uuid);
   g_free (id);
@@ -820,7 +834,7 @@ forget_cb (GList    *records,
   g_assert (g_list_length (records) == 1);
 
   record = EPHY_PASSWORD_RECORD (records->data);
-  g_signal_emit_by_name (self, "synchronizable-deleted", record);
+  g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, record);
   ephy_password_manager_forget_record (self, record, NULL, task);
 }
 
@@ -868,7 +882,7 @@ forget_all_cb (GList    *records,
                           (GAsyncReadyCallback)secret_password_clear_cb, NULL);
 
   for (GList *l = records; l && l->data; l = l->next)
-    g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
+    g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
 
   ephy_password_manager_cache_clear (self);
 
@@ -1107,7 +1121,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
         local_timestamp = ephy_password_record_get_time_password_changed (record);
         if (local_timestamp > remote_timestamp) {
           /* Local record is newer. Keep it, upload it and delete remote record from server. */
-          g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
+          g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
         } else {
           /* Remote record is newer. Forget local record and store remote record. */
           ephy_password_manager_forget_record (self, record, l->data, NULL);
@@ -1203,7 +1217,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
         if (local_timestamp > remote_timestamp) {
           /* Local record is newer. Keep it, upload it and delete remote record from server. */
           g_ptr_array_add (to_upload, g_object_ref (record));
-          g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
+          g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
         } else {
           /* Remote record is newer. Forget local record and store remote record. */
           ephy_password_manager_forget_record (self, record, l->data, NULL);

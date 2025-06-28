@@ -160,6 +160,15 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
+enum {
+  DOWNLOAD_ONLY_LOAD,
+  PERMISSION_REQUESTED,
+  SEARCH_ENGINES_LOADED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 G_DEFINE_FINAL_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
 
 static void
@@ -1025,7 +1034,7 @@ permission_request_cb (WebKitWebView           *web_view,
                                                  EPHY_PERMISSION_PERMIT);
         webkit_permission_request_allow (request);
       } else {
-        g_signal_emit_by_name (web_view, "permission-requested", permission_type, request, origin);
+        g_signal_emit (web_view, signals[PERMISSION_REQUESTED], 0, permission_type, request, origin);
       }
   }
 
@@ -1581,7 +1590,7 @@ get_opensearch_links_cb (WebKitWebView *web_view,
   g_list_store_sort (view->opensearch_engines,
                      sort_opensearch_engines_list_func,
                      NULL);
-  g_signal_emit_by_name (view, "search-engines-loaded");
+  g_signal_emit (view, signals[SEARCH_ENGINES_LOADED], 0);
 }
 
 static void
@@ -2370,7 +2379,7 @@ load_failed_cb (WebKitWebView   *web_view,
       /* If we are going to download something, and this is the first
        * page to load in this tab, we may want to close it down. */
       if (!view->ever_committed)
-        g_signal_emit_by_name (view, "download-only-load", NULL);
+        g_signal_emit (view, signals[DOWNLOAD_ONLY_LOAD], 0, NULL);
       break;
     case WEBKIT_MEDIA_ERROR_WILL_HANDLE_LOAD:
     /* Fallthrough so WebKit will start a new load to handle the media. */
@@ -4295,12 +4304,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::download-only-load signal is emitted when the @view has its main load
  * replaced by a download, and that is the only reason why the @view has been created.
  **/
-  g_signal_new ("download-only-load",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_FIRST,
-                0, NULL, NULL, NULL,
-                G_TYPE_NONE,
-                0);
+  signals[DOWNLOAD_ONLY_LOAD] = g_signal_new ("download-only-load",
+                                              EPHY_TYPE_WEB_VIEW,
+                                              G_SIGNAL_RUN_FIRST,
+                                              0, NULL, NULL, NULL,
+                                              G_TYPE_NONE,
+                                              0);
 
 /**
  * EphyWebView::permission-requested:
@@ -4309,15 +4318,15 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * The ::permission-requested signal is emitted when the @view is requesting a
  * particular permission
  **/
-  g_signal_new ("permission-requested",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_FIRST,
-                0, NULL, NULL, NULL,
-                G_TYPE_NONE,
-                3,
-                EPHY_TYPE_PERMISSION_TYPE,
-                WEBKIT_TYPE_PERMISSION_REQUEST,
-                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  signals[PERMISSION_REQUESTED] = g_signal_new ("permission-requested",
+                                                EPHY_TYPE_WEB_VIEW,
+                                                G_SIGNAL_RUN_FIRST,
+                                                0, NULL, NULL, NULL,
+                                                G_TYPE_NONE,
+                                                3,
+                                                EPHY_TYPE_PERMISSION_TYPE,
+                                                WEBKIT_TYPE_PERMISSION_REQUEST,
+                                                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
   * EphyWebView::search-engines-loaded:
@@ -4327,12 +4336,12 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
   * autodiscovering the OpenSearch search engines for this URL. This happens just
   * after the document has finished loading. See ephy_web_view_get_opensearch_engines().
   **/
-  g_signal_new ("search-engines-loaded",
-                EPHY_TYPE_WEB_VIEW,
-                G_SIGNAL_RUN_FIRST,
-                0, NULL, NULL, NULL,
-                G_TYPE_NONE,
-                0);
+  signals[SEARCH_ENGINES_LOADED] = g_signal_new ("search-engines-loaded",
+                                                 EPHY_TYPE_WEB_VIEW,
+                                                 G_SIGNAL_RUN_FIRST,
+                                                 0, NULL, NULL, NULL,
+                                                 G_TYPE_NONE,
+                                                 0);
 }
 
 /**

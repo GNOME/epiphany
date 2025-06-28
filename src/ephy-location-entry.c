@@ -119,6 +119,7 @@ enum {
   READER_MODE_CHANGED,
   GET_LOCATION,
   GET_TITLE,
+  LOCK_CLICKED,
   LAST_SIGNAL
 };
 static gint signals[LAST_SIGNAL] = { 0 };
@@ -729,7 +730,7 @@ on_editable_changed (GtkEditable *editable,
 static void
 on_security_button_clicked (EphyLocationEntry *self)
 {
-  g_signal_emit_by_name (self, "lock-clicked", NULL);
+  g_signal_emit (self, signals[LOCK_CLICKED], 0, NULL);
 }
 
 static void
@@ -1234,6 +1235,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                      G_TYPE_STRING,
                                      0,
                                      G_TYPE_NONE);
+
+  signals[LOCK_CLICKED] = g_signal_lookup ("lock-clicked", EPHY_TYPE_TITLE_WIDGET);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/location-entry.ui");
