@@ -1503,13 +1503,13 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
   switch (state) {
     case EPHY_BOOKMARK_ICON_HIDDEN:
       gtk_widget_set_visible (self->bookmark_button, FALSE);
-      gtk_widget_remove_css_class (self->bookmark_button, "starred");
+      gtk_widget_remove_css_class (self->bookmark_button, "bookmarked");
       break;
     case EPHY_BOOKMARK_ICON_EMPTY:
       gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
                                 "ephy-non-starred-symbolic");
-      gtk_widget_remove_css_class (self->bookmark_button, "starred");
+      gtk_widget_remove_css_class (self->bookmark_button, "bookmarked");
       /* Translators: tooltip for the empty bookmark button */
       gtk_widget_set_tooltip_text (self->bookmark_button, _("Bookmark Page"));
       break;
@@ -1517,7 +1517,7 @@ ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
       gtk_widget_set_visible (self->bookmark_button, TRUE);
       gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
                                 "ephy-starred-symbolic");
-      gtk_widget_add_css_class (self->bookmark_button, "starred");
+      gtk_widget_add_css_class (self->bookmark_button, "bookmarked");
       /* Translators: tooltip for the bookmarked button */
       gtk_widget_set_tooltip_text (self->bookmark_button, _("Edit Bookmark"));
       break;
@@ -1656,7 +1656,10 @@ void
 ephy_location_entry_set_reader_mode_state (EphyLocationEntry *self,
                                            gboolean           active)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->reader_mode_button), active);
+  if (active)
+    gtk_widget_add_css_class (self->reader_mode_button, "checked");
+  else
+    gtk_widget_remove_css_class (self->reader_mode_button, "checked");
 
   self->reader_mode_active = active;
 }
