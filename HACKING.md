@@ -45,6 +45,9 @@ need to stick to in order to get your patch accepted:
    `if (!condition)`, `if (!pointer)`, `if (integer == 0)`. Wrong:
    `if (condition == FALSE)`, `if (pointer == NULL)`, `if (!integer)`.
 
+ * Use `g_signal_emit ()` if a signal is part of the class. Otherwise, use
+   `g_signal_emit_by_name ()`.
+
 # Code Structure
 
 ## Layering

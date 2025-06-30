@@ -456,4 +456,3 @@ ephy_bookmark_row_set_movable (EphyBookmarkRow *self,
   gtk_widget_set_sensitive (self->drag_handle, movable);
   gtk_widget_set_sensitive (self->move_menu_button, movable);
 }
-
