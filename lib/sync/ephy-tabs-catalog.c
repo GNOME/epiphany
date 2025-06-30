@@ -55,7 +55,7 @@ ephy_tab_info_new (const char *title,
 {
   EphyTabInfo *info;
 
-  info = g_slice_new (EphyTabInfo);
+  info = g_new (EphyTabInfo, 1);
   info->title = g_strdup (title);
   info->url = g_strdup (url);
   info->favicon = g_strdup (favicon);
@@ -71,5 +71,5 @@ ephy_tab_info_free (EphyTabInfo *info)
   g_free (info->title);
   g_free (info->url);
   g_free (info->favicon);
-  g_slice_free (EphyTabInfo, info);
+  g_free (info);
 }
