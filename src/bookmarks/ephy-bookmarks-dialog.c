@@ -56,14 +56,6 @@ G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
 
-enum {
-  MOVE_ROW,
-  SORTED,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 static GtkWidget * create_bookmark_row (gpointer item,
                                         gpointer user_data);
 static GtkWidget *create_tag_row (EphyBookmarksDialog *self,
@@ -253,10 +245,10 @@ row_moved_cb (AdwActionRow        *row,
 
   if (g_strcmp0 (visible_child, "default") == 0) {
     update_bookmarks_order (self);
-    g_signal_emit (self->manager, signals[SORTED], 0, NULL);
+    g_signal_emit_by_name (self->manager, "sorted", NULL);
   } else {
     update_tags_order (self);
-    g_signal_emit (self->manager, signals[SORTED], 0, self->tag_detail_tag);
+    g_signal_emit_by_name (self->manager, "sorted", self->tag_detail_tag);
   }
 }
 
@@ -524,7 +516,7 @@ tag_row_drop_cb (AdwActionRow *self,
   source = g_value_get_object (value);
   g_object_set_data (G_OBJECT (source), "list-box", gtk_widget_get_parent (GTK_WIDGET (source)));
 
-  g_signal_emit (source, signals[MOVE_ROW], 0, self);
+  g_signal_emit_by_name (source, "bmks-move-row", self);
 
   return TRUE;
 }
@@ -543,7 +535,7 @@ tag_row_move_up_cb (GSimpleAction *action,
     return;
 
   g_object_set_data (G_OBJECT (row), "list-box", list_box);
-  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_ROW], 0, ADW_ACTION_ROW (prev_row));
+  g_signal_emit_by_name (ADW_ACTION_ROW (row), "bmks-move-row", ADW_ACTION_ROW (prev_row));
 }
 
 static void
@@ -560,7 +552,7 @@ tag_row_move_down_cb (GSimpleAction *action,
     return;
 
   g_object_set_data (G_OBJECT (row), "list-box", list_box);
-  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_ROW], 0, ADW_ACTION_ROW (next_row));
+  g_signal_emit_by_name (ADW_ACTION_ROW (row), "bmks-move-row", ADW_ACTION_ROW (next_row));
 }
 
 static GActionGroup *
@@ -1278,16 +1270,6 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_done_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_key_pressed);
-
-  signals[MOVE_ROW] =
-    g_signal_new ("bmks-move-row",
-                  ADW_TYPE_ACTION_ROW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  ADW_TYPE_ACTION_ROW);
-
-  signals[SORTED] = g_signal_lookup ("sorted", EPHY_TYPE_BOOKMARKS_MANAGER);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
