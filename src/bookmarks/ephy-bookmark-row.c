@@ -371,13 +371,7 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
   gtk_widget_class_install_action (widget_class, "row.move-up", NULL, move_up_cb);
   gtk_widget_class_install_action (widget_class, "row.move-down", NULL, move_down_cb);
 
-  signals[MOVE_ROW] =
-    g_signal_new ("bmks-move-row",
-                  ADW_TYPE_ACTION_ROW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  ADW_TYPE_ACTION_ROW);
+  signals[MOVE_ROW] = g_signal_lookup ("bmks-move-row", ADW_TYPE_ACTION_ROW);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, favicon_image);
