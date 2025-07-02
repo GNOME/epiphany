@@ -57,8 +57,7 @@ G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
 
 enum {
-  MOVE_ROW,
-  SORTED,
+  MOVE_TAG_ROW,
   LAST_SIGNAL
 };
 
@@ -252,10 +251,10 @@ row_moved_cb (AdwActionRow        *row,
 
   if (g_strcmp0 (visible_child, "default") == 0) {
     update_bookmarks_order (self);
-    g_signal_emit (self->manager, signals[SORTED], 0, NULL);
+    g_signal_emit_by_name (self->manager, "sorted", NULL);
   } else {
     update_tags_order (self);
-    g_signal_emit (self->manager, signals[SORTED], 0, self->tag_detail_tag);
+    g_signal_emit_by_name (self->manager, "sorted", self->tag_detail_tag);
   }
 }
 
@@ -445,7 +444,7 @@ create_bookmark_row (gpointer item,
                           g_strdup (EPHY_LIST_BOX_ROW_TYPE_BOOKMARK),
                           (GDestroyNotify)g_free);
 
-  g_signal_connect_object (row, "bmks-move-row", G_CALLBACK (row_moved_cb), self, 0);
+  g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, 0);
 
   set_row_is_editable (row, is_editing);
 
@@ -523,7 +522,10 @@ tag_row_drop_cb (AdwActionRow *self,
   source = g_value_get_object (value);
   g_object_set_data (G_OBJECT (source), "list-box", gtk_widget_get_parent (GTK_WIDGET (source)));
 
-  g_signal_emit (source, signals[MOVE_ROW], 0, self);
+  if (EPHY_IS_BOOKMARK_ROW (source))
+    g_signal_emit_by_name (source, "move-row", self);
+  else
+    g_signal_emit (source, signals[MOVE_TAG_ROW], 0, self);
 
   return TRUE;
 }
@@ -542,7 +544,7 @@ tag_row_move_up_cb (GSimpleAction *action,
     return;
 
   g_object_set_data (G_OBJECT (row), "list-box", list_box);
-  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_ROW], 0, ADW_ACTION_ROW (prev_row));
+  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_TAG_ROW], 0, ADW_ACTION_ROW (prev_row));
 }
 
 static void
@@ -559,7 +561,7 @@ tag_row_move_down_cb (GSimpleAction *action,
     return;
 
   g_object_set_data (G_OBJECT (row), "list-box", list_box);
-  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_ROW], 0, ADW_ACTION_ROW (next_row));
+  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_TAG_ROW], 0, ADW_ACTION_ROW (next_row));
 }
 
 static GActionGroup *
@@ -627,7 +629,7 @@ create_tag_row (EphyBookmarksDialog *self,
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), drag_image);
 
   g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, 0);
-  g_signal_connect_object (row, "bmks-move-row", G_CALLBACK (row_moved_cb), self, 0);
+  g_signal_connect_object (row, "move-tag-row", G_CALLBACK (row_moved_cb), self, 0);
 
   source = gtk_drag_source_new ();
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
@@ -1277,15 +1279,19 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_key_pressed);
 
-  signals[MOVE_ROW] =
-    g_signal_new ("bmks-move-row",
+  /* FIXME: Once tag rows are moved to their own file, move this signal
+   * definition there too. We should define the signal on an Epiphany
+   * type, not on ADW_TYPE_ACTION_ROW.
+   *
+   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/2721
+   */
+  signals[MOVE_TAG_ROW] =
+    g_signal_new ("move-tag-row",
                   ADW_TYPE_ACTION_ROW,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   ADW_TYPE_ACTION_ROW);
-
-  signals[SORTED] = g_signal_lookup ("sorted", EPHY_TYPE_BOOKMARKS_MANAGER);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
