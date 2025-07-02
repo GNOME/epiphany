@@ -96,8 +96,7 @@ update_rows_movable (EphyBookmarksDialog *self,
   while ((row = gtk_list_box_get_row_at_index (list_box, i++)))
     n_rows++;
 
-  i = 0;
-  while ((row = gtk_list_box_get_row_at_index (list_box, i++))) {
+  for (i = 0; (row = gtk_list_box_get_row_at_index (list_box, i)); i++) {
     gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-up", i > 0);
     gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-down", i < (n_rows - 1));
 
