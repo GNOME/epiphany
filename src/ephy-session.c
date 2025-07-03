@@ -921,13 +921,16 @@ save_session_sync (GTask        *task,
                    GCancellable *cancellable)
 {
   SaveData *data = (SaveData *)g_task_get_task_data (task);
-  xmlBufferPtr buffer;
-  xmlTextWriterPtr writer;
+  xmlOutputBufferPtr buffer;
+  xmlTextWriterPtr writer = NULL;
   GList *w;
   int ret = -1;
 
-  buffer = xmlBufferCreate ();
-  writer = xmlNewTextWriterMemory (buffer, 0);
+  buffer = xmlAllocOutputBuffer (NULL);
+  if (buffer == NULL)
+    goto out;
+
+  writer = xmlNewTextWriter (buffer);
   if (writer == NULL)
     goto out;
 
@@ -963,29 +966,21 @@ save_session_sync (GTask        *task,
 
   ret = xmlTextWriterEndDocument (writer);
 
-out:
-  if (writer)
-    xmlFreeTextWriter (writer);
-
   if (ret >= 0) {
-    GError *error = NULL;
-    GFile *session_file;
+    g_autoptr (GError) error = NULL;
+    g_autoptr (GFile) session_file = NULL;
 
     session_file = get_session_file (SESSION_STATE);
-
     if (!g_file_replace_contents (session_file,
-                                  (const char *)buffer->content,
-                                  buffer->use,
+                                  (const char *)xmlBufContent (buffer->buffer),
+                                  xmlBufUse (buffer->buffer),
                                   NULL, TRUE, 0, NULL, NULL, &error)) {
       g_warning ("Error saving session: %s", error->message);
-      g_error_free (error);
     }
-
-    g_object_unref (session_file);
   }
 
-  xmlBufferFree (buffer);
-
+out:
+  g_clear_pointer (&writer, xmlFreeTextWriter);
   g_task_return_boolean (task, TRUE);
 
   STOP_PROFILER ("Saving session")
