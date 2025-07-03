@@ -1333,15 +1333,16 @@ ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
 }
 
 static void
-ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
-                                              const char      *address)
+ephy_location_entry_do_set_address (EphyTitleWidget *widget,
+                                    const char      *address,
+                                    gboolean         force)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (widget);
   g_autofree char *effective_text = NULL;
   const char *text = "";
   const char *final_text;
 
-  if (ephy_location_entry_has_focus (self))
+  if (!force && ephy_location_entry_has_focus (self))
     return;
 
   if (address != NULL) {
@@ -1356,6 +1357,13 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   update_url_button_style (self);
 
   gtk_popover_popdown (GTK_POPOVER (self->suggestions_popover));
+}
+
+static void
+ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
+                                              const char      *address)
+{
+  ephy_location_entry_do_set_address (widget, address, FALSE);
 }
 
 static EphySecurityLevel
@@ -1493,7 +1501,7 @@ ephy_location_entry_reset (EphyLocationEntry *self)
 
   offset = strlen (text) - strlen (old_text);
   position = gtk_editable_get_position (GTK_EDITABLE (self));
-  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (self), text);
+  ephy_location_entry_do_set_address (EPHY_TITLE_WIDGET (self), text, TRUE);
   gtk_editable_set_position (GTK_EDITABLE (self), position + offset);
 
   return g_strcmp0 (text, old_text);
