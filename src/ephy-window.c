@@ -2177,7 +2177,7 @@ load_auto_open_schemes_table (void)
 }
 
 static gboolean
-url_should_open_automatically (const char *url,
+url_should_open_automatically (const char *opener_origin,
                                const char *navigation_uri)
 {
   g_autoptr (GError) error = NULL;
@@ -2192,7 +2192,7 @@ url_should_open_automatically (const char *url,
   }
 
   table = load_auto_open_schemes_table ();
-  pref_scheme = g_hash_table_lookup (table, url);
+  pref_scheme = g_hash_table_lookup (table, opener_origin);
   if (g_strcmp0 (pref_scheme, g_uri_get_scheme (uri)) == 0)
     return TRUE;
 
@@ -2203,13 +2203,13 @@ typedef struct {
   WebKitURIRequest *request;
   EphyWindow *window;
   char *target_scheme;
-  char *opener_uri;
+  char *opener_origin;
 
   GtkWidget *always_allow_switch;
 } OpenURLPermissionData;
 
 static OpenURLPermissionData *
-open_url_permission_data_new (const char       *uri,
+open_url_permission_data_new (const char       *opener_origin,
                               WebKitURIRequest *request,
                               EphyWindow       *window)
 {
@@ -2225,7 +2225,7 @@ open_url_permission_data_new (const char       *uri,
     return NULL;
   }
 
-  data->opener_uri = g_strdup (uri);
+  data->opener_origin = g_strdup (opener_origin);
   data->target_scheme = g_strdup (g_uri_get_scheme (navigation_uri));
   data->request = g_object_ref (request);
   data->window = g_object_ref (window);
@@ -2236,7 +2236,7 @@ open_url_permission_data_new (const char       *uri,
 static void
 open_url_permission_data_new_free (OpenURLPermissionData *data)
 {
-  g_clear_pointer (&data->opener_uri, g_free);
+  g_clear_pointer (&data->opener_origin, g_free);
   g_clear_pointer (&data->target_scheme, g_free);
   g_clear_object (&data->request);
   g_clear_object (&data->always_allow_switch);
@@ -2279,7 +2279,7 @@ on_open (AdwAlertDialog *self,
     gboolean always_allow = adw_switch_row_get_active (ADW_SWITCH_ROW (data->always_allow_switch));
 
     if (always_allow)
-      add_auto_open_scheme (data->opener_uri, data->target_scheme);
+      add_auto_open_scheme (data->opener_origin, data->target_scheme);
 
     ephy_file_launch_uri_handler (file,
                                   NULL,
@@ -2305,7 +2305,7 @@ ask_for_permission (gpointer user_data)
    * without consent, so they should not be able to also open those files
    * without user interaction.
    */
-  body = g_strdup_printf (_("Allow “%s” to open the “%s” link in an external app"), data->opener_uri, data->target_scheme);
+  body = g_strdup_printf (_("Allow “%s” to open the “%s” link in an external app"), data->opener_origin, data->target_scheme);
   dialog = adw_alert_dialog_new (_("Open in External App?"), body);
   adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "cancel", _("_Cancel"));
   adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "open", _("_Open Link"));
@@ -2335,6 +2335,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
   WebKitNavigationType navigation_type;
   WebKitURIRequest *request;
   const char *uri;
+  g_autofree char *opener_origin = NULL;
 
   g_assert (WEBKIT_IS_WEB_VIEW (web_view));
   g_assert (WEBKIT_IS_NAVIGATION_POLICY_DECISION (decision));
@@ -2346,10 +2347,14 @@ decide_navigation_policy (WebKitWebView            *web_view,
   request = webkit_navigation_action_get_request (navigation_action);
   uri = webkit_uri_request_get_uri (request);
 
+  opener_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
+  if (!opener_origin)
+    return TRUE;
+
   if (!ephy_embed_utils_address_has_web_scheme (uri)) {
     webkit_policy_decision_ignore (decision);
 
-    if (url_should_open_automatically (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), uri)) {
+    if (url_should_open_automatically (g_steal_pointer (&opener_origin), uri)) {
       g_autoptr (GFile) file = g_file_new_for_uri (uri);
 
       ephy_file_launch_uri_handler (file,
@@ -2366,7 +2371,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
       if (!webkit_navigation_action_is_user_gesture (navigation_action))
         return TRUE;
 
-      data = open_url_permission_data_new (ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view)), request, window);
+      data = open_url_permission_data_new (g_steal_pointer (&opener_origin), request, window);
       if (data)
         g_idle_add (ask_for_permission, data);
     }
