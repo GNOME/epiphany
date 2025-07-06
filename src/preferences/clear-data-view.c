@@ -225,7 +225,6 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
     AdwToastOverlay *toast_overlay = ephy_data_view_get_toast_overlay (EPHY_DATA_VIEW (clear_data_view));
     AdwToast *toast = adw_toast_new (_("Data cleared"));
 
-    adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
     adw_toast_overlay_add_toast (toast_overlay, toast);
   }
 

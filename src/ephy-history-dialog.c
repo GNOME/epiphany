@@ -454,7 +454,6 @@ row_copy_url_button_clicked (GtkWidget *button,
     AdwToast *toast = adw_toast_new (_("Link copied"));
 
     gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (button)), url->url);
-    adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
     adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
   }
 }

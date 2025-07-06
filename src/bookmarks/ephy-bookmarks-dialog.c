@@ -820,7 +820,6 @@ ephy_bookmarks_dialog_bookmark_removed_cb (EphyBookmarksDialog  *self,
   if (window == active_window) {
     AdwToast *toast = adw_toast_new (_("Bookmark removed"));
 
-    adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
     adw_toast_set_button_label (toast, _("_Undo"));
     if (ephy_window_get_show_sidebar (window))
       ephy_bookmarks_dialog_bookmark_removed_toast (self, bookmark, toast);

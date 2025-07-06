@@ -106,7 +106,6 @@ copy_password_clicked (GtkWidget *button,
     AdwToast *toast = adw_toast_new (_("Password copied"));
 
     gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (button)), password);
-    adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
     adw_toast_overlay_add_toast (toast_overlay, toast);
   }
 }
