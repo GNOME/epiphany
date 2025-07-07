@@ -129,44 +129,44 @@ nightly aarch64:
   stage: .post
   needs: ['flatpak aarch64']
 
-canary:
-  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master'
-  stage: 'test'
-  interruptible: true
-  tags:
-    - flatpak
-  variables:
-    BUNDLE: 'epiphany-canary.flatpak'
-  script:
-    - python3 generate-canary-manifest.py
-    - flatpak-builder --user --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
-    - flatpak build-bundle repo --runtime-repo=${RUNTIME_REPO} ${BUNDLE} org.gnome.Epiphany.Canary
-    - tar cf canary-repo.tar repo/
-    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json webkitgtk.zip
-
-  artifacts:
-    name: 'Canary Flatpak artifacts'
-    expose_as: 'Get Canary Flatpak bundle here'
-    when: 'always'
-    paths:
-      - "${BUNDLE}"
-      - "canary-repo.tar"
-    expire_in: 14 days
-  cache:
-    - key: "$CI_JOB_NAME"
-      paths:
-        - '.flatpak-builder/downloads'
-        - '.flatpak-builder/git'
-    - key: "$CI_JOB_NAME"
-      paths:
-        - '.flatpak-builder/cache'
-        - '.flatpak-builder/ccache'
-  except:
-    - gnome-*
-
-canary nightly:
-  extends: '.publish_nightly'
-  stage: .post
-  dependencies: ['canary']
-  before_script:
-    - mv canary-repo.tar repo.tar
+#canary:
+#  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master'
+#  stage: 'test'
+#  interruptible: true
+#  tags:
+#    - flatpak
+#  variables:
+#    BUNDLE: 'epiphany-canary.flatpak'
+#  script:
+#    - python3 generate-canary-manifest.py
+#    - flatpak-builder --user --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
+#    - flatpak build-bundle repo --runtime-repo=${RUNTIME_REPO} ${BUNDLE} org.gnome.Epiphany.Canary
+#    - tar cf canary-repo.tar repo/
+#    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json webkitgtk.zip
+#
+#  artifacts:
+#    name: 'Canary Flatpak artifacts'
+#    expose_as: 'Get Canary Flatpak bundle here'
+#    when: 'always'
+#    paths:
+#      - "${BUNDLE}"
+#      - "canary-repo.tar"
+#    expire_in: 14 days
+#  cache:
+#    - key: "$CI_JOB_NAME"
+#      paths:
+#        - '.flatpak-builder/downloads'
+#        - '.flatpak-builder/git'
+#    - key: "$CI_JOB_NAME"
+#      paths:
+#        - '.flatpak-builder/cache'
+#        - '.flatpak-builder/ccache'
+#  except:
+#    - gnome-*
+#
+#canary nightly:
+#  extends: '.publish_nightly'
+#  stage: .post
+#  dependencies: ['canary']
+#  before_script:
+#    - mv canary-repo.tar repo.tar
