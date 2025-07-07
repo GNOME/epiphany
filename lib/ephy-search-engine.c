@@ -549,7 +549,7 @@ on_suggestions_downloaded_cb (SoupSession  *session,
   /* (Ab)use operator precedence for more concise error handling. */
   if ((!echoed_query_string && (error_msg = "not a string as first element"))
       || (!JSON_NODE_HOLDS_ARRAY (json_array_get_element (json_array, 1)) && (error_msg = "not an array as second element"))) {
-    error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, error_msg);
+    error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_FAILED, error_msg);
     /* Directly copied from above. */
     g_prefix_error (&error,
                     /* TRANSLATORS: The first %s is the URL for the search suggestions and the second one is raw JSON content. */
