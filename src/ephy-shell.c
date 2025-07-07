@@ -455,6 +455,7 @@ static GActionEntry app_mode_app_entries[] = {
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
+  { "quit-web-app", quit_application, NULL, NULL, NULL },
   { "run-in-background", NULL, NULL, "false", NULL},
   { "uninstall-web-app", uninstall_web_app },
 };
@@ -539,6 +540,7 @@ set_accel_for_action (EphyShell   *shell,
   gtk_application_set_accels_for_action (GTK_APPLICATION (shell), detailed_action_name, accels);
 }
 
+
 static gboolean
 run_in_background_get_mapping (GValue   *value,
                                GVariant *variant,
@@ -554,9 +556,7 @@ run_in_background_set_mapping (const GValue       *value,
                                gpointer            user_data)
 {
   GVariant *var = g_value_get_variant (value);
-  EphyShell *shell = EPHY_SHELL (user_data);
 
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (GTK_APPLICATION (shell)), "quit", g_variant_get_boolean (var));
   return g_variant_new_boolean (g_variant_get_boolean (var));
 }
 
