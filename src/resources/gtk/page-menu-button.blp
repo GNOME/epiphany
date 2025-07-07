@@ -11,16 +11,6 @@ template $EphyPageMenuButton: Adw.Bin {
 menu page_menu {
   section {
     item {
-      custom: "zoom";
-    }
-
-    item {
-      custom: "header";
-    }
-  }
-
-  section {
-    item {
       /* Translators: 'Run in Background' item is a toggle, not an action */
       label: _("_Run in Background");
       action: "app.run-in-background";
@@ -42,6 +32,11 @@ menu page_menu {
     item {
       label: _("Reopen Closed _Tab");
       action: "app.reopen-closed-tab";
+    }
+
+    item {
+      label: _("Fullscreen");
+      action-name: "win.fullscreen";
     }
   }
 
@@ -117,74 +112,5 @@ menu page_menu {
 
 PopoverMenu page_menu_popover {
   menu-model: page_menu;
-
-  [zoom]
-  Box zoom-box {
-    orientation: horizontal;
-    homogeneous: true;
-
-    styles [
-      "linked",
-      "page-menu-zoom-box",
-    ]
-
-    Button {
-      tooltip-text: C_("tooltip", "Zoom Out");
-      icon-name: "zoom-out-symbolic";
-      action-name: "win.zoom-out";
-    }
-
-    Button {
-      tooltip-text: _("Restore Zoom");
-      action-name: "win.zoom-normal";
-
-      Label zoom_level {
-        width-chars: 5;
-      }
-    }
-
-    Button {
-      tooltip-text: C_("tooltip", "Zoom In");
-      icon-name: "zoom-in-symbolic";
-      action-name: "win.zoom-in";
-    }
-  }
-
-  [header]
-  Box button_box {
-    orientation: horizontal;
-    spacing: 6;
-    homogeneous: true;
-    margin-top: 6;
-
-    styles [
-      "page-menu-button-box",
-    ]
-
-    Button {
-      tooltip-text: _("Print…");
-      icon-name: "document-print-symbolic";
-      action-name: "win.print";
-    }
-
-    Button {
-      tooltip-text: _("Find…");
-      icon-name: "edit-find-symbolic";
-      action-name: "win.find";
-    }
-
-    Button {
-      tooltip-text: _("Fullscreen");
-      icon-name: "view-fullscreen-symbolic";
-      action-name: "win.fullscreen";
-    }
-
-    Button combined_stop_reload_button {
-      visible: false;
-      tooltip-text: _("Reload the current page");
-      icon-name: "view-refresh-symbolic";
-      action-name: "toolbar.combined-stop-reload";
-    }
-  }
 }
 

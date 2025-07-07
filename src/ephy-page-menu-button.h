@@ -31,15 +31,6 @@ G_DECLARE_FINAL_TYPE (EphyPageMenuButton, ephy_page_menu_button, EPHY, PAGE_MENU
 
 EphyPageMenuButton   *ephy_page_menu_button_new (void);
 
-void                  ephy_page_menu_button_set_zoom_level (EphyPageMenuButton *self,
-                                                            char               *zoom_level);
-
-void                  ephy_page_menu_button_change_combined_stop_reload_state (EphyPageMenuButton *self,
-                                                                               gboolean            loading);
-
-void                  ephy_page_menu_button_show_combined_stop_reload_button (EphyPageMenuButton *self,
-                                                                              gboolean            show);
-
 void                  ephy_page_menu_button_popup          (EphyPageMenuButton *self);
 void                  ephy_page_menu_button_popdown        (EphyPageMenuButton *self);
 

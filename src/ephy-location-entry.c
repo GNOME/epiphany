@@ -37,6 +37,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-site-menu-button.h"
 #include "ephy-suggestion.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
@@ -67,11 +68,10 @@ struct _EphyLocationEntry {
   /* Display */
   GtkWidget *url_button;
   GtkWidget *url_button_label;
-  GtkWidget *security_button;
+  GtkWidget *site_menu_button;
   GtkWidget *mute_button;
   GtkWidget *password_button;
   GtkWidget *opensearch_button;
-  GtkWidget *bookmark_button;
   GtkWidget *reader_mode_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *progress_bar;
@@ -736,7 +736,7 @@ on_editable_changed (GtkEditable *editable,
 }
 
 static void
-on_security_button_clicked (EphyLocationEntry *self)
+on_site_menu_clicked (EphyLocationEntry *self)
 {
   g_signal_emit (self, signals[LOCK_CLICKED], 0, NULL);
 }
@@ -1252,10 +1252,9 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, stack);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, text);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, security_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, site_menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, mute_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, password_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, bookmark_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, scrolled_window);
@@ -1270,7 +1269,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
   gtk_widget_class_bind_template_callback (widget_class, on_reader_mode_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_security_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_site_menu_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_suggestions_popover_notify_visible);
   gtk_widget_class_bind_template_callback (widget_class, on_suggestion_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_focus_enter);
@@ -1311,12 +1310,6 @@ ephy_location_entry_init (EphyLocationEntry *self)
   self->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
-                   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
-                   self->bookmark_button,
-                   "visible",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
 
   g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "delete-text", G_CALLBACK (on_delete_text), self, 0);
   g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "insert-text", G_CALLBACK (on_insert_text), self, 0);
@@ -1379,16 +1372,27 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (widget);
   const char *icon_name = NULL;
+  const char *description;
+
+  self->security_level = security_level;
 
   if (!self->reader_mode_active)
     icon_name = ephy_security_level_to_icon_name (security_level);
 
-  if (icon_name)
-    gtk_button_set_icon_name (GTK_BUTTON (self->security_button), icon_name);
+  if (!icon_name)
+    icon_name = "ephy-site-button-symbolic";
 
-  gtk_widget_set_visible (self->security_button, !!icon_name);
+  if (self->security_level == EPHY_SECURITY_LEVEL_STRONG_SECURITY)
+    description = _("Secure Site");
+  else
+    description = _("Insecure Site");
 
-  self->security_level = security_level;
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->site_menu_button),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                  description,
+                                  -1);
+
+  ephy_site_menu_button_set_icon_name (EPHY_SITE_MENU_BUTTON (self->site_menu_button), icon_name);
 }
 
 static void
@@ -1522,43 +1526,6 @@ ephy_location_entry_grab_focus (EphyLocationEntry *self)
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
 }
 
-void
-ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry     *self,
-                                             EphyBookmarkIconState  state)
-{
-  self->icon_state = state;
-
-  g_assert (EPHY_IS_LOCATION_ENTRY (self));
-
-  if (self->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)
-    state = EPHY_BOOKMARK_ICON_HIDDEN;
-
-  switch (state) {
-    case EPHY_BOOKMARK_ICON_HIDDEN:
-      gtk_widget_set_visible (self->bookmark_button, FALSE);
-      gtk_widget_remove_css_class (self->bookmark_button, "bookmarked");
-      break;
-    case EPHY_BOOKMARK_ICON_EMPTY:
-      gtk_widget_set_visible (self->bookmark_button, TRUE);
-      gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
-                                "ephy-non-starred-symbolic");
-      gtk_widget_remove_css_class (self->bookmark_button, "bookmarked");
-      /* Translators: tooltip for the empty bookmark button */
-      gtk_widget_set_tooltip_text (self->bookmark_button, _("Bookmark Page"));
-      break;
-    case EPHY_BOOKMARK_ICON_BOOKMARKED:
-      gtk_widget_set_visible (self->bookmark_button, TRUE);
-      gtk_button_set_icon_name (GTK_BUTTON (self->bookmark_button),
-                                "ephy-starred-symbolic");
-      gtk_widget_add_css_class (self->bookmark_button, "bookmarked");
-      /* Translators: tooltip for the bookmarked button */
-      gtk_widget_set_tooltip_text (self->bookmark_button, _("Edit Bookmark"));
-      break;
-    default:
-      g_assert_not_reached ();
-  }
-}
-
 /**
  * ephy_location_entry_set_lock_tooltip:
  * @entry: an #EphyLocationEntry widget
@@ -1571,7 +1538,7 @@ void
 ephy_location_entry_set_lock_tooltip (EphyLocationEntry *self,
                                       const char        *tooltip)
 {
-  gtk_widget_set_tooltip_text (self->security_button, tooltip);
+  gtk_widget_set_tooltip_text (self->site_menu_button, tooltip);
 }
 
 void
@@ -1776,8 +1743,6 @@ ephy_location_entry_set_adaptive_mode (EphyLocationEntry *self,
                                        EphyAdaptiveMode   adaptive_mode)
 {
   self->adaptive_mode = adaptive_mode;
-
-  ephy_location_entry_set_bookmark_icon_state (self, self->icon_state);
 }
 
 void
@@ -1902,4 +1867,11 @@ ephy_location_entry_set_position (EphyLocationEntry *self,
                                   int                position)
 {
   gtk_editable_set_position (GTK_EDITABLE (self->text), position);
+}
+
+void
+ephy_location_entry_set_zoom_level (EphyLocationEntry *entry,
+                                    char              *zoom_level)
+{
+  ephy_site_menu_button_set_zoom_level (EPHY_SITE_MENU_BUTTON (entry->site_menu_button), zoom_level);
 }

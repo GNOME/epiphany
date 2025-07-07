@@ -211,8 +211,6 @@ ephy_header_bar_constructed (GObject *object)
 
   /* Page Menu */
   header_bar->page_menu_button = GTK_WIDGET (ephy_page_menu_button_new ());
-  ephy_page_menu_button_show_combined_stop_reload_button (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button), FALSE);
-
   adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar), header_bar->page_menu_button);
 
   /* End action elements */
@@ -334,20 +332,4 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION)
     ephy_location_entry_set_adaptive_mode (EPHY_LOCATION_ENTRY (header_bar->title_widget), adaptive_mode);
-}
-
-void
-ephy_header_bar_start_change_combined_stop_reload_state (EphyHeaderBar *header_bar,
-                                                         gboolean       loading)
-{
-  ephy_page_menu_button_change_combined_stop_reload_state (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button), loading);
-}
-
-void
-ephy_header_bar_set_zoom_level (EphyHeaderBar *header_bar,
-                                gdouble        zoom)
-{
-  g_autofree gchar *zoom_level = g_strdup_printf ("%2.0f%%", zoom * 100);
-
-  ephy_page_menu_button_set_zoom_level (EPHY_PAGE_MENU_BUTTON (header_bar->page_menu_button), zoom_level);
 }

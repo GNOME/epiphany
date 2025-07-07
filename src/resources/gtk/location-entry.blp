@@ -18,13 +18,12 @@ template $EphyLocationEntry: Box {
           ]
 
           [start]
-          Button security_button {
-            tooltip-text: _("Website Security Status and Permissions");
+          $EphySiteMenuButton site_menu_button {
             focus-on-click: false;
-            clicked => $on_security_button_clicked() swapped;
-
+            valign: center;
             styles [
               "entry-icon",
+              "start",
             ]
           }
 
@@ -76,16 +75,6 @@ template $EphyLocationEntry: Box {
             styles [
               "entry-icon",
               "end",
-            ]
-          }
-
-          [end]
-          Button bookmark_button {
-            focus-on-click: false;
-            clicked => $on_bookmark_button_clicked();
-
-            styles [
-              "entry-icon",
             ]
           }
 

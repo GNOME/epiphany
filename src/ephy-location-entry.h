@@ -51,9 +51,6 @@ void            ephy_location_entry_undo_reset                 (EphyLocationEntr
 
 void            ephy_location_entry_grab_focus                 (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntry     *entry,
-                                                                EphyBookmarkIconState  state);
-
 void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
                                                                 const char        *tooltip);
 
@@ -111,4 +108,6 @@ gboolean        ephy_location_entry_has_focus                  (EphyLocationEntr
 
 void            ephy_location_entry_set_position               (EphyLocationEntry *self,
                                                                 int                position);
+void            ephy_location_entry_set_zoom_level             (EphyLocationEntry *entry,
+                                                                char              *zoom_level);
 G_END_DECLS

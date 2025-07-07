@@ -1,7 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2018 Purism SPC
- *  Copyright © 2018 Adrien Plazas <kekun.plazas@laposte.net>
+ *  Copyright © 2025 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -23,19 +22,18 @@
 
 #include <adwaita.h>
 
-#include "ephy-action-bar-end.h"
-#include "ephy-action-bar-start.h"
-#include "ephy-adaptive-mode.h"
-#include "ephy-window.h"
-
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_ACTION_BAR (ephy_action_bar_get_type ())
+#define EPHY_TYPE_SITE_MENU_BUTTON (ephy_site_menu_button_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, AdwBin);
+G_DECLARE_FINAL_TYPE (EphySiteMenuButton, ephy_site_menu_button, EPHY, SITE_MENU_BUTTON, GtkButton)
 
-EphyActionBar      *ephy_action_bar_new                  (EphyWindow *window);
-EphyActionBarStart *ephy_action_bar_get_action_bar_start (EphyActionBar *action_bar);
-EphyActionBarEnd   *ephy_action_bar_get_action_bar_end   (EphyActionBar *action_bar);
+GtkWidget *ephy_site_menu_button_new  (void);
+
+void       ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
+                                                 char               *zoom_level);
+
+void       ephy_site_menu_button_set_icon_name (EphySiteMenuButton *self,
+                                                const char         *icon_name);
 
 G_END_DECLS

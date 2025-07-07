@@ -44,9 +44,5 @@ EphyActionBarStart *ephy_header_bar_get_action_bar_start           (EphyHeaderBa
 EphyActionBarEnd   *ephy_header_bar_get_action_bar_end             (EphyHeaderBar *header_bar);
 void                ephy_header_bar_set_adaptive_mode              (EphyHeaderBar    *header_bar,
                                                                     EphyAdaptiveMode  adaptive_mode);
-void                ephy_header_bar_start_change_combined_stop_reload_state (EphyHeaderBar *header_bar,
-                                                                             gboolean       loading);
-void                ephy_header_bar_set_zoom_level                 (EphyHeaderBar *header_bar,
-                                                                    gdouble        zoom);
 
 G_END_DECLS

@@ -25,17 +25,16 @@
 #include "ephy-flatpak-utils.h"
 
 /* Translators: tooltip for the refresh button */
-static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page");
+/* static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page"); */
 
 struct _EphyPageMenuButton {
   AdwBin parent_instance;
 
   GtkWidget *menu_button;
   GMenu *page_menu;
-  GtkWidget *button_box;
   GtkWidget *page_menu_popover;
   GtkWidget *zoom_level;
-  GtkWidget *combined_stop_reload_button;
+  /* GtkWidget *combined_stop_reload_button; */
 };
 
 G_DEFINE_FINAL_TYPE (EphyPageMenuButton, ephy_page_menu_button, ADW_TYPE_BIN)
@@ -100,10 +99,7 @@ ephy_page_menu_button_class_init (EphyPageMenuButtonClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, EphyPageMenuButton, menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyPageMenuButton, page_menu);
-  gtk_widget_class_bind_template_child (widget_class, EphyPageMenuButton, button_box);
   gtk_widget_class_bind_template_child (widget_class, EphyPageMenuButton, page_menu_popover);
-  gtk_widget_class_bind_template_child (widget_class, EphyPageMenuButton, zoom_level);
-  gtk_widget_class_bind_template_child (widget_class, EphyPageMenuButton, combined_stop_reload_button);
 }
 
 static void
@@ -144,9 +140,6 @@ ephy_page_menu_button_init (EphyPageMenuButton *self)
 
     gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->menu_button), "open-menu");
     gtk_widget_add_css_class (self->menu_button, "toolbar-button");
-
-    gtk_widget_add_css_class (self->button_box, "linked");
-    gtk_box_set_spacing (GTK_BOX (self->button_box), 0);
   }
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (self->menu_button), self->page_menu_popover);
@@ -156,38 +149,6 @@ EphyPageMenuButton *
 ephy_page_menu_button_new (void)
 {
   return g_object_new (EPHY_TYPE_PAGE_MENU_BUTTON, NULL);
-}
-
-void
-ephy_page_menu_button_set_zoom_level (EphyPageMenuButton *self,
-                                      char               *zoom_level)
-{
-  gtk_label_set_text (GTK_LABEL (self->zoom_level), zoom_level);
-}
-
-void
-ephy_page_menu_button_change_combined_stop_reload_state (EphyPageMenuButton *self,
-                                                         gboolean            loading)
-{
-  if (loading) {
-    gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button),
-                              "process-stop-symbolic");
-    /* Translators: tooltip for the stop button */
-    gtk_widget_set_tooltip_text (self->combined_stop_reload_button,
-                                 _("Stop loading the current page"));
-  } else {
-    gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button),
-                              "view-refresh-symbolic");
-    gtk_widget_set_tooltip_text (self->combined_stop_reload_button,
-                                 _(REFRESH_BUTTON_TOOLTIP));
-  }
-}
-
-void
-ephy_page_menu_button_show_combined_stop_reload_button (EphyPageMenuButton *self,
-                                                        gboolean            show)
-{
-  gtk_widget_set_visible (self->combined_stop_reload_button, show);
 }
 
 void

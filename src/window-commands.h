@@ -254,4 +254,7 @@ void window_cmd_export_passwords                (GSimpleAction *action,
 void window_cmd_close_all_tabs                  (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_security_and_permissions        (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 G_END_DECLS

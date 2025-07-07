@@ -853,7 +853,6 @@ change_combined_stop_reload_state (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyActionBarStart *header_bar_start = ephy_header_bar_get_action_bar_start (EPHY_HEADER_BAR (window->header_bar));
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (window->header_bar);
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
   ephy_action_bar_start_change_combined_stop_reload_state (header_bar_start,
@@ -861,10 +860,6 @@ change_combined_stop_reload_state (GSimpleAction *action,
   if (EPHY_IS_LOCATION_ENTRY (title_widget))
     ephy_location_entry_start_change_combined_stop_reload_state (EPHY_LOCATION_ENTRY (title_widget),
                                                                  g_variant_get_boolean (loading));
-  ephy_header_bar_start_change_combined_stop_reload_state (header_bar,
-                                                           g_variant_get_boolean (loading));
-  ephy_action_bar_change_combined_stop_reload_state (EPHY_ACTION_BAR (window->action_bar),
-                                                     g_variant_get_boolean (loading));
 
   g_simple_action_set_state (action, loading);
 }
@@ -900,7 +895,7 @@ static const GActionEntry window_entries [] = {
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
   { "toggle-reader-mode", window_cmd_toggle_reader_mode },
-  { "bookmarks", window_cmd_bookmarks },
+  { "security-permissions", window_cmd_security_and_permissions },
 
   { "select-all", window_cmd_select_all },
 
@@ -1120,6 +1115,9 @@ sync_tab_address (EphyWebView *view,
   EphyEmbed *embed = window->active_embed;
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
   const char *current_text = ephy_title_widget_get_address (title_widget);
+  GActionGroup *action_group;
+  GAction *action;
+  EphySecurityLevel security_level;
 
   if (window->closing || ephy_embed_get_web_view (embed) != view)
     return;
@@ -1134,6 +1132,17 @@ sync_tab_address (EphyWebView *view,
 
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_INTERNAL_PAGE, is_internal_page);
+
+  view = ephy_embed_get_web_view (ephy_window_get_active_embed (window));
+  ephy_web_view_get_security_level (view, &security_level, NULL, NULL, NULL);
+
+  action_group = ephy_window_get_action_group (window, "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "security-permissions");
+
+  if (security_level == EPHY_SECURITY_LEVEL_LOCAL_PAGE || security_level == EPHY_SECURITY_LEVEL_TO_BE_DETERMINED)
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  else
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
   if ((ephy_web_view_get_is_blank (view) ||
        ephy_web_view_is_newtab (view) ||
@@ -1156,6 +1165,7 @@ sync_tab_zoom (WebKitWebView *web_view,
 {
   GActionGroup *action_group;
   GAction *action;
+  GtkWidget *lentry;
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
 
@@ -1164,8 +1174,11 @@ sync_tab_zoom (WebKitWebView *web_view,
 
   zoom = webkit_web_view_get_zoom_level (web_view);
 
-  ephy_header_bar_set_zoom_level (EPHY_HEADER_BAR (window->header_bar), zoom);
-  ephy_action_bar_set_zoom_level (EPHY_ACTION_BAR (window->action_bar), zoom);
+  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+  if (EPHY_IS_LOCATION_ENTRY (lentry)) {
+    g_autofree char *zoom_str = g_strdup_printf ("%.f%%", zoom * 100);
+    ephy_location_entry_set_zoom_level (EPHY_LOCATION_ENTRY (lentry), zoom_str);
+  }
 
   if (zoom >= ZOOM_MAXIMAL)
     can_zoom_in = FALSE;
@@ -1273,49 +1286,6 @@ void
 ephy_window_sync_bookmark_state (EphyWindow            *window,
                                  EphyBookmarkIconState  state)
 {
-  GtkWidget *lentry;
-
-  ephy_action_bar_set_bookmark_icon_state (EPHY_ACTION_BAR (window->action_bar), state);
-
-  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-
-  if (EPHY_IS_LOCATION_ENTRY (lentry))
-    ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (lentry), state);
-}
-
-static void
-sync_tab_bookmarked_status (EphyWebView *view,
-                            GParamSpec  *pspec,
-                            EphyWindow  *window)
-{
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  EphyEmbedShellMode mode;
-  EphyBookmarkIconState state;
-  GtkWidget *widget;
-  EphyBookmark *bookmark;
-  const char *address;
-
-  widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-
-  if (!EPHY_IS_LOCATION_ENTRY (widget))
-    return;
-
-  address = ephy_web_view_get_address (view);
-  mode = ephy_embed_shell_get_mode (shell);
-
-  if (!address ||
-      ephy_embed_utils_is_no_show_address (address) ||
-      mode == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
-    state = EPHY_BOOKMARK_ICON_HIDDEN;
-  } else {
-    bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
-    state = bookmark ? EPHY_BOOKMARK_ICON_BOOKMARKED
-                     : EPHY_BOOKMARK_ICON_EMPTY;
-  }
-
-  ephy_action_bar_set_bookmark_icon_state (EPHY_ACTION_BAR (window->action_bar), state);
-  ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (widget), state);
 }
 
 static void
@@ -2669,7 +2639,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_is_blank (view, NULL, window);
   sync_tab_navigation (view, NULL, window);
   sync_tab_title (embed, NULL, window);
-  sync_tab_bookmarked_status (view, NULL, window);
   sync_tab_address (view, NULL, window);
 
   sync_tab_zoom (web_view, NULL, window);
@@ -2702,9 +2671,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   g_signal_connect_object (embed, "notify::title",
                            G_CALLBACK (sync_tab_title),
-                           window, 0);
-  g_signal_connect_object (view, "notify::address",
-                           G_CALLBACK (sync_tab_bookmarked_status),
                            window, 0);
   g_signal_connect_object (view, "notify::address",
                            G_CALLBACK (sync_tab_address),
@@ -2782,9 +2748,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
                                         window);
   g_signal_handlers_disconnect_by_func (embed,
                                         G_CALLBACK (sync_tab_title),
-                                        window);
-  g_signal_handlers_disconnect_by_func (view,
-                                        G_CALLBACK (sync_tab_bookmarked_status),
                                         window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (sync_tab_address),
@@ -3902,44 +3865,12 @@ sync_user_input_cb (EphyLocationController *action,
   window->updating_address = FALSE;
 }
 
-static void
-title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
-                              GtkMenuButton   *menu_button,
-                              gpointer         user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyWebView *view;
-  const char *address;
-  GTlsCertificate *certificate;
-  GTlsCertificateFlags tls_errors;
-  EphySecurityLevel security_level;
-  GtkWidget *security_dialog;
-
-  if (adw_application_window_get_visible_dialog (ADW_APPLICATION_WINDOW (window)))
-    return;
-
-  view = ephy_embed_get_web_view (window->active_embed);
-  ephy_web_view_get_security_level (view, &security_level, &address, &certificate, &tls_errors);
-
-  security_dialog = ephy_security_dialog_new (address,
-                                              certificate,
-                                              tls_errors,
-                                              security_level);
-
-  adw_dialog_present (ADW_DIALOG (security_dialog), GTK_WIDGET (window));
-}
-
 static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
   GtkWidget *header_bar;
-  EphyTitleWidget *title_widget;
 
   header_bar = ephy_header_bar_new (window);
-
-  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
-  g_signal_connect (title_widget, "lock-clicked",
-                    G_CALLBACK (title_widget_lock_clicked_cb), window);
 
   return header_bar;
 }

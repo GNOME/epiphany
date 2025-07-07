@@ -54,6 +54,7 @@
 #include "ephy-prefs-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-privacy-report.h"
+#include "ephy-security-dialog.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -3404,4 +3405,25 @@ window_cmd_close_all_tabs (GSimpleAction *action,
   EphyWindow *window = user_data;
 
   ephy_tab_view_close_all (ephy_window_get_tab_view (window));
+}
+
+void
+window_cmd_security_and_permissions (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyWebView *view;
+  const char *address;
+  GTlsCertificate *certificate;
+  GTlsCertificateFlags tls_errors;
+  EphySecurityLevel security_level;
+  GtkWidget *security_dialog;
+
+  view = ephy_embed_get_web_view (ephy_window_get_active_embed (window));
+  ephy_web_view_get_security_level (view, &security_level, &address, &certificate, &tls_errors);
+
+  security_dialog = ephy_security_dialog_new (address, certificate, tls_errors, security_level);
+
+  adw_dialog_present (ADW_DIALOG (security_dialog), GTK_WIDGET (window));
 }
