@@ -293,9 +293,8 @@ ephy_bookmark_properties_bookmark_tag_removed_cb (EphyBookmarkProperties *self,
 }
 
 static void
-on_tags_activated (GtkListBox    *box,
-                   GtkListBoxRow *row,
-                   gpointer       user_data)
+on_tags_activated (AdwActionRow *row,
+                   gpointer      user_data)
 {
   EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
 
