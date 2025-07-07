@@ -351,9 +351,8 @@ on_add_button_clicked (GtkButton              *button,
 }
 
 static void
-on_tags_activated (GtkListBox    *box,
-                   GtkListBoxRow *row,
-                   gpointer       user_data)
+on_tags_activated (AdwActionRow *row,
+                   gpointer      user_data)
 {
   EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
 
