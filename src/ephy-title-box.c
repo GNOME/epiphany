@@ -32,13 +32,6 @@ enum {
   LAST_PROP
 };
 
-enum {
-  LOCK_CLICKED,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 struct _EphyTitleBox {
   AdwBin parent_instance;
 
@@ -54,13 +47,6 @@ static void ephy_title_box_title_widget_interface_init (EphyTitleWidgetInterface
 G_DEFINE_FINAL_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, ADW_TYPE_BIN,
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                       ephy_title_box_title_widget_interface_init))
-
-static void
-create_security_popup_cb (GtkMenuButton *button,
-                          EphyTitleBox  *title_box)
-{
-  g_signal_emit (title_box, signals[LOCK_CLICKED], 0, button);
-}
 
 static void
 ephy_title_box_constructed (GObject *object)
@@ -92,10 +78,6 @@ ephy_title_box_constructed (GObject *object)
   gtk_widget_set_valign (title_box->security_button, GTK_ALIGN_BASELINE_FILL);
   gtk_box_append (GTK_BOX (hbox), title_box->security_button);
   gtk_widget_add_css_class (title_box->security_button, "entry-icon");
-  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (title_box->security_button),
-                                         (GtkMenuButtonCreatePopupFunc)create_security_popup_cb,
-                                         title_box,
-                                         NULL);
 
   title_box->subtitle = gtk_label_new (NULL);
   gtk_widget_set_valign (title_box->subtitle, GTK_ALIGN_BASELINE_FILL);
@@ -215,8 +197,6 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
-
-  signals[LOCK_CLICKED] = g_signal_lookup ("lock-clicked", EPHY_TYPE_TITLE_WIDGET);
 }
 
 static void

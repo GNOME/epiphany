@@ -127,7 +127,6 @@ enum {
   READER_MODE_CHANGED,
   GET_LOCATION,
   GET_TITLE,
-  LOCK_CLICKED,
   LAST_SIGNAL
 };
 static gint signals[LAST_SIGNAL] = { 0 };
@@ -736,12 +735,6 @@ on_editable_changed (GtkEditable *editable,
 }
 
 static void
-on_site_menu_clicked (EphyLocationEntry *self)
-{
-  g_signal_emit (self, signals[LOCK_CLICKED], 0, NULL);
-}
-
-static void
 on_reader_mode_clicked (EphyLocationEntry *self)
 {
   self->reader_mode_active = !self->reader_mode_active;
@@ -1245,8 +1238,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                      0,
                                      G_TYPE_NONE);
 
-  signals[LOCK_CLICKED] = g_signal_lookup ("lock-clicked", EPHY_TYPE_TITLE_WIDGET);
-
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/location-entry.ui");
 
@@ -1269,7 +1260,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
   gtk_widget_class_bind_template_callback (widget_class, on_reader_mode_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_site_menu_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_suggestions_popover_notify_visible);
   gtk_widget_class_bind_template_callback (widget_class, on_suggestion_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_focus_enter);
