@@ -1376,7 +1376,7 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   self->security_level = security_level;
 
-  if (!self->reader_mode_active)
+  if (!self->reader_mode_active && security_level != EPHY_SECURITY_LEVEL_STRONG_SECURITY)
     icon_name = ephy_security_level_to_icon_name (security_level);
 
   if (!icon_name)
