@@ -119,12 +119,6 @@ ephy_page_menu_button_init (EphyPageMenuButton *self)
     remove_menu_item (self->page_menu, "app.firefox-sync-dialog");
     remove_menu_item (self->page_menu, "import-export");
     remove_menu_item (self->page_menu, "webapps");
-  } else if (ephy_is_running_inside_sandbox ()) {
-    remove_menu_item (self->page_menu, "app.run-in-background");
-    remove_menu_item (self->page_menu, "app.quit");
-
-    if (is_desktop_pantheon ())
-      remove_menu_item (self->page_menu, "app.help");
   } else {
     remove_menu_item (self->page_menu, "app.run-in-background");
     remove_menu_item (self->page_menu, "app.quit");
@@ -137,6 +131,9 @@ ephy_page_menu_button_init (EphyPageMenuButton *self)
 
   if (is_desktop_pantheon ()) {
     remove_menu_item (self->page_menu, "app.about");
+
+    if (ephy_is_running_inside_sandbox ())
+      remove_menu_item (self->page_menu, "app.help");
 
     gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (self->menu_button), "open-menu");
     gtk_widget_add_css_class (self->menu_button, "toolbar-button");

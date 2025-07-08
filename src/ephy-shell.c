@@ -455,7 +455,6 @@ static GActionEntry app_mode_app_entries[] = {
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_application, NULL, NULL, NULL },
-  { "quit-web-app", quit_application, NULL, NULL, NULL },
   { "run-in-background", NULL, NULL, "false", NULL},
   { "uninstall-web-app", uninstall_web_app },
 };
