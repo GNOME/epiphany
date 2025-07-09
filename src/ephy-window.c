@@ -2304,8 +2304,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
   WebKitNavigationAction *navigation_action;
   WebKitNavigationType navigation_type;
   WebKitURIRequest *request;
-  const char *uri;
-  g_autofree char *opener_origin = NULL;
+  const char *request_uri;
 
   g_assert (WEBKIT_IS_WEB_VIEW (web_view));
   g_assert (WEBKIT_IS_NAVIGATION_POLICY_DECISION (decision));
@@ -2315,17 +2314,23 @@ decide_navigation_policy (WebKitWebView            *web_view,
   navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
   navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
   request = webkit_navigation_action_get_request (navigation_action);
-  uri = webkit_uri_request_get_uri (request);
+  request_uri = webkit_uri_request_get_uri (request);
 
-  opener_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
-  if (!opener_origin)
-    return TRUE;
+  if (!ephy_embed_utils_address_has_web_scheme (request_uri)) {
+    g_autofree char *opener_origin = NULL;
+    const char *view_uri = webkit_web_view_get_uri (web_view);
 
-  if (!ephy_embed_utils_address_has_web_scheme (uri)) {
     webkit_policy_decision_ignore (decision);
 
-    if (url_should_open_automatically (g_steal_pointer (&opener_origin), uri)) {
-      g_autoptr (GFile) file = g_file_new_for_uri (uri);
+    if (!view_uri)
+      return TRUE;
+
+    opener_origin = ephy_uri_to_security_origin (view_uri);
+    if (!opener_origin)
+      return TRUE;
+
+    if (url_should_open_automatically (g_steal_pointer (&opener_origin), request_uri)) {
+      g_autoptr (GFile) file = g_file_new_for_uri (request_uri);
 
       ephy_file_launch_uri_handler (file,
                                     NULL,
@@ -2360,10 +2365,10 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     if (!gtk_widget_is_visible (GTK_WIDGET (window))) {
-      if (ephy_web_application_is_uri_allowed (uri)) {
+      if (ephy_web_application_is_uri_allowed (request_uri)) {
         gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
       } else {
-        ephy_file_open_uri_in_default_browser (uri, gtk_widget_get_display (GTK_WIDGET (window)));
+        ephy_file_open_uri_in_default_browser (request_uri, gtk_widget_get_display (GTK_WIDGET (window)));
         webkit_policy_decision_ignore (decision);
 
         gtk_window_destroy (GTK_WINDOW (window));
@@ -2374,10 +2379,10 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
     if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED ||
         (navigation_type == WEBKIT_NAVIGATION_TYPE_OTHER && webkit_navigation_action_is_user_gesture (navigation_action))) {
-      if (ephy_web_application_is_uri_allowed (uri))
-        return accept_navigation_policy_decision (window, decision, uri);
+      if (ephy_web_application_is_uri_allowed (request_uri))
+        return accept_navigation_policy_decision (window, decision, request_uri);
 
-      ephy_file_open_uri_in_default_browser (uri, gtk_widget_get_display (GTK_WIDGET (window)));
+      ephy_file_open_uri_in_default_browser (request_uri, gtk_widget_get_display (GTK_WIDGET (window)));
       webkit_policy_decision_ignore (decision);
 
       return TRUE;
@@ -2426,7 +2431,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
         return TRUE;
       }
     } else {
-      return accept_navigation_policy_decision (window, decision, uri);
+      return accept_navigation_policy_decision (window, decision, request_uri);
     }
 
     new_embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
@@ -2453,7 +2458,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     return TRUE;
   }
 
-  return accept_navigation_policy_decision (window, decision, uri);
+  return accept_navigation_policy_decision (window, decision, request_uri);
 }
 
 static void
