@@ -24,9 +24,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-flatpak-utils.h"
 
-/* Translators: tooltip for the refresh button */
-/* static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page"); */
-
 struct _EphyPageMenuButton {
   AdwBin parent_instance;
 
@@ -34,7 +31,6 @@ struct _EphyPageMenuButton {
   GMenu *page_menu;
   GtkWidget *page_menu_popover;
   GtkWidget *zoom_level;
-  /* GtkWidget *combined_stop_reload_button; */
 };
 
 G_DEFINE_FINAL_TYPE (EphyPageMenuButton, ephy_page_menu_button, ADW_TYPE_BIN)
