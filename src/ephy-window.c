@@ -5245,7 +5245,12 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
     ephy_bookmarks_dialog_set_is_editing (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog), FALSE);
     ephy_bookmarks_dialog_focus (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
   } else {
+    EphyWebView *web_view = ephy_embed_get_web_view (self->active_embed);
+
     ephy_bookmarks_dialog_clear_search (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
+
+    /* Set the navigation flags so the buttons don't become sensitive when exiting. */
+    _ephy_window_set_navigation_flags (self, ephy_web_view_get_navigation_flags (web_view));
   }
 }
 
