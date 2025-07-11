@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-07-08 05:37+0000\n"
-"PO-Revision-Date: 2025-07-08 16:34+0200\n"
+"POT-Creation-Date: 2025-07-11 01:25+0000\n"
+"PO-Revision-Date: 2025-07-11 17:28+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
 #: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:428 src/window-commands.c:1228
+#: src/ephy-main.c:428 src/window-commands.c:1229
 msgid "Web"
 msgstr "Web"
 
@@ -52,7 +52,7 @@ msgid "Web is often referred to by its code name, Epiphany."
 msgstr "Web este adesea menționat prin numele lui de cod, Epiphany."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1238
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1239
 msgid "The GNOME Project"
 msgstr "Proiectul GNOME"
 
@@ -1093,7 +1093,7 @@ msgstr "Versiunea %s"
 msgid "About Web"
 msgstr "Despre Web"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1230
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1231
 msgid "Epiphany Technology Preview"
 msgstr "Previzualizarea tehnologiei epiphany"
 
@@ -1112,7 +1112,7 @@ msgid "List of installed web apps"
 msgstr "Lista de aplicații web instalate"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2019
+#: embed/ephy-about-handler.c:330 src/window-commands.c:2020
 msgid "Launch"
 msgstr "Lansează"
 
@@ -1193,15 +1193,15 @@ msgstr "Introdu PIN-ul pentru %s, pentru autentificarea la %s:%d."
 #: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:767
 #: embed/ephy-web-view.c:1377 src/ephy-history-dialog.c:888
 #: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:269
-#: src/ephy-window.c:2310 src/preferences/autofill-view.c:363
+#: src/ephy-window.c:2280 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:98
 #: src/resources/gtk/history-dialog.blp:55
-#: src/resources/gtk/prefs-lang-dialog.blp:18 src/window-commands.c:359
-#: src/window-commands.c:564 src/window-commands.c:930
-#: src/window-commands.c:1408 src/window-commands.c:2112
-#: src/window-commands.c:3045
+#: src/resources/gtk/prefs-lang-dialog.blp:18 src/window-commands.c:360
+#: src/window-commands.c:565 src/window-commands.c:931
+#: src/window-commands.c:1409 src/window-commands.c:2113
+#: src/window-commands.c:3046
 msgid "_Cancel"
 msgstr "_Anulează"
 
@@ -1228,7 +1228,7 @@ msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "Situl web %s:%d solicită furnizarea unui certificat de autentificare."
 
-#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:363
+#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:364
 msgid "_Select"
 msgstr "Al_ege"
 
@@ -1288,7 +1288,7 @@ msgid "Finished downloading %s"
 msgstr "S-a descărcat %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969 src/ephy-window.c:4013
+#: embed/ephy-download.c:969 src/ephy-window.c:3949
 msgid "Download finished"
 msgstr "Descărcare terminată"
 
@@ -1890,7 +1890,7 @@ msgstr "Eroarea precisă a fost: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
 #: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1870
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1835
 msgid "Reload"
 msgstr "Reîncarcă"
 
@@ -2449,7 +2449,7 @@ msgid "Bookmark removed"
 msgstr "Eliminată din Preferate"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:824 src/ephy-window.c:993
+#: src/bookmarks/ephy-bookmarks-dialog.c:824 src/ephy-window.c:988
 #: src/preferences/prefs-features-page.c:276
 msgid "_Undo"
 msgstr "An_ulează"
@@ -2522,19 +2522,17 @@ msgid "Save Media As"
 msgstr "Salvează media ca"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar.c:560 src/ephy-action-bar-end.c:402
-#: src/ephy-location-entry.c:1547
+#: src/ephy-action-bar-end.c:402
 msgid "Bookmark Page"
 msgstr "Adaugă pagina în Preferate"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar.c:568 src/ephy-action-bar-end.c:410
-#: src/ephy-location-entry.c:1555
+#: src/ephy-action-bar-end.c:410
 msgid "Edit Bookmark"
 msgstr "Modifică preferata"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1879
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1844
 msgid "Stop"
 msgstr "Stop"
 
@@ -2698,7 +2696,7 @@ msgstr "Fereastră normală"
 msgid "Select _None"
 msgstr "_Nu selecționa nimic"
 
-#: src/ephy-history-dialog.c:267 src/ephy-window.c:1001
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:996
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Selecțione_ază tot"
@@ -2735,36 +2733,44 @@ msgstr "Indisponibil în modul incognito"
 msgid "Clear History"
 msgstr "Șterge cronologia"
 
-#: src/ephy-location-entry.c:340 src/resources/gtk/location-entry.blp:234
+#: src/ephy-location-entry.c:340 src/resources/gtk/location-entry.blp:222
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Caută situri web, preferate și file deschise"
 
+#: src/ephy-location-entry.c:1386
+msgid "Secure Site"
+msgstr "Sit web sigur"
+
+#: src/ephy-location-entry.c:1388
+msgid "Insecure Site"
+msgstr "Sit web nesigur"
+
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1591 src/ephy-permission-popover.c:273
+#: src/ephy-location-entry.c:1558 src/ephy-permission-popover.c:273
 msgid "Notification Request"
 msgstr "Cerere de notificare"
 
-#: src/ephy-location-entry.c:1595
+#: src/ephy-location-entry.c:1562
 msgid "Camera Request"
 msgstr "Cerere acces cameră"
 
-#: src/ephy-location-entry.c:1599
+#: src/ephy-location-entry.c:1566
 msgid "Microphone Request"
 msgstr "Cerere acces microfon"
 
-#: src/ephy-location-entry.c:1603
+#: src/ephy-location-entry.c:1570
 msgid "Screen Sharing Request"
 msgstr "Cerere de distribuire a ecranului"
 
-#: src/ephy-location-entry.c:1607
+#: src/ephy-location-entry.c:1574
 msgid "Location Request"
 msgstr "Cerere de localizare"
 
-#: src/ephy-location-entry.c:1611
+#: src/ephy-location-entry.c:1578
 msgid "Webcam and Microphone Request"
 msgstr "Cerere acces cameră web și microfon"
 
-#: src/ephy-location-entry.c:1615
+#: src/ephy-location-entry.c:1582
 msgid "Permission Request"
 msgstr "Cerere permisiuni"
 
@@ -2811,15 +2817,6 @@ msgstr "URL …"
 #: src/ephy-main.c:269
 msgid "Web options"
 msgstr "Opțiuni Web"
-
-#. Translators: tooltip for the refresh button
-#: src/ephy-page-menu-button.c:28 src/resources/gtk/page-menu-button.blp:184
-msgid "Reload the current page"
-msgstr "Reîncarcă pagina actuală"
-
-#: src/ephy-page-menu-button.c:177
-msgid "Stop loading the current page"
-msgstr "Oprește încărcarea paginii actuale"
 
 #: src/ephy-passwords-view.c:106
 msgid "Password copied"
@@ -3051,158 +3048,158 @@ msgstr "Nu s-au putut încărca sugestiile motorului de căutare: %s"
 msgid "Open a new tab"
 msgstr "Deschide un filă nouă"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:989
 msgid "Re_do"
 msgstr "_Refă"
 
 #. Edit.
-#: src/ephy-window.c:997
+#: src/ephy-window.c:992
 msgid "Cu_t"
 msgstr "_Taie"
 
-#: src/ephy-window.c:998
+#: src/ephy-window.c:993
 msgid "_Copy"
 msgstr "_Copiază"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:994
 msgid "_Paste"
 msgstr "Li_pește"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:995
 msgid "_Paste Text Only"
 msgstr "Li_pește numai textul"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:998
 msgid "S_end Link by Email…"
 msgstr "Trimit_e legătura prin e-mail…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:999
 msgid "Add _Link to Bookmarks"
 msgstr "Adaugă _legătura în Preferate"
 
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:1001
 msgid "_Reload"
 msgstr "Reînc_arcă"
 
-#: src/ephy-window.c:1007
+#: src/ephy-window.c:1002
 msgid "_Back"
 msgstr "Îna_poi"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1003
 msgid "_Forward"
 msgstr "Înai_nte"
 
 #. Bookmarks
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1006
 msgid "Add Boo_kmark…"
 msgstr "Adau_gă în Preferate…"
 
 #. Links.
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:1010
 msgid "Open Link in New _Window"
 msgstr "Deschide legătura în _fereastră nouă"
 
-#: src/ephy-window.c:1016
+#: src/ephy-window.c:1011
 msgid "Open Link in New _Tab"
 msgstr "Deschide legă_tura într-o filă nouă"
 
-#: src/ephy-window.c:1017
+#: src/ephy-window.c:1012
 msgid "Open Link in I_ncognito Window"
 msgstr "Deschide legătura în fe_reastră incognito"
 
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1013
 msgid "_Save Link As…"
 msgstr "_Salvează legătura ca…"
 
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1014
 msgid "_Copy Link Address"
 msgstr "_Copiază adresa legăturii"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1015
 msgid "_Copy E-mail Address"
 msgstr "_Copiază adresa de e-mail"
 
 #. Images.
-#: src/ephy-window.c:1024
+#: src/ephy-window.c:1019
 msgid "View _Image in New Tab"
 msgstr "Vezi _imaginea într-o filă nouă"
 
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1020
 msgid "Copy I_mage Address"
 msgstr "Copiază adresa i_maginii"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1021
 msgid "_Save Image As…"
 msgstr "_Salvează imaginea ca…"
 
-#: src/ephy-window.c:1027
+#: src/ephy-window.c:1022
 msgid "Set as _Wallpaper"
 msgstr "Stabilește ca imagine de _fundal"
 
 #. Video.
-#: src/ephy-window.c:1031
+#: src/ephy-window.c:1026
 msgid "Open Video in New _Window"
 msgstr "Deschide video într-o _fereastră nouă"
 
-#: src/ephy-window.c:1032
+#: src/ephy-window.c:1027
 msgid "Open Video in New _Tab"
 msgstr "Deschide video în_tr-o filă nouă"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1028
 msgid "_Save Video As…"
 msgstr "_Salvează video ca…"
 
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1029
 msgid "_Copy Video Address"
 msgstr "_Copiază adresa video"
 
 #. Audio.
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1033
 msgid "Open Audio in New _Window"
 msgstr "Deschide audio într-o _fereastră nouă"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1034
 msgid "Open Audio in New _Tab"
 msgstr "Deschide audio în_tr-o filă nouă"
 
-#: src/ephy-window.c:1040
+#: src/ephy-window.c:1035
 msgid "_Save Audio As…"
 msgstr "_Salvează audio ca…"
 
-#: src/ephy-window.c:1041
+#: src/ephy-window.c:1036
 msgid "_Copy Audio Address"
 msgstr "_Copiază adresa audio"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1042
 msgid "Save Pa_ge As…"
 msgstr "Salvează pa_gina ca…"
 
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1043
 msgid "_Take Screenshot…"
 msgstr "Fă un ins_tantaneu…"
 
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:1044
 msgid "_Page Source"
 msgstr "Sursa _paginii"
 
-#: src/ephy-window.c:1445
+#: src/ephy-window.c:1415
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Caută în web  „%s”"
 
-#: src/ephy-window.c:1474
+#: src/ephy-window.c:1444
 msgid "Open Link"
 msgstr "Deschide legătura"
 
-#: src/ephy-window.c:1476
+#: src/ephy-window.c:1446
 msgid "Open Link In New Tab"
 msgstr "Deschide legătura într-o filă nouă"
 
-#: src/ephy-window.c:1478
+#: src/ephy-window.c:1448
 msgid "Open Link In New Window"
 msgstr "Deschide legătura în fereastră nouă"
 
-#: src/ephy-window.c:1480
+#: src/ephy-window.c:1450
 msgid "Open Link In Incognito Window"
 msgstr "Deschide legătura în fereastră incognito"
 
@@ -3212,56 +3209,56 @@ msgstr "Deschide legătura în fereastră incognito"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2308
+#: src/ephy-window.c:2278
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr "Permite ca „%s” să deschidă legătura „%s” într-o aplicație externă"
 
-#: src/ephy-window.c:2309
+#: src/ephy-window.c:2279
 msgid "Open in External App?"
 msgstr "Se deschide într-o aplicație externă?"
 
-#: src/ephy-window.c:2311
+#: src/ephy-window.c:2281
 msgid "_Open Link"
 msgstr "_Deschide legătura"
 
-#: src/ephy-window.c:2317
+#: src/ephy-window.c:2287
 msgid "Always Allow"
 msgstr "Permite mereu"
 
-#: src/ephy-window.c:3094
+#: src/ephy-window.c:3062
 msgid "_Ask Later"
 msgstr "Între_abă mai târziu"
 
-#: src/ephy-window.c:3095 src/resources/gtk/permission-popover.blp:47
+#: src/ephy-window.c:3063 src/resources/gtk/permission-popover.blp:47
 msgid "_Deny"
 msgstr "_Refuză"
 
-#: src/ephy-window.c:3096 src/resources/gtk/permission-popover.blp:60
+#: src/ephy-window.c:3064 src/resources/gtk/permission-popover.blp:60
 msgid "_Allow"
 msgstr "_Permite"
 
-#: src/ephy-window.c:3299 src/ephy-window.c:5013
+#: src/ephy-window.c:3267 src/ephy-window.c:4949
 msgid "Leave Website?"
 msgstr "Se părăsește situl?"
 
-#: src/ephy-window.c:3300 src/ephy-window.c:5014 src/window-commands.c:1405
+#: src/ephy-window.c:3268 src/ephy-window.c:4950 src/window-commands.c:1406
 msgid "A form was modified and has not been submitted"
 msgstr "Un formular a fost modificat și nu a fost trimis"
 
-#: src/ephy-window.c:3301 src/ephy-window.c:5015 src/window-commands.c:1409
+#: src/ephy-window.c:3269 src/ephy-window.c:4951 src/window-commands.c:1410
 msgid "_Discard Form"
 msgstr "I_gnoră formularul"
 
-#: src/ephy-window.c:3322
+#: src/ephy-window.c:3290
 msgid "Download operation"
 msgstr "Operație de descărcare"
 
-#: src/ephy-window.c:3324
+#: src/ephy-window.c:3292
 msgid "Show details"
 msgstr "Arată detaliile"
 
-#: src/ephy-window.c:3326
+#: src/ephy-window.c:3294
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -3269,17 +3266,17 @@ msgstr[0] "%d operație de descărcare activă"
 msgstr[1] "%d operații de descărcare active"
 msgstr[2] "%d de operații de descărcare active"
 
-#: src/ephy-window.c:3615
+#: src/ephy-window.c:3583
 msgid "Set as Default Browser?"
 msgstr "Să fie navigatorul prestabilit?"
 
-#: src/ephy-window.c:3617
+#: src/ephy-window.c:3585
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Folosește Web ca navigatorul web prestabilit si pentru a deschide legături "
 "externe"
 
-#: src/ephy-window.c:3619
+#: src/ephy-window.c:3587
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3287,60 +3284,60 @@ msgstr ""
 "Utilizează Tehnologia de previzualizare Epiphany ca navigatorul web "
 "prestabilit și pentru a deschide legături externe"
 
-#: src/ephy-window.c:3623
+#: src/ephy-window.c:3591
 msgid "_Ask Again Later"
 msgstr "Între_abă din nou mai târziu"
 
-#: src/ephy-window.c:3624
+#: src/ephy-window.c:3592
 msgid "_No"
 msgstr "_Nu"
 
-#: src/ephy-window.c:3625
+#: src/ephy-window.c:3593
 msgid "_Yes"
 msgstr "_Da"
 
-#: src/ephy-window.c:4001
+#: src/ephy-window.c:3937
 msgid "Download started"
 msgstr "Descărcare pornită"
 
-#: src/ephy-window.c:4096
+#: src/ephy-window.c:4032
 msgid "Save password?"
 msgstr "Se salvează parola?"
 
-#: src/ephy-window.c:4097
+#: src/ephy-window.c:4033
 msgid "Passwords can be removed at any time in Preferences"
 msgstr "Parolele pot fi eliminate în orice moment din Preferințe"
 
-#: src/ephy-window.c:4099
+#: src/ephy-window.c:4035
 msgid "Not Now"
 msgstr "Nu acum"
 
-#: src/ephy-window.c:4100
+#: src/ephy-window.c:4036
 msgid "Never Save"
 msgstr "Nu salva niciodată"
 
-#: src/ephy-window.c:4101
+#: src/ephy-window.c:4037
 msgid "Save"
 msgstr "Salvează"
 
-#: src/ephy-window.c:5128
+#: src/ephy-window.c:5064
 msgid "Close Multiple Tabs?"
 msgstr "Se închid mai multe file?"
 
-#: src/ephy-window.c:5129
+#: src/ephy-window.c:5065
 msgid "If this window is closed, all open tabs will be lost"
 msgstr ""
 "Dacă se închide această fereastră, toate filele deschise vor fi pierdute"
 
-#: src/ephy-window.c:5130
+#: src/ephy-window.c:5066
 msgid "C_lose Tabs"
 msgstr "Î_nchide filele"
 
-#: src/ephy-window.c:5240
+#: src/ephy-window.c:5176
 msgid "New tab opened"
 msgstr "Filă nouă deschisă"
 
-#: src/ephy-window.c:5244
+#: src/ephy-window.c:5180
 msgid "Switch"
 msgstr "Schimbă"
 
@@ -3579,7 +3576,7 @@ msgstr "Extensii"
 msgid "View Open Tabs"
 msgstr "Arată filele deschise"
 
-#: src/resources/gtk/action-bar-end.blp:110 src/resources/gtk/action-bar.blp:76
+#: src/resources/gtk/action-bar-end.blp:110 src/resources/gtk/action-bar.blp:67
 #: src/resources/gtk/bookmarks-dialog.blp:53
 msgid "Bookmarks"
 msgstr "Preferate"
@@ -3934,24 +3931,20 @@ msgstr "_Deschide"
 msgid "Delete Language"
 msgstr "Șterge limba"
 
-#: src/resources/gtk/location-entry.blp:22
-msgid "Website Security Status and Permissions"
-msgstr "Starea de securitate și permisiunile paginii web"
-
-#: src/resources/gtk/location-entry.blp:47
+#: src/resources/gtk/location-entry.blp:45
 msgid "Un/Mute"
 msgstr "Mut/Sunet"
 
-#: src/resources/gtk/location-entry.blp:60
+#: src/resources/gtk/location-entry.blp:58
 #: src/resources/gtk/prefs-appearance-page.blp:45
 msgid "Reader Mode"
 msgstr "Modul lectură"
 
-#: src/resources/gtk/location-entry.blp:94
+#: src/resources/gtk/location-entry.blp:82
 msgid "View Available Passwords"
 msgstr "Arată parolele disponibile"
 
-#: src/resources/gtk/location-entry.blp:257
+#: src/resources/gtk/location-entry.blp:245
 msgid "Paste and _Go"
 msgstr "Lipește și Navi_ghează"
 
@@ -3991,7 +3984,7 @@ msgstr "Închide filele din d_reapta"
 msgid "Close _Other Tabs"
 msgstr "Închide celelalte _file"
 
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:290
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:291
 msgid "_Close"
 msgstr "În_chide"
 
@@ -4000,98 +3993,76 @@ msgid "Main Menu"
 msgstr "Opțiuni"
 
 #. Translators: 'Run in Background' item is a toggle, not an action
-#: src/resources/gtk/page-menu-button.blp:25
+#: src/resources/gtk/page-menu-button.blp:15
 msgid "_Run in Background"
 msgstr "Po_rnește în ascuns"
 
-#: src/resources/gtk/page-menu-button.blp:33
+#: src/resources/gtk/page-menu-button.blp:23
 #: src/resources/gtk/tab-overview-menu.blp:6
 msgid "_New Window"
 msgstr "_Fereastră nouă"
 
-#: src/resources/gtk/page-menu-button.blp:38
+#: src/resources/gtk/page-menu-button.blp:28
 #: src/resources/gtk/tab-overview-menu.blp:11
 msgid "New _Incognito Window"
 msgstr "Fereastră _incognito nouă"
 
-#: src/resources/gtk/page-menu-button.blp:43
+#: src/resources/gtk/page-menu-button.blp:33
 #: src/resources/gtk/tab-overview-menu.blp:18
 msgid "Reopen Closed _Tab"
 msgstr "Redeschide fila închi_să"
 
-#: src/resources/gtk/page-menu-button.blp:50
+#: src/resources/gtk/page-menu-button.blp:38
+msgid "Fullscreen"
+msgstr "Pe tot ecranul"
+
+#: src/resources/gtk/page-menu-button.blp:45
 msgid "Histo_ry"
 msgstr "C_ronologia"
 
-#: src/resources/gtk/page-menu-button.blp:55
+#: src/resources/gtk/page-menu-button.blp:50
 msgid "_Web Apps"
 msgstr "Aplicații _web"
 
-#: src/resources/gtk/page-menu-button.blp:60
+#: src/resources/gtk/page-menu-button.blp:55
 msgid "Install as _Web App…"
 msgstr "Instalează ca aplicație _web…"
 
-#: src/resources/gtk/page-menu-button.blp:65
+#: src/resources/gtk/page-menu-button.blp:60
 msgid "Manag_e Web Apps"
 msgstr "Administr_ează aplicații web"
 
-#: src/resources/gtk/page-menu-button.blp:72
+#: src/resources/gtk/page-menu-button.blp:67
 msgid "Text Enco_ding…"
 msgstr "Co_dare text…"
 
-#: src/resources/gtk/page-menu-button.blp:77
+#: src/resources/gtk/page-menu-button.blp:72
 msgid "Pri_vacy Report"
 msgstr "Raport de confidențialitate"
 
-#: src/resources/gtk/page-menu-button.blp:82
+#: src/resources/gtk/page-menu-button.blp:77
 msgid "Passw_ords"
 msgstr "Par_ole"
 
-#: src/resources/gtk/page-menu-button.blp:89
+#: src/resources/gtk/page-menu-button.blp:84
 msgid "Pr_eferences"
 msgstr "Pr_eferințe"
 
-#: src/resources/gtk/page-menu-button.blp:94
+#: src/resources/gtk/page-menu-button.blp:89
 msgid "_Help"
 msgstr "_Ajutor"
 
-#: src/resources/gtk/page-menu-button.blp:99
+#: src/resources/gtk/page-menu-button.blp:94
 msgid "_About Web"
 msgstr "_Despre Web"
 
-#: src/resources/gtk/page-menu-button.blp:106
+#: src/resources/gtk/page-menu-button.blp:101
 msgid "Uninstall Web App"
 msgstr "Dezinstalează aplicația web"
 
-#: src/resources/gtk/page-menu-button.blp:111
+#: src/resources/gtk/page-menu-button.blp:106
 msgid "Quit"
 msgstr "Închide"
-
-#: src/resources/gtk/page-menu-button.blp:132
-msgctxt "tooltip"
-msgid "Zoom Out"
-msgstr "Micșorează"
-
-#: src/resources/gtk/page-menu-button.blp:138
-msgid "Restore Zoom"
-msgstr "Mărime normală"
-
-#: src/resources/gtk/page-menu-button.blp:147
-msgctxt "tooltip"
-msgid "Zoom In"
-msgstr "Mărește"
-
-#: src/resources/gtk/page-menu-button.blp:165
-msgid "Print…"
-msgstr "Tipărește…"
-
-#: src/resources/gtk/page-menu-button.blp:171
-msgid "Find…"
-msgstr "Caută…"
-
-#: src/resources/gtk/page-menu-button.blp:177
-msgid "Fullscreen"
-msgstr "Pe tot ecranul"
 
 #: src/resources/gtk/password-popover.blp:21
 msgid "Save Login?"
@@ -4435,6 +4406,40 @@ msgstr "_Vizualizează certificatul…"
 msgid "_Permissions"
 msgstr "_Permisiuni"
 
+#: src/resources/gtk/site-menu-button.blp:12
+msgid "_Find…"
+msgstr "_Caută…"
+
+#: src/resources/gtk/site-menu-button.blp:17
+msgid "_Print…"
+msgstr "_Tipărește…"
+
+#: src/resources/gtk/site-menu-button.blp:22
+msgid "Add _Bookmark"
+msgstr "Adaugă în Pre_ferate"
+
+#: src/resources/gtk/site-menu-button.blp:27
+msgid "_Security & Permissions"
+msgstr "_Siguranță și Permisiuni"
+
+#: src/resources/gtk/site-menu-button.blp:47
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "Micșorează"
+
+#: src/resources/gtk/site-menu-button.blp:53
+msgid "Restore Zoom"
+msgstr "Mărime normală"
+
+#: src/resources/gtk/site-menu-button.blp:62
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "Mărește"
+
+#: src/resources/gtk/site-menu-button.blp:70
+msgid "Site Menu"
+msgstr "Opțiuni Sit web"
+
 #: src/resources/gtk/synced-tabs-dialog.blp:8
 msgid "Synced Tabs"
 msgstr "File sincronizate"
@@ -4556,89 +4561,89 @@ msgstr "Lipsește numele sau versiunea"
 msgid "Failed to determine initiating URI"
 msgstr "Nu s-a reușit stabilirea URI-ului de inițiere"
 
-#: src/window-commands.c:127
+#: src/window-commands.c:128
 msgid "HTML File"
 msgstr "Fișier HTML"
 
-#: src/window-commands.c:128
+#: src/window-commands.c:129
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:129 src/window-commands.c:731
+#: src/window-commands.c:130 src/window-commands.c:732
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:130 src/window-commands.c:732
+#: src/window-commands.c:131 src/window-commands.c:733
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:172 src/window-commands.c:568
-#: src/window-commands.c:894 src/window-commands.c:934
+#: src/window-commands.c:173 src/window-commands.c:569
+#: src/window-commands.c:895 src/window-commands.c:935
 msgid "_Select File"
 msgstr "_Alege fișierul"
 
-#: src/window-commands.c:174 src/window-commands.c:896
+#: src/window-commands.c:175 src/window-commands.c:897
 msgid "I_mport"
 msgstr "I_mportă"
 
-#: src/window-commands.c:327 src/window-commands.c:416
-#: src/window-commands.c:460 src/window-commands.c:483
-#: src/window-commands.c:499
+#: src/window-commands.c:328 src/window-commands.c:417
+#: src/window-commands.c:461 src/window-commands.c:484
+#: src/window-commands.c:500
 msgid "Bookmarks successfully imported!"
 msgstr "Preferate importate cu succes!"
 
-#: src/window-commands.c:346
+#: src/window-commands.c:347
 msgid "Select Profile"
 msgstr "Alege profilul"
 
-#: src/window-commands.c:427 src/window-commands.c:689
-#: src/window-commands.c:815 src/window-commands.c:1037
+#: src/window-commands.c:428 src/window-commands.c:690
+#: src/window-commands.c:816 src/window-commands.c:1038
 msgid "Choose File"
 msgstr "Alege fișierul"
 
-#: src/window-commands.c:554
+#: src/window-commands.c:555
 msgid "Import Bookmarks"
 msgstr "Importă Preferate"
 
-#: src/window-commands.c:582 src/window-commands.c:948
+#: src/window-commands.c:583 src/window-commands.c:949
 msgid "File Type"
 msgstr "Tip de fișier"
 
-#: src/window-commands.c:646
+#: src/window-commands.c:647
 msgid "Bookmarks successfully exported!"
 msgstr "Preferate exportate cu succes!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:700
+#: src/window-commands.c:701
 msgid "bookmarks.html"
 msgstr "preferate.html"
 
-#: src/window-commands.c:730
+#: src/window-commands.c:731
 msgid "CSV File"
 msgstr "Fișier CSV"
 
-#: src/window-commands.c:778 src/window-commands.c:804
+#: src/window-commands.c:779 src/window-commands.c:805
 msgid "Passwords successfully imported!"
 msgstr "Parolele au fost importate cu succes!"
 
-#: src/window-commands.c:920
+#: src/window-commands.c:921
 msgid "Import Passwords"
 msgstr "Importă parolele"
 
-#: src/window-commands.c:996
+#: src/window-commands.c:997
 msgid "Passwords successfully exported!"
 msgstr "Parolele au fost exportate cu succes!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1047
+#: src/window-commands.c:1048
 msgid "passwords.csv"
 msgstr "parole.csv"
 
-#: src/window-commands.c:1225
+#: src/window-commands.c:1226
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1248
+#: src/window-commands.c:1249
 msgid "translator-credits"
 msgstr ""
 "Mișu Moldovan <dumol@gnome.ro>\n"
@@ -4649,60 +4654,60 @@ msgstr ""
 "2018-2021, 2023\n"
 "Antonio Marin <gnmer.6qxyg@slmail.me>, 2025"
 
-#: src/window-commands.c:1404
+#: src/window-commands.c:1405
 msgid "Reload Website?"
 msgstr "Se reîncarcă pagina web?"
 
-#: src/window-commands.c:1952
+#: src/window-commands.c:1953
 msgid "New Web App"
 msgstr "Aplicație web nouă"
 
-#: src/window-commands.c:2004
+#: src/window-commands.c:2005
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplicația „%s” este gata de utilizare"
 
-#: src/window-commands.c:2007
+#: src/window-commands.c:2008
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Aplicația „%s” nu a putut fi creată: %s"
 
-#: src/window-commands.c:2105
+#: src/window-commands.c:2106
 msgid "Replace Existing Web App?"
 msgstr "Se înlocuiește aplicația web existentă?"
 
-#: src/window-commands.c:2108
+#: src/window-commands.c:2109
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "O aplicație cu numele „%s” există deja, înlocuirea acesteia o va suprascrie"
 
-#: src/window-commands.c:2113
+#: src/window-commands.c:2114
 msgid "_Replace"
 msgstr "Înlocui_ește"
 
-#: src/window-commands.c:2418
+#: src/window-commands.c:2419
 msgid "Screenshot finished"
 msgstr "Instantaneu terminat"
 
-#: src/window-commands.c:2531
+#: src/window-commands.c:2532
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2535
+#: src/window-commands.c:2536
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2581
+#: src/window-commands.c:2582
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3040
+#: src/window-commands.c:3041
 msgid "Enable Caret Browsing Mode?"
 msgstr "Se activează modul de navigare cu cursor?"
 
-#: src/window-commands.c:3041
+#: src/window-commands.c:3042
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4712,6 +4717,6 @@ msgstr ""
 "Această caracteristică poziționează un cursor mobil în paginile web, "
 "permițând navigarea folosind tastatura. Se activează navigarea cu cursorul?"
 
-#: src/window-commands.c:3046
+#: src/window-commands.c:3047
 msgid "_Enable"
 msgstr "Activ_ează"
