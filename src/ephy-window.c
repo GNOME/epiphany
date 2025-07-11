@@ -48,7 +48,6 @@
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-mouse-gesture-controller.h"
-#include "ephy-password-popover.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-permission-popover.h"
 #include "ephy-prefs.h"
@@ -2564,12 +2563,8 @@ load_all_available_popovers (EphyWindow  *window,
   lentry = EPHY_LOCATION_ENTRY (title_widget);
   ephy_location_entry_clear_permission_buttons (lentry);
 
-  for (l = popover_list; l; l = l->next) {
-    if (EPHY_IS_PASSWORD_POPOVER (l->data))
-      ephy_location_entry_set_password_popover (lentry, EPHY_PASSWORD_POPOVER (l->data));
-    else if (EPHY_IS_PERMISSION_POPOVER (l->data))
-      ephy_location_entry_add_permission_popover (lentry, EPHY_PERMISSION_POPOVER (l->data));
-  }
+  for (l = popover_list; l; l = l->next)
+    ephy_location_entry_add_permission_popover (lentry, EPHY_PERMISSION_POPOVER (l->data));
 }
 
 static void
@@ -2945,18 +2940,8 @@ static void
 popover_response_cb (EphyWindow *window,
                      gpointer    popover)
 {
-  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-  EphyLocationEntry *lentry;
   EphyWebView *view;
   GList *popover_list;
-
-  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
-    return;
-
-  lentry = EPHY_LOCATION_ENTRY (title_widget);
-
-  if (EPHY_IS_PASSWORD_POPOVER (popover))
-    ephy_location_entry_set_password_popover (lentry, NULL);
 
   view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
   popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
@@ -4009,73 +3994,50 @@ save_password_cb (EphyEmbedShell          *shell,
                   EphyPasswordRequestData *request_data)
 {
   GtkWindow *window;
-  GtkWidget *title_widget;
-  EphyLocationEntry *lentry;
+  AdwDialog *dialog;
+  AdwPreferencesGroup *prefs_group;
+  GtkWidget *password_entry;
 
   /* Sanity checks would have already occurred before this point */
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
   if (!gtk_widget_is_visible (GTK_WIDGET (window)))
     return;
 
-  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
-      (EPHY_WINDOW (window)->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
-    AdwDialog *dialog;
-    GtkBox *entry_box;
-    GtkWidget *password_entry;
+  dialog = adw_alert_dialog_new (_("Save Password?"),
+                                 _("Passwords are saved only on your device and can be removed at any time in Preferences"));
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "close", _("Not Now"),
+                                  "never", _("Never Save"),
+                                  "save", _("Save"),
+                                  NULL);
 
-    dialog = adw_alert_dialog_new (_("Save password?"),
-                                   _("Passwords can be removed at any time in Preferences"));
-    adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
-                                    "close", _("Not Now"),
-                                    "never", _("Never Save"),
-                                    "save", _("Save"),
-                                    NULL);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "never", ADW_RESPONSE_DESTRUCTIVE);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "save", ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "close");
+  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "close");
 
-    adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "never", ADW_RESPONSE_DESTRUCTIVE);
-    adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "save", ADW_RESPONSE_SUGGESTED);
-    adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "close");
-    adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "close");
+  prefs_group = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
+  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), GTK_WIDGET (prefs_group));
 
-    entry_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 6));
-    adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), GTK_WIDGET (entry_box));
+  if (request_data->username) {
+    GtkWidget *username_entry = adw_entry_row_new ();
 
-    if (request_data->username) {
-      GtkWidget *username_entry = gtk_entry_new ();
-      gtk_editable_set_text (GTK_EDITABLE (username_entry), request_data->username);
-      gtk_box_append (entry_box, username_entry);
-      g_signal_connect (username_entry, "changed", G_CALLBACK (on_username_entry_changed), request_data);
-    }
-
-    password_entry = gtk_password_entry_new ();
-    gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (password_entry), TRUE);
-    gtk_editable_set_text (GTK_EDITABLE (password_entry), request_data->password);
-    gtk_box_append (entry_box, password_entry);
-    g_signal_connect (password_entry, "changed", G_CALLBACK (on_password_entry_changed), request_data);
-
-    g_signal_connect (dialog, "response::save", G_CALLBACK (on_password_save), request_data);
-    g_signal_connect (dialog, "response::never", G_CALLBACK (on_password_never), request_data);
-
-    adw_dialog_present (dialog, GTK_WIDGET (window));
-  } else {
-    EphyPasswordPopover *popover = ephy_password_popover_new (request_data);
-    EphyWebView *view = ephy_shell_get_active_web_view (EPHY_SHELL (shell));
-    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_popovers, view);
-
-    title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (ephy_window_get_header_bar (EPHY_WINDOW (window)))));
-
-    g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
-
-    lentry = EPHY_LOCATION_ENTRY (title_widget);
-
-    g_object_ref_sink (popover);
-
-    ephy_location_entry_set_password_popover (lentry, popover);
-    ephy_location_entry_show_password_popover (lentry);
-    list = g_list_append (list, popover);
-    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_popovers, view, list);
-
-    g_signal_connect_swapped (popover, "response", G_CALLBACK (popover_response_cb), window);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (username_entry), _("Username"));
+    gtk_editable_set_text (GTK_EDITABLE (username_entry), request_data->username);
+    adw_preferences_group_add (prefs_group, username_entry);
+    g_signal_connect (GTK_EDITABLE (username_entry), "changed", G_CALLBACK (on_username_entry_changed), request_data);
   }
+
+  password_entry = adw_password_entry_row_new ();
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (password_entry), _("Password"));
+  gtk_editable_set_text (GTK_EDITABLE (password_entry), request_data->password);
+  adw_preferences_group_add (prefs_group, password_entry);
+  g_signal_connect (GTK_EDITABLE (password_entry), "changed", G_CALLBACK (on_password_entry_changed), request_data);
+
+  g_signal_connect (dialog, "response::save", G_CALLBACK (on_password_save), request_data);
+  g_signal_connect (dialog, "response::never", G_CALLBACK (on_password_never), request_data);
+
+  adw_dialog_present (dialog, GTK_WIDGET (window));
 }
 
 static const char *disabled_win_actions_for_overview[] = {

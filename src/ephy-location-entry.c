@@ -69,7 +69,6 @@ struct _EphyLocationEntry {
   GtkWidget *url_button;
   GtkWidget *url_button_label;
   GtkWidget *site_menu_button;
-  GtkWidget *password_button;
   GtkWidget *opensearch_button;
   GtkWidget *reader_mode_button;
   GtkWidget *combined_stop_reload_button;
@@ -1229,7 +1228,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, stack);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, text);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, site_menu_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, password_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, scrolled_window);
@@ -1585,26 +1583,6 @@ ephy_location_entry_clear_permission_buttons (EphyLocationEntry *self)
   }
 
   g_clear_pointer (&self->permission_buttons, g_list_free);
-}
-
-void
-ephy_location_entry_set_password_popover (EphyLocationEntry   *self,
-                                          EphyPasswordPopover *popover)
-{
-  g_assert (EPHY_IS_LOCATION_ENTRY (self));
-  g_assert (popover == NULL || EPHY_IS_PASSWORD_POPOVER (popover));
-
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (self->password_button),
-                               GTK_WIDGET (popover));
-  gtk_widget_set_visible (self->password_button, popover != NULL);
-}
-
-void
-ephy_location_entry_show_password_popover (EphyLocationEntry *self)
-{
-  g_assert (EPHY_IS_LOCATION_ENTRY (self));
-
-  gtk_menu_button_popup (GTK_MENU_BUTTON (self->password_button));
 }
 
 void
