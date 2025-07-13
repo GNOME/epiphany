@@ -28,15 +28,15 @@ desktop = i18n.merge_file(
   type: 'desktop'
 )
 
-appdata_conf = configuration_data()
-appdata_conf.set('appid', application_id)
-appdata = i18n.merge_file(
+metainfo_conf = configuration_data()
+metainfo_conf.set('appid', application_id)
+metainfo = i18n.merge_file(
   input: configure_file(
-    input: files('org.gnome.Epiphany.appdata.xml.in.in'),
-    output: 'org.gnome.Epiphany.appdata.xml.in',
-    configuration: appdata_conf
+    input: files('org.gnome.Epiphany.metainfo.xml.in.in'),
+    output: 'org.gnome.Epiphany.metainfo.xml.in',
+    configuration: metainfo_conf
   ),
-  output: '@0@.appdata.xml'.format(application_id),
+  output: '@0@.metainfo.xml'.format(application_id),
   install: true,
   install_dir: join_paths(datadir, 'metainfo'),
   po_dir: po_dir
@@ -151,10 +151,10 @@ endif
 appstreamcli = find_program('appstreamcli', required: false)
 if appstreamcli.found()
   test(
-    'validate-appdata', appstreamcli,
+    'validate-metainfo', appstreamcli,
     args: [
-      'validate', '--no-net', appdata.full_path()
+      'validate', '--no-net', metainfo.full_path()
     ],
-    depends: appdata
+    depends: metainfo
   )
 endif
