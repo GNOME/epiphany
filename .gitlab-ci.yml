@@ -161,8 +161,8 @@ canary:
       paths:
         - '.flatpak-builder/cache'
         - '.flatpak-builder/ccache'
-  except:
-    - gnome-*
+  rules:
+    - if: $CI_COMMIT_BRANCH !~ /gnome-\d\d+/
 
 canary nightly:
   extends: '.publish_nightly'
