@@ -2638,7 +2638,7 @@ window_cmd_screenshot (GSimpleAction *action,
                         GTK_WINDOW (window),
                         NULL,
                         (GAsyncReadyCallback)save_dialog_cb,
-                        embed);
+                        save_dialog_async_data_new (embed, suggested_filename));
 }
 
 void
