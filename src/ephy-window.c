@@ -4848,6 +4848,12 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
   state = !adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view));
   adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view), state);
 
-  if (state)
+  if (state) {
     ephy_bookmarks_dialog_focus (EPHY_BOOKMARKS_DIALOG (self->bookmarks_dialog));
+  } else {
+    EphyWebView *web_view = ephy_embed_get_web_view (self->active_embed);
+
+    /* Set the navigation flags so the buttons don't become sensitive when exiting. */
+    _ephy_window_set_navigation_flags (self, ephy_web_view_get_navigation_flags (web_view));
+  }
 }
