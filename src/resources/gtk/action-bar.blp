@@ -75,6 +75,20 @@ template $EphyActionBar: Adw.Bin {
 
     $EphyPageMenuButton menu_button {
     }
+
+    MenuButton downloads_button {
+      tooltip-text: _("Downloads");
+      receives-default: true;
+
+      styles [
+        "image-button",
+        "toolbar-button",
+      ]
+
+      Image downloads_icon {
+        valign: center;
+      }
+    }
   }
 }
 

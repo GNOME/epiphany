@@ -20,6 +20,9 @@
  */
 
 #include "ephy-action-bar.h"
+
+#include "ephy-downloads-paintable.h"
+#include "ephy-downloads-popover.h"
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -29,6 +32,8 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-tab-view.h"
+
+#define NEEDS_ATTENTION_ANIMATION_TIMEOUT 2000 /*ms */
 
 enum {
   PROP_0,
@@ -49,6 +54,13 @@ struct _EphyActionBar {
   GtkWidget *navigation_forward;
   GCancellable *cancellable;
   GtkWidget *history_menu;
+
+  /* Downloads */
+  GtkWidget *downloads_button;
+  GtkWidget *downloads_popover;
+  GtkWidget *downloads_icon;
+  GdkPaintable *downloads_paintable;
+  guint downloads_button_attention_timeout_id;
 };
 
 G_DEFINE_FINAL_TYPE (EphyActionBar, ephy_action_bar, ADW_TYPE_BIN)
@@ -418,6 +430,73 @@ middle_click_released_cb (GtkGesture    *gesture,
 }
 
 static void
+add_attention_timeout_cb (EphyActionBar *self)
+{
+  gtk_widget_remove_css_class (self->downloads_icon, "accent");
+  self->downloads_button_attention_timeout_id = 0;
+}
+
+static void
+add_attention (EphyActionBar *self)
+{
+  g_clear_handle_id (&self->downloads_button_attention_timeout_id, g_source_remove);
+
+  gtk_widget_add_css_class (self->downloads_icon, "accent");
+  self->downloads_button_attention_timeout_id = g_timeout_add_once (NEEDS_ATTENTION_ANIMATION_TIMEOUT,
+                                                                    (GSourceOnceFunc)add_attention_timeout_cb,
+                                                                    self);
+}
+
+static void
+download_added_cb (EphyDownloadsManager *manager,
+                   EphyDownload         *download,
+                   EphyActionBar        *action_bar)
+{
+  if (!action_bar->downloads_popover) {
+    action_bar->downloads_popover = ephy_downloads_popover_new ();
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (action_bar->downloads_button),
+                                 action_bar->downloads_popover);
+  }
+
+  add_attention (action_bar);
+  gtk_box_append (GTK_BOX (action_bar->toolbar), action_bar->downloads_button);
+}
+
+static void
+download_completed_cb (EphyDownloadsManager *manager,
+                       EphyDownload         *download,
+                       EphyActionBar        *action_bar)
+{
+  ephy_downloads_paintable_animate_done (EPHY_DOWNLOADS_PAINTABLE (action_bar->downloads_paintable));
+}
+
+static void
+download_removed_cb (EphyDownloadsManager *manager,
+                     EphyDownload         *download,
+                     EphyActionBar        *action_bar)
+{
+  if (!ephy_downloads_manager_get_downloads (manager))
+    gtk_widget_unparent (action_bar->downloads_button);
+}
+
+static void
+downloads_estimated_progress_cb (EphyDownloadsManager *manager,
+                                 EphyActionBar        *action_bar)
+{
+  gdouble fraction = ephy_downloads_manager_get_estimated_progress (manager);
+
+  g_object_set (action_bar->downloads_paintable, "progress", fraction, NULL);
+}
+
+static void
+show_downloads_cb (EphyDownloadsManager *manager,
+                   EphyActionBar        *action_bar)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (action_bar)))
+    gtk_menu_button_popup (GTK_MENU_BUTTON (action_bar->downloads_button));
+}
+
+static void
 ephy_action_bar_set_property (GObject      *object,
                               guint         property_id,
                               const GValue *value,
@@ -503,10 +582,13 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, toolbar);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, tab_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_back);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_forward);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, menu_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, downloads_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, downloads_icon);
 
   gtk_widget_class_bind_template_callback (widget_class,
                                            right_click_pressed_cb);
@@ -521,13 +603,47 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
 static void
 ephy_action_bar_init (EphyActionBar *action_bar)
 {
+  GObject *object = G_OBJECT (action_bar);
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
+  EphyDownloadsManager *downloads_manager;
   EphyEmbedShellMode mode;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar));
 
-  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+  mode = ephy_embed_shell_get_mode (embed_shell);
   gtk_widget_set_visible (GTK_WIDGET (action_bar->tab_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  /* Downloads */
+  downloads_manager = ephy_embed_shell_get_downloads_manager (embed_shell);
+
+  if (ephy_downloads_manager_get_downloads (downloads_manager)) {
+    action_bar->downloads_popover = ephy_downloads_popover_new ();
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (action_bar->downloads_button), action_bar->downloads_popover);
+  } else {
+    gtk_widget_unparent (action_bar->downloads_button);
+  }
+
+  action_bar->downloads_paintable = ephy_downloads_paintable_new (action_bar->downloads_icon);
+  gtk_image_set_from_paintable (GTK_IMAGE (action_bar->downloads_icon),
+                                action_bar->downloads_paintable);
+
+
+  g_signal_connect_object (downloads_manager, "download-added",
+                           G_CALLBACK (download_added_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "download-completed",
+                           G_CALLBACK (download_completed_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "download-removed",
+                           G_CALLBACK (download_removed_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "estimated-progress-changed",
+                           G_CALLBACK (downloads_estimated_progress_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "show-downloads",
+                           G_CALLBACK (show_downloads_cb),
+                           object, 0);
 }
 
 EphyActionBar *
