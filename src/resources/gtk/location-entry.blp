@@ -41,19 +41,6 @@ template $EphyLocationEntry: Box {
           }
 
           [end]
-          Button mute_button {
-            tooltip-text: _("Un/Mute");
-            visible: false;
-            focus-on-click: false;
-            icon-name: "ephy-audio-muted-symbolic";
-            clicked => $on_mute_button_clicked();
-
-            styles [
-              "entry-icon",
-            ]
-          }
-
-          [end]
           Button reader_mode_button {
             tooltip-text: _("Reader Mode");
             focus-on-click: false;

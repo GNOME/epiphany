@@ -93,12 +93,6 @@ GListModel     *ephy_location_entry_get_model                  (EphyLocationEntr
 void            ephy_location_entry_set_model                  (EphyLocationEntry *entry,
                                                                 GListModel        *model);
 
-void            ephy_location_entry_set_mute_button_can_show   (EphyLocationEntry *entry,
-                                                                gboolean           visible);
-
-void            ephy_loation_entry_update_mute_button          (EphyLocationEntry *entry,
-                                                                EphyWindow        *window);
-
 void            ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *self,
                                                                              gboolean           loading);
 

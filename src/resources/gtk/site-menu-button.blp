@@ -19,6 +19,12 @@ menu menu_model {
     }
 
     item {
+      label: _("Mute Tab");
+      action: "tab.mute";
+      hidden-when: "action-disabled";
+    }
+
+    item {
       label: _("Add _Bookmark");
       action: "win.bookmark-page";
     }

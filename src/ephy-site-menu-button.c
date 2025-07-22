@@ -20,6 +20,8 @@
 
 #include "ephy-site-menu-button.h"
 
+#include <webkit/webkit.h>
+
 struct _EphySiteMenuButton {
   GtkButton parent_instance;
 

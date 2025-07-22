@@ -69,7 +69,6 @@ struct _EphyLocationEntry {
   GtkWidget *url_button;
   GtkWidget *url_button_label;
   GtkWidget *site_menu_button;
-  GtkWidget *mute_button;
   GtkWidget *password_button;
   GtkWidget *opensearch_button;
   GtkWidget *reader_mode_button;
@@ -98,7 +97,6 @@ struct _EphyLocationEntry {
 
   gboolean insert_completion;
   gboolean reader_mode_active;
-  gboolean can_show_mute_button;
 
   gint idle_id;
   guint dns_prefetch_handle_id;
@@ -1068,19 +1066,6 @@ on_icon_press (GtkEntry             *entry,
 }
 
 static void
-on_mute_button_clicked (GtkWidget         *button,
-                        EphyLocationEntry *self)
-{
-  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
-  EphyEmbed *embed = EPHY_EMBED (ephy_window_get_active_embed (window));
-  EphyWebView *view = ephy_embed_get_web_view (embed);
-  gboolean muted = webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view));
-
-  webkit_web_view_set_is_muted (WEBKIT_WEB_VIEW (view), !muted);
-  ephy_loation_entry_update_mute_button (self, window);
-}
-
-static void
 on_insert_text (GtkEditable *editable,
                 gchar       *text,
                 gint         length,
@@ -1244,7 +1229,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, stack);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, text);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, site_menu_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, mute_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, password_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
@@ -1270,7 +1254,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_url_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_icon_press);
   gtk_widget_class_bind_template_callback (widget_class, on_bookmark_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_mute_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_insert_text);
   gtk_widget_class_bind_template_callback (widget_class, on_delete_text);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
@@ -1771,43 +1754,6 @@ ephy_location_entry_set_model (EphyLocationEntry *self,
   gtk_single_selection_set_model (self->suggestions_model, model);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_MODEL]);
-}
-
-void
-ephy_location_entry_set_mute_button_can_show (EphyLocationEntry *self,
-                                              gboolean           visible)
-{
-  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
-  self->can_show_mute_button = visible;
-
-  ephy_loation_entry_update_mute_button (self, window);
-}
-
-void
-ephy_loation_entry_update_mute_button (EphyLocationEntry *self,
-                                       EphyWindow        *window)
-{
-  EphyEmbed *embed = ephy_window_get_active_embed (window);
-  EphyWebView *view;
-  const char *icon_name = NULL;
-
-  if (!embed)
-    return;
-
-  view = ephy_embed_get_web_view (embed);
-  if (webkit_web_view_is_playing_audio (WEBKIT_WEB_VIEW (view))) {
-    if (webkit_web_view_get_is_muted (WEBKIT_WEB_VIEW (view)))
-      icon_name = "ephy-audio-muted-symbolic";
-    else
-      icon_name = "ephy-audio-playing-symbolic";
-  }
-
-  if (self->can_show_mute_button && icon_name) {
-    gtk_button_set_icon_name (GTK_BUTTON (self->mute_button), icon_name);
-    gtk_widget_set_visible (self->mute_button, TRUE);
-  } else {
-    gtk_widget_set_visible (self->mute_button, FALSE);
-  }
 }
 
 /* Translators: tooltip for the refresh button */
