@@ -645,6 +645,9 @@ ephy_shell_startup (GApplication *application)
                                      app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
                                      application);
 
+    action = g_action_map_lookup_action (G_ACTION_MAP (application), "shortcuts");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
     action = g_action_map_lookup_action (G_ACTION_MAP (application), "run-in-background");
     g_settings_bind_with_mapping (EPHY_SETTINGS_WEB_APP,
                                   EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND,

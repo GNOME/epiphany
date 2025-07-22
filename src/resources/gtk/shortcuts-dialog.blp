@@ -1,0 +1,297 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.ShortcutsDialog shortcuts_dialog {
+  Adw.ShortcutsSection {
+    title: C_("shortcuts dialog", "General");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "New Window");
+      accelerator: "<Primary>N";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "New Incognito Window");
+      accelerator: "<shift><Primary>N";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Open File");
+      accelerator: "<Primary>O";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Save Page");
+      accelerator: "<Primary>S";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Take Screenshot");
+      accelerator: "<shift><Primary>S";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Print Page");
+      accelerator: "<Primary>P";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Quit");
+      accelerator: "<Primary>Q";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Help");
+      accelerator: "F1";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Open Menu");
+      accelerator: "F10";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Show Downloads List");
+      accelerator: "<shift><Primary>Y";
+    }
+  }
+
+  Adw.ShortcutsSection {
+    title: _("Navigation");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go to Homepage");
+      accelerator: "<alt>Home";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Reload Current Page");
+      accelerator: "F5 <Primary>R";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Reload Bypassing Cache");
+      accelerator: "<shift>F5 <shift><Primary>R";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Stop Loading Current Page");
+      accelerator: "Escape";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go Back to Previous Page");
+      accelerator: "<alt>Left";
+      direction: ltr;
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go Back to Previous Page");
+      accelerator: "<alt>Right";
+      direction: rtl;
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go Forward to Next Page");
+      accelerator: "<alt>Right";
+      direction: ltr;
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go Forward to Next Page");
+      accelerator: "<alt>Left";
+      direction: rtl;
+    }
+  }
+
+  Adw.ShortcutsSection {
+    title: C_("shortcuts dialog", "Tabs");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "New Tab");
+      accelerator: "<Primary>T";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Close Current Tab");
+      accelerator: "<Primary>W";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Reopen Closed Tab");
+      accelerator: "<shift><Primary>T";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go to Next Tab");
+      accelerator: "<Primary>Page_Down <Primary>Tab";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Go to Previous Tab");
+      accelerator: "<Primary>Page_Up <shift><Primary>Tab";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Move Current Tab to the Left");
+      accelerator: "<shift><Primary>Page_Up";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Move Current Tab to the Right");
+      accelerator: "<shift><Primary>Page_Down";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Duplicate Current Tab");
+      accelerator: "<shift><Primary>K";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "View Open Tabs");
+      accelerator: "<shift><Primary>O";
+    }
+  }
+
+  Adw.ShortcutsSection {
+    title: C_("shortcuts dialog", "Miscellaneous");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "History");
+      accelerator: "<Primary>H";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Clear Website Data");
+      accelerator: "<Primary><Shift>Delete";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Preferences");
+      accelerator: "<Primary>comma";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Bookmark Current Page");
+      accelerator: "<Primary>D";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Show Bookmarks List");
+      accelerator: "<alt><Primary>D";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Import Bookmarks");
+      accelerator: "<Shift><Primary>M";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Export Bookmarks");
+      accelerator: "<Shift><Primary>X";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Toggle Caret Browsing");
+      accelerator: "F7";
+    }
+  }
+
+  Adw.ShortcutsSection {
+    title: C_("shortcuts dialog", "View");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Zoom In");
+      accelerator: "<Primary>plus";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Zoom Out");
+      accelerator: "<Primary>minus";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Reset Zoom");
+      accelerator: "<Primary>0";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Fullscreen");
+      accelerator: "F11";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "View Page Source");
+      accelerator: "<Primary>U";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Toggle Inspector");
+      accelerator: "<shift><Primary>I F12";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Toggle Reader Mode");
+      accelerator: "<alt><Primary>R";
+    }
+  }
+
+  Adw.ShortcutsSection {
+    title: C_("shortcuts dialog", "Editing");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Cut");
+      accelerator: "<Primary>X";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Copy");
+      accelerator: "<Primary>C";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Paste");
+      accelerator: "<Primary>V";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Undo");
+      accelerator: "<Primary>Z";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Redo");
+      accelerator: "<shift><Primary>Z";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Select All");
+      accelerator: "<Primary>A";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Select Page URL");
+      accelerator: "<Primary>L";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Search With Default Search Engine");
+      accelerator: "<Primary>K";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Find");
+      accelerator: "<Primary>F";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Next Find Result");
+      accelerator: "<Primary>G";
+    }
+
+    Adw.ShortcutsItem {
+      title: C_("shortcuts dialog", "Previous Find Result");
+      accelerator: "<shift><Primary>G";
+    }
+  }
+}

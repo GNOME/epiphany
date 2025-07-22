@@ -41,6 +41,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-filters-manager.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-fullscreen-box.h"
 #include "ephy-header-bar.h"
 #include "ephy-lib-type-builtins.h"
@@ -4239,6 +4240,23 @@ pan_cb (EphyWindow      *self,
 }
 
 static void
+shortcuts_action_cb (EphyWindow *window)
+{
+  AdwDialog *dialog = adw_application_window_get_visible_dialog (ADW_APPLICATION_WINDOW (window));
+
+  g_assert (ADW_IS_SHORTCUTS_DIALOG (dialog));
+
+  if (ephy_can_install_web_apps ()) {
+    AdwShortcutsSection *section = adw_shortcuts_section_new (C_("shortcuts dialog", "Web App"));
+    AdwShortcutsItem *item;
+
+    item = adw_shortcuts_item_new (C_("shortcuts dialog", "Install Site as Web App"), "<Shift><Primary>A");
+    adw_shortcuts_section_add (section, item);
+    adw_shortcuts_dialog_add (ADW_SHORTCUTS_DIALOG (dialog), section);
+  }
+}
+
+static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
@@ -4418,6 +4436,10 @@ ephy_window_constructed (GObject *object)
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
 
   /* other notifiers */
+  action = g_action_map_lookup_action (G_ACTION_MAP (shell),
+                                       "shortcuts");
+  g_signal_connect_swapped (action, "activate", G_CALLBACK (shortcuts_action_cb), window);
+
   action_group = ephy_window_get_action_group (window, "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "browse-with-caret");
