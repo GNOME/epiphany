@@ -211,7 +211,7 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
                                      (GCompareDataFunc)g_strcmp0,
                                      NULL);
     if (!lookup_iter)
-      g_sequence_append (urls, g_strdup (url));
+      g_sequence_insert_sorted (urls, g_strdup (url), (GCompareDataFunc)g_strcmp0, NULL);
   }
 
   ephy_bookmarks_manager_tags_order_clear_tag (self->manager, tag);
