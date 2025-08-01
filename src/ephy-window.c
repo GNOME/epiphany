@@ -49,7 +49,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-mouse-gesture-controller.h"
 #include "ephy-permissions-manager.h"
-#include "ephy-permission-popover.h"
 #include "ephy-prefs.h"
 #include "ephy-security-dialog.h"
 #include "ephy-session.h"
@@ -179,7 +178,6 @@ struct _EphyWindow {
   GtkWidget *switch_to_tab;
   AdwToast *switch_toast;
   AdwToast *download_start_toast;
-  GHashTable *active_permission_popovers;
   GtkWidget *header_bin_top;
   GtkWidget *header_bin_bottom;
   GCancellable *cancellable;
@@ -2549,39 +2547,6 @@ progress_update (WebKitWebView *web_view,
 }
 
 static void
-load_all_available_popovers (EphyWindow  *window,
-                             EphyWebView *view)
-{
-  GList *popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
-  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-  EphyLocationEntry *lentry;
-  GList *l;
-
-  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
-    return;
-
-  lentry = EPHY_LOCATION_ENTRY (title_widget);
-  ephy_location_entry_clear_permission_buttons (lentry);
-
-  for (l = popover_list; l; l = l->next)
-    ephy_location_entry_add_permission_popover (lentry, EPHY_PERMISSION_POPOVER (l->data));
-}
-
-static void
-destroy_permission_popovers_for_view (EphyWindow  *window,
-                                      EphyWebView *view)
-{
-  GList *popover_list;
-
-  /* Freeing open permission popovers will also free the outstanding permission
-   * requests, which is equivalent to denying them.
-   */
-  popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
-  g_hash_table_steal (window->active_permission_popovers, view);
-  g_list_free_full (popover_list, g_object_unref);
-}
-
-static void
 load_changed_cb (EphyWebView     *view,
                  WebKitLoadEvent  load_event,
                  EphyWindow      *window)
@@ -2596,10 +2561,6 @@ load_changed_cb (EphyWebView     *view,
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget))
     ephy_location_entry_set_reader_mode_visible (EPHY_LOCATION_ENTRY (title_widget), FALSE);
-
-  destroy_permission_popovers_for_view (window, view);
-  if (view == ephy_embed_get_web_view (window->active_embed))
-    load_all_available_popovers (window, view);
 }
 
 static void
@@ -2936,91 +2897,153 @@ reader_mode_cb (EphyWebView *view,
   update_reader_mode (window, view);
 }
 
-static void
-popover_response_cb (EphyWindow *window,
-                     gpointer    popover)
+typedef struct {
+  WebKitPermissionRequest *request;
+  EphyPermissionType permission_type;
+  char *origin;
+} EphyPermissionRequestData;
+
+static EphyPermissionRequestData *
+ephy_permission_request_data_new (WebKitPermissionRequest *request,
+                                  EphyPermissionType       permission_type,
+                                  const char              *origin)
 {
-  EphyWebView *view;
-  GList *popover_list;
+  EphyPermissionRequestData *data = g_new (EphyPermissionRequestData, 1);
 
-  view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
-  popover_list = g_hash_table_lookup (window->active_permission_popovers, view);
-  popover_list = g_list_remove (popover_list, popover);
+  data->request = g_object_ref (request);
+  data->permission_type = permission_type;
+  data->origin = g_strdup (origin);
 
-  if (!popover_list)
-    g_hash_table_steal (window->active_permission_popovers, view);
-  else
-    g_hash_table_replace (window->active_permission_popovers, view, popover_list);
-
-  g_object_unref (popover);
+  return data;
 }
 
 static void
-set_permission (EphyPermissionPopover *popover,
-                gboolean               response)
+ephy_permission_request_data_free (EphyPermissionRequestData *data)
+{
+  g_clear_object (&data->request);
+  g_free (data->origin);
+
+  g_free (data);
+}
+
+static void
+set_permission (EphyPermissionRequestData *data,
+                gboolean                   response)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   EphyPermissionsManager *permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
-  EphyPermissionType permission_type = ephy_permission_popover_get_permission_type (popover);
-  const char *origin = ephy_permission_popover_get_origin (popover);
 
-  if (ephy_permission_is_stored_by_permissions_manager (permission_type)) {
+  if (ephy_permission_is_stored_by_permissions_manager (data->permission_type)) {
     ephy_permissions_manager_set_permission (permissions_manager,
-                                             permission_type, origin,
+                                             data->permission_type, data->origin,
                                              response ? EPHY_PERMISSION_PERMIT
                                                       : EPHY_PERMISSION_DENY);
   } else if (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
     ephy_permissions_manager_set_permission (permissions_manager,
                                              EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
-                                             origin,
+                                             data->origin,
                                              response ? EPHY_PERMISSION_PERMIT
                                                       : EPHY_PERMISSION_DENY);
     ephy_permissions_manager_set_permission (permissions_manager,
                                              EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE,
-                                             origin,
+                                             data->origin,
                                              response ? EPHY_PERMISSION_PERMIT
                                                       : EPHY_PERMISSION_DENY);
   }
 
-  gtk_widget_unparent (GTK_WIDGET (popover));
+  ephy_permission_request_data_free (data);
 }
 
 static void
-on_permission_allow (AdwAlertDialog        *self,
-                     char                  *response,
-                     EphyPermissionPopover *popover)
+on_permission_allow (AdwAlertDialog            *self,
+                     char                      *response,
+                     EphyPermissionRequestData *data)
 {
-  webkit_permission_request_allow (ephy_permission_popover_get_permission_request (popover));
-  set_permission (popover, TRUE);
+  webkit_permission_request_allow (data->request);
+  set_permission (data, TRUE);
 }
 
 static void
-on_permission_deny (AdwAlertDialog        *self,
-                    char                  *response,
-                    EphyPermissionPopover *popover)
+on_permission_deny (AdwAlertDialog            *self,
+                    char                      *response,
+                    EphyPermissionRequestData *data)
 {
-  webkit_permission_request_deny (ephy_permission_popover_get_permission_request (popover));
-  set_permission (popover, FALSE);
+  webkit_permission_request_deny (data->request);
+  set_permission (data, FALSE);
 }
 
 static void
-popover_allow_cb (EphyPermissionPopover *popover,
-                  EphyWindow            *window)
+permission_dialog_get_text (EphyPermissionRequestData  *data,
+                            char                      **title,
+                            char                      **message)
 {
-  webkit_permission_request_allow (ephy_permission_popover_get_permission_request (popover));
-  set_permission (popover, TRUE);
+  const char *requesting_domain = NULL;
+  const char *current_domain = NULL;
+  g_autofree char *bold_origin = NULL;
 
-  popover_response_cb (window, popover);
-}
-
-static void
-popover_deny_cb (EphyPermissionPopover *popover,
-                 EphyWindow            *window)
-{
-  webkit_permission_request_deny (ephy_permission_popover_get_permission_request (popover));
-  set_permission (popover, FALSE);
-
-  popover_response_cb (window, popover);
+  bold_origin = g_markup_printf_escaped ("<b>%s</b>", data->origin);
+  switch (data->permission_type) {
+    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+      /* Translators: Notification policy for a specific site. */
+      *title = g_strdup (_("Notification Request"));
+      /* Translators: Notification policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to send you notifications"),
+                                  bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
+      /* Translators: Geolocation policy for a specific site. */
+      *title = g_strdup (_("Location Access Request"));
+      /* Translators: Geolocation policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to know your location"),
+                                  bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
+      /* Translators: Microphone policy for a specific site. */
+      *title = g_strdup (_("Microphone Access Request"));
+      /* Translators: Microphone policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to use your microphone"),
+                                  bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
+      /* Translators: Webcam policy for a specific site. */
+      *title = g_strdup (_("Webcam Access Request"));
+      /* Translators: Webcam policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to use your webcam"),
+                                  bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
+      /* Translators: Webcam and microphone policy for a specific site. */
+      *title = g_strdup (_("Webcam and Microphone Access Request"));
+      /* Translators: Webcam and microphone policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to use your webcam and microphone"),
+                                  bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_ACCESS_DISPLAY:
+      /* Translators: Display access policy for a specific site. */
+      *title = g_strdup ("Display Access Request");
+      /* Translators: Display access policy for a specific site. */
+      *message = g_strdup_printf ("The page at “%s” would like to share your screen",
+                                  bold_origin);
+      break;
+    case EPHY_PERMISSION_TYPE_WEBSITE_DATA_ACCESS:
+      requesting_domain = webkit_website_data_access_permission_request_get_requesting_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (data->request));
+      current_domain = webkit_website_data_access_permission_request_get_current_domain (WEBKIT_WEBSITE_DATA_ACCESS_PERMISSION_REQUEST (data->request));
+      /* Translators: Storage access policy for a specific site. */
+      *title = g_strdup (_("Website Data Access Request"));
+      /* Translators: Storage access policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to access its own data (including cookies) while browsing “%s”. This will allow “%s” to track your activity on “%s”."),
+                                  requesting_domain, current_domain, requesting_domain, current_domain);
+      break;
+    case EPHY_PERMISSION_TYPE_CLIPBOARD:
+      /* Translators: Clipboard policy for a specific site. */
+      *title = g_strdup (_("Clipboard Access Request"));
+      /* Translators: Clipboard policy for a specific site. */
+      *message = g_strdup_printf (_("The page at “%s” would like to access your clipboard"),
+                                  bold_origin);
+      break;
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 static void
@@ -3030,56 +3053,34 @@ permission_requested_cb (EphyWebView             *view,
                          const char              *origin,
                          EphyWindow              *window)
 {
-  EphyPermissionPopover *popover;
+  EphyPermissionRequestData *data;
+  AdwDialog *dialog;
+  g_autofree char *title = NULL;
+  g_autofree char *message = NULL;
 
   if (!gtk_widget_is_visible (GTK_WIDGET (window)))
     return;
 
-  popover = ephy_permission_popover_new (permission_type, request, origin);
+  data = ephy_permission_request_data_new (request, permission_type, origin);
+  permission_dialog_get_text (data, &title, &message);
+  dialog = adw_alert_dialog_new (title, message);
 
-  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
-      (window->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW)) {
-    AdwDialog *dialog;
-    g_autofree char *title = NULL;
-    g_autofree char *message = NULL;
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "close", _("_Ask Later"),
+                                  "deny", _("_Deny"),
+                                  "allow", _("_Allow"),
+                                  NULL);
 
-    ephy_permission_popover_get_text (popover, &title, &message);
-    dialog = adw_alert_dialog_new (title, message);
+  adw_alert_dialog_set_body_use_markup (ADW_ALERT_DIALOG (dialog), TRUE);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "deny", ADW_RESPONSE_DESTRUCTIVE);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "allow", ADW_RESPONSE_SUGGESTED);
+  adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "close");
+  adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "close");
 
-    adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
-                                    "close", _("_Ask Later"),
-                                    "deny", _("_Deny"),
-                                    "allow", _("_Allow"),
-                                    NULL);
+  g_signal_connect (dialog, "response::allow", G_CALLBACK (on_permission_allow), data);
+  g_signal_connect (dialog, "response::deny", G_CALLBACK (on_permission_deny), data);
 
-    adw_alert_dialog_set_body_use_markup (ADW_ALERT_DIALOG (dialog), TRUE);
-    adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "deny", ADW_RESPONSE_DESTRUCTIVE);
-    adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "allow", ADW_RESPONSE_SUGGESTED);
-    adw_alert_dialog_set_default_response (ADW_ALERT_DIALOG (dialog), "close");
-    adw_alert_dialog_set_close_response (ADW_ALERT_DIALOG (dialog), "close");
-
-    g_signal_connect (dialog, "response::allow", G_CALLBACK (on_permission_allow), popover);
-    g_signal_connect (dialog, "response::deny", G_CALLBACK (on_permission_deny), popover);
-
-    adw_dialog_present (dialog, GTK_WIDGET (window));
-  } else {
-    EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-    EphyLocationEntry *lentry;
-    GList *list = g_hash_table_lookup (EPHY_WINDOW (window)->active_permission_popovers, view);
-
-    g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
-
-    g_object_ref_sink (popover);
-
-    lentry = EPHY_LOCATION_ENTRY (title_widget);
-    ephy_location_entry_add_permission_popover (lentry, popover);
-    ephy_location_entry_show_best_permission_popover (lentry);
-    list = g_list_append (list, popover);
-    g_hash_table_replace (EPHY_WINDOW (window)->active_permission_popovers, view, list);
-
-    g_signal_connect (popover, "allow", G_CALLBACK (popover_allow_cb), window);
-    g_signal_connect (popover, "deny", G_CALLBACK (popover_deny_cb), window);
-  }
+  adw_dialog_present (dialog, GTK_WIDGET (window));
 }
 
 static void
@@ -3165,8 +3166,6 @@ ephy_window_close_tab (EphyWindow *window,
 
     ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_NEW_TAB);
   }
-
-  destroy_permission_popovers_for_view (window, ephy_embed_get_web_view (tab));
 
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
 
@@ -3418,8 +3417,6 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   ephy_window_set_active_tab (window, embed);
 
   update_reader_mode (window, view);
-
-  load_all_available_popovers (window, view);
 }
 
 static void
@@ -3599,13 +3596,6 @@ is_browser_default (void)
 }
 
 static void
-free_permission_popovers (gpointer  key,
-                          GList    *value)
-{
-  g_list_free_full (value, g_object_unref);
-}
-
-static void
 ephy_window_dispose (GObject *object)
 {
   EphyWindow *window = EPHY_WINDOW (object);
@@ -3629,10 +3619,6 @@ ephy_window_dispose (GObject *object)
 
     g_clear_pointer (&window->action_labels, g_hash_table_unref);
     g_clear_pointer (&window->action_groups, g_hash_table_unref);
-
-    g_hash_table_foreach (window->active_permission_popovers,
-                          (GHFunc)free_permission_popovers, NULL);
-    g_clear_pointer (&window->active_permission_popovers, g_hash_table_unref);
   }
 
   G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
@@ -4291,9 +4277,6 @@ ephy_window_constructed (GObject *object)
                          g_strdup (action_label[i].action),
                          g_strdup (action_label[i].label));
   }
-
-  window->active_permission_popovers = g_hash_table_new (g_direct_hash,
-                                                         g_direct_equal);
 
   /* Set accels for actions */
   app = g_application_get_default ();

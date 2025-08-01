@@ -74,7 +74,6 @@ struct _EphyLocationEntry {
   GtkWidget *combined_stop_reload_button;
   GtkWidget *progress_bar;
   GList *page_actions;
-  GList *permission_buttons;
 
   /* Edit */
   GtkWidget *text;
@@ -833,15 +832,6 @@ on_item_released (GtkGesture  *gesture,
 }
 
 static void
-on_permission_popover_response (EphyPermissionPopover *popover,
-                                GtkMenuButton         *button)
-{
-  EphyLocationEntry *self = EPHY_LOCATION_ENTRY (gtk_widget_get_parent (GTK_WIDGET (button)));
-  gtk_widget_unparent (GTK_WIDGET (button));
-  self->permission_buttons = g_list_remove (self->permission_buttons, button);
-}
-
-static void
 update_reader_icon (EphyLocationEntry *self)
 {
   GdkDisplay *display;
@@ -1499,90 +1489,6 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *self,
                                       const char        *tooltip)
 {
   gtk_widget_set_tooltip_text (self->site_menu_button, tooltip);
-}
-
-void
-ephy_location_entry_add_permission_popover (EphyLocationEntry     *self,
-                                            EphyPermissionPopover *popover)
-{
-  GtkMenuButton *menu_button;
-
-  g_assert (EPHY_IS_LOCATION_ENTRY (self));
-  g_assert (EPHY_IS_PERMISSION_POPOVER (popover));
-
-  menu_button = GTK_MENU_BUTTON (gtk_menu_button_new ());
-
-  switch (ephy_permission_popover_get_permission_type (popover)) {
-    case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-notifications-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Notification Request"));
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-camera-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Camera Request"));
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-microphone-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Microphone Request"));
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_DISPLAY:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-generic-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Screen Sharing Request"));
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-location-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Location Request"));
-      break;
-    case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-generic-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Webcam and Microphone Request"));
-      break;
-    default:
-      gtk_menu_button_set_icon_name (menu_button, "ephy-permission-generic-symbolic");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (menu_button), _("Permission Request"));
-  }
-
-  gtk_widget_set_valign (GTK_WIDGET (menu_button), GTK_ALIGN_CENTER);
-  gtk_menu_button_set_popover (menu_button, GTK_WIDGET (popover));
-
-  gtk_widget_add_css_class (GTK_WIDGET (menu_button), "entry-icon");
-  gtk_widget_add_css_class (GTK_WIDGET (menu_button), "start");
-
-  gtk_widget_set_parent (GTK_WIDGET (menu_button), GTK_WIDGET (self));
-  self->permission_buttons = g_list_prepend (self->permission_buttons, menu_button);
-  g_signal_connect (popover, "allow", G_CALLBACK (on_permission_popover_response), menu_button);
-  g_signal_connect (popover, "deny", G_CALLBACK (on_permission_popover_response), menu_button);
-}
-
-void
-ephy_location_entry_show_best_permission_popover (EphyLocationEntry *self)
-{
-  g_assert (EPHY_IS_LOCATION_ENTRY (self));
-
-  if (self->permission_buttons) {
-    GtkWidget *menu_button = g_list_last (self->permission_buttons)->data;
-
-    gtk_menu_button_popup (GTK_MENU_BUTTON (menu_button));
-  }
-}
-
-void
-ephy_location_entry_clear_permission_buttons (EphyLocationEntry *self)
-{
-  GList *l;
-
-  g_assert (EPHY_IS_LOCATION_ENTRY (self));
-
-  for (l = self->permission_buttons; l; l = l->next) {
-    GtkMenuButton *button = l->data;
-    GtkPopover *popover = gtk_menu_button_get_popover (button);
-
-    g_signal_handlers_disconnect_by_func (popover, G_CALLBACK (on_permission_popover_response), button);
-
-    gtk_widget_unparent (GTK_WIDGET (button));
-  }
-
-  g_clear_pointer (&self->permission_buttons, g_list_free);
 }
 
 void

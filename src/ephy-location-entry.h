@@ -27,7 +27,6 @@
 
 #include "ephy-adaptive-mode.h"
 #include "ephy-bookmark-states.h"
-#include "ephy-permission-popover.h"
 #include "ephy-security-levels.h"
 #include "ephy-window.h"
 
@@ -52,13 +51,6 @@ void            ephy_location_entry_grab_focus                 (EphyLocationEntr
 
 void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
                                                                 const char        *tooltip);
-
-void            ephy_location_entry_add_permission_popover     (EphyLocationEntry     *entry,
-                                                                EphyPermissionPopover *popover);
-
-void            ephy_location_entry_show_best_permission_popover (EphyLocationEntry *entry);
-
-void            ephy_location_entry_clear_permission_buttons   (EphyLocationEntry *entry);
 
 void            ephy_location_entry_set_reader_mode_visible    (EphyLocationEntry *entry,
                                                                 gboolean           visible);
