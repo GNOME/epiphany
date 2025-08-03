@@ -803,7 +803,7 @@ ephy_shell_add_platform_data (GApplication    *application,
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->add_platform_data (application, builder);
 
-  if (!app->local_startup_context)
+  if (!g_application_get_is_remote (application))
     return;
 
   /*
@@ -811,6 +811,7 @@ ephy_shell_add_platform_data (GApplication    *application,
    * ctx that are non-NULL.
    */
 
+  g_assert (app->local_startup_context);
   ctx = app->local_startup_context;
   if (ctx->startup_mode == 0 && !ctx->session_filename && !ctx->arguments)
     return;
