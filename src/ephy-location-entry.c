@@ -1635,6 +1635,12 @@ ephy_location_entry_get_opensearch_button (EphyLocationEntry *entry)
   return entry->opensearch_button;
 }
 
+GtkWidget *
+ephy_location_entry_get_site_menu_button (EphyLocationEntry *self)
+{
+  return self->site_menu_button;
+}
+
 gboolean
 ephy_location_entry_has_focus (EphyLocationEntry *self)
 {

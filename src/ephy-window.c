@@ -53,6 +53,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-site-menu-button.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
@@ -1150,6 +1151,18 @@ sync_tab_address (EphyWebView *view,
 
   if (g_strcmp0 (location, current_text) != 0)
     ephy_window_set_location (window, location);
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
+    EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (title_widget);
+    GtkWidget *site_menu_button = ephy_location_entry_get_site_menu_button (lentry);
+    EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+    const char *address = ephy_web_view_get_address (view);
+    EphyBookmark *bookmark;
+
+    bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
+    ephy_site_menu_button_update_bookmark_item (EPHY_SITE_MENU_BUTTON (site_menu_button),
+                                                !!bookmark);
+  }
 
   g_free (location);
 }

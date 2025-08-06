@@ -80,6 +80,8 @@ void            ephy_location_entry_start_change_combined_stop_reload_state (Eph
 
 GtkWidget      *ephy_location_entry_get_opensearch_button      (EphyLocationEntry *entry);
 
+GtkWidget      *ephy_location_entry_get_site_menu_button      (EphyLocationEntry *self);
+
 gboolean        ephy_location_entry_has_focus                  (EphyLocationEntry *self);
 
 void            ephy_location_entry_set_position               (EphyLocationEntry *self,

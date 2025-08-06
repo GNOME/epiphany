@@ -6,38 +6,38 @@ menu menu_model {
       custom: "zoom_level";
     }
   }
+}
 
-  section {
-    item {
-      label: _("_Find…");
-      action: "win.find";
-    }
+menu items_section {
+  item {
+    label: _("_Find…");
+    action: "win.find";
+  }
 
-    item {
-      label: _("_Print…");
-      action: "win.print";
-    }
+  item {
+    label: _("_Print…");
+    action: "win.print";
+  }
 
-    item {
-      label: _("Mute Tab");
-      action: "tab.mute";
-      hidden-when: "action-disabled";
-    }
+  item {
+    label: _("Mute Tab");
+    action: "tab.mute";
+    hidden-when: "action-disabled";
+  }
 
-    item {
-      label: _("Add _Bookmark");
-      action: "win.bookmark-page";
-    }
+  item {
+    label: _("Edit _Bookmark…");
+    action: "win.bookmark-page";
+  }
 
-    item {
-      label: _("Text Enco_ding…");
-      action: "win.encoding";
-    }
+  item {
+    label: _("Text Enco_ding…");
+    action: "win.encoding";
+  }
 
-    item {
-      label: _("_Security & Permissions");
-      action: "win.security-permissions";
-    }
+  item {
+    label: _("_Security & Permissions");
+    action: "win.security-permissions";
   }
 }
 

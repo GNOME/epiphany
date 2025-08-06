@@ -36,4 +36,7 @@ void       ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
 void       ephy_site_menu_button_set_icon_name (EphySiteMenuButton *self,
                                                 const char         *icon_name);
 
+void       ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
+                                                       gboolean            has_bookmark);
+
 G_END_DECLS
