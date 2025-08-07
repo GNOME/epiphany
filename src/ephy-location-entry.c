@@ -1560,6 +1560,7 @@ ephy_location_entry_set_adaptive_mode (EphyLocationEntry *self,
                                        EphyAdaptiveMode   adaptive_mode)
 {
   self->adaptive_mode = adaptive_mode;
+  gtk_popover_set_position (GTK_POPOVER (self->suggestions_popover), adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW ? GTK_POS_TOP : GTK_POS_BOTTOM);
 }
 
 void
