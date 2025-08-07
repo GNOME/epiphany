@@ -117,11 +117,11 @@ get_or_create_group (GPtrArray  *groups,
 }
 
 static void
-feature_switch_notify_active_cb (GtkSwitch  *swtch,
+feature_switch_notify_active_cb (GtkSwitch  *switch_widget,
                                  GParamSpec *pspec,
                                  GtkWidget  *reset_button)
 {
-  gboolean enabled = gtk_switch_get_active (swtch);
+  gboolean enabled = gtk_switch_get_active (switch_widget);
   GtkWidget *row = gtk_widget_get_ancestor (reset_button, ADW_TYPE_ACTION_ROW);
   WebKitFeature *feature = g_object_get_data (G_OBJECT (row), "feature");
   gboolean is_default = enabled == webkit_feature_get_default_value (feature);
@@ -156,9 +156,9 @@ feature_switch_reset_cb (GtkWidget     *button,
                                                           button,
                                                           EPHY_TYPE_PREFS_FEATURES_PAGE));
 
-    GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (parent));
+    GtkWidget *switch_widget = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (parent));
     webkit_settings_set_feature_enabled (settings, feature, enabled);
-    gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+    gtk_switch_set_active (GTK_SWITCH (switch_widget), enabled);
     gtk_widget_set_sensitive (button, !enabled);
     self->non_default_values--;
     gtk_widget_set_sensitive (self->reset_all_row, self->non_default_values);
@@ -214,7 +214,7 @@ reset_all_toast_button_clicked_cb (PrefsFeaturesPage *self)
     int j = 0;
 
     while ((row = adw_preferences_group_get_row (group, j++))) {
-      GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (row));
+      GtkWidget *switch_widget = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (row));
       GtkWidget *button = gtk_widget_get_last_child (gtk_widget_get_last_child (gtk_widget_get_first_child (row)));
       WebKitFeature *feature = g_object_get_data (G_OBJECT (row), "feature");
       const char *prev_value = g_object_steal_data (G_OBJECT (row), "prev-value");
@@ -225,7 +225,7 @@ reset_all_toast_button_clicked_cb (PrefsFeaturesPage *self)
 
       enabled = !g_strcmp0 (prev_value, "active");
       webkit_settings_set_feature_enabled (settings, feature, enabled);
-      gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+      gtk_switch_set_active (GTK_SWITCH (switch_widget), enabled);
       gtk_widget_set_sensitive (button, TRUE);
       self->non_default_values++;
     }
@@ -249,10 +249,10 @@ reset_all_row_activated_cb (AdwButtonRow      *row,
     int j = 0;
 
     while ((row = adw_preferences_group_get_row (group, j++))) {
-      GtkWidget *swtch = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (row));
+      GtkWidget *switch_widget = adw_action_row_get_activatable_widget (ADW_ACTION_ROW (row));
       GtkWidget *button = gtk_widget_get_last_child (gtk_widget_get_last_child (gtk_widget_get_first_child (row)));
       WebKitFeature *feature = g_object_get_data (G_OBJECT (row), "feature");
-      gboolean active = gtk_switch_get_active (GTK_SWITCH (swtch));
+      gboolean active = gtk_switch_get_active (GTK_SWITCH (switch_widget));
       gboolean enabled = webkit_feature_get_default_value (feature);
 
       if (active == enabled)
@@ -264,7 +264,7 @@ reset_all_row_activated_cb (AdwButtonRow      *row,
         g_object_set_data (G_OBJECT (row), "prev-value", "inactive");
 
       webkit_settings_set_feature_enabled (settings, feature, enabled);
-      gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+      gtk_switch_set_active (GTK_SWITCH (switch_widget), enabled);
       gtk_widget_set_sensitive (button, FALSE);
     }
   }
@@ -304,7 +304,7 @@ prefs_feature_page_constructed (GObject *object)
     if (status != WEBKIT_FEATURE_STATUS_EMBEDDER && (show_internal || status != WEBKIT_FEATURE_STATUS_INTERNAL)) {
       AdwPreferencesGroup *group = get_or_create_group (groups, webkit_feature_get_category (feature));
       GtkWidget *row = adw_action_row_new ();
-      GtkWidget *swtch = gtk_switch_new ();
+      GtkWidget *switch_widget = gtk_switch_new ();
       GtkWidget *reset = gtk_button_new_from_icon_name ("edit-undo-symbolic");
       GtkWidget *label = gtk_label_new (g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
       gboolean enabled = webkit_settings_get_feature_enabled (settings, feature);
@@ -319,8 +319,8 @@ prefs_feature_page_constructed (GObject *object)
                                    webkit_feature_get_details (feature));
       g_object_set_data (G_OBJECT (row), "feature", feature);
 
-      gtk_widget_set_valign (swtch, GTK_ALIGN_CENTER);
-      gtk_switch_set_active (GTK_SWITCH (swtch), enabled);
+      gtk_widget_set_valign (switch_widget, GTK_ALIGN_CENTER);
+      gtk_switch_set_active (GTK_SWITCH (switch_widget), enabled);
       gtk_widget_set_sensitive (reset, enabled != webkit_feature_get_default_value (feature));
 
       gtk_widget_set_tooltip_text (reset, _("Reset to default"));
@@ -338,7 +338,7 @@ prefs_feature_page_constructed (GObject *object)
                              (GClosureNotify)webkit_feature_unref,
                              G_CONNECT_DEFAULT);
 
-      g_signal_connect_data (swtch,
+      g_signal_connect_data (switch_widget,
                              "notify::active",
                              G_CALLBACK (feature_switch_notify_active_cb),
                              reset,
@@ -346,9 +346,9 @@ prefs_feature_page_constructed (GObject *object)
                              G_CONNECT_DEFAULT);
 
       adw_action_row_add_suffix (ADW_ACTION_ROW (row), label);
-      adw_action_row_add_suffix (ADW_ACTION_ROW (row), swtch);
+      adw_action_row_add_suffix (ADW_ACTION_ROW (row), switch_widget);
       adw_action_row_add_suffix (ADW_ACTION_ROW (row), reset);
-      adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), swtch);
+      adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), switch_widget);
       adw_preferences_group_add (group, row);
     }
   }
