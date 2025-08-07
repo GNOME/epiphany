@@ -26,7 +26,6 @@
 #include <gtk/gtk.h>
 
 #include "ephy-adaptive-mode.h"
-#include "ephy-bookmark-states.h"
 #include "ephy-security-levels.h"
 #include "ephy-window.h"
 
@@ -48,9 +47,6 @@ gboolean        ephy_location_entry_reset                      (EphyLocationEntr
 void            ephy_location_entry_undo_reset                 (EphyLocationEntry *entry);
 
 void            ephy_location_entry_grab_focus                 (EphyLocationEntry *entry);
-
-void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
-                                                                const char        *tooltip);
 
 void            ephy_location_entry_set_reader_mode_visible    (EphyLocationEntry *entry,
                                                                 gboolean           visible);

@@ -660,24 +660,11 @@ bookmark_removed_toast_button_clicked (AdwToast     *toast,
                                        EphyBookmark *bookmark)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GtkWindow *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
 
   if (ephy_bookmarks_manager_get_bookmark_by_url (manager, ephy_bookmark_get_url (bookmark)))
     return;
 
   ephy_bookmarks_manager_add_bookmark (manager, bookmark);
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
 }
 
 void

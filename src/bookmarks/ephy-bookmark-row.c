@@ -99,24 +99,10 @@ static void
 ephy_bookmark_row_remove_button_clicked_cb (EphyBookmarkRow *row,
                                             GtkButton       *button)
 {
-  GtkWindow *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
-
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_BUTTON (button));
 
   ephy_bookmarks_manager_remove_bookmark (ephy_shell_get_bookmarks_manager (ephy_shell_get_default ()), row->bookmark);
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (row->bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_EMPTY);
 }
 
 static void

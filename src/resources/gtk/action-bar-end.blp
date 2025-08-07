@@ -97,15 +97,6 @@ template $EphyActionBarEnd: Box {
     ]
   }
 
-  Button bookmark_button {
-    visible: false;
-    icon-name: "ephy-non-starred-symbolic";
-
-    styles [
-      "toolbar-button",
-    ]
-  }
-
   Button bookmarks_button {
     tooltip-text: _("Bookmarks");
     clicked => $on_bookmarks_button();

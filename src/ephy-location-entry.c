@@ -27,7 +27,6 @@
 #include "ephy-location-entry.h"
 
 #include "ephy-about-handler.h"
-#include "ephy-bookmark-properties.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
@@ -102,7 +101,6 @@ struct _EphyLocationEntry {
 
   EphySecurityLevel security_level;
   EphyAdaptiveMode adaptive_mode;
-  EphyBookmarkIconState icon_state;
 
   GtkCssProvider *css_provider;
 };
@@ -1022,17 +1020,6 @@ register_activate_shortcuts (GtkWidgetClass  *widget_class,
 }
 
 static void
-on_bookmark_button_clicked (GtkButton *button,
-                            gpointer   user_data)
-{
-  GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
-  GtkWidget *dialog;
-
-  dialog = ephy_bookmark_properties_new_for_window (EPHY_WINDOW (window));
-  adw_dialog_present (ADW_DIALOG (dialog), window);
-}
-
-static void
 on_url_button_clicked (GtkButton *button,
                        gpointer   user_data)
 {
@@ -1241,7 +1228,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_item_released);
   gtk_widget_class_bind_template_callback (widget_class, on_url_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_icon_press);
-  gtk_widget_class_bind_template_callback (widget_class, on_bookmark_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_insert_text);
   gtk_widget_class_bind_template_callback (widget_class, on_delete_text);
   gtk_widget_class_bind_template_callback (widget_class, get_suggestion_icon);
@@ -1474,21 +1460,6 @@ ephy_location_entry_grab_focus (EphyLocationEntry *self)
 {
   gtk_widget_grab_focus (self->text);
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
-}
-
-/**
- * ephy_location_entry_set_lock_tooltip:
- * @entry: an #EphyLocationEntry widget
- * @tooltip: the text to be set in the tooltip for the lock icon
- *
- * Set the text to be displayed when hovering the lock icon of @entry.
- *
- **/
-void
-ephy_location_entry_set_lock_tooltip (EphyLocationEntry *self,
-                                      const char        *tooltip)
-{
-  gtk_widget_set_tooltip_text (self->site_menu_button, tooltip);
 }
 
 void

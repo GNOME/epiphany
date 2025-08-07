@@ -28,7 +28,6 @@
 #include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
 #include "ephy-add-opensearch-engine-button.h"
-#include "ephy-bookmark-states.h"
 #include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
@@ -153,7 +152,6 @@ struct _EphyWindow {
   GtkWidget *overview;
   EphyFullscreenBox *fullscreen_box;
   GtkWidget *header_bar;
-  EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
   EphyTabView *tab_view;
   AdwTabBar *tab_bar;
@@ -1278,12 +1276,6 @@ sync_tab_is_blank (EphyWebView *view,
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_BLANK,
                                               ephy_web_view_get_is_blank (view));
-}
-
-void
-ephy_window_sync_bookmark_state (EphyWindow            *window,
-                                 EphyBookmarkIconState  state)
-{
 }
 
 static void
@@ -3611,7 +3603,6 @@ ephy_window_dispose (GObject *object)
 
     _ephy_window_set_context_event (window, NULL);
 
-    g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
     g_clear_object (&window->mouse_gesture_controller);
 
@@ -5166,21 +5157,8 @@ bookmark_removed_toast_button_clicked (AdwToast     *toast,
                                        EphyBookmark *bookmark)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GtkWindow *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
 
   ephy_bookmarks_manager_add_bookmark (manager, bookmark);
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
 }
 
 void

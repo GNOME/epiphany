@@ -23,9 +23,6 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-adaptive-mode.h"
-#include "ephy-bookmark-states.h"
-
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_ACTION_BAR_END (ephy_action_bar_end_get_type ())
@@ -40,11 +37,5 @@ GtkWidget        *ephy_action_bar_end_get_downloads_revealer    (EphyActionBarEn
 
 void              ephy_action_bar_end_set_browser_actions       (EphyActionBarEnd *action_bar_end,
                                                                  GListStore       *browser_actions);
-
-void              ephy_action_bar_end_set_bookmark_icon_state (EphyActionBarEnd       *action_bar_end,
-                                                               EphyBookmarkIconState  state);
-
-void              ephy_action_bar_end_set_adaptive_mode       (EphyActionBarEnd *action_bar_end,
-                                                               EphyAdaptiveMode  adaptive_mode);
 
 G_END_DECLS

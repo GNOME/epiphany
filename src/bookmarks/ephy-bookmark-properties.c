@@ -206,30 +206,11 @@ static void
 ephy_bookmark_properties_actions_remove_bookmark (EphyBookmarkProperties *self)
 {
   AdwDialog *dialog = ADW_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (self), ADW_TYPE_DIALOG));
-  GtkWidget *parent;
-  GtkRoot *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
 
   self->bookmark_is_removed = TRUE;
   ephy_bookmarks_manager_remove_bookmark (self->manager, self->bookmark);
 
   adw_dialog_close (dialog);
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (self));
-
-  if (!parent)
-    return;
-
-  window = gtk_widget_get_root (parent);
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (self->bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_EMPTY);
 }
 
 static void
@@ -318,10 +299,6 @@ on_add_button_clicked (GtkButton              *button,
                        EphyBookmarkProperties *self)
 {
   GSequenceIter *iter;
-  GtkWidget *window;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *address;
 
   for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (self->bookmark));
        !g_sequence_iter_is_end (iter);
@@ -338,14 +315,6 @@ on_add_button_clicked (GtkButton              *button,
   }
 
   ephy_bookmarks_manager_add_bookmark (self->manager, self->bookmark);
-
-  window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  view = ephy_embed_get_web_view (embed);
-  address = ephy_web_view_get_address (view);
-
-  if (g_strcmp0 (ephy_bookmark_get_url (self->bookmark), address) == 0)
-    ephy_window_sync_bookmark_state (EPHY_WINDOW (window), EPHY_BOOKMARK_ICON_BOOKMARKED);
 
   adw_dialog_close (ADW_DIALOG (self));
 }
