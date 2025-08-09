@@ -1593,7 +1593,13 @@ ephy_location_entry_page_action_clear (EphyLocationEntry *self)
 void
 ephy_location_entry_grab_focus_without_selecting (EphyLocationEntry *self)
 {
-  gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
+  EphyEmbed *active_embed = ephy_window_get_active_embed (window);
+  EphyWebView *web_view = ephy_embed_get_web_view (active_embed);
+
+  if (ephy_web_view_get_location_entry_has_focus (web_view))
+    gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
+
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (self->text));
 }
 
