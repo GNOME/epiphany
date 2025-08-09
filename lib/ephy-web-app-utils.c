@@ -409,7 +409,7 @@ ephy_web_application_create (const char                 *id,
   }
   close (fd);
 
-  /* Create the deskop file. */
+  /* Create the desktop file. */
   if (!create_desktop_file (id, address, profile_dir, install_token, error))
     return FALSE;
 
@@ -449,7 +449,7 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
   }
   close (fd);
 
-  /* Create the deskop file. */
+  /* Create the desktop file. */
   if (G_IS_DESKTOP_APP_INFO (app_info)) {
     const char *source_name = NULL;
     g_autofree char *dest_name = NULL;
