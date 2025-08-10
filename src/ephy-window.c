@@ -5170,6 +5170,9 @@ bookmark_removed_toast_button_clicked (AdwToast     *toast,
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
 
+  if (ephy_bookmarks_manager_get_bookmark_by_url (manager, ephy_bookmark_get_url (bookmark)))
+    return;
+
   ephy_bookmarks_manager_add_bookmark (manager, bookmark);
 }
 
