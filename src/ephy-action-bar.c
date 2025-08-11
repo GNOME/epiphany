@@ -459,7 +459,9 @@ download_added_cb (EphyDownloadsManager *manager,
   }
 
   add_attention (action_bar);
-  gtk_box_append (GTK_BOX (action_bar->toolbar), action_bar->downloads_button);
+
+  if (!gtk_widget_get_parent (action_bar->downloads_button))
+    gtk_box_append (GTK_BOX (action_bar->toolbar), action_bar->downloads_button);
 }
 
 static void
