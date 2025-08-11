@@ -24,20 +24,20 @@ patch="/tmp/$prefix-$suffix.patch"
 # clean up old patches
 rm -f /tmp/$prefix*.patch
 
-pushd $SOURCE_ROOT
+pushd "$SOURCE_ROOT" || exit
 for DIR in embed lib src tests
 do
-   # Aligning prototypes is not working yet, so avoid headers
-   for FILE in $(find "$DIR" -name "*.c" ! -path "*/contrib/*")
-    do
-        "$UNCRUSTIFY" -q -c "data/uncrustify.cfg" -f "$FILE" -o "$FILE.uncrustify"
-        "$LINEUP_PARAMETERS" "$FILE.uncrustify" > "$FILE.temp" && mv "$FILE.temp" "$FILE.uncrustify"
-        diff -urN "$FILE" "$FILE.uncrustify" | \
-            sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
-        rm "$FILE.uncrustify"
-   done
+  # Aligning prototypes is not working yet, so avoid headers
+  find "$DIR" -name "*.c" ! -path "*/contrib/*" -type f -print0 | while IFS= read -r -d '' FILE;
+  do
+    "$UNCRUSTIFY" -q -c "data/uncrustify.cfg" -f "$FILE" -o "$FILE".uncrustify
+    "$LINEUP_PARAMETERS" "$FILE".uncrustify > "$FILE.temp" && mv "$FILE".temp "$FILE".uncrustify
+    diff -urN "$FILE" "$FILE".uncrustify | \
+        sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
+    rm "$FILE".uncrustify
+  done
 done
-popd
+popd || exit
 
 if [ ! -s "$patch" ] ; then
   printf "** Commit is valid. \\o/\n"
@@ -48,13 +48,13 @@ fi
 printf "** Commit does not comply to the correct style :(\n\n"
 
 if hash colordiff 2> /dev/null; then
-  colordiff < $patch
+  colordiff < "$patch"
 else
   cat "$patch"
 fi
 
 printf "\n"
-printf "You can apply these changed with: git apply $patch\n"
+printf "You can apply these changed with: git apply %s\n" "$patch"
 printf "\n"
 
 exit 1
