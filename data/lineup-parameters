@@ -61,14 +61,15 @@ import sys
 from typing import NamedTuple
 
 # https://regexr.com/ is your friend.
-functionNameRegex = re.compile(r'^(\w+) ?\(')
+functionNameRegex = re.compile(r"^(\w+) ?\(")
 parameterRegex = re.compile(
-    r'^\s*(?P<type>(const\s+)?\w+)'
-    r'\s+(?P<stars>\**)'
-    r'\s*(?P<name>\w+)'
-    r'\s*(?P<end>,|\))'
-    r'\s*$')
-openingCurlyBraceRegex = re.compile(r'^{\s*$')
+    r"^\s*(?P<type>(const\s+)?\w+)"
+    r"\s+(?P<stars>\**)"
+    r"\s*(?P<name>\w+)"
+    r"\s*(?P<end>,|\))"
+    r"\s*$"
+)
+openingCurlyBraceRegex = re.compile(r"^{\s*$")
 
 
 def matchFunctionName(line):
@@ -92,14 +93,14 @@ def matchParameter(line):
     match = parameterRegex.match(line[firstParamPosition:])
     if match is None:
         return None
-    paramType = match.group('type')
-    assert(paramType is not None)
-    name = match.group('name')
-    assert(name is not None)
-    stars = match.group('stars')
+    paramType = match.group("type")
+    assert paramType is not None
+    name = match.group("name")
+    assert name is not None
+    stars = match.group("stars")
     numStars = len(stars) if stars is not None else 0
-    end = match.group('end')
-    isLastParameter = True if end is not None and end == ')' else False
+    end = match.group("end")
+    isLastParameter = True if end is not None and end == ")" else False
     return ParameterInfo(paramType, name, numStars, isLastParameter)
 
 
@@ -141,23 +142,27 @@ def computeSpacing(parameterInfos):
 
 
 def printParameter(parameterInfo, maxTypeLength, maxStarsLength, outfile):
-    outfile.write(f'{parameterInfo.paramType:<{maxTypeLength + 1}}')
-    paramNamePaddedWithStars = f'{parameterInfo.name:*>{parameterInfo.numStars + len(parameterInfo.name)}}'
-    outfile.write(f'{paramNamePaddedWithStars:>{maxStarsLength + len(parameterInfo.name)}}')
+    outfile.write(f"{parameterInfo.paramType:<{maxTypeLength + 1}}")
+    paramNamePaddedWithStars = (
+        f"{parameterInfo.name:*>{parameterInfo.numStars + len(parameterInfo.name)}}"
+    )
+    outfile.write(
+        f"{paramNamePaddedWithStars:>{maxStarsLength + len(parameterInfo.name)}}"
+    )
 
 
 def printFunctionDeclaration(remainingLines, length, useTabs, outfile):
     functionName, _ = matchFunctionName(remainingLines[0])
-    assert(functionName is not None)
-    outfile.write(f'{functionName} (')
+    assert functionName is not None
+    outfile.write(f"{functionName} (")
     numSpacesToParenthesis = len(functionName) + 2
-    whitespace = ''
+    whitespace = ""
     if useTabs:
-        tabs = ''.ljust(numSpacesToParenthesis // 8, '\t')
-        spaces = ''.ljust(numSpacesToParenthesis % 8)
+        tabs = "".ljust(numSpacesToParenthesis // 8, "\t")
+        spaces = "".ljust(numSpacesToParenthesis % 8)
         whitespace = tabs + spaces
     else:
-        whitespace = ''.ljust(numSpacesToParenthesis)
+        whitespace = "".ljust(numSpacesToParenthesis)
     parameterInfos = getParameterInfos(remainingLines, length)
     maxTypeLength, maxStarsLength = computeSpacing(parameterInfos)
     numParameters = len(parameterInfos)
@@ -167,8 +172,8 @@ def printFunctionDeclaration(remainingLines, length, useTabs, outfile):
             outfile.write(whitespace)
         printParameter(parameterInfo, maxTypeLength, maxStarsLength, outfile)
         if i + 1 != numParameters:
-            outfile.write(',\n')
-    outfile.write(')\n')
+            outfile.write(",\n")
+    outfile.write(")\n")
 
 
 def parseContents(infile, useTabs, outfile):
@@ -192,18 +197,25 @@ def parseContents(infile, useTabs, outfile):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description='Line up parameters of C functions')
-    parser.add_argument('infile', nargs='?',
-                        type=argparse.FileType('r'),
-                        default=sys.stdin,
-                        help='input C source file')
-    parser.add_argument('-o', metavar='outfile', nargs='?',
-                        type=argparse.FileType('w'),
-                        default=sys.stdout,
-                        help='where to output modified file')
-    parser.add_argument('--tabs', action='store_true',
-                        help='whether use tab characters in the output')
+    parser = argparse.ArgumentParser(description="Line up parameters of C functions")
+    parser.add_argument(
+        "infile",
+        nargs="?",
+        type=argparse.FileType("r"),
+        default=sys.stdin,
+        help="input C source file",
+    )
+    parser.add_argument(
+        "-o",
+        metavar="outfile",
+        nargs="?",
+        type=argparse.FileType("w"),
+        default=sys.stdout,
+        help="where to output modified file",
+    )
+    parser.add_argument(
+        "--tabs", action="store_true", help="whether use tab characters in the output"
+    )
     args = parser.parse_args()
     parseContents(args.infile, args.tabs, args.o)
     args.infile.close()
