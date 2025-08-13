@@ -2586,6 +2586,9 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
+  /* This doesn't change the value returned by ephy_web_view_get_location_entry_has_focus(). */
+  gtk_widget_grab_focus (GTK_WIDGET (view));
+
   if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
     GListModel *model = ephy_web_view_get_opensearch_engines (view);
     EphyAddOpensearchEngineButton *opensearch_button =
@@ -2593,15 +2596,11 @@ ephy_window_connect_active_embed (EphyWindow *window)
     ephy_add_opensearch_engine_button_set_model (opensearch_button, model);
 
     ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_reader_mode_state (view));
-  }
 
-  if (ephy_web_view_get_location_entry_has_focus (view)) {
-    /* Grab view to not interfere with location entry signals clearing position */
-    gtk_widget_grab_focus (GTK_WIDGET (view));
-    ephy_location_entry_grab_focus_without_selecting (EPHY_LOCATION_ENTRY (title_widget));
-    ephy_location_entry_set_position (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_location_entry_position (view));
-  } else {
-    gtk_widget_grab_focus (GTK_WIDGET (view));
+    if (ephy_web_view_get_location_entry_has_focus (view)) {
+      ephy_location_entry_grab_focus_without_selecting (EPHY_LOCATION_ENTRY (title_widget));
+      ephy_location_entry_set_position (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_location_entry_position (view));
+    }
   }
 
   sync_tab_security (view, NULL, window);
