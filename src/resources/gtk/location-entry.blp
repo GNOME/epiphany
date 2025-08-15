@@ -77,105 +77,6 @@ template $EphyLocationEntry: Box {
               released => $middle_click_released_cb();
             }
           }
-
-          Popover suggestions_popover {
-            has-arrow: false;
-            autohide: false;
-            can-focus: false;
-            margin-bottom: 2;
-            margin-top: 2;
-            notify::visible => $on_suggestions_popover_notify_visible() swapped;
-
-            child: ScrolledWindow scrolled_window {
-              hscrollbar-policy: never;
-              max-content-height: 400;
-              propagate-natural-height: true;
-
-              child: ListView suggestions_view {
-                activate => $on_suggestion_activated() swapped;
-
-                model: SingleSelection suggestions_model {
-                  autoselect: false;
-                  can-unselect: true;
-                  items-changed => $update_suggestions_popover() swapped;
-                };
-
-                factory: BuilderListItemFactory {
-                  template ListItem {
-                    child: Grid {
-                      column-spacing: 6;
-                      row-spacing: 3;
-
-                      GestureClick {
-                        button: 1;
-                        exclusive: true;
-                        pressed => $on_item_pressed();
-                        released => $on_item_released();
-                      }
-
-                      Image {
-                        pixel-size: 16;
-                        gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.icon)) as <Gio.Icon>;
-
-                        layout {
-                          column: "0";
-                          row: "0";
-                        }
-                      }
-
-                      Label {
-                        use-markup: true;
-                        ellipsize: end;
-                        xalign: 0;
-                        single-line-mode: true;
-                        hexpand: true;
-                        label: bind template.item as <$EphySuggestion>.title;
-
-                        layout {
-                          column: "1";
-                          row: "0";
-                        }
-                      }
-
-                      Label {
-                        use-markup: true;
-                        ellipsize: end;
-                        xalign: 0;
-                        single-line-mode: true;
-                        hexpand: true;
-                        label: bind template.item as <$EphySuggestion>.subtitle;
-
-                        layout {
-                          column: "1";
-                          row: "1";
-                        }
-
-                        styles [
-                          "dim-label",
-                          "caption",
-                        ]
-                      }
-
-                      Image {
-                        pixel-size: 16;
-                        gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)) as <Gio.Icon>;
-
-                        layout {
-                          column: "2";
-                          row: "0";
-                        }
-                      }
-                    };
-                  }
-                };
-              };
-            };
-
-            styles [
-              "menu",
-              "suggestions",
-            ]
-          }
         }
 
         [overlay]
@@ -201,6 +102,105 @@ template $EphyLocationEntry: Box {
         activate => $on_activate() swapped;
         changed => $on_editable_changed() swapped;
         icon-press => $on_icon_press();
+
+        Popover suggestions_popover {
+          has-arrow: false;
+          autohide: false;
+          can-focus: false;
+          margin-bottom: 2;
+          margin-top: 2;
+          notify::visible => $on_suggestions_popover_notify_visible() swapped;
+
+          child: ScrolledWindow scrolled_window {
+            hscrollbar-policy: never;
+            max-content-height: 400;
+            propagate-natural-height: true;
+
+            child: ListView suggestions_view {
+              activate => $on_suggestion_activated() swapped;
+
+              model: SingleSelection suggestions_model {
+                autoselect: false;
+                can-unselect: true;
+                items-changed => $update_suggestions_popover() swapped;
+              };
+
+              factory: BuilderListItemFactory {
+                template ListItem {
+                  child: Grid {
+                    column-spacing: 6;
+                    row-spacing: 3;
+
+                    GestureClick {
+                      button: 1;
+                      exclusive: true;
+                      pressed => $on_item_pressed();
+                      released => $on_item_released();
+                    }
+
+                    Image {
+                      pixel-size: 16;
+                      gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.icon)) as <Gio.Icon>;
+
+                      layout {
+                        column: "0";
+                        row: "0";
+                      }
+                    }
+
+                    Label {
+                      use-markup: true;
+                      ellipsize: end;
+                      xalign: 0;
+                      single-line-mode: true;
+                      hexpand: true;
+                      label: bind template.item as <$EphySuggestion>.title;
+
+                      layout {
+                        column: "1";
+                        row: "0";
+                      }
+                    }
+
+                    Label {
+                      use-markup: true;
+                      ellipsize: end;
+                      xalign: 0;
+                      single-line-mode: true;
+                      hexpand: true;
+                      label: bind template.item as <$EphySuggestion>.subtitle;
+
+                      layout {
+                        column: "1";
+                        row: "1";
+                      }
+
+                      styles [
+                        "dim-label",
+                        "caption",
+                      ]
+                    }
+
+                    Image {
+                      pixel-size: 16;
+                      gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)) as <Gio.Icon>;
+
+                      layout {
+                        column: "2";
+                        row: "0";
+                      }
+                    }
+                  };
+                }
+              };
+            };
+          };
+
+          styles [
+            "menu",
+            "suggestions",
+          ]
+        }
 
         EventControllerKey {
           key-pressed => $on_key_pressed() swapped;
