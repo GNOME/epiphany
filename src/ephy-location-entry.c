@@ -982,6 +982,8 @@ ephy_location_entry_dispose (GObject *object)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (object);
 
+  g_clear_pointer (&self->suggestions_popover, gtk_widget_unparent);
+
   if (self->text) {
     gtk_editable_finish_delegate (GTK_EDITABLE (self));
     self->text = NULL;
