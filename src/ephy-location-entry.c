@@ -472,13 +472,15 @@ on_key_pressed (EphyLocationEntry     *self,
   selected = gtk_single_selection_get_selected (self->suggestions_model);
 
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up) {
-    if (selected < 0)
+    if (selected <= 0)
       selected = matches - 1;
     else
       selected--;
   } else if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down) {
     if (selected < matches - 1)
       selected++;
+    else if (selected == matches - 1)
+      selected = 0;
     else
       selected = -1;
   } else if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_KP_Page_Up) {
