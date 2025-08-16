@@ -4025,8 +4025,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   web_view->cancellable = g_cancellable_new ();
 
-  web_view->location_entry_has_focus = TRUE;
-
   g_signal_connect_object (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
                            G_CALLBACK (reader_setting_changed_cb),
                            web_view, G_CONNECT_SWAPPED);
