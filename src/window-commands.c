@@ -2434,18 +2434,26 @@ take_snapshot (EphyEmbed *embed,
                                 g_filename_from_uri (file, NULL, NULL));
 }
 
+typedef enum {
+  SAVE_DIALOG_MODE_SAVE_AS,
+  SAVE_DIALOG_MODE_SCREENSHOT
+} SaveDialogMode;
+
 typedef struct {
   EphyEmbed *embed;
   char *suggested_filename;
+  SaveDialogMode mode;
 } SaveDialogAsyncData;
 
 static SaveDialogAsyncData *
-save_dialog_async_data_new (EphyEmbed  *embed,
-                            const char *suggested_filename)
+save_dialog_async_data_new (EphyEmbed      *embed,
+                            const char     *suggested_filename,
+                            SaveDialogMode  mode)
 {
   SaveDialogAsyncData *data = g_new (SaveDialogAsyncData, 1);
   data->embed = g_object_ref (embed);
   data->suggested_filename = g_strdup (suggested_filename);
+  data->mode = mode;
   return data;
 }
 
@@ -2481,7 +2489,7 @@ save_dialog_cb (GtkFileDialog       *dialog,
       /* Easter egg: allow power users to take a screenshot of anything that's
        * not a PNG by changing the suffix to .png.
        */
-      if (g_str_has_suffix (converted, ".png") && !g_str_has_suffix (data->suggested_filename, ".png")) {
+      if (data->mode == SAVE_DIALOG_MODE_SCREENSHOT || (g_str_has_suffix (converted, ".png") && !g_str_has_suffix (data->suggested_filename, ".png"))) {
         take_snapshot (data->embed, converted);
       } else {
         EphyWebView *web_view = ephy_embed_get_web_view (data->embed);
@@ -2548,7 +2556,7 @@ window_cmd_save_as (GSimpleAction *action,
                         GTK_WINDOW (window),
                         NULL,
                         (GAsyncReadyCallback)save_dialog_cb,
-                        save_dialog_async_data_new (embed, suggested_filename));
+                        save_dialog_async_data_new (embed, suggested_filename, SAVE_DIALOG_MODE_SAVE_AS));
 }
 
 void
@@ -2593,7 +2601,7 @@ window_cmd_screenshot (GSimpleAction *action,
                         GTK_WINDOW (window),
                         NULL,
                         (GAsyncReadyCallback)save_dialog_cb,
-                        save_dialog_async_data_new (embed, suggested_filename));
+                        save_dialog_async_data_new (embed, suggested_filename, SAVE_DIALOG_MODE_SCREENSHOT));
 }
 
 void
