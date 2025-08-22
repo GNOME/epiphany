@@ -1323,6 +1323,7 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (widget);
   const char *icon_name = NULL;
+  const char *description;
 
   self->security_level = security_level;
 
@@ -1331,6 +1332,16 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   if (!icon_name)
     icon_name = "ephy-site-button-symbolic";
+
+  if (self->security_level == EPHY_SECURITY_LEVEL_STRONG_SECURITY)
+    description = _("Secure Site");
+  else
+    description = _("Insecure Site");
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->site_menu_button),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                  description,
+                                  -1);
 
   ephy_site_menu_button_set_icon_name (EPHY_SITE_MENU_BUTTON (self->site_menu_button), icon_name);
 }
