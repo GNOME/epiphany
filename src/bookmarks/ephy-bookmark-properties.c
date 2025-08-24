@@ -409,6 +409,8 @@ ephy_bookmark_properties_constructed (GObject *object)
     widget = ephy_bookmark_properties_create_tag_widget (self, tag, selected);
     gtk_list_box_insert (GTK_LIST_BOX (self->tag_list), widget, -1);
   }
+
+  adw_dialog_set_focus (ADW_DIALOG (self), self->name_row);
 }
 
 static void
