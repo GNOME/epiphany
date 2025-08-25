@@ -486,6 +486,9 @@ context_cmd_search_selection (GSimpleAction *action,
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (user_data), embed, EPHY_NEW_TAB_APPEND_AFTER | EPHY_NEW_TAB_JUMP);
   ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), search_url);
+
+  gtk_widget_grab_focus (GTK_WIDGET (ephy_embed_get_web_view (new_embed)));
+
   g_free (search_url);
 }
 
