@@ -59,7 +59,8 @@ ephy_embed_utils_link_message_parse (const char *message)
    * subject and alike.
    */
   p = strchr (status_message, '?');
-  if (p != NULL) *p = '\0';
+  if (p)
+    *p = '\0';
 
   /* Then we also want to check if there is more than an email address
    * in the mailto: list.
@@ -70,7 +71,7 @@ ephy_embed_utils_link_message_parse (const char *message)
   tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
                                        (splitted_message[0] + 7)));
 
-  while (splitted_message [i] != NULL) {
+  while (splitted_message [i]) {
     /* TRANSLATORS: This string is part of the previous translatable string.
      * It is appended for each extraneous mailto: URI email address. For
      * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
@@ -127,7 +128,7 @@ ephy_embed_utils_address_has_web_scheme (const char *address)
   gboolean has_web_scheme;
   int colonpos;
 
-  if (address == NULL)
+  if (!address)
     return FALSE;
 
   colonpos = (int)((strstr (address, ":")) - address);
@@ -236,7 +237,7 @@ ephy_embed_utils_address_is_valid (const char *address)
 
   scheme = g_uri_parse_scheme (address);
 
-  if (scheme != NULL) {
+  if (scheme) {
     info = g_app_info_get_default_for_uri_scheme (scheme);
     g_free (scheme);
   }
@@ -334,7 +335,7 @@ ephy_embed_utils_autosearch_address (const char *search_key)
     engine = ephy_search_engine_manager_get_incognito_engine (manager);
   else
     engine = ephy_search_engine_manager_get_default_engine (manager);
-  g_assert (engine != NULL);
+  g_assert (engine);
 
   return ephy_search_engine_build_search_address (engine, search_key);
 }
@@ -356,7 +357,7 @@ ephy_embed_utils_normalize_or_autosearch_address (const char *address)
 gboolean
 ephy_embed_utils_url_is_empty (const char *location)
 {
-  return (location == NULL ||
+  return (!location ||
           location[0] == '\0' ||
           strcmp (location, "about:blank") == 0 ||
           strcmp (location, "ephy-about:newtab") == 0 ||

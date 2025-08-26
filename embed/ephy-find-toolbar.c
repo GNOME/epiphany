@@ -115,7 +115,8 @@ clear_status (EphyFindToolbar *toolbar)
   gtk_widget_set_sensitive (toolbar->prev, FALSE);
   gtk_widget_set_sensitive (toolbar->next, FALSE);
 
-  if (toolbar->web_view == NULL) return;
+  if (!toolbar->web_view)
+    return;
 
   webkit_find_controller_search_finish (toolbar->controller);
 }
@@ -469,14 +470,14 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
 {
   if (toolbar->web_view == web_view) return;
 
-  if (toolbar->web_view != NULL) {
+  if (toolbar->web_view) {
     g_signal_handlers_disconnect_matched (toolbar->controller,
                                           G_SIGNAL_MATCH_DATA,
                                           0, 0, NULL, NULL, toolbar);
   }
 
   toolbar->web_view = web_view;
-  if (web_view != NULL) {
+  if (web_view) {
     toolbar->controller = webkit_web_view_get_find_controller (web_view);
     g_signal_connect_object (toolbar->controller, "found-text",
                              G_CALLBACK (found_text_cb),
@@ -554,7 +555,7 @@ ephy_find_toolbar_selection_async (GObject      *source_object,
 void
 ephy_find_toolbar_open (EphyFindToolbar *toolbar)
 {
-  g_assert (toolbar->web_view != NULL);
+  g_assert (toolbar->web_view);
 
   webkit_web_view_evaluate_javascript (toolbar->web_view, "window.getSelection().toString();", -1, NULL, NULL, toolbar->cancellable, ephy_find_toolbar_selection_async, toolbar);
 
@@ -570,7 +571,7 @@ ephy_find_toolbar_close (EphyFindToolbar *toolbar)
 {
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (toolbar->search_bar), FALSE);
 
-  if (toolbar->web_view == NULL) return;
+  if (!toolbar->web_view) return;
 
   webkit_find_controller_search_finish (toolbar->controller);
 }

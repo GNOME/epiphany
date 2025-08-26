@@ -704,7 +704,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   self->manager->wk_filter = webkit_user_content_filter_store_load_finish (self->manager->store,
                                                                            result,
                                                                            &error);
-  self->found = (self->manager->wk_filter != NULL);
+  self->found = !!self->manager->wk_filter;
 
   if (self->manager->wk_filter) {
     LOG ("Found compiled filter %s.", filter_info_get_identifier (self));
@@ -1079,7 +1079,7 @@ setup_adblocker_list (EphyFiltersManager *self)
   }
 
   for (int lang = 0; lang < n_languages; lang++) {
-    for (int idx = 0; adblockers[idx].lang != NULL; idx++)
+    for (int idx = 0; adblockers[idx].lang; idx++)
       if (g_ascii_strcasecmp (languages[lang], adblockers[idx].lang) == 0 && !g_strv_contains ((const char * const *)locale_filters, adblockers[idx].url)) {
         char **tmp = locale_filters;
 

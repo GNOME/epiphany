@@ -163,7 +163,7 @@ file_is_compressed (const char *filename)
   int i;
   static const char * const compression[] = { ".gz", ".bz2", ".Z", ".lz", ".xz", NULL };
 
-  for (i = 0; compression[i] != NULL; i++) {
+  for (i = 0; compression[i]; i++) {
     if (g_str_has_suffix (filename, compression[i]))
       return compression[i];
   }
@@ -180,11 +180,11 @@ parse_extension (const char *filename)
   compression = file_is_compressed (filename);
 
   /* if the file is compressed we might have a double extension */
-  if (compression != NULL) {
+  if (compression) {
     int i;
     static const char * const extensions[] = { "tar", "ps", "xcf", "dvi", "txt", "text", NULL };
 
-    for (i = 0; extensions[i] != NULL; i++) {
+    for (i = 0; extensions[i]; i++) {
       char *suffix;
       suffix = g_strdup_printf (".%s%s", extensions[i], compression);
 
@@ -228,7 +228,7 @@ set_destination_for_suggested_filename (EphyDownload *download,
     return FALSE;
   }
 
-  if (suggested_filename != NULL) {
+  if (suggested_filename) {
     dest_name = ephy_sanitize_filename (g_strdup (suggested_filename));
   } else {
     dest_name = ephy_file_tmp_filename (".ephy-download-XXXXXX", NULL);
@@ -957,7 +957,7 @@ display_download_finished_notification (WebKitDownload *download)
   toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
   dest = webkit_download_get_destination (download);
 
-  if (!gtk_window_is_active (toplevel) && dest != NULL) {
+  if (!gtk_window_is_active (toplevel) && dest) {
     char *filename;
     char *message;
     GNotification *notification;
@@ -1097,7 +1097,7 @@ ephy_download_new_for_uri (const char *uri)
   WebKitDownload *download;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  g_assert (uri != NULL);
+  g_assert (uri);
 
   download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell), uri);
   ephy_download = ephy_download_new (download);
@@ -1113,7 +1113,7 @@ ephy_download_new_for_uri_internal (const char *uri)
   g_autoptr (WebKitDownload) download = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  g_assert (uri != NULL);
+  g_assert (uri);
 
   download = webkit_network_session_download_uri (ephy_embed_shell_get_network_session (shell), uri);
   ephy_download = ephy_download_new_internal (download);

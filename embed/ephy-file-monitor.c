@@ -54,7 +54,7 @@ ephy_file_monitor_cancel (EphyFileMonitor *monitor)
 {
   g_assert (EPHY_IS_FILE_MONITOR (monitor));
 
-  if (monitor->monitor != NULL) {
+  if (monitor->monitor) {
     LOG ("Cancelling file monitor");
 
     g_file_monitor_cancel (G_FILE_MONITOR (monitor->monitor));
@@ -172,17 +172,17 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
   GFileInfo *file_info;
 
   g_assert (EPHY_IS_FILE_MONITOR (file_monitor));
-  g_assert (address != NULL);
+  g_assert (address);
 
   ephy_file_monitor_cancel (file_monitor);
 
   local = g_str_has_prefix (address, "file://");
-  if (local == FALSE)
+  if (!local)
     return;
 
   /* strip off anchors */
   anchor = strchr (address, '#');
-  if (anchor != NULL)
+  if (anchor)
     url = g_strndup (address, anchor - address);
   else
     url = g_strdup (address);
@@ -191,7 +191,7 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
   file_info = g_file_query_info (file,
                                  G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                  0, NULL, NULL);
-  if (file_info == NULL) {
+  if (!file_info) {
     g_object_unref (file);
     g_free (url);
     return;

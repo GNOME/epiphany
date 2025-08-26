@@ -525,7 +525,7 @@ modules_initialized_cb (GObject      *source_object,
   }
 
   slots = gck_modules_get_slots (modules, TRUE);
-  for (GList *iter = slots; iter != NULL && iter->data != NULL; iter = iter->next) {
+  for (GList *iter = slots; iter && iter->data; iter = iter->next) {
     GckSlot *slot = GCK_SLOT (iter->data);
     g_autoptr (GckTokenInfo) info = NULL;
     g_autofree char *label = NULL;

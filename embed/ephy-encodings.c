@@ -287,15 +287,15 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
   GVariantBuilder builder;
 
   g_assert (EPHY_IS_ENCODINGS (encodings));
-  g_assert (code != NULL);
+  g_assert (code);
 
-  if (ephy_encodings_get_encoding (encodings, code, FALSE) == NULL)
+  if (!ephy_encodings_get_encoding (encodings, code, FALSE))
     return;
 
   /* Keep the list elements unique. */
   element = g_slist_find_custom (encodings->recent, code,
                                  (GCompareFunc)strcmp);
-  if (element != NULL) {
+  if (element) {
     g_free (element->data);
     encodings->recent =
       g_slist_remove_link (encodings->recent, element);
@@ -332,7 +332,7 @@ ephy_encodings_get_recent (EphyEncodings *encodings)
 
   g_assert (EPHY_IS_ENCODINGS (encodings));
 
-  for (l = encodings->recent; l != NULL; l = l->next) {
+  for (l = encodings->recent; l; l = l->next) {
     EphyEncoding *encoding;
 
     encoding = ephy_encodings_get_encoding (encodings, (char *)l->data, FALSE);
@@ -376,9 +376,9 @@ ephy_encodings_init (EphyEncodings *encodings)
     char *item;
     item = list[i];
 
-    if (g_slist_find (encodings->recent, item) == NULL
+    if (!g_slist_find (encodings->recent, item)
         && g_slist_length (encodings->recent) < RECENT_MAX
-        && ephy_encodings_get_encoding (encodings, item, FALSE) != NULL) {
+        && ephy_encodings_get_encoding (encodings, item, FALSE)) {
       encodings->recent = g_slist_prepend (encodings->recent, g_strdup (item));
     }
   }

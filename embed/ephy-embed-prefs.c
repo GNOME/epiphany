@@ -52,7 +52,7 @@ update_user_style_on_all_ucm (void)
 {
   GList *list = NULL;
 
-  for (list = ucm_list; list != NULL; list = list->next) {
+  for (list = ucm_list; list; list = list->next) {
     WebKitUserContentManager *ucm = list->data;
 
     webkit_user_content_manager_remove_all_style_sheets (ucm);
@@ -161,7 +161,7 @@ update_user_javascript_on_all_ucm (void)
 {
   GList *list = NULL;
 
-  for (list = ucm_list; list != NULL; list = list->next) {
+  for (list = ucm_list; list; list = list->next) {
     WebKitUserContentManager *ucm = list->data;
 
     webkit_user_content_manager_remove_all_scripts (ucm);
@@ -286,7 +286,7 @@ webkit_pref_callback_font_size (GSettings  *settings,
 
     desc = pango_font_description_from_string (value);
     size = pango_font_description_get_size (desc);
-    if (pango_font_description_get_size_is_absolute (desc) == FALSE)
+    if (!pango_font_description_get_size_is_absolute (desc))
       size /= PANGO_SCALE;
     pango_font_description_free (desc);
   }

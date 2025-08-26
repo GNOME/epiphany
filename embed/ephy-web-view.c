@@ -748,7 +748,7 @@ ephy_web_view_set_address (EphyWebView *view,
   if (g_strcmp0 (view->address, address) == 0)
     return;
 
-  was_empty = view->address == NULL;
+  was_empty = !view->address;
   g_free (view->address);
   view->address = g_strdup (address);
 
@@ -757,7 +757,7 @@ ephy_web_view_set_address (EphyWebView *view,
   _ephy_web_view_set_is_blank (view, ephy_embed_utils_url_is_empty (address));
 
   /* If the view was empty there is no need to clean the typed address. */
-  if (!was_empty && ephy_web_view_is_loading (view) && view->typed_address != NULL)
+  if (!was_empty && ephy_web_view_is_loading (view) && view->typed_address)
     ephy_web_view_set_typed_address (view, NULL);
 
   g_object_notify_by_pspec (object, obj_properties[PROP_ADDRESS]);
@@ -989,7 +989,7 @@ permission_request_cb (WebKitWebView           *web_view,
 
   address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
   origin = ephy_uri_to_security_origin (address);
-  if (origin == NULL)
+  if (!origin)
     return FALSE;
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
@@ -1055,7 +1055,7 @@ get_host_for_url_cb (gpointer service,
   double current_zoom;
   double set_zoom;
 
-  if (success == FALSE)
+  if (!success)
     return;
 
   view = EPHY_WEB_VIEW (user_data);
@@ -1102,7 +1102,7 @@ ephy_web_view_set_loading_message (EphyWebView *view,
     decoded_address = ephy_uri_decode (address);
     title = ephy_embed_utils_get_title_from_address (decoded_address);
 
-    if (title != NULL && title[0] != '\0') {
+    if (title && title[0] != '\0') {
       /* translators: %s here is the address of the web page */
       view->loading_message = g_strdup_printf (_("Loading “%s”…"), title);
     } else {
@@ -1136,7 +1136,7 @@ ephy_web_view_set_committed_location (EphyWebView *view,
   /* Do this up here so we still have the old address around. */
   ephy_file_monitor_update_location (view->file_monitor, location);
 
-  if (location == NULL || location[0] == '\0') {
+  if (!location || location[0] == '\0') {
     ephy_web_view_set_address (view, NULL);
   } else if (g_str_has_prefix (location, EPHY_ABOUT_SCHEME ":applications")) {
     g_autoptr (GUri) uri = NULL;
@@ -1268,7 +1268,7 @@ tls_error_page_message_received_cb (WebKitUserContentManager *manager,
     return;
 
   g_assert (G_IS_TLS_CERTIFICATE (view->certificate));
-  g_assert (view->tls_error_failing_uri != NULL);
+  g_assert (view->tls_error_failing_uri);
 
   uri = g_uri_parse (view->tls_error_failing_uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
   webkit_network_session_allow_tls_certificate_for_host (ephy_embed_shell_get_network_session (shell),
@@ -1494,7 +1494,7 @@ get_js_object_string_property (JSCValue   *js_value,
   g_assert (jsc_value_is_string (prop_value));
 
   s = jsc_value_to_string (prop_value);
-  g_assert (s != NULL);
+  g_assert (s);
 
   return s;
 }
@@ -1636,7 +1636,7 @@ load_changed_cb (WebKitWebView   *web_view,
 
       g_clear_handle_id (&view->snapshot_timeout_id, g_source_remove);
 
-      if (view->address == NULL || view->address[0] == '\0') {
+      if (!view->address || view->address[0] == '\0') {
         /* We've probably never loaded any page before. */
         ephy_web_view_set_address (view, webkit_web_view_get_uri (web_view));
       }
@@ -2208,7 +2208,7 @@ ephy_web_view_load_error_page (EphyWebView          *view,
   reason = error ? error->message : _("None specified");
 
   origin = ephy_uri_to_security_origin (uri);
-  if (origin == NULL)
+  if (!origin)
     origin = g_strdup (uri);
 
   lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
@@ -2752,7 +2752,7 @@ password_manager_handle_query_usernames_message (WebKitWebView     *web_view,
   usernames = ephy_password_manager_get_usernames_for_origin (password_manager, origin);
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
-  for (l = usernames; l != NULL; l = g_list_next (l))
+  for (l = usernames; l; l = g_list_next (l))
     g_variant_builder_add (&builder, "s", l->data);
 
   webkit_user_message_send_reply (message, webkit_user_message_new ("PasswordManager.QueryUsernamesResponse",
@@ -3477,12 +3477,12 @@ ephy_web_view_get_best_web_app_icon_finish (EphyWebView   *view,
   if (!data)
     return FALSE;
 
-  if (data->icon_uri != NULL && data->icon_uri[0] != '\0') {
+  if (data->icon_uri && data->icon_uri[0] != '\0') {
     *icon_uri = data->icon_uri;
     data->icon_uri = NULL;
   }
 
-  if (data->icon_color != NULL && data->icon_color[0] != '\0')
+  if (data->icon_color && data->icon_color[0] != '\0')
     gdk_rgba_parse (icon_color, data->icon_color);
 
   get_best_web_app_icon_async_data_free (data);
@@ -3809,7 +3809,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
   }
 
   home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
-  if (home == NULL || home[0] == '\0') {
+  if (!home || home[0] == '\0') {
     ephy_web_view_load_new_tab_page (view);
   } else {
     ephy_web_view_freeze_history (view);

@@ -140,7 +140,7 @@ ephy_embed_statusbar_get_context_id (EphyEmbed  *embed,
   guint id;
 
   g_assert (EPHY_IS_EMBED (embed));
-  g_assert (context_description != NULL);
+  g_assert (context_description);
 
   /* we need to preserve namespaces on object datas */
   string = g_strconcat ("ephy-embed-status-bar-context:", context_description, NULL);
@@ -161,7 +161,7 @@ ephy_embed_set_statusbar_label (EphyEmbed  *embed,
 {
   ephy_floating_bar_set_primary_label (EPHY_FLOATING_BAR (embed->floating_bar), label);
 
-  if (label == NULL || label[0] == '\0') {
+  if (!label || label[0] == '\0') {
     gtk_widget_set_visible (embed->floating_bar, FALSE);
     gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
     gtk_widget_remove_css_class (embed->floating_bar, "end");
@@ -187,7 +187,7 @@ ephy_embed_statusbar_push (EphyEmbed  *embed,
 
   g_assert (EPHY_IS_EMBED (embed));
   g_assert (context_id != 0);
-  g_assert (text != NULL);
+  g_assert (text);
 
   msg = g_new (EphyEmbedStatusbarMsg, 1);
   msg->text = g_strdup (text);
@@ -260,7 +260,7 @@ ephy_embed_set_title (EphyEmbed  *embed,
   char *new_title;
 
   new_title = g_strdup (title);
-  if (new_title == NULL || g_strstrip (new_title)[0] == '\0') {
+  if (!new_title || g_strstrip (new_title)[0] == '\0') {
     const char *address;
 
     g_free (new_title);
@@ -270,7 +270,7 @@ ephy_embed_set_title (EphyEmbed  *embed,
     if (address && strcmp (address, "about:blank") != 0)
       new_title = ephy_embed_utils_get_title_from_address (address);
 
-    if (new_title == NULL || new_title[0] == '\0') {
+    if (!new_title || new_title[0] == '\0') {
       g_free (new_title);
       new_title = g_strdup (_(BLANK_PAGE_TITLE));
     }
@@ -998,7 +998,7 @@ ephy_embed_attach_notification_container (EphyEmbed *embed)
   g_assert (EPHY_IS_EMBED (embed));
 
   container = ephy_notification_container_get_default ();
-  if (gtk_widget_get_parent (GTK_WIDGET (container)) == NULL)
+  if (!gtk_widget_get_parent (GTK_WIDGET (container)))
     gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), GTK_WIDGET (container));
 }
 
