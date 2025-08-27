@@ -49,6 +49,7 @@
 #include "ephy-mouse-gesture-controller.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
+#include "ephy-reader-handler.h"
 #include "ephy-security-dialog.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
@@ -2869,7 +2870,7 @@ update_reader_mode (EphyWindow  *window,
                     EphyWebView *view)
 {
   EphyWebView *active_view;
-  gboolean available = ephy_web_view_is_reader_mode_available (view);
+  gboolean visible;
   GtkWidget *title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
   EphyLocationEntry *lentry;
 
@@ -2887,9 +2888,11 @@ update_reader_mode (EphyWindow  *window,
   if (active_view != view)
     return;
 
-  ephy_location_entry_set_reader_mode_visible (lentry, available);
+  visible = (ephy_web_view_is_reader_mode_available (view)
+             || g_str_has_prefix (ephy_web_view_get_display_address (EPHY_WEB_VIEW (view)), EPHY_READER_SCHEME));
+  ephy_location_entry_set_reader_mode_visible (lentry, visible);
 
-  if (available)
+  if (visible)
     ephy_location_entry_set_reader_mode_state (lentry, ephy_web_view_get_reader_mode_state (view));
 }
 
