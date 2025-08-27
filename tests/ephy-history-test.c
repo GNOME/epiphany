@@ -84,7 +84,7 @@ page_vist_created (EphyHistoryService *service,
 {
   GMainLoop *loop = g_object_steal_data (G_OBJECT (service), "main-loop");
 
-  if (user_data != NULL) {
+  if (user_data) {
     g_assert_true (EPHY_IS_HISTORY_SERVICE (user_data));
     g_object_unref (user_data);
   }
@@ -233,7 +233,7 @@ set_url_title (EphyHistoryService *service,
 
   g_assert_true (success);
 
-  if (test_result == FALSE) {
+  if (!test_result) {
     g_object_unref (service);
     g_main_loop_quit (loop);
   } else
@@ -311,7 +311,7 @@ test_get_url_done (EphyHistoryService *service,
 
   g_assert_true (success == expected_success);
 
-  if (expected_success == TRUE) {
+  if (expected_success) {
     g_assert_nonnull (url);
     g_assert_cmpstr (url->url, ==, "http://www.gnome.org");
     g_assert_cmpint (url->id, !=, -1);
@@ -339,7 +339,7 @@ test_get_url_helper (gboolean add_entry)
   g_autoptr (GMainLoop) loop = g_main_loop_new (NULL, FALSE);
   EphyHistoryService *service = ensure_empty_history (test_db_filename ());
 
-  if (add_entry == TRUE) {
+  if (add_entry) {
     EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
     ephy_history_service_add_visit (service, visit, NULL, test_get_url_visit_added, GINT_TO_POINTER (add_entry));
     ephy_history_page_visit_free (visit);

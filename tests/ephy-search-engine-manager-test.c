@@ -92,7 +92,7 @@ test_search_engine_manager (void)
   for (guint i = 0;;) {
     g_autoptr (EphySearchEngine) engine = g_list_model_get_item (G_LIST_MODEL (manager), i);
 
-    if (engine == NULL)
+    if (!engine)
       break;
 
     g_assert_true (EPHY_IS_SEARCH_ENGINE (engine));

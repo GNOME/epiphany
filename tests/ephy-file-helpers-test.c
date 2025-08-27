@@ -90,7 +90,7 @@ test_ephy_file_get_downloads_dir (void)
     if (in_sandbox && !test.in_sandbox)
       continue;
 
-    if (test.expected != NULL)
+    if (test.expected)
       expected_dir = test.expected;
     else
       expected_dir = g_get_user_special_dir (test.user_dir);
