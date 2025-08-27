@@ -87,6 +87,9 @@ view_in_destination (EphyWindow      *window,
   webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
   webkit_web_view_session_state_unref (session_state);
   ephy_web_view_load_url (new_view, value);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+    gtk_widget_grab_focus (GTK_WIDGET (new_view));
 }
 
 void
