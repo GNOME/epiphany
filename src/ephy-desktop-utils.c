@@ -33,7 +33,7 @@ is_desktop_pantheon (void)
   if (!xdg_current_desktop)
     return FALSE;
 
-  return strstr (xdg_current_desktop, "Pantheon") != NULL;
+  return !!strstr (xdg_current_desktop, "Pantheon");
 #else
   return FALSE;
 #endif
@@ -47,7 +47,7 @@ is_desktop_gnome (void)
   if (!xdg_current_desktop)
     return FALSE;
 
-  return strstr (xdg_current_desktop, "GNOME") != NULL;
+  return !!strstr (xdg_current_desktop, "GNOME");
 }
 
 const char *

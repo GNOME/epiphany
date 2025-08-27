@@ -123,7 +123,7 @@ prefs_general_page_dispose (GObject *object)
     g_clear_object (&general_page->cancellable);
   }
 
-  if (general_page->add_lang_dialog != NULL) {
+  if (general_page->add_lang_dialog) {
     GtkWindow **add_lang_dialog = &general_page->add_lang_dialog;
 
     g_object_remove_weak_pointer (G_OBJECT (general_page->add_lang_dialog),
@@ -206,7 +206,7 @@ language_editor_add_activated (GtkWidget *listbox,
 
   general_page = EPHY_PREFS_GENERAL_PAGE (gtk_widget_get_ancestor (listbox, EPHY_TYPE_PREFS_GENERAL_PAGE));
 
-  if (general_page->add_lang_dialog == NULL) {
+  if (!general_page->add_lang_dialog) {
     GtkWindow *window;
     GtkWindow **add_lang_dialog;
 
@@ -297,7 +297,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   int len;
   int index;
 
-  g_assert (code != NULL && desc != NULL);
+  g_assert (code && desc);
 
   len = get_list_box_length (GTK_LIST_BOX (general_page->lang_listbox));
 
@@ -335,13 +335,13 @@ add_lang_dialog_response_cb (GtkWidget        *button,
   GtkTreeIter iter;
   GList *rows, *r;
 
-  g_assert (dialog != NULL);
+  g_assert (dialog);
 
   selection = gtk_tree_view_get_selection (general_page->add_lang_treeview);
 
   rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
-  for (r = rows; r != NULL; r = r->next) {
+  for (r = rows; r; r = r->next) {
     GtkTreePath *path = (GtkTreePath *)r->data;
 
     if (gtk_tree_model_get_iter (model, &iter, path)) {
@@ -443,12 +443,12 @@ setup_add_language_dialog (PrefsGeneralPage *general_page)
     if (!gnome_parse_locale (locale, &language_code, &country_code, NULL, NULL))
       break;
 
-    if (language_code == NULL)
+    if (!language_code)
       break;
 
     language_name = gnome_get_language_from_locale (locale, locale);
 
-    if (country_code != NULL)
+    if (country_code)
       shortened_locale = g_strdup_printf ("%s-%s", language_code, country_code);
     else
       shortened_locale = g_strdup (language_code);
@@ -528,7 +528,7 @@ normalize_locale (const char *locale)
    * because older versions of Epiphany stored locales as entirely
    * lowercase.
    */
-  for (char *p = strchr (result, '-'); p != NULL && *p != '\0'; p++)
+  for (char *p = strchr (result, '-'); p && *p != '\0'; p++)
     *p = g_ascii_toupper (*p);
 
   return result;
@@ -809,7 +809,7 @@ custom_homepage_entry_changed (GtkEditable      *editable,
   if (gtk_check_button_get_active (GTK_CHECK_BUTTON (general_page->custom_homepage_radiobutton))) {
     g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL,
                            gtk_editable_get_text (editable));
-  } else if ((gtk_editable_get_text (editable) != NULL) &&
+  } else if ((gtk_editable_get_text (editable)) &&
              gtk_check_button_get_active (GTK_CHECK_BUTTON (general_page->new_tab_homepage_radiobutton))) {
     g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL, gtk_editable_get_text (editable));
     gtk_widget_set_sensitive (general_page->custom_homepage_entry, TRUE);
@@ -1068,9 +1068,9 @@ init_lang_listbox (PrefsGeneralPage *general_page)
       add_system_language_entry (general_page);
     } else if (code[0] != '\0') {
       g_autofree char *normalized_locale = normalize_locale (code);
-      if (normalized_locale != NULL) {
+      if (normalized_locale) {
         g_autofree char *language_name = language_for_locale (normalized_locale);
-        if (language_name == NULL)
+        if (!language_name)
           language_name = g_strdup (normalized_locale);
         language_editor_add (general_page, normalized_locale, language_name);
       }

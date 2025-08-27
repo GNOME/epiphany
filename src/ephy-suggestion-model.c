@@ -262,7 +262,7 @@ icon_loaded_cb (GObject      *source,
   int w, h;
 
   texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
-  if (texture == NULL)
+  if (!texture)
     return;
 
   suggestion = EPHY_SUGGESTION (user_data);
@@ -404,7 +404,7 @@ query_data_new (const char *query,
 static void
 query_data_free (QueryData *data)
 {
-  g_assert (data != NULL);
+  g_assert (data);
   g_clear_pointer (&data->tabs, g_sequence_free);
   g_clear_pointer (&data->bookmarks, g_sequence_free);
   g_clear_pointer (&data->history, g_sequence_free);
@@ -629,7 +629,7 @@ history_query_completed_cb (EphyHistoryService *service,
   urls = (GList *)result_data;
 
   if (strlen (data->query) > 0) {
-    for (const GList *p = urls; p != NULL; p = p->next) {
+    for (const GList *p = urls; p; p = p->next) {
       EphyHistoryURL *url = (EphyHistoryURL *)p->data;
       EphySuggestion *suggestion;
       g_autofree gchar *escaped_title = NULL;
@@ -726,7 +726,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   QueryData *data;
 
   g_assert (EPHY_IS_SUGGESTION_MODEL (self));
-  g_assert (query != NULL);
+  g_assert (query);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -738,7 +738,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   if (data->scope == QUERY_SCOPE_ALL || data->scope == QUERY_SCOPE_SUGGESTIONS) {
     gboolean is_possible_url = FALSE;
 
-    if (strstr (query, " ") == NULL && strstr (query, "."))
+    if (!strstr (query, " ") && strstr (query, "."))
       is_possible_url = TRUE;
 
     if (include_search_engines_suggestions && !is_possible_url && strlen (query) > 1 && g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_USE_SEARCH_SUGGESTIONS))
@@ -792,7 +792,7 @@ ephy_suggestion_model_get_suggestion_with_uri (EphySuggestionModel *self,
   g_autofree gchar *uri_casefold = g_utf8_casefold (uri, -1);
 
   g_assert (EPHY_IS_SUGGESTION_MODEL (self));
-  g_assert (uri != NULL && *uri != '\0');
+  g_assert (uri && *uri != '\0');
 
   for (iter = g_sequence_get_begin_iter (self->items);
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {

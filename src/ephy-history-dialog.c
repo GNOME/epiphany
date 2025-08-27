@@ -402,7 +402,7 @@ on_browse_history_deleted_cb (gpointer service,
     g_autoptr (GList) checked_rows = get_checked_rows (self);
     GList *iter = NULL;
 
-    for (iter = checked_rows; iter != NULL; iter = g_list_next (iter))
+    for (iter = checked_rows; iter; iter = g_list_next (iter))
       gtk_list_box_remove (GTK_LIST_BOX (self->listbox), iter->data);
 
     if (!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0)) {
@@ -421,7 +421,7 @@ delete_checked_rows (EphyHistoryDialog *self)
   GList *deleted_urls = NULL;
   GList *iter = NULL;
 
-  for (iter = checked_rows; iter != NULL; iter = g_list_next (iter)) {
+  for (iter = checked_rows; iter; iter = g_list_next (iter)) {
     EphyHistoryURL *url = get_url_from_row (iter->data);
 
     deleted_urls = g_list_prepend (deleted_urls, url);
@@ -430,7 +430,7 @@ delete_checked_rows (EphyHistoryDialog *self)
   ephy_history_service_delete_urls (self->history_service, deleted_urls, self->cancellable,
                                     (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
 
-  for (iter = deleted_urls; iter != NULL; iter = g_list_next (iter))
+  for (iter = deleted_urls; iter; iter = g_list_next (iter))
     ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
 
   g_list_free_full (deleted_urls, (GDestroyNotify)ephy_history_url_free);
@@ -648,7 +648,7 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
     while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++)))
       visible_rows = g_list_prepend (visible_rows, row);
 
-    for (iter = visible_rows; iter != NULL; iter = g_list_next (iter)) {
+    for (iter = visible_rows; iter; iter = g_list_next (iter)) {
       EphyHistoryURL *url = get_url_from_row (iter->data);
 
       deleted_urls = g_list_prepend (deleted_urls, url);
@@ -657,7 +657,7 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
     ephy_history_service_delete_urls (self->history_service, deleted_urls, self->cancellable,
                                       (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
 
-    for (iter = deleted_urls; iter != NULL; iter = g_list_next (iter))
+    for (iter = deleted_urls; iter; iter = g_list_next (iter))
       ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
 
     g_list_free_full (deleted_urls, (GDestroyNotify)ephy_history_url_free);
@@ -915,7 +915,7 @@ on_selection_open_button_clicked (GtkWidget         *open_button,
   g_autoptr (GList) checked_rows = get_checked_rows (self);
   GList *iter = NULL;
 
-  for (iter = checked_rows; iter != NULL; iter = g_list_next (iter)) {
+  for (iter = checked_rows; iter; iter = g_list_next (iter)) {
     g_autoptr (EphyHistoryURL) url = get_url_from_row (iter->data);
     EphyEmbed *embed;
 

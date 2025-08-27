@@ -146,7 +146,7 @@ entry_activate_cb (EphyLocationEntry      *entry,
   }
 
   content = gtk_editable_get_text (GTK_EDITABLE (entry));
-  if (content == NULL || content[0] == '\0')
+  if (!content || content[0] == '\0')
     return;
 
   if (g_str_has_prefix (content, "ephy-tab://") && handle_ephy_tab_uri (controller, content))
@@ -268,7 +268,7 @@ focus_leave_cb (EphyLocationController *controller)
 static void
 notify_selected_index_cb (EphyLocationController *controller)
 {
-  if (controller->sync_address_is_blocked == TRUE) {
+  if (controller->sync_address_is_blocked) {
     controller->sync_address_is_blocked = FALSE;
     g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), controller->title_widget);
   }

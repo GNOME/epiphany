@@ -640,6 +640,6 @@ ephy_data_view_set_options_menu (EphyDataView *self,
 {
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
 
-  gtk_widget_set_visible (priv->options_menu_button, model != NULL);
+  gtk_widget_set_visible (priv->options_menu_button, !!model);
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->options_menu_button), model);
 }

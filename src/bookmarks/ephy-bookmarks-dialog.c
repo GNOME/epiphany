@@ -179,14 +179,14 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
   /* Add URLs to the sequence from the existing variant. Skip bookmarks that
    * aren't in the tag anymore. */
   urls = g_sequence_new (g_free);
-  if (current_order != NULL) {
+  if (current_order) {
     for (iter = g_sequence_get_begin_iter (current_order);
          !g_sequence_iter_is_end (iter);
          iter = g_sequence_iter_next (iter)) {
       const char *url = g_sequence_get (iter);
       EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
 
-      if (bookmark == NULL)
+      if (!bookmark)
         continue;
 
       if (!ephy_bookmark_has_tag (bookmark, tag))
@@ -824,7 +824,7 @@ ephy_bookmarks_dialog_tag_created_cb (EphyBookmarksDialog  *self,
   GtkWidget *tag_row;
 
   g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
   tag_row = create_tag_row (self, tag);
@@ -942,7 +942,7 @@ ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
   GSequence *tag_order;
 
   tag_order = ephy_bookmarks_manager_tags_order_get_tag (self->manager, tag);
-  if (tag_order != NULL) {
+  if (tag_order) {
     populate_tag_detail_list_box (self, tag_order);
   } else {
     GSequence *bookmarks;
@@ -969,7 +969,7 @@ ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
   gtk_widget_set_state_flags (self->search_entry, GTK_STATE_FLAG_NORMAL, TRUE);
 
-  if (self->tag_detail_tag != NULL)
+  if (self->tag_detail_tag)
     g_free (self->tag_detail_tag);
   self->tag_detail_tag = g_strdup (tag);
 
@@ -1122,12 +1122,12 @@ on_search_entry_changed (GtkSearchEntry *entry,
   }
 
   if ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0))) {
-    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), idx++)) != NULL) {
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), idx++))) {
       if (gtk_widget_get_mapped (GTK_WIDGET (row)))
         mapped++;
     }
   } else {
-    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), idx++)) != NULL) {
+    while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), idx++))) {
       if (gtk_widget_get_mapped (GTK_WIDGET (row)))
         mapped++;
     }
@@ -1225,7 +1225,7 @@ ephy_bookmarks_dialog_sorted_cb (EphyBookmarksDialog  *self,
 
     gtk_list_box_remove_all (GTK_LIST_BOX (self->tag_detail_list_box));
 
-    if (order != NULL)
+    if (order)
       populate_tag_detail_list_box (self, order);
   }
 }

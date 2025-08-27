@@ -27,7 +27,7 @@ adw_widget_compute_expand (GtkWidget *widget,
   gboolean vexpand = FALSE;
 
   for (child = gtk_widget_get_first_child (widget);
-       child != NULL;
+       child;
        child = gtk_widget_get_next_sibling (child)) {
     hexpand = hexpand || gtk_widget_compute_expand (child, GTK_ORIENTATION_HORIZONTAL);
     vexpand = vexpand || gtk_widget_compute_expand (child, GTK_ORIENTATION_VERTICAL);

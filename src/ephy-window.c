@@ -335,9 +335,9 @@ ephy_window_open_link (EphyLink      *link,
   EphyEmbed *new_embed;
   EphyWebView *web_view;
 
-  g_assert (address != NULL || (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_NEW_TAB | EPHY_LINK_HOME_PAGE)));
+  g_assert (address || (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_NEW_TAB | EPHY_LINK_HOME_PAGE)));
 
-  if (embed == NULL)
+  if (!embed)
     embed = window->active_embed;
 
   if (flags & EPHY_LINK_BOOKMARK)
@@ -354,7 +354,7 @@ ephy_window_open_link (EphyLink      *link,
     EphyNewTabFlags ntflags = 0;
     EphyWindow *target_window;
 
-    if (embed == NULL)
+    if (!embed)
       target_window = window;
     else
       target_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed)));
@@ -799,7 +799,7 @@ update_edit_actions_sensitivity (EphyWindow *window,
     WebKitEditorState *state;
 
     embed = window->active_embed;
-    g_assert (embed != NULL);
+    g_assert (embed);
 
     view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
     state = webkit_web_view_get_editor_state (view);
@@ -1075,7 +1075,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   action_group = ephy_window_get_action_group (window, "win");
 
   /* Page menu */
-  for (i = 0; action_group_actions[i] != NULL; i++) {
+  for (i = 0; action_group_actions[i]; i++) {
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          action_group_actions[i]);
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
@@ -1145,7 +1145,7 @@ sync_tab_address (EphyWebView *view,
   if ((ephy_web_view_get_is_blank (view) ||
        ephy_web_view_is_newtab (view) ||
        ephy_web_view_is_overview (view)) &&
-      ephy_embed_get_typed_input (embed) != NULL)
+      ephy_embed_get_typed_input (embed))
     location = g_strdup (ephy_embed_get_typed_input (embed));
   else
     location = calculate_location (typed_address, address);
@@ -1355,7 +1355,7 @@ _ephy_window_unset_context_event (EphyWindow *window)
   /* Unref the event from idle since we still need it
    * from the action callbacks which will run before idle.
    */
-  if (window->idle_worker == 0 && window->context_event != NULL) {
+  if (window->idle_worker == 0 && window->context_event) {
     window->idle_worker =
       g_idle_add ((GSourceFunc)idle_unref_context_event, window);
   }
@@ -1405,7 +1405,7 @@ mnemonic_escape_string (const char *string)
   ptr = gstring->str;
 
   /* Convert each underscore to a double underscore. */
-  while ((ptr = g_utf8_strchr (ptr, -1, '_')) != NULL) {
+  while ((ptr = g_utf8_strchr (ptr, -1, '_'))) {
     ptrdiff_t pos = ptr - gstring->str;
     g_string_insert (gstring, pos, "_");
     ptr = gstring->str + pos + 2;
@@ -2577,7 +2577,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
   EphyWebView *view;
   EphyTitleWidget *title_widget;
 
-  g_assert (window->active_embed != NULL);
+  g_assert (window->active_embed);
 
   embed = window->active_embed;
   view = ephy_embed_get_web_view (embed);
@@ -2686,7 +2686,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   EphyWebView *view;
   EphyTitleWidget *title_widget;
 
-  g_assert (window->active_embed != NULL);
+  g_assert (window->active_embed);
 
   embed = window->active_embed;
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -2761,12 +2761,12 @@ ephy_window_set_active_tab (EphyWindow *window,
   if (old_embed == new_embed)
     return;
 
-  if (old_embed != NULL)
+  if (old_embed)
     ephy_window_disconnect_active_embed (window);
 
   window->active_embed = new_embed;
 
-  if (new_embed != NULL)
+  if (new_embed)
     ephy_window_connect_active_embed (window);
 }
 
@@ -3246,9 +3246,7 @@ tab_has_modified_forms_cb (EphyWebView             *view,
 
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
 
-  if (data->window != NULL &&
-      data->embed != NULL &&
-      data->page != NULL) {
+  if (data->window && data->embed && data->page) {
     AdwTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
 
     if (!has_modified_forms) {
@@ -3610,7 +3608,7 @@ ephy_window_dispose (GObject *object)
   LOG ("EphyWindow dispose %p", window);
 
   /* Only do these once */
-  if (window->closing == FALSE) {
+  if (!window->closing) {
     window->closing = TRUE;
 
     g_cancellable_cancel (window->cancellable);
@@ -3920,7 +3918,7 @@ download_completed_cb (EphyDownload *download,
   AdwToast *toast = adw_toast_new (_("Download finished"));
 
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
-  if (window->download_start_toast != NULL)
+  if (window->download_start_toast)
     adw_toast_dismiss (window->download_start_toast);
 
   adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
@@ -4646,7 +4644,7 @@ void
 ephy_window_load_url (EphyWindow *window,
                       const char *url)
 {
-  g_assert (url != NULL);
+  g_assert (url);
 
   ephy_link_open (EPHY_LINK (window), url, NULL, 0);
 }
@@ -4972,7 +4970,7 @@ ephy_window_check_modified_forms (EphyWindow *window)
 
   window->checking_modified_forms = TRUE;
 
-  for (l = tabs; l != NULL; l = l->next) {
+  for (l = tabs; l; l = l->next) {
     EphyEmbed *embed = (EphyEmbed *)l->data;
 
     ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),

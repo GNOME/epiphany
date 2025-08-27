@@ -332,7 +332,7 @@ ephy_download_widget_dispose (GObject *object)
 
   widget = EPHY_DOWNLOAD_WIDGET (object);
 
-  if (widget->download != NULL) {
+  if (widget->download) {
     WebKitDownload *download = ephy_download_get_webkit_download (widget->download);
 
     g_signal_handlers_disconnect_matched (download, G_SIGNAL_MATCH_DATA, 0, 0,

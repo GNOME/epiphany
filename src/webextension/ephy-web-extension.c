@@ -737,7 +737,7 @@ web_extension_add_permission (JsonArray *array,
     return;
   }
 
-  if (strstr (permission, "://") != NULL) {
+  if (strstr (permission, "://")) {
     if (!g_str_has_prefix (permission, "*://") &&
         !is_supported_scheme (g_uri_peek_scheme (permission))) {
       LOG ("Unsupported host permission: %s", permission);
@@ -1514,7 +1514,7 @@ ephy_web_extension_get_guid (EphyWebExtension *self)
 const char * const *
 ephy_web_extension_get_host_permissions (EphyWebExtension *self)
 {
-  g_assert (self->host_permissions->pdata[self->host_permissions->len - 1] == NULL);
+  g_assert (!self->host_permissions->pdata[self->host_permissions->len - 1]);
   return (const char * const *)self->host_permissions->pdata;
 }
 

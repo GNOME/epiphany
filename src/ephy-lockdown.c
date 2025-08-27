@@ -56,7 +56,7 @@ arbitrary_url_cb (GSettings  *settings,
   if (g_settings_get_boolean (settings, key)) {
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
     /* embed is NULL on startup */
-    if (embed == NULL)
+    if (!embed)
       return;
 
     address = ephy_web_view_get_display_address (ephy_embed_get_web_view (embed));

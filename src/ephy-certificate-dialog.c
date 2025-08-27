@@ -73,7 +73,7 @@ bytes_to_display (GBytes *bytes)
   gsize remaining_bytes;
   guchar j;
 
-  g_return_val_if_fail (bytes != NULL, NULL);
+  g_return_val_if_fail (bytes, NULL);
 
   input = g_bytes_get_data (bytes, &remaining_bytes);
   result = g_string_sized_new (remaining_bytes * 2 + 1);
@@ -195,7 +195,7 @@ create_page (GcrCertificate *certificate)
 
   elements = gcr_certificate_get_interface_elements (certificate);
 
-  for (l = elements; l != NULL; l = l->next) {
+  for (l = elements; l; l = l->next) {
     GcrCertificateSection *section = l->data;
     GtkWidget *widget = create_section (section);
 
@@ -490,7 +490,7 @@ ephy_certificate_dialog_new (const char           *address,
 {
   AdwDialog *dialog;
 
-  g_assert (address != NULL);
+  g_assert (address);
   g_assert (G_IS_TLS_CERTIFICATE (certificate));
 
   dialog = ADW_DIALOG (g_object_new (EPHY_TYPE_CERTIFICATE_DIALOG,

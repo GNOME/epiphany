@@ -170,7 +170,7 @@ ephy_legacy_web_application_get_gapplication_id_from_profile_directory (const ch
 
   /* Just get the basename */
   name = strrchr (profile_dir, G_DIR_SEPARATOR);
-  if (name == NULL) {
+  if (!name) {
     g_warning ("Profile directory %s is not a valid path", profile_dir);
     return NULL;
   }

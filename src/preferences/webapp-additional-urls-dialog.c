@@ -150,7 +150,7 @@ on_add_row_changed (GtkEditable *editable,
     uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, &error);
   }
 
-  gtk_widget_set_sensitive (self->add_button, error == NULL);
+  gtk_widget_set_sensitive (self->add_button, !error);
 }
 
 static void

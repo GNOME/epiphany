@@ -459,7 +459,7 @@ prefs_autofill_utils_get_country_cb (GObject      *source_object,
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Could not get autofill storage data: %s", error->message);
   } else if (autofill_value) {
-    for (int i = 0; country_map[i].name != NULL; i++) {
+    for (int i = 0; country_map[i].name; i++) {
       if (g_strcmp0 (country_map[i].name, autofill_value) == 0) {
         adw_combo_row_set_selected (ADW_COMBO_ROW (self->country), i);
         break;
@@ -481,7 +481,7 @@ prefs_autofill_utils_get_card_cb (GObject      *source_object,
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Could not get autofill storage data: %s", error->message);
   } else if (autofill_value) {
-    for (int i = 0; card_map[i].name != NULL; i++) {
+    for (int i = 0; card_map[i].name; i++) {
       if (g_strcmp0 (card_map[i].name, autofill_value) == 0) {
         adw_combo_row_set_selected (ADW_COMBO_ROW (self->card_type), i);
         break;
@@ -597,7 +597,7 @@ ephy_autofill_view_init (EphyAutoFillView *self)
 
   country_model = gtk_string_list_new (NULL);
 
-  for (int i = 0; country_map[i].code != NULL; i++)
+  for (int i = 0; country_map[i].code; i++)
     gtk_string_list_append (country_model, country_map[i].name);
 
   adw_combo_row_set_model (ADW_COMBO_ROW (self->country), G_LIST_MODEL (country_model));
@@ -609,7 +609,7 @@ ephy_autofill_view_init (EphyAutoFillView *self)
 
   card_model = gtk_string_list_new (NULL);
 
-  for (int i = 0; card_map[i].code != NULL; i++)
+  for (int i = 0; card_map[i].code; i++)
     gtk_string_list_append (card_model, card_map[i].name);
 
   adw_combo_row_set_model (ADW_COMBO_ROW (self->card_type), G_LIST_MODEL (card_model));

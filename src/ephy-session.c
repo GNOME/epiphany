@@ -88,9 +88,8 @@ get_session_file (const char *filename)
   GFile *file;
   char *path;
 
-  if (filename == NULL) {
+  if (!filename)
     return NULL;
-  }
 
   if (strcmp (filename, SESSION_STATE) == 0) {
     path = g_build_filename (ephy_profile_dir (),
@@ -239,7 +238,7 @@ ephy_session_undo_close_tab (EphySession *session)
   g_assert (EPHY_IS_SESSION (session));
 
   tab = g_queue_pop_head (session->closed_tabs);
-  if (tab == NULL)
+  if (!tab)
     return;
 
   LOG ("UNDO CLOSE TAB: %s", tab->url);
@@ -322,7 +321,7 @@ ephy_session_get_can_undo_tab_closed (EphySession *session)
 {
   g_assert (EPHY_IS_SESSION (session));
 
-  return g_queue_is_empty (session->closed_tabs) == FALSE;
+  return !g_queue_is_empty (session->closed_tabs);
 }
 
 static void
@@ -615,7 +614,7 @@ session_window_new (EphyWindow  *window,
   get_window_geometry (window, session_window);
   tab_view = ephy_window_get_tab_view (window);
 
-  for (l = tabs; l != NULL; l = l->next) {
+  for (l = tabs; l; l = l->next) {
     SessionTab *tab;
 
     tab = session_tab_new (EPHY_EMBED (l->data), session, tab_view);
@@ -654,7 +653,7 @@ save_data_new (EphySession *session)
   data->session = g_object_ref (session);
 
   windows = gtk_application_get_windows (GTK_APPLICATION (shell));
-  for (w = windows; w != NULL; w = w->next) {
+  for (w = windows; w; w = w->next) {
     SessionWindow *session_window;
 
     session_window = session_window_new (EPHY_WINDOW (w->data), session);
@@ -781,7 +780,7 @@ write_ephy_window (xmlTextWriterPtr  writer,
   only_pinned_tabs = policy == EPHY_PREFS_RESTORE_SESSION_POLICY_CRASHED;
 
   if (only_pinned_tabs) {
-    for (l = window->tabs; l != NULL; l = l->next, last_pinned_tab++) {
+    for (l = window->tabs; l; l = l->next, last_pinned_tab++) {
       SessionTab *tab = (SessionTab *)l->data;
 
       if (!tab->pinned)
@@ -820,7 +819,7 @@ write_ephy_window (xmlTextWriterPtr  writer,
   if (ret < 0)
     return ret;
 
-  for (l = window->tabs; l != NULL; l = l->next) {
+  for (l = window->tabs; l; l = l->next) {
     SessionTab *tab = (SessionTab *)l->data;
 
     if (only_pinned_tabs && !tab->pinned)
@@ -883,8 +882,8 @@ session_seems_reasonable (GList *windows)
    * WebKit. Do not clobber an existing good session file with our new bogus
    * state. Bug #768250.
    */
-  for (GList *w = windows; w != NULL; w = w->next) {
-    for (GList *t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
+  for (GList *w = windows; w; w = w->next) {
+    for (GList *t = ((SessionWindow *)w->data)->tabs; t; t = t->next) {
       const char *url = ((SessionTab *)t->data)->url;
       g_autoptr (GUri) uri = NULL;
 
@@ -899,7 +898,7 @@ session_seems_reasonable (GList *windows)
                          G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED,
                          NULL);
       if (uri) {
-        if (g_uri_get_host (uri) != NULL ||
+        if (g_uri_get_host (uri) ||
             strcmp (g_uri_get_scheme (uri), "file") == 0 ||
             strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
             strcmp (g_uri_get_scheme (uri), "view-source") == 0)
@@ -927,11 +926,11 @@ save_session_sync (GTask        *task,
   int ret = -1;
 
   buffer = xmlAllocOutputBuffer (NULL);
-  if (buffer == NULL)
+  if (!buffer)
     goto out;
 
   writer = xmlNewTextWriter (buffer);
-  if (writer == NULL)
+  if (!writer)
     goto out;
 
   ret = xmlTextWriterSetIndent (writer, 1);
@@ -954,7 +953,7 @@ save_session_sync (GTask        *task,
     goto out;
 
   /* iterate through all the windows */
-  for (w = data->windows; w != NULL && ret >= 0; w = w->next) {
+  for (w = data->windows; w && ret >= 0; w = w->next) {
     ret = write_ephy_window (writer, (SessionWindow *)w->data);
   }
   if (ret < 0)
@@ -1721,7 +1720,7 @@ ephy_session_resume (EphySession         *session,
    * restore the session, clobber the session state
    * file.
    */
-  if (has_session_state == FALSE) {
+  if (!has_session_state) {
     session_maybe_open_window (session);
   } else if (ephy_shell_get_n_windows (shell) == 0) {
     ephy_session_load (session, SESSION_STATE, cancellable,

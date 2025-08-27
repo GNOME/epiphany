@@ -291,7 +291,7 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
   downloads_manager = ephy_embed_shell_get_downloads_manager (embed_shell);
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->downloads_revealer),
-                                 ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
+                                 !!ephy_downloads_manager_get_downloads (downloads_manager));
 
   if (ephy_downloads_manager_get_downloads (downloads_manager)) {
     action_bar_end->downloads_popover = ephy_downloads_popover_new ();

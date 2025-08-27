@@ -136,7 +136,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
   view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
   encoding = webkit_web_view_get_custom_charset (view);
-  is_automatic = encoding == NULL;
+  is_automatic = !encoding;
 
   clean_selected (dialog);
 
@@ -165,7 +165,7 @@ embed_net_stop_cb (EphyWebView        *view,
                    WebKitLoadEvent     load_event,
                    EphyEncodingDialog *dialog)
 {
-  if (ephy_web_view_is_loading (view) == FALSE)
+  if (!ephy_web_view_is_loading (view))
     sync_encoding_against_embed (dialog);
 }
 
@@ -223,7 +223,7 @@ activate_choice (EphyEncodingDialog *dialog)
 
   if (gtk_switch_get_active (dialog->default_switch)) {
     webkit_web_view_set_custom_charset (view, NULL);
-  } else if (dialog->selected_encoding != NULL) {
+  } else if (dialog->selected_encoding) {
     const char *code;
 
     code = dialog->selected_encoding;
@@ -382,21 +382,21 @@ ephy_encoding_dialog_constructed (GObject *object)
 
   /* recent */
   recent = ephy_encodings_get_recent (dialog->encodings);
-  if (recent != NULL) {
+  if (recent) {
     recent = g_list_sort (recent, (GCompareFunc)sort_encodings);
     g_list_foreach (recent, (GFunc)add_list_item, dialog->recent_list_box);
   } else
     gtk_widget_set_visible (dialog->recent_box, FALSE);
 
   /* related */
-  if (dialog->selected_encoding != NULL) {
+  if (dialog->selected_encoding) {
     enc_node = ephy_encodings_get_encoding (dialog->encodings, dialog->selected_encoding, TRUE);
     g_assert (EPHY_IS_ENCODING (enc_node));
     groups = ephy_encoding_get_language_groups (enc_node);
 
     related = ephy_encodings_get_encodings (dialog->encodings, groups);
   }
-  if (related != NULL) {
+  if (related) {
     related = g_list_sort (related, (GCompareFunc)sort_encodings);
     g_list_foreach (related, (GFunc)add_list_item, dialog->related_list_box);
   } else
@@ -418,7 +418,7 @@ ephy_encoding_dialog_dispose (GObject *object)
                                         G_CALLBACK (ephy_encoding_dialog_sync_embed),
                                         dialog);
 
-  if (dialog->embed != NULL)
+  if (dialog->embed)
     ephy_encoding_dialog_detach_embed (dialog);
 
   G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->dispose (object);

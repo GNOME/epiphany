@@ -77,7 +77,7 @@ ephy_browser_action_activate (EphyBrowserAction *self)
   EphyWebExtensionManager *manager = ephy_web_extension_manager_get_default ();
 
   /* If it has no popup clicking just emits this event and is handled already. */
-  if (ephy_web_extension_get_browser_popup (self->web_extension) == NULL) {
+  if (!ephy_web_extension_get_browser_popup (self->web_extension)) {
     ephy_web_extension_manager_emit_in_background_view (manager, self->web_extension, "browserAction.onClicked", "");
     return TRUE;
   }

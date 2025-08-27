@@ -493,7 +493,7 @@ add_permission_combobox (EphySecurityDialog *dialog,
   gtk_string_list_append (list, _("Allow"));
   gtk_string_list_append (list, _("Deny"));
   if (!no_ask) {
-    const gchar *name = third_option_name == NULL ? _("Ask") : third_option_name;
+    const gchar *name = !third_option_name ? _("Ask") : third_option_name;
     gtk_string_list_append (list, _(name));
   }
 
@@ -540,7 +540,7 @@ ephy_security_dialog_new (const char           *address,
                           GTlsCertificateFlags  tls_errors,
                           EphySecurityLevel     security_level)
 {
-  g_assert (address != NULL);
+  g_assert (address);
 
   return GTK_WIDGET (g_object_new (EPHY_TYPE_SECURITY_DIALOG,
                                    "address", address,

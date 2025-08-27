@@ -132,7 +132,7 @@ ephy_title_box_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (title_box->security_button),
                                  icon_name);
-  gtk_widget_set_visible (title_box->security_button, icon_name != NULL);
+  gtk_widget_set_visible (title_box->security_button, !!icon_name);
 
   title_box->security_level = security_level;
 }

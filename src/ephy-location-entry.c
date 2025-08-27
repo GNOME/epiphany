@@ -194,12 +194,12 @@ proxy_resolver_ready_cb (GObject      *object,
   g_auto (GStrv) proxies = NULL;
 
   proxies = g_proxy_resolver_lookup_finish (resolver, result, &error);
-  if (error != NULL) {
+  if (error) {
     g_clear_pointer (&helper, free_prefetch_helper);
     return;
   }
 
-  if (proxies != NULL && (g_strv_length (proxies) > 1 || g_strcmp0 (proxies[0], "direct://") != 0)) {
+  if (proxies && (g_strv_length (proxies) > 1 || g_strcmp0 (proxies[0], "direct://") != 0)) {
     g_clear_pointer (&helper, free_prefetch_helper);
     return;
   }
@@ -222,7 +222,7 @@ schedule_dns_prefetch (EphyLocationEntry *self,
   PrefetchHelper *helper;
   g_autoptr (GUri) uri = NULL;
 
-  if (resolver == NULL)
+  if (!resolver)
     return;
 
   uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, NULL);
@@ -860,7 +860,7 @@ paste_received (GdkClipboard      *clipboard,
   g_autofree char *text = NULL;
 
   text = gdk_clipboard_read_text_finish (GDK_CLIPBOARD (clipboard), result, NULL);
-  if (text == NULL) {
+  if (!text) {
     gtk_widget_error_bell (GTK_WIDGET (self));
     return;
   }
@@ -1292,7 +1292,7 @@ ephy_location_entry_do_set_address (EphyTitleWidget *widget,
   if (!force && ephy_location_entry_has_focus (self))
     return;
 
-  if (address != NULL) {
+  if (address) {
     if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
       effective_text = g_strdup_printf ("about:%s", address + strlen (EPHY_ABOUT_SCHEME) + 1);
     else if (g_str_has_prefix (address, EPHY_READER_SCHEME))
@@ -1444,9 +1444,9 @@ ephy_location_entry_reset (EphyLocationEntry *self)
   g_autofree char *url = NULL;
 
   g_signal_emit (self, signals[GET_LOCATION], 0, &url);
-  text = url != NULL ? url : "";
+  text = !!url ? url : "";
   old_text = gtk_editable_get_text (GTK_EDITABLE (self));
-  old_text = old_text != NULL ? old_text : "";
+  old_text = !!old_text ? old_text : "";
 
   if (g_strcmp0 (text, old_text) == 0) {
     EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));

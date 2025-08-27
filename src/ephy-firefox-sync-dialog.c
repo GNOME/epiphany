@@ -631,7 +631,7 @@ prefs_sync_page_finalize (GObject *object)
 {
   EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (object);
 
-  if (sync_dialog->fxa_web_view != NULL) {
+  if (sync_dialog->fxa_web_view) {
     webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
                                                                    "toChromeMessageHandler",
                                                                    NULL);

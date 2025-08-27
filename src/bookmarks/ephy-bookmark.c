@@ -358,7 +358,7 @@ ephy_bookmark_set_id (EphyBookmark *self,
                       const char   *id)
 {
   g_assert (EPHY_IS_BOOKMARK (self));
-  g_assert (id != NULL);
+  g_assert (id);
 
   g_free (self->id);
   self->id = g_strdup (id);
@@ -399,7 +399,7 @@ ephy_bookmark_add_tag (EphyBookmark *self,
   GSequenceIter *prev_tag_iter;
 
   g_assert (EPHY_IS_BOOKMARK (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
 
   tag_iter = g_sequence_search (self->tags,
                                 (gpointer)tag,
@@ -421,7 +421,7 @@ ephy_bookmark_remove_tag (EphyBookmark *self,
   GSequenceIter *tag_iter;
 
   g_assert (EPHY_IS_BOOKMARK (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
 
   tag_iter = g_sequence_lookup (self->tags,
                                 (gpointer)tag,
@@ -441,14 +441,14 @@ ephy_bookmark_has_tag (EphyBookmark *self,
   GSequenceIter *tag_iter;
 
   g_assert (EPHY_IS_BOOKMARK (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
 
   tag_iter = g_sequence_lookup (self->tags,
                                 (gpointer)tag,
                                 (GCompareDataFunc)ephy_bookmark_tags_compare,
                                 NULL);
 
-  return tag_iter != NULL;
+  return !!tag_iter;
 }
 
 GSequence *
@@ -506,8 +506,8 @@ ephy_bookmark_tags_compare (const char *tag1,
   int result;
   int result_casefolded;
 
-  g_assert (tag1 != NULL);
-  g_assert (tag2 != NULL);
+  g_assert (tag1);
+  g_assert (tag2);
 
   result = g_strcmp0 (tag1, tag2);
   result_casefolded = g_strcmp0 (g_utf8_casefold (tag1, -1),
@@ -552,7 +552,7 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  const GValue     *value,
                                  GParamSpec       *pspec)
 {
-  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+  if (G_VALUE_HOLDS_STRING (value) && !g_value_get_string (value)) {
     JsonNode *node = json_node_new (JSON_NODE_VALUE);
     json_node_set_string (node, "");
     return node;
@@ -564,7 +564,7 @@ serializable_serialize_property (JsonSerializable *serializable,
     GSequence *tags = g_value_get_pointer (value);
     GSequenceIter *iter;
 
-    if (tags != NULL) {
+    if (tags) {
       for (iter = g_sequence_get_begin_iter (tags);
            !g_sequence_iter_is_end (iter);
            iter = g_sequence_iter_next (iter)) {

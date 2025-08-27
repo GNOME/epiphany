@@ -60,10 +60,10 @@ view_in_destination (EphyWindow      *window,
   EphyNewTabFlags flags = 0;
 
   hit_test_result = ephy_window_get_context_event (window);
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   g_object_get (hit_test_result, property_name, &value, NULL);
   switch (destination) {
@@ -127,7 +127,7 @@ context_cmd_copy_link_address (GSimpleAction *action,
   const char *address;
 
   hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   context = webkit_hit_test_result_get_context (hit_test_result);
 
@@ -170,7 +170,7 @@ context_cmd_send_via_email (GSimpleAction *action,
   g_autoptr (GtkUriLauncher) launcher = NULL;
 
   hit_test_result = ephy_window_get_context_event (window);
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   context = webkit_hit_test_result_get_context (hit_test_result);
 
@@ -181,7 +181,7 @@ context_cmd_send_via_email (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_assert (embed != NULL);
+    g_assert (embed);
 
     label = ephy_embed_get_title (embed);
     address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
@@ -279,7 +279,7 @@ save_property_url (const char *title,
   SavePropertyURLData *data;
 
   hit_test_result = ephy_window_get_context_event (window);
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   g_object_get (hit_test_result, property, &location, NULL);
   download = ephy_download_new_for_uri (location);
@@ -386,7 +386,7 @@ context_cmd_set_image_as_background (GSimpleAction *action,
   g_autoptr (EphyDownload) download = NULL;
 
   hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   location = webkit_hit_test_result_get_image_uri (hit_test_result);
 
@@ -465,7 +465,7 @@ context_cmd_link_in_incognito_window (GSimpleAction *action,
   const char *link_uri;
 
   hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   link_uri = webkit_hit_test_result_get_link_uri (hit_test_result);
 
@@ -565,7 +565,7 @@ context_cmd_add_link_to_bookmarks (GSimpleAction *action,
   const char *address;
 
   hit_test_result = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_assert (hit_test_result != NULL);
+  g_assert (hit_test_result);
 
   context = webkit_hit_test_result_get_context (hit_test_result);
 

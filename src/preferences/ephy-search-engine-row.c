@@ -192,7 +192,7 @@ on_bang_entry_text_changed_cb (EphySearchEngineRow *row,
   if (g_strcmp0 (bang, ephy_search_engine_get_bang (row->engine)) != 0 &&
       ephy_search_engine_manager_has_bang (row->manager, bang)) {
     set_entry_as_invalid (bang_entry, _("This shortcut is already used."));
-  } else if (strchr (bang, ' ') != NULL) {
+  } else if (strchr (bang, ' ')) {
     set_entry_as_invalid (bang_entry, _("Search shortcuts must not contain any space."));
   } else if (bang[0] != '\0' && /* Empty bangs are allowed if none is wanted. */
              (!g_unichar_ispunct (g_utf8_get_char (bang)) ||
@@ -321,8 +321,8 @@ on_ephy_search_engine_row_constructed (GObject *object)
 {
   EphySearchEngineRow *self = EPHY_SEARCH_ENGINE_ROW (object);
 
-  g_assert (self->engine != NULL);
-  g_assert (self->manager != NULL);
+  g_assert (self->engine);
+  g_assert (self->manager);
 
   gtk_editable_set_text (GTK_EDITABLE (self->name_entry),
                          ephy_search_engine_get_name (self->engine));

@@ -370,7 +370,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
   GSequenceIter *iter;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_assert (bookmarks != NULL);
+  g_assert (bookmarks);
 
   for (iter = g_sequence_get_begin_iter (bookmarks);
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
@@ -435,7 +435,7 @@ ephy_bookmarks_manager_get_bookmark_by_url (EphyBookmarksManager *self,
   GSequenceIter *iter;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_assert (url != NULL);
+  g_assert (url);
 
   for (iter = g_sequence_get_begin_iter (self->bookmarks);
        !g_sequence_iter_is_end (iter);
@@ -456,7 +456,7 @@ ephy_bookmarks_manager_get_bookmark_by_id (EphyBookmarksManager *self,
   GSequenceIter *iter;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_assert (id != NULL);
+  g_assert (id);
 
   for (iter = g_sequence_get_begin_iter (self->bookmarks);
        !g_sequence_iter_is_end (iter);
@@ -478,7 +478,7 @@ ephy_bookmarks_manager_create_tag (EphyBookmarksManager *self,
   GSequenceIter *prev_tag_iter;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
 
   tag_iter = g_sequence_search (self->tags,
                                 (gpointer)tag,
@@ -500,7 +500,7 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self,
   GSequenceIter *iter = NULL;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
 
   if (strcmp (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
     return;
@@ -509,7 +509,7 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self,
                             (gpointer)tag,
                             (GCompareDataFunc)ephy_bookmark_tags_compare,
                             NULL);
-  g_assert (iter != NULL);
+  g_assert (iter);
   g_sequence_remove (iter);
 
   /* Also remove the tag from each bookmark if they have it */
@@ -525,14 +525,14 @@ ephy_bookmarks_manager_tag_exists (EphyBookmarksManager *self,
   GSequenceIter *iter;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_assert (tag != NULL);
+  g_assert (tag);
 
   iter = g_sequence_lookup (self->tags,
                             (gpointer)tag,
                             (GCompareDataFunc)ephy_bookmark_tags_compare,
                             NULL);
 
-  return iter != NULL;
+  return !!iter;
 }
 
 GSequence *
@@ -554,7 +554,7 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
 
   bookmarks = g_sequence_new (g_object_unref);
 
-  if (tag == NULL) {
+  if (!tag) {
     for (iter = g_sequence_get_begin_iter (self->bookmarks);
          !g_sequence_iter_is_end (iter);
          iter = g_sequence_iter_next (iter)) {
@@ -765,7 +765,7 @@ ephy_bookmarks_manager_save_warn_on_error_cb (GObject      *object,
   g_autoptr (GError) error = NULL;
 
   ret = ephy_bookmarks_manager_save_finish (self, result, &error);
-  if (ret == FALSE)
+  if (!ret)
     g_warning ("%s", error->message);
 }
 

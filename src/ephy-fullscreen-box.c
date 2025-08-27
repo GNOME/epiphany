@@ -489,7 +489,7 @@ ephy_fullscreen_box_set_content (EphyFullscreenBox *self,
                                  GtkWidget         *content)
 {
   g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (content == NULL || GTK_IS_WIDGET (content));
+  g_return_if_fail (!content || GTK_IS_WIDGET (content));
 
   if (ephy_fullscreen_box_get_content (self) == content)
     return;

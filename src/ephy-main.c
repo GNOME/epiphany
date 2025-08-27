@@ -70,7 +70,7 @@ handle_shutdown_signal (gpointer user_data)
   /* Note that this function executes on the main loop AFTER the signal handler
    * has returned, so we don't have to worry about async signal safety.
    */
-  g_assert (ephy_shell != NULL);
+  g_assert (ephy_shell);
   ephy_shell_try_quit (ephy_shell);
 
   /* Goals:
@@ -223,8 +223,8 @@ main (int   argc,
     opening = strchr (argv[2], '(');
     closing = strchr (argv[2], ')');
 
-    if (opening == NULL ||
-        closing == NULL ||
+    if (!opening ||
+        !closing ||
         opening == argv[2] ||
         opening + 1 >= closing) {
       g_print ("Invalid argument for -remote\n");
@@ -247,7 +247,7 @@ main (int   argc,
     argument = g_strstrip (g_strndup (opening + 1, closing - opening - 1));
     arg_list = g_strsplit (argument, ",", -1);
     g_free (argument);
-    if (arg_list == NULL) {
+    if (!arg_list) {
       g_print ("Invalid argument for -remote\n");
 
       exit (1);
@@ -285,17 +285,17 @@ main (int   argc,
   g_option_context_free (option_context);
 
   /* Some argument sanity checks*/
-  if (application_to_delete != NULL && argc > 3) {
+  if (application_to_delete && argc > 3) {
     g_print ("Cannot pass any other parameter when using --delete-application\n");
     exit (1);
   }
 
-  if (private_instance == TRUE && application_mode == TRUE) {
+  if (private_instance && application_mode) {
     g_print ("Cannot use --private-instance and --application-mode at the same time\n");
     exit (1);
   }
 
-  if (private_instance == TRUE && profile_directory) {
+  if (private_instance && profile_directory) {
     g_print ("Cannot use --private-instance and --profile at the same time\n");
     exit (1);
   }
@@ -329,12 +329,12 @@ main (int   argc,
     }
   }
 
-  if (application_mode && profile_directory == NULL) {
+  if (application_mode && !profile_directory) {
     g_print ("--profile must be used when --application-mode is requested without desktop file path\n");
     exit (1);
   }
 
-  if (incognito_mode && profile_directory == NULL)
+  if (incognito_mode && !profile_directory)
     profile_directory = ephy_default_profile_dir ();
 
   /* Required for bubblewrap sandbox. */
@@ -356,7 +356,7 @@ main (int   argc,
   /* Run the migration in all cases, except when running a private
    *  instance without a given profile directory or running in
    *  incognito or automation mode. */
-  if (!(private_instance && profile_directory == NULL) && !incognito_mode && !automation_mode) {
+  if (!(private_instance && !profile_directory) && !incognito_mode && !automation_mode) {
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
       g_print ("Failed to run the migrator process, Web will now abort.\n");
@@ -371,13 +371,13 @@ main (int   argc,
   arbitrary_url = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                           EPHY_PREFS_LOCKDOWN_ARBITRARY_URL);
 
-  if (arguments != NULL && arbitrary_url) {
+  if (arguments && arbitrary_url) {
     g_print ("URL loading is locked down.\n");
     exit (1);
   }
 
   /* convert arguments to uris or at least to utf8 */
-  if (arguments != NULL) {
+  if (arguments) {
     char **args = ephy_string_commandline_args_to_uris (arguments,
                                                         &error);
     if (error) {

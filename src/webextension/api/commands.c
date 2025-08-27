@@ -89,7 +89,7 @@ set_accel_for_action (EphyWebExtension    *self,
   g_auto (GStrv) current_actions = NULL;
   g_autofree char *action_name = NULL;
 
-  if (command->accelerator == NULL) {
+  if (!command->accelerator) {
     g_debug ("commands: Command has no accelerator, skipping");
     return;
   }
@@ -98,7 +98,7 @@ set_accel_for_action (EphyWebExtension    *self,
                                                            command->accelerator);
   action_name = get_accel_action_name (self, command);
 
-  if (current_actions[0] != NULL) {
+  if (current_actions[0]) {
     g_debug ("commands: Accelerator %s already set, not overriding", command->accelerator);
     return;
   }

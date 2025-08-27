@@ -118,7 +118,7 @@ middle_click_handle_on_history_menu_item (EphyEmbed                 *embed,
                                   EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
                                   embed,
                                   flags);
-  g_assert (new_embed != NULL);
+  g_assert (new_embed);
 
   /* Load the new URL */
   url = webkit_back_forward_list_item_get_original_uri (item);

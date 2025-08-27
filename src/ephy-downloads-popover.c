@@ -182,7 +182,7 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), popover->downloads_box);
 
   downloads = ephy_downloads_manager_get_downloads (manager);
-  for (l = downloads; l != NULL; l = g_list_next (l)) {
+  for (l = downloads; l; l = g_list_next (l)) {
     EphyDownload *download = (EphyDownload *)l->data;
     GtkWidget *row;
     GtkWidget *widget;

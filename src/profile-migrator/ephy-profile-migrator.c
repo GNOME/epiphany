@@ -182,7 +182,7 @@ migrate_pre_flatpak_webapps (void)
 
       /* Correct the Icon= key */
       icon = g_key_file_get_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, &error);
-      if (icon == NULL) {
+      if (!icon) {
         g_warning ("Failed to get Icon key from %s: %s", old_desktop_file_name, error->message);
         g_clear_error (&error);
       } else if (g_str_has_suffix (icon, EPHY_WEB_APP_ICON_NAME)) {
@@ -196,9 +196,8 @@ migrate_pre_flatpak_webapps (void)
       }
 
       tryexec = g_key_file_get_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_TRY_EXEC, NULL);
-      if (tryexec == NULL) {
+      if (!tryexec)
         g_key_file_set_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_TRY_EXEC, "epiphany");
-      }
 
       if (!g_key_file_save_to_file (keyfile, new_desktop_file_name, &error)) {
         g_warning ("Failed to save desktop file %s", error->message);
@@ -326,7 +325,7 @@ ephy_migrator (void)
     m ();
   }
 
-  if (ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION) != TRUE) {
+  if (!ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION)) {
     LOG ("Failed to store the current migration version");
     return FALSE;
   }
@@ -396,7 +395,7 @@ main (int   argc,
 
   ephy_debug_init ();
 
-  if (profile_dir != NULL)
+  if (profile_dir)
     file_helpers_flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
 
   if (!ephy_file_helpers_init (profile_dir, file_helpers_flags, NULL)) {

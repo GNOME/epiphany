@@ -120,7 +120,7 @@ ephy_shell_startup_context_new (EphyStartupMode   startup_mode,
 static void
 ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 {
-  g_assert (ctx != NULL);
+  g_assert (ctx);
 
   g_free (ctx->session_filename);
   g_strfreev (ctx->arguments);
@@ -138,8 +138,8 @@ ephy_shell_startup_continue (EphyShell               *shell,
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
 
-  if (ctx->session_filename != NULL) {
-    g_assert (session != NULL);
+  if (ctx->session_filename) {
+    g_assert (session);
     ephy_session_load (session, (const char *)ctx->session_filename, NULL, NULL, NULL);
   } else if (new_window_option && shell->remote_startup_context) {
     char *homepage_url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
@@ -759,7 +759,7 @@ ephy_shell_activate (GApplication *application)
     g_clear_pointer (&shell->open_notification_id, g_free);
   }
 
-  if (shell->remote_startup_context == NULL) {
+  if (!shell->remote_startup_context) {
     EphySession *session = ephy_shell_get_session (shell);
 
     /* We are activating the primary instance for the first time. If we
@@ -889,7 +889,7 @@ ephy_shell_before_emit (GApplication *application,
   }
 
   /* We have already processed and discarded any previous remote startup contexts. */
-  g_assert (shell->remote_startup_context == NULL);
+  g_assert (!shell->remote_startup_context);
   shell->remote_startup_context = ctx;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->before_emit (application,
@@ -901,7 +901,7 @@ ephy_shell_get_lockdown (EphyShell *shell)
 {
   g_assert (EPHY_IS_SHELL (shell));
 
-  if (shell->lockdown == NULL)
+  if (!shell->lockdown)
     shell->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
 
   return G_OBJECT (shell->session);
@@ -948,7 +948,7 @@ ephy_shell_init (EphyShell *shell)
   EphyShell **ptr = &ephy_shell;
 
   /* globally accessible singleton */
-  g_assert (ephy_shell == NULL);
+  g_assert (!ephy_shell);
   ephy_shell = shell;
   ephy_shell->startup_finished = FALSE;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
@@ -1206,7 +1206,7 @@ ephy_shell_get_session (EphyShell *shell)
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     return NULL;
 
-  if (shell->session == NULL)
+  if (!shell->session)
     shell->session = g_object_new (EPHY_TYPE_SESSION, NULL);
 
   return shell->session;
@@ -1228,7 +1228,7 @@ ephy_shell_get_sync_service (EphyShell *shell)
 #if 0
   /* Firefox Sync is disabled due to: https://gitlab.gnome.org/GNOME/epiphany/-/issues/2337 */
 
-  if (shell->sync_service == NULL) {
+  if (!shell->sync_service) {
     shell->sync_service = ephy_sync_service_new (TRUE);
 
     g_signal_connect_object (shell->sync_service,
@@ -1258,7 +1258,7 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
 {
   g_assert (EPHY_IS_SHELL (shell));
 
-  if (shell->bookmarks_manager == NULL)
+  if (!shell->bookmarks_manager)
     shell->bookmarks_manager = ephy_bookmarks_manager_new ();
 
   return shell->bookmarks_manager;
@@ -1279,7 +1279,7 @@ ephy_shell_get_history_manager (EphyShell *shell)
 
   g_assert (EPHY_IS_SHELL (shell));
 
-  if (shell->history_manager == NULL) {
+  if (!shell->history_manager) {
     embed_shell = ephy_embed_shell_get_default ();
     service = ephy_embed_shell_get_global_history_service (embed_shell);
     shell->history_manager = ephy_history_manager_new (service);
@@ -1293,7 +1293,7 @@ ephy_shell_get_open_tabs_manager (EphyShell *shell)
 {
   g_assert (EPHY_IS_SHELL (shell));
 
-  if (shell->open_tabs_manager == NULL)
+  if (!shell->open_tabs_manager)
     shell->open_tabs_manager = ephy_open_tabs_manager_new (EPHY_TABS_CATALOG (shell));
 
   return shell->open_tabs_manager;
@@ -1307,7 +1307,7 @@ ephy_shell_get_open_tabs_manager (EphyShell *shell)
 GNetworkMonitor *
 ephy_shell_get_net_monitor (EphyShell *shell)
 {
-  if (shell->network_monitor == NULL)
+  if (!shell->network_monitor)
     shell->network_monitor = g_network_monitor_get_default ();
 
   return shell->network_monitor;
@@ -1334,7 +1334,7 @@ ephy_shell_get_history_dialog (EphyShell *shell)
 
   embed_shell = ephy_embed_shell_get_default ();
 
-  if (shell->history_dialog == NULL) {
+  if (!shell->history_dialog) {
     service = ephy_embed_shell_get_global_history_service (embed_shell);
     shell->history_dialog = ephy_history_dialog_new (service);
     g_signal_connect (shell->history_dialog,
@@ -1354,7 +1354,7 @@ ephy_shell_get_history_dialog (EphyShell *shell)
 GtkWidget *
 ephy_shell_get_firefox_sync_dialog (EphyShell *shell)
 {
-  if (shell->firefox_sync_dialog == NULL) {
+  if (!shell->firefox_sync_dialog) {
     shell->firefox_sync_dialog = ephy_firefox_sync_dialog_new ();
     g_signal_connect (shell->firefox_sync_dialog,
                       "destroy",
@@ -1373,7 +1373,7 @@ ephy_shell_get_firefox_sync_dialog (EphyShell *shell)
 GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
-  if (shell->prefs_dialog == NULL) {
+  if (!shell->prefs_dialog) {
     shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG, NULL);
 
     g_signal_connect (shell->prefs_dialog,
@@ -1390,13 +1390,13 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
 {
   const char *id = NULL;
 
-  g_assert (ephy_shell == NULL);
+  g_assert (!ephy_shell);
 
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     const char *profile_dir = ephy_profile_dir ();
 
     id = ephy_web_application_get_gapplication_id_from_profile_directory (profile_dir);
-    if (id == NULL)
+    if (!id)
       g_error ("Cannot start web app instance: %s is not a valid profile directory", profile_dir);
   } else {
     id = APPLICATION_ID;
@@ -1408,7 +1408,7 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
                                          "resource-base-path", "/org/gnome/Epiphany",
                                          NULL));
   /* FIXME weak ref */
-  g_assert (ephy_shell != NULL);
+  g_assert (ephy_shell);
 }
 
 /**
@@ -1425,7 +1425,7 @@ ephy_shell_set_startup_context (EphyShell               *shell,
 {
   g_assert (EPHY_IS_SHELL (shell));
 
-  g_assert (shell->local_startup_context == NULL);
+  g_assert (!shell->local_startup_context);
 
   shell->local_startup_context = ctx;
 }
@@ -1674,7 +1674,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   data->current_uri++;
   data->previous_embed = embed;
 
-  return data->uris && data->uris[data->current_uri] != NULL;
+  return data->uris && !!data->uris[data->current_uri];
 }
 
 static void

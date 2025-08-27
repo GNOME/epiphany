@@ -225,7 +225,7 @@ get_existing_bookmark (const char           *url,
                                                       (GCompareDataFunc)ephy_bookmark_tags_compare,
                                                       NULL);
 
-      if (search_iter == NULL)
+      if (!search_iter)
         ephy_bookmark_add_tag (bookmark, tag);
     }
   }
@@ -256,7 +256,7 @@ load_tags_for_bookmark (EphySQLiteConnection *connection,
     goto out;
   }
 
-  if (ephy_sqlite_statement_bind_int (statement, 0, bookmark_id, &error) == FALSE) {
+  if (!ephy_sqlite_statement_bind_int (statement, 0, bookmark_id, &error)) {
     g_warning ("[Bookmark %d] Could not bind tag id in statement: %s", bookmark_id, error->message);
     goto out;
   }
@@ -323,7 +323,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
   statement = ephy_sqlite_connection_create_statement (connection,
                                                        statement_str,
                                                        &my_error);
-  if (statement == NULL) {
+  if (!statement) {
     g_warning ("Could not build bookmarks query statement: %s", my_error->message);
     g_error_free (my_error);
     g_set_error (error,

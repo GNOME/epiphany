@@ -386,7 +386,7 @@ ephy_indicator_bin_set_child (EphyIndicatorBin *self,
                               GtkWidget        *child)
 {
   g_return_if_fail (EPHY_IS_INDICATOR_BIN (self));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (!child || GTK_IS_WIDGET (child));
 
   if (self->child == child)
     return;

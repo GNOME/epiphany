@@ -168,7 +168,7 @@ update_bookmarks_select_button_label (AdwComboRow *combo_row,
       break;
     }
 
-  g_assert (option_found != FALSE);
+  g_assert (option_found);
   if (import_options[i].type == IMPORT_TYPE_CHOOSE)
     gtk_button_set_label (button, _("_Select File"));
   else if (import_options[i].type == IMPORT_TYPE_IMPORT)
@@ -373,7 +373,7 @@ show_firefox_profile_selector (GtkWindow *parent,
   gtk_widget_set_margin_end (list_box, 5);
   gtk_window_set_child (GTK_WINDOW (selector), list_box);
 
-  for (l = profiles; l != NULL; l = l->next) {
+  for (l = profiles; l; l = l->next) {
     const gchar *profile = l->data;
     GtkWidget *label;
 
@@ -533,7 +533,7 @@ dialog_bookmarks_import_cb (GtkWidget   *button,
       break;
     }
 
-  g_assert (option_id != NULL);
+  g_assert (option_id);
   import_bookmarks_using_option_id (option_id, window);
 
   adw_dialog_force_close (dialog);
@@ -864,7 +864,7 @@ dialog_passwords_import_cb (GtkWidget   *button,
       break;
     }
 
-  g_assert (option_id != NULL);
+  g_assert (option_id);
   import_passwords_using_option_id (option_id, window);
 
   adw_dialog_force_close (dialog);
@@ -890,7 +890,7 @@ update_passwords_select_button_label (AdwComboRow *combo_row,
       break;
     }
 
-  g_assert (option_found != FALSE);
+  g_assert (option_found);
   if (import_passwords_options[i].type == IMPORT_TYPE_CHOOSE)
     gtk_button_set_label (button, _("_Select File"));
   else if (import_passwords_options[i].type == IMPORT_TYPE_IMPORT)
@@ -1067,7 +1067,7 @@ window_cmd_show_history (GSimpleAction *action,
 
   dialog = EPHY_HISTORY_DIALOG (ephy_shell_get_history_dialog (ephy_shell_get_default ()));
   if (ephy_history_dialog_get_parent_window (dialog) != user_data &&
-      ephy_history_dialog_get_parent_window (dialog) != NULL) {
+      ephy_history_dialog_get_parent_window (dialog)) {
     adw_dialog_force_close (ADW_DIALOG (dialog));
     dialog = EPHY_HISTORY_DIALOG (ephy_shell_get_history_dialog (ephy_shell_get_default ()));
   }
@@ -1102,7 +1102,7 @@ window_cmd_show_clear_data_view (GSimpleAction *action,
 
   dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
   if (ephy_prefs_dialog_get_parent_window (dialog) != user_data &&
-      ephy_prefs_dialog_get_parent_window (dialog) != NULL) {
+      ephy_prefs_dialog_get_parent_window (dialog)) {
     adw_dialog_force_close (ADW_DIALOG (dialog));
     dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
   }
@@ -1124,7 +1124,7 @@ window_cmd_show_preferences (GSimpleAction *action,
 
   dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
   if (ephy_prefs_dialog_get_parent_window (dialog) != user_data &&
-      ephy_prefs_dialog_get_parent_window (dialog) != NULL) {
+      ephy_prefs_dialog_get_parent_window (dialog)) {
     adw_dialog_force_close (ADW_DIALOG (dialog));
     dialog = EPHY_PREFS_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
   }
@@ -1277,7 +1277,7 @@ window_cmd_reopen_closed_tab (GSimpleAction *action,
   EphySession *session = ephy_shell_get_session (shell);
   EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
-  g_assert (session != NULL);
+  g_assert (session);
 
   if (!ephy_window_get_sidebar_shown (window))
     ephy_session_undo_close_tab (session);
@@ -1293,7 +1293,7 @@ window_cmd_navigation (GSimpleAction *action,
   WebKitWebView *web_view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -1316,7 +1316,7 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
   WebKitWebView *web_view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -1369,7 +1369,7 @@ window_cmd_stop (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -1437,7 +1437,7 @@ window_cmd_reload (GSimpleAction *action,
   EphyEmbed *embed;
 
   embed = EPHY_EMBED (ephy_tab_view_get_current_page (ephy_window_get_tab_view (window)));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
                                     NULL,
@@ -1455,7 +1455,7 @@ window_cmd_reload_bypass_cache (GSimpleAction *action,
   WebKitWebView *view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -1540,10 +1540,10 @@ open_dialog_cb (GtkFileDialog *dialog,
   }
 
   uri = g_file_get_uri (file);
-  if (uri != NULL) {
+  if (uri) {
     converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
-    if (converted != NULL)
+    if (converted)
       ephy_window_load_url (window, converted);
   }
 }
@@ -1769,7 +1769,7 @@ frame_pixbuf (GIcon   *icon,
                      radius,
                      width - frame_width * 2 - 1,
                      height - frame_width * 2 - 1);
-  if (rgba != NULL)
+  if (rgba)
     cairo_set_source_rgba (cr,
                            rgba->red,
                            rgba->green,
@@ -1780,7 +1780,7 @@ frame_pixbuf (GIcon   *icon,
   cairo_fill_preserve (cr);
 
   scaled = scaled_pixbuf_from_icon (icon, width, height);
-  if (scaled != NULL) {
+  if (scaled) {
     int w = gdk_pixbuf_get_width (scaled);
     int h = gdk_pixbuf_get_height (scaled);
 
@@ -1806,9 +1806,9 @@ set_image_from_favicon (EphyApplicationDialogData *data)
   GdkTexture *icon_texture = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (data->view));
 
   icon = ephy_favicon_get_from_texture_scaled (icon_texture, 0, 0);
-  if (icon != NULL) {
+  if (icon) {
     data->framed_pixbuf = frame_pixbuf (icon, NULL, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
-    g_assert (data->icon_v == NULL);
+    g_assert (!data->icon_v);
     data->icon_v = g_icon_serialize (G_ICON (data->framed_pixbuf));
   } else {
     g_autoptr (GBytes) bytes = NULL;
@@ -1822,7 +1822,7 @@ set_image_from_favicon (EphyApplicationDialogData *data)
     data->icon_v = g_icon_serialize (icon);
   }
 
-  g_assert (data->icon_v != NULL);
+  g_assert (data->icon_v);
   create_install_dialog_when_ready (data);
 }
 
@@ -1834,16 +1834,16 @@ set_app_icon_from_filename (EphyApplicationDialogData *data,
   g_autoptr (GError) error = NULL;
 
   pixbuf = gdk_pixbuf_new_from_file_at_size (filename, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE, &error);
-  if (pixbuf == NULL)
+  if (!pixbuf)
     g_warning ("Failed to create pixbuf for %s: %s", filename, error->message);
 
-  if (pixbuf != NULL) {
+  if (pixbuf) {
     data->framed_pixbuf = frame_pixbuf (G_ICON (pixbuf), &data->icon_rgba, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
-    g_assert (data->icon_v == NULL);
+    g_assert (!data->icon_v);
     data->icon_v = g_icon_serialize (G_ICON (data->framed_pixbuf));
     create_install_dialog_when_ready (data);
   }
-  if (data->icon_v == NULL) {
+  if (!data->icon_v) {
     g_warning ("Failed to get icon for web app %s, falling back to favicon", data->display_address);
     set_image_from_favicon (data);
   }
@@ -1918,7 +1918,7 @@ fill_default_application_image_cb (GObject      *source,
 
   data->icon_href = uri;
   data->icon_rgba = color;
-  if (data->icon_href != NULL)
+  if (data->icon_href)
     download_icon_and_set_image (data);
   else
     set_image_from_favicon (data);
@@ -1928,14 +1928,14 @@ static void
 set_default_application_title (EphyApplicationDialogData *data,
                                char                      *title)
 {
-  if (title == NULL || title[0] == '\0') {
+  if (!title || title[0] == '\0') {
     g_autoptr (GUri) uri = NULL;
     const char *host;
 
     uri = g_uri_parse (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)), G_URI_FLAGS_PARSE_RELAXED, NULL);
     host = g_uri_get_host (uri);
 
-    if (host != NULL && host[0] != '\0') {
+    if (host && host[0] != '\0') {
       if (g_str_has_prefix (host, "www."))
         title = g_strdup (host + strlen ("www."));
       else
@@ -1943,12 +1943,12 @@ set_default_application_title (EphyApplicationDialogData *data,
     }
   }
 
-  if (title == NULL || title[0] == '\0') {
+  if (!title || title[0] == '\0') {
     g_clear_pointer (&title, g_free);
     title = g_strdup (webkit_web_view_get_title (WEBKIT_WEB_VIEW (data->view)));
   }
 
-  if (title == NULL || title[0] == '\0') {
+  if (!title || title[0] == '\0') {
     g_clear_pointer (&title, g_free);
     title = g_strdup (_("New Web App"));
   }
@@ -2074,7 +2074,7 @@ prepare_install_cb (GObject      *object,
   g_autoptr (GError) error = NULL;
 
   ret = xdp_portal_dynamic_launcher_prepare_install_finish (portal, result, &error);
-  if (ret == NULL) {
+  if (!ret) {
     /* This might just mean the user canceled the operation */
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
       send_web_app_install_notification (data, error);
@@ -2086,7 +2086,7 @@ prepare_install_cb (GObject      *object,
 
   chosen_name_v = g_variant_lookup_value (ret, "name", G_VARIANT_TYPE_STRING);
   token_v = g_variant_lookup_value (ret, "token", G_VARIANT_TYPE_STRING);
-  if (chosen_name_v == NULL || token_v == NULL) {
+  if (!chosen_name_v || !token_v) {
     send_web_app_install_notification (data, error);
     g_warning ("Failed to install web app, PrepareInstall() returned invalid data");
     ephy_application_dialog_data_free (data);
@@ -2337,7 +2337,7 @@ window_cmd_save_as_application (GSimpleAction *action,
     return;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   data = g_new0 (EphyApplicationDialogData, 1);
   data->window = g_object_ref (window);
@@ -2482,10 +2482,10 @@ save_dialog_cb (GtkFileDialog       *dialog,
     goto out;
 
   uri = g_file_get_uri (file);
-  if (uri != NULL) {
+  if (uri) {
     converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
-    if (converted != NULL) {
+    if (converted) {
       /* Easter egg: allow power users to take a screenshot of anything that's
        * not a PNG by changing the suffix to .png.
        */
@@ -2523,7 +2523,7 @@ window_cmd_save_as (GSimpleAction *action,
   const char *last_directory_path;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   dialog = gtk_file_dialog_new ();
 
@@ -2573,7 +2573,7 @@ window_cmd_screenshot (GSimpleAction *action,
   const char *last_directory_path;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   dialog = gtk_file_dialog_new ();
 
@@ -2908,7 +2908,7 @@ window_cmd_page_source (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
@@ -2940,7 +2940,7 @@ window_cmd_toggle_inspector (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -3225,7 +3225,7 @@ window_cmd_toggle_reader_mode (GSimpleAction *action,
   gboolean active;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   web_view = ephy_embed_get_web_view (embed);
 
@@ -3266,7 +3266,7 @@ window_cmd_homepage_new_tab (GSimpleAction *action,
   EphyWebView *web_view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   embed = ephy_shell_new_tab (ephy_shell_get_default (),
                               EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
@@ -3302,7 +3302,7 @@ clipboard_text_received_cb (GdkClipboard *clipboard,
   normalized = ephy_embed_utils_normalize_or_autosearch_address (text);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   embed = ephy_shell_new_tab (ephy_shell_get_default (),
                               EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (embed))),
@@ -3364,7 +3364,7 @@ window_cmd_change_tabs_mute_state (GSimpleAction *action,
   gboolean mute;
 
   embed = EPHY_EMBED (ephy_tab_view_get_current_page (ephy_window_get_tab_view (window)));
-  g_assert (embed != NULL);
+  g_assert (embed);
 
   view = ephy_embed_get_web_view (embed);
 
