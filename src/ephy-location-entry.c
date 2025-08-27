@@ -33,6 +33,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-pixbuf-utils.h"
+#include "ephy-reader-handler.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-signal-accumulator.h"
@@ -1292,6 +1293,9 @@ ephy_location_entry_do_set_address (EphyTitleWidget *widget,
   if (address != NULL) {
     if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
       effective_text = g_strdup_printf ("about:%s", address + strlen (EPHY_ABOUT_SCHEME) + 1);
+    else if (g_str_has_prefix (address, EPHY_READER_SCHEME))
+      effective_text = g_strdup (address + strlen (EPHY_READER_SCHEME) + 1);
+
     text = address;
   }
 
