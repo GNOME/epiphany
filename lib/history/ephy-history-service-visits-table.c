@@ -56,7 +56,7 @@ ephy_history_service_add_visit_row (EphyHistoryService   *self,
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
   if (self->in_memory)
     return;
@@ -71,9 +71,9 @@ ephy_history_service_add_visit_row (EphyHistoryService   *self,
     return;
   }
 
-  if (ephy_sqlite_statement_bind_int (statement, 0, visit->url->id, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int64 (statement, 1, visit->visit_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error) == FALSE) {
+  if (!ephy_sqlite_statement_bind_int (statement, 0, visit->url->id, &error) ||
+      !ephy_sqlite_statement_bind_int64 (statement, 1, visit->visit_time, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error)) {
     g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
@@ -126,7 +126,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self,
   int i = 0;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
   statement_str = g_string_new (base_statement);
 
@@ -145,7 +145,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self,
   if (query->host > 0)
     statement_str = g_string_append (statement_str, "urls.host = ? AND ");
 
-  for (substring = query->substring_list; substring != NULL; substring = substring->next) {
+  for (substring = query->substring_list; substring; substring = substring->next) {
     statement_str = g_string_append (statement_str, "(urls.url LIKE ? OR urls.title LIKE ?) AND ");
   }
 
@@ -162,7 +162,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self,
   }
 
   if (query->from >= 0) {
-    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->from, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int64 (statement, i++, query->from, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -170,7 +170,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self,
     }
   }
   if (query->to >= 0) {
-    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->to, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int64 (statement, i++, query->to, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -178,23 +178,23 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self,
     }
   }
   if (query->host > 0) {
-    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->host, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int (statement, i++, (int)query->host, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
     }
   }
-  for (substring = query->substring_list; substring != NULL; substring = substring->next) {
+  for (substring = query->substring_list; substring; substring = substring->next) {
     char *string = ephy_sqlite_create_match_pattern (substring->data);
-    if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_string (statement, i++, string, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       g_free (string);
       return NULL;
     }
-    if (ephy_sqlite_statement_bind_string (statement, i++, string + 2, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_string (statement, i++, string + 2, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);

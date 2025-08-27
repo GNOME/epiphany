@@ -227,7 +227,7 @@ ephy_autofill_storage_delete (EphyAutofillField    field,
 
   get_key_and_label_for_field (field, &key, &label);
 
-  if (key != NULL) {
+  if (key) {
     secret_password_clear (EPHY_AUTOFILL_SCHEMA,
                            cancellable,
                            callback,
@@ -248,7 +248,7 @@ ephy_autofill_storage_get (EphyAutofillField    field,
 
   get_key_and_label_for_field (field, &key, &label);
 
-  if (key != NULL) {
+  if (key) {
     secret_password_lookup (EPHY_AUTOFILL_SCHEMA,
                             cancellable,
                             callback,
@@ -266,13 +266,13 @@ ephy_autofill_storage_set (EphyAutofillField    field,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
-  const char *storable_value = (value == NULL) ? "" : value;
+  const char *storable_value = (!value) ? "" : value;
   const char *label;
   const char *key;
 
   get_key_and_label_for_field (field, &key, &label);
 
-  if (label != NULL && key != NULL) {
+  if (label && key) {
     secret_password_store (EPHY_AUTOFILL_SCHEMA,
                            SECRET_COLLECTION_DEFAULT,
                            label,

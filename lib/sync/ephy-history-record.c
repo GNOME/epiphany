@@ -303,7 +303,7 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  const GValue     *value,
                                  GParamSpec       *pspec)
 {
-  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+  if (G_VALUE_HOLDS_STRING (value) && !g_value_get_string (value)) {
     JsonNode *node = json_node_new (JSON_NODE_VALUE);
     json_node_set_string (node, "");
     return node;
@@ -315,7 +315,7 @@ serializable_serialize_property (JsonSerializable *serializable,
     GSequence *visits = g_value_get_pointer (value);
     GSequenceIter *it;
 
-    if (visits != NULL) {
+    if (visits) {
       for (it = g_sequence_get_begin_iter (visits); !g_sequence_iter_is_end (it); it = g_sequence_iter_next (it)) {
         EphyHistoryRecordVisit *visit = g_sequence_get (it);
         JsonObject *object = json_object_new ();

@@ -515,7 +515,7 @@ ephy_sync_crypto_concat_bytes (const guint8 *bytes,
   memcpy (out, bytes, out_len);
 
   va_start (args, len);
-  while ((next = va_arg (args, guint8 *)) != NULL) {
+  while ((next = va_arg (args, guint8 *))) {
     next_len = va_arg (args, gsize);
     out = g_realloc (out, out_len + next_len);
     memcpy (out + out_len, next, next_len);

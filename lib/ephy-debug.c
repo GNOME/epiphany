@@ -53,7 +53,7 @@ build_modules (const char *name,
   *is_all = FALSE;
 
   env = g_getenv (name);
-  if (env == NULL)
+  if (!env)
     return NULL;
 
   if (strcmp (env, "all") == 0) {
@@ -78,11 +78,11 @@ log_module (const gchar    *log_domain,
   if (!ephy_log_all_modules && !ephy_log_modules)
     return;
 
-  if (ephy_log_modules != NULL) {
+  if (ephy_log_modules) {
     guint i;
 
-    for (i = 0; ephy_log_modules[i] != NULL; i++) {
-      if (strstr (message, ephy_log_modules [i]) != NULL) {
+    for (i = 0; ephy_log_modules[i]; i++) {
+      if (strstr (message, ephy_log_modules [i])) {
         should_log = TRUE;
         break;
       }
@@ -103,7 +103,7 @@ trap_handler (const char     *log_domain,
 {
   g_log_default_handler (log_domain, log_level, message, user_data);
 
-  if (ephy_debug_break != NULL &&
+  if (ephy_debug_break &&
       (log_level & (G_LOG_LEVEL_WARNING |
                     G_LOG_LEVEL_ERROR |
                     G_LOG_LEVEL_CRITICAL |
@@ -166,10 +166,10 @@ ephy_should_profile (const char *module)
   slash = strrchr (module, '/');
 
   /* Happens on builddir != srcdir builds */
-  if (slash != NULL)
+  if (slash)
     module = slash + 1;
 
-  for (i = 0; ephy_profile_modules[i] != NULL; i++) {
+  for (i = 0; ephy_profile_modules[i]; i++) {
     if (strcmp (ephy_profile_modules[i], module) == 0) {
       result = TRUE;
       break;
@@ -184,7 +184,7 @@ ephy_profiler_dump (EphyProfiler *profiler)
 {
   double seconds;
 
-  g_assert (profiler != NULL);
+  g_assert (profiler);
 
   seconds = g_timer_elapsed (profiler->timer, NULL);
 
@@ -196,7 +196,7 @@ ephy_profiler_dump (EphyProfiler *profiler)
 static void
 ephy_profiler_free (EphyProfiler *profiler)
 {
-  g_assert (profiler != NULL);
+  g_assert (profiler);
 
   g_timer_destroy (profiler->timer);
   g_free (profiler->name);
@@ -229,14 +229,14 @@ ephy_profiler_start (const char *name,
 {
   EphyProfiler *profiler;
 
-  if (ephy_profilers_hash == NULL) {
+  if (!ephy_profilers_hash) {
     ephy_profilers_hash =
       g_hash_table_new_full (g_str_hash, g_str_equal,
                              g_free, NULL);
   }
 
   if (!ephy_profile_all_modules &&
-      (ephy_profile_modules == NULL || !ephy_should_profile (module)))
+      (!ephy_profile_modules || !ephy_should_profile (module)))
     return;
 
   profiler = ephy_profiler_new (name, module);
@@ -256,7 +256,7 @@ ephy_profiler_stop (const char *name)
   EphyProfiler *profiler;
 
   profiler = g_hash_table_lookup (ephy_profilers_hash, name);
-  if (profiler == NULL)
+  if (!profiler)
     return;
 
   g_hash_table_remove (ephy_profilers_hash, name);

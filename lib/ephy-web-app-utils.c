@@ -124,7 +124,7 @@ ephy_web_application_get_gapplication_id_from_profile_directory (const char *pro
 
   /* Just get the basename */
   name = strrchr (profile_dir, G_DIR_SEPARATOR);
-  if (name == NULL) {
+  if (!name) {
     g_warning ("Profile directory %s is not a valid path", profile_dir);
     return NULL;
   }
@@ -505,7 +505,7 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   g_autoptr (GKeyFile) desktop_keyfile = NULL;
   g_autoptr (GError) error = NULL;
 
-  g_assert (profile_directory != NULL);
+  g_assert (profile_directory);
 
   gapplication_id = ephy_web_application_get_gapplication_id_from_profile_directory (profile_directory);
   if (!gapplication_id)
@@ -587,7 +587,7 @@ ephy_web_application_get_tmp_icon_path (const char  *desktop_path,
   gsize bytes_len;
   int fd;
 
-  g_return_val_if_fail (desktop_path != NULL, NULL);
+  g_return_val_if_fail (desktop_path, NULL);
 
   /* This function is only useful inside the sandbox since the icon file on the
    * host is inaccessible in that case.
@@ -663,7 +663,7 @@ ephy_web_application_for_profile_directory (const char            *profile_dir,
   app->desktop_path = ephy_web_application_get_desktop_path (id);
   if (ephy_can_install_web_apps ()) {
     key_file = ephy_web_application_get_desktop_keyfile (id, &error);
-    if (key_file == NULL) {
+    if (!key_file) {
       g_warning ("Failed to get desktop keyfile for id %s from portal: %s", id, error->message);
       g_clear_pointer (&app, ephy_web_application_free); /* avoid a scan-build warning */
       return NULL;

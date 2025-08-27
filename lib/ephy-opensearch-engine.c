@@ -198,7 +198,7 @@ url_template_param_substitution (const char  *url_template,
   if (!path_start)
     return NULL;
 
-  while ((param_start = strchr (param_start, '{')) != NULL) {
+  while ((param_start = strchr (param_start, '{'))) {
     const char *param_end = strchr (param_start, '}');
     g_autofree char *param_name = NULL;
     gsize param_name_len;
@@ -296,7 +296,7 @@ xml_start_element_cb (GMarkupParseContext  *context,
      * to ignore all unknown attributes. So instead we must loop manually
      * through the attributes, to get the ones we care about.
      */
-    for (guint i = 0; attribute_names[i] != NULL; i++) {
+    for (guint i = 0; attribute_names[i]; i++) {
       const char *attr_name = attribute_names[i];
       const char *attr_value = attribute_values[i];
 
@@ -324,7 +324,7 @@ xml_start_element_cb (GMarkupParseContext  *context,
   else if (g_strcmp0 (element_name, "Param") == 0 && data->url) {
     const char *param_name = NULL, *param_value = NULL;
 
-    for (guint i = 0; attribute_names[i] != NULL; i++) {
+    for (guint i = 0; attribute_names[i]; i++) {
       const char *attr_name = attribute_names[i];
       const char *attr_value = attribute_values[i];
 

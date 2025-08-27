@@ -307,7 +307,7 @@ parse_csv_row (char *row_string)
           quotes_closed = FALSE;
         } else {
           quotes_closed = !quotes_closed;
-          if (quotes_closed == FALSE)
+          if (!quotes_closed)
             g_string_append_c (token, row_string[j]);
         }
       } else if (row_string[j] != ' ' || (row_string[j] == ' ' && quotes_opened && !quotes_closed)) {

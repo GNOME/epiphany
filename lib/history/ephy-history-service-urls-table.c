@@ -61,14 +61,14 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
-  if (url_string == NULL && url != NULL)
+  if (!url_string && url)
     url_string = url->url;
 
-  g_assert (url_string || (url != NULL && url->id != -1));
+  g_assert (url_string || (url && url->id != -1));
 
-  if (url != NULL && url->id != -1) {
+  if (url && url->id != -1) {
     statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                          "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
                                                          "WHERE id=?", &error);
@@ -84,7 +84,7 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
     return NULL;
   }
 
-  if (url != NULL && url->id != -1) {
+  if (url && url->id != -1) {
     ephy_sqlite_statement_bind_int (statement, 0, url->id, &error);
   } else {
     ephy_sqlite_statement_bind_string (statement, 0, url_string, &error);
@@ -96,22 +96,21 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
     return NULL;
   }
 
-  if (ephy_sqlite_statement_step (statement, &error) == FALSE) {
+  if (!ephy_sqlite_statement_step (statement, &error)) {
     g_object_unref (statement);
     return NULL;
   }
 
-  if (url == NULL) {
+  if (!url)
     url = ephy_history_url_new (NULL, NULL, 0, 0, 0);
-  }
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
 
   /* Only get the URL and page title if we don't know it yet, as the version in the
    *  history could be outdated. */
-  if (url->url == NULL)
+  if (!url->url)
     url->url = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 1));
-  if (url->title == NULL)
+  if (!url->title)
     url->title = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 2));
 
   url->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3),
@@ -132,7 +131,7 @@ ephy_history_service_add_url_row (EphyHistoryService *self,
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
   if (self->in_memory)
     return;
@@ -146,13 +145,13 @@ ephy_history_service_add_url_row (EphyHistoryService *self,
     return;
   }
 
-  if (ephy_sqlite_statement_bind_string (statement, 0, url->url, &error) == FALSE ||
-      ephy_sqlite_statement_bind_string (statement, 1, url->title, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 2, url->visit_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 3, url->typed_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int64 (statement, 4, url->last_visit_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 5, url->host->id, &error) == FALSE ||
-      ephy_sqlite_statement_bind_string (statement, 6, url->sync_id, &error) == FALSE) {
+  if (!ephy_sqlite_statement_bind_string (statement, 0, url->url, &error) ||
+      !ephy_sqlite_statement_bind_string (statement, 1, url->title, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 2, url->visit_count, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 3, url->typed_count, &error) ||
+      !ephy_sqlite_statement_bind_int64 (statement, 4, url->last_visit_time, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 5, url->host->id, &error) ||
+      !ephy_sqlite_statement_bind_string (statement, 6, url->sync_id, &error)) {
     g_warning ("Could not insert URL into urls table: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
@@ -178,7 +177,7 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
   if (self->in_memory)
     return;
@@ -192,13 +191,13 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
     return;
   }
 
-  if (ephy_sqlite_statement_bind_string (statement, 0, url->title, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 1, url->visit_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 2, url->typed_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int64 (statement, 3, url->last_visit_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 4, url->hidden, &error) == FALSE ||
-      ephy_sqlite_statement_bind_string (statement, 5, url->sync_id, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 6, url->id, &error) == FALSE) {
+  if (!ephy_sqlite_statement_bind_string (statement, 0, url->title, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 1, url->visit_count, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 2, url->typed_count, &error) ||
+      !ephy_sqlite_statement_bind_int64 (statement, 3, url->last_visit_time, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 4, url->hidden, &error) ||
+      !ephy_sqlite_statement_bind_string (statement, 5, url->sync_id, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 6, url->id, &error)) {
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
@@ -257,7 +256,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
   int i = 0;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
   statement_str = g_string_new (base_statement);
 
@@ -280,7 +279,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
   if (query->host > 0)
     statement_str = g_string_append (statement_str, "urls.host = ? AND ");
 
-  for (substring = query->substring_list; substring != NULL; substring = substring->next)
+  for (substring = query->substring_list; substring; substring = substring->next)
     statement_str = g_string_append (statement_str, "(urls.url LIKE ? OR urls.title LIKE ?) AND ");
 
   statement_str = g_string_append (statement_str, "1 ");
@@ -330,7 +329,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
   }
 
   if (query->from > 0) {
-    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->from, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int64 (statement, i++, query->from, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -338,7 +337,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
     }
   }
   if (query->to > 0) {
-    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->to, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int64 (statement, i++, query->to, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -346,23 +345,23 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
     }
   }
   if (query->host > 0) {
-    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->host, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int (statement, i++, (int)query->host, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
     }
   }
-  for (substring = query->substring_list; substring != NULL; substring = substring->next) {
+  for (substring = query->substring_list; substring; substring = substring->next) {
     char *string = ephy_sqlite_create_match_pattern (substring->data);
-    if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_string (statement, i++, string, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       g_free (string);
       return NULL;
     }
-    if (ephy_sqlite_statement_bind_string (statement, i++, string + 2, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_string (statement, i++, string + 2, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -373,7 +372,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
   }
 
   if (query->limit)
-    if (ephy_sqlite_statement_bind_int (statement, i++, query->limit, &error) == FALSE) {
+    if (!ephy_sqlite_statement_bind_int (statement, i++, query->limit, &error)) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -406,7 +405,7 @@ ephy_history_service_delete_url (EphyHistoryService *self,
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
-  g_assert (self->history_database != NULL);
+  g_assert (self->history_database);
 
   g_assert (url->id != -1 || url->url);
 

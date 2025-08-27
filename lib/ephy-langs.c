@@ -42,18 +42,18 @@ ephy_langs_sanitise (GArray *array)
     lang1 = (char *)g_array_index (array, char *, i);
 
     dash = strchr (lang1, '-');
-    if (dash == NULL)
+    if (!dash)
       continue;
 
     for (j = i + 1; j < (int)array->len; j++) {
       lang2 = (char *)g_array_index (array, char *, j);
-      if (strchr (lang2, '-') == NULL &&
+      if (!strchr (lang2, '-') &&
           g_str_has_prefix (lang1, lang2)) {
         found = TRUE;
       }
     }
 
-    if (found == FALSE) {
+    if (!found) {
       prefix = g_strndup (lang1, dash - lang1);
       g_array_append_val (array, prefix);
     }
@@ -78,8 +78,8 @@ ephy_langs_sanitise (GArray *array)
       lang1 = (char *)g_array_index (array, char *, i);
       lang2 = (char *)g_array_index (array, char *, j);
 
-      if (strchr (lang1, '-') == NULL &&
-          strchr (lang2, '-') != NULL &&
+      if (!strchr (lang1, '-') &&
+          strchr (lang2, '-') &&
           g_str_has_prefix (lang2, lang1)) {
         g_array_insert_val (array, j + 1, lang1);
         g_array_remove_index (array, i);
@@ -97,9 +97,9 @@ ephy_langs_append_languages (GArray *array)
   int i;
 
   languages = g_get_language_names ();
-  g_assert (languages != NULL);
+  g_assert (languages);
 
-  for (i = 0; languages[i] != NULL; i++) {
+  for (i = 0; languages[i]; i++) {
     if (strstr (languages[i], ".") == 0 &&
         strstr (languages[i], "@") == 0 &&
         strcmp (languages[i], "C") != 0) {
@@ -169,7 +169,7 @@ ephy_langs_normalize_locale (const char *locale)
    * because older versions of Epiphany stored locales as entirely
    * lowercase.
    */
-  for (char *p = strchr (result, '-'); p != NULL && *p != '\0'; p++)
+  for (char *p = strchr (result, '-'); p && *p != '\0'; p++)
     *p = g_ascii_toupper (*p);
 
   return result;

@@ -753,7 +753,7 @@ ephy_password_manager_find (EphyPasswordManager *self,
 
   g_hash_table_unref (attributes);
 
-  return list != NULL;
+  return !!list;
 }
 
 static void

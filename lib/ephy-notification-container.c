@@ -37,7 +37,7 @@ static void
 ephy_notification_container_init (EphyNotificationContainer *self)
 {
   /* Globally accessible singleton */
-  g_assert (notification_container == NULL);
+  g_assert (!notification_container);
   notification_container = self;
   g_object_add_weak_pointer (G_OBJECT (notification_container),
                              (gpointer *)&notification_container);
@@ -62,7 +62,7 @@ ephy_notification_container_class_init (EphyNotificationContainerClass *klass)
 EphyNotificationContainer *
 ephy_notification_container_get_default (void)
 {
-  if (notification_container != NULL)
+  if (notification_container)
     return notification_container;
 
   return g_object_new (EPHY_TYPE_NOTIFICATION_CONTAINER,

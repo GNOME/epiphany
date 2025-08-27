@@ -352,7 +352,7 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  GParamSpec       *pspec)
 {
   /* Convert NULL to "", as Firefox expects empty strings for missing fields. */
-  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+  if (G_VALUE_HOLDS_STRING (value) && !g_value_get_string (value)) {
     JsonNode *node = json_node_new (JSON_NODE_VALUE);
     json_node_set_string (node, "");
     return node;

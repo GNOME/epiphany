@@ -80,13 +80,13 @@ ephy_permissions_manager_dispose (GObject *object)
   g_clear_pointer (&manager->origins_mapping, g_hash_table_destroy);
   g_clear_pointer (&manager->settings_mapping, g_hash_table_destroy);
 
-  if (manager->permission_type_permitted_origins != NULL) {
+  if (manager->permission_type_permitted_origins) {
     g_hash_table_foreach (manager->permission_type_permitted_origins, free_cached_origin_list, NULL);
     g_hash_table_destroy (manager->permission_type_permitted_origins);
     manager->permission_type_permitted_origins = NULL;
   }
 
-  if (manager->permission_type_denied_origins != NULL) {
+  if (manager->permission_type_denied_origins) {
     g_hash_table_foreach (manager->permission_type_denied_origins, free_cached_origin_list, NULL);
     g_hash_table_destroy (manager->permission_type_denied_origins);
     manager->permission_type_denied_origins = NULL;
@@ -115,7 +115,7 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   WebKitSecurityOrigin *security_origin;
   char *pos;
 
-  g_assert (origin != NULL);
+  g_assert (origin);
 
   settings = g_hash_table_lookup (manager->origins_mapping, origin);
   if (settings)
@@ -125,7 +125,7 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   security_origin = webkit_security_origin_new_for_uri (origin);
   trimmed_protocol = g_strdup (webkit_security_origin_get_protocol (security_origin));
   pos = strchr (trimmed_protocol, '/');
-  if (pos != NULL)
+  if (pos)
     *pos = '\0';
 
   origin_path = g_strdup_printf ("/org/gnome/epiphany/permissions/%s/%s/%u/",
@@ -228,10 +228,10 @@ webkit_security_origin_compare (WebKitSecurityOrigin *a,
    * equal. Therefore, they cannot be ordered, and must not be passed to this
    * compare function.
    */
-  g_assert (protocol_a != NULL);
-  g_assert (protocol_b != NULL);
-  g_assert (host_a != NULL);
-  g_assert (host_b != NULL);
+  g_assert (protocol_a);
+  g_assert (protocol_b);
+  g_assert (host_a);
+  g_assert (host_b);
 
   return strcmp (protocol_a, protocol_b) || strcmp (host_a, host_b) ||
          webkit_security_origin_get_port (b) - webkit_security_origin_get_port (a);
@@ -248,9 +248,9 @@ maybe_add_origin_to_permission_type_cache (GHashTable           *permissions,
   /* Add origin to the appropriate permissions cache if (a) the cache already
    * exists, and (b) it does not already contain origin. */
   origins = g_hash_table_lookup (permissions, GINT_TO_POINTER (type));
-  if (origins != NULL) {
+  if (origins) {
     l = g_list_find_custom (origins, origin, (GCompareFunc)webkit_security_origin_compare);
-    if (l == NULL) {
+    if (!l) {
       origins = g_list_prepend (origins, webkit_security_origin_ref (origin));
       g_hash_table_replace (permissions, GINT_TO_POINTER (type), origins);
     }
@@ -268,9 +268,9 @@ maybe_remove_origin_from_permission_type_cache (GHashTable           *permission
   /* Remove origin from the appropriate permissions cache if (a) the cache
    * exists, and (b) it contains origin. */
   origins = g_hash_table_lookup (permissions, GINT_TO_POINTER (type));
-  if (origins != NULL) {
+  if (origins) {
     l = g_list_find_custom (origins, origin, (GCompareFunc)webkit_security_origin_compare);
-    if (l != NULL) {
+    if (l) {
       webkit_security_origin_unref (l->data);
       origins = g_list_remove_link (origins, l);
       g_hash_table_replace (permissions, GINT_TO_POINTER (type), origins);
@@ -290,7 +290,7 @@ ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
   g_assert (ephy_permission_is_stored_by_permissions_manager (type));
 
   webkit_origin = webkit_security_origin_new_for_uri (origin);
-  if (webkit_origin == NULL)
+  if (!webkit_origin)
     return;
 
   settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
@@ -324,7 +324,7 @@ group_name_to_security_origin (const char *group)
 
   /* Should be of form org/gnome/epiphany/permissions/http/example.com/0 */
   tokens = g_strsplit (group, "/", -1);
-  if (g_strv_length (tokens) == 7 && tokens[4] != NULL && tokens[5] != NULL && tokens[6] != NULL)
+  if (g_strv_length (tokens) == 7 && tokens[4] && tokens[5] && tokens[6])
     origin = webkit_security_origin_new (tokens[4], tokens[5], atoi (tokens[6]));
 
   g_strfreev (tokens);
@@ -347,7 +347,7 @@ origin_for_keyfile_key (GKeyFile           *file,
     g_autofree char *value = NULL;
 
     value = g_key_file_get_string (file, group, key, &error);
-    if (error != NULL) {
+    if (error) {
       g_warning ("Error processing %s group %s key %s: %s",
                  filename, group, key, error->message);
       return NULL;
@@ -374,7 +374,7 @@ origins_for_keyfile_group (GKeyFile           *file,
   g_autoptr (GError) error = NULL;
 
   keys = g_key_file_get_keys (file, group, &keys_length, &error);
-  if (error != NULL) {
+  if (error) {
     g_warning ("Error processing %s group %s: %s", filename, group, error->message);
     return NULL;
   }
@@ -405,11 +405,11 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
   /* Return results from cache, if they exist. */
   if (permit) {
     origins = g_hash_table_lookup (manager->permission_type_permitted_origins, GINT_TO_POINTER (type));
-    if (origins != NULL)
+    if (origins)
       return origins;
   } else {
     origins = g_hash_table_lookup (manager->permission_type_denied_origins, GINT_TO_POINTER (type));
-    if (origins != NULL)
+    if (origins)
       return origins;
   }
 
@@ -419,7 +419,7 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
   filename = g_build_filename (ephy_profile_dir (), PERMISSIONS_FILENAME, NULL);
 
   g_key_file_load_from_file (file, filename, G_KEY_FILE_NONE, &error);
-  if (error != NULL) {
+  if (error) {
     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
       g_warning ("Error processing %s: %s", filename, error->message);
     g_error_free (error);
@@ -432,7 +432,7 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
                              origins_for_keyfile_group (file, filename, groups[i], type, permit));
 
   /* Cache the results. */
-  if (origins != NULL) {
+  if (origins) {
     g_hash_table_insert (permit ? manager->permission_type_permitted_origins
                                 : manager->permission_type_denied_origins,
                          GINT_TO_POINTER (type),

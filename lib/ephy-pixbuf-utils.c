@@ -140,7 +140,7 @@ ephy_get_pixbuf_from_surface (cairo_surface_t *surface,
   g_autoptr (GdkPixbuf) dest = NULL;
 
   /* General sanity checks */
-  g_return_val_if_fail (surface != NULL, NULL);
+  g_return_val_if_fail (surface, NULL);
   g_return_val_if_fail (width > 0 && height > 0, NULL);
 
   content = cairo_surface_get_content (surface) | CAIRO_CONTENT_COLOR;
@@ -160,7 +160,7 @@ ephy_get_pixbuf_from_surface (cairo_surface_t *surface,
     src_y = 0;
   }
   cairo_surface_flush (surface);
-  if (cairo_surface_status (surface) || dest == NULL) {
+  if (cairo_surface_status (surface) || !dest) {
     cairo_surface_destroy (surface);
     return NULL;
   }

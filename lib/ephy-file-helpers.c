@@ -88,7 +88,7 @@ GQuark ephy_file_helpers_error_quark;
 const char *
 ephy_file_tmp_dir (void)
 {
-  if (tmp_dir == NULL) {
+  if (!tmp_dir) {
     char *partial_name;
     char *full_name;
 
@@ -99,9 +99,8 @@ ephy_file_tmp_dir (void)
     tmp_dir = mkdtemp (full_name);
     g_free (partial_name);
 
-    if (tmp_dir == NULL) {
+    if (!tmp_dir)
       g_free (full_name);
-    }
   }
 
   return tmp_dir;
@@ -113,7 +112,7 @@ ephy_file_download_dir (void)
   const char *xdg_download_dir;
 
   xdg_download_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
-  if (xdg_download_dir != NULL)
+  if (xdg_download_dir)
     return g_strdup (xdg_download_dir);
 
   /* If we don't have XDG user dirs info, return an educated guess. */
@@ -170,7 +169,7 @@ ephy_file_desktop_dir (void)
   const char *xdg_desktop_dir;
 
   xdg_desktop_dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-  if (xdg_desktop_dir != NULL)
+  if (xdg_desktop_dir)
     return g_strdup (xdg_desktop_dir);
 
   /* If we don't have XDG user dirs info, return an educated guess. */
@@ -400,7 +399,7 @@ ephy_file_helpers_init (const char            *profile_dir,
   private_profile = (flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE || flags & EPHY_FILE_HELPERS_TESTING_MODE);
   steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
-  if (profile_dir != NULL && !steal_data_from_profile) {
+  if (profile_dir && !steal_data_from_profile) {
     if (g_path_is_absolute (profile_dir)) {
       profile_dir_global = g_strdup (profile_dir);
     } else {
@@ -420,7 +419,7 @@ ephy_file_helpers_init (const char            *profile_dir,
       config_dir = g_build_filename (profile_dir_global, "config", NULL);
     }
   } else if (private_profile) {
-    if (ephy_file_tmp_dir () == NULL) {
+    if (!ephy_file_tmp_dir ()) {
       g_set_error (error,
                    EPHY_FILE_HELPERS_ERROR_QUARK,
                    0,
@@ -438,15 +437,15 @@ ephy_file_helpers_init (const char            *profile_dir,
       profile_dir_type = EPHY_PROFILE_DIR_TEST;
   }
 
-  if (profile_dir_global == NULL) {
+  if (!profile_dir_global) {
     profile_dir_type = EPHY_PROFILE_DIR_DEFAULT;
     profile_dir_global = ephy_default_profile_dir ();
   }
 
-  if (cache_dir == NULL)
+  if (!cache_dir)
     cache_dir = ephy_default_cache_dir ();
 
-  if (config_dir == NULL)
+  if (!config_dir)
     config_dir = ephy_default_config_dir ();
 
   if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS) {
@@ -505,7 +504,7 @@ ephy_file_helpers_shutdown (void)
 {
   g_hash_table_destroy (files);
 
-  if (mime_table != NULL) {
+  if (mime_table) {
     LOG ("Destroying mime type hashtable");
     g_hash_table_destroy (mime_table);
     mime_table = NULL;
@@ -515,7 +514,7 @@ ephy_file_helpers_shutdown (void)
   g_clear_pointer (&cache_dir, g_free);
   g_clear_pointer (&config_dir, g_free);
 
-  if (tmp_dir != NULL) {
+  if (tmp_dir) {
     LOG ("shutdown: delete tmp_dir %s", tmp_dir);
     ephy_file_delete_dir_recursively (tmp_dir, NULL);
     g_clear_pointer (&tmp_dir, g_free);
@@ -622,7 +621,7 @@ ephy_file_launch_uri_handler (GFile                        *file,
   g_autoptr (GError) error = NULL;
   gboolean ret = FALSE;
 
-  g_assert (file != NULL);
+  g_assert (file);
 
   /* Launch via URI handler only under sandbox or when user interaction is
    * required, because this way loses focus stealing prevention. There's no
@@ -762,7 +761,7 @@ ephy_file_delete_dir_recursively (const char  *directory,
 char *
 ephy_sanitize_filename (char *filename)
 {
-  g_assert (filename != NULL);
+  g_assert (filename);
 
   return g_strdelimit (filename, G_DIR_SEPARATOR_S, '_');
 }

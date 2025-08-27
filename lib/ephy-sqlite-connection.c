@@ -218,7 +218,7 @@ ephy_sqlite_connection_execute (EphySQLiteConnection  *self,
                                 const char            *sql,
                                 GError               **error)
 {
-  if (self->database == NULL) {
+  if (!self->database) {
     set_error_from_string ("Connection not open.", error);
     return FALSE;
   }
@@ -237,7 +237,7 @@ ephy_sqlite_connection_create_statement (EphySQLiteConnection  *self,
 {
   sqlite3_stmt *prepared_statement;
 
-  if (self->database == NULL) {
+  if (!self->database) {
     set_error_from_string ("Connection not open.", error);
     return NULL;
   }

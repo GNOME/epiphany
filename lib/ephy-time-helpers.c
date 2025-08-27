@@ -90,7 +90,7 @@ eel_strdup_strftime (const char *format,
   /* Walk from % character to % character. */
   for (;;) {
     percent = strchr (remainder, '%');
-    if (percent == NULL) {
+    if (!percent) {
       g_string_append (string, remainder);
       break;
     }
@@ -125,7 +125,7 @@ eel_strdup_strftime (const char *format,
     }
 
     modifier = 0;
-    if (strchr (SUS_EXTENDED_STRFTIME_MODIFIERS, *remainder) != NULL) {
+    if (strchr (SUS_EXTENDED_STRFTIME_MODIFIERS, *remainder)) {
       modifier = *remainder;
       remainder++;
 
@@ -135,7 +135,7 @@ eel_strdup_strftime (const char *format,
       }
     }
 
-    if (strchr (C_STANDARD_STRFTIME_CHARACTERS, *remainder) == NULL) {
+    if (!strchr (C_STANDARD_STRFTIME_CHARACTERS, *remainder)) {
       g_warning ("eel_strdup_strftime does not support "
                  "non-standard escape code %%%c",
                  *remainder);
@@ -172,7 +172,7 @@ eel_strdup_strftime (const char *format,
     /* Strip leading zeros if requested. */
     piece = buffer;
     if (strip_leading_zeros || turn_leading_zeros_to_spaces) {
-      if (strchr (C_STANDARD_NUMERIC_STRFTIME_CHARACTERS, *remainder) == NULL) {
+      if (!strchr (C_STANDARD_NUMERIC_STRFTIME_CHARACTERS, *remainder)) {
         g_warning ("eel_strdup_strftime does not support "
                    "modifier for non-numeric escape code %%%c%c",
                    remainder[-1],
@@ -308,11 +308,10 @@ ephy_time_helpers_utf_friendly_time (time_t date)
     }
   }
 
-  if (format != NULL) {
+  if (format)
     str = eel_strdup_strftime (format, &then);
-  }
 
-  if (str == NULL) {
+  if (!str) {
     /* impossible time or broken locale settings */
     str = g_strdup (_("Unknown"));
   }

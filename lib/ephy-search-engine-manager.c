@@ -529,7 +529,7 @@ gboolean
 ephy_search_engine_manager_has_bang (EphySearchEngineManager *manager,
                                      const char              *bang)
 {
-  return g_hash_table_lookup (manager->bangs, bang) != NULL;
+  return !!g_hash_table_lookup (manager->bangs, bang);
 }
 
 /**
@@ -569,7 +569,7 @@ parse_bang_query (EphySearchEngineManager  *manager,
   const char *space_p;
   EphySearchEngine *final_bang_engine = NULL, *bang_engine = NULL;
 
-  g_assert (search != NULL);
+  g_assert (search);
   if (*search == '\0')
     return NULL;
 

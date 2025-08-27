@@ -46,7 +46,7 @@ ephy_settings_init (void)
   const char *profile_directory;
   char *base_path;
 
-  if (settings != NULL)
+  if (settings)
     return;
 
   profile_directory = ephy_profile_dir ();
@@ -82,7 +82,7 @@ ephy_settings_init (void)
 void
 ephy_settings_shutdown (void)
 {
-  if (settings != NULL) {
+  if (settings) {
     g_hash_table_remove_all (settings);
     g_hash_table_unref (settings);
   }
@@ -124,7 +124,7 @@ ephy_settings_get (const char *schema)
     g_assert (strcmp (schema, ephy_prefs_relocatable_schemas[i].schema) != 0);
 
   gsettings = g_settings_new (schema);
-  if (gsettings == NULL)
+  if (!gsettings)
     g_warning ("Invalid schema %s requested", schema);
   else
     g_hash_table_insert (settings, g_strdup (schema), gsettings);

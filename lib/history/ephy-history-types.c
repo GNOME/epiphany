@@ -47,7 +47,7 @@ ephy_history_page_visit_new (const char               *url,
 void
 ephy_history_page_visit_free (EphyHistoryPageVisit *visit)
 {
-  if (visit == NULL)
+  if (!visit)
     return;
 
   ephy_history_url_free (visit->url);
@@ -103,7 +103,7 @@ ephy_history_host_copy (EphyHistoryHost *original)
 {
   EphyHistoryHost *host;
 
-  if (original == NULL)
+  if (!original)
     return NULL;
 
   host = ephy_history_host_new (original->url,
@@ -118,7 +118,7 @@ ephy_history_host_copy (EphyHistoryHost *original)
 void
 ephy_history_host_free (EphyHistoryHost *host)
 {
-  if (host == NULL)
+  if (!host)
     return;
 
   g_free (host->url);
@@ -157,7 +157,7 @@ EphyHistoryURL *
 ephy_history_url_copy (EphyHistoryURL *url)
 {
   EphyHistoryURL *copy;
-  if (url == NULL)
+  if (!url)
     return NULL;
 
   copy = ephy_history_url_new (url->url,
@@ -178,7 +178,7 @@ ephy_history_url_copy (EphyHistoryURL *url)
 void
 ephy_history_url_free (EphyHistoryURL *url)
 {
-  if (url == NULL)
+  if (!url)
     return;
 
   g_free (url->url);
@@ -239,7 +239,7 @@ ephy_history_query_copy (EphyHistoryQuery *query)
   copy->ignore_local = query->ignore_local;
   copy->host = query->host;
 
-  for (iter = query->substring_list; iter != NULL; iter = iter->next) {
+  for (iter = query->substring_list; iter; iter = iter->next) {
     copy->substring_list = g_list_prepend (copy->substring_list, g_strdup (iter->data));
   }
   copy->substring_list = g_list_reverse (copy->substring_list);

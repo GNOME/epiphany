@@ -125,7 +125,7 @@ save_thumbnail (GdkPixbuf  *pixbuf,
   gboolean ret = FALSE;
   GError *error = NULL;
 
-  if (pixbuf == NULL)
+  if (!pixbuf)
     return FALSE;
 
   path = thumbnail_path (uri);
@@ -154,12 +154,12 @@ save_thumbnail (GdkPixbuf  *pixbuf,
   rename (tmp_path, path);
 
 out:
-  if (error != NULL) {
+  if (error) {
     g_warning ("Failed to create thumbnail %s: %s", tmp_path, error->message);
     g_error_free (error);
   }
 
-  if (tmp_path != NULL)
+  if (tmp_path)
     unlink (tmp_path);
 
   g_free (path);
@@ -318,7 +318,7 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
 
   g_assert (EPHY_IS_SNAPSHOT_SERVICE (service));
   g_assert (GDK_IS_PIXBUF (snapshot));
-  g_assert (url != NULL);
+  g_assert (url);
 
   task = g_task_new (service, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
@@ -517,7 +517,7 @@ ephy_snapshot_service_get_default (void)
 {
   static EphySnapshotService *service = NULL;
 
-  if (service == NULL)
+  if (!service)
     service = g_object_new (EPHY_TYPE_SNAPSHOT_SERVICE, NULL);
 
   return service;
@@ -533,7 +533,7 @@ ephy_snapshot_service_lookup_cached_snapshot_path (EphySnapshotService *service,
 
   data = g_hash_table_lookup (service->cache, url);
 
-  return data == NULL ? NULL : data->path;
+  return !data ? NULL : data->path;
 }
 
 static EphySnapshotFreshness
@@ -544,7 +544,7 @@ ephy_snapshot_service_lookup_snapshot_freshness (EphySnapshotService *service,
 
   data = g_hash_table_lookup (service->cache, url);
 
-  return data == NULL ? SNAPSHOT_STALE : data->freshness;
+  return !data ? SNAPSHOT_STALE : data->freshness;
 }
 
 static void
@@ -560,7 +560,7 @@ get_snapshot_path_for_url_thread (GTask               *task,
   path = thumbnail_path (data->url);
 
   pixbuf = gdk_pixbuf_new_from_file (path, &error);
-  if (pixbuf == NULL) {
+  if (!pixbuf) {
     g_task_return_new_error (task,
                              EPHY_SNAPSHOT_SERVICE_ERROR,
                              EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
@@ -586,7 +586,7 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
   const char *path;
 
   g_assert (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_assert (url != NULL);
+  g_assert (url);
 
   task = g_task_new (service, cancellable, callback, user_data);
 

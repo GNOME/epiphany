@@ -34,13 +34,13 @@ ephy_signal_accumulator_object (GSignalInvocationHint *ihint,
   GetTypeFunc get_type = (GetTypeFunc)accu_data;
 
   object = g_value_get_object (handler_return);
-  if (object != NULL &&
+  if (object &&
       G_TYPE_CHECK_INSTANCE_TYPE (object, get_type ())) {
     g_value_set_object (return_accu, object);
 
     return FALSE;
   } else {
-    g_assert (object == NULL);
+    g_assert (!object);
   }
 
   return TRUE;
@@ -54,5 +54,5 @@ ephy_signal_accumulator_string (GSignalInvocationHint *ihint,
 {
   g_value_copy (handler_return, return_accu);
 
-  return g_value_get_string (handler_return) == NULL;
+  return !g_value_get_string (handler_return);
 }

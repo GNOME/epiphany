@@ -44,7 +44,7 @@ ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_di
   if (g_file_test (migrated_file, G_FILE_TEST_EXISTS)) {
     g_file_get_contents (migrated_file, &contents, &size, NULL);
 
-    if (contents != NULL)
+    if (contents)
       result = sscanf (contents, "%d", &latest);
 
     if (result != 1)
@@ -74,7 +74,7 @@ ephy_profile_utils_set_migration_version_for_profile_dir (int         version,
   contents = g_strdup_printf ("%d", version);
   result = g_file_set_contents (migrated_file, contents, -1, NULL);
 
-  if (result == FALSE)
+  if (!result)
     LOG ("Couldn't store migration version %d in %s", version, migrated_file);
 
   return result;
@@ -122,7 +122,7 @@ ephy_profile_utils_do_migration (const char *profile_directory,
     argv[i++] = index;
   }
 
-  if (profile_directory != NULL) {
+  if (profile_directory) {
     argv[i++] = "-p";
     argv[i++] = (char *)profile_directory;
   }

@@ -36,7 +36,7 @@ ephy_string_to_int (const char *string,
   char *parse_end;
 
   /* Check for the case of an empty string. */
-  if (string == NULL || *string == '\0')
+  if (!string || *string == '\0')
     return FALSE;
 
   /* Call the standard library routine to do the conversion. */
@@ -63,7 +63,7 @@ ephy_string_blank_chr (char *source)
 {
   char *p;
 
-  if (source == NULL)
+  if (!source)
     return NULL;
 
   p = source;
@@ -155,7 +155,7 @@ ephy_string_collate_key_for_domain (const char *str,
    * g_utf8_collate_key_for_filename on the dot-separated
    * components, but this seems good enough for now.
    */
-  while ((dot = g_strrstr_len (str, len, ".")) != NULL) {
+  while ((dot = g_strrstr_len (str, len, "."))) {
     newlen = dot - str;
 
     g_string_append_len (result, dot + 1, len - newlen - 1);
@@ -175,7 +175,7 @@ ephy_string_get_host_name (const char *url)
 {
   g_autoptr (GUri) uri = NULL;
 
-  if (url == NULL ||
+  if (!url ||
       g_str_has_prefix (url, "file://") ||
       g_str_has_prefix (url, "about:") ||
       g_str_has_prefix (url, "ephy-about:"))
@@ -185,13 +185,13 @@ ephy_string_get_host_name (const char *url)
   /* If uri is NULL it's very possible that we just got
    * something without a scheme, let's try to prepend
    * 'http://' */
-  if (uri == NULL) {
+  if (!uri) {
     char *effective_url = g_strconcat ("http://", url, NULL);
     uri = g_uri_parse (effective_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
     g_free (effective_url);
   }
 
-  if (uri == NULL)
+  if (!uri)
     return NULL;
 
   return g_strdup (g_uri_get_host (uri));
@@ -215,12 +215,12 @@ ephy_string_commandline_args_to_uris (char   **arguments,
   GFile *file;
   guint i;
 
-  if (arguments == NULL)
+  if (!arguments)
     return NULL;
 
   args = g_malloc0 (sizeof (gchar *) * (g_strv_length (arguments) + 1));
 
-  for (i = 0; arguments[i] != NULL; ++i) {
+  for (i = 0; arguments[i]; ++i) {
     file = g_file_new_for_commandline_arg (arguments [i]);
     if (g_file_is_native (file) && g_file_query_exists (file, NULL)) {
       args[i] = g_file_get_uri (file);
@@ -318,7 +318,7 @@ ephy_strv_remove (const char * const *strv,
   n = new_strv;
   s = strv;
 
-  while (*s != NULL) {
+  while (*s) {
     if (strcmp (*s, str) != 0) {
       *n = g_strdup (*s);
       n++;
@@ -345,7 +345,7 @@ ephy_strv_append (const char * const *strv,
   n = new_strv;
   s = strv;
 
-  while (*s != NULL) {
+  while (*s) {
     *n = g_strdup (*s);
     n++;
     s++;
