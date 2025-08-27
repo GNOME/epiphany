@@ -1235,7 +1235,7 @@ window_cmd_show_about (GSimpleAction *action,
   adw_about_dialog_set_version (dialog, VERSION);
   adw_about_dialog_set_copyright (dialog,
                                   "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                                  "Copyright © 2003–2023 The GNOME Web Developers");
+                                  "Copyright The GNOME Web Developers");
   adw_about_dialog_set_developer_name (dialog, _("The GNOME Project"));
 
   adw_about_dialog_set_debug_info (dialog, debug_info);
