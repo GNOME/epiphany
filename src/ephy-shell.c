@@ -879,6 +879,11 @@ ephy_shell_before_emit (GApplication *application,
             break;
         }
       }
+
+      /* Normally g_variant_iter_loop() frees this for us, but not if we break
+       * out of the loop and never call it again.
+       */
+      g_variant_unref (value);
       break;
     }
   }
