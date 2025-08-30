@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-08-03 22:35+0000\n"
-"PO-Revision-Date: 2025-08-04 13:42+0200\n"
+"POT-Creation-Date: 2025-08-29 14:25+0000\n"
+"PO-Revision-Date: 2025-08-30 23:27+0200\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "X-DL-Module: epiphany\n"
 "X-DL-State: Translating\n"
 "X-DL-Team: gl\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
@@ -114,12 +114,8 @@ msgid "Enable Search Suggestions"
 msgstr "Activar as suxestións de busca"
 
 #: data/org.gnome.epiphany.gschema.xml:51
-#, fuzzy
-#| msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgid "Whether to show Search Suggestion in url entry popdown."
-msgstr ""
-"Indica se mostrar as suxestións de Busca de Google no despregábel do campo "
-"da url despregábel."
+msgstr "Indica se mostrar as suxestións de Busca no campo da url despregábel."
 
 #: data/org.gnome.epiphany.gschema.xml:55
 msgid "Force new windows to be opened in tabs"
@@ -235,10 +231,8 @@ msgid "Show url bar at bottom"
 msgstr "Mostrar a barra de enderezos na parte inferior"
 
 #: data/org.gnome.epiphany.gschema.xml:101
-#, fuzzy
-#| msgid "Whether to show buttons for navigation in WebApp."
 msgid "Whether to show url bar on bottom."
-msgstr "Indica se mostrar os botóns para a navegación na aplicación web."
+msgstr "Indica se mostrar a barra de navegación na parte inferior."
 
 #: data/org.gnome.epiphany.gschema.xml:105
 msgid "The visibility policy for the tabs bar."
@@ -508,16 +502,14 @@ msgid "Default zoom level for new pages"
 msgstr "O nivel de ampliación por omisión para as novas páxinas"
 
 #: data/org.gnome.epiphany.gschema.xml:232
-#, fuzzy
-#| msgid "Default Zoom Level"
 msgid "Default reader mode zoom level."
-msgstr "Nivel de ampliación por omisión"
+msgstr "Nivel de ampliación predeterminado no modo lectura"
 
 #: data/org.gnome.epiphany.gschema.xml:233
-#, fuzzy
-#| msgid "Default zoom level for new pages"
 msgid "Sets the zoom level for reader mode pages."
-msgstr "O nivel de ampliación por omisión para as novas páxinas"
+msgstr ""
+"Estabelece o nivel de ampliación predeterminado para as páxinas no modo "
+"lectura."
 
 #: data/org.gnome.epiphany.gschema.xml:237
 msgid "Enable autosearch"
@@ -654,6 +646,7 @@ msgstr "Abrir URIs automaticamente"
 #: data/org.gnome.epiphany.gschema.xml:298
 msgid "This is a permission map of security origins to URL schemes."
 msgstr ""
+"Este é un mapa de permisos dos orixes de seguranza dos esquemas de URL."
 
 #: data/org.gnome.epiphany.gschema.xml:304
 msgid "Web application additional URLs"
@@ -1024,19 +1017,11 @@ msgstr ""
 "automaticamente a resposta."
 
 #: data/org.gnome.epiphany.gschema.xml:506
-#, fuzzy
-#| msgid "Decision to apply when webcam permission is requested for this host"
 msgid "Decision to apply when display permission is requested for this host"
 msgstr ""
 "Decisión a aplicar cando o permiso de cámara web se solicita para este equipo"
 
 #: data/org.gnome.epiphany.gschema.xml:507
-#, fuzzy
-#| msgid ""
-#| "This option is used to save whether a given host has been given "
-#| "permission to access the user’s location. The “undecided” default means "
-#| "the browser needs to ask the user for permission, while “allow” and "
-#| "“deny” tell it to automatically make the decision upon request."
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s display. The “undecided” default means the browser "
@@ -1216,8 +1201,8 @@ msgstr "Escriba o PIN para %s para autenticarse en %s:%d."
 #: embed/ephy-client-certificate-manager.c:321
 #: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:767
 #: embed/ephy-web-view.c:1377 src/ephy-history-dialog.c:888
-#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:269
-#: src/ephy-window.c:2284 src/preferences/autofill-view.c:363
+#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:267
+#: src/ephy-window.c:2288 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:98
@@ -1225,7 +1210,7 @@ msgstr "Escriba o PIN para %s para autenticarse en %s:%d."
 #: src/resources/gtk/prefs-lang-dialog.blp:18 src/window-commands.c:360
 #: src/window-commands.c:565 src/window-commands.c:931
 #: src/window-commands.c:1409 src/window-commands.c:2113
-#: src/window-commands.c:3046
+#: src/window-commands.c:3054
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1313,7 +1298,7 @@ msgid "Finished downloading %s"
 msgstr "Rematouse a descarga de %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969 src/ephy-window.c:3928
+#: embed/ephy-download.c:969 src/ephy-window.c:3920
 msgid "Download finished"
 msgstr "Terminou a descarga"
 
@@ -1726,7 +1711,7 @@ msgstr "Sensíbel a _maiúsculas"
 
 #: embed/ephy-find-toolbar.c:323
 msgid "Match Whole _Word Only"
-msgstr ""
+msgstr "Coincidir a palabra _completa"
 
 #: embed/ephy-find-toolbar.c:326
 msgid "Search Options"
@@ -1919,7 +1904,7 @@ msgstr "O erro preciso foi: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
 #: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1738
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1635
 msgid "Reload"
 msgstr "Recargar"
 
@@ -2165,12 +2150,14 @@ msgstr ""
 #, c-format
 msgid "Couldn't download search engine description file for %s: "
 msgstr ""
+"Non foi posíbel descargar o ficheiro de descrición do motor de busca para "
+"%s: "
 
 #. TRANSLATORS: The %s is the URL for the search suggestions.
 #: lib/ephy-search-engine.c:508
 #, c-format
 msgid "Couldn't load search engine suggestions from %s: "
-msgstr ""
+msgstr "Non foi posíbel cargar as suxestións do motor de busca desde %s: "
 
 #: lib/ephy-search-engine.c:517
 #, c-format
@@ -2188,7 +2175,7 @@ msgstr ""
 #: lib/ephy-search-engine.c:541 lib/ephy-search-engine.c:556
 #, c-format
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
-msgstr ""
+msgstr "Non foi posíbel analizar as suxestións desde %s con JSON %s: "
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2444,7 +2431,7 @@ msgstr "Seleccione a etiqueta actual"
 msgid "Remove current tag"
 msgstr "Eliminar a etiqueta actual"
 
-#: src/bookmarks/ephy-bookmark-properties.c:308
+#: src/bookmarks/ephy-bookmark-properties.c:289
 msgid "Add Bookmark"
 msgstr "Engadir marcador"
 
@@ -2463,12 +2450,12 @@ msgstr "Mover arriba"
 msgid "Move Down"
 msgstr "Mover abaixo"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:822
+#: src/bookmarks/ephy-bookmarks-dialog.c:809
 msgid "Bookmark removed"
 msgstr "Marcador eliminado"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:824 src/ephy-window.c:988
+#: src/bookmarks/ephy-bookmarks-dialog.c:811 src/ephy-window.c:986
 #: src/preferences/prefs-features-page.c:276
 msgid "_Undo"
 msgstr "_Desfacer"
@@ -2528,30 +2515,20 @@ msgstr "Favoritos"
 msgid "Mobile"
 msgstr "Móbil"
 
-#: src/context-menu-commands.c:297
+#: src/context-menu-commands.c:300
 msgid "Save Link As"
 msgstr "Gardar a ligazón como"
 
-#: src/context-menu-commands.c:305
+#: src/context-menu-commands.c:308
 msgid "Save Image As"
 msgstr "Gardar a imaxe como"
 
-#: src/context-menu-commands.c:313
+#: src/context-menu-commands.c:316
 msgid "Save Media As"
 msgstr "Gardar multimedia como"
 
-#. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:402
-msgid "Bookmark Page"
-msgstr "Marcar páxina"
-
-#. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:410
-msgid "Edit Bookmark"
-msgstr "Editar marcador"
-
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1747
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1644
 msgid "Stop"
 msgstr "Deter"
 
@@ -2708,7 +2685,7 @@ msgstr "Saír da pantalla completa"
 msgid "Select _None"
 msgstr "Seleccionar _ningún"
 
-#: src/ephy-history-dialog.c:267 src/ephy-window.c:996
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:994
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Seleccionar _todo"
@@ -2745,38 +2722,17 @@ msgstr "Non dispoñíbel en modo _incógnito"
 msgid "Clear History"
 msgstr "Limpar o historial"
 
-#: src/ephy-location-entry.c:336 src/resources/gtk/location-entry.blp:197
+#: src/ephy-location-entry.c:334 src/resources/gtk/location-entry.blp:98
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Buscar sitios web, marcadores e lapelas abertas"
 
-#. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1518 src/ephy-permission-popover.c:273
-msgid "Notification Request"
-msgstr "Solicitude de notificacións"
+#: src/ephy-location-entry.c:1341
+msgid "Secure Site"
+msgstr "Sitio seguro"
 
-#: src/ephy-location-entry.c:1522
-msgid "Camera Request"
-msgstr "Solicitude de cámara"
-
-#: src/ephy-location-entry.c:1526
-msgid "Microphone Request"
-msgstr "Solicitude de micrófono"
-
-#: src/ephy-location-entry.c:1530
-msgid "Screen Sharing Request"
-msgstr "Solicitude de compartición de pantalla"
-
-#: src/ephy-location-entry.c:1534
-msgid "Location Request"
-msgstr "Solicitude de localización"
-
-#: src/ephy-location-entry.c:1538
-msgid "Webcam and Microphone Request"
-msgstr "Solicitude de cámara web e micrófono"
-
-#: src/ephy-location-entry.c:1542
-msgid "Permission Request"
-msgstr "Solicitude de permiso"
+#: src/ephy-location-entry.c:1343
+msgid "Insecure Site"
+msgstr "Sitio non seguro"
 
 #: src/ephy-main.c:114
 msgid "Open a new browser window instead of a new tab"
@@ -2840,7 +2796,7 @@ msgstr ""
 msgid "Copy password"
 msgstr "Copiar contrasinal"
 
-#: src/ephy-passwords-view.c:259 src/ephy-window.c:4025
+#: src/ephy-passwords-view.c:259 src/ephy-window.c:4017
 msgid "Username"
 msgstr "Nome de usuario"
 
@@ -2848,90 +2804,13 @@ msgstr "Nome de usuario"
 msgid "Copy username"
 msgstr "Copiar nome de usuario"
 
-#: src/ephy-passwords-view.c:277 src/ephy-window.c:4032
+#: src/ephy-passwords-view.c:277 src/ephy-window.c:4024
 msgid "Password"
 msgstr "Contrasinal"
 
 #: src/ephy-passwords-view.c:290
 msgid "Remove Password"
 msgstr "Eliminar contrasinal"
-
-#. Translators: Notification policy for a specific site.
-#: src/ephy-permission-popover.c:275
-#, c-format
-msgid "The page at “%s” would like to send you notifications"
-msgstr "A páxina en «%s» quere enviarlle notificacións"
-
-#. Translators: Geolocation policy for a specific site.
-#: src/ephy-permission-popover.c:280
-msgid "Location Access Request"
-msgstr "Solicitude de acceso á localización"
-
-#. Translators: Geolocation policy for a specific site.
-#: src/ephy-permission-popover.c:282
-#, c-format
-msgid "The page at “%s” would like to know your location"
-msgstr "A páxina «%s» quere saber a súa localización"
-
-#. Translators: Microphone policy for a specific site.
-#: src/ephy-permission-popover.c:287
-msgid "Microphone Access Request"
-msgstr "Solicitude de acceso ao micrófono"
-
-#. Translators: Microphone policy for a specific site.
-#: src/ephy-permission-popover.c:289
-#, c-format
-msgid "The page at “%s” would like to use your microphone"
-msgstr "A páxina «%s» quere usar o seu micrófono"
-
-#. Translators: Webcam policy for a specific site.
-#: src/ephy-permission-popover.c:294
-msgid "Webcam Access Request"
-msgstr "Solicitude de acceso á cámara web"
-
-#. Translators: Webcam policy for a specific site.
-#: src/ephy-permission-popover.c:296
-#, c-format
-msgid "The page at “%s” would like to use your webcam"
-msgstr "A páxina «%s» quere usar a súa cámara web"
-
-#. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-permission-popover.c:301
-msgid "Webcam and Microphone Access Request"
-msgstr "Solicitude de acceso á cámara web e o micrófono"
-
-#. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-permission-popover.c:303
-#, c-format
-msgid "The page at “%s” would like to use your webcam and microphone"
-msgstr "A páxina «%s» quere usar a súa cámara web e o micrófono"
-
-#. Translators: Storage access policy for a specific site.
-#: src/ephy-permission-popover.c:317
-msgid "Website Data Access Request"
-msgstr "Solicitude de acceso a datos do sitio web"
-
-#. Translators: Storage access policy for a specific site.
-#: src/ephy-permission-popover.c:319
-#, c-format
-msgid ""
-"The page at “%s” would like to access its own data (including cookies) while "
-"browsing “%s”. This will allow “%s” to track your activity on “%s”."
-msgstr ""
-"A páxina «%s» desexa usar acceder aos seus datos (incluíndo as cookies) "
-"mentres navega «%s». Isto permitiralle a «%s» seguir a súa actividade en "
-"«%s»."
-
-#. Translators: Clipboard policy for a specific site.
-#: src/ephy-permission-popover.c:324
-msgid "Clipboard Access Request"
-msgstr "Solicitude de acceso ao portapapeis"
-
-#. Translators: Clipboard policy for a specific site.
-#: src/ephy-permission-popover.c:326
-#, c-format
-msgid "The page at “%s” would like to access your clipboard"
-msgstr "A páxina «%s» quere acceder ao portatapeis"
 
 #: src/ephy-privacy-report.c:65
 msgid "Blocked trackers on this site"
@@ -2952,36 +2831,28 @@ msgstr[1] ""
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
 #: src/ephy-security-dialog.c:184
-#, fuzzy, c-format
-#| msgid ""
-#| "This web site’s digital identification is not trusted. You may have "
-#| "connected to an attacker pretending to be %s."
+#, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
 "connected to an attacker pretending to be %s"
 msgstr ""
 "A identificación dixital do sitio web non é confiábel. Pode que se teña "
-"conectado a un atacante que finxe ser %s."
+"conectado a un atacante que finxe ser %s"
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
 #: src/ephy-security-dialog.c:191
-#, fuzzy, c-format
-#| msgid ""
-#| "This site has no security. An attacker could see any information you "
-#| "send, or control the content that you see."
+#, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see"
 msgstr ""
 "Este sitio non ten seguranza. Un atacante podería ver calquera información "
-"que envíe, ou controlar o contido que ves."
+"que envíe, ou controlar o contido que ves"
 
 #. Label in certificate dialog when site sends mixed content.
 #: src/ephy-security-dialog.c:198
-#, fuzzy
-#| msgid "This web site did not properly secure your connection."
 msgid "This web site did not properly secure your connection"
-msgstr "Este sitio web non asegura correctamente a súa conexión."
+msgstr "Este sitio web non asegura correctamente a súa conexión"
 
 #. Label in certificate dialog on secure sites.
 #: src/ephy-security-dialog.c:203
@@ -3041,14 +2912,20 @@ msgid "Uninstall Web App?"
 msgstr "Desinstalar aplicación _web?"
 
 #: src/ephy-shell.c:414
-#, fuzzy
-#| msgid "All visible links will be permanently deleted"
 msgid "This web appʼs data will be permanently deleted"
-msgstr "Todas as ligazóns elimanaranse permanentemente"
+msgstr "Todos os datos da aplicación web elimanaranse permanentemente"
 
 #: src/ephy-shell.c:418
 msgid "_Uninstall"
 msgstr "_Desinstalar"
+
+#: src/ephy-site-menu-button.c:163 src/resources/gtk/site-menu-button.blp:29
+msgid "Edit _Bookmark…"
+msgstr "Editar _marcador…"
+
+#: src/ephy-site-menu-button.c:165
+msgid "Add _Bookmark…"
+msgstr "Engadir _marcador…"
 
 #: src/ephy-suggestion-model.c:668
 #, c-format
@@ -3060,158 +2937,158 @@ msgstr "Non foi posíbel cargar as suxestións dos motores de busca: %s"
 msgid "Open a new tab"
 msgstr "Abrir unha lapela nova"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:987
 msgid "Re_do"
 msgstr "Re_facer"
 
 #. Edit.
-#: src/ephy-window.c:992
+#: src/ephy-window.c:990
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:991
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:994
+#: src/ephy-window.c:992
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:993
 msgid "_Paste Text Only"
 msgstr "_Pegar só texto"
 
-#: src/ephy-window.c:998
+#: src/ephy-window.c:996
 msgid "S_end Link by Email…"
 msgstr "_Enviar a ligazón por correo electrónico…"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:997
 msgid "Add _Link to Bookmarks"
 msgstr "Engadir _ligazón aos marcadores"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:999
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1000
 msgid "_Back"
 msgstr "_Atrás"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1001
 msgid "_Forward"
 msgstr "_Adiante"
 
 #. Bookmarks
-#: src/ephy-window.c:1006
+#: src/ephy-window.c:1004
 msgid "Add Boo_kmark…"
 msgstr "Engadir mar_cador…"
 
 #. Links.
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1008
 msgid "Open Link in New _Window"
 msgstr "Abrir a ligazón nunha xanela _nova"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1009
 msgid "Open Link in New _Tab"
 msgstr "Abrir ligazón nunha _lapela nova"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1010
 msgid "Open Link in I_ncognito Window"
 msgstr "Abrir a ligazón nunha xanela de i_ncógnito"
 
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1011
 msgid "_Save Link As…"
 msgstr "_Gardar a ligazón como…"
 
-#: src/ephy-window.c:1014
+#: src/ephy-window.c:1012
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
 
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:1013
 msgid "_Copy E-mail Address"
 msgstr "_Copiar enderezo de correo"
 
 #. Images.
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1017
 msgid "View _Image in New Tab"
 msgstr "Ver _imaxe nunha lapela nova"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1018
 msgid "Copy I_mage Address"
 msgstr "Copiar o enderezo da i_maxe"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1019
 msgid "_Save Image As…"
 msgstr "_Gardar a imaxe como…"
 
-#: src/ephy-window.c:1022
+#: src/ephy-window.c:1020
 msgid "Set as _Wallpaper"
 msgstr "Definir como _fondo do escritorio"
 
 #. Video.
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1024
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo nunha nova _xanela"
 
-#: src/ephy-window.c:1027
+#: src/ephy-window.c:1025
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo nunha _lapela nova"
 
-#: src/ephy-window.c:1028
+#: src/ephy-window.c:1026
 msgid "_Save Video As…"
 msgstr "_Gardar vídeo como…"
 
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1027
 msgid "_Copy Video Address"
 msgstr "_Copiar enderezo do vídeo"
 
 #. Audio.
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1031
 msgid "Open Audio in New _Window"
 msgstr "Abrir audio nunha _xanela nova"
 
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1032
 msgid "Open Audio in New _Tab"
 msgstr "Abrir audio nunha _lapela nova"
 
-#: src/ephy-window.c:1035
+#: src/ephy-window.c:1033
 msgid "_Save Audio As…"
 msgstr "_Gardar audio como…"
 
-#: src/ephy-window.c:1036
+#: src/ephy-window.c:1034
 msgid "_Copy Audio Address"
 msgstr "_Copiar enderezo do audio"
 
-#: src/ephy-window.c:1042
+#: src/ephy-window.c:1040
 msgid "Save Pa_ge As…"
 msgstr "Gardar _páxina como…"
 
-#: src/ephy-window.c:1043
+#: src/ephy-window.c:1041
 msgid "_Take Screenshot…"
 msgstr "Facer _captura de pantalla…"
 
-#: src/ephy-window.c:1044
+#: src/ephy-window.c:1042
 msgid "_Page Source"
 msgstr "Código da _páxina"
 
-#: src/ephy-window.c:1419
+#: src/ephy-window.c:1423
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Busca no web por «%s»"
 
-#: src/ephy-window.c:1448
+#: src/ephy-window.c:1452
 msgid "Open Link"
 msgstr "Abrir ligazón"
 
-#: src/ephy-window.c:1450
+#: src/ephy-window.c:1454
 msgid "Open Link In New Tab"
 msgstr "Abrir ligazón nunha nova lapela"
 
-#: src/ephy-window.c:1452
+#: src/ephy-window.c:1456
 msgid "Open Link In New Window"
 msgstr "Abrir ligazón na nova xanela"
 
-#: src/ephy-window.c:1454
+#: src/ephy-window.c:1458
 msgid "Open Link In Incognito Window"
 msgstr "Abrir a ligazón nunha xanela de incógnito"
 
@@ -3221,72 +3098,154 @@ msgstr "Abrir a ligazón nunha xanela de incógnito"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2282
+#: src/ephy-window.c:2286
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
-msgstr ""
+msgstr "Permitirlle “%s” abrir a ligazón “%s” nunha aplicación externa"
 
-#: src/ephy-window.c:2283
+#: src/ephy-window.c:2287
 msgid "Open in External App?"
 msgstr "Abrir unha aplicación externa?"
 
-#: src/ephy-window.c:2285
+#: src/ephy-window.c:2289
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
-#: src/ephy-window.c:2291
+#: src/ephy-window.c:2295
 msgid "Always Allow"
 msgstr "Permitir todo"
 
-#: src/ephy-window.c:3050
+#. Translators: Notification policy for a specific site.
+#: src/ephy-window.c:2995
+msgid "Notification Request"
+msgstr "Solicitude de notificacións"
+
+#. Translators: Notification policy for a specific site.
+#: src/ephy-window.c:2997
+#, c-format
+msgid "The page at “%s” would like to send you notifications"
+msgstr "A páxina en «%s» quere enviarlle notificacións"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-window.c:3002
+msgid "Location Access Request"
+msgstr "Solicitude de acceso á localización"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-window.c:3004
+#, c-format
+msgid "The page at “%s” would like to know your location"
+msgstr "A páxina «%s» quere saber a súa localización"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-window.c:3009
+msgid "Microphone Access Request"
+msgstr "Solicitude de acceso ao micrófono"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-window.c:3011
+#, c-format
+msgid "The page at “%s” would like to use your microphone"
+msgstr "A páxina «%s» quere usar o seu micrófono"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-window.c:3016
+msgid "Webcam Access Request"
+msgstr "Solicitude de acceso á cámara web"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-window.c:3018
+#, c-format
+msgid "The page at “%s” would like to use your webcam"
+msgstr "A páxina «%s» quere usar a súa cámara web"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-window.c:3023
+msgid "Webcam and Microphone Access Request"
+msgstr "Solicitude de acceso á cámara web e o micrófono"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-window.c:3025
+#, c-format
+msgid "The page at “%s” would like to use your webcam and microphone"
+msgstr "A páxina «%s» quere usar a súa cámara web e o micrófono"
+
+#. Translators: Storage access policy for a specific site.
+#: src/ephy-window.c:3039
+msgid "Website Data Access Request"
+msgstr "Solicitude de acceso a datos do sitio web"
+
+#. Translators: Storage access policy for a specific site.
+#: src/ephy-window.c:3041
+#, c-format
+msgid ""
+"The page at “%s” would like to access its own data (including cookies) while "
+"browsing “%s”. This will allow “%s” to track your activity on “%s”."
+msgstr ""
+"A páxina «%s» desexa usar acceder aos seus datos (incluíndo as cookies) "
+"mentres navega «%s». Isto permitiralle a «%s» seguir a súa actividade en "
+"«%s»."
+
+#. Translators: Clipboard policy for a specific site.
+#: src/ephy-window.c:3046
+msgid "Clipboard Access Request"
+msgstr "Solicitude de acceso ao portapapeis"
+
+#. Translators: Clipboard policy for a specific site.
+#: src/ephy-window.c:3048
+#, c-format
+msgid "The page at “%s” would like to access your clipboard"
+msgstr "A páxina «%s» quere acceder ao portatapeis"
+
+#: src/ephy-window.c:3076
 msgid "_Ask Later"
 msgstr "_Preguntar máis tarde"
 
-#: src/ephy-window.c:3051 src/resources/gtk/permission-popover.blp:47
+#: src/ephy-window.c:3077
 msgid "_Deny"
 msgstr "_Denegar"
 
-#: src/ephy-window.c:3052 src/resources/gtk/permission-popover.blp:60
+#: src/ephy-window.c:3078
 msgid "_Allow"
 msgstr "_Permitir"
 
-#: src/ephy-window.c:3255 src/ephy-window.c:4926
+#: src/ephy-window.c:3261 src/ephy-window.c:4915
 msgid "Leave Website?"
 msgstr "Desexa abandonar o sitio web?"
 
-#: src/ephy-window.c:3256 src/ephy-window.c:4927 src/window-commands.c:1406
+#: src/ephy-window.c:3262 src/ephy-window.c:4916 src/window-commands.c:1406
 msgid "A form was modified and has not been submitted"
 msgstr "Modificouse un formulario que non foi remitido"
 
-#: src/ephy-window.c:3257 src/ephy-window.c:4928 src/window-commands.c:1410
+#: src/ephy-window.c:3263 src/ephy-window.c:4917 src/window-commands.c:1410
 msgid "_Discard Form"
 msgstr "_Descartar formulario"
 
-#: src/ephy-window.c:3278
+#: src/ephy-window.c:3284
 msgid "Download operation"
 msgstr "Operación de descarga"
 
-#: src/ephy-window.c:3280
+#: src/ephy-window.c:3286
 msgid "Show details"
 msgstr "Mostrar detalles"
 
-#: src/ephy-window.c:3282
+#: src/ephy-window.c:3288
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operación de descarga activa"
 msgstr[1] "%d operacións de descarga activas"
 
-#: src/ephy-window.c:3562
+#: src/ephy-window.c:3566
 msgid "Set as Default Browser?"
 msgstr "Desexa estabelecer como o navegador predeterminado?"
 
-#: src/ephy-window.c:3564
+#: src/ephy-window.c:3568
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Usar Web como navegador web predeterminado e para abrir ligazóns externas"
 
-#: src/ephy-window.c:3566
+#: src/ephy-window.c:3570
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3294,27 +3253,27 @@ msgstr ""
 "Usar a Viste previa da Tecnoloxía experimental de Epiphany como o seu "
 "navegador predeterminado e para abrir ligazóns externas"
 
-#: src/ephy-window.c:3570
+#: src/ephy-window.c:3574
 msgid "_Ask Again Later"
 msgstr "_Preguntar máis tarde de novo"
 
-#: src/ephy-window.c:3571
+#: src/ephy-window.c:3575
 msgid "_No"
 msgstr "_Non"
 
-#: src/ephy-window.c:3572
+#: src/ephy-window.c:3576
 msgid "_Yes"
 msgstr "_Si"
 
-#: src/ephy-window.c:3916
+#: src/ephy-window.c:3908
 msgid "Download started"
 msgstr "Descarga iniciada"
 
-#: src/ephy-window.c:4006
+#: src/ephy-window.c:3998
 msgid "Save Password?"
 msgstr "Gardar o contrasinal?"
 
-#: src/ephy-window.c:4007
+#: src/ephy-window.c:3999
 msgid ""
 "Passwords are saved only on your device and can be removed at any time in "
 "Preferences"
@@ -3322,45 +3281,45 @@ msgstr ""
 "Os contrasinais só se gardan no seu dispositivo e poden eliminarse en "
 "calquera momento desde as Preferencias"
 
-#: src/ephy-window.c:4009
+#: src/ephy-window.c:4001
 msgid "Not Now"
 msgstr "Agora non"
 
-#: src/ephy-window.c:4010
+#: src/ephy-window.c:4002
 msgid "Never Save"
 msgstr "Non gardar nunca"
 
-#: src/ephy-window.c:4011
+#: src/ephy-window.c:4003
 msgid "Save"
 msgstr "Gardar"
 
-#: src/ephy-window.c:4212
+#: src/ephy-window.c:4204
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Aplicación web"
 
-#: src/ephy-window.c:4215
+#: src/ephy-window.c:4207
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Instalar sitio como aplicación web"
 
-#: src/ephy-window.c:5041
+#: src/ephy-window.c:5030
 msgid "Close Multiple Tabs?"
 msgstr "Desexa pechar varias lapelas?"
 
-#: src/ephy-window.c:5042
+#: src/ephy-window.c:5031
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Se pecha esta xanela, perderanse todas as lapelas abertas"
 
-#: src/ephy-window.c:5043
+#: src/ephy-window.c:5032
 msgid "C_lose Tabs"
 msgstr "P_echar lapelas"
 
-#: src/ephy-window.c:5153
+#: src/ephy-window.c:5142
 msgid "New tab opened"
 msgstr "Lapela nova aberta"
 
-#: src/ephy-window.c:5157
+#: src/ephy-window.c:5146
 msgid "Switch"
 msgstr "Cambiar"
 
@@ -3598,8 +3557,8 @@ msgstr "Extensións"
 msgid "View Open Tabs"
 msgstr "Ver lapelas abertas"
 
-#: src/resources/gtk/action-bar-end.blp:110 src/resources/gtk/action-bar.blp:67
-#: src/resources/gtk/bookmarks-dialog.blp:53
+#: src/resources/gtk/action-bar-end.blp:101 src/resources/gtk/action-bar.blp:67
+#: src/resources/gtk/bookmarks-dialog.blp:54
 msgid "Bookmarks"
 msgstr "Marcadores"
 
@@ -3618,6 +3577,10 @@ msgstr "Adiante"
 #: src/resources/gtk/prefs-general-page.blp:61
 msgid "Homepage"
 msgstr "Páxina de inicio"
+
+#: src/resources/gtk/add-opensearch-engine-button.blp:4
+msgid "Add Search Engine"
+msgstr "Engadir motor de busca"
 
 #: src/resources/gtk/autofill-view.blp:5
 msgid "Autofill Data"
@@ -3736,27 +3699,31 @@ msgstr "Editar"
 msgid "Done"
 msgstr "Feito"
 
-#: src/resources/gtk/bookmarks-dialog.blp:38 src/resources/gtk/data-view.blp:18
+#: src/resources/gtk/bookmarks-dialog.blp:32
+msgid "Close"
+msgstr "Pechar"
+
+#: src/resources/gtk/bookmarks-dialog.blp:39 src/resources/gtk/data-view.blp:18
 msgid "Options"
 msgstr "Opcións"
 
-#: src/resources/gtk/bookmarks-dialog.blp:68
+#: src/resources/gtk/bookmarks-dialog.blp:69
 msgid "Search bookmarks"
 msgstr "Buscar marcadores"
 
-#: src/resources/gtk/bookmarks-dialog.blp:160
+#: src/resources/gtk/bookmarks-dialog.blp:161
 msgid "No Bookmarks"
 msgstr "Non hai marcadores"
 
-#: src/resources/gtk/bookmarks-dialog.blp:161
+#: src/resources/gtk/bookmarks-dialog.blp:162
 msgid "Bookmarked pages will appear here"
 msgstr "As páxinas marcadas aparecerán aquí"
 
-#: src/resources/gtk/bookmarks-dialog.blp:180
+#: src/resources/gtk/bookmarks-dialog.blp:181
 msgid "I_mport…"
 msgstr "I_mportar…"
 
-#: src/resources/gtk/bookmarks-dialog.blp:185
+#: src/resources/gtk/bookmarks-dialog.blp:186
 msgid "E_xport…"
 msgstr "_Exportar…"
 
@@ -3982,6 +3949,7 @@ msgid "Unp_in Tab"
 msgstr "Desfi_xar lapela"
 
 #: src/resources/gtk/notebook-context-menu.blp:35
+#: src/resources/gtk/site-menu-button.blp:23
 msgid "_Mute Tab"
 msgstr "_Silenciar lapela"
 
@@ -4026,8 +3994,8 @@ msgid "Reopen Closed _Tab"
 msgstr "Reabrir _lapela pechada"
 
 #: src/resources/gtk/page-menu-button.blp:38
-msgid "Fullscreen"
-msgstr "Pantalla completa"
+msgid "_Fullscreen"
+msgstr "_Pantalla completa"
 
 #: src/resources/gtk/page-menu-button.blp:45
 msgid "Histo_ry"
@@ -4070,12 +4038,12 @@ msgid "_About Web"
 msgstr "_Sobre Web"
 
 #: src/resources/gtk/page-menu-button.blp:101
-msgid "Uninstall Web App"
-msgstr "Desinstalar aplicación web"
+msgid "_Uninstall Web App"
+msgstr "_Desinstalar aplicación web"
 
 #: src/resources/gtk/page-menu-button.blp:106
-msgid "Quit"
-msgstr "Saír"
+msgid "_Quit"
+msgstr "_Saír"
 
 #: src/resources/gtk/passwords-view.blp:9
 msgid "Passwords"
@@ -4442,271 +4410,268 @@ msgstr "Saír"
 
 #: src/resources/gtk/shortcuts-dialog.blp:44
 msgctxt "shortcuts dialog"
+msgid "Keyboard Shortcuts"
+msgstr "Atallos de teclado"
+
+#: src/resources/gtk/shortcuts-dialog.blp:49
+msgctxt "shortcuts dialog"
 msgid "Help"
 msgstr "Axuda"
 
-#: src/resources/gtk/shortcuts-dialog.blp:49
+#: src/resources/gtk/shortcuts-dialog.blp:54
 msgctxt "shortcuts dialog"
 msgid "Open Menu"
 msgstr "Abrir menú"
 
-#: src/resources/gtk/shortcuts-dialog.blp:54
+#: src/resources/gtk/shortcuts-dialog.blp:59
 msgctxt "shortcuts dialog"
 msgid "Show Downloads List"
 msgstr "Mostrar a lista de descargas"
 
-#: src/resources/gtk/shortcuts-dialog.blp:60
+#: src/resources/gtk/shortcuts-dialog.blp:65
 msgid "Navigation"
 msgstr "Navegación"
 
-#: src/resources/gtk/shortcuts-dialog.blp:63
+#: src/resources/gtk/shortcuts-dialog.blp:68
 msgctxt "shortcuts dialog"
 msgid "Go to Homepage"
 msgstr "Ir á páxina de inicio"
 
-#: src/resources/gtk/shortcuts-dialog.blp:68
+#: src/resources/gtk/shortcuts-dialog.blp:73
 msgctxt "shortcuts dialog"
 msgid "Reload Current Page"
 msgstr "Recargar a páxina actual"
 
-#: src/resources/gtk/shortcuts-dialog.blp:73
+#: src/resources/gtk/shortcuts-dialog.blp:78
 msgctxt "shortcuts dialog"
 msgid "Reload Bypassing Cache"
 msgstr "Recargar omitindo a caché"
 
-#: src/resources/gtk/shortcuts-dialog.blp:78
+#: src/resources/gtk/shortcuts-dialog.blp:83
 msgctxt "shortcuts dialog"
 msgid "Stop Loading Current Page"
 msgstr "Deter a carga da páxina actual"
 
-#: src/resources/gtk/shortcuts-dialog.blp:83
-#: src/resources/gtk/shortcuts-dialog.blp:89
+#: src/resources/gtk/shortcuts-dialog.blp:88
+#: src/resources/gtk/shortcuts-dialog.blp:94
 msgctxt "shortcuts dialog"
 msgid "Go Back to Previous Page"
 msgstr "Retroceder á anterior páxina"
 
-#: src/resources/gtk/shortcuts-dialog.blp:95
-#: src/resources/gtk/shortcuts-dialog.blp:101
+#: src/resources/gtk/shortcuts-dialog.blp:100
+#: src/resources/gtk/shortcuts-dialog.blp:106
 msgctxt "shortcuts dialog"
 msgid "Go Forward to Next Page"
 msgstr "Avanzar á seguinte páxina"
 
-#: src/resources/gtk/shortcuts-dialog.blp:108
+#: src/resources/gtk/shortcuts-dialog.blp:113
 msgctxt "shortcuts dialog"
 msgid "Tabs"
 msgstr "Lapelas"
 
-#: src/resources/gtk/shortcuts-dialog.blp:111
+#: src/resources/gtk/shortcuts-dialog.blp:116
 msgctxt "shortcuts dialog"
 msgid "New Tab"
 msgstr "Nova lapela"
 
-#: src/resources/gtk/shortcuts-dialog.blp:116
+#: src/resources/gtk/shortcuts-dialog.blp:121
 msgctxt "shortcuts dialog"
 msgid "Close Current Tab"
 msgstr "Pechar a lapela actual"
 
-#: src/resources/gtk/shortcuts-dialog.blp:121
+#: src/resources/gtk/shortcuts-dialog.blp:126
 msgctxt "shortcuts dialog"
 msgid "Reopen Closed Tab"
 msgstr "Reabrir a lapela pechada"
 
-#: src/resources/gtk/shortcuts-dialog.blp:126
+#: src/resources/gtk/shortcuts-dialog.blp:131
 msgctxt "shortcuts dialog"
 msgid "Go to Next Tab"
 msgstr "Ir á seguinte lapela"
 
-#: src/resources/gtk/shortcuts-dialog.blp:131
+#: src/resources/gtk/shortcuts-dialog.blp:136
 msgctxt "shortcuts dialog"
 msgid "Go to Previous Tab"
 msgstr "Ir á lapela anterior"
 
-#: src/resources/gtk/shortcuts-dialog.blp:136
+#: src/resources/gtk/shortcuts-dialog.blp:141
 msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Left"
 msgstr "Move a lapela actual á esquerda"
 
-#: src/resources/gtk/shortcuts-dialog.blp:141
+#: src/resources/gtk/shortcuts-dialog.blp:146
 msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Right"
 msgstr "Move a lapela actual á dereita"
 
-#: src/resources/gtk/shortcuts-dialog.blp:146
+#: src/resources/gtk/shortcuts-dialog.blp:151
 msgctxt "shortcuts dialog"
 msgid "Duplicate Current Tab"
 msgstr "Duplicar a lapela actual"
 
-#: src/resources/gtk/shortcuts-dialog.blp:151
+#: src/resources/gtk/shortcuts-dialog.blp:156
 msgctxt "shortcuts dialog"
 msgid "View Open Tabs"
 msgstr "Ver lapelas abertas"
 
-#: src/resources/gtk/shortcuts-dialog.blp:157
+#: src/resources/gtk/shortcuts-dialog.blp:162
 msgctxt "shortcuts dialog"
 msgid "Miscellaneous"
 msgstr "Miscelánea"
 
-#: src/resources/gtk/shortcuts-dialog.blp:160
+#: src/resources/gtk/shortcuts-dialog.blp:165
 msgctxt "shortcuts dialog"
 msgid "History"
 msgstr "Historial"
 
-#: src/resources/gtk/shortcuts-dialog.blp:165
+#: src/resources/gtk/shortcuts-dialog.blp:170
 msgctxt "shortcuts dialog"
 msgid "Clear Website Data"
 msgstr "Limpar os datos do sitio web"
 
-#: src/resources/gtk/shortcuts-dialog.blp:170
+#: src/resources/gtk/shortcuts-dialog.blp:175
 msgctxt "shortcuts dialog"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/resources/gtk/shortcuts-dialog.blp:175
+#: src/resources/gtk/shortcuts-dialog.blp:180
 msgctxt "shortcuts dialog"
 msgid "Bookmark Current Page"
 msgstr "Marcar páxina actual"
 
-#: src/resources/gtk/shortcuts-dialog.blp:180
+#: src/resources/gtk/shortcuts-dialog.blp:185
 msgctxt "shortcuts dialog"
 msgid "Show Bookmarks List"
 msgstr "Mostrar lista de marcadores"
 
-#: src/resources/gtk/shortcuts-dialog.blp:185
+#: src/resources/gtk/shortcuts-dialog.blp:190
 msgctxt "shortcuts dialog"
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
-#: src/resources/gtk/shortcuts-dialog.blp:190
+#: src/resources/gtk/shortcuts-dialog.blp:195
 msgctxt "shortcuts dialog"
 msgid "Export Bookmarks"
 msgstr "Exportar marcadores"
 
-#: src/resources/gtk/shortcuts-dialog.blp:195
+#: src/resources/gtk/shortcuts-dialog.blp:200
 msgctxt "shortcuts dialog"
 msgid "Toggle Caret Browsing"
 msgstr "Trocar modo de navegación co cursor"
 
-#: src/resources/gtk/shortcuts-dialog.blp:201
+#: src/resources/gtk/shortcuts-dialog.blp:206
 msgctxt "shortcuts dialog"
 msgid "View"
 msgstr "Ver"
 
-#: src/resources/gtk/shortcuts-dialog.blp:204
+#: src/resources/gtk/shortcuts-dialog.blp:209
 msgctxt "shortcuts dialog"
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: src/resources/gtk/shortcuts-dialog.blp:209
+#: src/resources/gtk/shortcuts-dialog.blp:214
 msgctxt "shortcuts dialog"
 msgid "Zoom Out"
 msgstr "Afastar"
 
-#: src/resources/gtk/shortcuts-dialog.blp:214
+#: src/resources/gtk/shortcuts-dialog.blp:219
 msgctxt "shortcuts dialog"
 msgid "Reset Zoom"
 msgstr "Restaurar ampliación"
 
-#: src/resources/gtk/shortcuts-dialog.blp:219
+#: src/resources/gtk/shortcuts-dialog.blp:224
 msgctxt "shortcuts dialog"
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: src/resources/gtk/shortcuts-dialog.blp:224
+#: src/resources/gtk/shortcuts-dialog.blp:229
 msgctxt "shortcuts dialog"
 msgid "View Page Source"
 msgstr "Ver código fonte da páxina"
 
-#: src/resources/gtk/shortcuts-dialog.blp:229
+#: src/resources/gtk/shortcuts-dialog.blp:234
 msgctxt "shortcuts dialog"
 msgid "Toggle Inspector"
 msgstr "Trocar inspector"
 
-#: src/resources/gtk/shortcuts-dialog.blp:234
+#: src/resources/gtk/shortcuts-dialog.blp:239
 msgctxt "shortcuts dialog"
 msgid "Toggle Reader Mode"
 msgstr "Trocar o modo lectura"
 
-#: src/resources/gtk/shortcuts-dialog.blp:240
+#: src/resources/gtk/shortcuts-dialog.blp:245
 msgctxt "shortcuts dialog"
 msgid "Editing"
 msgstr "Editando"
 
-#: src/resources/gtk/shortcuts-dialog.blp:243
+#: src/resources/gtk/shortcuts-dialog.blp:248
 msgctxt "shortcuts dialog"
 msgid "Cut"
 msgstr "Cortar"
 
-#: src/resources/gtk/shortcuts-dialog.blp:248
+#: src/resources/gtk/shortcuts-dialog.blp:253
 msgctxt "shortcuts dialog"
 msgid "Copy"
 msgstr "Copiar"
 
-#: src/resources/gtk/shortcuts-dialog.blp:253
+#: src/resources/gtk/shortcuts-dialog.blp:258
 msgctxt "shortcuts dialog"
 msgid "Paste"
 msgstr "Pegar"
 
-#: src/resources/gtk/shortcuts-dialog.blp:258
+#: src/resources/gtk/shortcuts-dialog.blp:263
 msgctxt "shortcuts dialog"
 msgid "Undo"
 msgstr "Desfacer"
 
-#: src/resources/gtk/shortcuts-dialog.blp:263
+#: src/resources/gtk/shortcuts-dialog.blp:268
 msgctxt "shortcuts dialog"
 msgid "Redo"
 msgstr "Refacer"
 
-#: src/resources/gtk/shortcuts-dialog.blp:268
+#: src/resources/gtk/shortcuts-dialog.blp:273
 msgctxt "shortcuts dialog"
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: src/resources/gtk/shortcuts-dialog.blp:273
+#: src/resources/gtk/shortcuts-dialog.blp:278
 msgctxt "shortcuts dialog"
 msgid "Select Page URL"
 msgstr "Seleccionar a URL da páxina"
 
-#: src/resources/gtk/shortcuts-dialog.blp:278
+#: src/resources/gtk/shortcuts-dialog.blp:283
 msgctxt "shortcuts dialog"
 msgid "Search With Default Search Engine"
 msgstr "Buscar co motor de busca predeterminado"
 
-#: src/resources/gtk/shortcuts-dialog.blp:283
+#: src/resources/gtk/shortcuts-dialog.blp:288
 msgctxt "shortcuts dialog"
 msgid "Find"
 msgstr "Buscar"
 
-#: src/resources/gtk/shortcuts-dialog.blp:288
+#: src/resources/gtk/shortcuts-dialog.blp:293
 msgctxt "shortcuts dialog"
 msgid "Next Find Result"
 msgstr "Seguinte resultado da busca"
 
-#: src/resources/gtk/shortcuts-dialog.blp:293
+#: src/resources/gtk/shortcuts-dialog.blp:298
 msgctxt "shortcuts dialog"
 msgid "Previous Find Result"
 msgstr "Anterior resultado da busca"
 
-#: src/resources/gtk/site-menu-button.blp:12
+#: src/resources/gtk/site-menu-button.blp:13
 msgid "_Find…"
 msgstr "_Buscar…"
 
-#: src/resources/gtk/site-menu-button.blp:17
+#: src/resources/gtk/site-menu-button.blp:18
 msgid "_Print…"
 msgstr "_Imprimir…"
 
-#: src/resources/gtk/site-menu-button.blp:22
-msgid "Mute Tab"
-msgstr "Silenciar lapela"
-
-#: src/resources/gtk/site-menu-button.blp:28
-msgid "Add _Bookmark"
-msgstr "Engadir mar_cador"
-
-#: src/resources/gtk/site-menu-button.blp:33
+#: src/resources/gtk/site-menu-button.blp:34
 msgid "Text Enco_ding…"
 msgstr "Co_dificación do texto…"
 
-#: src/resources/gtk/site-menu-button.blp:38
+#: src/resources/gtk/site-menu-button.blp:39
 msgid "_Security & Permissions"
 msgstr "_Seguranza e permisos"
 
@@ -4755,6 +4720,8 @@ msgid ""
 "URLs that start with the same base domain (example.com) will be opened by "
 "this web app"
 msgstr ""
+"As URLs que comezan co mesmo dominio base (exemplo.gal) será aberta por esta "
+"aplicación web"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:16
 msgid "Base Domain"
@@ -4969,23 +4936,23 @@ msgstr "_Substituír"
 msgid "Screenshot finished"
 msgstr "Terminou a captura de pantalla"
 
-#: src/window-commands.c:2532
+#: src/window-commands.c:2540
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2536
+#: src/window-commands.c:2544
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2582
+#: src/window-commands.c:2590
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3041
+#: src/window-commands.c:3049
 msgid "Enable Caret Browsing Mode?"
 msgstr "Desexa activar o modo de navegación co cursor?"
 
-#: src/window-commands.c:3042
+#: src/window-commands.c:3050
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4996,9 +4963,36 @@ msgstr ""
 "web, permitíndolle moverse co seu teclado. Quere activar o modo de "
 "navegación con cursor?"
 
-#: src/window-commands.c:3047
+#: src/window-commands.c:3055
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Bookmark Page"
+#~ msgstr "Marcar páxina"
+
+#~ msgid "Camera Request"
+#~ msgstr "Solicitude de cámara"
+
+#~ msgid "Microphone Request"
+#~ msgstr "Solicitude de micrófono"
+
+#~ msgid "Screen Sharing Request"
+#~ msgstr "Solicitude de compartición de pantalla"
+
+#~ msgid "Location Request"
+#~ msgstr "Solicitude de localización"
+
+#~ msgid "Webcam and Microphone Request"
+#~ msgstr "Solicitude de cámara web e micrófono"
+
+#~ msgid "Permission Request"
+#~ msgstr "Solicitude de permiso"
+
+#~ msgid "Mute Tab"
+#~ msgstr "Silenciar lapela"
+
+#~ msgid "Add _Bookmark"
+#~ msgstr "Engadir mar_cador"
 
 #~ msgid "Deprecated. Please use search-engine-providers instead."
 #~ msgstr "Obsoleto. Use search-engine-providers no lugar."
@@ -5369,9 +5363,6 @@ msgstr "_Activar"
 
 #~ msgid "S_ynced tabs"
 #~ msgstr "Lapelas s_incronizadas"
-
-#~ msgid "Close"
-#~ msgstr "Pechar"
 
 #~ msgid "New Tab Page"
 #~ msgstr "Páxina de lapela nova"
