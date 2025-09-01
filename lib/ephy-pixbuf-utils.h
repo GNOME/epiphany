@@ -32,3 +32,4 @@ GdkPixbuf *ephy_get_pixbuf_from_surface (cairo_surface_t *surface,
                                          int              src_y,
                                          int              width,
                                          int              height);
+
