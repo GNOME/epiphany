@@ -24,6 +24,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-profile-utils.h"
+#include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
 
@@ -255,6 +256,12 @@ migrate_gsb_db (void)
     g_warning ("Failed to delete %s: %s", threats_db_journal, g_strerror (errno));
 }
 
+static void
+migrate_search_engines (void)
+{
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
+}
+
 [[maybe_unused]]
 static void
 migrate_nothing (void)
@@ -276,6 +283,7 @@ const EphyProfileMigrator migrators[] = {
   /* 37 */
   migrate_pre_flatpak_webapps,
   /* 38 */ migrate_gsb_db,
+  /* 39 */ migrate_search_engines,
 };
 
 static gboolean
