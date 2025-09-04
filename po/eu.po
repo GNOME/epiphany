@@ -11,8 +11,8 @@
 msgid ""
 msgstr "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-03-06 13:30+0000\n"
-"PO-Revision-Date: 2025-03-02 09:14+0200\n"
+"POT-Creation-Date: 2025-08-29 14:25+0000\n"
+"PO-Revision-Date: 2025-08-31 09:14+0200\n"
 "Last-Translator: Asier Saratsua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -21,49 +21,32 @@ msgstr "Project-Id-Version: epiphany master\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:6
-#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
-#: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1328
+#: data/org.gnome.Epiphany.desktop.in.in:2
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:205
+#: embed/ephy-about-handler.c:237 src/ephy-main.c:104 src/ephy-main.c:268
+#: src/ephy-main.c:428 src/window-commands.c:1229
 msgid "Web"
 msgstr "Weba"
 
-#: data/org.gnome.Epiphany.appdata.xml.in.in:7
-#: data/org.gnome.Epiphany.desktop.in.in:5
-msgid "Browse the web"
-msgstr "Nabigatu webean"
-
-#: data/org.gnome.Epiphany.appdata.xml.in.in:9
-msgid ""
-"The web browser for GNOME, featuring tight integration with the desktop and "
-"a simple and intuitive user interface that allows you to focus on your web "
-"pages. If you’re looking for a simple, clean, beautiful view of the web, "
-"this is the browser for you."
-msgstr "GNOMEren web nabigatzailea, mahaigainera egokitutako bateragarritasunarekin eta erabil errazeko erabiltzailearen interfazearekin web orrietan zentra zaitezen. Webaren ikuspegi eder, garbi eta sotil baten bila bazabiltza, hau da zure nabigatzailea."
-
-#: data/org.gnome.Epiphany.appdata.xml.in.in:15
-msgid "Web is often referred to by its code name, Epiphany."
-msgstr "Weba aplikazioa bere kode-izenagatik ezaguna da: Epiphany."
-
-#. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1338
-msgid "The GNOME Project"
-msgstr "GNOME proiektua"
-
-#: data/org.gnome.Epiphany.desktop.in.in:4
+#: data/org.gnome.Epiphany.desktop.in.in:3
 msgid "Web Browser"
 msgstr "Web-nabigatzailea"
 
+#: data/org.gnome.Epiphany.desktop.in.in:4
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:7
+msgid "Browse the web"
+msgstr "Nabigatu webean"
+
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Epiphany.desktop.in.in:7
+#: data/org.gnome.Epiphany.desktop.in.in:6
 msgid "web;browser;internet;epiphany;"
 msgstr "weba;nabigatzailea;internet;epiphany;"
 
-#: data/org.gnome.Epiphany.desktop.in.in:21
+#: data/org.gnome.Epiphany.desktop.in.in:20
 msgid "New Window"
 msgstr "Leiho berria"
 
-#: data/org.gnome.Epiphany.desktop.in.in:25
+#: data/org.gnome.Epiphany.desktop.in.in:24
 msgid "New Incognito Window"
 msgstr "Isilpeko leiho berria"
 
@@ -80,22 +63,26 @@ msgid "Address of the user’s home page."
 msgstr "Erabiltzailearen orrialde nagusiaren helbidea."
 
 #: data/org.gnome.epiphany.gschema.xml:22
-msgid "Default search engine."
-msgstr "Bilaketa-motor lehenetsia."
+msgid "Default search engine"
+msgstr "Bilaketa-motor lehenetsia"
 
 #: data/org.gnome.epiphany.gschema.xml:23
 msgid "Name of the search engine selected by default."
 msgstr "Lehenetsi gisa hautatutako bilaketa-motorraren izena."
 
-#: data/org.gnome.epiphany.gschema.xml:33
-msgid "Deprecated. Please use search-engine-providers instead."
-msgstr "Zaharkituta. Erabili 'search-engine-providers'"
+#: data/org.gnome.epiphany.gschema.xml:27
+msgid "Incognito search engine"
+msgstr "Isilpeko bilaketa-motorra"
 
-#: data/org.gnome.epiphany.gschema.xml:45
+#: data/org.gnome.epiphany.gschema.xml:28
+msgid "Name of the search engine selected in incognito mode."
+msgstr "Isilpeko moduan hautatutako bilaketa-motorraren izena."
+
+#: data/org.gnome.epiphany.gschema.xml:39
 msgid "List of the search engines."
 msgstr "Bilaketa-motorren zerrenda."
 
-#: data/org.gnome.epiphany.gschema.xml:46
+#: data/org.gnome.epiphany.gschema.xml:40
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
@@ -104,80 +91,80 @@ msgid ""
 "the search engine."
 msgstr "Bilaketa-motorren zerrenda. vardict elementuen matrize bat da, non vardict bakoitza bilaketa-motor bat eta onartutako honako gakoak diren: \"name\" bilaketa-motorraren izena da. \"url\" bilaketaren URLa bilaketa-terminoa %s katearekin ordeztuta da. \"bang\" bilaketa-motorraren bang-a (laster-letra) da."
 
-#: data/org.gnome.epiphany.gschema.xml:56
-msgid "Enable Google Search Suggestions"
-msgstr "Gaitu Google bilaketen iradokizunak"
+#: data/org.gnome.epiphany.gschema.xml:50
+msgid "Enable Search Suggestions"
+msgstr "Gaitu bilaketa-iradokizunak"
 
-#: data/org.gnome.epiphany.gschema.xml:57
-msgid "Whether to show Google Search Suggestion in url entry popdown."
-msgstr "URLa sartzeko bunbuilo beherakorrean Googlen bilaketen iradokizunak erakutsiko diren ala ez."
+#: data/org.gnome.epiphany.gschema.xml:51
+msgid "Whether to show Search Suggestion in url entry popdown."
+msgstr "Bilaketa-iradokizunak erakutsiko diren ala ez URLa sartzeko bunbuiloan"
 
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:55
 msgid "Force new windows to be opened in tabs"
 msgstr "Derrigortu leiho berriak fitxetan irekitzea"
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Derrigortu galdetzea leiho berriek irekitzeko fitxa berriak erabiltzea leiho berrien ordez."
 
-#: data/org.gnome.epiphany.gschema.xml:69
+#: data/org.gnome.epiphany.gschema.xml:63
 msgid "Whether to automatically restore the last session"
 msgstr "Azken saioa automatikoki leheneratuko den edo ez adierazten du"
 
-#: data/org.gnome.epiphany.gschema.xml:70
+#: data/org.gnome.epiphany.gschema.xml:64
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr "Abioan saioa nola leheneratuko den definitzen du. Balio onartuak: 'always' (beti) aplikazioaren aurreko egoera beti leheneratzen da; eta 'crashed' (kraskatuta) aplikazioa kraskatzen denean soilik leheneratuko da saioa."
 
-#: data/org.gnome.epiphany.gschema.xml:74
+#: data/org.gnome.epiphany.gschema.xml:68
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr "Saioa leheneratzean berehala ikusgai ez dauden fitxen karga atzeratzea edo ez"
 
-#: data/org.gnome.epiphany.gschema.xml:75
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr "Aukera hau gaituta badago (TRUE gisa ezarrita), saioa leheneratzean  fitxak ez dira kargatuko erabiltzaileak haien gainean klik egin arte."
 
-#: data/org.gnome.epiphany.gschema.xml:79
+#: data/org.gnome.epiphany.gschema.xml:73
 msgid "List of adblock filters"
 msgstr "Adblock iragazkien zerrenda"
 
-#: data/org.gnome.epiphany.gschema.xml:80
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
 msgstr "Iragarkien blokeatzaileak erabiliko dituen eduki-iragazkien arauak dituzten URLen zerrenda, JSON formatuan"
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid "Whether to ask for setting browser as default"
 msgstr "Nabigatzailea lehenetsi modura ezarriko den galdetuko den ala ez"
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
 msgstr "Aukera honetan egia ezartzen denean, nabigatzaileak galdetuko du nabigatzaile lehenetsia bihurtuko den ala ez, lehendik ezarrita ez badago."
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid "Start in incognito mode"
 msgstr "Abiarazi isilpeko moduan"
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr "Aukera honetan egia ezartzen denean, nabigatzailea beti isilpeko moduan abiaraziko da"
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "Active clear data items."
 msgstr "Datu-elementuen garbiketa aktiboa."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
@@ -186,21 +173,29 @@ msgid ""
 "Prevention data."
 msgstr "Datu-elementuak garbitzen dituen hautapenak (bit-maskara) aktibo egon behar du modu lehenetsian. 1 = Cookie-ak, 2 = HTTP disko-cachea, 4 = Datuen biltegi lokala, 8 = Lineaz kanpoko web-aplikazioen cachea, 16 = IndexDB datu-baseak, 32 = WebSQL datu-baseak, 64 = pluginen datuak, 128 = HSTS politiken cachea, 256 = Jarraipenaren prebentzio adimentsuaren datuak."
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "Zabaldu fitxen tamaina fitxa-barrako leku erabilgarria betetzeko."
 
-#: data/org.gnome.epiphany.gschema.xml:102
+#: data/org.gnome.epiphany.gschema.xml:96
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar. This setting is ignored in Pantheon desktop."
 msgstr "Gaitzen bada, fitxa-barraren leku erabilgarri osoa erabiltzeko zabalduko dira fitxak. Ezarpen honi ez ikusiarena egiten zaio Pantheon mahaigainean."
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:100
+msgid "Show url bar at bottom"
+msgstr "Erakutsi URLen barra behean"
+
+#: data/org.gnome.epiphany.gschema.xml:101
+msgid "Whether to show url bar on bottom."
+msgstr "URLen barra behean erakutsiko den ala ez."
+
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "The visibility policy for the tabs bar."
 msgstr "Fitxa-barraren ikusgaitasunaren araua."
 
-#: data/org.gnome.epiphany.gschema.xml:107
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -208,29 +203,49 @@ msgid ""
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr "Fitxa-barra noiz erakutsiko den kontrolatzen du. Balio onartuak: 'always' (beti), fitxa-barra beti erakusten da; 'more-than-one' (bat baino gehiago), fitxa-barra soilik erakutsiko da fitxa bat edo gehiago daudenean); eta 'never' (inoiz ere ez), fitxa-barra ez da inoiz erakusten. Ezarpen honi ez ikusiarena egiten zaio Pantheon mahaigainean, eta 'always' balioa erabiltzen da."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:110
 msgid "Keep window open when closing last tab"
 msgstr "Mantendu leihoa irekita azken fitxa ixtean"
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr "Gaituta badago, aplikazioaren leihoa irekita geratuko da azken fitxa ixten denean."
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:115
+msgid "Show the WebKit features preferences page."
+msgstr "Erakutsi WebKit eginbideen hobespenen orria."
+
+#: data/org.gnome.epiphany.gschema.xml:116
+msgid ""
+"Controls whether the preferences window shows the page which allows toggling "
+"experimental and development WebKit features."
+msgstr "Hobespenen leihoak WebKit eginbide esperimentalak eta garapenezkoak aktibatzea ahalbidetzen duen orria erakutsiko duen ala ez kontrolatzen du."
+
+#: data/org.gnome.epiphany.gschema.xml:120
+msgid "Show internal WebKit features in the features preferences page."
+msgstr "Erakutsi barneko WebKit eginbideak hobespenen orrian."
+
+#: data/org.gnome.epiphany.gschema.xml:121
+msgid ""
+"Controls whether the features page in the preferences window shows internal "
+"WebKit features."
+msgstr "Hobespenen leihoak barneko WebKit eginbideak erakutsiko dituen ala ez kontrolatzen du."
+
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid "Reader mode article font style."
 msgstr "Irakurle moduaren artikuluen letra-tipoaren estiloa."
 
-#: data/org.gnome.epiphany.gschema.xml:119
+#: data/org.gnome.epiphany.gschema.xml:128
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr "Chooses the style of the main body text for articles in reader mode. Balio onartuak: 'sans' eta 'serif'."
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid "Reader mode color scheme."
 msgstr "Irakurle moduaren kolore-eskema"
 
-#: data/org.gnome.epiphany.gschema.xml:124
+#: data/org.gnome.epiphany.gschema.xml:133
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
@@ -238,173 +253,181 @@ msgid ""
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr "Irakurle moduan ikusiko diren artikuluen koloreen estiloa hautatzen du. Balio onartuak: 'argia' (testu iluna atzeko plano argian) eta 'iluna' (testu argia atzeko plano ilunean). Ezarpen honi ez ikusiarena egingo zaio sistema osorako estilo ilun baten hobespena eskaintze duten sistemetan, esaterako GNOME 42 eta berriagoetan."
 
-#: data/org.gnome.epiphany.gschema.xml:130
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Minimum font size"
 msgstr "Gutxieneko letra-tamaina"
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:143
 msgid "Use GNOME fonts"
 msgstr "Erabili GNOMEren letra-tipoak"
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid "Use GNOME font settings."
 msgstr "Erabili GNOMEren letra-tipoen ezarpenak."
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:148
 msgid "Custom sans-serif font"
 msgstr "Sans serif letra-tipo pertsonalizatua"
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr "Balio bat mahaigaineko sans-serif letra-tipoa gainidazteko 'use-gnome-fonts' ezartzean."
 
-#: data/org.gnome.epiphany.gschema.xml:144
+#: data/org.gnome.epiphany.gschema.xml:153
 msgid "Custom serif font"
 msgstr "Serif letra-tipo pertsonalizatua"
 
-#: data/org.gnome.epiphany.gschema.xml:145
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr "Balio bat mahaigaineko serif letra-tipoa gainidazteko 'use-gnome-fonts' ezartzean."
 
-#: data/org.gnome.epiphany.gschema.xml:149
+#: data/org.gnome.epiphany.gschema.xml:158
 msgid "Custom monospace font"
 msgstr "Tarte bakarreko letra-tipo pertsonalizatua"
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr "Balio bat mahaigaineko tarte bakarreko letra-tipoa gainidazteko 'use-gnome-fonts' ezartzean."
 
-#: data/org.gnome.epiphany.gschema.xml:154
+#: data/org.gnome.epiphany.gschema.xml:163
 msgid "Use a custom CSS"
 msgstr "Erabili CSS pertsonalizatua"
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Erabili CSS pertsonalizatua webguneetako CSS propioak aldatzeko."
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:168
 msgid "Use a custom JS"
 msgstr "Erabili JS pertsonalizatua"
 
-#: data/org.gnome.epiphany.gschema.xml:160
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid "Use a custom JS file to modify websites."
 msgstr "Erabili JS pertsonalizatua webguneak aldatzeko."
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:173
 msgid "Enable spell checking"
 msgstr "Gaitu ortografia-egiaztapena"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:174
 msgid "Spell check any text typed in editable areas."
 msgstr "Area editagarrietako edozein testuren ortografia zuzendu."
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:178
 msgid "Default encoding"
 msgstr "Kodeketa lehenetsia"
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:179
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "Kodeketa lehenetsia. Onartutako balioak WebKitGTK liburutegiak uler ditzakeenak dira."
 
-#: data/org.gnome.epiphany.gschema.xml:174
-#: src/resources/gtk/prefs-general-page.ui:219
+#: data/org.gnome.epiphany.gschema.xml:183
+#: src/resources/gtk/prefs-general-page.blp:201
 msgid "Languages"
 msgstr "Hizkuntzak"
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:184
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr "Hobetsitako hizkuntzak. Hizkuntza-kodeen matrizea edo 'system' uneko hizkuntza erabiltzeko."
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:188
 msgid "Allow popups"
 msgstr "Onartu laster-leihoak"
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:189
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "Eman baimena guneei leiho berriak JavaScript-ekin irekitzeko (JavaScript gaituta badago)."
 
-#: data/org.gnome.epiphany.gschema.xml:184
+#: data/org.gnome.epiphany.gschema.xml:193
 msgid "User agent"
 msgstr "Erabiltzaile-agentea"
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:194
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr "Erabiltzaile-agente gisa erabiliko den katea nabigatzailea web zerbitzarietan identifikatzeko."
 
-#: data/org.gnome.epiphany.gschema.xml:189
+#: data/org.gnome.epiphany.gschema.xml:198
 msgid "Enable adblock"
 msgstr "Gaitu iragarkien blokeatzailea"
 
-#: data/org.gnome.epiphany.gschema.xml:190
+#: data/org.gnome.epiphany.gschema.xml:199
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Web orriak erakutsi nahi dituzten kapsulatutako iragarkiak blokeatu edo ez adierazten du."
 
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:203
 msgid "Remember passwords"
 msgstr "Gogoratu pasahitzak"
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:204
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Webguneetan pasahitzak gorde eta aurretik osatuko diren ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:208
 msgid "Autofill form data"
 msgstr "Bete automatikoki inprimaki-datuak"
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:209
 msgid "Whether to auto fill form data in websites."
 msgstr "Webguneetako inprimaki-datuak automatikoki beteko diren ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:213
 msgid "Enable site-specific quirks"
 msgstr "Gaitu gune zehatzen bitxikeriak"
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:214
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
 msgstr "Gaitu berezitasunak zenbait webgunek hobeto funtziona dezaten. Hobe ezarpen hau desgaitzen baduzu arazo bat arazten ari zarenean."
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:218
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "Gaitu jarraipenaren prebentzio adimentsua (ITP)"
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:219
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "Jarraipenaren prebentzio adimentsua gaituko den ala ez"
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid "Allow websites to store local website data"
 msgstr "Onartu webguneek datuak lokalean biltegiratu ditzaten"
 
-#: data/org.gnome.epiphany.gschema.xml:215
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr "Webguneek cookie-ak, biltegiratze-datu lokalak eta IndexedDB datu-baseak onartuko dituzten ala ez. Hau desgaitzen bada, zenbait webgunek ez dute ongi funtzionatuko."
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "Default zoom level for new pages"
 msgstr "Orri berrien zoomaren maila lehenetsia"
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:232
+msgid "Default reader mode zoom level."
+msgstr "Irakurle moduaren zoom-maila lehenetsia."
+
+#: data/org.gnome.epiphany.gschema.xml:233
+msgid "Sets the zoom level for reader mode pages."
+msgstr "Irakurle moduko orrien zoom-maila ezartzen du."
+
+#: data/org.gnome.epiphany.gschema.xml:237
 msgid "Enable autosearch"
 msgstr "Gaitu bilaketa automatikoa"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -412,45 +435,45 @@ msgid ""
 "selected from the dropdown menu."
 msgstr "Sareko bilaketa automatiko bat egingo den ala ez helbide-barran URL bat ez dirudien zerbait sartzen denean. Ezarpen hau desgaituta badago, dena kargatuko da URL bat bailitzan, bilaketa-motor bat esplizituki hautatzen ez bada goitibeherako menuan."
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:242
 msgid "Enable mouse gestures"
 msgstr "Gaitu sagu-keinuak"
 
-#: data/org.gnome.epiphany.gschema.xml:229
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr "Sagu-keinuak gaituko diren ala ez. Sagu-keinuak Opera nabigatzailearen portaeran oinarrituta daude eta saguaren erdiko botoia + keinua erabilita aktibatzen dira."
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:247
 msgid "Enable navigation gestures"
 msgstr "Gaitu nabigazio-keinuak"
 
-#: data/org.gnome.epiphany.gschema.xml:234
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "Whether to enable back and forward navigation gestures."
 msgstr "Aurreranzko eta atzeranzko nabigazio-keinuak gaituko diren ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "Last upload directory"
 msgstr "Kargarako azken direktorioa"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Keep track of last upload directory"
 msgstr "Gogoratu kargarako azken direktorioa"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Last download directory"
 msgstr "Deskargarako azken direktorioa"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Keep track of last download directory"
 msgstr "Gogoratu deskargarako azken direktorioa"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "Hardware acceleration policy"
 msgstr "Hardware bidezko azelerazioaren politika"
 
-#: data/org.gnome.epiphany.gschema.xml:249
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
@@ -458,295 +481,311 @@ msgid ""
 "could expose severe hardware-specific graphics driver bugs."
 msgstr "Hardware bidezko azelerazioa gaituko den ala ez. Balio onartuak: 'always' (beti) eta 'never' (inoiz ere ez). Hardware bidezko azelerazioa beharrezkoa izan daiteke errendimendu onargarria lortzeko kapsulatutako gailuetan, baina memoriaren erabilera handitzen du eta kontrolagailu grafikoen akats larriak jasan ditzake."
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid "Always ask for download directory"
 msgstr "Beti galdetu deskargarako direktorioa"
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Deskarga bakoitzean direktorioen aukeratzaile bat erakutsiko den ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid "Enable immediately switch to new open tab"
 msgstr "Gaitu fitxa ireki berrira berehala joatea"
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Fitxa ireki berrira automatikoki joango den ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:263
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid "Enable WebExtensions"
 msgstr "Gaitu WebExtensions"
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr "WebExtensions gaituko den ala ez. WebExtensions nabigatzaile anitzetarako hedapen-sistema bat da."
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:282
 msgid "Active WebExtensions"
 msgstr "WebExtensions aktibo"
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid "Indicates which WebExtensions are set to active."
 msgstr "WebExtensions aktibo dagoen ala ez adierazten du."
 
-#: data/org.gnome.epiphany.gschema.xml:273
+#: data/org.gnome.epiphany.gschema.xml:287
 msgid "Show developer actions"
 msgstr "Erakutsi garatzaile-ekintzak"
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:288
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr "Garatzaile-ekintzen laster-menua erakutsiko den ala ez. Horrela, 'Orriaren iturburua' eta 'Aztertu elementua' ekintzak erabili ahal izango dira."
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:292
+msgid "Always show full URL"
+msgstr "Erakutsi beti URL osoa"
+
+#: data/org.gnome.epiphany.gschema.xml:293
+msgid "Whether to show the full URL in the address bar even when unfocused."
+msgstr "Helbide-barran URL osoa erakutsiko den ala ez, baita fokuratu gabe dagoenean ere."
+
+#: data/org.gnome.epiphany.gschema.xml:297
+msgid "Automatically open URIs"
+msgstr "Automatikoki ireki URIak"
+
+#: data/org.gnome.epiphany.gschema.xml:298
+msgid "This is a permission map of security origins to URL schemes."
+msgstr "Segurtasun-jatorrien eta URL eskemen arteko baimen-mapa bat da."
+
+#: data/org.gnome.epiphany.gschema.xml:304
 msgid "Web application additional URLs"
 msgstr "Web-aplikazioaren URL gehigarriak"
 
-#: data/org.gnome.epiphany.gschema.xml:281
+#: data/org.gnome.epiphany.gschema.xml:305
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Web-aplikazioak ireki beharko dituen URLen zerrenda"
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid "Show navigation buttons in WebApp"
 msgstr "Erakutsi nabigazio-botoiak WebApp-en"
 
-#: data/org.gnome.epiphany.gschema.xml:286
+#: data/org.gnome.epiphany.gschema.xml:310
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "WebApp-en nabigaziorako botoiak erakutsiko diren ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:290
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "Run in background"
 msgstr "Exekutatu atzeko planoan"
 
-#: data/org.gnome.epiphany.gschema.xml:291
+#: data/org.gnome.epiphany.gschema.xml:315
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr "Gaituta badago, aplikazioa atzeko planoan exekutatuko da leihoa ixtean."
 
-#: data/org.gnome.epiphany.gschema.xml:295
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid "WebApp is system-wide"
 msgstr "WebApp sistema osokoa da"
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:320
 msgid "If enabled, application cannot be edited or removed."
 msgstr "Gaituta badago, aplikazioa ezin da ez editatu ez kendu."
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid "The downloads folder"
 msgstr "Deskargen karpeta"
 
-#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:327
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr "Deskargak gordetzeko karpetaren bide-izena, edo \"Downloads\" (Deskargak) deskargen karpeta lehenetsia erabiltzeko, edo \"Desktop\" (Mahaigaina) mahaigaina karpeta erabiltzeko."
 
-#: data/org.gnome.epiphany.gschema.xml:310
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid "Window position"
 msgstr "Leihoaren posizioa"
 
-#: data/org.gnome.epiphany.gschema.xml:311
+#: data/org.gnome.epiphany.gschema.xml:335
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "Aurreko saioetatik berreskuratu ez den leiho berrian erabiliko den posizioa."
 
-#: data/org.gnome.epiphany.gschema.xml:315
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "Window size"
 msgstr "Leihoaren tamaina"
 
-#: data/org.gnome.epiphany.gschema.xml:316
+#: data/org.gnome.epiphany.gschema.xml:340
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr "Aurreko saioetatik berreskuratu ez den leiho berrian erabiliko den tamaina."
 
-#: data/org.gnome.epiphany.gschema.xml:320
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "Is maximized"
 msgstr "Maximizatua"
 
-#: data/org.gnome.epiphany.gschema.xml:321
+#: data/org.gnome.epiphany.gschema.xml:345
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr "Aurreko saioetatik berreskuratu ez den leiho berria maximizatuta abiaraziko den ala ez."
 
-#: data/org.gnome.epiphany.gschema.xml:336
+#: data/org.gnome.epiphany.gschema.xml:360
 msgid "Disable forward and back buttons"
 msgstr "Desgaitu aurrera eta atzera joateko botoiak"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr "Ezarritakoa 'true' (egia) bada, aurrera eta atzera joateko botoiak desgaituko dira eta erabiltzaileek ezin izango dute nabigatzailearen historia hurbila atzitu."
 
-#: data/org.gnome.epiphany.gschema.xml:355
+#: data/org.gnome.epiphany.gschema.xml:379
 msgid "Firefox Sync Token Server URL"
 msgstr "Firefox Sync token-zerbitzariaren URLa"
 
-#: data/org.gnome.epiphany.gschema.xml:356
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "URL to a custom Firefox Sync token server."
 msgstr "Firefox Sync token-zerbitzari pertsonalizatu baten URLa."
 
-#: data/org.gnome.epiphany.gschema.xml:360
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Firefox Sync kontu-zerbitzariaren URLa"
 
-#: data/org.gnome.epiphany.gschema.xml:361
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "Firefox Sync kontu-zerbitzari pertsonalizatu baten URLa."
 
-#: data/org.gnome.epiphany.gschema.xml:365
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "Currently signed in sync user"
 msgstr "Unean sinkronizatze-erabiltzaile gisa saioan hasita"
 
-#: data/org.gnome.epiphany.gschema.xml:366
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
 msgstr "Mozillaren zerbitzariekin datuak sinkronizatzeko erabiltzen den Mozilla kontuari lotutako posta elektronikoa."
 
-#: data/org.gnome.epiphany.gschema.xml:370
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid "Last sync timestamp"
 msgstr "Azken sinkronizazioaren denbora-zigilua"
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Egin zen azken sinkronizazioaren data-zigilua UNIX denboran (segundotan)."
 
-#: data/org.gnome.epiphany.gschema.xml:375
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid "Sync device ID"
 msgstr "Sinkronizatze-gailuaren IDa"
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "The sync device ID of the current device."
 msgstr "Uneko gailuaren sinkronizatze-gailuaren IDa."
 
-#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid "Sync device name"
 msgstr "Sinkronizatze-gailuaren izena"
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid "The sync device name of the current device."
 msgstr "Uneko gailuaren sinkronizatze-gailuaren izena."
 
-#: data/org.gnome.epiphany.gschema.xml:385
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid "The sync frequency in minutes"
 msgstr "Sinkronizazioaren maiztasuna (minututan)"
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Bi sinkronizazio jarraituen arteko minutu kopurua."
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:414
 msgid "Sync data with Firefox"
 msgstr "Sinkronizatu datuak Firefox-ekin"
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr "TRUE (egia) Epiphanyren bilduma Firefoxenarekin sinkronizatu behar bada. Bestela, FALSE (faltsua)"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Enable bookmarks sync"
 msgstr "Gaitu laster-markak sinkronizatzea"
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "TRUE (egia) laster-marken bilduma sinkronizatu behar bada. Bestela, FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid "Bookmarks sync timestamp"
 msgstr "Laster-marken sinkronizazioaren denbora-zigilua"
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Laster-marken azken sinkronizazioa burutu zeneko denbora-zigilua."
 
-#: data/org.gnome.epiphany.gschema.xml:405
-#: data/org.gnome.epiphany.gschema.xml:420
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:444
+#: data/org.gnome.epiphany.gschema.xml:459
 msgid "Initial sync or normal sync"
 msgstr "Hasierako sinkronizazioa, edo sink. arrunta"
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "TRUE (egia) laster-marken bilduma aurreneko aldiz sinkronizatu behar bada. Bestela FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid "Enable passwords sync"
 msgstr "Gaitu pasahitzak sinkronizatzea"
 
-#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "TRUE (egia) pasahitzen bilduma sinkronizatu behar bada. Bestela FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "Passwords sync timestamp"
 msgstr "Pasahitzen sinkronizazioaren denbora-zigilua"
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Pasahitzen azken sinkronizazioa burutu zeneko denbora-zigilua."
 
-#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "TRUE (egia) pasahitzen bilduma aurreneko aldiz sinkronizatu behar bada. Bestela FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:449
 msgid "Enable history sync"
 msgstr "Gaitu historia sinkronizatzea"
 
-#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "TRUE (egia) historiaren bilduma sinkronizatu behar bada. Bestela FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:454
 msgid "History sync timestamp"
 msgstr "Historiaren sinkronizazioaren denbora-zigilua"
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:455
 msgid "The timestamp at which last history sync was made."
 msgstr "Historiaren azken sinkronizazioa burutu zeneko denbora-zigilua."
 
-#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:460
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "TRUE (egia) historiaren bilduma aurreneko aldiz sinkronizatu behar bada. Bestela FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:464
 msgid "Enable open tabs sync"
 msgstr "Gaitu irekitako fitxak sinkronizatzea"
 
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:465
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "TRUE (egia) irekitako fitxen bilduma sinkronizatu behar bada. Bestela FALSE (faltsua)."
 
-#: data/org.gnome.epiphany.gschema.xml:445
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid "Open tabs sync timestamp"
 msgstr "Irekitako fitxen sinkronizazioaren denbora-zigilua"
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:470
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Irekitako fitxen azken sinkronizazioa burutu zeneko denbora-zigilua."
 
-#: data/org.gnome.epiphany.gschema.xml:457
+#: data/org.gnome.epiphany.gschema.xml:481
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Aplikatu beharreko erabakia ostalari honentzako mikrofonoaren baimena eskatzean."
 
-#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -754,12 +793,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr "Aukera honek gordetzen du ostalari jakin bati erabiltzailearen mikrofonoa atzitzeko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzaileak erabiltzaileari galdetuko diola adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
 
-#: data/org.gnome.epiphany.gschema.xml:462
+#: data/org.gnome.epiphany.gschema.xml:486
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "Aplikatu beharreko erabakia ostalari honentzako geolokalizazioaren baimena eskatzean."
 
-#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -767,12 +806,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr "Aukera honek gordetzen du ostalari jakin bati erabiltzailearen kokalekua atzitzeko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzaileak erabiltzaileari galdetuko diola adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
 
-#: data/org.gnome.epiphany.gschema.xml:467
+#: data/org.gnome.epiphany.gschema.xml:491
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Aplikatu beharreko erabakia ostalari honentzako jakinarazpenaren baimena eskatzean."
 
-#: data/org.gnome.epiphany.gschema.xml:468
+#: data/org.gnome.epiphany.gschema.xml:492
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -780,12 +819,12 @@ msgid ""
 "automatically make the decision upon request."
 msgstr "Aukera honek gordetzen du ostalari jakin bati jakinarazpenak erakusteko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzaileak erabiltzaileari galdetuko diola adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
 
-#: data/org.gnome.epiphany.gschema.xml:472
+#: data/org.gnome.epiphany.gschema.xml:496
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "Aplikatu beharreko erabakia ostalari honentzako pasahitza gordetzeko baimena eskatzean."
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:497
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -793,11 +832,11 @@ msgid ""
 "make the decision upon request."
 msgstr "Aukera honek gordetzen du ostalari jakin bati pasahitzak gordentzeko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzaileak erabiltzaileari galdetuko diola adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
 
-#: data/org.gnome.epiphany.gschema.xml:477
+#: data/org.gnome.epiphany.gschema.xml:501
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Zer erabaki aplikatu ostalari honek web-kameraren baimenak eskatzean"
 
-#: data/org.gnome.epiphany.gschema.xml:478
+#: data/org.gnome.epiphany.gschema.xml:502
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -805,12 +844,24 @@ msgid ""
 "automatically make the decision upon request."
 msgstr "Aukera honek gordetzen du ostalari jakin bati erabiltzailearen web-kamera atzitzeko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzaileak erabiltzaileari galdetuko diola adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
 
-#: data/org.gnome.epiphany.gschema.xml:482
+#: data/org.gnome.epiphany.gschema.xml:506
+msgid "Decision to apply when display permission is requested for this host"
+msgstr "Aplikatu beharreko erabakia ostalari honentzako bistaratze-baimena eskatzean."
+
+#: data/org.gnome.epiphany.gschema.xml:507
+msgid ""
+"This option is used to save whether a given host has been given permission "
+"to access the user’s display. The “undecided” default means the browser "
+"needs to ask the user for permission, while “allow” and “deny” tell it to "
+"automatically make the decision upon request."
+msgstr "Aukera honek gordetzen du ostalari jakin bati erabiltzailearen pantaila atzitzeko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzaileak erabiltzaileari galdetuko diola adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
+
+#: data/org.gnome.epiphany.gschema.xml:511
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "Aplikatu beharreko erabakia ostalari honentzako iragarkien baimena eskatzean."
 
-#: data/org.gnome.epiphany.gschema.xml:483
+#: data/org.gnome.epiphany.gschema.xml:512
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -818,17 +869,34 @@ msgid ""
 "decision upon request."
 msgstr "Aukera honek gordetzen du ostalari jakin bati iragarkiak bidaltzeko baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta nabigatzailearen ezarpen globala erabiliko dela adierazten du; 'allow' (baimendu) eta 'deny' (ukatu) balioek eskaeren aurrean erabakia automatikoki hartuko dela zehazten dute."
 
-#: data/org.gnome.epiphany.gschema.xml:487
+#: data/org.gnome.epiphany.gschema.xml:516
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr "Aplikatu beharreko erabakia erreprodukzio automatikoko politika bat eskatzean ostalari honetarako"
 
-#: data/org.gnome.epiphany.gschema.xml:488
+#: data/org.gnome.epiphany.gschema.xml:517
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
 "while “allow” and “deny” tell it to allow / deny all requests to autoplay "
 "media respectively."
 msgstr "Aukera honek gordetzen du ostalari jakin bati erreprodukzio automatikorako baimena eman zaion ala ez. Balio onartuak: 'undecided' (erabaki gabe) balio lehenetsia da eta mutututako multimedien erreprodukzio automatikoa onartzen dela esan nahi du; 'allow' (baimendu) eta 'deny' (ukatu) balioek multimedia automatikoki erreproduzitzeko eskariak automatikoki onartu edo ukatuko direla zehazten dute."
+
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:9
+msgid ""
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages. If you’re looking for a simple, clean, beautiful view of the web, "
+"this is the browser for you."
+msgstr "GNOMEren web nabigatzailea, mahaigainera egokitutako bateragarritasunarekin eta erabil errazeko erabiltzailearen interfazearekin web orrietan zentra zaitezen. Webaren ikuspegi eder, garbi eta sotil baten bila bazabiltza, hau da zure nabigatzailea."
+
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:15
+msgid "Web is often referred to by its code name, Epiphany."
+msgstr "Weba aplikazioa bere kode-izenagatik ezaguna da: Epiphany."
+
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:35 src/window-commands.c:1239
+msgid "The GNOME Project"
+msgstr "GNOME proiektua"
 
 #: embed/ephy-about-handler.c:117 embed/ephy-about-handler.c:119
 msgid "Memory usage"
@@ -843,7 +911,7 @@ msgstr "%s bertsioa"
 msgid "About Web"
 msgstr "Weba aplikazioari buruz"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1330
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1231
 msgid "Epiphany Technology Preview"
 msgstr "Epiphanyren aurrerapen teknologikoak"
 
@@ -852,116 +920,139 @@ msgid "A simple, clean, beautiful view of the web"
 msgstr "Webaren ikuspegi xume, garbi eta dotorea."
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:271 embed/ephy-about-handler.c:273
-#: embed/ephy-about-handler.c:338 embed/ephy-about-handler.c:364
+#: embed/ephy-about-handler.c:274 embed/ephy-about-handler.c:277
+#: embed/ephy-about-handler.c:345 embed/ephy-about-handler.c:371
 msgid "Apps"
 msgstr "Aplikazioak"
 
-#: embed/ephy-about-handler.c:274
+#: embed/ephy-about-handler.c:278
 msgid "List of installed web apps"
 msgstr "Instalatutako web-aplikazioen zerrenda"
 
-#: embed/ephy-about-handler.c:323
+#. Translators: Desktop notification when a new web app is created.
+#: embed/ephy-about-handler.c:330 src/window-commands.c:2020
+msgid "Launch"
+msgstr "Abiarazi"
+
+#: embed/ephy-about-handler.c:330
 msgid "Delete"
 msgstr "Ezabatu"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:325
+#: embed/ephy-about-handler.c:332
 msgid "Installed on:"
 msgstr "Instalatuta:"
 
-#: embed/ephy-about-handler.c:364
+#: embed/ephy-about-handler.c:371
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
 msgstr "Zure webgunerik gogokoena gehitu dezakezu <b>Instalatu web-aplikazio gisa…</b> sakatuta orriaren menuan."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:469
+#: embed/ephy-about-handler.c:476
 msgid "Welcome to Web"
 msgstr "Ongi etorri Weba aplikaziora"
 
-#: embed/ephy-about-handler.c:469
+#: embed/ephy-about-handler.c:476
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Hasi nabigatzen eta gehien bisitatu dituzun webguneak agertuko dira hemen."
 
-#: embed/ephy-about-handler.c:503
+#: embed/ephy-about-handler.c:510
 #: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "Kendu ikuspegitik"
 
-#: embed/ephy-about-handler.c:593 embed/ephy-about-handler.c:594
+#: embed/ephy-about-handler.c:600 embed/ephy-about-handler.c:601
 msgid "Private Browsing"
 msgstr "Arakatze pribatua"
 
-#: embed/ephy-about-handler.c:595
+#: embed/ephy-about-handler.c:602
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
 "when you close the window. Files you download will be kept."
 msgstr "Isilpean nabigatzen ari zara. Modu honetan ikusitako orriak ez dira nabigazio-historian agertuko eta gordetako informazio guztia garbitu egingo da leihoa ixten duzunean. Deskargatu dituzun fitxategiak gorde egingo dira."
 
-#: embed/ephy-about-handler.c:599
+#: embed/ephy-about-handler.c:606
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr "Isilpeko moduak zure jarduerak ordenagailu hau darabilten besteengandik ezkutatzen ditu."
 
-#: embed/ephy-about-handler.c:601
+#: embed/ephy-about-handler.c:608
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
 "that you visit, and advertisers on these websites may still be tracking you."
 msgstr "Ez ditu zure jarduerak ezkutatuko lanetik ari bazara. Zure Interneteko Zerbitzuen Hornitzaileak (ISP), zure gobernuak, beste gobernu batzuk, bisitatzen dituzun webguneek eta iragarkien enpresek zure jardueren aztarna jarrai dezakete."
 
-#: embed/ephy-client-certificate-manager.c:294
+#: embed/ephy-client-certificate-manager.c:310
 msgid "PIN required"
 msgstr "PINa behar da"
 
-#: embed/ephy-client-certificate-manager.c:297
+#: embed/ephy-client-certificate-manager.c:313
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Sartu PINa %s erabiltzailerako, %s:%d gunean autentifikatzeko."
 
-#: embed/ephy-client-certificate-manager.c:305
-#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:767
-#: embed/ephy-web-view.c:1347 src/ephy-history-dialog.c:889
-#: src/ephy-window.c:262 src/preferences/autofill-view.c:363
-#: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:178
-#: src/resources/gtk/firefox-sync-dialog.ui:117
-#: src/resources/gtk/history-dialog.ui:58
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:358
-#: src/window-commands.c:616 src/window-commands.c:978
-#: src/window-commands.c:1508 src/window-commands.c:2212
-#: src/window-commands.c:3112
+#: embed/ephy-client-certificate-manager.c:321
+#: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:767
+#: embed/ephy-web-view.c:1377 src/ephy-history-dialog.c:888
+#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:267
+#: src/ephy-window.c:2288 src/preferences/autofill-view.c:363
+#: src/preferences/extension-view.c:117
+#: src/resources/gtk/bookmark-properties.blp:20
+#: src/resources/gtk/firefox-sync-dialog.blp:98
+#: src/resources/gtk/history-dialog.blp:55
+#: src/resources/gtk/prefs-lang-dialog.blp:18 src/window-commands.c:360
+#: src/window-commands.c:565 src/window-commands.c:931
+#: src/window-commands.c:1409 src/window-commands.c:2113
+#: src/window-commands.c:3054
 msgid "_Cancel"
 msgstr "_Utzi"
 
-#: embed/ephy-client-certificate-manager.c:306
+#: embed/ephy-client-certificate-manager.c:322
 msgid "_Login"
 msgstr "_Saio-hasiera"
 
-#: embed/ephy-client-certificate-manager.c:388
+#: embed/ephy-client-certificate-manager.c:431
 msgid "Select certificate"
 msgstr "Hautatu ziurtagiria"
 
-#: embed/ephy-client-certificate-manager.c:391
+#: embed/ephy-client-certificate-manager.c:435
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr "%s:%d guneak %s erabiltzailerako ziurtagiri bat eman dezazun behar du."
 
-#: embed/ephy-client-certificate-manager.c:396
+#: embed/ephy-client-certificate-manager.c:440
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "%s:%d guneak autentifikaziorako ziurtagiri bat eman dezazun behar du."
 
-#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:362
+#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:364
 msgid "_Select"
 msgstr "_Hautatu"
 
-#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:554
+#: embed/ephy-client-certificate-manager.c:489
+msgid "Remember Decision"
+msgstr "Gogoratu erabakia"
+
+#: embed/ephy-client-certificate-manager.c:492
+msgid "Never"
+msgstr "Inoiz ere ez"
+
+#: embed/ephy-client-certificate-manager.c:493
+msgid "For Session"
+msgstr "Saioan"
+
+#: embed/ephy-client-certificate-manager.c:494
+msgid "Permanently"
+msgstr "Beti"
+
+#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:585
 msgid "Select a Directory"
 msgstr "Hautatu direktorioa"
 
@@ -1001,7 +1092,7 @@ msgid "Finished downloading %s"
 msgstr "%s deskargatzea amaitu da"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969 src/ephy-window.c:3675
+#: embed/ephy-download.c:969 src/ephy-window.c:3920
 msgid "Download finished"
 msgstr "Deskarga amaitu da"
 
@@ -1068,8 +1159,7 @@ msgid "Blank page"
 msgstr "Orri hutsa"
 
 #. Title for the blank page
-#. Translators: tooltip for the new tab button
-#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.ui:117
+#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.blp:100
 msgid "New Tab"
 msgstr "Fitxa berria"
 
@@ -1397,19 +1487,31 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Ezezaguna (%s)"
 
-#: embed/ephy-find-toolbar.c:235
+#: embed/ephy-find-toolbar.c:289
 msgid "Type to search…"
 msgstr "Idatzi bilaketa…"
 
-#: embed/ephy-find-toolbar.c:241
+#: embed/ephy-find-toolbar.c:295
 msgid "Find previous occurrence of the search string"
 msgstr "Hitzaren aurreko agerraldia bilatzen du"
 
-#: embed/ephy-find-toolbar.c:248
+#: embed/ephy-find-toolbar.c:302
 msgid "Find next occurrence of the search string"
 msgstr "Hitzaren hurrengo agerraldia bilatzen du"
 
-#: embed/ephy-reader-handler.c:309
+#: embed/ephy-find-toolbar.c:322
+msgid "_Case Sensitive"
+msgstr "_Maiuskula/minuskula"
+
+#: embed/ephy-find-toolbar.c:323
+msgid "Match Whole _Word Only"
+msgstr "Bat etorri hitz _osoarekin soilik"
+
+#: embed/ephy-find-toolbar.c:326
+msgid "Search Options"
+msgstr "Bilaketaren aukerak"
+
+#: embed/ephy-reader-handler.c:315
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "'%s' ez da baliozko URIa"
@@ -1422,119 +1524,118 @@ msgstr "Ez da testua aurkitu"
 msgid "Search wrapped back to the top"
 msgstr "Bilatu berriro goitik"
 
-#: embed/ephy-web-view.c:232 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:245 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "Fitxategi denak"
 
-#: embed/ephy-web-view.c:241 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:254 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr "Onartutako mota guztiak"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:612
+#: embed/ephy-web-view.c:625
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Inprimaki hau ez da segurua - pasahitza ez da pribatua izango"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3415
+#: embed/ephy-web-view.c:626 embed/ephy-web-view.c:3642
 msgid "_Dismiss"
 msgstr "_Baztertu"
 
-#: embed/ephy-web-view.c:789
+#: embed/ephy-web-view.c:802
 msgid "Web process crashed"
 msgstr "Web prozesua kraskatu da"
 
-#: embed/ephy-web-view.c:792
+#: embed/ephy-web-view.c:805
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Web prozesua amaitu egin da memoria-mugak gainditu direlako"
 
-#: embed/ephy-web-view.c:795
+#: embed/ephy-web-view.c:808
 msgid "Web process terminated by API request"
 msgstr "Web-prozesua amaitu da API eskari baten ondorioz"
 
-#: embed/ephy-web-view.c:840
+#: embed/ephy-web-view.c:853
 msgid "Page Unresponsive"
 msgstr "Orriak ez du erantzuten"
 
-#: embed/ephy-web-view.c:843
+#: embed/ephy-web-view.c:856
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "Uneko “%s” orriak ez du erantzuten"
 
-#: embed/ephy-web-view.c:847
+#: embed/ephy-web-view.c:860
 msgid "_Wait"
 msgstr "_Itxaron"
 
-#: embed/ephy-web-view.c:848
+#: embed/ephy-web-view.c:861
 msgid "Force _Stop"
 msgstr "Behartu _gelditzea"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1091
+#: embed/ephy-web-view.c:1107
 #, c-format
 msgid "Loading “%s”…"
 msgstr "'%s' kargatzen…"
 
-#: embed/ephy-web-view.c:1093 embed/ephy-web-view.c:1099
+#: embed/ephy-web-view.c:1109 embed/ephy-web-view.c:1115
 msgid "Loading…"
 msgstr "Kargatzen…"
 
-#: embed/ephy-web-view.c:1340
+#: embed/ephy-web-view.c:1370
 msgid "Delete Web App?"
 msgstr "Ezabatu web-aplikazioa?"
 
-#: embed/ephy-web-view.c:1343
+#: embed/ephy-web-view.c:1373
 #, c-format
 msgid ""
 "“%s” will be removed. You will have to re-install the website as an app from "
 "the menu to use it again."
 msgstr "“%s” kendu egingo da. Webgunea berriro instalatu beharko duzu aplikazio gisa menutik, hura berriro erabili ahal izateko."
 
-#: embed/ephy-web-view.c:1348 src/preferences/autofill-view.c:364
-#: src/preferences/passwords-view.c:179 src/resources/gtk/history-dialog.ui:160
-#: src/resources/gtk/location-entry.ui:303
+#: embed/ephy-web-view.c:1378 src/ephy-passwords-view.c:159
+#: src/preferences/autofill-view.c:364 src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "Ez_abatu"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1626
+#: embed/ephy-web-view.c:1806
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Webgune honek aurkeztutako identifikazioa beste webgune batena da."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1631
+#: embed/ephy-web-view.c:1811
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr "Webgune honen identifikazioa zaharregia da fidagarria izateko. Egiaztatu data zure ordenagailuaren egutegian."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1636
+#: embed/ephy-web-view.c:1816
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Webgune honen identifikazioa ez da erakunde fidagarri batek igorritakoa."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1641
+#: embed/ephy-web-view.c:1821
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Ezin izan da webgune honen identifikazioa prozesatu. Hondatuta egon daiteke."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1646
+#: embed/ephy-web-view.c:1826
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "Webgune honen identifikazioa igorri zuen erakunde fidagarriak errebokatu du."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1651
+#: embed/ephy-web-view.c:1831
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "Ezin da webgune honen identifikazioan fidatu, zifratze oso ahula darabilelako."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1656
+#: embed/ephy-web-view.c:1836
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1542,31 +1643,31 @@ msgstr "Webgune honen identifikazioa etorkizuneko datentzako bakarrik da baliozk
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1721 embed/ephy-web-view.c:1777
+#: embed/ephy-web-view.c:1901 embed/ephy-web-view.c:1957
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Arazoa orria kargatzean"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1724
+#: embed/ephy-web-view.c:1904
 msgid "Unable to display this website"
 msgstr "Ezin izan da webgune hau bistaratu."
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1729
+#: embed/ephy-web-view.c:1909
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Badirudi '%s' gunea ez dagoela erabilgarri."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1733
+#: embed/ephy-web-view.c:1913
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
 msgstr "Baliteke aldi baterako ezin erabili izana edo helbide berri batera aldatua izatea. Egiaztatu zure interneteko konexioak ongi funtzionatzen duela."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1743
+#: embed/ephy-web-view.c:1923
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Errorearen xehetasuna: %s"
@@ -1576,85 +1677,85 @@ msgstr "Errorearen xehetasuna: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
-#: embed/ephy-web-view.c:1837 embed/ephy-web-view.c:1873
-#: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:181
+#: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
+#: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1635
 msgid "Reload"
 msgstr "Birkargatu"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1752 embed/ephy-web-view.c:1805
-#: embed/ephy-web-view.c:1841 embed/ephy-web-view.c:1877
+#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1985
+#: embed/ephy-web-view.c:2021 embed/ephy-web-view.c:2057
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1780
+#: embed/ephy-web-view.c:1960
 msgid "Oops! There may be a problem"
 msgstr "Eeeepaaa! Arazo bat egin daiteke"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1785
+#: embed/ephy-web-view.c:1965
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "'%s' webguneak Web ustekabean ixtea eragin du."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1972
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Hau berriro gertatzen bada, eskertuko genizuke arazoaren berri %s(e)ko garatzaileei bidaliko bazenie."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1826
+#: embed/ephy-web-view.c:2006
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Arazoa orria bistaratzean"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1829
+#: embed/ephy-web-view.c:2009
 msgid "Oops!"
 msgstr "Eeeepaaa!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1832
+#: embed/ephy-web-view.c:2012
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr "Zerbait oker joan da orri hau bistaratzean. Kargatu berriro edo bisitatu beste orri bat jarraitzeko."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1862
+#: embed/ephy-web-view.c:2042
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Orriak ez du erantzuten"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1865
+#: embed/ephy-web-view.c:2045
 msgid "Uh-oh!"
 msgstr "Ai ene!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1868
+#: embed/ephy-web-view.c:2048
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
 msgstr "Orri honek ez du erantzunik eman denbora luzez. Kargatu berriro edo bisitatu beste orri bat jarraitzeko."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1904
+#: embed/ephy-web-view.c:2084
 #, c-format
 msgid "Security Violation"
 msgstr "Segurtasuneko bortxaketa"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1907
+#: embed/ephy-web-view.c:2087
 msgid "This Connection is Not Secure"
 msgstr "Konexio hau segurua ez dela dirudi."
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1912
+#: embed/ephy-web-view.c:2092
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1663,52 +1764,52 @@ msgstr "Honek ez dirudi benetako %s. Erasotzaileek webgune honetatik edo honetar
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1922 embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:2102 embed/ephy-web-view.c:2152
 msgid "Go Back"
 msgstr "Joan atzera"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1925 embed/ephy-web-view.c:1975
+#: embed/ephy-web-view.c:2105 embed/ephy-web-view.c:2155
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1928
+#: embed/ephy-web-view.c:2108
 msgid "Accept Risk and Proceed"
 msgstr "Onartu arriskua eta jarraitu"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1932
+#: embed/ephy-web-view.c:2112
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "J"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1955 embed/ephy-web-view.c:1958
+#: embed/ephy-web-view.c:2135 embed/ephy-web-view.c:2138
 #, c-format
 msgid "File not found"
 msgstr "Ez da fitxategia aurkitu"
 
-#: embed/ephy-web-view.c:1963
+#: embed/ephy-web-view.c:2143
 #, c-format
 msgid "%s could not be found."
 msgstr "%s ez da aurkitu."
 
-#: embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:2145
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
 "check if it has been moved, renamed, or deleted."
 msgstr "Egiaztatu fitxategi-izenaren maiuskulak edo idaztean egindako beste akats batzuk. Begiratu, baita ere, fitxategia lekuz aldatu, izenez aldatu edo ezabatu den."
 
-#: embed/ephy-web-view.c:2028
+#: embed/ephy-web-view.c:2208
 msgid "None specified"
 msgstr "Ez da bat ere zehaztu"
 
-#: embed/ephy-web-view.c:2142
+#: embed/ephy-web-view.c:2322
 msgid "Technical information"
 msgstr "Informazio teknikoa"
 
@@ -1725,10 +1826,9 @@ msgid "Images"
 msgstr "Irudiak"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
-#: src/resources/gtk/action-bar-end.ui:11
-#: src/resources/gtk/prefs-general-page.ui:121
+#: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:80
+#: src/resources/gtk/prefs-general-page.blp:106
 msgid "Downloads"
 msgstr "Deskargak"
 
@@ -1756,15 +1856,90 @@ msgstr "'%s' fitxategia badago. Kendu ezazu paretik."
 msgid "Failed to create directory “%s”."
 msgstr "Huts egin du %s direktorioa sortzean."
 
-#: lib/ephy-file-helpers.c:721
+#: lib/ephy-file-helpers.c:722
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Errorea %s fitxategia kentzean: %s"
 
-#: lib/ephy-file-helpers.c:739
+#: lib/ephy-file-helpers.c:740
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Errorea %s direktorioa kentzean: %s"
+
+#: lib/ephy-opensearch-engine.c:112
+#, c-format
+msgid "The %s search engine template URL can't be valid."
+msgstr "Bilaketa-motorraren %s txantiloia ezin da baliozkoa izan."
+
+#: lib/ephy-opensearch-engine.c:210
+#, c-format
+msgid ""
+"Found unclosed URL template parameter curly bracket at pos %d of URL %s."
+msgstr "Itxi gabeko URL txantiloi-parametroa aurkitu da, kortxete kiribila %d kokalekuan, %s URLan."
+
+#: lib/ephy-opensearch-engine.c:220
+#, c-format
+msgid "Found URL template parameter at %d in URL %s, but without any name."
+msgstr "URL txantiloi-parametroa aurkitu da %d kokalekuan, %s URLan, baina ez du izenik."
+
+#: lib/ephy-opensearch-engine.c:243
+#, c-format
+msgid "Found unknown URL template parameter %s in URL %s."
+msgstr "URL txantiloi-parametro ezezaguna (%s) aurkitu da %s URLan."
+
+#: lib/ephy-opensearch-engine.c:262
+#, c-format
+msgid ""
+"Parsing of URL template %s succeeded, but no search terms were found so it's "
+"not useful as a search engine."
+msgstr "%s URL txantiloiaren analisia ongi egin da, baina ez da bilaketa-terminorik aurkitu eta, beraz, ezin da bilaketa-motor gisa erabili."
+
+#: lib/ephy-opensearch-engine.c:339
+#, c-format
+msgid "Skipping <Param> tag as it has no name or value attribute"
+msgstr "<Param> etiketa saltatzen, ez baitu izenik edo balio-atributurik"
+
+#. TRANSLATORS: First %s is the name of the search engine. Second %s is the error message (supposedly partially localized on the GLib level).
+#: lib/ephy-opensearch-engine.c:447
+#, c-format
+msgid "Couldn't parse search engine description file for %s: %s"
+msgstr "Ezin da bilaketa-motorraren deskribapen-fitxategia analizatu %s motorrerako: %s"
+
+#: lib/ephy-opensearch-engine.c:460
+#, c-format
+msgid ""
+"Couldn't create search engine as it did not provide sufficient information!"
+msgstr "Ezin da bilaketa-motorra sortu, ez baita nahiko informazio eman."
+
+#. TRANSLATORS: The %s is the name of the search engine.
+#: lib/ephy-opensearch-engine.c:518
+#, c-format
+msgid "Couldn't download search engine description file for %s: "
+msgstr "Ezin da bilaketa-motorraren deskribapen-fitxategia deskargatu %s motorrerako: "
+
+#. TRANSLATORS: The %s is the URL for the search suggestions.
+#: lib/ephy-search-engine.c:508
+#, c-format
+msgid "Couldn't load search engine suggestions from %s: "
+msgstr "Ezin da bilaketa-motorraren iradokizuna kargatu %s bilaketarako: "
+
+#: lib/ephy-search-engine.c:517
+#, c-format
+msgid "No content provided, length %ld"
+msgstr "Ez da edukirik eman, %ld luzera"
+
+#: lib/ephy-search-engine.c:536
+#, c-format
+msgid ""
+"Got empty JSON response or non-array root node or smaller than 2 elements "
+"array root node"
+msgstr "Hutsik dagoen JSON erantzuna edo matrizekoa ez den erro-nodoa edo 2 elementu baino gutxiago dituen erro-nodoa jaso da"
+
+#. TRANSLATORS: The first %s is the URL for the search suggestions and the second one is raw JSON content.
+#: lib/ephy-search-engine.c:541 lib/ephy-search-engine.c:556
+#, c-format
+msgid "Could not parse JSON suggestions from %s with JSON %s: "
+msgstr "Ezin dira %s bilaketaren JSON iradokizunak analizatu %s JSONarekin: "
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -1772,7 +1947,7 @@ msgstr "Errorea %s direktorioa kentzean: %s"
 #: lib/ephy-sync-utils.c:322
 #, c-format
 msgid "%s’s GNOME Web on %s"
-msgstr "%s(r)en GNOME Web %s(e)n"
+msgstr "%s erabiltzailearen GNOME Weba %s ordenagailuan"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:236
@@ -1838,32 +2013,32 @@ msgstr "%Y %b %d"
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: lib/ephy-web-app-utils.c:325
+#: lib/ephy-web-app-utils.c:326
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr "Huts egin du %s IDa duen web-aplikazioaren mahaigaineko fitxategi-izena eskuratzeak"
 
-#: lib/ephy-web-app-utils.c:348
+#: lib/ephy-web-app-utils.c:349
 #, c-format
 msgid "Failed to install desktop file %s: "
 msgstr "Huts egin du %s mahaigaineko fitxategia instalatzeak: "
 
-#: lib/ephy-web-app-utils.c:387
+#: lib/ephy-web-app-utils.c:388
 #, c-format
 msgid "Profile directory %s already exists"
 msgstr "%s profil-direktorioa badago lehendik"
 
-#: lib/ephy-web-app-utils.c:394
+#: lib/ephy-web-app-utils.c:395
 #, c-format
 msgid "Failed to create directory %s"
 msgstr "Huts egin du %s direktorioa sortzeak"
 
-#: lib/ephy-web-app-utils.c:406
+#: lib/ephy-web-app-utils.c:407
 #, c-format
 msgid "Failed to create .app file: %s"
 msgstr "Huts egin du .app fitxategia sortzeak: %s"
 
-#: lib/sync/ephy-password-export.c:121
+#: lib/sync/ephy-password-export.c:123
 msgid "Error in exporting passwords to a CSV file"
 msgstr "Errorea pasahitzak CSV fitxategira esportatzean"
 
@@ -1878,21 +2053,21 @@ msgid ""
 "Browser password database could not be opened. Close browser and try again."
 msgstr "Nabigatzailearen pasahitzen datu-basea ezin da ireki. Itxi nabigatzailea eta saiatu berriro."
 
-#: lib/sync/ephy-password-import.c:360
+#: lib/sync/ephy-password-import.c:361
 msgid "Error in reading CSV file"
 msgstr "Errorea CSV fitxategia irakurtzean"
 
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:450
+#: lib/sync/ephy-password-manager.c:468
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "'%s'(r)en pasahitza '%s'(r)en inprimakian"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:454
+#: lib/sync/ephy-password-manager.c:472
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Pasahitza '%s'(r)en inprimakian"
@@ -1990,51 +2165,80 @@ msgstr "Huts egin du gailuaren informazioa kargatzeak."
 msgid "Failed to retrieve the Sync Key"
 msgstr "Huts egin du sink. gakoa  eskuratzea."
 
-#: src/bookmarks/ephy-bookmark-properties.c:145
+#: src/bookmarks/ephy-bookmark-properties.c:149
 msgid "Select current tag"
 msgstr "Hautatu uneko etiketa"
 
-#: src/bookmarks/ephy-bookmark-properties.c:159
+#: src/bookmarks/ephy-bookmark-properties.c:163
 msgid "Remove current tag"
 msgstr "Kendu uneko etiketa"
+
+#: src/bookmarks/ephy-bookmark-properties.c:289
+msgid "Add Bookmark"
+msgstr "Gehitu laster-marka"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:618
+#: src/resources/gtk/bookmark-row.blp:65 src/resources/gtk/lang-row.blp:33
+msgid "Move Controls"
+msgstr "Aldatu kontrolak lekuz"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:623
+#: src/resources/gtk/bookmark-row.blp:7 src/resources/gtk/lang-row.blp:7
+msgid "Move Up"
+msgstr "Eraman gora"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:624
+#: src/resources/gtk/bookmark-row.blp:11 src/resources/gtk/lang-row.blp:11
+msgid "Move Down"
+msgstr "Eraman behera"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:809
+msgid "Bookmark removed"
+msgstr "Laster-marka kendu da"
+
+#. Undo, redo.
+#: src/bookmarks/ephy-bookmarks-dialog.c:811 src/ephy-window.c:986
+#: src/preferences/prefs-features-page.c:276
+msgid "_Undo"
+msgstr "_Desegin"
 
 #: src/bookmarks/ephy-bookmarks-import.c:127
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr "Fitxategia ez da baliozko Epiphany-ko laster-marken fitxategia: etiketen taula falta da"
 
-#: src/bookmarks/ephy-bookmarks-import.c:145
+#: src/bookmarks/ephy-bookmarks-import.c:161
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr "Fitxategia ez da baliozko Epiphany-ko laster-marken fitxategia: laster-marken taula falta da"
 
-#: src/bookmarks/ephy-bookmarks-import.c:286
+#: src/bookmarks/ephy-bookmarks-import.c:319
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr "Firefoxen laster-marken datu-basea ezin izan da ireki. Itxi Firefox eta saiatu berriro."
 
-#: src/bookmarks/ephy-bookmarks-import.c:299
-#: src/bookmarks/ephy-bookmarks-import.c:335
+#: src/bookmarks/ephy-bookmarks-import.c:332
+#: src/bookmarks/ephy-bookmarks-import.c:368
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Ezin izan dira Firefox-eko laster-markarik lortu."
 
-#: src/bookmarks/ephy-bookmarks-import.c:502
+#: src/bookmarks/ephy-bookmarks-import.c:535
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "HTML laster-marken datu-basea ezin da ireki: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:513
+#: src/bookmarks/ephy-bookmarks-import.c:546
 msgid "HTML bookmarks database could not be read."
 msgstr "HTML laster-marken datu-basea ezin da irakurri."
 
-#: src/bookmarks/ephy-bookmarks-import.c:535
+#: src/bookmarks/ephy-bookmarks-import.c:568
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "HTML laster-marken datu-basea ezin da analizatu: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:707
+#: src/bookmarks/ephy-bookmarks-import.c:740
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Laster-marken fitxategia ezin izan da analizatu:"
@@ -2047,31 +2251,27 @@ msgstr "Gogokoak"
 msgid "Mobile"
 msgstr "Mugikorra"
 
-#: src/context-menu-commands.c:295
+#: src/context-menu-commands.c:300
 msgid "Save Link As"
 msgstr "Gorde esteka honela"
 
-#: src/context-menu-commands.c:303
+#: src/context-menu-commands.c:308
 msgid "Save Image As"
 msgstr "Gorde irudia honela"
 
-#: src/context-menu-commands.c:311
+#: src/context-menu-commands.c:316
 msgid "Save Media As"
 msgstr "Gorde _multimedia honela"
 
-#. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1832
-msgid "Bookmark Page"
-msgstr "Sortu orriaren laster-marka"
-
-#. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1840
-msgid "Edit Bookmark"
-msgstr "Editatu laster-marka"
-
-#: src/ephy-action-bar-start.c:568
+#. Translators: tooltip for the stop button
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1644
 msgid "Stop"
 msgstr "Gelditu"
+
+#: src/ephy-add-opensearch-engine-button.c:206
+#, c-format
+msgid "Add “%s” as Search Engine"
+msgstr "Gehitu “%s” bilaketa-motor gisa"
 
 #: src/ephy-certificate-dialog.c:179
 msgid "Show More"
@@ -2124,9 +2324,8 @@ msgid ""
 "insecurely."
 msgstr "Ziurtagiri hau baliozkoa da. Hala ere, orri honen baliabideak modu ez-seguruan bidali dira."
 
-#: src/ephy-downloads-popover.c:211 src/resources/gtk/autofill-view.ui:12
-#: src/resources/gtk/passwords-view.ui:27
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:101
+#: src/ephy-downloads-popover.c:213 src/resources/gtk/autofill-view.blp:13
+#: src/resources/gtk/passwords-view.blp:11
 msgid "_Clear All"
 msgstr "Garbitu _denak"
 
@@ -2212,30 +2411,16 @@ msgid_plural "%u mins"
 msgstr[0] "Min %u"
 msgstr[1] "%u min"
 
-#. Translators: tooltip for the refresh button
-#: src/ephy-header-bar.c:51
-msgid "Reload the current page"
-msgstr "Kargatu berriro uneko orria"
-
-#: src/ephy-header-bar.c:261
+#: src/ephy-header-bar.c:205
 msgid "Exit Fullscreen"
 msgstr "Irten pantaila osotik"
 
-#: src/ephy-header-bar.c:272
-msgid "Main Menu"
-msgstr "Menu nagusia"
-
-#: src/ephy-header-bar.c:452
-msgid "Stop loading the current page"
-msgstr "Gelditu uneko orria kargatzea"
-
 #: src/ephy-history-dialog.c:264
-msgid "De_select All"
-msgstr "De_sautatu denak"
+msgid "Select _None"
+msgstr "Ez hautatu e_zer"
 
-#: src/ephy-history-dialog.c:267 src/ephy-window.c:924
-#: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/location-entry.ui:313
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:994
+#: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
@@ -2243,176 +2428,121 @@ msgstr "Hautatu _dena"
 msgid "Link copied"
 msgstr "Esteka kopiatu da"
 
-#: src/ephy-history-dialog.c:552
+#: src/ephy-history-dialog.c:551
 msgid "Remove the selected pages from history"
 msgstr "Kendu hautatutako orriak historiatik"
 
-#: src/ephy-history-dialog.c:559
+#: src/ephy-history-dialog.c:558
 msgid "Copy URL"
 msgstr "Kopiatu URLa"
 
-#: src/ephy-history-dialog.c:885
+#: src/ephy-history-dialog.c:884
 msgid "Clear Browsing History?"
 msgstr "Garbitu nabigazio-historia?"
 
-#: src/ephy-history-dialog.c:886
+#: src/ephy-history-dialog.c:885
 msgid "All visible links will be permanently deleted"
 msgstr "Ikusgai dauden esteka guztiak betiko ezabatuko dira"
 
-#: src/ephy-history-dialog.c:890 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:889
 msgid "Cl_ear"
 msgstr "_Garbitu"
 
-#: src/ephy-history-dialog.c:1105
+#: src/ephy-history-dialog.c:1104
 msgid "Unavailable in Incognito Mode"
 msgstr "Ezin da erabili isilpeko moduan"
 
-#: src/ephy-history-dialog.c:1108
+#: src/ephy-history-dialog.c:1107
 msgid "Clear History"
 msgstr "Garbitu historia"
 
-#. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1876 src/ephy-permission-popover.c:271
-msgid "Notification Request"
-msgstr "Jakinarazpen-eskaera"
+#: src/ephy-location-entry.c:334 src/resources/gtk/location-entry.blp:98
+msgid "Search for websites, bookmarks, and open tabs"
+msgstr "Bilatu webguneetan, laster-marketan eta irekitako fitxetan"
 
-#: src/ephy-location-entry.c:1880
-msgid "Camera Request"
-msgstr "Kamera-eskaera"
+#: src/ephy-location-entry.c:1341
+msgid "Secure Site"
+msgstr "Gune segurua"
 
-#: src/ephy-location-entry.c:1884
-msgid "Microphone Request"
-msgstr "Mikrofono-eskaera"
+#: src/ephy-location-entry.c:1343
+msgid "Insecure Site"
+msgstr "Gune ez segurua"
 
-#: src/ephy-location-entry.c:1888
-msgid "Location Request"
-msgstr "Kokaleku-eskaera"
-
-#: src/ephy-location-entry.c:1892
-msgid "Webcam and Microphone Request"
-msgstr "Web-kameraren eta mikrofonoaren eskaera"
-
-#: src/ephy-location-entry.c:1896
-msgid "Permission Request"
-msgstr "Baimen-eskaera"
-
-#: src/ephy-main.c:113
+#: src/ephy-main.c:114
 msgid "Open a new browser window instead of a new tab"
 msgstr "Ireki nabigatzaile-leiho berria, fitxa berria ireki ordez"
 
-#: src/ephy-main.c:117
+#: src/ephy-main.c:118
 msgid "Load the given session state file"
 msgstr "Kargatu emandako saioaren egoeraren fitxategia"
 
-#: src/ephy-main.c:117
+#: src/ephy-main.c:118
 msgid "FILE"
 msgstr "FITXATEGIA"
 
-#: src/ephy-main.c:121
+#: src/ephy-main.c:122
 msgid "Start an instance with user data read-only"
 msgstr "Abiarazi instantzia bat irakurtzeko soilik den erabiltzaile-datuekin"
 
-#: src/ephy-main.c:125
+#: src/ephy-main.c:126
 msgid "Start a private instance with separate user data"
 msgstr "Abiarazi instantzia pribatu bat erabiltzaile-datuak bereizita dituena"
 
-#: src/ephy-main.c:130
+#: src/ephy-main.c:131
 msgid "Start a private instance in web application mode"
 msgstr "Abiarazi instantzia pribatu bat web-aplikazioen moduan"
 
-#: src/ephy-main.c:134
+#: src/ephy-main.c:135
 msgid "Start a private instance for WebDriver control"
 msgstr "Abiarazi instantzia pribatu bat WebDriver kontrolerako"
 
-#: src/ephy-main.c:138
+#: src/ephy-main.c:139
 msgid "Custom profile directory for private instance"
 msgstr "Profil-direktorio pertsonalizatua instantzia pribaturako"
 
-#: src/ephy-main.c:138
+#: src/ephy-main.c:139
 msgid "DIR"
 msgstr "DIR"
 
-#: src/ephy-main.c:142
+#: src/ephy-main.c:143
 msgid "URL …"
 msgstr "URLa …"
 
-#: src/ephy-main.c:267
+#: src/ephy-main.c:269
 msgid "Web options"
 msgstr "Webaren aukerak"
 
-#. Translators: Notification policy for a specific site.
-#: src/ephy-permission-popover.c:273
-#, c-format
-msgid "The page at “%s” would like to send you notifications"
-msgstr "'%s' guneko orriak jakinarazpenak bidali nahi dizkizu"
+#: src/ephy-passwords-view.c:106
+msgid "Password copied"
+msgstr "Pasahitza kopiatu da"
 
-#. Translators: Geolocation policy for a specific site.
-#: src/ephy-permission-popover.c:278
-msgid "Location Access Request"
-msgstr "Kokalekua erabiltzeko eskaera"
+#: src/ephy-passwords-view.c:154
+msgid "Delete All Passwords?"
+msgstr "Ezabatu pasahitz guztiak?"
 
-#. Translators: Geolocation policy for a specific site.
-#: src/ephy-permission-popover.c:280
-#, c-format
-msgid "The page at “%s” would like to know your location"
-msgstr "'%s' guneko orriak zure kokalekua ezagutu nahi du"
+#: src/ephy-passwords-view.c:155
+msgid "This will clear all locally stored passwords, and can not be undone."
+msgstr "Horrek lokalean biltegiratutako pasahitz guztiak garbituko ditu, eta hori ezin da desegin."
 
-#. Translators: Microphone policy for a specific site.
-#: src/ephy-permission-popover.c:285
-msgid "Microphone Access Request"
-msgstr "Mikrofonoa erabiltzeko eskaera"
+#: src/ephy-passwords-view.c:252
+msgid "Copy password"
+msgstr "Kopiatu pasahitza"
 
-#. Translators: Microphone policy for a specific site.
-#: src/ephy-permission-popover.c:287
-#, c-format
-msgid "The page at “%s” would like to use your microphone"
-msgstr "'%s' guneko orriak zure mikrofonoa erabili nahi du"
+#: src/ephy-passwords-view.c:259 src/ephy-window.c:4017
+msgid "Username"
+msgstr "Erabiltzaile-izena"
 
-#. Translators: Webcam policy for a specific site.
-#: src/ephy-permission-popover.c:292
-msgid "Webcam Access Request"
-msgstr "Web-kamera erabiltzeko eskaera"
+#: src/ephy-passwords-view.c:270
+msgid "Copy username"
+msgstr "Kopiatu erabiltzaile-izena"
 
-#. Translators: Webcam policy for a specific site.
-#: src/ephy-permission-popover.c:294
-#, c-format
-msgid "The page at “%s” would like to use your webcam"
-msgstr "'%s' guneko orriak zure web-kamera erabili nahi du"
+#: src/ephy-passwords-view.c:277 src/ephy-window.c:4024
+msgid "Password"
+msgstr "Pasahitza"
 
-#. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-permission-popover.c:299
-msgid "Webcam and Microphone Access Request"
-msgstr "Web-kamera eta mikrofonoa erabiltzeko eskaera"
-
-#. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-permission-popover.c:301
-#, c-format
-msgid "The page at “%s” would like to use your webcam and microphone"
-msgstr "'%s' guneko orriak zure web-kamera eta mikrofonoa erabili nahi ditu"
-
-#. Translators: Storage access policy for a specific site.
-#: src/ephy-permission-popover.c:308
-msgid "Website Data Access Request"
-msgstr "Webgunearen datuak erabiltzeko eskaera"
-
-#. Translators: Storage access policy for a specific site.
-#: src/ephy-permission-popover.c:310
-#, c-format
-msgid ""
-"The page at “%s” would like to access its own data (including cookies) while "
-"browsing “%s”. This will allow “%s” to track your activity on “%s”."
-msgstr "'%s' guneko orriak bere datu propioak erabili nahi ditu (cookie-ak barne)  '%s' arakatu bitartean. Hori egiten bada, “%s” guneak “%s” gunean duzun jardueran jarraipena egingo du.."
-
-#. Translators: Clipboard policy for a specific site.
-#: src/ephy-permission-popover.c:315
-msgid "Clipboard Access Request"
-msgstr "Arbela erabiltzeko eskaera"
-
-#. Translators: Clipboard policy for a specific site.
-#: src/ephy-permission-popover.c:317
-#, c-format
-msgid "The page at “%s” would like to access your clipboard"
-msgstr "'%s' guneko orriak zure arbela erabili nahi du"
+#: src/ephy-passwords-view.c:290
+msgid "Remove Password"
+msgstr "Kendu pasahitza"
 
 #: src/ephy-privacy-report.c:65
 msgid "Blocked trackers on this site"
@@ -2430,351 +2560,485 @@ msgid_plural ""
 msgstr[0] "GNOME Web aplikazioak aztarnari %uek webguneetan jarraitu zaitzan eragotzi du"
 msgstr[1] "GNOME Web aplikazioak %u aztarnarik webguneetan jarraitu zaitzaten eragotzi du"
 
-#. Label in certificate popover when site is untrusted. %s is a URL.
-#: src/ephy-security-popover.c:185
+#. Label in certificate dialog when site is untrusted. %s is a URL.
+#: src/ephy-security-dialog.c:184
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
-"connected to an attacker pretending to be %s."
-msgstr "Webgunearen identifikazio digitala ez da fidagarria. Erasotzaile bat konektatuta eduki dezakezu %s dela itxura eginez."
+"connected to an attacker pretending to be %s"
+msgstr "Webgunearen identifikazio digitala ez da fidagarria. Erasotzaile bat konektatuta eduki dezakezu %s dela itxura eginez"
 
-#. Label in certificate popover when site uses HTTP. %s is a URL.
-#: src/ephy-security-popover.c:192
+#. Label in certificate dialog when site uses HTTP. %s is a URL.
+#: src/ephy-security-dialog.c:191
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
-"or control the content that you see."
-msgstr "Gune honek ez du segurtasunik. Erasotzaile batek zuk bidalitako edozein informazio ikusi dezake, edo erabiltzen ari zaren edukia kontrolatu dezake."
+"or control the content that you see"
+msgstr "Gune honek ez du segurtasunik. Erasotzaile batek zuk bidalitako edozein informazio ikusi dezake, edo erabiltzen ari zaren edukia kontrolatu dezake"
 
-#. Label in certificate popover when site sends mixed content.
-#: src/ephy-security-popover.c:199
-msgid "This web site did not properly secure your connection."
-msgstr "Webgune honek zurekin ezarri duen konexioa ez da erabat segurua."
+#. Label in certificate dialog when site sends mixed content.
+#: src/ephy-security-dialog.c:198
+msgid "This web site did not properly secure your connection"
+msgstr "Webgune honek zurekin ezarri duen konexioa ez da erabat segurua"
 
-#. Label in certificate popover on secure sites.
-#: src/ephy-security-popover.c:204
-msgid "Your connection seems to be secure."
-msgstr "Zure konexioa segurua dela dirudi."
+#. Label in certificate dialog on secure sites.
+#: src/ephy-security-dialog.c:203
+msgid "Your connection seems to be secure"
+msgstr "Zure konexioa segurua dela dirudi"
 
-#: src/ephy-security-popover.c:245
-msgid "_View Certificate…"
-msgstr "_Ikusi ziurtagiria…"
-
-#: src/ephy-security-popover.c:492
+#: src/ephy-security-dialog.c:493
 msgid "Allow"
 msgstr "Baimendu"
 
-#: src/ephy-security-popover.c:493
+#: src/ephy-security-dialog.c:494
 msgid "Deny"
 msgstr "Ukatu"
 
-#: src/ephy-security-popover.c:496
+#: src/ephy-security-dialog.c:496
 msgid "Ask"
 msgstr "Galdetu"
 
-#: src/ephy-security-popover.c:514
-msgid "Permissions"
-msgstr "Baimenak"
-
-#: src/ephy-security-popover.c:556
+#: src/ephy-security-dialog.c:519
 msgid "Advertisements"
 msgstr "Iragarkiak"
 
-#: src/ephy-security-popover.c:557
+#: src/ephy-security-dialog.c:520
 msgid "Notifications"
 msgstr "Jakinarazpenak"
 
-#: src/ephy-security-popover.c:558
-msgid "Password saving"
+#: src/ephy-security-dialog.c:521
+msgid "Password Saving"
 msgstr "Pasahitza gordetzea"
 
-#: src/ephy-security-popover.c:559
-msgid "Location access"
+#: src/ephy-security-dialog.c:522
+msgid "Location Access"
 msgstr "Kokalekua atzitzea"
 
-#: src/ephy-security-popover.c:560
-msgid "Microphone access"
+#: src/ephy-security-dialog.c:523
+msgid "Microphone Access"
 msgstr "Mikrofonoa atzitzea"
 
-#: src/ephy-security-popover.c:561
-msgid "Webcam access"
+#: src/ephy-security-dialog.c:524
+msgid "Webcam Access"
 msgstr "Web-kamera atzitzea"
 
-#: src/ephy-security-popover.c:562
-msgid "Media autoplay"
+#: src/ephy-security-dialog.c:525
+msgid "Display Access"
+msgstr "Pantaila atzitzea"
+
+#: src/ephy-security-dialog.c:526
+msgid "Media Autoplay"
 msgstr "Multimediaren erreprodukzio automatikoa"
 
-#: src/ephy-security-popover.c:562
+#: src/ephy-security-dialog.c:526
 msgid "Without Sound"
 msgstr "Soinurik gabe"
 
+#: src/ephy-shell.c:414
+msgid "Uninstall Web App?"
+msgstr "Desinstalatu web-aplikazioa?"
+
+#: src/ephy-shell.c:414
+msgid "This web appʼs data will be permanently deleted"
+msgstr "Web-aplikazio hau betiko ezabatuko da"
+
+#: src/ephy-shell.c:418
+msgid "_Uninstall"
+msgstr "_Desinstalatu"
+
+#: src/ephy-site-menu-button.c:163 src/resources/gtk/site-menu-button.blp:29
+msgid "Edit _Bookmark…"
+msgstr "Editatu _laster-marka…"
+
+#: src/ephy-site-menu-button.c:165
+msgid "Add _Bookmark…"
+msgstr "Gehitu _laster-marka…"
+
+#: src/ephy-suggestion-model.c:668
+#, c-format
+msgid "Could not load search engines suggestions: %s"
+msgstr "Ezin izan dira kargatu bilaketa-motorren iradokizunak: %s"
+
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:650
+#: src/ephy-tab-view.c:663
 msgid "Open a new tab"
 msgstr "Fitxa berria irekitzen du"
 
-#. Undo, redo.
-#: src/ephy-window.c:916 src/resources/gtk/location-entry.ui:277
-msgid "_Undo"
-msgstr "_Desegin"
-
-#: src/ephy-window.c:917
+#: src/ephy-window.c:987
 msgid "Re_do"
 msgstr "Be_rregin"
 
 #. Edit.
-#: src/ephy-window.c:920 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:990
 msgid "Cu_t"
 msgstr "_Moztu"
 
-#: src/ephy-window.c:921 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:991
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: src/ephy-window.c:922 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:992
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: src/ephy-window.c:923
+#: src/ephy-window.c:993
 msgid "_Paste Text Only"
 msgstr "Itsatsi te_stua soilik"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:996
 msgid "S_end Link by Email…"
 msgstr "Bi_dali esteka postaz…"
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:997
+msgid "Add _Link to Bookmarks"
+msgstr "Gehitu _esteka laster-markei"
+
+#: src/ephy-window.c:999
 msgid "_Reload"
 msgstr "Bir_kargatu"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:1000
 msgid "_Back"
 msgstr "At_zera"
 
-#: src/ephy-window.c:930
+#: src/ephy-window.c:1001
 msgid "_Forward"
 msgstr "A_urrera"
 
 #. Bookmarks
-#: src/ephy-window.c:933
+#: src/ephy-window.c:1004
 msgid "Add Boo_kmark…"
 msgstr "_Gehitu laster-marka…"
 
 #. Links.
-#: src/ephy-window.c:937
+#: src/ephy-window.c:1008
 msgid "Open Link in New _Window"
 msgstr "Ireki esteka leiho _berrian"
 
-#: src/ephy-window.c:938
+#: src/ephy-window.c:1009
 msgid "Open Link in New _Tab"
 msgstr "Ireki esteka _fitxa berrian"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:1010
 msgid "Open Link in I_ncognito Window"
 msgstr "Ireki esteka _isilpeko leihoan"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:1011
 msgid "_Save Link As…"
 msgstr "Gorde _esteka honela…"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:1012
 msgid "_Copy Link Address"
 msgstr "_Kopiatu estekaren helbidea"
 
-#: src/ephy-window.c:942
+#: src/ephy-window.c:1013
 msgid "_Copy E-mail Address"
 msgstr "_Kopiatu helbide elektronikoa"
 
 #. Images.
-#: src/ephy-window.c:946
+#: src/ephy-window.c:1017
 msgid "View _Image in New Tab"
 msgstr "Ikusi _irudia fitxa berrian"
 
-#: src/ephy-window.c:947
+#: src/ephy-window.c:1018
 msgid "Copy I_mage Address"
 msgstr "Kopiatu ir_udiaren helbidea"
 
-#: src/ephy-window.c:948
+#: src/ephy-window.c:1019
 msgid "_Save Image As…"
 msgstr "Gorde _irudia honela…"
 
-#: src/ephy-window.c:949
+#: src/ephy-window.c:1020
 msgid "Set as _Wallpaper"
 msgstr "Ezarri _horma-paper gisa"
 
 #. Video.
-#: src/ephy-window.c:953
+#: src/ephy-window.c:1024
 msgid "Open Video in New _Window"
 msgstr "Ireki bideoa _leiho berrian"
 
-#: src/ephy-window.c:954
+#: src/ephy-window.c:1025
 msgid "Open Video in New _Tab"
 msgstr "Ireki bideoa _fitxa berrian"
 
-#: src/ephy-window.c:955
+#: src/ephy-window.c:1026
 msgid "_Save Video As…"
 msgstr "Gorde _bideoa honela…"
 
-#: src/ephy-window.c:956
+#: src/ephy-window.c:1027
 msgid "_Copy Video Address"
 msgstr "_Kopiatu bideoaren helbidea"
 
 #. Audio.
-#: src/ephy-window.c:960
+#: src/ephy-window.c:1031
 msgid "Open Audio in New _Window"
 msgstr "Ireki audioa _leiho berrian"
 
-#: src/ephy-window.c:961
+#: src/ephy-window.c:1032
 msgid "Open Audio in New _Tab"
 msgstr "Ireki audioa _fitxa berrian"
 
-#: src/ephy-window.c:962
+#: src/ephy-window.c:1033
 msgid "_Save Audio As…"
 msgstr "Gorde _audioa honela…"
 
-#: src/ephy-window.c:963
+#: src/ephy-window.c:1034
 msgid "_Copy Audio Address"
 msgstr "_Kopiatu audioaren helbidea"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:1040
 msgid "Save Pa_ge As…"
 msgstr "Gorde _orria honela…"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:1041
 msgid "_Take Screenshot…"
 msgstr "_Egin pantaila-argazkia…"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:1042
 msgid "_Page Source"
 msgstr "_Orriaren iturburua"
 
-#: src/ephy-window.c:1354
+#: src/ephy-window.c:1423
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Bilatu '%s' webean"
 
-#: src/ephy-window.c:1383
+#: src/ephy-window.c:1452
 msgid "Open Link"
 msgstr "Ireki esteka"
 
-#: src/ephy-window.c:1385
+#: src/ephy-window.c:1454
 msgid "Open Link In New Tab"
 msgstr "Ireki esteka fitxa berrian"
 
-#: src/ephy-window.c:1387
+#: src/ephy-window.c:1456
 msgid "Open Link In New Window"
 msgstr "Ireki esteka leiho berrian"
 
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1458
 msgid "Open Link In Incognito Window"
 msgstr "Ireki esteka isilpeko leihoan"
 
-#: src/ephy-window.c:2778
+#. Additional user interaction is required to prevent malicious websites
+#. * from launching URL handler application's on the user's computer without
+#. * explicit user consent. Notably, websites can download malicious files
+#. * without consent, so they should not be able to also open those files
+#. * without user interaction.
+#.
+#: src/ephy-window.c:2286
+#, c-format
+msgid "Allow “%s” to open the “%s” link in an external app"
+msgstr "Onartu “%s” aplikazioak “%s” esteka kanpoko aplikazio batean ireki dezan"
+
+#: src/ephy-window.c:2287
+msgid "Open in External App?"
+msgstr "Ireki kanpoko aplikazioa?"
+
+#: src/ephy-window.c:2289
+msgid "_Open Link"
+msgstr "_Ireki esteka"
+
+#: src/ephy-window.c:2295
+msgid "Always Allow"
+msgstr "Onartu beti"
+
+#. Translators: Notification policy for a specific site.
+#: src/ephy-window.c:2995
+msgid "Notification Request"
+msgstr "Jakinarazpen-eskaera"
+
+#. Translators: Notification policy for a specific site.
+#: src/ephy-window.c:2997
+#, c-format
+msgid "The page at “%s” would like to send you notifications"
+msgstr "'%s' guneko orriak jakinarazpenak bidali nahi dizkizu"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-window.c:3002
+msgid "Location Access Request"
+msgstr "Kokalekua erabiltzeko eskaera"
+
+#. Translators: Geolocation policy for a specific site.
+#: src/ephy-window.c:3004
+#, c-format
+msgid "The page at “%s” would like to know your location"
+msgstr "'%s' guneko orriak zure kokalekua ezagutu nahi du"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-window.c:3009
+msgid "Microphone Access Request"
+msgstr "Mikrofonoa erabiltzeko eskaera"
+
+#. Translators: Microphone policy for a specific site.
+#: src/ephy-window.c:3011
+#, c-format
+msgid "The page at “%s” would like to use your microphone"
+msgstr "'%s' guneko orriak zure mikrofonoa erabili nahi du"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-window.c:3016
+msgid "Webcam Access Request"
+msgstr "Web-kamera erabiltzeko eskaera"
+
+#. Translators: Webcam policy for a specific site.
+#: src/ephy-window.c:3018
+#, c-format
+msgid "The page at “%s” would like to use your webcam"
+msgstr "'%s' guneko orriak zure web-kamera erabili nahi du"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-window.c:3023
+msgid "Webcam and Microphone Access Request"
+msgstr "Web-kamera eta mikrofonoa erabiltzeko eskaera"
+
+#. Translators: Webcam and microphone policy for a specific site.
+#: src/ephy-window.c:3025
+#, c-format
+msgid "The page at “%s” would like to use your webcam and microphone"
+msgstr "'%s' guneko orriak zure web-kamera eta mikrofonoa erabili nahi ditu"
+
+#. Translators: Storage access policy for a specific site.
+#: src/ephy-window.c:3039
+msgid "Website Data Access Request"
+msgstr "Webgunearen datuak erabiltzeko eskaera"
+
+#. Translators: Storage access policy for a specific site.
+#: src/ephy-window.c:3041
+#, c-format
+msgid ""
+"The page at “%s” would like to access its own data (including cookies) while "
+"browsing “%s”. This will allow “%s” to track your activity on “%s”."
+msgstr "'%s' guneko orriak bere datu propioak erabili nahi ditu (cookie-ak barne)  '%s' arakatu bitartean. Hori egiten bada, “%s” guneak “%s” gunean duzun jardueran jarraipena egingo du.."
+
+#. Translators: Clipboard policy for a specific site.
+#: src/ephy-window.c:3046
+msgid "Clipboard Access Request"
+msgstr "Arbela erabiltzeko eskaera"
+
+#. Translators: Clipboard policy for a specific site.
+#: src/ephy-window.c:3048
+#, c-format
+msgid "The page at “%s” would like to access your clipboard"
+msgstr "'%s' guneko orriak zure arbela erabili nahi du"
+
+#: src/ephy-window.c:3076
 msgid "_Ask Later"
 msgstr "_Galdetu geroago"
 
-#: src/ephy-window.c:2779 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:3077
 msgid "_Deny"
 msgstr "_Ukatu"
 
-#: src/ephy-window.c:2780 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:3078
 msgid "_Allow"
 msgstr "_Onartu"
 
-#: src/ephy-window.c:2982 src/ephy-window.c:4579
+#: src/ephy-window.c:3261 src/ephy-window.c:4915
 msgid "Leave Website?"
 msgstr "Utzi webgunea?"
 
-#: src/ephy-window.c:2983 src/ephy-window.c:4580 src/window-commands.c:1505
+#: src/ephy-window.c:3262 src/ephy-window.c:4916 src/window-commands.c:1406
 msgid "A form was modified and has not been submitted"
 msgstr "Inprimaki bat aldatu da baina ez da bidali."
 
-#: src/ephy-window.c:2984 src/ephy-window.c:4581 src/window-commands.c:1509
+#: src/ephy-window.c:3263 src/ephy-window.c:4917 src/window-commands.c:1410
 msgid "_Discard Form"
 msgstr "_Baztertu inprimakia"
 
-#: src/ephy-window.c:3005
+#: src/ephy-window.c:3284
 msgid "Download operation"
 msgstr "Deskarga-eragiketa"
 
-#: src/ephy-window.c:3007
+#: src/ephy-window.c:3286
 msgid "Show details"
 msgstr "Erakutsi xehetasunak"
 
-#: src/ephy-window.c:3009
+#: src/ephy-window.c:3288
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "Desgarga-eragiketa %d aktibo"
 msgstr[1] "%d deskarga-eragiketa aktibo"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3566
 msgid "Set as Default Browser?"
 msgstr "Ezarri nabigatzaile lehenetsi gisa?"
 
-#: src/ephy-window.c:3278
+#: src/ephy-window.c:3568
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Erabili Weba aplikazioa kanpoko estekak irekitzeko eta interneten ibiltzeko nabigatzaile lehenetsi gisa"
 
-#: src/ephy-window.c:3280
+#: src/ephy-window.c:3570
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr "Erabili Epiphany Technoloty Preview aplikazioa kanpoko estekak irekitzeko eta interneten ibiltzeko nabigatzaile lehenetsi gisa"
 
-#: src/ephy-window.c:3284
+#: src/ephy-window.c:3574
 msgid "_Ask Again Later"
 msgstr "_Galdetu geroago berriro"
 
-#: src/ephy-window.c:3285
+#: src/ephy-window.c:3575
 msgid "_No"
 msgstr "_Ez"
 
-#: src/ephy-window.c:3286
+#: src/ephy-window.c:3576
 msgid "_Yes"
 msgstr "_Bai"
 
-#: src/ephy-window.c:3663
+#: src/ephy-window.c:3908
 msgid "Download started"
 msgstr "Deskarga hasi da"
 
-#: src/ephy-window.c:3759
-msgid "Save password?"
+#: src/ephy-window.c:3998
+msgid "Save Password?"
 msgstr "Gorde pasahitza?"
 
-#: src/ephy-window.c:3760
-msgid "Passwords can be removed at any time in Preferences"
-msgstr "Pasahitzak edozein momentutan ezabatu daitezke hobespenetara joanda"
+#: src/ephy-window.c:3999
+msgid ""
+"Passwords are saved only on your device and can be removed at any time in "
+"Preferences"
+msgstr "Pasahitzak zure gailuan soilik gordeko dira eta edozein momentutan ezabatu daitezke hobespenetara joanda"
 
-#: src/ephy-window.c:3762
+#: src/ephy-window.c:4001
 msgid "Not Now"
 msgstr "Orain ez"
 
-#: src/ephy-window.c:3763
+#: src/ephy-window.c:4002
 msgid "Never Save"
 msgstr "Ez gorde inoiz"
 
-#: src/ephy-window.c:3764
+#: src/ephy-window.c:4003
 msgid "Save"
 msgstr "Gorde"
 
-#: src/ephy-window.c:4710
+#: src/ephy-window.c:4204
+msgctxt "shortcuts dialog"
+msgid "Web App"
+msgstr "Web-aplikazioa"
+
+#: src/ephy-window.c:4207
+msgctxt "shortcuts dialog"
+msgid "Install Site as Web App"
+msgstr "Instalatu gunea web-aplikazio gisa"
+
+#: src/ephy-window.c:5030
 msgid "Close Multiple Tabs?"
 msgstr "Itxi fitxa anitz?"
 
-#: src/ephy-window.c:4711
+#: src/ephy-window.c:5031
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Leiho hau ixten bada, irekitako fitxa guztiak galduko dira"
 
-#: src/ephy-window.c:4712
+#: src/ephy-window.c:5032
 msgid "C_lose Tabs"
 msgstr "I_txi fitxak"
 
-#: src/ephy-window.c:4811
+#: src/ephy-window.c:5142
 msgid "New tab opened"
 msgstr "Fitxa berria ireki da"
 
-#: src/ephy-window.c:4815
+#: src/ephy-window.c:5146
 msgid "Switch"
 msgstr "Aldatu"
 
@@ -2786,89 +3050,119 @@ msgstr "Ezabatu sarrera guztiak?"
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr "Lokalean biltegiratutako sarrera guztiak garbituko dira, eta hori ezin da desegin."
 
-#: src/preferences/clear-data-view.c:68
+#: src/preferences/clear-data-view.c:70
 msgid "Cookies"
 msgstr "Cookie-ak"
 
-#: src/preferences/clear-data-view.c:69
+#: src/preferences/clear-data-view.c:71
 msgid "HTTP disk cache"
 msgstr "HTTP diskoko cachea"
 
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:72
 msgid "Local storage data"
 msgstr "Biltegiratze lokaleko datuak"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:73
 msgid "Offline web application cache"
 msgstr "Lineaz kanpoko web-aplikazioen cachea"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:74
 msgid "IndexedDB databases"
 msgstr "IndexedDB datu-baseak"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:75
 msgid "HSTS policies cache"
 msgstr "HSTS politiken cachea"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:76
 msgid "Intelligent Tracking Prevention data"
 msgstr "Jarraipenaren prebentzio adimentsuaren datuak"
 
-#: src/preferences/ephy-search-engine-listbox.c:29
+#: src/preferences/clear-data-view.c:226
+msgid "Data cleared"
+msgstr "Datuak garbitu dira"
+
+#: src/preferences/ephy-search-engine-listbox.c:105
+#: src/preferences/prefs-general-page.c:942
 msgid "New search engine"
 msgstr "Bilaketa-motor berria"
 
-#: src/preferences/ephy-search-engine-listbox.c:305
+#: src/preferences/ephy-search-engine-listbox.c:156
 msgid "A_dd Search Engine"
 msgstr "_Gehitu bilaketa-motorra"
 
-#: src/preferences/ephy-search-engine-row.c:114
+#: src/preferences/ephy-search-engine-row.c:130
 msgid "This field is required"
 msgstr "Eremu hau derrigorrezkoa da"
 
-#: src/preferences/ephy-search-engine-row.c:119
+#: src/preferences/ephy-search-engine-row.c:135
 msgid "Address must start with either http:// or https://"
 msgstr "Helbidearen hasierak http:// edo https:// izan behar du"
 
-#: src/preferences/ephy-search-engine-row.c:131
+#: src/preferences/ephy-search-engine-row.c:147
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Helbideak %s katearekin ordezkatutako bilaketa-terminoa eduki behar du"
 
-#: src/preferences/ephy-search-engine-row.c:134
+#: src/preferences/ephy-search-engine-row.c:150
 msgid "Address should not contain the search term several times"
 msgstr "Helbideal ez du bilaketa-terminoa behin baino gehiagotan eduki behar"
 
-#: src/preferences/ephy-search-engine-row.c:140
+#: src/preferences/ephy-search-engine-row.c:156
 msgid "Address is not a valid URI"
 msgstr "çHelbidea ez da baliozko URIa"
 
-#: src/preferences/ephy-search-engine-row.c:145
+#: src/preferences/ephy-search-engine-row.c:161
 #, c-format
 msgid ""
-"Address is not a valid URL. The address should look like https://www.example."
-"com/search?q=%s"
+"Address is not a valid URL. The address should look like https://"
+"www.example.com/search?q=%s"
 msgstr "Helbidea ez da baliozko URLa. Helbidearen itxurak honelakoa izan behar du: https://www.adibidea.com/search?q=%s"
 
-#: src/preferences/ephy-search-engine-row.c:188
+#: src/preferences/ephy-search-engine-row.c:194
 msgid "This shortcut is already used."
 msgstr "Lasterbide hori jadanik erabilia dago."
 
-#: src/preferences/ephy-search-engine-row.c:190
+#: src/preferences/ephy-search-engine-row.c:196
 msgid "Search shortcuts must not contain any space."
 msgstr "Bilakerako lasterbideek ez dute zuriunerik izan behar."
 
-#: src/preferences/ephy-search-engine-row.c:198
+#: src/preferences/ephy-search-engine-row.c:204
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "Bilaketarako lasterbideek !, # edo @ bezalako ikur batekin hasi behar dute."
 
-#: src/preferences/ephy-search-engine-row.c:331
+#: src/preferences/ephy-search-engine-row.c:211
+msgid "Shortcut (for example !ddg)"
+msgstr "Lasterbidea (adibidez !ddg)"
+
+#: src/preferences/ephy-search-engine-row.c:211
+#: src/resources/gtk/search-engine-row.blp:27
+msgid "Shortcut"
+msgstr "Lasterbidea"
+
+#: src/preferences/ephy-search-engine-row.c:231
+#, c-format
+msgid "Address (with search term as %s)"
+msgstr "Helbidea (bilaketa-terminoa %s dela)"
+
+#: src/preferences/ephy-search-engine-row.c:231
+#: src/resources/gtk/autofill-view.blp:56
+#: src/resources/gtk/bookmark-properties.blp:45
+#: src/resources/gtk/search-engine-row.blp:22
+msgid "Address"
+msgstr "Helbidea"
+
+#: src/preferences/ephy-search-engine-row.c:251
 msgid "A name is required"
 msgstr "Izen bat behar da"
 
-#: src/preferences/ephy-search-engine-row.c:333
+#: src/preferences/ephy-search-engine-row.c:253
 msgid "This search engine already exists"
 msgstr "Bilaketa-motor hori badago lehendik"
+
+#: src/preferences/ephy-search-engine-row.c:350
+msgid "No search suggestions"
+msgstr "Ez dago bilaketa-iradokizunik"
 
 #: src/preferences/extension-view.c:113
 msgid "Remove Extension"
@@ -2882,51 +3176,19 @@ msgstr "Ziur zaude hedapen hau kendu nahi duzula?"
 msgid "_Remove"
 msgstr "_Kendu"
 
-#: src/preferences/passwords-view.c:123
-msgid "Password copied"
-msgstr "Pasahitza kopiatu da"
-
-#: src/preferences/passwords-view.c:174
-msgid "Delete All Passwords?"
-msgstr "Ezabatu pasahitz guztiak?"
-
-#: src/preferences/passwords-view.c:175
-msgid "This will clear all locally stored passwords, and can not be undone."
-msgstr "Horrek lokalean biltegiratutako pasahitz guztiak garbituko ditu, eta hori ezin da desegin."
-
-#: src/preferences/passwords-view.c:234
-msgid "Copy password"
-msgstr "Kopiatu pasahitza"
-
-#: src/preferences/passwords-view.c:241
-msgid "Username"
-msgstr "Erabiltzaile-izena"
-
-#: src/preferences/passwords-view.c:251
-msgid "Copy username"
-msgstr "Kopiatu erabiltzaile-izena"
-
-#: src/preferences/passwords-view.c:258
-msgid "Password"
-msgstr "Pasahitza"
-
-#: src/preferences/passwords-view.c:270
-msgid "Remove Password"
-msgstr "Kendu pasahitza"
-
-#: src/preferences/prefs-appearance-page.c:65
+#: src/preferences/prefs-appearance-page.c:67
 msgid "Sans"
 msgstr "Sans"
 
-#: src/preferences/prefs-appearance-page.c:67
+#: src/preferences/prefs-appearance-page.c:69
 msgid "Serif"
 msgstr "Serif"
 
-#: src/preferences/prefs-appearance-page.c:109
+#: src/preferences/prefs-appearance-page.c:111
 msgid "Light"
 msgstr "Argia"
 
-#: src/preferences/prefs-appearance-page.c:111
+#: src/preferences/prefs-appearance-page.c:113
 msgid "Dark"
 msgstr "Iluna"
 
@@ -2952,1229 +3214,1226 @@ msgstr "Instalatu"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Ireki fitxategia (manifest.json/xpi)"
 
-#: src/preferences/prefs-general-page.c:202
-#: src/resources/gtk/prefs-lang-dialog.ui:8
+#: src/preferences/prefs-features-page.c:275
+msgid "All values reset"
+msgstr "Balio guztien berrezarpena"
+
+#: src/preferences/prefs-features-page.c:326
+msgid "Reset to default"
+msgstr "Berrezarri lehenespenera"
+
+#: src/preferences/prefs-general-page.c:231
+#: src/resources/gtk/prefs-lang-dialog.blp:8
 msgid "Add Language"
 msgstr "Gehitu hizkuntza"
 
-#: src/preferences/prefs-general-page.c:363
-#: src/preferences/prefs-general-page.c:519
+#: src/preferences/prefs-general-page.c:394
+#: src/preferences/prefs-general-page.c:550
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Sistemaren hizkuntza (%s)"
 msgstr[1] "Sistemaren hizkuntzak (%s)"
 
-#: src/preferences/prefs-general-page.c:728
+#: src/preferences/prefs-general-page.c:766
 msgid "Supported Image Files"
 msgstr "Onartutako irudi-fitxategiak"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1811
+#: src/preferences/webapp-additional-urls-dialog.c:70
+msgid "Remove URL"
+msgstr "Kendu URLa"
+
+#: src/profile-migrator/ephy-profile-migrator.c:332
 msgid "Executes only the n-th migration step"
 msgstr "Migrazioaren n. urratsa soilik exekutatzen du"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1815
+#: src/profile-migrator/ephy-profile-migrator.c:336
 msgid "Specifies the required version for the migrator"
 msgstr "Migratzailearen beharrezko bertsioa zehazten du"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1819
+#: src/profile-migrator/ephy-profile-migrator.c:340
 msgid "Specifies the profile where the migrator should run"
 msgstr "Migratzailea zein profiletan exekutatu behar duen zehazten du"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1841
+#: src/profile-migrator/ephy-profile-migrator.c:362
 msgid "Web profile migrator"
 msgstr "Web-aren profilaren migratzailea"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1842
+#: src/profile-migrator/ephy-profile-migrator.c:363
 msgid "Web profile migrator options"
 msgstr "Web-aren profilaren migratzailearen aukerak"
 
-#. Translators: tooltip for the webextension actions button
-#: src/resources/gtk/action-bar-end.ui:29
-#: src/resources/gtk/prefs-extensions-page.ui:6
+#: src/resources/gtk/action-bar-end.blp:25
+#: src/resources/gtk/prefs-extensions-page.blp:6
 msgid "Extensions"
 msgstr "Hedapenak"
 
-#: src/resources/gtk/action-bar-end.ui:100
+#: src/resources/gtk/action-bar-end.blp:93
 msgid "View Open Tabs"
 msgstr "Ikusi irekitako fitxak"
 
-#. Translators: tooltip for the bookmarks popover button
-#: src/resources/gtk/action-bar-end.ui:118
-#: src/resources/gtk/bookmarks-dialog.ui:29
+#: src/resources/gtk/action-bar-end.blp:101 src/resources/gtk/action-bar.blp:67
+#: src/resources/gtk/bookmarks-dialog.blp:54
 msgid "Bookmarks"
 msgstr "Laster-markak"
 
-#. Translators: tooltip for the back button
-#: src/resources/gtk/action-bar-start.ui:17
+#: src/resources/gtk/action-bar-start.blp:17
+#: src/resources/gtk/action-bar.blp:15
 msgid "Back"
 msgstr "Atzera"
 
-#. Translators: tooltip for the forward button
-#: src/resources/gtk/action-bar-start.ui:48
+#: src/resources/gtk/action-bar-start.blp:42
+#: src/resources/gtk/action-bar.blp:40
 msgid "Forward"
 msgstr "Aurrera"
 
-#. Translators: tooltip for the secret homepage button
-#: src/resources/gtk/action-bar-start.ui:98
-#: src/resources/gtk/extension-view.ui:62
-#: src/resources/gtk/prefs-general-page.ui:71
+#: src/resources/gtk/action-bar-start.blp:84
+#: src/resources/gtk/extension-view.blp:52
+#: src/resources/gtk/prefs-general-page.blp:61
 msgid "Homepage"
 msgstr "Webgune nagusia"
 
-#: src/resources/gtk/autofill-view.ui:4
+#: src/resources/gtk/add-opensearch-engine-button.blp:4
+msgid "Add Search Engine"
+msgstr "Gehitu bilaketa-motorra"
+
+#: src/resources/gtk/autofill-view.blp:5
 msgid "Autofill Data"
 msgstr "Bete datuak automatikoki"
 
-#: src/resources/gtk/autofill-view.ui:25
+#: src/resources/gtk/autofill-view.blp:24
 msgid "Personal"
 msgstr "Pertsonala"
 
-#: src/resources/gtk/autofill-view.ui:28
+#: src/resources/gtk/autofill-view.blp:27
 msgid "First Name"
 msgstr "Izena"
 
-#: src/resources/gtk/autofill-view.ui:33
+#: src/resources/gtk/autofill-view.blp:31
 msgid "Last Name"
 msgstr "Abizena"
 
-#: src/resources/gtk/autofill-view.ui:38
+#: src/resources/gtk/autofill-view.blp:35
 msgid "Full Name"
 msgstr "Izen osoa"
 
-#: src/resources/gtk/autofill-view.ui:45
+#: src/resources/gtk/autofill-view.blp:40
 msgid "Contact"
 msgstr "Kontaktua"
 
-#: src/resources/gtk/autofill-view.ui:48
+#: src/resources/gtk/autofill-view.blp:43
 msgid "User Name"
 msgstr "Erabiltzaile-izena"
 
-#: src/resources/gtk/autofill-view.ui:53
+#: src/resources/gtk/autofill-view.blp:47
 msgid "E-Mail"
 msgstr "Helbide elektronikoa"
 
-#: src/resources/gtk/autofill-view.ui:58
+#: src/resources/gtk/autofill-view.blp:51
 msgid "Phone"
 msgstr "Telefonoa"
 
-#: src/resources/gtk/autofill-view.ui:65
-#: src/resources/gtk/bookmark-properties.ui:29
-#: src/resources/gtk/search-engine-row.ui:46
-msgid "Address"
-msgstr "Helbidea"
-
-#: src/resources/gtk/autofill-view.ui:68
+#: src/resources/gtk/autofill-view.blp:59
 msgid "Street"
 msgstr "Kalea"
 
-#: src/resources/gtk/autofill-view.ui:73
+#: src/resources/gtk/autofill-view.blp:63
 msgid "Organization"
 msgstr "Erakundea"
 
-#: src/resources/gtk/autofill-view.ui:78
+#: src/resources/gtk/autofill-view.blp:67
 msgid "Postal Code"
 msgstr "Posta-kodea"
 
-#: src/resources/gtk/autofill-view.ui:83
+#: src/resources/gtk/autofill-view.blp:71
 msgid "State"
 msgstr "Egoera"
 
-#: src/resources/gtk/autofill-view.ui:88
+#: src/resources/gtk/autofill-view.blp:75
 msgid "City"
 msgstr "Hiria"
 
-#: src/resources/gtk/autofill-view.ui:93
+#: src/resources/gtk/autofill-view.blp:79
 msgid "Country"
 msgstr "Herrialdea"
 
-#: src/resources/gtk/autofill-view.ui:100
+#: src/resources/gtk/autofill-view.blp:84
 msgid "Credit Card"
 msgstr "Kreditu-txartela"
 
-#: src/resources/gtk/autofill-view.ui:103
+#: src/resources/gtk/autofill-view.blp:87
 msgid "Type"
 msgstr "Mota"
 
-#: src/resources/gtk/autofill-view.ui:108
+#: src/resources/gtk/autofill-view.blp:91
 msgid "Owner"
 msgstr "Jabea"
 
-#: src/resources/gtk/autofill-view.ui:113
+#: src/resources/gtk/autofill-view.blp:95
 msgid "Number"
 msgstr "Zenbakia"
 
-#: src/resources/gtk/bookmark-properties.ui:10
+#: src/resources/gtk/bookmark-properties.blp:9
 msgid "Bookmark"
 msgstr "Laster-marka"
 
-#: src/resources/gtk/bookmark-properties.ui:24
-#: src/resources/gtk/search-engine-row.ui:26
+#: src/resources/gtk/bookmark-properties.blp:28
+#: src/resources/gtk/prefs-lang-dialog.blp:26
+msgid "_Add"
+msgstr "_Gehitu"
+
+#: src/resources/gtk/bookmark-properties.blp:41
+#: src/resources/gtk/search-engine-row.blp:18
 msgid "Name"
 msgstr "Izena"
 
-#: src/resources/gtk/bookmark-properties.ui:38
-#: src/resources/gtk/bookmark-properties.ui:71
+#: src/resources/gtk/bookmark-properties.blp:51
+#: src/resources/gtk/bookmark-properties.blp:77
 msgid "Tags"
 msgstr "Etiketak"
 
-#: src/resources/gtk/bookmark-properties.ui:54
+#: src/resources/gtk/bookmark-properties.blp:64
+#: src/resources/gtk/bookmark-row.blp:42
+#: src/resources/gtk/search-engine-row.blp:9
 msgid "Remove"
 msgstr "Kendu"
 
-#: src/resources/gtk/bookmark-properties.ui:94
+#: src/resources/gtk/bookmark-properties.blp:100
 msgid "Add Tag"
 msgstr "Gehitu etiketa"
 
-#: src/resources/gtk/bookmark-properties.ui:104
+#: src/resources/gtk/bookmark-properties.blp:112
 msgid "Add new tag"
 msgstr "Gehitu etiketa berria"
 
-#: src/resources/gtk/bookmarks-dialog.ui:44
+#: src/resources/gtk/bookmarks-dialog.blp:18
+msgid "Edit"
+msgstr "Editatu"
+
+#: src/resources/gtk/bookmarks-dialog.blp:25
+msgid "Done"
+msgstr "Eginda"
+
+#: src/resources/gtk/bookmarks-dialog.blp:32
+msgid "Close"
+msgstr "Itxi"
+
+#: src/resources/gtk/bookmarks-dialog.blp:39 src/resources/gtk/data-view.blp:18
+msgid "Options"
+msgstr "Aukerak"
+
+#: src/resources/gtk/bookmarks-dialog.blp:69
 msgid "Search bookmarks"
 msgstr "Bilatu laster-markak"
 
-#: src/resources/gtk/bookmarks-dialog.ui:139
+#: src/resources/gtk/bookmarks-dialog.blp:161
 msgid "No Bookmarks"
 msgstr "Laster-markarik ez"
 
-#: src/resources/gtk/bookmarks-dialog.ui:140
+#: src/resources/gtk/bookmarks-dialog.blp:162
 msgid "Bookmarked pages will appear here"
 msgstr "Laster-marka duten orriak hemen agertuko dira"
 
-#: src/resources/gtk/clear-data-view.ui:22
+#: src/resources/gtk/bookmarks-dialog.blp:181
+msgid "I_mport…"
+msgstr "I_nportatu…"
+
+#: src/resources/gtk/bookmarks-dialog.blp:186
+msgid "E_xport…"
+msgstr "E_sportatu…"
+
+#: src/resources/gtk/clear-data-view.blp:5
 msgid "Website Data"
 msgstr "Webguneen datuak"
 
-#: src/resources/gtk/clear-data-view.ui:23
+#: src/resources/gtk/clear-data-view.blp:6
 msgid "_Clear Data"
 msgstr "_Garbitu datuak"
 
-#: src/resources/gtk/clear-data-view.ui:24
+#: src/resources/gtk/clear-data-view.blp:7
 msgid "Remove selected website data"
 msgstr "Kendu hautatutako webguneen datuak"
 
-#: src/resources/gtk/clear-data-view.ui:25
+#: src/resources/gtk/clear-data-view.blp:8
 msgid "Search website data"
 msgstr "Bilatu webguneen datuak"
 
-#: src/resources/gtk/clear-data-view.ui:26
+#: src/resources/gtk/clear-data-view.blp:9
 msgid "No Website Data Found"
 msgstr "Ez da webgunearen daturik aurkitu"
 
-#: src/resources/gtk/clear-data-view.ui:27
+#: src/resources/gtk/clear-data-view.blp:10
 msgid "Website data will be listed here"
 msgstr "Webguneen datuak hemen zerrendatuko dira"
 
-#: src/resources/gtk/clear-data-view.ui:50
+#: src/resources/gtk/clear-data-view.blp:32
 msgid "Clear selected website data:"
 msgstr "Garbitu hautatutako webguneen datuak:"
 
-#: src/resources/gtk/clear-data-view.ui:105
+#: src/resources/gtk/clear-data-view.blp:65
 msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
 msgstr "Ezin duzu ekintza hau desegin. Garbitu nahi dituzun datuak betiko kenduko dira."
 
-#: src/resources/gtk/data-view.ui:14 src/resources/gtk/history-dialog.ui:39
-#: src/resources/gtk/history-dialog.ui:65
+#: src/resources/gtk/data-view.blp:12 src/resources/gtk/history-dialog.blp:37
+#: src/resources/gtk/history-dialog.blp:62
+#: src/resources/gtk/prefs-general-page.blp:152
 msgid "Search"
 msgstr "Bilatu"
 
-#: src/resources/gtk/data-view.ui:66 src/resources/gtk/history-dialog.ui:144
+#: src/resources/gtk/data-view.blp:64 src/resources/gtk/history-dialog.blp:130
 msgid "No Results Found"
 msgstr "Ez da emaitzarik aurkitu"
 
-#: src/resources/gtk/data-view.ui:67 src/resources/gtk/history-dialog.ui:145
+#: src/resources/gtk/data-view.blp:65 src/resources/gtk/history-dialog.blp:131
 msgid "Try a different search"
 msgstr "Saiatu bestelako bilaketa bat"
 
-#: src/resources/gtk/encoding-dialog.ui:6
+#: src/resources/gtk/encoding-dialog.blp:5
 msgid "Text Encoding"
 msgstr "Testu kodeketa"
 
-#: src/resources/gtk/encoding-dialog.ui:30
+#: src/resources/gtk/encoding-dialog.blp:28
 msgid "Use Encoding Specified by Document"
 msgstr "Erabili dokumentuak zehaztutako kodeketa"
 
-#: src/resources/gtk/encoding-dialog.ui:62
+#: src/resources/gtk/encoding-dialog.blp:57
 msgid "Recent Encodings"
 msgstr "Azken aldiko kodeketak"
 
-#: src/resources/gtk/encoding-dialog.ui:88
+#: src/resources/gtk/encoding-dialog.blp:80
 msgid "Related Encodings"
 msgstr "Erlazionatutako kodeketak"
 
-#: src/resources/gtk/encoding-dialog.ui:111
+#: src/resources/gtk/encoding-dialog.blp:100
 msgid "Show All…"
 msgstr "Erakutsi denak…"
 
-#: src/resources/gtk/extension-view.ui:7
+#: src/resources/gtk/extension-view.blp:7
 msgid "Open _Inspector"
 msgstr "Ireki _ikuskatzailea"
 
-#: src/resources/gtk/extension-view.ui:35
+#: src/resources/gtk/extension-view.blp:29
 msgid "Author"
 msgstr "Egilea"
 
-#: src/resources/gtk/extension-view.ui:48
+#: src/resources/gtk/extension-view.blp:40
 msgid "Version"
 msgstr "Bertsioa"
 
-#: src/resources/gtk/extension-view.ui:77
+#: src/resources/gtk/extension-view.blp:63
 msgid "Enabled"
 msgstr "Gaituta"
 
-#: src/resources/gtk/extension-view.ui:87
+#: src/resources/gtk/extension-view.blp:70
 msgid "Remove Extension…"
 msgstr "Kendu hedapena…"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:9
+#: src/resources/gtk/firefox-sync-dialog.blp:9
 msgid "Firefox Sync"
 msgstr "Firefoxen sinkronizazioa"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:19
+#: src/resources/gtk/firefox-sync-dialog.blp:17
 msgid "Sync _Now"
 msgstr "Sinkronizatu _orain"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:32
+#: src/resources/gtk/firefox-sync-dialog.blp:27
 msgid ""
 "Sign in with your Mozilla account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
 "endorsed by Mozilla."
 msgstr "Hasi saioa zure Mozilla kontuan GNOME Weben eta Firefoxen dituzun datuak beste ordenagailu batzuekin sinkronizatzeko. GNOME Web ez da Firefox eta ez du Mozillak ekoizten edo sustatzen."
 
-#: src/resources/gtk/firefox-sync-dialog.ui:49
+#: src/resources/gtk/firefox-sync-dialog.blp:41
 msgid "Mozilla Account"
 msgstr "Mozilla kontua"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:52
+#: src/resources/gtk/firefox-sync-dialog.blp:44
 msgid "Logged in"
 msgstr "Saioan sartuta"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:56
+#: src/resources/gtk/firefox-sync-dialog.blp:48
 msgid "Sign _Out"
 msgstr "_Amaitu saioa"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:68
+#: src/resources/gtk/firefox-sync-dialog.blp:57
 msgid "Sync Options"
 msgstr "Sinkronizazioaren aukerak"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:71
+#: src/resources/gtk/firefox-sync-dialog.blp:60
 msgid "Sync _Bookmarks"
 msgstr "Sinkronizatu _laster-markak"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:78
+#: src/resources/gtk/firefox-sync-dialog.blp:66
 msgid "Sync _Passwords"
 msgstr "Sinkronizatu _pasahitzak"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:84
+#: src/resources/gtk/firefox-sync-dialog.blp:71
 msgid "Sync _History"
 msgstr "Sinkronizatu _historia"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:90
+#: src/resources/gtk/firefox-sync-dialog.blp:76
 msgid "Sync Open _Tabs"
 msgstr "Sinkronizatu _fitxa irekiak"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:94
+#: src/resources/gtk/firefox-sync-dialog.blp:80
 msgid "S_ynced Tabs"
 msgstr "_Sinkronizatutako fitxak"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:104
+#: src/resources/gtk/firefox-sync-dialog.blp:88
 msgid "Frequency"
 msgstr "Maiztasuna"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:113
+#: src/resources/gtk/firefox-sync-dialog.blp:94
 msgid "Device name"
 msgstr "Gailuaren izena"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:126
-#: src/resources/gtk/password-popover.ui:94
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:91
+#: src/resources/gtk/firefox-sync-dialog.blp:106
 msgid "_Save"
 msgstr "_Gorde"
 
-#: src/resources/gtk/firefox-sync-dialog.ui:135
+#: src/resources/gtk/firefox-sync-dialog.blp:114
 msgid "_Change"
 msgstr "_Aldatu"
 
-#: src/resources/gtk/history-dialog.ui:8
+#: src/resources/gtk/history-dialog.blp:7
 msgid "History"
 msgstr "Historia"
 
-#: src/resources/gtk/history-dialog.ui:20
+#: src/resources/gtk/history-dialog.blp:18
 msgid "_Clear"
 msgstr "_Garbitu"
 
-#: src/resources/gtk/history-dialog.ui:32
+#: src/resources/gtk/history-dialog.blp:30
 msgid "Select Items"
 msgstr "Hautatu elementuak"
 
-#: src/resources/gtk/history-dialog.ui:84
+#: src/resources/gtk/history-dialog.blp:79
 msgid "Search history"
 msgstr "Garbitu historia"
 
-#: src/resources/gtk/history-dialog.ui:137
+#: src/resources/gtk/history-dialog.blp:124
 msgid "No History Found"
 msgstr "Ez da historiarik aurkitu"
 
-#: src/resources/gtk/history-dialog.ui:138
+#: src/resources/gtk/history-dialog.blp:125
 msgid "Visited pages will be listed here"
 msgstr "Bisitatutako orriak hemen zerrendatuko dira"
 
-#: src/resources/gtk/history-dialog.ui:171
+#: src/resources/gtk/history-dialog.blp:155
 msgid "_Open"
 msgstr "_Ireki"
 
-#: src/resources/gtk/lang-row.ui:21
+#: src/resources/gtk/lang-row.blp:46
 msgid "Delete Language"
 msgstr "Ezabatu hizkuntza"
 
-#: src/resources/gtk/location-entry.ui:12
-msgid "Search for websites, bookmarks, and open tabs"
-msgstr "Bilatu webguneetan, laster-marketan eta irekitako fitxetan"
-
-#: src/resources/gtk/location-entry.ui:67
-msgid "Website Security Status and Permissions"
-msgstr "Webgunearen segurtasun-egoera eta baimenak"
-
-#: src/resources/gtk/location-entry.ui:86
-#: src/resources/gtk/prefs-appearance-page.ui:59
+#: src/resources/gtk/location-entry.blp:45
+#: src/resources/gtk/prefs-appearance-page.blp:45
 msgid "Reader Mode"
 msgstr "Irakurle modua"
 
-#: src/resources/gtk/location-entry.ui:98
-msgid "Clear"
-msgstr "Garbitu"
-
-#: src/resources/gtk/location-entry.ui:111
-msgid "View Available Passwords"
-msgstr "Ikusi erabilgarri dauden pasahitzak"
-
-#: src/resources/gtk/location-entry.ui:281
-msgid "_Redo"
-msgstr "_Berregin"
-
-#: src/resources/gtk/location-entry.ui:299
+#: src/resources/gtk/location-entry.blp:220
 msgid "Paste and _Go"
 msgstr "Itsatsi eta _joan"
 
-#: src/resources/gtk/notebook-context-menu.ui:7
+#: src/resources/gtk/notebook-context-menu.blp:6
 msgid "R_eload"
 msgstr "_Birkargatu"
 
-#: src/resources/gtk/notebook-context-menu.ui:11
+#: src/resources/gtk/notebook-context-menu.blp:11
 msgid "Reload _All Tabs"
 msgstr "Birkargatu _fitxa guztiak"
 
-#: src/resources/gtk/notebook-context-menu.ui:15
+#: src/resources/gtk/notebook-context-menu.blp:16
 msgid "_Duplicate"
 msgstr "_Bikoiztu"
 
-#: src/resources/gtk/notebook-context-menu.ui:21
+#: src/resources/gtk/notebook-context-menu.blp:23
 msgid "P_in Tab"
 msgstr "_Finkatu fitxa"
 
-#: src/resources/gtk/notebook-context-menu.ui:26
+#: src/resources/gtk/notebook-context-menu.blp:29
 msgid "Unp_in Tab"
 msgstr "_Askatu fitxa"
 
-#: src/resources/gtk/notebook-context-menu.ui:31
+#: src/resources/gtk/notebook-context-menu.blp:35
+#: src/resources/gtk/site-menu-button.blp:23
 msgid "_Mute Tab"
 msgstr "_Mututu fitxa"
 
-#: src/resources/gtk/notebook-context-menu.ui:37
+#: src/resources/gtk/notebook-context-menu.blp:42
 msgid "Close Tabs to the _Left"
 msgstr "Itxi e_zkerreko fitxak"
 
-#: src/resources/gtk/notebook-context-menu.ui:41
+#: src/resources/gtk/notebook-context-menu.blp:47
 msgid "Close Tabs to the _Right"
 msgstr "Itxi e_skuineko fitxak"
 
-#: src/resources/gtk/notebook-context-menu.ui:45
+#: src/resources/gtk/notebook-context-menu.blp:52
 msgid "Close _Other Tabs"
 msgstr "Itxi _beste fitxak"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:289
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:291
 msgid "_Close"
 msgstr "It_xi"
 
-#: src/resources/gtk/page-menu-popover.ui:14
+#: src/resources/gtk/page-menu-button.blp:7
+msgid "Main Menu"
+msgstr "Menu nagusia"
+
+#. Translators: 'Run in Background' item is a toggle, not an action
+#: src/resources/gtk/page-menu-button.blp:15
 msgid "_Run in Background"
 msgstr "_Exekutatu atzeko planoan"
 
-#: src/resources/gtk/page-menu-popover.ui:21
-#: src/resources/gtk/tab-overview-menu.ui:6
+#: src/resources/gtk/page-menu-button.blp:23
+#: src/resources/gtk/tab-overview-menu.blp:6
 msgid "_New Window"
 msgstr "_Leiho berria"
 
-#: src/resources/gtk/page-menu-popover.ui:25
-#: src/resources/gtk/tab-overview-menu.ui:10
+#: src/resources/gtk/page-menu-button.blp:28
+#: src/resources/gtk/tab-overview-menu.blp:11
 msgid "New _Incognito Window"
 msgstr "Isilpeko leiho berria"
 
-#: src/resources/gtk/page-menu-popover.ui:29
-#: src/resources/gtk/tab-overview-menu.ui:16
+#: src/resources/gtk/page-menu-button.blp:33
+#: src/resources/gtk/tab-overview-menu.blp:18
 msgid "Reopen Closed _Tab"
 msgstr "Ireki berriro itxitako _fitxa"
 
-#: src/resources/gtk/page-menu-popover.ui:35
+#: src/resources/gtk/page-menu-button.blp:38
+msgid "_Fullscreen"
+msgstr "_Pantaila osoa"
+
+#: src/resources/gtk/page-menu-button.blp:45
 msgid "Histo_ry"
 msgstr "Histor_ia"
 
-#: src/resources/gtk/page-menu-popover.ui:46
-msgid "I_mport and Export"
-msgstr "I_nportatu eta esportatu"
-
-#: src/resources/gtk/page-menu-popover.ui:50
-msgid "I_mport Bookmarks…"
-msgstr "I_nportatu laster-markak…"
-
-#: src/resources/gtk/page-menu-popover.ui:54
-msgid "E_xport Bookmarks…"
-msgstr "E_sportatu laster-markak…"
-
-#: src/resources/gtk/page-menu-popover.ui:60
-msgid "Import _Passwords…"
-msgstr "Inportatu _pasahitzak…"
-
-#: src/resources/gtk/page-menu-popover.ui:64
-msgid "Export _Passwords…"
-msgstr "Esportatu _pasahitzak…"
-
-#: src/resources/gtk/page-menu-popover.ui:70
+#: src/resources/gtk/page-menu-button.blp:50
 msgid "_Web Apps"
 msgstr "_Web-aplikazioak"
 
-#: src/resources/gtk/page-menu-popover.ui:74
+#: src/resources/gtk/page-menu-button.blp:55
 msgid "Install as _Web App…"
 msgstr "Instalatu _web-aplikazio gisa…"
 
-#: src/resources/gtk/page-menu-popover.ui:78
+#: src/resources/gtk/page-menu-button.blp:60
 msgid "Manag_e Web Apps"
 msgstr "_Kudeatu web-aplikazioak"
 
-#: src/resources/gtk/page-menu-popover.ui:84
-msgid "Text Enco_ding…"
-msgstr "Test_u-kodeketa…"
-
-#: src/resources/gtk/page-menu-popover.ui:88
+#: src/resources/gtk/page-menu-button.blp:67
 msgid "Pri_vacy Report"
 msgstr "Pri_batutasun-txostena"
 
-#: src/resources/gtk/page-menu-popover.ui:94
+#: src/resources/gtk/page-menu-button.blp:72
+msgid "Passw_ords"
+msgstr "P_asahitzak"
+
+#: src/resources/gtk/page-menu-button.blp:79
 msgid "Pr_eferences"
 msgstr "_Hobespenak"
 
-#: src/resources/gtk/page-menu-popover.ui:98
+#: src/resources/gtk/page-menu-button.blp:84
 msgid "_Keyboard Shortcuts"
 msgstr "Las_ter-teklak"
 
-#: src/resources/gtk/page-menu-popover.ui:102
+#: src/resources/gtk/page-menu-button.blp:89
 msgid "_Help"
 msgstr "_Laguntza"
 
-#: src/resources/gtk/page-menu-popover.ui:106
+#: src/resources/gtk/page-menu-button.blp:94
 msgid "_About Web"
 msgstr "_Weba aplikazioari buruz"
 
-#: src/resources/gtk/page-menu-popover.ui:123
-msgctxt "tooltip"
-msgid "Zoom Out"
-msgstr "Txikiagotu"
+#: src/resources/gtk/page-menu-button.blp:101
+msgid "_Uninstall Web App"
+msgstr "_Desinstalatu web-aplikazioa"
 
-#: src/resources/gtk/page-menu-popover.ui:130
-msgid "Restore Zoom"
-msgstr "Leheneratu zooma"
+#: src/resources/gtk/page-menu-button.blp:106
+msgid "_Quit"
+msgstr "_Irten"
 
-#: src/resources/gtk/page-menu-popover.ui:141
-msgctxt "tooltip"
-msgid "Zoom In"
-msgstr "Handiagotu"
-
-#: src/resources/gtk/page-menu-popover.ui:159
-msgid "Print…"
-msgstr "Inprimatu…"
-
-#: src/resources/gtk/page-menu-popover.ui:166
-msgid "Find…"
-msgstr "Bilatu…"
-
-#: src/resources/gtk/page-menu-popover.ui:173
-msgid "Fullscreen"
-msgstr "Pantaila osoa"
-
-#: src/resources/gtk/password-popover.ui:22
-msgid "Save Login?"
-msgstr "Gorde saio-hasiera?"
-
-#: src/resources/gtk/password-popover.ui:42
-msgid ""
-"Passwords are saved only on your device and can be removed at any time in "
-"Preferences"
-msgstr "Pasahitzak zure gailuan soilik gordeko dira eta edozein momentutan ezabatu daitezke hobespenetara joanda"
-
-#: src/resources/gtk/password-popover.ui:64
-msgid "_Never Save"
-msgstr "Ez gorde _inoiz"
-
-#: src/resources/gtk/password-popover.ui:79
-msgid "N_ot Now"
-msgstr "Orain e_z"
-
-#: src/resources/gtk/passwords-view.ui:25
-#: src/resources/gtk/prefs-privacy-page.ui:53
+#: src/resources/gtk/passwords-view.blp:9
 msgid "Passwords"
 msgstr "Pasahitzak"
 
-#: src/resources/gtk/passwords-view.ui:28
+#: src/resources/gtk/passwords-view.blp:12
 msgid "Remove All Passwords"
 msgstr "Kendu pasahitz guztiak"
 
-#: src/resources/gtk/passwords-view.ui:29
+#: src/resources/gtk/passwords-view.blp:13
 msgid "Search passwords"
 msgstr "Bilatu pasahitzak"
 
-#: src/resources/gtk/passwords-view.ui:30
+#: src/resources/gtk/passwords-view.blp:14
 msgid "No Passwords Found"
 msgstr "Ez da pasahitzik aurkitu"
 
-#: src/resources/gtk/passwords-view.ui:31
+#: src/resources/gtk/passwords-view.blp:15
 msgid "Saved passwords will be listed here"
 msgstr "Gordetako pasahitzak hemen zerrendatuko dira"
 
-#: src/resources/gtk/passwords-view.ui:73
+#: src/resources/gtk/passwords-view.blp:53
 msgid "_Copy Password"
 msgstr "Kopiatu _pasahitza"
 
-#: src/resources/gtk/passwords-view.ui:77
+#: src/resources/gtk/passwords-view.blp:58
 msgid "C_opy Username"
 msgstr "Kopiatu _erabiltzaile-izena"
 
-#: src/resources/gtk/prefs-appearance-page.ui:6
+#: src/resources/gtk/passwords-view.blp:67
+msgid "_Import…"
+msgstr "I_nportatu…"
+
+#: src/resources/gtk/passwords-view.blp:72
+msgid "_Export…"
+msgstr "E_sportatu…"
+
+#: src/resources/gtk/prefs-appearance-page.blp:6
 msgid "Appearance"
 msgstr "Itxura"
 
-#: src/resources/gtk/prefs-appearance-page.ui:9
+#: src/resources/gtk/prefs-appearance-page.blp:9
 msgid "Fonts"
 msgstr "Letra-tipoak"
 
-#: src/resources/gtk/prefs-appearance-page.ui:13
+#: src/resources/gtk/prefs-appearance-page.blp:13
 msgid "Use Custom Fonts"
 msgstr "Erabili letra-tipo pertsonalizatuak"
 
-#: src/resources/gtk/prefs-appearance-page.ui:17
+#: src/resources/gtk/prefs-appearance-page.blp:17
 msgid "Sans Serif Font"
 msgstr "Sans serif letra-tipoa"
 
-#: src/resources/gtk/prefs-appearance-page.ui:30
+#: src/resources/gtk/prefs-appearance-page.blp:26
 msgid "Serif Font"
 msgstr "Serif letra-tipoa"
 
-#: src/resources/gtk/prefs-appearance-page.ui:43
+#: src/resources/gtk/prefs-appearance-page.blp:35
 msgid "Monospace Font"
 msgstr "Tarte bakarreko letra-tipoa"
 
-#: src/resources/gtk/prefs-appearance-page.ui:62
+#: src/resources/gtk/prefs-appearance-page.blp:48
 msgid "Font Style"
 msgstr "Letra-tipoaren estiloa"
 
-#: src/resources/gtk/prefs-appearance-page.ui:77
+#: src/resources/gtk/prefs-appearance-page.blp:57
 msgid "Color Scheme"
 msgstr "Kolore-eskema"
 
-#: src/resources/gtk/prefs-appearance-page.ui:94
+#: src/resources/gtk/prefs-appearance-page.blp:67
 msgid "Style"
 msgstr "Estiloa"
 
-#: src/resources/gtk/prefs-appearance-page.ui:97
+#: src/resources/gtk/prefs-appearance-page.blp:70
 msgid "Use Custom Stylesheet"
 msgstr "Erabili estilo-orri pertsonalizatua"
 
-#: src/resources/gtk/prefs-appearance-page.ui:111
+#: src/resources/gtk/prefs-appearance-page.blp:83
 msgid "Use Custom JavaScript"
 msgstr "Erabili JavaScript pertsonalizatua"
 
-#: src/resources/gtk/prefs-appearance-page.ui:125
+#: src/resources/gtk/prefs-appearance-page.blp:96
 msgid "Default Zoom Level"
 msgstr "Zoomaren maila lehenetsia"
 
-#: src/resources/gtk/prefs-extensions-page.ui:12
+#: src/resources/gtk/prefs-extensions-page.blp:11
 msgid "Add New Extension"
 msgstr "Gehitu hedapen berria"
 
-#: src/resources/gtk/prefs-extensions-page.ui:13
+#: src/resources/gtk/prefs-extensions-page.blp:12
 msgid "Extensions must be installed manually from their files"
 msgstr "Hedapenak eskuz instalatu behar dira fitxategietatik"
 
-#: src/resources/gtk/prefs-extensions-page.ui:27
+#: src/resources/gtk/prefs-extensions-page.blp:25
 msgid ""
 "Epiphany is compatible with web extensions for Mozilla Firefox. To find and "
-"add web extensions, visit <a href=\"https://addons.mozilla.org\">addons."
-"mozilla.org</a>"
+"add web extensions, visit <a href=\"https://"
+"addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr "Epiphany Mozilla Firefox aplikazioaren web-hedapenekin bateragarria da. Web-hedapenak aurkitu eta gehitzeko, bisitatu <a href=\"https://addons.mozilla.org\">addons.mozilla.org</a>."
 
-#: src/resources/gtk/prefs-extensions-page.ui:59
+#: src/resources/gtk/prefs-extensions-page.blp:53
 msgid "No Extensions Installed"
 msgstr "Ez dago hedapenik instalatuta"
 
-#: src/resources/gtk/prefs-general-page.ui:6
+#: src/resources/gtk/prefs-features-page.blp:6
+msgid "Features"
+msgstr "Eginbideak"
+
+#: src/resources/gtk/prefs-features-page.blp:10
+msgid "Reset All"
+msgstr "Berrezarri dena"
+
+#: src/resources/gtk/prefs-general-page.blp:6
 msgid "General"
 msgstr "Orokorra"
 
-#: src/resources/gtk/prefs-general-page.ui:9
+#: src/resources/gtk/prefs-general-page.blp:9
 msgid "Web App"
 msgstr "Web-aplikazioa"
 
-#: src/resources/gtk/prefs-general-page.ui:13
+#: src/resources/gtk/prefs-general-page.blp:13
 msgid "_Icon"
 msgstr "_Ikonoa"
 
-#: src/resources/gtk/prefs-general-page.ui:25
+#: src/resources/gtk/prefs-general-page.blp:23
 msgid "_Homepage"
 msgstr "_Hasierako orria"
 
-#: src/resources/gtk/prefs-general-page.ui:32
+#: src/resources/gtk/prefs-general-page.blp:29
 msgid "_Title"
 msgstr "_Titulua"
 
-#: src/resources/gtk/prefs-general-page.ui:40
-msgid "Additional _URLs"
-msgstr "URL _gehigarriak"
+#: src/resources/gtk/prefs-general-page.blp:36
+msgid "Additional _Domains"
+msgstr "D_omeinu gehigarriak"
 
-#: src/resources/gtk/prefs-general-page.ui:54
+#: src/resources/gtk/prefs-general-page.blp:47
 msgid "Web Content"
 msgstr "Web edukia"
 
-#: src/resources/gtk/prefs-general-page.ui:57
+#: src/resources/gtk/prefs-general-page.blp:50
 msgid "Block _Advertisements"
 msgstr "Blokeatu _iragarkiak"
 
-#: src/resources/gtk/prefs-general-page.ui:63
+#: src/resources/gtk/prefs-general-page.blp:55
 msgid "Block _Popup Windows"
 msgstr "Blokeatu _laster-leihoak"
 
-#: src/resources/gtk/prefs-general-page.ui:75
+#: src/resources/gtk/prefs-general-page.blp:65
 msgid "Most _Visited Pages"
 msgstr "Orri _bisitatuenak"
 
-#: src/resources/gtk/prefs-general-page.ui:87
+#: src/resources/gtk/prefs-general-page.blp:76
 msgid "_Blank Page"
 msgstr "Orri _hutsa"
 
-#: src/resources/gtk/prefs-general-page.ui:100
+#: src/resources/gtk/prefs-general-page.blp:88
 msgid "_Custom"
 msgstr "_Pertsonalizatu"
 
-#: src/resources/gtk/prefs-general-page.ui:124
+#: src/resources/gtk/prefs-general-page.blp:109
 msgid "Ask o_n Download"
 msgstr "Galdetu d_eskargatzean"
 
-#: src/resources/gtk/prefs-general-page.ui:131
+#: src/resources/gtk/prefs-general-page.blp:115
 msgid "_Download Folder"
 msgstr "_Deskargen karpeta"
 
-#: src/resources/gtk/prefs-general-page.ui:171
-msgid "Search Engines"
-msgstr "Bilaketako motorrak"
+#: src/resources/gtk/prefs-general-page.blp:155
+msgid "Search Engine"
+msgstr "Bilaketa-motorra"
 
-#: src/resources/gtk/prefs-general-page.ui:179
+#: src/resources/gtk/prefs-general-page.blp:159
+msgid "Incognito Search Engine"
+msgstr "Isilpeko bilaketa-motorra"
+
+#: src/resources/gtk/prefs-general-page.blp:168
 msgid "Session"
 msgstr "Saioa"
 
-#: src/resources/gtk/prefs-general-page.ui:182
+#: src/resources/gtk/prefs-general-page.blp:171
 msgid "Start in _Incognito Mode"
 msgstr "Abiarazi _isilpeko moduan"
 
-#: src/resources/gtk/prefs-general-page.ui:188
+#: src/resources/gtk/prefs-general-page.blp:176
 msgid "_Restore Tabs on Startup"
 msgstr "Berrezarri _fitxak abioan"
 
-#: src/resources/gtk/prefs-general-page.ui:196
+#: src/resources/gtk/prefs-general-page.blp:182
 msgid "Browsing"
 msgstr "Nabigatzea"
 
-#: src/resources/gtk/prefs-general-page.ui:199
+#: src/resources/gtk/prefs-general-page.blp:185
 msgid "Mouse _Gestures"
 msgstr "Sagu-_keinuak"
 
-#: src/resources/gtk/prefs-general-page.ui:205
+#: src/resources/gtk/prefs-general-page.blp:190
 msgid "S_witch Immediately to New Tabs"
 msgstr "Joan berehala fitxa _berrira"
 
-#: src/resources/gtk/prefs-general-page.ui:211
+#: src/resources/gtk/prefs-general-page.blp:195
 msgid "Touch _Navigation Gestures"
 msgstr "Ukipen bidezko _nabigazio-keinuak"
 
-#: src/resources/gtk/prefs-general-page.ui:234
+#: src/resources/gtk/prefs-general-page.blp:214
 msgid "_Spell Checking"
 msgstr "O_rtografia-egiaztapena"
 
-#: src/resources/gtk/prefs-general-page.ui:242
+#: src/resources/gtk/prefs-general-page.blp:220
 msgid "Developer"
 msgstr "Garatzailea"
 
-#: src/resources/gtk/prefs-general-page.ui:245
+#: src/resources/gtk/prefs-general-page.blp:223
 msgid "Show D_eveloper Actions"
 msgstr "Erakutsi _garatzaile-ekintzak"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:25
-msgid "_Add"
-msgstr "_Gehitu"
+#: src/resources/gtk/prefs-general-page.blp:228
+msgid "Always Show Full _URL"
+msgstr "Erakutsi beti URL o_soa"
 
-#: src/resources/gtk/prefs-lang-dialog.ui:45
+#: src/resources/gtk/prefs-lang-dialog.blp:45
 msgid "Choose a language"
 msgstr "Aukeratu hizkuntza bat"
 
-#: src/resources/gtk/prefs-privacy-page.ui:6
+#: src/resources/gtk/prefs-privacy-page.blp:6
 msgid "Privacy"
 msgstr "Pribatutasuna"
 
-#: src/resources/gtk/prefs-privacy-page.ui:10
+#: src/resources/gtk/prefs-privacy-page.blp:10
 msgid "Web Tracking"
 msgstr "Web jarraipena"
 
-#: src/resources/gtk/prefs-privacy-page.ui:13
+#: src/resources/gtk/prefs-privacy-page.blp:13
 msgid "Intelligent _Tracking Prevention"
 msgstr "_Jarraipenaren prebentzio adimentsua"
 
-#: src/resources/gtk/prefs-privacy-page.ui:19
+#: src/resources/gtk/prefs-privacy-page.blp:18
 msgid ""
 "Allow websites to store cookies, databases, and local storage data. "
 "Disabling website data storage will break many websites."
 msgstr "Onartu webguneek cookie-ak, datu-baseak eta datu-biltegi lokalak onartu ditzaten. Hau desgaitzen bada, zenbait webgunek ez dute ongi funtzionatuko."
 
-#: src/resources/gtk/prefs-privacy-page.ui:20
+#: src/resources/gtk/prefs-privacy-page.blp:19
 msgid "_Website Data Storage"
 msgstr "_Webguneen datu-biltegiratzea"
 
-#: src/resources/gtk/prefs-privacy-page.ui:28
+#: src/resources/gtk/prefs-privacy-page.blp:25
 msgid "Search Suggestions"
 msgstr "Bilatu iradokizunak"
 
-#: src/resources/gtk/prefs-privacy-page.ui:31
+#: src/resources/gtk/prefs-privacy-page.blp:28
 msgid "Enable search suggestions in the URL entry"
 msgstr "Gaitu bilaketa-iradokizunak URLen sarreran"
 
-#: src/resources/gtk/prefs-privacy-page.ui:32
-msgid "_Google Search Suggestions"
-msgstr "_Google bilaketen iradokizunak"
+#: src/resources/gtk/prefs-privacy-page.blp:29
+msgid "Search Su_ggestions"
+msgstr "Bilaketa-_iradokizunak"
 
-#: src/resources/gtk/prefs-privacy-page.ui:40
+#: src/resources/gtk/prefs-privacy-page.blp:35
 msgid "Personal Data"
 msgstr "Datu pertsonalak"
 
-#: src/resources/gtk/prefs-privacy-page.ui:43
-msgid "Clear Website _Data"
-msgstr "Garbitu webguneen _datuak"
+#: src/resources/gtk/prefs-privacy-page.blp:38
+msgid "Website _Data"
+msgstr "Webguneen _datuak"
 
-#: src/resources/gtk/prefs-privacy-page.ui:57
-msgid "_Passwords"
-msgstr "_Pasahitzak"
-
-#: src/resources/gtk/prefs-privacy-page.ui:69
-msgid "_Remember Passwords"
-msgstr "_Gogoratu pasahitzak"
-
-#: src/resources/gtk/prefs-privacy-page.ui:77
+#: src/resources/gtk/prefs-privacy-page.blp:51
 msgid "Forms and Autofill"
 msgstr "Inprimakiak eta betetze automatikoa"
 
-#: src/resources/gtk/prefs-privacy-page.ui:80
+#: src/resources/gtk/prefs-privacy-page.blp:54
 msgid "_Autofill Forms"
 msgstr "Bete _inprimakiak automatikoki"
 
-#: src/resources/gtk/prefs-privacy-page.ui:87
+#: src/resources/gtk/prefs-privacy-page.blp:60
 msgid "Autofill _Data"
 msgstr "Bete _datuak automatikoki"
 
-#: src/resources/gtk/privacy-report.ui:10
+#: src/resources/gtk/privacy-report.blp:10
 msgid "Privacy Report"
 msgstr "Pribatutasun-txostena"
 
-#: src/resources/gtk/privacy-report.ui:34
+#: src/resources/gtk/privacy-report.blp:29
 msgid "_Websites"
 msgstr "_Webguneak"
 
-#: src/resources/gtk/privacy-report.ui:59
+#: src/resources/gtk/privacy-report.blp:49
 msgid "_Trackers"
 msgstr "Az_tarnariak"
 
-#: src/resources/gtk/privacy-report.ui:91
+#: src/resources/gtk/privacy-report.blp:74
 msgid "No Trackers Blocked"
 msgstr "Ez da aztarnaririk blokeatu"
 
-#: src/resources/gtk/privacy-report.ui:92
+#: src/resources/gtk/privacy-report.blp:75
 msgid ""
 "Trackers that tried to collect personal information across websites will "
 "appear here"
 msgstr "Webguneetan informazio pertsonala biltzea saiatzen diren aztarnariak hemen agertuko dira"
 
-#: src/resources/gtk/privacy-report.ui:105
+#: src/resources/gtk/privacy-report.blp:83
 msgid "Details"
 msgstr "Xehetasunak"
 
-#: src/resources/gtk/search-engine-row.ui:8
-msgid "Selects Default Search Engine"
-msgstr "Bilaketa-motor lehenetsia hautatzen du"
+#: src/resources/gtk/security-dialog.blp:20
+msgid "_Security"
+msgstr "_Segurtasuna"
 
-#: src/resources/gtk/search-engine-row.ui:69
-msgid "Shortcut"
-msgstr "Lasterbidea"
+#: src/resources/gtk/security-dialog.blp:26
+msgid "_View Certificate…"
+msgstr "_Ikusi ziurtagiria…"
 
-#: src/resources/gtk/search-engine-row.ui:92
-msgid ""
-"To determine the search address, perform a search using the search engine "
-"that you want to add and replace the search term with %s"
-msgstr "Bilaketaren helbidea zehazteko, egin bilaketa bat gehitu nahi duzun bilaketa-motorra erabiliz, eta ordeztu bilaketa-terminoa %s katearekin"
+#: src/resources/gtk/security-dialog.blp:40
+msgid "_Permissions"
+msgstr "_Baimenak"
 
-#: src/resources/gtk/search-engine-row.ui:110
-msgid "R_emove Search Engine"
-msgstr "_Kendu bilaketa-motorra"
-
-#: src/resources/gtk/shortcuts-dialog.ui:13
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:6
+msgctxt "shortcuts dialog"
 msgid "General"
 msgstr "Orokorra"
 
-#: src/resources/gtk/shortcuts-dialog.ui:16
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:9
+msgctxt "shortcuts dialog"
 msgid "New Window"
 msgstr "Leiho berria"
 
-#: src/resources/gtk/shortcuts-dialog.ui:22
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:14
+msgctxt "shortcuts dialog"
 msgid "New Incognito Window"
 msgstr "Isilpeko leiho berria"
 
-#: src/resources/gtk/shortcuts-dialog.ui:28
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:19
+msgctxt "shortcuts dialog"
 msgid "Open File"
 msgstr "Ireki fitxategia"
 
-#: src/resources/gtk/shortcuts-dialog.ui:34
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:24
+msgctxt "shortcuts dialog"
 msgid "Save Page"
 msgstr "Gorde orria"
 
-#: src/resources/gtk/shortcuts-dialog.ui:40
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:29
+msgctxt "shortcuts dialog"
 msgid "Take Screenshot"
 msgstr "Atera pantaila-argazkia"
 
-#: src/resources/gtk/shortcuts-dialog.ui:46
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:34
+msgctxt "shortcuts dialog"
 msgid "Print Page"
 msgstr "Inprimatu orria"
 
-#: src/resources/gtk/shortcuts-dialog.ui:52
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:39
+msgctxt "shortcuts dialog"
 msgid "Quit"
 msgstr "Irten"
 
-#: src/resources/gtk/shortcuts-dialog.ui:58
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:44
+msgctxt "shortcuts dialog"
+msgid "Keyboard Shortcuts"
+msgstr "Laster-teklak"
+
+#: src/resources/gtk/shortcuts-dialog.blp:49
+msgctxt "shortcuts dialog"
 msgid "Help"
 msgstr "Laguntza"
 
-#: src/resources/gtk/shortcuts-dialog.ui:64
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:54
+msgctxt "shortcuts dialog"
 msgid "Open Menu"
 msgstr "Ireki menua"
 
-#: src/resources/gtk/shortcuts-dialog.ui:70
-msgctxt "shortcut window"
-msgid "Shortcuts"
-msgstr "Lasterbideak"
-
-#: src/resources/gtk/shortcuts-dialog.ui:76
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:59
+msgctxt "shortcuts dialog"
 msgid "Show Downloads List"
 msgstr "Erakutsi deskargen zerrenda"
 
-#: src/resources/gtk/shortcuts-dialog.ui:86
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:65
 msgid "Navigation"
 msgstr "Nabigazioa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:89
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:68
+msgctxt "shortcuts dialog"
 msgid "Go to Homepage"
 msgstr "Joan orri nagusira"
 
-#: src/resources/gtk/shortcuts-dialog.ui:95
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:73
+msgctxt "shortcuts dialog"
 msgid "Reload Current Page"
 msgstr "Birkargatu uneko orrialdea"
 
-#: src/resources/gtk/shortcuts-dialog.ui:101
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:78
+msgctxt "shortcuts dialog"
 msgid "Reload Bypassing Cache"
 msgstr "Birkargatu cachea saihestuta"
 
-#: src/resources/gtk/shortcuts-dialog.ui:107
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:83
+msgctxt "shortcuts dialog"
 msgid "Stop Loading Current Page"
 msgstr "Gelditu uneko orriaren karga"
 
-#: src/resources/gtk/shortcuts-dialog.ui:113
-#: src/resources/gtk/shortcuts-dialog.ui:126
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:88
+#: src/resources/gtk/shortcuts-dialog.blp:94
+msgctxt "shortcuts dialog"
 msgid "Go Back to Previous Page"
 msgstr "Itzuli aurreko orrira"
 
-#: src/resources/gtk/shortcuts-dialog.ui:119
-#: src/resources/gtk/shortcuts-dialog.ui:132
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:100
+#: src/resources/gtk/shortcuts-dialog.blp:106
+msgctxt "shortcuts dialog"
 msgid "Go Forward to Next Page"
 msgstr "Joan hurrengo orrira"
 
-#: src/resources/gtk/shortcuts-dialog.ui:141
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:113
+msgctxt "shortcuts dialog"
 msgid "Tabs"
 msgstr "Fitxak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:144
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:116
+msgctxt "shortcuts dialog"
 msgid "New Tab"
 msgstr "Fitxa berria"
 
-#: src/resources/gtk/shortcuts-dialog.ui:150
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:121
+msgctxt "shortcuts dialog"
 msgid "Close Current Tab"
 msgstr "Itxi uneko fitxa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:156
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:126
+msgctxt "shortcuts dialog"
 msgid "Reopen Closed Tab"
-msgstr "Ireki berriro itxitako fitxa"
+msgstr "Berriro ireki itxitako fitxa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:162
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:131
+msgctxt "shortcuts dialog"
 msgid "Go to Next Tab"
 msgstr "Joan hurrengo fitxara"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:136
+msgctxt "shortcuts dialog"
 msgid "Go to Previous Tab"
 msgstr "Joan aurreko fitxara"
 
-#: src/resources/gtk/shortcuts-dialog.ui:174
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:141
+msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Left"
 msgstr "Eraman uneko fitxa ezkerrera"
 
-#: src/resources/gtk/shortcuts-dialog.ui:180
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:146
+msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Right"
 msgstr "Eraman uneko fitxa eskuinera"
 
-#: src/resources/gtk/shortcuts-dialog.ui:186
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:151
+msgctxt "shortcuts dialog"
 msgid "Duplicate Current Tab"
 msgstr "Bizkoitu uneko fitxa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:192
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:156
+msgctxt "shortcuts dialog"
 msgid "View Open Tabs"
 msgstr "Ikusi irekitako fitxak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:202
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:162
+msgctxt "shortcuts dialog"
 msgid "Miscellaneous"
 msgstr "Bestelakoak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:205
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:165
+msgctxt "shortcuts dialog"
 msgid "History"
 msgstr "Historia"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:170
+msgctxt "shortcuts dialog"
 msgid "Clear Website Data"
 msgstr "Garbitu webguneen datuak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:217
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:175
+msgctxt "shortcuts dialog"
 msgid "Preferences"
 msgstr "Hobespenak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:223
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:180
+msgctxt "shortcuts dialog"
 msgid "Bookmark Current Page"
 msgstr "Egin uneko orriaren laster-marka"
 
-#: src/resources/gtk/shortcuts-dialog.ui:229
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:185
+msgctxt "shortcuts dialog"
 msgid "Show Bookmarks List"
 msgstr "Erakutsi laster-marken zerrenda"
 
-#: src/resources/gtk/shortcuts-dialog.ui:235
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:190
+msgctxt "shortcuts dialog"
 msgid "Import Bookmarks"
 msgstr "Inportatu laster-markak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:241
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:195
+msgctxt "shortcuts dialog"
 msgid "Export Bookmarks"
 msgstr "Esportatu laster-markak"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:200
+msgctxt "shortcuts dialog"
 msgid "Toggle Caret Browsing"
-msgstr "Txandakatu kurtsore bidezko arakatzea"
+msgstr "Aktibatu/desaktibatu kurtsore bidezko arakatzea"
 
-#: src/resources/gtk/shortcuts-dialog.ui:257
-msgctxt "shortcut window"
-msgid "Web App"
-msgstr "Web-aplikazioa"
-
-#: src/resources/gtk/shortcuts-dialog.ui:260
-msgctxt "shortcut window"
-msgid "Install Site as Web App"
-msgstr "Instalatu gunea web-aplikazio gisa"
-
-#: src/resources/gtk/shortcuts-dialog.ui:270
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:206
+msgctxt "shortcuts dialog"
 msgid "View"
 msgstr "Ikusi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:273
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:209
+msgctxt "shortcuts dialog"
 msgid "Zoom In"
 msgstr "Handiagotu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:279
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:214
+msgctxt "shortcuts dialog"
 msgid "Zoom Out"
 msgstr "Txikiagotu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:285
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:219
+msgctxt "shortcuts dialog"
 msgid "Reset Zoom"
 msgstr "Berrezarri zooma"
 
-#: src/resources/gtk/shortcuts-dialog.ui:291
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:224
+msgctxt "shortcuts dialog"
 msgid "Fullscreen"
 msgstr "Pantaila osoa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:229
+msgctxt "shortcuts dialog"
 msgid "View Page Source"
 msgstr "Ikusi orriaren iturburua"
 
-#: src/resources/gtk/shortcuts-dialog.ui:303
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:234
+msgctxt "shortcuts dialog"
 msgid "Toggle Inspector"
-msgstr "Txandakatu ikuskatzailea"
+msgstr "Aktibatu/desaktibatu ikuskatzailea"
 
-#: src/resources/gtk/shortcuts-dialog.ui:309
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:239
+msgctxt "shortcuts dialog"
 msgid "Toggle Reader Mode"
-msgstr "Txandakatu irakurle modua"
+msgstr "Aktibatu/desaktibatu irakurle modua"
 
-#: src/resources/gtk/shortcuts-dialog.ui:319
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:245
+msgctxt "shortcuts dialog"
 msgid "Editing"
 msgstr "Edizioa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:322
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:248
+msgctxt "shortcuts dialog"
 msgid "Cut"
 msgstr "Ebaki"
 
-#: src/resources/gtk/shortcuts-dialog.ui:328
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:253
+msgctxt "shortcuts dialog"
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:334
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:258
+msgctxt "shortcuts dialog"
 msgid "Paste"
 msgstr "Itsatsi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:340
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:263
+msgctxt "shortcuts dialog"
 msgid "Undo"
 msgstr "Desegin"
 
-#: src/resources/gtk/shortcuts-dialog.ui:346
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:268
+msgctxt "shortcuts dialog"
 msgid "Redo"
 msgstr "Berregin"
 
-#: src/resources/gtk/shortcuts-dialog.ui:352
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:273
+msgctxt "shortcuts dialog"
 msgid "Select All"
 msgstr "Hautatu dena"
 
-#: src/resources/gtk/shortcuts-dialog.ui:358
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:278
+msgctxt "shortcuts dialog"
 msgid "Select Page URL"
 msgstr "Hautatu orriaren URLa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:364
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:283
+msgctxt "shortcuts dialog"
 msgid "Search With Default Search Engine"
 msgstr "Bilatu bilaketa-motor lehenetsia erabilita"
 
-#: src/resources/gtk/shortcuts-dialog.ui:370
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:288
+msgctxt "shortcuts dialog"
 msgid "Find"
 msgstr "Aurkitu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:376
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:293
+msgctxt "shortcuts dialog"
 msgid "Next Find Result"
 msgstr "Bilaketaren hurrengo emaitza"
 
-#: src/resources/gtk/shortcuts-dialog.ui:382
-msgctxt "shortcut window"
+#: src/resources/gtk/shortcuts-dialog.blp:298
+msgctxt "shortcuts dialog"
 msgid "Previous Find Result"
 msgstr "Bilaketaren aurreko emaitza"
 
-#: src/resources/gtk/synced-tabs-dialog.ui:18
+#: src/resources/gtk/site-menu-button.blp:13
+msgid "_Find…"
+msgstr "_Bilatu…"
+
+#: src/resources/gtk/site-menu-button.blp:18
+msgid "_Print…"
+msgstr "_Inprimatu…"
+
+#: src/resources/gtk/site-menu-button.blp:34
+msgid "Text Enco_ding…"
+msgstr "Test_u-kodeketa…"
+
+#: src/resources/gtk/site-menu-button.blp:39
+msgid "_Security & Permissions"
+msgstr "_Segurtasuna eta baimenak"
+
+#: src/resources/gtk/site-menu-button.blp:58
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "Txikiagotu"
+
+#: src/resources/gtk/site-menu-button.blp:64
+msgid "Restore Zoom"
+msgstr "Leheneratu zooma"
+
+#: src/resources/gtk/site-menu-button.blp:73
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "Handiagotu"
+
+#: src/resources/gtk/site-menu-button.blp:81
+msgid "Site Menu"
+msgstr "Gunearen menua"
+
+#: src/resources/gtk/synced-tabs-dialog.blp:8
 msgid "Synced Tabs"
 msgstr "Sinkronizatutako fitxak"
 
-#: src/resources/gtk/synced-tabs-dialog.ui:36
+#: src/resources/gtk/synced-tabs-dialog.blp:25
 msgid ""
 "Below are the synced open tabs of your other devices that use Firefox Sync "
 "with this account. Open a tab by double clicking its name (tabs under Local "
 "Tabs cannot be opened)."
 msgstr "Kontu honekin Firefox Sync erabiltzen duten zure beste gailuetan irekita dauden sinkronizatutako fitxak ageri dira azpian. Ireki fitxa bat bere izenaren gainean klik bikoitza eginez ('Fitxa lokalak'  atalekoak ezin dira ireki)."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:7
+#: src/resources/gtk/tab-overview-menu.blp:23
+msgid "Close _All Tabs"
+msgstr "Itxi fitxa _guztiak"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.blp:5
 msgid "Additional URLs"
 msgstr "URL gehigarriak"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:25
+#: src/resources/gtk/webapp-additional-urls-dialog.blp:12
 msgid ""
-"A URL that starts with any of the additional URLs will be opened by the web "
-"application. If you omit the URL scheme, the one from the currently loaded "
-"URL will be used."
-msgstr "URL gehigarrietako edozeinekin hasten den URL bat irekiko da web-aplikazioan. URL eskema ezikusten baduzu, unean kargatutako URLko bat erabiliko da."
+"URLs that start with the same base domain (example.com) will be opened by "
+"this web app"
+msgstr "Oinarri-domeinu berarekin hasten diren URLak (adibidea.com) web-aplikazio honekin irekiko dira"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:35
-msgctxt "Column header in the Additional URLs dialog"
-msgid "URL"
-msgstr "URLa"
+#: src/resources/gtk/webapp-additional-urls-dialog.blp:16
+msgid "Base Domain"
+msgstr "Oinarri-domeinua"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:78
-msgid "Add New URL"
-msgstr "Gehitu beste URL bat"
+#: src/resources/gtk/webapp-additional-urls-dialog.blp:24
+msgid "Add URL"
+msgstr "Gehitu URLa"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:84
-msgid "Remove Selected URLs"
-msgstr "Kendu hautatutako URLak"
-
-#: src/search-provider/ephy-search-provider.c:214
+#: src/search-provider/ephy-search-provider.c:215
 #, c-format
 msgid "Search the web for “%s”"
 msgstr "Bilatu '%s' webean"
 
-#: src/search-provider/ephy-search-provider.c:224
+#: src/search-provider/ephy-search-provider.c:225
 #, c-format
 msgid "Load “%s”"
 msgstr "Kargatu “%s”"
@@ -4252,156 +4511,311 @@ msgstr "Izena edo bertsioa falta da"
 msgid "Failed to determine initiating URI"
 msgstr "Huts egin du hasierako URIa zehazteak"
 
-#: src/window-commands.c:126
+#: src/window-commands.c:128
 msgid "HTML File"
 msgstr "HTML fitxategia"
 
-#: src/window-commands.c:127
+#: src/window-commands.c:129
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:128 src/window-commands.c:779
+#: src/window-commands.c:130 src/window-commands.c:732
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:129 src/window-commands.c:780
+#: src/window-commands.c:131 src/window-commands.c:733
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:171 src/window-commands.c:620
-#: src/window-commands.c:942 src/window-commands.c:982
+#: src/window-commands.c:173 src/window-commands.c:569
+#: src/window-commands.c:895 src/window-commands.c:935
 msgid "_Select File"
 msgstr "_Hautatu fitxategia"
 
-#: src/window-commands.c:173 src/window-commands.c:944
+#: src/window-commands.c:175 src/window-commands.c:897
 msgid "I_mport"
 msgstr "_Inportatu"
 
-#: src/window-commands.c:326 src/window-commands.c:416
-#: src/window-commands.c:466 src/window-commands.c:510
-#: src/window-commands.c:533 src/window-commands.c:549
+#: src/window-commands.c:328 src/window-commands.c:417
+#: src/window-commands.c:461 src/window-commands.c:484
+#: src/window-commands.c:500
 msgid "Bookmarks successfully imported!"
 msgstr "Laster-markak ongi inportatu dira."
 
-#: src/window-commands.c:345
+#: src/window-commands.c:347
 msgid "Select Profile"
 msgstr "Hautatu profila"
 
-#: src/window-commands.c:427 src/window-commands.c:477
-#: src/window-commands.c:737 src/window-commands.c:863
-#: src/window-commands.c:1083
+#: src/window-commands.c:428 src/window-commands.c:690
+#: src/window-commands.c:816 src/window-commands.c:1038
 msgid "Choose File"
 msgstr "Aukeratu fitxategia"
 
-#: src/window-commands.c:606
+#: src/window-commands.c:555
 msgid "Import Bookmarks"
 msgstr "Inportatu laster-markak"
 
-#: src/window-commands.c:634 src/window-commands.c:996
+#: src/window-commands.c:583 src/window-commands.c:949
 msgid "File Type"
 msgstr "Fitxategi mota"
 
-#: src/window-commands.c:698
+#: src/window-commands.c:647
 msgid "Bookmarks successfully exported!"
 msgstr "Laster-markak ongi esportatu dira."
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:748
+#: src/window-commands.c:701
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
-#: src/window-commands.c:778
+#: src/window-commands.c:731
 msgid "CSV File"
 msgstr "CSV fitxategia"
 
-#: src/window-commands.c:826 src/window-commands.c:852
+#: src/window-commands.c:779 src/window-commands.c:805
 msgid "Passwords successfully imported!"
 msgstr "Pasahitzak ongi inportatu dira!"
 
-#: src/window-commands.c:968
+#: src/window-commands.c:921
 msgid "Import Passwords"
 msgstr "Inportatu pasahitzak"
 
-#: src/window-commands.c:1044
+#: src/window-commands.c:997
 msgid "Passwords successfully exported!"
 msgstr "Pasahitzak ongi esportatu dira."
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1093
+#: src/window-commands.c:1048
 msgid "passwords.csv"
 msgstr "pasahitzak.csv"
 
-#: src/window-commands.c:1325
+#: src/window-commands.c:1226
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1348
+#: src/window-commands.c:1249
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: src/window-commands.c:1504
+#: src/window-commands.c:1405
 msgid "Reload Website?"
 msgstr "Birkargatu webgunea?"
 
-#: src/window-commands.c:2052
+#: src/window-commands.c:1953
 msgid "New Web App"
 msgstr "Web-aplikazio berria"
 
-#: src/window-commands.c:2104
+#: src/window-commands.c:2005
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "'%s' aplikazioa prest dago erabiltzeko"
 
-#: src/window-commands.c:2107
+#: src/window-commands.c:2008
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "“%s” aplikazioa ezin da sortu: %s"
 
-#. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2119
-msgid "Launch"
-msgstr "Abiarazi"
-
-#: src/window-commands.c:2205
+#: src/window-commands.c:2106
 msgid "Replace Existing Web App?"
 msgstr "Ordeztu lehendik dagoen web-aplikazioa?"
 
-#: src/window-commands.c:2208
+#: src/window-commands.c:2109
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Badago lehendik \"%s\" deritzon aplikazio bat. Hura ordezten bada, gainidatzi egingo da."
 
-#: src/window-commands.c:2213
+#: src/window-commands.c:2114
 msgid "_Replace"
 msgstr "_Ordeztu"
 
-#: src/window-commands.c:2598
+#: src/window-commands.c:2419
+msgid "Screenshot finished"
+msgstr "Pantaila-argazkia amaitu da"
+
+#: src/window-commands.c:2540
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2602
+#: src/window-commands.c:2544
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2648
+#: src/window-commands.c:2590
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3107
+#: src/window-commands.c:3049
 msgid "Enable Caret Browsing Mode?"
 msgstr "Gaitu kurtsore bidezko arakatzea?"
 
-#: src/window-commands.c:3108
+#: src/window-commands.c:3050
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
 "want to enable caret browsing?"
 msgstr "F7 sakatzeak kurtsorearen bidezko nabigazioa aktibatzen eta desaktibatzen du. Eginbide honek kurtsore mugikor bat kokatzen du web-orrietan, haren barruan mugitzeko aukera eskainiz. Kurtsorearen bidezko nabigazioa aktibatu nahi duzu?"
 
-#: src/window-commands.c:3113
+#: src/window-commands.c:3055
 msgid "_Enable"
 msgstr "_Gaitu"
+
+#~ msgid "Deprecated. Please use search-engine-providers instead."
+#~ msgstr "Zaharkituta. Erabili 'search-engine-providers'"
+
+#~ msgid "Bookmark Page"
+#~ msgstr "Sortu orriaren laster-marka"
+
+#~ msgid "Reload the current page"
+#~ msgstr "Kargatu berriro uneko orria"
+
+#~ msgid "Stop loading the current page"
+#~ msgstr "Gelditu uneko orria kargatzea"
+
+#~ msgid "De_select All"
+#~ msgstr "De_sautatu denak"
+
+#~ msgid "Camera Request"
+#~ msgstr "Kamera-eskaera"
+
+#~ msgid "Microphone Request"
+#~ msgstr "Mikrofono-eskaera"
+
+#~ msgid "Location Request"
+#~ msgstr "Kokaleku-eskaera"
+
+#~ msgid "Webcam and Microphone Request"
+#~ msgstr "Web-kameraren eta mikrofonoaren eskaera"
+
+#~ msgid "Permission Request"
+#~ msgstr "Baimen-eskaera"
+
+#~ msgid "Passwords can be removed at any time in Preferences"
+#~ msgstr "Pasahitzak edozein momentutan ezabatu daitezke hobespenetara joanda"
+
+#~ msgid "Clear"
+#~ msgstr "Garbitu"
+
+#~ msgid "View Available Passwords"
+#~ msgstr "Ikusi erabilgarri dauden pasahitzak"
+
+#~ msgid "_Redo"
+#~ msgstr "_Berregin"
+
+#~ msgid "I_mport and Export"
+#~ msgstr "I_nportatu eta esportatu"
+
+#~ msgid "I_mport Bookmarks…"
+#~ msgstr "I_nportatu laster-markak…"
+
+#~ msgid "Import _Passwords…"
+#~ msgstr "Inportatu _pasahitzak…"
+
+#~ msgid "Save Login?"
+#~ msgstr "Gorde saio-hasiera?"
+
+#~ msgid "_Never Save"
+#~ msgstr "Ez gorde _inoiz"
+
+#~ msgid "N_ot Now"
+#~ msgstr "Orain e_z"
+
+#~ msgid "_Google Search Suggestions"
+#~ msgstr "_Google bilaketen iradokizunak"
+
+#~ msgid "Clear Website _Data"
+#~ msgstr "Garbitu webguneen _datuak"
+
+#~ msgid "_Passwords"
+#~ msgstr "_Pasahitzak"
+
+#~ msgid "_Remember Passwords"
+#~ msgstr "_Gogoratu pasahitzak"
+
+#~ msgid "Selects Default Search Engine"
+#~ msgstr "Bilaketa-motor lehenetsia hautatzen du"
+
+#~ msgid ""
+#~ "To determine the search address, perform a search using the search engine "
+#~ "that you want to add and replace the search term with %s"
+#~ msgstr ""
+#~ "Bilaketaren helbidea zehazteko, egin bilaketa bat gehitu nahi duzun "
+#~ "bilaketa-motorra erabiliz, eta ordeztu bilaketa-terminoa %s katearekin"
+
+#~ msgid "R_emove Search Engine"
+#~ msgstr "_Kendu bilaketa-motorra"
+
+#~ msgctxt "shortcut window"
+#~ msgid "General"
+#~ msgstr "Orokorra"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New Window"
+#~ msgstr "Leiho berria"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New Incognito Window"
+#~ msgstr "Isilpeko leiho berria"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Shortcuts"
+#~ msgstr "Lasterbideak"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Tabs"
+#~ msgstr "Fitxak"
+
+#~ msgctxt "shortcut window"
+#~ msgid "New Tab"
+#~ msgstr "Fitxa berria"
+
+#~ msgctxt "shortcut window"
+#~ msgid "View Open Tabs"
+#~ msgstr "Ikusi irekitako fitxak"
+
+#~ msgctxt "shortcut window"
+#~ msgid "History"
+#~ msgstr "Historia"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Preferences"
+#~ msgstr "Hobespenak"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Import Bookmarks"
+#~ msgstr "Inportatu laster-markak"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Web App"
+#~ msgstr "Web-aplikazioa"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom In"
+#~ msgstr "Handiagotu"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Zoom Out"
+#~ msgstr "Txikiagotu"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Fullscreen"
+#~ msgstr "Pantaila osoa"
+
+#~ msgid ""
+#~ "A URL that starts with any of the additional URLs will be opened by the "
+#~ "web application. If you omit the URL scheme, the one from the currently "
+#~ "loaded URL will be used."
+#~ msgstr ""
+#~ "URL gehigarrietako edozeinekin hasten den URL bat irekiko da web-"
+#~ "aplikazioan. URL eskema ezikusten baduzu, unean kargatutako URLko bat "
+#~ "erabiliko da."
+
+#~ msgctxt "Column header in the Additional URLs dialog"
+#~ msgid "URL"
+#~ msgstr "URLa"
+
+#~ msgid "Remove Selected URLs"
+#~ msgstr "Kendu hautatutako URLak"
 
 #~ msgid "Bookmarks order"
 #~ msgstr "Laster-marken ordena"
@@ -4418,20 +4832,11 @@ msgstr "_Gaitu"
 #~ msgid "The order of bookmarks in the tag detail view of each tag."
 #~ msgstr "Laster-marken ordena etiketa bakoitzaren ikuspegi xehean."
 
-#~ msgid "Bookmark removed"
-#~ msgstr "Laster-marka kendu da"
-
 #~ msgid "_Select All"
 #~ msgstr "_Hautatu denak"
 
 #~ msgid "Properties"
 #~ msgstr "Propietateak"
-
-#~ msgid "Edit"
-#~ msgstr "Editatu"
-
-#~ msgid "Done"
-#~ msgstr "Eginda"
 
 #~ msgid "C_lear All"
 #~ msgstr "Garbitu _denak"
@@ -4520,10 +4925,6 @@ msgstr "_Gaitu"
 #~ msgstr ""
 #~ "Nabigazio segurua gaituko den ala ez. Nabigazio segurua Google Safe "
 #~ "Browsing API v4 bidez dabil."
-
-#, c-format
-#~ msgid "Security Warning"
-#~ msgstr "Segurtasun-abisua"
 
 #~ msgid "Unsafe website detected!"
 #~ msgstr "Segurua ez den webgunea antzeman da!"
@@ -4652,12 +5053,6 @@ msgstr "_Gaitu"
 
 #~ msgid "S_ynced tabs"
 #~ msgstr "_Sinkronizatutako fitxak"
-
-#~ msgid "Close"
-#~ msgstr "Itxi"
-
-#~ msgid "Tabs"
-#~ msgstr "Fitxak"
 
 #~ msgid "New Tab Page"
 #~ msgstr "Fitxa berriaren orria"
@@ -4858,9 +5253,6 @@ msgstr "_Gaitu"
 #~ msgid "Title:"
 #~ msgstr "Titulua:"
 
-#~ msgid "Manage Search _Engines"
-#~ msgstr "Kudeatu _bilaketa-motorrak"
-
 #~ msgid "Add _Language"
 #~ msgstr "Gehitu _hizkuntza"
 
@@ -5012,9 +5404,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Forget the selected passwords"
 #~ msgstr "Ahaztu hautatutako pasahitzak"
-
-#~ msgid "Preferences"
-#~ msgstr "Hobespenak"
 
 #~ msgid "Clear _Cookies"
 #~ msgstr "Garbitu _cookie-ak"
@@ -5361,9 +5750,6 @@ msgstr "_Gaitu"
 #~ msgid "_About"
 #~ msgstr "Honi _buruz"
 
-#~ msgid "_Quit"
-#~ msgstr "_Irten"
-
 #~ msgid "Date"
 #~ msgstr "Data"
 
@@ -5375,9 +5761,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Text _Encoding"
 #~ msgstr "Testu _kodeketa"
-
-#~ msgid "A_utomatically open downloaded files"
-#~ msgstr "A_utomatikoki ireki deskargatutako fitxategiak"
 
 #~ msgid "Enable _plugins"
 #~ msgstr "Gaitu _pluginak"
@@ -5535,10 +5918,6 @@ msgstr "_Gaitu"
 #~ "Gure jarraipenik egiterik ez dugula nahi webguneei adierazi edo ez. Jakin "
 #~ "ezazu webguneak ez daudela derrigortuta ezarpen honi kasu egiteko. "
 
-#~ msgid "Whether to show the title column in the bookmarks window."
-#~ msgstr ""
-#~ "Laster-marken leihoan tituluaren zutabea erakutsi edo ez adierazten du."
-
 #~ msgid "Whether to show the address column in the bookmarks window."
 #~ msgstr ""
 #~ "Laster-marken leihoan helbidearen zutabea erakutsi edo ez adierazten du."
@@ -5626,9 +6005,6 @@ msgstr "_Gaitu"
 #~ msgstr[0] "Laster-marka %d antzekoa da"
 #~ msgstr[1] "%d laster-marka antzekoak dira"
 
-#~ msgid "Add Bookmark"
-#~ msgstr "Gehitu laster-marka"
-
 #~ msgid "“%s” Properties"
 #~ msgstr "'%s' - Propietateak"
 
@@ -5657,10 +6033,6 @@ msgstr "_Gaitu"
 #~ msgctxt "bookmarks"
 #~ msgid "Not Categorized"
 #~ msgstr "Kategoriarik gabeak"
-
-#~ msgctxt "bookmarks"
-#~ msgid "Nearby Sites"
-#~ msgstr "Gertuko guneak"
 
 #~ msgid "Untitled"
 #~ msgstr "Izengabea"
@@ -5834,9 +6206,6 @@ msgstr "_Gaitu"
 #~ msgid "&#60;b&#62;Related encodings&#60;/b&#62;"
 #~ msgstr "&#60;b&#62;Azken kodeketak&#60;/b&#62;"
 
-#~ msgid "Add _Bookmark"
-#~ msgstr "Gehitu _laster-marka"
-
 #~ msgid "_Tell websites I do not want to be tracked"
 #~ msgstr "_Adierazi webguneei ez dudala nire jarraipenik egiterik nahi"
 
@@ -5870,9 +6239,6 @@ msgstr "_Gaitu"
 
 #~ msgid "_Normal Size"
 #~ msgstr "Tamaina _normala"
-
-#~ msgid "_Add Bookmark…"
-#~ msgstr "_Gehitu laster-marka..."
 
 #~ msgid "_Location…"
 #~ msgstr "_Helbidea..."
@@ -6096,9 +6462,6 @@ msgstr "_Gaitu"
 #~ msgid "End of current session"
 #~ msgstr "Uneko saioaren amaiera"
 
-#~ msgid "Domain"
-#~ msgstr "Domeinua"
-
 #~ msgid "Host"
 #~ msgstr "Ostalaria"
 
@@ -6223,9 +6586,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Find:"
 #~ msgstr "Bilatu:"
-
-#~ msgid "_Case sensitive"
-#~ msgstr "_Maiuskula/minuskula"
 
 #~ msgid "Find Previous"
 #~ msgstr "Bilatu aurrekoa"
@@ -6379,9 +6739,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Show “_%s”"
 #~ msgstr "Erakutsi '_%s'"
-
-#~ msgid "_Move on Toolbar"
-#~ msgstr "_Aldatu lekuz tresna-barran"
 
 #~ msgid "Move the selected item on the toolbar"
 #~ msgstr "Aldatu lekuz hautatutako elementua tresna-barran"
@@ -6614,9 +6971,6 @@ msgstr "_Gaitu"
 
 #~ msgid "_Send Email…"
 #~ msgstr "Bi_dali posta..."
-
-#~ msgid "Insecure"
-#~ msgstr "Segurtasun gabea"
 
 #~ msgid "Broken"
 #~ msgstr "Hautsita"
