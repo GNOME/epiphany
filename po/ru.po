@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-08-10 18:13+0000\n"
-"PO-Revision-Date: 2025-08-11 17:59+0300\n"
+"POT-Creation-Date: 2025-08-25 15:09+0000\n"
+"PO-Revision-Date: 2025-08-25 18:40+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:205
@@ -1182,7 +1182,7 @@ msgstr "Введите PIN-код для %s, чтобы пройти аутен�
 #: src/resources/gtk/prefs-lang-dialog.blp:18 src/window-commands.c:360
 #: src/window-commands.c:565 src/window-commands.c:931
 #: src/window-commands.c:1409 src/window-commands.c:2113
-#: src/window-commands.c:3046
+#: src/window-commands.c:3054
 msgid "_Cancel"
 msgstr "_Отменить"
 
@@ -1268,7 +1268,7 @@ msgid "Finished downloading %s"
 msgstr "Завершена загрузка %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969 src/ephy-window.c:3918
+#: embed/ephy-download.c:969 src/ephy-window.c:3917
 msgid "Download finished"
 msgstr "Загрузка завершена"
 
@@ -1868,7 +1868,7 @@ msgstr "Точная ошибка: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
 #: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1622
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1631
 msgid "Reload"
 msgstr "Обновить"
 
@@ -2491,7 +2491,7 @@ msgid "Save Media As"
 msgstr "Сохранить мультимедиа как"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1631
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1640
 msgid "Stop"
 msgstr "Остановить"
 
@@ -2692,9 +2692,17 @@ msgstr "Недоступно в приватном режиме"
 msgid "Clear History"
 msgstr "Очистить историю"
 
-#: src/ephy-location-entry.c:333 src/resources/gtk/location-entry.blp:197
+#: src/ephy-location-entry.c:333 src/resources/gtk/location-entry.blp:98
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Поиск сайтов, закладок и открытых вкладок"
+
+#: src/ephy-location-entry.c:1337
+msgid "Secure Site"
+msgstr "Безопасный сайт"
+
+#: src/ephy-location-entry.c:1339
+msgid "Insecure Site"
+msgstr "Небезопасный сайт"
 
 #: src/ephy-main.c:114
 msgid "Open a new browser window instead of a new tab"
@@ -2756,7 +2764,7 @@ msgstr "Это очистит все локально хранящиеся па�
 msgid "Copy password"
 msgstr "Копировать пароль"
 
-#: src/ephy-passwords-view.c:259 src/ephy-window.c:4015
+#: src/ephy-passwords-view.c:259 src/ephy-window.c:4014
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -2764,7 +2772,7 @@ msgstr "Имя пользователя"
 msgid "Copy username"
 msgstr "Копировать имя пользователя"
 
-#: src/ephy-passwords-view.c:277 src/ephy-window.c:4022
+#: src/ephy-passwords-view.c:277 src/ephy-window.c:4021
 msgid "Password"
 msgstr "Пароль"
 
@@ -3076,67 +3084,67 @@ msgid "Always Allow"
 msgstr "Всегда разрешать"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:2993
+#: src/ephy-window.c:2992
 msgid "Notification Request"
 msgstr "Запрос об уведомлении"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:2995
+#: src/ephy-window.c:2994
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "Страница «%s» хотела бы отправлять вам уведомления"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3000
+#: src/ephy-window.c:2999
 msgid "Location Access Request"
 msgstr "Запрос на доступ к местоположению"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3002
+#: src/ephy-window.c:3001
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "Страница «%s» хотела бы узнать ваше местоположение"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3007
+#: src/ephy-window.c:3006
 msgid "Microphone Access Request"
 msgstr "Запрос на доступ к микрофону"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3009
+#: src/ephy-window.c:3008
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "Страница «%s» хотела бы использовать ваш микрофон"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3014
+#: src/ephy-window.c:3013
 msgid "Webcam Access Request"
 msgstr "Запрос на доступ к веб-камере"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3015
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "Страница «%s» хотела бы использовать вашу веб-камеру"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3021
+#: src/ephy-window.c:3020
 msgid "Webcam and Microphone Access Request"
 msgstr "Запрос на доступ к веб-камере и микрофону"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3022
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "Страница «%s» хотела бы использовать вашу веб-камеру и микрофон"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3037
+#: src/ephy-window.c:3036
 msgid "Website Data Access Request"
 msgstr "Запрос на доступ к данным веб-сайта"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3039
+#: src/ephy-window.c:3038
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
@@ -3147,49 +3155,49 @@ msgstr ""
 "активность на «%s»."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3044
+#: src/ephy-window.c:3043
 msgid "Clipboard Access Request"
 msgstr "Запрос на доступ к буферу обмена"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3046
+#: src/ephy-window.c:3045
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "Страница «%s» хотела бы получить доступ к вашему буферу обмена"
 
-#: src/ephy-window.c:3074
+#: src/ephy-window.c:3073
 msgid "_Ask Later"
 msgstr "_Спросить позже"
 
-#: src/ephy-window.c:3075
+#: src/ephy-window.c:3074
 msgid "_Deny"
 msgstr "_Запретить"
 
-#: src/ephy-window.c:3076
+#: src/ephy-window.c:3075
 msgid "_Allow"
 msgstr "_Разрешить"
 
-#: src/ephy-window.c:3259 src/ephy-window.c:4913
+#: src/ephy-window.c:3258 src/ephy-window.c:4912
 msgid "Leave Website?"
 msgstr "Покинуть сайт?"
 
-#: src/ephy-window.c:3260 src/ephy-window.c:4914 src/window-commands.c:1406
+#: src/ephy-window.c:3259 src/ephy-window.c:4913 src/window-commands.c:1406
 msgid "A form was modified and has not been submitted"
 msgstr "Форма была изменена и не была отправлена"
 
-#: src/ephy-window.c:3261 src/ephy-window.c:4915 src/window-commands.c:1410
+#: src/ephy-window.c:3260 src/ephy-window.c:4914 src/window-commands.c:1410
 msgid "_Discard Form"
 msgstr "_Отменить изменения"
 
-#: src/ephy-window.c:3282
+#: src/ephy-window.c:3281
 msgid "Download operation"
 msgstr "Операция загрузки"
 
-#: src/ephy-window.c:3284
+#: src/ephy-window.c:3283
 msgid "Show details"
 msgstr "Показать детали"
 
-#: src/ephy-window.c:3286
+#: src/ephy-window.c:3285
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -3197,17 +3205,17 @@ msgstr[0] "%d операция загрузки активна"
 msgstr[1] "Активны %d операции загрузки"
 msgstr[2] "Активно %d операций загрузки"
 
-#: src/ephy-window.c:3564
+#: src/ephy-window.c:3563
 msgid "Set as Default Browser?"
 msgstr "Установить в качестве браузера по умолчанию?"
 
-#: src/ephy-window.c:3566
+#: src/ephy-window.c:3565
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Использовать Веб-браузер в качестве веб-браузера по умолчанию и для открытия "
 "внешних ссылок"
 
-#: src/ephy-window.c:3568
+#: src/ephy-window.c:3567
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3215,27 +3223,27 @@ msgstr ""
 "Использовать Epiphany Technology Preview в качестве веб-браузера по "
 "умолчанию и для открытия внешних ссылок"
 
-#: src/ephy-window.c:3572
+#: src/ephy-window.c:3571
 msgid "_Ask Again Later"
 msgstr "_Спросить еще раз позже"
 
-#: src/ephy-window.c:3573
+#: src/ephy-window.c:3572
 msgid "_No"
 msgstr "_Нет"
 
-#: src/ephy-window.c:3574
+#: src/ephy-window.c:3573
 msgid "_Yes"
 msgstr "_Да"
 
-#: src/ephy-window.c:3906
+#: src/ephy-window.c:3905
 msgid "Download started"
 msgstr "Началась загрузка"
 
-#: src/ephy-window.c:3996
+#: src/ephy-window.c:3995
 msgid "Save Password?"
 msgstr "Сохранить пароль?"
 
-#: src/ephy-window.c:3997
+#: src/ephy-window.c:3996
 msgid ""
 "Passwords are saved only on your device and can be removed at any time in "
 "Preferences"
@@ -3243,45 +3251,45 @@ msgstr ""
 "Пароли сохраняются только на вашем устройстве и могут быть удалены в любой "
 "момент в Параметрах"
 
-#: src/ephy-window.c:3999
+#: src/ephy-window.c:3998
 msgid "Not Now"
 msgstr "Не сейчас"
 
-#: src/ephy-window.c:4000
+#: src/ephy-window.c:3999
 msgid "Never Save"
 msgstr "Никогда не сохранять"
 
-#: src/ephy-window.c:4001
+#: src/ephy-window.c:4000
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/ephy-window.c:4202
+#: src/ephy-window.c:4201
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Веб-приложение"
 
-#: src/ephy-window.c:4205
+#: src/ephy-window.c:4204
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Установить сайт как веб-приложение"
 
-#: src/ephy-window.c:5028
+#: src/ephy-window.c:5027
 msgid "Close Multiple Tabs?"
 msgstr "Закрыть несколько вкладок?"
 
-#: src/ephy-window.c:5029
+#: src/ephy-window.c:5028
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Если это окно закроется, все открытые вкладки будут потеряны"
 
-#: src/ephy-window.c:5030
+#: src/ephy-window.c:5029
 msgid "C_lose Tabs"
 msgstr "_Закрыть вкладки"
 
-#: src/ephy-window.c:5140
+#: src/ephy-window.c:5139
 msgid "New tab opened"
 msgstr "Открыта новая вкладка"
 
-#: src/ephy-window.c:5144
+#: src/ephy-window.c:5143
 msgid "Switch"
 msgstr "Переключиться"
 
@@ -3519,7 +3527,7 @@ msgid "View Open Tabs"
 msgstr "Просмотреть открытые вкладки"
 
 #: src/resources/gtk/action-bar-end.blp:101 src/resources/gtk/action-bar.blp:67
-#: src/resources/gtk/bookmarks-dialog.blp:53
+#: src/resources/gtk/bookmarks-dialog.blp:54
 msgid "Bookmarks"
 msgstr "Закладки"
 
@@ -3538,6 +3546,10 @@ msgstr "Вперед"
 #: src/resources/gtk/prefs-general-page.blp:61
 msgid "Homepage"
 msgstr "Домашняя страница"
+
+#: src/resources/gtk/add-opensearch-engine-button.blp:4
+msgid "Add Search Engine"
+msgstr "Добавить поисковую систему"
 
 #: src/resources/gtk/autofill-view.blp:5
 msgid "Autofill Data"
@@ -3656,27 +3668,31 @@ msgstr "Редактировать"
 msgid "Done"
 msgstr "Готово"
 
-#: src/resources/gtk/bookmarks-dialog.blp:38 src/resources/gtk/data-view.blp:18
+#: src/resources/gtk/bookmarks-dialog.blp:32
+msgid "Close"
+msgstr "Закрыть"
+
+#: src/resources/gtk/bookmarks-dialog.blp:39 src/resources/gtk/data-view.blp:18
 msgid "Options"
 msgstr "Параметры"
 
-#: src/resources/gtk/bookmarks-dialog.blp:68
+#: src/resources/gtk/bookmarks-dialog.blp:69
 msgid "Search bookmarks"
 msgstr "Поиск закладок"
 
-#: src/resources/gtk/bookmarks-dialog.blp:160
+#: src/resources/gtk/bookmarks-dialog.blp:161
 msgid "No Bookmarks"
 msgstr "Нет закладок"
 
-#: src/resources/gtk/bookmarks-dialog.blp:161
+#: src/resources/gtk/bookmarks-dialog.blp:162
 msgid "Bookmarked pages will appear here"
 msgstr "Страницы, добавленные в закладки, будут отображаться здесь"
 
-#: src/resources/gtk/bookmarks-dialog.blp:180
+#: src/resources/gtk/bookmarks-dialog.blp:181
 msgid "I_mport…"
 msgstr "И_мпортировать…"
 
-#: src/resources/gtk/bookmarks-dialog.blp:185
+#: src/resources/gtk/bookmarks-dialog.blp:186
 msgid "E_xport…"
 msgstr "_Экспортировать…"
 
@@ -3902,6 +3918,7 @@ msgid "Unp_in Tab"
 msgstr "Отпустить вкладку"
 
 #: src/resources/gtk/notebook-context-menu.blp:35
+#: src/resources/gtk/site-menu-button.blp:23
 msgid "_Mute Tab"
 msgstr "_Выключить звук на вкладке"
 
@@ -3946,8 +3963,8 @@ msgid "Reopen Closed _Tab"
 msgstr "Открыть _закрытую вкладку"
 
 #: src/resources/gtk/page-menu-button.blp:38
-msgid "Fullscreen"
-msgstr "Полноэкранный режим"
+msgid "_Fullscreen"
+msgstr "По_лноэкранный режим"
 
 #: src/resources/gtk/page-menu-button.blp:45
 msgid "Histo_ry"
@@ -3990,12 +4007,12 @@ msgid "_About Web"
 msgstr "_О приложении"
 
 #: src/resources/gtk/page-menu-button.blp:101
-msgid "Uninstall Web App"
-msgstr "Удалить веб-приложение"
+msgid "_Uninstall Web App"
+msgstr "_Удалить веб-приложение"
 
 #: src/resources/gtk/page-menu-button.blp:106
-msgid "Quit"
-msgstr "Закрыть"
+msgid "_Quit"
+msgstr "_Закрыть"
 
 #: src/resources/gtk/passwords-view.blp:9
 msgid "Passwords"
@@ -4362,246 +4379,251 @@ msgstr "Закрыть"
 
 #: src/resources/gtk/shortcuts-dialog.blp:44
 msgctxt "shortcuts dialog"
+msgid "Keyboard Shortcuts"
+msgstr "Комбинации клавиш"
+
+#: src/resources/gtk/shortcuts-dialog.blp:49
+msgctxt "shortcuts dialog"
 msgid "Help"
 msgstr "Справка"
 
-#: src/resources/gtk/shortcuts-dialog.blp:49
+#: src/resources/gtk/shortcuts-dialog.blp:54
 msgctxt "shortcuts dialog"
 msgid "Open Menu"
 msgstr "Открыть меню"
 
-#: src/resources/gtk/shortcuts-dialog.blp:54
+#: src/resources/gtk/shortcuts-dialog.blp:59
 msgctxt "shortcuts dialog"
 msgid "Show Downloads List"
 msgstr "Показать список загрузок"
 
-#: src/resources/gtk/shortcuts-dialog.blp:60
+#: src/resources/gtk/shortcuts-dialog.blp:65
 msgid "Navigation"
 msgstr "Навигация"
 
-#: src/resources/gtk/shortcuts-dialog.blp:63
+#: src/resources/gtk/shortcuts-dialog.blp:68
 msgctxt "shortcuts dialog"
 msgid "Go to Homepage"
 msgstr "Перейти на домашнюю страницу"
 
-#: src/resources/gtk/shortcuts-dialog.blp:68
+#: src/resources/gtk/shortcuts-dialog.blp:73
 msgctxt "shortcuts dialog"
 msgid "Reload Current Page"
 msgstr "Обновить текущую страницу"
 
-#: src/resources/gtk/shortcuts-dialog.blp:73
+#: src/resources/gtk/shortcuts-dialog.blp:78
 msgctxt "shortcuts dialog"
 msgid "Reload Bypassing Cache"
 msgstr "Обновить минуя кэш"
 
-#: src/resources/gtk/shortcuts-dialog.blp:78
+#: src/resources/gtk/shortcuts-dialog.blp:83
 msgctxt "shortcuts dialog"
 msgid "Stop Loading Current Page"
 msgstr "Остановить загрузку текущей страницы"
 
-#: src/resources/gtk/shortcuts-dialog.blp:83
-#: src/resources/gtk/shortcuts-dialog.blp:89
+#: src/resources/gtk/shortcuts-dialog.blp:88
+#: src/resources/gtk/shortcuts-dialog.blp:94
 msgctxt "shortcuts dialog"
 msgid "Go Back to Previous Page"
 msgstr "Перейти к предыдущей странице"
 
-#: src/resources/gtk/shortcuts-dialog.blp:95
-#: src/resources/gtk/shortcuts-dialog.blp:101
+#: src/resources/gtk/shortcuts-dialog.blp:100
+#: src/resources/gtk/shortcuts-dialog.blp:106
 msgctxt "shortcuts dialog"
 msgid "Go Forward to Next Page"
 msgstr "Перейти к следующей странице"
 
-#: src/resources/gtk/shortcuts-dialog.blp:108
+#: src/resources/gtk/shortcuts-dialog.blp:113
 msgctxt "shortcuts dialog"
 msgid "Tabs"
 msgstr "Вкладки"
 
-#: src/resources/gtk/shortcuts-dialog.blp:111
+#: src/resources/gtk/shortcuts-dialog.blp:116
 msgctxt "shortcuts dialog"
 msgid "New Tab"
 msgstr "Новая вкладка"
 
-#: src/resources/gtk/shortcuts-dialog.blp:116
+#: src/resources/gtk/shortcuts-dialog.blp:121
 msgctxt "shortcuts dialog"
 msgid "Close Current Tab"
 msgstr "Закрыть текущую вкладку"
 
-#: src/resources/gtk/shortcuts-dialog.blp:121
+#: src/resources/gtk/shortcuts-dialog.blp:126
 msgctxt "shortcuts dialog"
 msgid "Reopen Closed Tab"
 msgstr "Повторно открыть закрытую вкладку"
 
-#: src/resources/gtk/shortcuts-dialog.blp:126
+#: src/resources/gtk/shortcuts-dialog.blp:131
 msgctxt "shortcuts dialog"
 msgid "Go to Next Tab"
 msgstr "Перейти к следующей вкладке"
 
-#: src/resources/gtk/shortcuts-dialog.blp:131
+#: src/resources/gtk/shortcuts-dialog.blp:136
 msgctxt "shortcuts dialog"
 msgid "Go to Previous Tab"
 msgstr "Перейти к предыдущей вкладке"
 
-#: src/resources/gtk/shortcuts-dialog.blp:136
+#: src/resources/gtk/shortcuts-dialog.blp:141
 msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Left"
 msgstr "Переместить текущую вкладку влево"
 
-#: src/resources/gtk/shortcuts-dialog.blp:141
+#: src/resources/gtk/shortcuts-dialog.blp:146
 msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Right"
 msgstr "Переместить текущую вкладку вправо"
 
-#: src/resources/gtk/shortcuts-dialog.blp:146
+#: src/resources/gtk/shortcuts-dialog.blp:151
 msgctxt "shortcuts dialog"
 msgid "Duplicate Current Tab"
 msgstr "Дублировать текущую вкладку"
 
-#: src/resources/gtk/shortcuts-dialog.blp:151
+#: src/resources/gtk/shortcuts-dialog.blp:156
 msgctxt "shortcuts dialog"
 msgid "View Open Tabs"
 msgstr "Просмотреть открытые вкладки"
 
-#: src/resources/gtk/shortcuts-dialog.blp:157
+#: src/resources/gtk/shortcuts-dialog.blp:162
 msgctxt "shortcuts dialog"
 msgid "Miscellaneous"
 msgstr "Разное"
 
-#: src/resources/gtk/shortcuts-dialog.blp:160
+#: src/resources/gtk/shortcuts-dialog.blp:165
 msgctxt "shortcuts dialog"
 msgid "History"
 msgstr "История"
 
-#: src/resources/gtk/shortcuts-dialog.blp:165
+#: src/resources/gtk/shortcuts-dialog.blp:170
 msgctxt "shortcuts dialog"
 msgid "Clear Website Data"
 msgstr "Очистить данные сайта"
 
-#: src/resources/gtk/shortcuts-dialog.blp:170
+#: src/resources/gtk/shortcuts-dialog.blp:175
 msgctxt "shortcuts dialog"
 msgid "Preferences"
 msgstr "Параметры"
 
-#: src/resources/gtk/shortcuts-dialog.blp:175
+#: src/resources/gtk/shortcuts-dialog.blp:180
 msgctxt "shortcuts dialog"
 msgid "Bookmark Current Page"
 msgstr "Добавить текущую страницу в закладки"
 
-#: src/resources/gtk/shortcuts-dialog.blp:180
+#: src/resources/gtk/shortcuts-dialog.blp:185
 msgctxt "shortcuts dialog"
 msgid "Show Bookmarks List"
 msgstr "Показать список закладок"
 
-#: src/resources/gtk/shortcuts-dialog.blp:185
+#: src/resources/gtk/shortcuts-dialog.blp:190
 msgctxt "shortcuts dialog"
 msgid "Import Bookmarks"
 msgstr "Импортировать закладки"
 
-#: src/resources/gtk/shortcuts-dialog.blp:190
+#: src/resources/gtk/shortcuts-dialog.blp:195
 msgctxt "shortcuts dialog"
 msgid "Export Bookmarks"
 msgstr "Экспортировать закладки"
 
-#: src/resources/gtk/shortcuts-dialog.blp:195
+#: src/resources/gtk/shortcuts-dialog.blp:200
 msgctxt "shortcuts dialog"
 msgid "Toggle Caret Browsing"
 msgstr "Режим клавишной навигации"
 
-#: src/resources/gtk/shortcuts-dialog.blp:201
+#: src/resources/gtk/shortcuts-dialog.blp:206
 msgctxt "shortcuts dialog"
 msgid "View"
 msgstr "Вид"
 
-#: src/resources/gtk/shortcuts-dialog.blp:204
+#: src/resources/gtk/shortcuts-dialog.blp:209
 msgctxt "shortcuts dialog"
 msgid "Zoom In"
 msgstr "Увеличить масштаб"
 
-#: src/resources/gtk/shortcuts-dialog.blp:209
+#: src/resources/gtk/shortcuts-dialog.blp:214
 msgctxt "shortcuts dialog"
 msgid "Zoom Out"
 msgstr "Уменьшить масштаб"
 
-#: src/resources/gtk/shortcuts-dialog.blp:214
+#: src/resources/gtk/shortcuts-dialog.blp:219
 msgctxt "shortcuts dialog"
 msgid "Reset Zoom"
 msgstr "Сбросить масштаб"
 
-#: src/resources/gtk/shortcuts-dialog.blp:219
+#: src/resources/gtk/shortcuts-dialog.blp:224
 msgctxt "shortcuts dialog"
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
 
-#: src/resources/gtk/shortcuts-dialog.blp:224
+#: src/resources/gtk/shortcuts-dialog.blp:229
 msgctxt "shortcuts dialog"
 msgid "View Page Source"
 msgstr "Просмотреть код страницы"
 
-#: src/resources/gtk/shortcuts-dialog.blp:229
+#: src/resources/gtk/shortcuts-dialog.blp:234
 msgctxt "shortcuts dialog"
 msgid "Toggle Inspector"
 msgstr "Переключить инспектор"
 
-#: src/resources/gtk/shortcuts-dialog.blp:234
+#: src/resources/gtk/shortcuts-dialog.blp:239
 msgctxt "shortcuts dialog"
 msgid "Toggle Reader Mode"
 msgstr "Переключить режим чтения"
 
-#: src/resources/gtk/shortcuts-dialog.blp:240
+#: src/resources/gtk/shortcuts-dialog.blp:245
 msgctxt "shortcuts dialog"
 msgid "Editing"
 msgstr "Редактирование"
 
-#: src/resources/gtk/shortcuts-dialog.blp:243
+#: src/resources/gtk/shortcuts-dialog.blp:248
 msgctxt "shortcuts dialog"
 msgid "Cut"
 msgstr "Вырезать"
 
-#: src/resources/gtk/shortcuts-dialog.blp:248
+#: src/resources/gtk/shortcuts-dialog.blp:253
 msgctxt "shortcuts dialog"
 msgid "Copy"
 msgstr "Копировать"
 
-#: src/resources/gtk/shortcuts-dialog.blp:253
+#: src/resources/gtk/shortcuts-dialog.blp:258
 msgctxt "shortcuts dialog"
 msgid "Paste"
 msgstr "Вставить"
 
-#: src/resources/gtk/shortcuts-dialog.blp:258
+#: src/resources/gtk/shortcuts-dialog.blp:263
 msgctxt "shortcuts dialog"
 msgid "Undo"
 msgstr "Отменить"
 
-#: src/resources/gtk/shortcuts-dialog.blp:263
+#: src/resources/gtk/shortcuts-dialog.blp:268
 msgctxt "shortcuts dialog"
 msgid "Redo"
 msgstr "Повторить"
 
-#: src/resources/gtk/shortcuts-dialog.blp:268
+#: src/resources/gtk/shortcuts-dialog.blp:273
 msgctxt "shortcuts dialog"
 msgid "Select All"
 msgstr "Выделить все"
 
-#: src/resources/gtk/shortcuts-dialog.blp:273
+#: src/resources/gtk/shortcuts-dialog.blp:278
 msgctxt "shortcuts dialog"
 msgid "Select Page URL"
 msgstr "Выделить URL страницы"
 
-#: src/resources/gtk/shortcuts-dialog.blp:278
+#: src/resources/gtk/shortcuts-dialog.blp:283
 msgctxt "shortcuts dialog"
 msgid "Search With Default Search Engine"
 msgstr "Поиск с помощью поисковой системы по умолчанию"
 
-#: src/resources/gtk/shortcuts-dialog.blp:283
+#: src/resources/gtk/shortcuts-dialog.blp:288
 msgctxt "shortcuts dialog"
 msgid "Find"
 msgstr "Найти"
 
-#: src/resources/gtk/shortcuts-dialog.blp:288
+#: src/resources/gtk/shortcuts-dialog.blp:293
 msgctxt "shortcuts dialog"
 msgid "Next Find Result"
 msgstr "Следующий результат"
 
-#: src/resources/gtk/shortcuts-dialog.blp:293
+#: src/resources/gtk/shortcuts-dialog.blp:298
 msgctxt "shortcuts dialog"
 msgid "Previous Find Result"
 msgstr "Предыдущий результат"
@@ -4613,10 +4635,6 @@ msgstr "_Найти…"
 #: src/resources/gtk/site-menu-button.blp:18
 msgid "_Print…"
 msgstr "_Печать…"
-
-#: src/resources/gtk/site-menu-button.blp:23
-msgid "Mute Tab"
-msgstr "Выключить звук на вкладке"
 
 #: src/resources/gtk/site-menu-button.blp:34
 msgid "Text Enco_ding…"
@@ -4897,23 +4915,23 @@ msgstr "_Заменить"
 msgid "Screenshot finished"
 msgstr "Снимок экрана сделан"
 
-#: src/window-commands.c:2532
+#: src/window-commands.c:2540
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2536
+#: src/window-commands.c:2544
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2582
+#: src/window-commands.c:2590
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3041
+#: src/window-commands.c:3049
 msgid "Enable Caret Browsing Mode?"
 msgstr "Включить режим клавишной навигации?"
 
-#: src/window-commands.c:3042
+#: src/window-commands.c:3050
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4923,9 +4941,12 @@ msgstr ""
 "помещает на страницу курсор, позволяющий перемещаться по странице с помощью "
 "клавиатуры. Включить клавишную навигацию?"
 
-#: src/window-commands.c:3047
+#: src/window-commands.c:3055
 msgid "_Enable"
 msgstr "_Включить"
+
+#~ msgid "Mute Tab"
+#~ msgstr "Выключить звук на вкладке"
 
 #~ msgid "Deprecated. Please use search-engine-providers instead."
 #~ msgstr ""
@@ -5302,9 +5323,6 @@ msgstr "_Включить"
 
 #~ msgid "Block Dangerous Web_sites"
 #~ msgstr "_Блокировать опасные сайты"
-
-#~ msgid "Close"
-#~ msgstr "Закрыть"
 
 #~ msgid "Third-party Cookies Request"
 #~ msgstr "Запрос сторонних файлов cookie"
