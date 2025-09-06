@@ -180,7 +180,7 @@ ephy_snapshot_service_prepare_snapshot (GdkTexture *texture)
   if (!orig_width || !orig_height)
     return NULL;
 
-  snapshot = ephy_texture_to_pixbuf (texture);
+  snapshot = ephy_texture_to_pixbuf (texture, FALSE);
 
   if (orig_width < EPHY_THUMBNAIL_WIDTH ||
       orig_height < EPHY_THUMBNAIL_HEIGHT) {

@@ -1719,7 +1719,7 @@ scaled_pixbuf_from_icon (GIcon *icon,
   if (GDK_IS_PIXBUF (icon))
     pixbuf = GDK_PIXBUF (g_object_ref (icon));
   else if (GDK_IS_TEXTURE (icon))
-    pixbuf = ephy_texture_to_pixbuf (GDK_TEXTURE (icon));
+    pixbuf = ephy_texture_to_pixbuf (GDK_TEXTURE (icon), TRUE);
   else
     g_assert_not_reached ();
 

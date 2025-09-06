@@ -211,19 +211,24 @@ pixbuf_texture_unref_cb (guchar   *pixels,
 }
 
 GdkPixbuf *
-ephy_texture_to_pixbuf (GdkTexture *texture)
+ephy_texture_to_pixbuf (GdkTexture *texture,
+                        gboolean    has_alpha)
 {
   g_autoptr (GdkTextureDownloader) downloader = NULL;
   GBytes *bytes;
   gsize stride;
 
   downloader = gdk_texture_downloader_new (texture);
-  gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R8G8B8);
+  if (has_alpha)
+    gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R8G8B8A8);
+  else
+    gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R8G8B8);
+
   bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
 
   return gdk_pixbuf_new_from_data (g_bytes_get_data (bytes, NULL),
                                    GDK_COLORSPACE_RGB,
-                                   FALSE,
+                                   has_alpha,
                                    8,
                                    gdk_texture_get_width (texture),
                                    gdk_texture_get_height (texture),

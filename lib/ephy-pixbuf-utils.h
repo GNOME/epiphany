@@ -25,7 +25,8 @@
 
 GdkTexture *ephy_texture_new_for_pixbuf (GdkPixbuf *pixbuf);
 
-GdkPixbuf *ephy_texture_to_pixbuf (GdkTexture *texture);
+GdkPixbuf *ephy_texture_to_pixbuf (GdkTexture *texture,
+                                   gboolean has_alpha);
 
 GdkPixbuf *ephy_get_pixbuf_from_surface (cairo_surface_t *surface,
                                          int              src_x,

@@ -47,6 +47,6 @@ ephy_favicon_get_from_texture_scaled (GdkTexture *texture,
   if (favicon_width == width && favicon_height == height)
     return G_ICON (g_object_ref (texture));
 
-  pixbuf = ephy_texture_to_pixbuf (texture);
+  pixbuf = ephy_texture_to_pixbuf (texture, TRUE);
   return G_ICON (gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR));
 }
