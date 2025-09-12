@@ -516,13 +516,21 @@ ephy_security_dialog_init (EphySecurityDialog *dialog)
   dialog->permission_pos = 0;
   combo_box_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->ad_combobox = add_permission_combobox (dialog, _("Advertisements"), on_ad_combobox_changed, combo_box_size_group, TRUE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->notification_combobox = add_permission_combobox (dialog, _("Notifications"), on_notification_combobox_changed, combo_box_size_group, FALSE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->save_password_combobox = add_permission_combobox (dialog, _("Password Saving"), on_save_password_combobox_changed, combo_box_size_group, FALSE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->access_location_combobox = add_permission_combobox (dialog, _("Location Access"), on_access_location_combobox_changed, combo_box_size_group, FALSE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->access_microphone_combobox = add_permission_combobox (dialog, _("Microphone Access"), on_access_microphone_combobox_changed, combo_box_size_group, FALSE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->access_webcam_combobox = add_permission_combobox (dialog, _("Webcam Access"), on_access_webcam_combobox_changed, combo_box_size_group, FALSE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->access_display_combobox = add_permission_combobox (dialog, _("Display Access"), on_access_display_combobox_changed, combo_box_size_group, FALSE, NULL);
+  /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
   dialog->autoplay_combobox = add_permission_combobox (dialog, _("Media Autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, _("Without Sound"));
 }
 
