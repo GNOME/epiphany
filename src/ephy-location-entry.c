@@ -423,10 +423,8 @@ on_focus_leave (GtkEventControllerFocus *controller,
                 EphyLocationEntry       *self)
 {
   GtkWidget *focus_widget = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (self)));
-  GtkWidget *parent_window = gtk_widget_get_ancestor (GTK_WIDGET (self->text), GTK_TYPE_WINDOW);
-  GtkWindow *active_window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
 
-  if (focus_widget != NULL && GTK_WINDOW (parent_window) == active_window
+  if (focus_widget && gtk_widget_has_focus (self->text)
       && gtk_widget_is_ancestor (focus_widget, GTK_WIDGET (self->text)))
     return;
 
@@ -434,12 +432,12 @@ on_focus_leave (GtkEventControllerFocus *controller,
 
   gtk_popover_popdown (GTK_POPOVER (self->suggestions_popover));
 
-  update_url_button_style (self);
-
-  /* Don't change to the display stack child if the user switched to another
-   * window. This is so the entry stays focused when they switch back. */
-  if (GTK_WINDOW (parent_window) == active_window)
+  /* Only switch to display if the window is still focused. The visible
+   * child stays at edit if the user navigated outside the window. */
+  if (gtk_widget_has_focus (self->text)) {
+    update_url_button_style (self);
     gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "display");
+  }
 }
 
 /*
