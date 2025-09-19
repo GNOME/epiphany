@@ -434,7 +434,7 @@ on_focus_leave (GtkEventControllerFocus *controller,
 
   /* Only switch to display if the window is still focused. The visible
    * child stays at edit if the user navigated outside the window. */
-  if (gtk_widget_has_focus (self->text)) {
+  if (gtk_widget_has_focus (self->text) || !GTK_IS_WIDGET (focus_widget)) {
     update_url_button_style (self);
     gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "display");
   }
