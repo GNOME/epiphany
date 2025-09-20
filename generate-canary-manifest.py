@@ -21,13 +21,14 @@ import json
 import os
 import sys
 import urllib.request
+import urllib.parse
 
 ARCHIVE_FILE = "webkitgtk.zip"
 
 def download_nightly_build(verbose):
     url = "https://webkitgtk.org/built-products/x86_64/release/nightly/GNOMEWebCanary"
     with urllib.request.urlopen(f"{url}/LAST-IS") as fd:
-        latest = fd.read().strip().decode('utf8')
+        latest = urllib.parse.quote(fd.read().strip().decode('utf8'))
 
     print(f"Downloading build {latest} from {url}")
     archive = open(ARCHIVE_FILE, "wb")
