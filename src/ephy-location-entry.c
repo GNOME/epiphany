@@ -411,7 +411,7 @@ on_focus_enter (GtkEventControllerFocus *controller,
       const char *text = ephy_web_view_get_address (web_view);
 
       if (!ephy_embed_utils_is_no_show_address (text))
-        gtk_editable_set_text (GTK_EDITABLE (self->text), ephy_web_view_get_address (web_view));
+        gtk_editable_set_text (GTK_EDITABLE (self->text), ephy_web_view_get_display_address (web_view));
       else
         gtk_editable_set_text (GTK_EDITABLE (self->text), "");
     }
