@@ -297,7 +297,6 @@ update_url_button_style (EphyLocationEntry *self)
   PangoAttribute *end_hidden;
   g_autoptr (GUri) uri = NULL;
   const char *text = NULL;
-  const char *host;
   const char *base_domain;
   const char *scheme;
   const char *sub_string;
@@ -337,11 +336,7 @@ update_url_button_style (EphyLocationEntry *self)
   if (!uri)
     goto out;
 
-  host = g_uri_get_host (uri);
-  if (!host || strlen (host) == 0)
-    goto out;
-
-  base_domain = soup_tld_get_base_domain (host, NULL);
+  base_domain = ephy_uri_get_base_domain (g_uri_get_host (uri));
   if (!base_domain)
     goto out;
 
@@ -611,8 +606,7 @@ compute_prefix (EphyLocationEntry *self,
     } else {
       g_autoptr (GError) error = NULL;
       g_autoptr (GUri) uri = g_uri_parse (subtitle, G_URI_FLAGS_PARSE_RELAXED, &error);
-      g_autofree char *lower_host = NULL;
-      const char *base;
+      g_autofree char *base = NULL;
 
       if (error) {
         LOG ("Could not parse url: %s", error->message);
@@ -622,19 +616,14 @@ compute_prefix (EphyLocationEntry *self,
       if (!g_uri_get_host (uri))
         continue;
 
-      lower_host = g_utf8_strdown (g_uri_get_host (uri), -1);
-      base = soup_tld_get_base_domain (lower_host, &error);
-      if (error) {
-        /* This can happen with internal urls, so fallback to full host */
-        LOG ("Could not get base domain from %s: %s", lower_host, error->message);
-        text = g_strdup (lower_host);
-      } else {
-        if (g_str_has_prefix (base, key)) {
-          text = g_strdup (base);
-        } else if (g_str_has_prefix (lower_host, key)) {
-          text = g_strdup (lower_host);
-        }
+      base = ephy_uri_get_base_domain (g_uri_get_host (uri));
+      if (!base) {
+        LOG ("Could not get base domain for host %s", g_uri_get_host (uri));
+        continue;
       }
+
+      if (g_str_has_prefix (base, key))
+        text = g_strdup (base);
     }
 
     if (!text)

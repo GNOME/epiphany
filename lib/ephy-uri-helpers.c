@@ -103,3 +103,23 @@ ephy_uri_unescape (const char *uri_string)
 
   return decoded;
 }
+
+char *
+ephy_uri_get_base_domain (const char *hostname)
+{
+  g_autofree char *lowercase_hostname = NULL;
+  const char *base_domain;
+
+  if (!hostname)
+    return NULL;
+
+  lowercase_hostname = g_utf8_strdown (hostname, -1);
+  if (!lowercase_hostname)
+    return NULL;
+
+  base_domain = soup_tld_get_base_domain (lowercase_hostname, NULL);
+  if (!base_domain)
+    return g_steal_pointer (&lowercase_hostname);
+
+  return g_strdup (base_domain);
+}
