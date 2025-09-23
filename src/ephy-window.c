@@ -2358,13 +2358,6 @@ decide_navigation_policy (WebKitWebView            *web_view,
     } else {
       OpenURLPermissionData *data;
 
-      /* User gesture is required to prevent websites from spamming open URL
-       * requests unless the user has actually interacted with the website. (This
-       * corresponds roughly to "transient activation" in the HTML standard.)
-       */
-      if (!webkit_navigation_action_is_user_gesture (navigation_action))
-        return TRUE;
-
       data = open_url_permission_data_new (opener_origin, request, window);
       if (data)
         g_idle_add (ask_for_permission, data);
