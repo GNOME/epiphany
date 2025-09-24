@@ -115,6 +115,7 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_AUTOFILL_DATA                "autofill-data"
 #define EPHY_PREFS_WEB_AUTO_OPEN_SCHEMES            "auto-open-schemes"
 #define EPHY_PREFS_WEB_READER_MODE_ZOOM_LEVEL       "reader-mode-zoom-level"
+#define EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER         "enable-cookie-banner"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,

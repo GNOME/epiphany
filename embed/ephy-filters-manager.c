@@ -957,6 +957,22 @@ update_filters (EphyFiltersManager  *manager,
                           filter_info);
   }
 
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER)) {
+    g_autoptr (GBytes) data = g_resources_lookup_data ("/org/gnome/epiphany/hush.json", 0, NULL);
+    g_autofree char *filter_id = filter_info_identifier_for_source_uri ("org/gnome/epiphany/hush.json");
+    FilterInfo *filter_info = NULL;
+
+    filter_info = filter_info_new ("/org/gnome/epiphany/hush.json", manager);
+    filter_info->identifier = g_steal_pointer (&filter_id);
+
+    webkit_user_content_filter_store_save (manager->store,
+                                           filter_info_get_identifier (filter_info),
+                                           data,
+                                           manager->cancellable,
+                                           (GAsyncReadyCallback)filter_saved_cb,
+                                           filter_info);
+  }
+
   /* Remove the filters which are no longer in the configured set. */
   g_hash_table_foreach (old_filters,
                         (GHFunc)remove_unused_filter,

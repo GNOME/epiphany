@@ -1,0 +1,19 @@
+# Hush - Noiseless Browsing – Content Blocker for Safari 
+
+We are currently shipping commit: 09b813266ec3bc62652671f57cf67e7e534f116a
+
+In order to update the list, following steps needs to be done:
+
+## Download and install deno (https://deno.com/)
+
+curl -fsSL https://deno.land/install.sh | sh
+
+## Download Hush sources
+
+git clone https://github.com/oblador/hush.git
+
+cd hush
+
+make fetch_external
+
+make -s blocklist > hush.json

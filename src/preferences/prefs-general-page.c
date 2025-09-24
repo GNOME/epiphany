@@ -60,6 +60,7 @@ struct _PrefsGeneralPage {
   /* Web Content */
   GtkWidget *adblock_allow_row;
   GtkWidget *popups_allow_row;
+  GtkWidget *cookie_banner_allow_row;
 
   /* Homepage */
   GtkWidget *homepage_box;
@@ -998,6 +999,7 @@ prefs_general_page_class_init (PrefsGeneralPageClass *klass)
   /* Web Content */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, adblock_allow_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, popups_allow_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, cookie_banner_allow_row);
 
   /* Homepage */
   gtk_widget_class_bind_template_child (widget_class, PrefsGeneralPage, homepage_box);
@@ -1223,6 +1225,12 @@ setup_general_page (PrefsGeneralPage *general_page)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_POPUPS,
                    general_page->popups_allow_row,
+                   "active",
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER,
+                   general_page->cookie_banner_allow_row,
                    "active",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
 
