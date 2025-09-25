@@ -33,10 +33,24 @@ GtkWidget *ephy_site_menu_button_new  (void);
 void       ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
                                                  char               *zoom_level);
 
-void       ephy_site_menu_button_set_icon_name (EphySiteMenuButton *self,
-                                                const char         *icon_name);
+void       ephy_site_menu_button_set_state (EphySiteMenuButton *self,
+                                            unsigned int        state);
+
+void       ephy_site_menu_button_append_description (EphySiteMenuButton *self,
+                                                     const char         *section);
+
+void       ephy_site_menu_button_clear_description (EphySiteMenuButton *self);
 
 void       ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
                                                        gboolean            has_bookmark);
+
+gboolean   ephy_site_menu_button_is_animating (EphySiteMenuButton *self);
+
+void       ephy_site_menu_button_set_do_animation (EphySiteMenuButton *self,
+                                                   gboolean            do_animation);
+
+void       ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self);
+
+void       ephy_site_menu_button_cancel_animation (EphySiteMenuButton *self);
 
 G_END_DECLS

@@ -70,7 +70,6 @@ struct _EphyLocationEntry {
   GtkWidget *url_button_label;
   GtkWidget *site_menu_button;
   GtkWidget *opensearch_button;
-  GtkWidget *reader_mode_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *progress_bar;
   GList *page_actions;
@@ -94,7 +93,6 @@ struct _EphyLocationEntry {
   gdouble progress_fraction;
 
   gboolean insert_completion;
-  gboolean reader_mode_active;
 
   gint idle_id;
   guint dns_prefetch_handle_id;
@@ -119,7 +117,6 @@ static GParamSpec *props[LAST_PROP] = { 0 };
 enum {
   ACTIVATE,
   USER_CHANGED,
-  READER_MODE_CHANGED,
   GET_LOCATION,
   GET_TITLE,
   LAST_SIGNAL
@@ -734,14 +731,6 @@ on_editable_changed (GtkEditable *editable,
 }
 
 static void
-on_reader_mode_clicked (EphyLocationEntry *self)
-{
-  self->reader_mode_active = !self->reader_mode_active;
-
-  g_signal_emit (G_OBJECT (self), signals[READER_MODE_CHANGED], 0, self->reader_mode_active);
-}
-
-static void
 on_suggestions_popover_notify_visible (EphyLocationEntry *self)
 {
   GtkAdjustment *adj;
@@ -832,24 +821,6 @@ on_item_released (GtkGesture  *gesture,
 
   gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
   on_suggestion_activated (self, position);
-}
-
-static void
-update_reader_icon (EphyLocationEntry *self)
-{
-  GdkDisplay *display;
-  GtkIconTheme *theme;
-  const gchar *name;
-
-  display = gtk_widget_get_display (GTK_WIDGET (self));
-  theme = gtk_icon_theme_get_for_display (display);
-
-  if (gtk_icon_theme_has_icon (theme, "view-reader-symbolic"))
-    name = "view-reader-symbolic";
-  else
-    name = "ephy-reader-mode-symbolic";
-
-  gtk_button_set_icon_name (GTK_BUTTON (self->reader_mode_button), name);
 }
 
 static void
@@ -1155,22 +1126,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                         G_TYPE_STRING);
 
   /**
-   * EphyLocationEntry::reader-mode-changed:
-   * @entry: the object on which the signal is emitted
-   * @active: whether reader mode is active
-   *
-   * Emitted when the user clicks the reader mode icon inside the
-   * #EphyLocationEntry.
-   *
-   */
-  signals[READER_MODE_CHANGED] = g_signal_new ("reader-mode-changed", G_OBJECT_CLASS_TYPE (klass),
-                                               G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                               0, NULL, NULL, NULL,
-                                               G_TYPE_NONE,
-                                               1,
-                                               G_TYPE_BOOLEAN);
-
-  /**
    * EphyLocationEntry::get-location:
    * @entry: the object on which the signal is emitted
    * Returns: the current page address as a string
@@ -1212,7 +1167,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, stack);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, text);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, site_menu_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, reader_mode_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_popover);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_model);
@@ -1225,7 +1179,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_editable_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_activate);
-  gtk_widget_class_bind_template_callback (widget_class, on_reader_mode_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_suggestions_popover_notify_visible);
   gtk_widget_class_bind_template_callback (widget_class, on_suggestion_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_focus_enter);
@@ -1267,9 +1220,6 @@ ephy_location_entry_init (EphyLocationEntry *self)
 
   g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "delete-text", G_CALLBACK (on_delete_text), self, 0);
   g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "insert-text", G_CALLBACK (on_insert_text), self, 0);
-
-  update_reader_icon (self);
-  g_signal_connect_object (gtk_settings_get_default (), "notify::gtk-icon-theme-name", G_CALLBACK (update_reader_icon), self, G_CONNECT_SWAPPED);
 }
 
 static const char *
@@ -1306,6 +1256,9 @@ ephy_location_entry_do_set_address (EphyTitleWidget *widget,
   ephy_location_entry_set_text (self, final_text);
   update_url_button_style (self);
 
+  if (final_text != gtk_editable_get_text (GTK_EDITABLE (self->text)))
+    ephy_site_menu_button_set_do_animation (EPHY_SITE_MENU_BUTTON (self->site_menu_button), TRUE);
+
   gtk_popover_popdown (GTK_POPOVER (self->suggestions_popover));
 }
 
@@ -1328,28 +1281,24 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
                                                      EphySecurityLevel  security_level)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (widget);
-  const char *icon_name = NULL;
+  unsigned int state = 0;
   const char *description;
 
   self->security_level = security_level;
 
-  if (!self->reader_mode_active && security_level != EPHY_SECURITY_LEVEL_STRONG_SECURITY)
-    icon_name = ephy_security_level_to_icon_name (security_level);
-
-  if (!icon_name)
-    icon_name = "ephy-site-button-symbolic";
+  if (security_level == EPHY_SECURITY_LEVEL_NO_SECURITY
+      || security_level == EPHY_SECURITY_LEVEL_MIXED_CONTENT
+      || security_level == EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE)
+    state = 2;
 
   if (self->security_level == EPHY_SECURITY_LEVEL_STRONG_SECURITY)
     description = _("Secure Site");
   else
     description = _("Insecure Site");
 
-  gtk_accessible_update_property (GTK_ACCESSIBLE (self->site_menu_button),
-                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
-                                  description,
-                                  -1);
-
-  ephy_site_menu_button_set_icon_name (EPHY_SITE_MENU_BUTTON (self->site_menu_button), icon_name);
+  ephy_site_menu_button_clear_description (EPHY_SITE_MENU_BUTTON (self->site_menu_button));
+  ephy_site_menu_button_append_description (EPHY_SITE_MENU_BUTTON (self->site_menu_button), description);
+  ephy_site_menu_button_set_state (EPHY_SITE_MENU_BUTTON (self->site_menu_button), state);
 }
 
 static void
@@ -1481,31 +1430,6 @@ ephy_location_entry_grab_focus (EphyLocationEntry *self)
 {
   gtk_widget_grab_focus (self->text);
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
-}
-
-void
-ephy_location_entry_set_reader_mode_visible (EphyLocationEntry *self,
-                                             gboolean           visible)
-{
-  gtk_widget_set_visible (self->reader_mode_button, visible);
-}
-
-void
-ephy_location_entry_set_reader_mode_state (EphyLocationEntry *self,
-                                           gboolean           active)
-{
-  if (active)
-    gtk_widget_add_css_class (self->reader_mode_button, "checked");
-  else
-    gtk_widget_remove_css_class (self->reader_mode_button, "checked");
-
-  self->reader_mode_active = active;
-}
-
-gboolean
-ephy_location_entry_get_reader_mode_state (EphyLocationEntry *self)
-{
-  return self->reader_mode_active;
 }
 
 static void

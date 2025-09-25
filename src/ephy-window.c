@@ -477,6 +477,13 @@ sync_tab_load_status (EphyWebView     *view,
   ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         SENS_FLAG_LOADING, loading);
 
+  if (!loading) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "toggle-reader-mode");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+    g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (FALSE));
+  }
+
   action_group = ephy_window_get_action_group (window, "toolbar");
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
@@ -892,7 +899,6 @@ static const GActionEntry window_entries [] = {
   { "passwords", window_cmd_passwords },
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
-  { "toggle-reader-mode", window_cmd_toggle_reader_mode },
   { "security-permissions", window_cmd_security_and_permissions },
 
   { "select-all", window_cmd_select_all },
@@ -904,6 +910,7 @@ static const GActionEntry window_entries [] = {
   { "switch-new-tab", window_cmd_switch_new_tab },
 
   /* Toggle actions */
+  { "toggle-reader-mode", NULL, NULL, "false", window_cmd_toggle_reader_mode },
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
   { "fullscreen", NULL, NULL, "false", window_cmd_change_fullscreen_state },
 };
@@ -1267,14 +1274,8 @@ sync_tab_navigation (EphyWebView *view,
                      GParamSpec  *pspec,
                      EphyWindow  *window)
 {
-  GtkWidget *lentry;
-
   if (window->closing)
     return;
-
-  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-  if (EPHY_IS_LOCATION_ENTRY (lentry))
-    ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (lentry), FALSE);
 
   _ephy_window_set_navigation_flags (window, ephy_web_view_get_navigation_flags (view));
 }
@@ -2557,16 +2558,11 @@ load_changed_cb (EphyWebView     *view,
                  WebKitLoadEvent  load_event,
                  EphyWindow      *window)
 {
-  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-
   sync_tab_load_status (view, load_event, window);
   sync_tab_address (view, NULL, window);
 
   if (load_event != WEBKIT_LOAD_STARTED)
     return;
-
-  if (EPHY_IS_LOCATION_ENTRY (title_widget))
-    ephy_location_entry_set_reader_mode_visible (EPHY_LOCATION_ENTRY (title_widget), FALSE);
 }
 
 static void
@@ -2596,11 +2592,16 @@ ephy_window_connect_active_embed (EphyWindow *window)
       EPHY_ADD_OPENSEARCH_ENGINE_BUTTON (ephy_location_entry_get_opensearch_button (EPHY_LOCATION_ENTRY (title_widget)));
     ephy_add_opensearch_engine_button_set_model (opensearch_button, model);
 
-    ephy_location_entry_set_reader_mode_state (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_reader_mode_state (view));
-
     if (ephy_web_view_get_location_entry_has_focus (view)) {
       ephy_location_entry_grab_focus_without_selecting (EPHY_LOCATION_ENTRY (title_widget));
       ephy_location_entry_set_position (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_location_entry_position (view));
+    }
+
+    if (ephy_embed_get_do_animate_reader_mode (embed)) {
+      GtkWidget *site_menu_button = ephy_location_entry_get_site_menu_button (EPHY_LOCATION_ENTRY (title_widget));
+
+      ephy_site_menu_button_animate_reader_mode (EPHY_SITE_MENU_BUTTON (site_menu_button));
+      ephy_embed_set_do_animate_reader_mode (embed, FALSE);
     }
   }
 
@@ -2695,8 +2696,15 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
-    ephy_web_view_set_location_entry_has_focus (view, ephy_location_entry_has_focus (EPHY_LOCATION_ENTRY (title_widget)));
-    ephy_web_view_set_location_entry_position (view, gtk_editable_get_position (GTK_EDITABLE (title_widget)));
+    EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (title_widget);
+    EphySiteMenuButton *site_menu_button;
+
+    ephy_web_view_set_location_entry_has_focus (view, ephy_location_entry_has_focus (lentry));
+    ephy_web_view_set_location_entry_position (view, gtk_editable_get_position (GTK_EDITABLE (lentry)));
+
+    site_menu_button = EPHY_SITE_MENU_BUTTON (ephy_location_entry_get_site_menu_button (lentry));
+    if (ephy_site_menu_button_is_animating (site_menu_button))
+      ephy_site_menu_button_cancel_animation (site_menu_button);
   }
 
   ephy_embed_detach_notification_container (window->active_embed);
@@ -2867,33 +2875,49 @@ download_only_load_cb (EphyWebView *view,
 
 static void
 update_reader_mode (EphyWindow  *window,
-                    EphyWebView *view)
+                    EphyWebView *view,
+                    gboolean     update_entry)
 {
   EphyWebView *active_view;
-  gboolean visible;
-  GtkWidget *title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-  EphyLocationEntry *lentry;
+  GActionGroup *action_group;
+  GAction *action;
+  gboolean active;
+  gboolean enabled;
+  EphyTitleWidget *title_widget;
+  EphyLocationEntry *entry;
+  EphySiteMenuButton *site_menu_button;
 
-  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
+  if (!window->active_embed)
     return;
 
-  lentry = EPHY_LOCATION_ENTRY (title_widget);
+  active = g_str_has_prefix (ephy_web_view_get_display_address (EPHY_WEB_VIEW (view)), EPHY_READER_SCHEME);
+  enabled = (ephy_web_view_is_reader_mode_available (view) || active);
 
-  if (!window->active_embed) {
-    ephy_location_entry_set_reader_mode_state (lentry, FALSE);
+  active_view = ephy_embed_get_web_view (window->active_embed);
+  if (active_view != view) {
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+
+    ephy_embed_set_do_animate_reader_mode (embed, enabled && !active);
     return;
   }
 
-  active_view = ephy_embed_get_web_view (window->active_embed);
-  if (active_view != view)
+  action_group = ephy_window_get_action_group (window, "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "toggle-reader-mode");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (active));
+
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  if (!EPHY_IS_LOCATION_ENTRY (title_widget))
     return;
 
-  visible = (ephy_web_view_is_reader_mode_available (view)
-             || g_str_has_prefix (ephy_web_view_get_display_address (EPHY_WEB_VIEW (view)), EPHY_READER_SCHEME));
-  ephy_location_entry_set_reader_mode_visible (lentry, visible);
+  entry = EPHY_LOCATION_ENTRY (title_widget);
+  site_menu_button = EPHY_SITE_MENU_BUTTON (ephy_location_entry_get_site_menu_button (entry));
 
-  if (visible)
-    ephy_location_entry_set_reader_mode_state (lentry, ephy_web_view_get_reader_mode_state (view));
+  if (update_entry && enabled && !active)
+    ephy_site_menu_button_animate_reader_mode (site_menu_button);
+
+  if (enabled)
+    ephy_site_menu_button_append_description (site_menu_button, _("Reader Mode Available"));
 }
 
 static void
@@ -2901,7 +2925,7 @@ reader_mode_cb (EphyWebView *view,
                 GParamSpec  *pspec,
                 EphyWindow  *window)
 {
-  update_reader_mode (window, view);
+  update_reader_mode (window, view, TRUE);
 }
 
 typedef struct {
@@ -3421,7 +3445,7 @@ tab_view_notify_selected_page_cb (EphyWindow *window)
   /* update new tab */
   ephy_window_set_active_tab (window, embed);
 
-  update_reader_mode (window, view);
+  update_reader_mode (window, view, FALSE);
 }
 
 static void

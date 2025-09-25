@@ -275,19 +275,6 @@ notify_selected_index_cb (EphyLocationController *controller)
 }
 
 static void
-reader_mode_changed_cb (EphyLocationEntry *lentry,
-                        gboolean           active,
-                        gpointer           user_data)
-{
-  EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
-  EphyWindow *window = controller->window;
-  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  EphyWebView *view = ephy_embed_get_web_view (embed);
-
-  ephy_web_view_toggle_reader_mode (view, active);
-}
-
-static void
 ephy_location_controller_constructed (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
@@ -321,9 +308,6 @@ ephy_location_controller_constructed (GObject *object)
   model = ephy_suggestion_model_new (history_service, bookmarks_manager);
   ephy_location_entry_set_model (EPHY_LOCATION_ENTRY (controller->title_widget), G_LIST_MODEL (model));
   g_object_unref (model);
-
-  g_signal_connect (controller->title_widget, "reader-mode-changed",
-                    G_CALLBACK (reader_mode_changed_cb), controller);
 
   g_object_bind_property (controller, "editable",
                           widget, "editable",

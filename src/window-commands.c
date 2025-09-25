@@ -3228,13 +3228,15 @@ window_cmd_toggle_reader_mode (GSimpleAction *action,
   g_assert (embed);
 
   web_view = ephy_embed_get_web_view (embed);
-
-  if (!ephy_web_view_is_reader_mode_available (web_view))
-    return;
-
   active = ephy_web_view_get_reader_mode_state (web_view);
 
+  if (!ephy_web_view_is_reader_mode_available (web_view) && !active)
+    return;
+
   ephy_web_view_toggle_reader_mode (web_view, !active);
+
+  g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                             g_variant_new_boolean (!active));
 }
 
 void

@@ -41,18 +41,6 @@ template $EphyLocationEntry: Box {
           }
 
           [end]
-          Button reader_mode_button {
-            tooltip-text: _("Reader Mode");
-            focus-on-click: false;
-            visible: false;
-            clicked => $on_reader_mode_clicked() swapped;
-
-            styles [
-              "entry-icon",
-            ]
-          }
-
-          [end]
           $EphyAddOpensearchEngineButton opensearch_button {
             valign: center;
             focus-on-click: false;

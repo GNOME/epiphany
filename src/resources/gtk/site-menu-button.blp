@@ -6,6 +6,13 @@ menu menu_model {
       custom: "zoom_level";
     }
   }
+
+  section {
+    item {
+      label: _("_Reader Mode");
+      action: "win.toggle-reader-mode";
+    }
+  }
 }
 
 menu items_section {
@@ -79,8 +86,14 @@ PopoverMenu popover_menu {
 
 template $EphySiteMenuButton: Button {
   tooltip-text: _("Site Menu");
-  icon-name: "ephy-site-button-symbolic";
   focus-on-click: false;
   valign: center;
   clicked => $on_clicked();
+
+  child: Image {
+    paintable: PathPaintable paintable {
+      resource: "/org/gnome/Epiphany/icons/scalable/status/ephy-site-button-symbolic.gpa";
+      state: 0;
+    };
+  };
 }

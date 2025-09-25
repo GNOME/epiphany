@@ -35,6 +35,14 @@ struct _EphySiteMenuButton {
   GMenuModel *items_section;
   GtkWidget *popover_menu;
   GtkWidget *zoom_level;
+  GtkPathPaintable *paintable;
+
+  char *description;
+
+  guint timeout_id;
+  gboolean do_animation;
+  gboolean is_animating;
+  unsigned int prev_state;
 };
 
 G_DEFINE_FINAL_TYPE (EphySiteMenuButton, ephy_site_menu_button, GTK_TYPE_BUTTON)
@@ -86,6 +94,8 @@ ephy_site_menu_button_dispose (GObject *object)
 {
   EphySiteMenuButton *self = EPHY_SITE_MENU_BUTTON (object);
 
+  g_clear_handle_id (&self->timeout_id, g_source_remove);
+
   gtk_widget_unparent (self->popover_menu);
 
   G_OBJECT_CLASS (ephy_site_menu_button_parent_class)->dispose (object);
@@ -105,6 +115,7 @@ ephy_site_menu_button_class_init (EphySiteMenuButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, items_section);
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, popover_menu);
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, zoom_level);
+  gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, paintable);
 
   gtk_widget_class_bind_template_callback (widget_class, on_clicked);
 }
@@ -147,10 +158,40 @@ ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
 }
 
 void
-ephy_site_menu_button_set_icon_name (EphySiteMenuButton *self,
-                                     const char         *icon_name)
+ephy_site_menu_button_set_state (EphySiteMenuButton *self,
+                                 unsigned int        state)
 {
-  gtk_button_set_icon_name (GTK_BUTTON (self), icon_name);
+  gtk_path_paintable_set_state (self->paintable, state);
+}
+
+void
+ephy_site_menu_button_append_description (EphySiteMenuButton *self,
+                                          const char         *section)
+{
+  g_autofree char *new_description = NULL;
+
+  if (self->description)
+    new_description = g_strjoin (". ", self->description, section, NULL);
+  else
+    new_description = g_strdup (section);
+
+  g_clear_pointer (&self->description, g_free);
+  self->description = g_strdup (new_description);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                  self->description,
+                                  -1);
+}
+
+void
+ephy_site_menu_button_clear_description (EphySiteMenuButton *self)
+{
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                  NULL, -1);
+
+  g_clear_pointer (&self->description, g_free);
 }
 
 void
@@ -163,4 +204,55 @@ ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
     g_menu_insert (G_MENU (self->items_section), 3, _("Edit _Bookmark…"), "win.bookmark-page");
   else
     g_menu_insert (G_MENU (self->items_section), 3, _("Add _Bookmark…"), "win.bookmark-page");
+}
+
+gboolean
+ephy_site_menu_button_is_animating (EphySiteMenuButton *self)
+{
+  return self->is_animating;
+}
+
+void
+ephy_site_menu_button_set_do_animation (EphySiteMenuButton *self,
+                                        gboolean            do_animation)
+{
+  self->do_animation = do_animation;
+}
+
+void
+on_animation_timeout (EphySiteMenuButton *self)
+{
+  gtk_path_paintable_set_state (self->paintable, self->prev_state);
+
+  self->is_animating = FALSE;
+  self->do_animation = FALSE;
+  g_clear_handle_id (&self->timeout_id, g_source_remove);
+}
+
+void
+ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
+{
+  int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
+
+  if (!self->do_animation)
+    return;
+
+  if (self->is_animating)
+    ephy_site_menu_button_cancel_animation (self);
+
+  self->is_animating = TRUE;
+  self->prev_state = gtk_path_paintable_get_state (self->paintable);
+  gtk_path_paintable_set_state (self->paintable, 1);
+
+  g_clear_handle_id (&self->timeout_id, g_source_remove);
+  self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
+}
+
+void
+ephy_site_menu_button_cancel_animation (EphySiteMenuButton *self)
+{
+  self->is_animating = FALSE;
+  self->do_animation = FALSE;
+
+  gtk_path_paintable_set_state (self->paintable, self->prev_state);
 }

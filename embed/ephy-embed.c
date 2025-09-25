@@ -89,6 +89,7 @@ struct _EphyEmbed {
   gboolean inspector_loaded;
   gboolean progress_bar_enabled;
   gboolean first_load_finished;
+  gboolean do_animate_reader_mode;
 };
 
 G_DEFINE_FINAL_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -302,6 +303,19 @@ ephy_embed_set_typed_input (EphyEmbed  *embed,
 {
   g_free (embed->typed_input);
   embed->typed_input = g_strdup (input);
+}
+
+gboolean
+ephy_embed_get_do_animate_reader_mode (EphyEmbed *embed)
+{
+  return embed->do_animate_reader_mode;
+}
+
+void
+ephy_embed_set_do_animate_reader_mode (EphyEmbed *embed,
+                                       gboolean   do_animate)
+{
+  embed->do_animate_reader_mode = do_animate;
 }
 
 static void
@@ -836,6 +850,7 @@ ephy_embed_init (EphyEmbed *embed)
   embed->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
   embed->inspector_loaded = FALSE;
   embed->first_load_finished = FALSE;
+  embed->do_animate_reader_mode = FALSE;
 }
 
 /**

@@ -48,14 +48,6 @@ void            ephy_location_entry_undo_reset                 (EphyLocationEntr
 
 void            ephy_location_entry_grab_focus                 (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_reader_mode_visible    (EphyLocationEntry *entry,
-                                                                gboolean           visible);
-
-void            ephy_location_entry_set_reader_mode_state      (EphyLocationEntry *entry,
-                                                                gboolean           active);
-
-gboolean        ephy_location_entry_get_reader_mode_state      (EphyLocationEntry *entry);
-
 void            ephy_location_entry_set_progress               (EphyLocationEntry *entry,
                                                                 gdouble            progress,
                                                                 gboolean           loading);
