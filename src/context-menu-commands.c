@@ -516,15 +516,24 @@ context_cmd_open_selection_in_new_tab (GSimpleAction *action,
                                        gpointer       user_data)
 {
   EphyEmbed *embed, *new_embed;
+  EphyWebView *web_view;
   const char *open_term;
+  EphyNewTabFlags flags = EPHY_NEW_TAB_APPEND_AFTER;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
   g_assert (EPHY_IS_EMBED (embed));
 
   open_term = g_variant_get_string (parameter, NULL);
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+    flags |= EPHY_NEW_TAB_JUMP;
+
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                  EPHY_WINDOW (user_data), embed, EPHY_NEW_TAB_APPEND_AFTER | EPHY_NEW_TAB_JUMP);
-  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), open_term);
+                                  EPHY_WINDOW (user_data), embed, flags);
+  web_view = ephy_embed_get_web_view (new_embed);
+  ephy_web_view_load_url (web_view, open_term);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_SWITCH_TO_NEW_TAB))
+    gtk_widget_grab_focus (GTK_WIDGET (web_view));
 }
 
 void
