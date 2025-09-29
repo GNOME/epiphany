@@ -306,7 +306,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 
   /* Options */
   toolbar->options_button = gtk_menu_button_new ();
-  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (toolbar->options_button), "emblem-system-symbolic");
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (toolbar->options_button), "view-more-symbolic");
 
   group = g_simple_action_group_new ();
   case_action = g_simple_action_new_stateful ("case-sensitive", NULL, g_variant_new_boolean (FALSE));
