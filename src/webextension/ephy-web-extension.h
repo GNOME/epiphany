@@ -124,19 +124,12 @@ const char            *ephy_web_extension_get_manifest                    (EphyW
 
 const char            *ephy_web_extension_background_web_view_get_page    (EphyWebExtension *self);
 
-GdkPixbuf             *ephy_web_extension_browser_action_get_icon         (EphyWebExtension *self,
-                                                                           int               size);
-
-const char            *ephy_web_extension_browser_action_get_tooltip      (EphyWebExtension *self);
-
 const char            *ephy_web_extension_get_browser_popup               (EphyWebExtension *self);
 
 GList                 *ephy_web_extension_get_content_scripts             (EphyWebExtension *self);
 
 GList                 *ephy_web_extension_get_content_script_js           (EphyWebExtension *self,
                                                                            gpointer          content_script);
-
-const char            *ephy_web_extension_get_base_location               (EphyWebExtension *self);
 
 gconstpointer          ephy_web_extension_get_resource                    (EphyWebExtension *self,
                                                                            const char       *name,
@@ -156,7 +149,7 @@ GList                 *ephy_web_extension_get_custom_css_list             (EphyW
 WebKitUserStyleSheet  *ephy_web_extension_custom_css_style                (EphyWebExtension *self,
                                                                            gpointer          custom_css);
 
-const char            *ephy_web_extension_get_option_ui_page              (EphyWebExtension *self);
+                                                                           const char            *ephy_web_extension_get_option_ui_page              (EphyWebExtension *self);
 
 const char            *ephy_web_extension_get_guid                        (EphyWebExtension *self);
 
