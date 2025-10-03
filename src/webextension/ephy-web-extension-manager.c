@@ -394,6 +394,7 @@ ephy_web_extension_manager_init (EphyWebExtensionManager *self)
   WebKitWebContext *web_context;
 
   web_context = ephy_embed_shell_get_web_context (ephy_embed_shell_get_default ());
+  webkit_web_extension_match_pattern_register_custom_URL_scheme ("ephy-webextension");
   webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, NULL, NULL);
   webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                          "ephy-webextension");

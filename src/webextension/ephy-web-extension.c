@@ -40,11 +40,6 @@
 #include <glib/gstdio.h>
 #include <json-glib/json-glib.h>
 
-typedef struct {
-  gint64 size;
-  GdkPixbuf *pixbuf;
-} WebExtensionIcon;
-
 typedef struct  {
   GPtrArray *allow_list;
   GPtrArray *block_list;
@@ -56,13 +51,11 @@ typedef struct  {
 } WebExtensionContentScript;
 
 typedef struct {
-  GList *default_icons;
   GtkWidget *widget;
 } WebExtensionPageAction;
 
 typedef struct {
   char *title;
-  GList *default_icons;
   char *popup;
 } WebExtensionBrowserAction;
 
@@ -78,20 +71,17 @@ typedef struct {
 struct _EphyWebExtension {
   GObject parent_instance;
 
+  WebKitWebExtension *extension;
+
   gboolean xpi;
   char *base_location;
   char *manifest;
 
-  char *description;
-  gint64 manifest_version;
   char *guid;
   char *author;
-  char *name;
-  char *short_name;
-  char *version;
   char *homepage_url;
+
   char *content_security_policy;
-  GList *icons;
   GList *content_scripts;
   char *background_page;
   GHashTable *page_action_map;
@@ -156,32 +146,6 @@ ephy_web_extension_get_resource_as_string (EphyWebExtension *self,
   return g_steal_pointer (&out);
 }
 
-static WebExtensionIcon *
-web_extension_icon_new (EphyWebExtension *self,
-                        const char       *resource_path,
-                        gint64            size)
-{
-  WebExtensionIcon *icon = NULL;
-  g_autoptr (GdkPixbuf) pixbuf = NULL;
-
-  pixbuf = ephy_web_extension_load_pixbuf (self, resource_path, size);
-  if (!pixbuf)
-    return NULL;
-
-  icon = g_new (WebExtensionIcon, 1);
-  icon->size = size;
-  icon->pixbuf = g_steal_pointer (&pixbuf);
-
-  return icon;
-}
-
-static void
-web_extension_icon_free (WebExtensionIcon *icon)
-{
-  g_clear_object (&icon->pixbuf);
-  g_free (icon);
-}
-
 static WebExtensionContentScript *
 web_extension_content_script_new (WebKitUserContentInjectedFrames injected_frames,
                                   WebKitUserScriptInjectionTime   injection_time)
@@ -224,110 +188,52 @@ web_extension_options_ui_free (WebExtensionOptionsUI *options_ui)
   g_free (options_ui);
 }
 
-static void
-web_extension_add_icon (JsonObject *object,
-                        const char *member_name,
-                        JsonNode   *member_node,
-                        gpointer    user_data)
-{
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  WebExtensionIcon *icon;
-  const char *path;
-  gint64 size;
-
-  path = ephy_json_node_to_string (member_node);
-  if (!path) {
-    LOG ("Skipping icon as value is invalid");
-    return;
-  }
-
-  size = g_ascii_strtoll (member_name, NULL, 0);
-  if (size == 0) {
-    LOG ("Skipping %s as web extension icon as size is 0", path);
-    return;
-  }
-
-  icon = web_extension_icon_new (self, path, size);
-  if (icon)
-    self->icons = g_list_append (self->icons, icon);
-}
-
-static void
-web_extension_add_browser_icons (JsonObject *object,
-                                 const char *member_name,
-                                 JsonNode   *member_node,
-                                 gpointer    user_data)
-{
-  EphyWebExtension *self = EPHY_WEB_EXTENSION (user_data);
-  WebExtensionIcon *icon;
-  const char *file;
-  gint64 size;
-
-  file = ephy_json_node_to_string (member_node);
-  if (!file) {
-    LOG ("Skipping browser icon as value is invalid");
-    return;
-  }
-
-  size = g_ascii_strtoll (member_name, NULL, 0);
-  if (size == 0) {
-    LOG ("Skipping %s as web extension browser icon as size is 0", file);
-    return;
-  }
-
-  icon = web_extension_icon_new (self, file, size);
-  if (icon)
-    self->browser_action->default_icons = g_list_append (self->browser_action->default_icons, icon);
-}
-
 GdkPixbuf *
 ephy_web_extension_get_icon (EphyWebExtension *self,
                              gint64            size)
 {
-  WebExtensionIcon *icon_fallback = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GdkPixbufLoader) loader = NULL;
+  GBytesIcon *icon;
 
-  for (GList *list = self->icons; list && list->data; list = list->next) {
-    WebExtensionIcon *icon = list->data;
+  icon = G_BYTES_ICON(webkit_web_extension_get_icon (self->extension, size, size));
+  if (!icon)
+    return NULL;
 
-    if (icon->size == size)
-      return gdk_pixbuf_copy (icon->pixbuf);
+  loader = gdk_pixbuf_loader_new ();
+  gdk_pixbuf_loader_write_bytes (loader, g_bytes_icon_get_bytes (icon), &error);
+  if (error)
+    return NULL;
+  
+  if (!gdk_pixbuf_loader_close (loader, &error) && error)
+    return NULL;
 
-    if (!icon_fallback || icon->size > icon_fallback->size)
-      icon_fallback = icon;
-  }
-
-  /* Fallback */
-  if (!icon_fallback && self->browser_action && self->browser_action->default_icons)
-    icon_fallback = self->browser_action->default_icons->data;
-
-  if (icon_fallback && icon_fallback->pixbuf)
-    return gdk_pixbuf_scale_simple (icon_fallback->pixbuf, size, size, GDK_INTERP_BILINEAR);
-
-  return NULL;
+  return gdk_pixbuf_copy (gdk_pixbuf_loader_get_pixbuf(loader));
 }
 
 const char *
 ephy_web_extension_get_name (EphyWebExtension *self)
 {
-  return self->name;
+  return webkit_web_extension_get_display_name(self->extension);
 }
 
 const char *
 ephy_web_extension_get_short_name (EphyWebExtension *self)
 {
-  return self->short_name ? self->short_name : self->name;
+  const gchar* short_name = webkit_web_extension_get_display_short_name(self->extension);
+  return short_name ? short_name : webkit_web_extension_get_display_name(self->extension);
 }
 
 const char *
 ephy_web_extension_get_version (EphyWebExtension *self)
 {
-  return self->version;
+  return webkit_web_extension_get_display_version(self->extension);
 }
 
 const char *
 ephy_web_extension_get_description (EphyWebExtension *self)
 {
-  return self->description;
+  return webkit_web_extension_get_display_description(self->extension);
 }
 
 const char *
@@ -352,12 +258,6 @@ const char *
 ephy_web_extension_get_manifest (EphyWebExtension *self)
 {
   return self->manifest;
-}
-
-const char *
-ephy_web_extension_get_base_location (EphyWebExtension *self)
-{
-  return self->base_location;
 }
 
 static void
@@ -563,31 +463,12 @@ static void
 web_extension_parse_page_action (EphyWebExtension *self,
                                  JsonObject       *object)
 {
-  const char *default_icon = ephy_json_object_get_string (object, "default_icon");
-  g_autoptr (GdkPixbuf) pixbuf = NULL;
-  WebExtensionIcon *icon;
-
-  if (!default_icon) {
-    LOG ("We only support page_action's default_icon as a string currently.");
-    return;
-  }
-
-  pixbuf = ephy_web_extension_load_pixbuf (self, default_icon, -1);
-  if (!pixbuf)
-    return;
-
-  icon = g_new (WebExtensionIcon, 1);
-  icon->size = -1;
-  icon->pixbuf = g_steal_pointer (&pixbuf);
-
   self->page_action = g_new0 (WebExtensionPageAction, 1);
-  self->page_action->default_icons = g_list_append (self->page_action->default_icons, icon);
 }
 
 static void
 web_extension_page_action_free (WebExtensionPageAction *page_action)
 {
-  g_clear_list (&page_action->default_icons, (GDestroyNotify)web_extension_icon_free);
   g_free (page_action);
 }
 
@@ -681,23 +562,6 @@ web_extension_parse_browser_action (EphyWebExtension *self,
   self->browser_action = browser_action;
   self->browser_action->title = ephy_web_extension_manifest_get_localized_string (self, object, "default_title");
   self->browser_action->popup = g_strdup (ephy_json_object_get_string (object, "default_popup"));
-
-  if (json_object_has_member (object, "default_icon")) {
-    JsonNode *icon_node = json_object_get_member (object, "default_icon");
-
-    /* default_icon can be Object or String */
-    if (json_node_get_node_type (icon_node) == JSON_NODE_OBJECT) {
-      JsonObject *icon_object = json_object_get_object_member (object, "default_icon");
-      json_object_foreach_member (icon_object, web_extension_add_browser_icons, self);
-    } else if (JSON_NODE_HOLDS_VALUE (icon_node) && json_node_get_value_type (icon_node) == G_TYPE_STRING) {
-      const char *default_icon = json_object_get_string_member (object, "default_icon");
-      WebExtensionIcon *icon = web_extension_icon_new (self, default_icon, -1);
-      if (icon)
-        self->browser_action->default_icons = g_list_append (self->browser_action->default_icons, icon);
-    } else {
-      LOG ("browser_action's default_icon is invalid");
-    }
-  }
 }
 
 static void
@@ -705,7 +569,6 @@ web_extension_browser_action_free (WebExtensionBrowserAction *browser_action)
 {
   g_clear_pointer (&browser_action->title, g_free);
   g_clear_pointer (&browser_action->popup, g_free);
-  g_clear_list (&browser_action->default_icons, (GDestroyNotify)web_extension_icon_free);
   g_free (browser_action);
 }
 
@@ -952,19 +815,16 @@ ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *self = EPHY_WEB_EXTENSION (object);
 
+  g_clear_object (&self->extension);
+
   g_clear_pointer (&self->base_location, g_free);
   g_clear_pointer (&self->manifest, g_free);
   g_clear_pointer (&self->guid, g_free);
-  g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->author, g_free);
-  g_clear_pointer (&self->name, g_free);
-  g_clear_pointer (&self->short_name, g_free);
-  g_clear_pointer (&self->version, g_free);
   g_clear_pointer (&self->homepage_url, g_free);
   g_clear_pointer (&self->local_storage_path, g_free);
   g_clear_pointer (&self->content_security_policy, g_free);
 
-  g_clear_list (&self->icons, (GDestroyNotify)web_extension_icon_free);
   g_clear_list (&self->content_scripts, (GDestroyNotify)web_extension_content_script_free);
   g_clear_pointer (&self->resources, g_hash_table_unref);
   g_clear_pointer (&self->background_page, g_free);
@@ -1022,6 +882,12 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
   g_autofree char *extension_basename = NULL;
   g_autofree char *local_storage_contents = NULL;
 
+  self->extension = webkit_web_extension_new (g_file_new_for_path (self->base_location), &local_error);
+  if (local_error) {
+      g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("Failed to parse manifest.json: %s"), local_error->message);
+      return FALSE;
+    }
+
   manifest = ephy_web_extension_get_resource (self, "manifest.json", &length);
   if (!manifest) {
     g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("manifest.json not found"));
@@ -1047,16 +913,7 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
   }
 
   self->manifest = g_strndup ((char *)manifest, length);
-  self->manifest_version = ephy_json_object_get_int (root_object, "manifest_version");
-  if (self->manifest_version != 2) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("Only manifest_version 2 is supported"));
-    return FALSE;
-  }
 
-  self->description = ephy_web_extension_manifest_get_localized_string (self, root_object, "description");
-  self->name = ephy_web_extension_manifest_get_localized_string (self, root_object, "name");
-  self->short_name = ephy_web_extension_manifest_get_localized_string (self, root_object, "short_name");
-  self->version = ephy_web_extension_manifest_get_localized_string (self, root_object, "version");
   self->homepage_url = ephy_web_extension_manifest_get_localized_string (self, root_object, "homepage_url");
   self->author = ephy_web_extension_manifest_get_localized_string (self, root_object, "author");
 
@@ -1064,11 +921,6 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
   self->content_security_policy = g_strdup (ephy_json_object_get_string (root_object, "content_security_policy"));
   if (!self->content_security_policy)
     self->content_security_policy = g_strdup ("script-src 'self'; object-src 'self';");
-
-  if (!*self->version || !*self->name) {
-    g_set_error (error, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_MANIFEST, _("Missing name or version"));
-    return FALSE;
-  }
 
   extension_basename = g_path_get_basename (self->base_location);
   self->local_storage_path = g_build_filename (ephy_config_dir (), "web_extensions",
@@ -1084,9 +936,6 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
 
   if (!self->local_storage)
     self->local_storage = json_node_init_object (json_node_alloc (), json_object_new ());
-
-  if ((child_object = ephy_json_object_get_object (root_object, "icons")))
-    json_object_foreach_member (child_object, web_extension_add_icon, self);
 
   if ((child_array = ephy_json_object_get_array (root_object, "content_scripts")))
     json_array_foreach_element (child_array, web_extension_add_content_script, self);
@@ -1369,7 +1218,7 @@ ephy_web_extension_has_browser_action (EphyWebExtension *self)
 gboolean
 ephy_web_extension_has_background_web_view (EphyWebExtension *self)
 {
-  return !!self->background_page;
+  return webkit_web_extension_get_has_background_content (self->extension) || webkit_web_extension_get_has_persistent_background_content (self->extension);
 }
 
 const char *
@@ -1392,42 +1241,10 @@ ephy_web_extension_get_content_script_js (EphyWebExtension *self,
   return script->user_scripts;
 }
 
-GdkPixbuf *
-ephy_web_extension_browser_action_get_icon (EphyWebExtension *self,
-                                            int               size)
-{
-  WebExtensionIcon *icon_fallback = NULL;
-
-  if (!self->browser_action || !self->browser_action->default_icons)
-    return NULL;
-
-  for (GList *list = self->browser_action->default_icons; list && list->data; list = list->next) {
-    WebExtensionIcon *icon = list->data;
-
-    if (icon->size == size)
-      return gdk_pixbuf_copy (icon->pixbuf);
-
-    if (!icon_fallback || icon->size > icon_fallback->size)
-      icon_fallback = icon;
-  }
-
-  /* Fallback */
-  if (icon_fallback)
-    return gdk_pixbuf_scale_simple (icon_fallback->pixbuf, size, size, GDK_INTERP_BILINEAR);
-
-  return NULL;
-}
-
 const char *
 ephy_web_extension_get_browser_popup (EphyWebExtension *self)
 {
   return self->browser_action->popup;
-}
-
-const char *
-ephy_web_extension_browser_action_get_tooltip (EphyWebExtension *self)
-{
-  return self->browser_action->title;
 }
 
 WebExtensionCustomCSS *
@@ -1535,147 +1352,21 @@ is_supported_scheme (const char *scheme)
   return FALSE;
 }
 
-static gboolean
-scheme_matches (const char *permission_scheme,
-                const char *uri_scheme)
-{
-  /* NOTE: Firefox matches "wss" and "ws" here, Safari and Chrome do not. */
-  static const char * const wildcard_allowed_schemes[] = {
-    "https", "http", "wss", "ws"
-  };
-
-  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#scheme */
-  /* wildcard is a GUri workaround, see parse_uri_with_wildcard_scheme(). */
-  if (strcmp (permission_scheme, "wildcard") == 0) {
-    for (guint i = 0; i < G_N_ELEMENTS (wildcard_allowed_schemes); i++) {
-      if (strcmp (wildcard_allowed_schemes[i], uri_scheme) == 0)
-        return TRUE;
-    }
-
-    return FALSE;
-  }
-
-  return is_supported_scheme (permission_scheme) && strcmp (permission_scheme, uri_scheme) == 0;
-}
-
-static gboolean
-host_matches (const char *permission_host,
-              const char *uri_host)
-{
-  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#host */
-  if (strcmp (permission_host, "*") == 0)
-    return TRUE;
-
-  if (g_str_has_prefix (permission_host, "*."))
-    return g_str_has_suffix (uri_host, permission_host + 1); /* Skip '*' but NOT '.'. */
-
-  return strcmp (permission_host, uri_host) == 0;
-}
-
-static gboolean
-path_matches (const char *permission_path,
-              const char *uri_path)
-{
-  g_autofree char *permission_path_escaped = NULL;
-  g_autoptr (GString) permission_path_regex = NULL;
-
-  /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns#path */
-  if (strcmp (permission_path, "*") == 0)
-    return TRUE;
-
-  /* We need to do more complicated pattern matching so convert it to regex replacing '*' with '.*'
-   * and making sure to match the entire string. */
-  permission_path_escaped = g_regex_escape_string (permission_path, -1);
-  permission_path_regex = g_string_new (permission_path_escaped);
-  g_string_replace (permission_path_regex, "\\*", ".*", -1);
-
-  return g_regex_match_simple (permission_path_regex->str, uri_path, G_REGEX_ANCHORED, G_REGEX_MATCH_ANCHORED | G_REGEX_MATCH_NOTEMPTY);
-}
-
-static char *
-join_path_and_query (GUri *uri)
-{
-  const char *path = g_uri_get_path (uri);
-  const char *query = g_uri_get_query (uri);
-  if (!query)
-    return g_strdup (path);
-
-  return g_strjoin ("?", path, query, NULL);
-}
-
-static GUri *
-parse_uri_with_wildcard_scheme (const char  *uri,
-                                GError     **error)
-{
-  g_autofree char *modified_uri = NULL;
-  const char *uri_to_check = uri;
-
-  /* GUri considers the scheme `*` invalid so we have to hackily work around that. */
-  if (g_str_has_prefix (uri, "*://")) {
-    modified_uri = g_strconcat ("wildcard", uri + 1, NULL);
-    uri_to_check = modified_uri;
-  }
-
-  return g_uri_parse (uri_to_check, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, error);
-}
-
-static gboolean
-is_default_port (const char *scheme,
-                 int         port)
-{
-  static const char * const default_port_80[] = { "http", "ws", NULL };
-  static const char * const default_port_443[] = { "https", "wss", NULL };
-
-  switch (port) {
-    case 80:
-      return g_strv_contains (default_port_80, scheme);
-    case 443:
-      return g_strv_contains (default_port_443, scheme);
-  }
-  return FALSE;
-}
-
 gboolean
 ephy_web_extension_rule_matches_uri (const char *rule,
                                      GUri       *uri)
 {
   g_autoptr (GUri) rule_uri = NULL;
   g_autoptr (GError) error = NULL;
-  g_autofree char *rule_path_and_query = NULL;
-  g_autofree char *uri_path_and_query = NULL;
-  const char *rule_scheme;
-  int rule_port;
+  g_autoptr (WebKitWebExtensionMatchPattern) match_pattern = NULL;
 
-  rule_uri = parse_uri_with_wildcard_scheme (rule, &error);
-  if (error) {
-    g_warning ("Failed to parse rule '%s' as URI: %s", rule, error->message);
+  match_pattern = webkit_web_extension_match_pattern_new_with_string (rule, &error);
+  if (!match_pattern || error) {
+    g_warning ("Failed to parse rule '%s': %s", rule, error->message);
     return FALSE;
   }
 
-  rule_scheme = g_uri_get_scheme (rule_uri);
-  rule_port = g_uri_get_port (rule_uri);
-
-  /* Ports are forbidden, however GUri normalizes these to the default. */
-  if (rule_port != -1 && !is_default_port (rule_scheme, rule_port))
-    return FALSE;
-
-  /* Empty paths are forbidden. */
-  if (strcmp (g_uri_get_path (rule_uri), "") == 0)
-    return FALSE;
-
-  if (!scheme_matches (rule_scheme, g_uri_get_scheme (uri)))
-    return FALSE;
-
-  if (!host_matches (g_uri_get_host (rule_uri), g_uri_get_host (uri)))
-    return FALSE;
-
-  rule_path_and_query = join_path_and_query (rule_uri);
-  uri_path_and_query = join_path_and_query (uri);
-
-  if (!path_matches (rule_path_and_query, uri_path_and_query))
-    return FALSE;
-
-  return TRUE;
+  return webkit_web_extension_match_pattern_matches_url (match_pattern, g_uri_to_string (uri), WEBKIT_WEB_EXTENSION_MATCH_PATTERN_OPTIONS_NONE);
 }
 
 static gboolean
