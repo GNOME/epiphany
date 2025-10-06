@@ -288,10 +288,84 @@ update_suggestions_popover (EphyLocationEntry *self)
   }
 }
 
+static char *
+get_host_from_display_url (const char *decoded_uri)
+{
+  g_autofree char *copy = g_strdup (decoded_uri);
+  const char *protocol_end;
+  const char *authority_start;
+  const char *first_colon;
+  const char *first_slash;
+  const char *first_question_mark;
+  const char *first_octothorpe;
+  const char *first_hostname_terminator;
+  const char *last_at_sign;
+
+  /* Get host component without using GUri, such that the original URL is not
+   * modified in any way and the return value is guaranteed to be a substring of
+   * the input. (Notably, this avoids GUri performing punycode encoding.)
+   *
+   * The algorithm is based on WebKit's applyHostNameFunctionToURLString in
+   * URLHelpers.cpp (License: BSD-3-Clause).
+   */
+
+  protocol_end = strstr (copy, "://");
+  if (!protocol_end)
+    return NULL;
+
+  authority_start = protocol_end + strlen ("://");
+
+  first_colon = g_utf8_strchr (authority_start, -1, ':');
+  first_slash = g_utf8_strchr (authority_start, -1, '/');
+  first_question_mark = g_utf8_strchr (authority_start, -1, '?');
+  first_octothorpe = g_utf8_strchr (authority_start, -1, '#');
+
+  first_hostname_terminator = first_colon;
+  if (!first_hostname_terminator || (first_slash && first_slash < first_hostname_terminator))
+    first_hostname_terminator = first_slash;
+  if (!first_hostname_terminator || (first_question_mark && first_question_mark < first_hostname_terminator))
+    first_hostname_terminator = first_question_mark;
+  if (!first_hostname_terminator || (first_octothorpe && first_octothorpe < first_hostname_terminator))
+    first_hostname_terminator = first_octothorpe;
+
+  if (first_hostname_terminator)
+    ((char *)first_hostname_terminator)[0] = '\0';
+
+  last_at_sign = g_utf8_strrchr (authority_start, -1, '@');
+  if (last_at_sign)
+    return g_strdup (last_at_sign + 1);
+
+  return g_strdup (authority_start);
+}
+
+static guint
+get_port_from_display_url (const char *decoded_uri)
+{
+  g_autoptr (GUri) uri = NULL;
+  g_autoptr (GError) error = NULL;
+
+  uri = g_uri_parse (decoded_uri, G_URI_FLAGS_PARSE_RELAXED, &error);
+  if (!uri)
+    g_warning ("Failed to parse URL %s: %s", decoded_uri, error->message);
+  return g_uri_get_port (uri);
+}
+
+static char *
+get_actual_display_address (EphyLocationEntry *self)
+{
+  g_autofree char *location = NULL;
+
+  g_signal_emit (self, signals[GET_LOCATION], 0, &location);
+
+  if (!location)
+    return NULL;
+
+  return ephy_uri_decode (location);
+}
+
 static void
 update_url_button_style (EphyLocationEntry *self)
 {
-  EphyWindow *window;
   const PangoRectangle empty_rect = {};
   g_autoptr (PangoAttrList) attrs = NULL;
   PangoAttribute *color_normal;
@@ -299,10 +373,11 @@ update_url_button_style (EphyLocationEntry *self)
   PangoAttribute *start_hidden;
   PangoAttribute *end_hidden;
   g_autoptr (GUri) uri = NULL;
-  const char *text = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autofree char *text = NULL;
   const char *base_domain;
-  const char *scheme;
   const char *sub_string;
+  g_autofree char *host = NULL;
   g_autofree char *port_str = NULL;
   gint port;
 
@@ -315,40 +390,32 @@ update_url_button_style (EphyLocationEntry *self)
   color_dimmed = pango_attr_foreground_alpha_new (32768);
   pango_attr_list_insert (attrs, color_dimmed);
 
-  text = gtk_editable_get_text (GTK_EDITABLE (self));
-
-  window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
-  if (window) {
-    EphyEmbed *active_embed = ephy_window_get_active_embed (window);
-    const char *typed_input = ephy_embed_get_typed_input (active_embed);
-
-    if (typed_input && g_strcmp0 (typed_input, text) == 0) {
-      text = ephy_web_view_get_address (ephy_embed_get_web_view (active_embed));
-      if (ephy_embed_utils_is_no_show_address (text))
-        text = NULL;
-    }
-  }
-
-  if (!text || strlen (text) == 0) {
+  text = get_actual_display_address (self);
+  if (!text || strlen (text) == 0 || ephy_embed_utils_is_no_show_address (text)) {
     gtk_label_set_text (GTK_LABEL (self->url_button_label), _("Search for websites, bookmarks, and open tabs"));
     gtk_label_set_attributes (GTK_LABEL (self->url_button_label), attrs);
+    LOG ("Failed to update URL button style: URL is null, empty, or no-show");
     return;
   }
 
-  uri = g_uri_parse (text, G_URI_FLAGS_PARSE_RELAXED, NULL);
-  if (!uri)
+  host = get_host_from_display_url (text);
+  if (!host) {
+    LOG ("Failed to get host component for URL %s", text);
     goto out;
+  }
+  port = get_port_from_display_url (text);
 
-  base_domain = ephy_uri_get_base_domain (g_uri_get_host (uri));
-  if (!base_domain)
+  base_domain = ephy_uri_get_base_domain (host);
+  if (!base_domain) {
+    LOG ("Failed to update URL button style: failed to get base domain for URL %s: %s", text, error->message);
     goto out;
+  }
 
   sub_string = strstr (text, base_domain);
-  if (!sub_string)
+  if (!sub_string) {
+    LOG ("Failed to update URL button style: failed to find base domain %s in URL %s (is there no public suffix?)", base_domain, text);
     goto out;
-
-  scheme = g_uri_get_scheme (uri);
-  port = g_uri_get_port (uri);
+  }
 
   if (text && strlen (text) > 0) {
     /* Base domain with normal style */
@@ -363,7 +430,7 @@ update_url_button_style (EphyLocationEntry *self)
     /* Scheme is hidden */
     start_hidden = pango_attr_shape_new (&empty_rect, &empty_rect);
     start_hidden->start_index = 0;
-    start_hidden->end_index = start_hidden->start_index + strlen (scheme) + strlen ("://");
+    start_hidden->end_index = strstr (text, host) - text;
     pango_attr_list_insert (attrs, start_hidden);
 
     /* Everything after the port is hidden */
@@ -1432,8 +1499,8 @@ ephy_location_entry_reset (EphyLocationEntry *self)
   int position, offset;
   g_autofree char *url = NULL;
 
-  g_signal_emit (self, signals[GET_LOCATION], 0, &url);
-  text = url != NULL ? url : "";
+  url = get_actual_display_address (self);
+  text = !!url ? url : "";
   old_text = gtk_editable_get_text (GTK_EDITABLE (self));
   old_text = old_text != NULL ? old_text : "";
 

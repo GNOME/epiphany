@@ -227,7 +227,7 @@ get_location_cb (EphyLocationEntry      *entry,
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
-  return ephy_embed_utils_is_no_show_address (address) ? NULL : ephy_uri_decode (address);
+  return ephy_embed_utils_is_no_show_address (address) ? NULL : g_strdup (address);
 }
 
 static char *
