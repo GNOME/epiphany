@@ -55,6 +55,7 @@ conf.set_quoted('PROFILE', profile)
 conf.set_quoted('SOURCE_ROOT', meson.project_source_root())
 tech_preview = get_option('tech_preview')
 conf.set10('TECH_PREVIEW', tech_preview)
+conf.set10('CANARY', profile == 'Canary')
 conf.set_quoted('G_LOG_DOMAIN', 'epiphany')
 
 version_array = meson.project_version().split('.')

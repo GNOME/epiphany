@@ -46,7 +46,7 @@ struct _EphyPrefsDialog {
 
   EphyWindow *parent_window;
 
-#if !TECH_PREVIEW
+#if !TECH_PREVIEW && !CANARY
   GtkWidget *features_page;
 #endif
 };
@@ -139,7 +139,7 @@ sync_extensions (EphyPrefsDialog *self)
   }
 }
 
-#if !TECH_PREVIEW
+#if !TECH_PREVIEW && !CANARY
 static void
 sync_features (EphyPrefsDialog *self)
 {
@@ -187,7 +187,7 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
                            dialog,
                            G_CONNECT_SWAPPED);
 
-#if TECH_PREVIEW
+#if TECH_PREVIEW || CANARY
   adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (dialog),
                               g_object_new (EPHY_TYPE_PREFS_FEATURES_PAGE, "dialog", dialog, NULL));
 #else
