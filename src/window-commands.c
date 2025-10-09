@@ -1784,9 +1784,12 @@ frame_pixbuf (GIcon   *icon,
     int w = gdk_pixbuf_get_width (scaled);
     int h = gdk_pixbuf_get_height (scaled);
 
-    gdk_cairo_set_source_pixbuf (cr, scaled,
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    gdk_cairo_set_source_pixbuf (cr,
+                                 scaled,
                                  (width - w) / 2,
                                  (height - h) / 2);
+    G_GNUC_END_IGNORE_DEPRECATIONS
     cairo_fill (cr);
   }
 

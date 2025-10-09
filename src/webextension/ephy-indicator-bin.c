@@ -30,7 +30,10 @@ struct _EphyIndicatorBin {
   GtkWidget *indicator;
   GtkWidget *label;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  /* FIXME: https://gitlab.gnome.org/GNOME/epiphany/-/issues/2784 */
   GskGLShader *shader;
+  G_GNUC_END_IGNORE_DEPRECATIONS
   gboolean shader_compiled;
 };
 
@@ -61,12 +64,14 @@ ensure_shader (EphyIndicatorBin *self)
   if (self->shader)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   self->shader = gsk_gl_shader_new_from_resource ("/org/gnome/epiphany/mask.glsl");
 
   native = gtk_widget_get_native (GTK_WIDGET (self));
   renderer = gtk_native_get_renderer (native);
 
   self->shader_compiled = gsk_gl_shader_compile (self->shader, renderer, &error);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (error) {
     /* If shaders aren't supported, the error doesn't matter and we just
@@ -177,19 +182,23 @@ ephy_indicator_bin_snapshot (GtkWidget   *widget,
     if (self->shader_compiled) {
       graphene_rect_t bounds;
 
-      gsk_render_node_get_bounds (child_node, &bounds);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      gsk_render_node_get_bounds (child_node,
+                                  &bounds);
       gtk_snapshot_push_gl_shader (snapshot, self->shader, &bounds,
                                    gsk_gl_shader_format_args (self->shader, NULL));
+      G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
     gtk_snapshot_append_node (snapshot, child_node);
 
     if (self->shader_compiled) {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_snapshot_gl_shader_pop_texture (snapshot);
 
       gtk_widget_snapshot_child (widget, self->mask, snapshot);
       gtk_snapshot_gl_shader_pop_texture (snapshot);
-
+      G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_snapshot_pop (snapshot);
     }
 
