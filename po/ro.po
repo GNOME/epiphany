@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-09-05 07:18+0000\n"
-"PO-Revision-Date: 2025-09-05 14:49+0200\n"
+"POT-Creation-Date: 2025-09-25 10:02+0000\n"
+"PO-Revision-Date: 2025-10-09 14:34+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -213,7 +213,7 @@ msgid ""
 msgstr ""
 "Dacă este activată fișele care conțin titlurile filelor vor fi extinse ca să "
 "folosească tot spațiul disponibil din bara filelor. Această opțiune este "
-"ignorată în desktopul Pantheon."
+"ignorată în interfața Pantheon."
 
 #: data/org.gnome.epiphany.gschema.xml:100
 msgid "Show url bar at bottom"
@@ -238,7 +238,7 @@ msgstr ""
 "Stabilește când este afișată bara filelor. Valorile posibile sunt „always” "
 "(bara filelor este afișată mereu), „more-than-one” (bara filelor este "
 "afișată numai dacă sunt două sau mai multe file) și „never” (bara filelor nu "
-"este afișată niciodată). Desktopul Pantheon folosește doar valoarea „always”."
+"este afișată niciodată). Interfața Pantheon folosește doar valoarea „always”."
 
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "Keep window open when closing last tab"
@@ -572,7 +572,8 @@ msgstr "Întreabă mereu unde să se facă descărcarea"
 #: data/org.gnome.epiphany.gschema.xml:268
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr ""
-"Dacă se prezintă un dialog de alegere a dosarului pentru fiecare descărcare."
+"Dacă să se prezinte un dialog de alegere a dosarului pentru fiecare "
+"descărcare."
 
 #: data/org.gnome.epiphany.gschema.xml:272
 msgid "Enable immediately switch to new open tab"
@@ -681,9 +682,9 @@ msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
-"Calea dosarului unde să se descarce fișierele; sau „Downloads” pentru a "
-"utiliza dosarul prestabilit pentru fișierele descărcate, sau „Desktop” "
-"pentru a utiliza dosarul desktopului."
+"Calea dosarului unde să se descarce fișierele; sau „Downloads” (Descărcate) "
+"pentru a utiliza dosarul prestabilit pentru fișierele descărcate, sau "
+"„Desktop” (Birou) pentru a utiliza dosarul acesta."
 
 #: data/org.gnome.epiphany.gschema.xml:334
 msgid "Window position"
@@ -1890,7 +1891,7 @@ msgstr "Eroarea precisă a fost: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
 #: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1635
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1637
 msgid "Reload"
 msgstr "Reîncarcă"
 
@@ -2047,19 +2048,19 @@ msgstr "Pagini web"
 msgid "Images"
 msgstr "Imagini"
 
-# Dacă se modifică aici trebuie modificat și în xdg-user-dirs care se află în freedesktop.org (non-GNOME)
+# A se vedea xdg-user-dirs care se află în freedesktop.org (non-GNOME)
 #. If we don't have XDG user dirs info, return an educated guess.
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:80
 #: src/resources/gtk/prefs-general-page.blp:106
 msgid "Downloads"
-msgstr "Descărcări"
+msgstr "Descărcate"
 
-# Dacă se modifică aici trebuie modificat și în xdg-user-dirs care se află în freedesktop.org (non-GNOME)
+# A se vedea xdg-user-dirs care se află în freedesktop.org (non-GNOME)
 #. If we don't have XDG user dirs info, return an educated guess.
 #: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
 msgid "Desktop"
-msgstr "Desktop"
+msgstr "Birou"
 
 #: lib/ephy-file-helpers.c:190
 msgid "Home"
@@ -2522,7 +2523,7 @@ msgid "Save Media As"
 msgstr "Salvează media ca"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1644
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1646
 msgid "Stop"
 msgstr "Stop"
 
@@ -2727,11 +2728,11 @@ msgstr "Șterge cronologia"
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Caută situri web, preferate și file deschise"
 
-#: src/ephy-location-entry.c:1341
+#: src/ephy-location-entry.c:1343
 msgid "Secure Site"
 msgstr "Sit web sigur"
 
-#: src/ephy-location-entry.c:1343
+#: src/ephy-location-entry.c:1345
 msgid "Insecure Site"
 msgstr "Sit web nesigur"
 
@@ -2874,39 +2875,47 @@ msgstr "Refuză"
 msgid "Ask"
 msgstr "Întreabă"
 
-#: src/ephy-security-dialog.c:519
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:520
 msgid "Advertisements"
 msgstr "Reclame"
 
-#: src/ephy-security-dialog.c:520
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:522
 msgid "Notifications"
 msgstr "Notificări"
 
-#: src/ephy-security-dialog.c:521
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:524
 msgid "Password Saving"
 msgstr "Salvarea parolei"
 
-#: src/ephy-security-dialog.c:522
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:526
 msgid "Location Access"
 msgstr "Localizare"
 
-#: src/ephy-security-dialog.c:523
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:528
 msgid "Microphone Access"
 msgstr "Acces la microfon"
 
-#: src/ephy-security-dialog.c:524
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:530
 msgid "Webcam Access"
 msgstr "Acces la camera web"
 
-#: src/ephy-security-dialog.c:525
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:532
 msgid "Display Access"
 msgstr "Acces la ecran"
 
-#: src/ephy-security-dialog.c:526
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:534
 msgid "Media Autoplay"
 msgstr "Autoredare media"
 
-#: src/ephy-security-dialog.c:526
+#: src/ephy-security-dialog.c:534
 msgid "Without Sound"
 msgstr "Fără sunet"
 
