@@ -2337,7 +2337,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     if (!opener_origin)
       return TRUE;
 
-    if (url_should_open_automatically (g_steal_pointer (&opener_origin), request_uri)) {
+    if (url_should_open_automatically (opener_origin, request_uri)) {
       g_autoptr (GFile) file = g_file_new_for_uri (request_uri);
 
       ephy_file_launch_uri_handler (file,
@@ -2354,7 +2354,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
       if (!webkit_navigation_action_is_user_gesture (navigation_action))
         return TRUE;
 
-      data = open_url_permission_data_new (g_steal_pointer (&opener_origin), request, window);
+      data = open_url_permission_data_new (opener_origin, request, window);
       if (data)
         g_idle_add (ask_for_permission, data);
     }
