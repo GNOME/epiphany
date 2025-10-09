@@ -23,6 +23,7 @@
 
 #include "ephy-settings.h"
 #include "ephy-string.h"
+#include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
@@ -84,9 +85,8 @@ on_add_clicked (GtkWidget *button,
   g_auto (GStrv) new_urls = NULL;
   g_autoptr (GUri) uri = NULL;
   g_autoptr (GError) error = NULL;
-  g_autofree char *lower_host = NULL;
   const char *url = gtk_editable_get_text (GTK_EDITABLE (self->add_row));
-  const char *base_domain;
+  g_autofree char *base_domain = NULL;
   g_autoptr (GStrvBuilder) builder = NULL;
 
   urls = g_settings_get_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS);
@@ -105,10 +105,9 @@ on_add_clicked (GtkWidget *button,
     return;
   }
 
-  lower_host = g_utf8_strdown (g_uri_get_host (uri), -1);
-  base_domain = soup_tld_get_base_domain (lower_host, &error);
-  if (error) {
-    g_warning ("Could not add url %s: %s", url, error->message);
+  base_domain = ephy_uri_get_base_domain (g_uri_get_host (uri));
+  if (!base_domain) {
+    g_warning ("Could not get base domain from host %s", g_uri_get_host (uri));
     return;
   }
 

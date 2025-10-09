@@ -27,6 +27,7 @@
 #include "ephy-flatpak-utils.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
+#include "ephy-uri-helpers.h"
 
 #include <errno.h>
 #include <gio/gio.h>
@@ -897,10 +898,8 @@ urls_have_same_base_domain (const char *a_url,
   g_autoptr (GUri) a_uri = NULL;
   g_autoptr (GUri) b_uri = NULL;
   g_autoptr (GError) error = NULL;
-  g_autofree char *lower_host_a = NULL;
-  g_autofree char *lower_host_b = NULL;
-  const char *a_base;
-  const char *b_base;
+  g_autofree char *a_base = NULL;
+  g_autofree char *b_base = NULL;
 
   a_uri = g_uri_parse (a_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (!a_uri || !g_uri_get_host (a_uri))
@@ -917,19 +916,11 @@ urls_have_same_base_domain (const char *a_url,
     return FALSE;
 
   /* Compare base domains */
-  lower_host_a = g_utf8_strdown (g_uri_get_host (a_uri), -1);
-  a_base = soup_tld_get_base_domain (lower_host_a, &error);
-  if (error) {
-    g_warning ("Could not get base domain from %s", g_uri_get_host (a_uri));
-    return FALSE;
-  }
+  a_base = ephy_uri_get_base_domain (g_uri_get_host (a_uri));
+  b_base = ephy_uri_get_base_domain (g_uri_get_host (b_uri));
 
-  lower_host_b = g_utf8_strdown (g_uri_get_host (b_uri), -1);
-  b_base = soup_tld_get_base_domain (lower_host_b, &error);
-  if (error) {
-    g_warning ("Could not get base domain from %s", g_uri_get_host (b_uri));
+  if (!a_base || !b_base)
     return FALSE;
-  }
 
   return g_ascii_strcasecmp (a_base, b_base) == 0;
 }
