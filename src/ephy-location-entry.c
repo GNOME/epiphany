@@ -402,7 +402,7 @@ update_url_button_style (EphyLocationEntry *self)
   }
   port = get_port_from_display_url (text);
 
-  base_domain = ephy_uri_get_base_domain (g_uri_get_host (uri));
+  base_domain = ephy_uri_get_base_domain (host);
   if (!base_domain) {
     LOG ("Failed to update URL button style: failed to get base domain for URL %s: %s", text, error->message);
     goto out;
