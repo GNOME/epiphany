@@ -71,15 +71,15 @@ conf.set_quoted('EPHY_VERSION', meson.project_version())
 conf.set_quoted('VERSION', '@VCS_TAG@')
 
 glib_requirement = '>= 2.74.0'
-gtk_requirement = '>= 4.13.3'
+gtk_requirement = '>= 4.21.0'
 libadwaita_requirement = '>= 1.8.alpha'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.43.4'
 
 conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_74')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_74')
-conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_14')
-conf.set('GDK_VERSION_MAX_ALLOWED', 'GDK_VERSION_4_14')
+conf.set('GDK_VERSION_MIN_REQUIRED', 'GDK_VERSION_4_22')
+conf.set('GDK_VERSION_MAX_ALLOWED', 'GDK_VERSION_4_22')
 conf.set('ADW_VERSION_MIN_REQUIRED', 'ADW_VERSION_1_8')
 conf.set('ADW_VERSION_MAX_ALLOWED', 'ADW_VERSION_1_8')
 
