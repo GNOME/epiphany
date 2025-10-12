@@ -2887,7 +2887,7 @@ update_reader_mode (EphyWindow  *window,
   EphyLocationEntry *entry;
   EphySiteMenuButton *site_menu_button;
 
-  if (!window->active_embed)
+  if (!window->active_embed || !gtk_widget_get_parent (GTK_WIDGET (view)))
     return;
 
   active = g_str_has_prefix (ephy_web_view_get_display_address (EPHY_WEB_VIEW (view)), EPHY_READER_SCHEME);
