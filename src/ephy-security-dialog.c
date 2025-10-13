@@ -53,7 +53,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 struct _EphySecurityDialog {
   AdwDialog parent_instance;
   char *address;
-  char *hostname;
+  char *decoded_hostname;
   guint permission_pos;
   GtkWidget *status_page;
   GtkWidget *certificate_button;
@@ -133,15 +133,20 @@ ephy_security_dialog_set_address (EphySecurityDialog *dialog,
 {
   EphyPermissionsManager *permissions_manager;
   g_autoptr (GUri) uri = NULL;
-  g_autofree gchar *origin = NULL;
-  g_autofree gchar *uri_text = NULL;
+  g_autofree char *decoded_url = NULL;
+  g_autofree char *origin = NULL;
+  g_autofree char *uri_text = NULL;
 
   uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
   /* Label when clicking the lock icon on a secure page. %s is the website's hostname. */
   adw_status_page_set_title (ADW_STATUS_PAGE (dialog->status_page), g_uri_get_host (uri));
 
   dialog->address = g_strdup (address);
-  dialog->hostname = g_strdup (g_uri_get_host (uri));
+
+  decoded_url = ephy_uri_decode (address);
+  if (!decoded_url)
+    decoded_url = g_strdup (address);
+  dialog->decoded_hostname = ephy_uri_get_decoded_host (decoded_url);
 
   origin = ephy_uri_to_security_origin (address);
   if (!origin)
@@ -175,8 +180,8 @@ ephy_security_dialog_set_security_level (EphySecurityDialog *dialog,
 
   dialog->security_level = security_level;
 
-  address_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", dialog->hostname);
-  adw_status_page_set_title (ADW_STATUS_PAGE (dialog->status_page), dialog->hostname);
+  address_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", dialog->decoded_hostname);
+  adw_status_page_set_title (ADW_STATUS_PAGE (dialog->status_page), dialog->decoded_hostname);
 
   switch (security_level) {
     case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
@@ -255,7 +260,7 @@ ephy_security_dialog_finalize (GObject *object)
   EphySecurityDialog *dialog = EPHY_SECURITY_DIALOG (object);
 
   g_free (dialog->address);
-  g_free (dialog->hostname);
+  g_free (dialog->decoded_hostname);
 
   G_OBJECT_CLASS (ephy_security_dialog_parent_class)->finalize (object);
 }
