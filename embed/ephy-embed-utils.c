@@ -31,6 +31,7 @@
 #include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
 
 #include <glib/gi18n.h>
@@ -393,6 +394,8 @@ ephy_embed_utils_is_no_show_address (const char *address)
 char *
 ephy_embed_utils_get_title_from_address (const char *address)
 {
+  g_autofree char *decoded_url = NULL;
+
   if (g_str_has_prefix (address, "file://"))
     return g_strdup (address + 7);
 
@@ -402,7 +405,11 @@ ephy_embed_utils_get_title_from_address (const char *address)
       !strcmp (address, "about:newtab"))
     return g_strdup (_(NEW_TAB_PAGE_TITLE));
 
-  return ephy_string_get_host_name (address);
+  decoded_url = ephy_uri_decode (address);
+  if (!decoded_url)
+    return g_strdup (address);
+
+  return ephy_uri_get_decoded_host (decoded_url);
 }
 
 void
