@@ -25,9 +25,15 @@
 
 G_BEGIN_DECLS
 
+/* Epiphany and WebKit internally store URLs using percent-encoded characters
+ * and punycode rather than UTF-8. Encoded URLs should be used almost
+ * everywhere, but should not be displayed to the user. Use ephy_uri_decode()
+ * immediately before displaying the URL in user interface.
+ */
+
 char *ephy_uri_decode (const char *uri);
+char *ephy_uri_get_decoded_host (const char *decoded_uri);
 char *ephy_uri_to_security_origin (const char *uri);
 char *ephy_uri_get_base_domain (const char *hostname);
-char *ephy_uri_get_decoded_host (const char *decoded_uri);
 
 G_END_DECLS
