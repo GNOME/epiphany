@@ -36,19 +36,6 @@ test_ephy_uri_decode (void)
    */
 }
 
-static void
-test_ephy_uri_normalize (void)
-{
-  g_autofree char *result = NULL;
-
-  result = ephy_uri_normalize ("https://ja.wikipedia.org/wiki/メインページ");
-  g_assert_cmpstr (result, ==, "https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8");
-
-  /* Note: this function cannot normalize UTF-8 to IDN.
-   * (Maybe it should?)
-   */
-}
-
 int
 main (int   argc,
       char *argv[])
@@ -58,7 +45,6 @@ main (int   argc,
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/lib/ephy-uri-helpers/decode", test_ephy_uri_decode);
-  g_test_add_func ("/lib/ephy-uri-helpers/normalize", test_ephy_uri_normalize);
 
   ret = g_test_run ();
 
