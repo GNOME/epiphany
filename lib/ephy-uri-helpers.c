@@ -73,37 +73,6 @@ ephy_uri_to_security_origin (const char *uri_string)
   return result;
 }
 
-#define XDIGIT(c) ((c) <= '9' ? (c) - '0' : ((c) & 0x4F) - 'A' + 10)
-#define HEXCHAR(s) ((XDIGIT (s[1]) << 4) + XDIGIT (s[2]))
-
-char *
-ephy_uri_unescape (const char *uri_string)
-{
-  unsigned char *s, *d;
-  char *decoded;
-
-  g_assert (uri_string);
-
-  decoded = g_strdup (uri_string);
-  s = d = (unsigned char *)decoded;
-  do {
-    if (*s == '%') {
-      if (s[1] == '\0' ||
-          s[2] == '\0' ||
-          !g_ascii_isxdigit (s[1]) ||
-          !g_ascii_isxdigit (s[2])) {
-        *d++ = *s;
-        continue;
-      }
-      *d++ = HEXCHAR (s);
-      s += 2;
-    } else
-      *d++ = *s;
-  } while (*s++);
-
-  return decoded;
-}
-
 char *
 ephy_uri_get_base_domain (const char *hostname)
 {
