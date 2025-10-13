@@ -31,9 +31,9 @@ test_ephy_uri_decode (void)
   result = ephy_uri_decode ("https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8");
   g_assert_cmpstr (result, ==, "https://ja.wikipedia.org/wiki/メインページ");
 
-  /* FIXME: we should test decoding IDN URIs here too.
-   * But it seems to be broken.
-   */
+  g_clear_pointer (&result, g_free);
+  result = ephy_uri_decode ("https://xn--9dbaqfu.xn--4dbrk0ce/");
+  g_assert_cmpstr (result, ==, "https://כולנו.ישראל/");
 }
 
 int
