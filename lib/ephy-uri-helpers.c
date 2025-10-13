@@ -123,3 +123,53 @@ ephy_uri_get_base_domain (const char *hostname)
 
   return g_strdup (base_domain);
 }
+
+char *
+ephy_uri_get_decoded_host (const char *decoded_uri)
+{
+  g_autofree char *copy = g_strdup (decoded_uri);
+  const char *protocol_end;
+  const char *authority_start;
+  const char *first_colon;
+  const char *first_slash;
+  const char *first_question_mark;
+  const char *first_octothorpe;
+  const char *first_hostname_terminator;
+  const char *last_at_sign;
+
+  /* Get host component without using GUri, such that the original URL is not
+   * modified in any way and the return value is guaranteed to be a substring of
+   * the input. Notably, this avoids GUri performing punycode encoding.
+   *
+   * The algorithm is based on WebKit's applyHostNameFunctionToURLString in
+   * URLHelpers.cpp (License: BSD-3-Clause).
+   */
+
+  protocol_end = strstr (copy, "://");
+  if (!protocol_end)
+    return NULL;
+
+  authority_start = protocol_end + strlen ("://");
+
+  first_colon = g_utf8_strchr (authority_start, -1, ':');
+  first_slash = g_utf8_strchr (authority_start, -1, '/');
+  first_question_mark = g_utf8_strchr (authority_start, -1, '?');
+  first_octothorpe = g_utf8_strchr (authority_start, -1, '#');
+
+  first_hostname_terminator = first_colon;
+  if (!first_hostname_terminator || (first_slash && first_slash < first_hostname_terminator))
+    first_hostname_terminator = first_slash;
+  if (!first_hostname_terminator || (first_question_mark && first_question_mark < first_hostname_terminator))
+    first_hostname_terminator = first_question_mark;
+  if (!first_hostname_terminator || (first_octothorpe && first_octothorpe < first_hostname_terminator))
+    first_hostname_terminator = first_octothorpe;
+
+  if (first_hostname_terminator)
+    ((char *)first_hostname_terminator)[0] = '\0';
+
+  last_at_sign = g_utf8_strrchr (authority_start, -1, '@');
+  if (last_at_sign)
+    return g_strdup (last_at_sign + 1);
+
+  return g_strdup (authority_start);
+}
