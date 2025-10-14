@@ -23,6 +23,7 @@
 #include "config.h"
 #include "ephy-certificate-dialog.h"
 
+#include "ephy-uri-helpers.h"
 #include "ephy-lib-type-builtins.h"
 
 #include <adwaita.h>
@@ -217,10 +218,10 @@ static void
 ephy_certificate_dialog_set_address (EphyCertificateDialog *dialog,
                                      const char            *address)
 {
-  g_autoptr (GUri) uri = NULL;
+  g_autofree char *decoded_url = NULL;
 
-  uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
-  adw_dialog_set_title (ADW_DIALOG (dialog), g_uri_get_host (uri));
+  decoded_url = ephy_uri_decode (address);
+  adw_dialog_set_title (ADW_DIALOG (dialog), decoded_url);
 }
 
 static void
