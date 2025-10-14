@@ -30,5 +30,6 @@ char *ephy_uri_normalize (const char *uri);
 char *ephy_uri_to_security_origin (const char *uri);
 char *ephy_uri_unescape (const char *uri);
 char *ephy_uri_get_base_domain (const char *hostname);
+char *ephy_uri_get_decoded_host (const char *decoded_uri);
 
 G_END_DECLS
