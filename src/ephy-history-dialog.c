@@ -516,7 +516,12 @@ create_row (EphyHistoryDialog *self,
   GtkWidget *check_button;
   GtkWidget *copy_url_button;
   g_autofree char *title_escaped = g_markup_escape_text (url->title, -1);
-  g_autofree char *subtitle_escaped = g_markup_escape_text (url->url, -1);
+  g_autofree char *subtitle_escaped = NULL;
+  g_autofree char *decoded_url = ephy_uri_decode (url->url);
+
+  if (!decoded_url)
+    decoded_url = url->url;
+  subtitle_escaped = g_markup_escape_text (decoded_url, -1);
 
   /* Row */
   row = adw_action_row_new ();
@@ -525,7 +530,7 @@ create_row (EphyHistoryDialog *self,
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), title_escaped);
   adw_action_row_set_subtitle (ADW_ACTION_ROW (row), subtitle_escaped);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
-  gtk_widget_set_tooltip_text (row, url->url);
+  gtk_widget_set_tooltip_text (row, decoded_url);
 
   /* Fav Icon */
   icon = gtk_image_new ();
