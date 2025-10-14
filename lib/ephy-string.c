@@ -170,6 +170,7 @@ ephy_string_collate_key_for_domain (const char *str,
   return g_string_free (result, FALSE);
 }
 
+/* FIXME: delete this, or move it to ephy-uri-helpers */
 char *
 ephy_string_get_host_name (const char *url)
 {
