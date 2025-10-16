@@ -38,8 +38,6 @@ GtkWidget          *ephy_header_bar_new                            (EphyWindow  
 EphyTitleWidget    *ephy_header_bar_get_title_widget               (EphyHeaderBar *header_bar);
 GtkWidget          *ephy_header_bar_get_page_menu_button           (EphyHeaderBar *header_bar);
 EphyWindow         *ephy_header_bar_get_window                     (EphyHeaderBar *header_bar);
-void                ephy_header_bar_set_reader_mode_state          (EphyHeaderBar *header_bar,
-                                                                    EphyWebView   *view);
 EphyActionBarStart *ephy_header_bar_get_action_bar_start           (EphyHeaderBar *header_bar);
 EphyActionBarEnd   *ephy_header_bar_get_action_bar_end             (EphyHeaderBar *header_bar);
 void                ephy_header_bar_set_adaptive_mode              (EphyHeaderBar    *header_bar,

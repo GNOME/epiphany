@@ -32,8 +32,6 @@
 G_BEGIN_DECLS
 
 WebKitSettings *ephy_embed_prefs_get_settings  (void);
-void ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager      *cookie_manager,
-                                                const char               *settings_policy);
 void ephy_embed_prefs_apply_user_style         (WebKitUserContentManager *ucm);
 void ephy_embed_prefs_apply_user_javascript    (WebKitUserContentManager *ucm);
 

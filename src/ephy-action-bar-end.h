@@ -35,7 +35,4 @@ void              ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEn
 void              ephy_action_bar_end_show_downloads            (EphyActionBarEnd *action_bar_end);
 GtkWidget        *ephy_action_bar_end_get_downloads_revealer    (EphyActionBarEnd *action_bar_end);
 
-void              ephy_action_bar_end_set_browser_actions       (EphyActionBarEnd *action_bar_end,
-                                                                 GListStore       *browser_actions);
-
 G_END_DECLS

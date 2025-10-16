@@ -94,9 +94,6 @@ void                ephy_web_application_setup_from_desktop_file (GDesktopAppInf
 
 char               *ephy_web_application_get_profile_directory (const char *id);
 
-/* legacy variant for profile migration */
-char               *ephy_legacy_web_application_get_profile_directory (const char *id);
-
 GKeyFile           *ephy_web_application_get_desktop_keyfile (const char  *id,
                                                               GError     **error);
 
@@ -110,9 +107,6 @@ void                ephy_web_application_free (EphyWebApplication *app);
 gboolean            ephy_web_application_exists (const char *id);
 
 GList              *ephy_web_application_get_application_list (void);
-
-/* legacy variant for profile migration */
-GList              *ephy_web_application_get_legacy_application_list (void);
 
 char              **ephy_web_application_get_desktop_id_list (void);
 

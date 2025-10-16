@@ -60,8 +60,6 @@ void             ephy_embed_set_do_animate_reader_mode    (EphyEmbed *embed,
                                                            gboolean   do_animate);
 void             ephy_embed_attach_notification_container (EphyEmbed *embed);
 void             ephy_embed_detach_notification_container (EphyEmbed *embed);
-void             ephy_embed_download_started              (EphyEmbed    *embed,
-                                                           EphyDownload *ephy_download);
 WebKitWebViewSessionState
                 *ephy_embed_get_session_state             (EphyEmbed *embed);
 

@@ -38,8 +38,6 @@ G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENT
 
 GtkWidget      *ephy_location_entry_new                        (void);
 
-gboolean        ephy_location_entry_get_can_undo               (EphyLocationEntry *entry);
-
 gboolean        ephy_location_entry_get_can_redo               (EphyLocationEntry *entry);
 
 gboolean        ephy_location_entry_reset                      (EphyLocationEntry *entry);

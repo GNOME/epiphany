@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, EPHY, SEARCH_ENGINE_LIST_BOX, AdwBin)
 
-GtkWidget           *ephy_search_engine_list_box_new                 (void);
 EphySearchEngineRow *ephy_search_engine_list_box_find_row_for_engine (EphySearchEngineListBox *self,
                                                                       EphySearchEngine        *engine);
 

@@ -49,12 +49,6 @@ struct _EphySearchEngineListBox {
 
 G_DEFINE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, ADW_TYPE_BIN)
 
-GtkWidget *
-ephy_search_engine_list_box_new (void)
-{
-  return g_object_new (EPHY_TYPE_SEARCH_ENGINE_LIST_BOX, NULL);
-}
-
 /* This signal unexpands all other rows of the list box except the row
  * that just got expanded.
  */

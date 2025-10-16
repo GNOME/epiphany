@@ -35,7 +35,5 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, AdwBin);
 
 EphyActionBar      *ephy_action_bar_new                  (EphyWindow *window);
-EphyActionBarStart *ephy_action_bar_get_action_bar_start (EphyActionBar *action_bar);
-EphyActionBarEnd   *ephy_action_bar_get_action_bar_end   (EphyActionBar *action_bar);
 
 G_END_DECLS

@@ -35,16 +35,10 @@ void context_cmd_link_in_new_tab          (GSimpleAction *action,
 void context_cmd_link_in_incognito_window (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void context_cmd_view_source              (GSimpleAction *action,
-                                           GVariant      *parameter,
-                                           gpointer       user_data);
 void context_cmd_copy_link_address        (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void context_cmd_send_via_email           (GSimpleAction *action,
-                                           GVariant      *parameter,
-                                           gpointer       user_data);
-void context_cmd_copy_link_location       (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void context_cmd_download_link_as         (GSimpleAction *action,
@@ -57,9 +51,6 @@ void context_cmd_copy_image_location      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void context_cmd_view_image_in_new_tab    (GSimpleAction *action,
-                                           GVariant      *parameter,
-                                           gpointer       user_data);
-void context_cmd_download_link            (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void context_cmd_save_image_as            (GSimpleAction *action,

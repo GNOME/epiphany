@@ -87,8 +87,6 @@ typedef enum {
   EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD
 } EphyWebViewMessageHandlerScope;
 
-GType                      ephy_web_view_chrome_get_type          (void);
-GType                      ephy_web_view_security_level_get_type  (void);
 GtkWidget *                ephy_web_view_new                      (void);
 GtkWidget                 *ephy_web_view_new_with_related_view    (WebKitWebView             *related_view);
 void                       ephy_web_view_load_request             (EphyWebView               *view,
@@ -169,10 +167,6 @@ void                       ephy_web_view_save                     (EphyWebView  
 void                       ephy_web_view_load_homepage            (EphyWebView               *view);
 void                       ephy_web_view_load_new_tab_page        (EphyWebView               *view);
 
-char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
-                                                                   const char                *title,
-                                                                   GdkPixbuf                 *icon);
-
 void                       ephy_web_view_toggle_reader_mode       (EphyWebView               *view,
                                                                    gboolean                   active);
 
@@ -181,8 +175,6 @@ gboolean                   ephy_web_view_is_reader_mode_available (EphyWebView  
 gboolean                   ephy_web_view_get_reader_mode_state    (EphyWebView               *view);
 
 gboolean                   ephy_web_view_is_in_auth_dialog        (EphyWebView               *view);
-
-GtkWidget                 *ephy_web_view_new_with_user_content_manager (WebKitUserContentManager *ucm);
 
 guint64                    ephy_web_view_get_uid                       (EphyWebView *web_view);
 
