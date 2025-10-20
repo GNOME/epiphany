@@ -333,10 +333,6 @@ update_url_button_style (EphyLocationEntry *self)
   /* Button label is bold by default, reset to normal */
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_NORMAL));
 
-  /* Complete text is dimmed */
-  color_dimmed = pango_attr_foreground_alpha_new (32768);
-  pango_attr_list_insert (attrs, color_dimmed);
-
   text = get_actual_display_address (self);
   if (!text || strlen (text) == 0 || ephy_embed_utils_is_no_show_address (text)) {
     gtk_label_set_text (GTK_LABEL (self->url_button_label), _("Search for websites, bookmarks, and open tabs"));
@@ -365,6 +361,10 @@ update_url_button_style (EphyLocationEntry *self)
     LOG ("Failed to update URL button style: failed to find base domain %s in URL %s (is there no public suffix?)", base_domain, text);
     goto out;
   }
+
+  /* Complete text is dimmed */
+  color_dimmed = pango_attr_foreground_alpha_new (32768);
+  pango_attr_list_insert (attrs, color_dimmed);
 
   if (text && strlen (text) > 0) {
     /* Base domain with normal style */
