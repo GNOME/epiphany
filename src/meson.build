@@ -164,7 +164,6 @@ ephymain_dep = declare_dependency(
 
 
 ephy_profile_migrator = executable('ephy-profile-migrator',
-  'profile-migrator/ephy-legacy-web-app-utils.c',
   'profile-migrator/ephy-profile-migrator.c',
   dependencies: ephymain_dep,
   install: true,
