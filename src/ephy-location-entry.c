@@ -347,6 +347,7 @@ update_url_button_style (EphyLocationEntry *self)
 
   host = ephy_uri_get_decoded_host (text);
   if (!host || !host[0]) {
+    /* It's probably a file:// URL. */
     LOG ("Failed to get host component for URL %s", text);
     goto out;
   }
@@ -354,6 +355,7 @@ update_url_button_style (EphyLocationEntry *self)
 
   base_domain = ephy_uri_get_base_domain (host);
   if (!base_domain) {
+    /* It's probably not in the public suffix list. */
     LOG ("Failed to update URL button style: failed to get base domain for URL %s: %s", text, error->message);
     goto out;
   }
