@@ -349,7 +349,7 @@ update_url_button_style (EphyLocationEntry *self)
   }
 
   host = ephy_uri_get_decoded_host (text);
-  if (!host) {
+  if (!host || !host[0]) {
     LOG ("Failed to get host component for URL %s", text);
     goto out;
   }
