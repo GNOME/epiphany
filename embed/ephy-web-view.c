@@ -177,6 +177,7 @@ open_dialog_cb (GtkFileDialog            *dialog,
                 WebKitFileChooserRequest *request)
 {
   g_autoptr (GListModel) files = NULL;
+  guint num_items;
 
   if (webkit_file_chooser_request_get_select_multiple (request)) {
     files = gtk_file_dialog_open_multiple_finish (dialog, result, NULL);
@@ -190,14 +191,15 @@ open_dialog_cb (GtkFileDialog            *dialog,
     }
   }
 
-  if (files) {
+  num_items = files ? g_list_model_get_n_items (files) : 0;
+
+  if (files && num_items > 0) {
     GPtrArray *file_array = g_ptr_array_new ();
     g_autoptr (GFile) first_file = NULL;
     g_autoptr (GFile) current_folder = NULL;
     g_autofree char *current_folder_path = NULL;
-    guint i, n = g_list_model_get_n_items (files);
 
-    for (i = 0; i < n; i++) {
+    for (guint i = 0; i < num_items; i++) {
       g_autoptr (GFile) file = g_list_model_get_item (files, i);
 
       g_ptr_array_add (file_array, g_file_get_path (file));
