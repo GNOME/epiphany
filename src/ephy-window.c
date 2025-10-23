@@ -526,6 +526,7 @@ ephy_window_set_adaptive_mode (EphyWindow       *window,
     adw_bin_set_child (ADW_BIN (window->header_bin_bottom), window->header_bar);
     g_object_unref (window->header_bar);
     gtk_widget_add_css_class (GTK_WIDGET (window), "narrow");
+    gtk_revealer_set_reveal_child (GTK_REVEALER (window->action_bar_revealer), TRUE);
     gtk_widget_set_visible (window->action_bar_revealer, TRUE);
   } else {
     g_object_ref (window->header_bar);
