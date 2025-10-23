@@ -1,13 +1,11 @@
 using Gtk 4.0;
 using Adw 1;
 
-Adw.Window add_language_dialog {
-  destroy-with-parent: true;
-  default-width: 300;
-  default-height: 420;
+Adw.Dialog add_language_dialog {
+  content-height: 420;
   title: _("Add Language");
 
-  content: Adw.ToolbarView {
+  child: Adw.ToolbarView {
     [top]
     Adw.HeaderBar {
       show-start-title-buttons: false;
@@ -44,7 +42,7 @@ Adw.Window add_language_dialog {
         xalign: 0;
         label: _("Choose a language");
         use-underline: true;
-        mnemonic-widget: languages_treeview;
+        mnemonic-widget: languages_list_view;
       }
 
       ScrolledWindow {
@@ -55,21 +53,11 @@ Adw.Window add_language_dialog {
           "frame",
         ]
 
-        TreeView languages_treeview {
-          headers-visible: false;
-
-          [internal-child selection]
-          TreeSelection {}
+        ListView languages_list_view {
+          enable-rubberband: true;
         }
       }
     };
   };
-
-  ShortcutController {
-    Shortcut {
-      trigger: "Escape";
-      action: "action(window.close)";
-    }
-  }
 }
 
