@@ -35,7 +35,7 @@ struct _EphySiteMenuButton {
   GMenuModel *items_section;
   GtkWidget *popover_menu;
   GtkWidget *zoom_level;
-  GtkPathPaintable *paintable;
+  GtkSvg *svg;
 
   char *description;
 
@@ -115,7 +115,7 @@ ephy_site_menu_button_class_init (EphySiteMenuButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, items_section);
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, popover_menu);
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, zoom_level);
-  gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, paintable);
+  gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, svg);
 
   gtk_widget_class_bind_template_callback (widget_class, on_clicked);
 }
@@ -161,7 +161,7 @@ void
 ephy_site_menu_button_set_state (EphySiteMenuButton *self,
                                  unsigned int        state)
 {
-  gtk_path_paintable_set_state (self->paintable, state);
+  gtk_svg_set_state (self->svg, state);
 }
 
 void
@@ -222,7 +222,7 @@ ephy_site_menu_button_set_do_animation (EphySiteMenuButton *self,
 void
 on_animation_timeout (EphySiteMenuButton *self)
 {
-  gtk_path_paintable_set_state (self->paintable, self->prev_state);
+  gtk_svg_set_state (self->svg, self->prev_state);
 
   self->is_animating = FALSE;
   self->do_animation = FALSE;
@@ -241,8 +241,8 @@ ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
     ephy_site_menu_button_cancel_animation (self);
 
   self->is_animating = TRUE;
-  self->prev_state = gtk_path_paintable_get_state (self->paintable);
-  gtk_path_paintable_set_state (self->paintable, 1);
+  self->prev_state = gtk_svg_get_state (self->svg);
+  gtk_svg_set_state (self->svg, 1);
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
   self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
@@ -254,5 +254,5 @@ ephy_site_menu_button_cancel_animation (EphySiteMenuButton *self)
   self->is_animating = FALSE;
   self->do_animation = FALSE;
 
-  gtk_path_paintable_set_state (self->paintable, self->prev_state);
+  gtk_svg_set_state (self->svg, self->prev_state);
 }

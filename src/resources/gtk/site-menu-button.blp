@@ -91,8 +91,8 @@ template $EphySiteMenuButton: Button {
   clicked => $on_clicked();
 
   child: Image {
-    paintable: PathPaintable paintable {
-      resource: "/org/gnome/Epiphany/icons/scalable/status/ephy-site-button-symbolic.gpa";
+    paintable: Svg svg {
+      resource: "/org/gnome/Epiphany/icons/scalable/status/ephy-site-button-symbolic.svg";
       state: 0;
     };
   };
