@@ -73,7 +73,6 @@ struct _EphySecurityDialog {
 
 G_DEFINE_FINAL_TYPE (EphySecurityDialog, ephy_security_dialog, ADW_TYPE_DIALOG)
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 set_permission_ads_combo_row_state (EphyPermissionsManager *permissions_manager,
                                     gint                    permission_id,
@@ -125,7 +124,6 @@ set_permission_combo_row_state (EphyPermissionsManager *permissions_manager,
       break;
   }
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_security_dialog_set_address (EphySecurityDialog *dialog,
@@ -360,7 +358,6 @@ ephy_security_dialog_class_init (EphySecurityDialogClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 on_ad_combo_row_changed (AdwComboRow        *widget,
                          GParamSpec         *pspec,
@@ -387,7 +384,6 @@ on_ad_combo_row_changed (AdwComboRow        *widget,
                                            origin,
                                            permission);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 handle_permission_combo_row_changed (EphySecurityDialog *dialog,
@@ -423,7 +419,6 @@ handle_permission_combo_row_changed (EphySecurityDialog *dialog,
                                            permission);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 on_notification_combo_row_changed (AdwComboRow        *row,
                                    GParamSpec         *psepc,
@@ -509,7 +504,6 @@ add_permission_combo_row (EphySecurityDialog *dialog,
 
   return widget;
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 ephy_security_dialog_init (EphySecurityDialog *dialog)
