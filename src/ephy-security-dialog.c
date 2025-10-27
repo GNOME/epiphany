@@ -57,14 +57,14 @@ struct _EphySecurityDialog {
   guint permission_pos;
   GtkWidget *status_page;
   GtkWidget *certificate_button;
-  GtkWidget *ad_combobox;
-  GtkWidget *notification_combobox;
-  GtkWidget *save_password_combobox;
-  GtkWidget *access_location_combobox;
-  GtkWidget *access_microphone_combobox;
-  GtkWidget *access_webcam_combobox;
-  GtkWidget *access_display_combobox;
-  GtkWidget *autoplay_combobox;
+  GtkWidget *ad_combo_row;
+  GtkWidget *notification_combo_row;
+  GtkWidget *save_password_combo_row;
+  GtkWidget *access_location_combo_row;
+  GtkWidget *access_microphone_combo_row;
+  GtkWidget *access_webcam_combo_row;
+  GtkWidget *access_display_combo_row;
+  GtkWidget *autoplay_combo_row;
   GtkWidget *listbox;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
@@ -75,10 +75,10 @@ G_DEFINE_FINAL_TYPE (EphySecurityDialog, ephy_security_dialog, ADW_TYPE_DIALOG)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-set_permission_ads_combobox_state (EphyPermissionsManager *permissions_manager,
-                                   gint                    permission_id,
-                                   gchar                  *origin,
-                                   GtkWidget              *widget)
+set_permission_ads_combo_row_state (EphyPermissionsManager *permissions_manager,
+                                    gint                    permission_id,
+                                    gchar                  *origin,
+                                    GtkWidget              *widget)
 {
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   EphyPermission permission;
@@ -102,10 +102,10 @@ set_permission_ads_combobox_state (EphyPermissionsManager *permissions_manager,
 }
 
 static void
-set_permission_combobox_state (EphyPermissionsManager *permissions_manager,
-                               gint                    permission_id,
-                               gchar                  *origin,
-                               GtkWidget              *widget)
+set_permission_combo_row_state (EphyPermissionsManager *permissions_manager,
+                                gint                    permission_id,
+                                gchar                  *origin,
+                                GtkWidget              *widget)
 {
   EphyPermission permission;
 
@@ -153,14 +153,14 @@ ephy_security_dialog_set_address (EphySecurityDialog *dialog,
     return;
 
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
-  set_permission_ads_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_ADS, origin, dialog->ad_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS, origin, dialog->notification_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_SAVE_PASSWORD, origin, dialog->save_password_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, dialog->access_location_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, dialog->access_microphone_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, dialog->access_webcam_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_DISPLAY, origin, dialog->access_display_combobox);
-  set_permission_combobox_state (permissions_manager, EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY, origin, dialog->autoplay_combobox);
+  set_permission_ads_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_ADS, origin, dialog->ad_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS, origin, dialog->notification_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_SAVE_PASSWORD, origin, dialog->save_password_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_LOCATION, origin, dialog->access_location_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE, origin, dialog->access_microphone_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM, origin, dialog->access_webcam_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_ACCESS_DISPLAY, origin, dialog->access_display_combo_row);
+  set_permission_combo_row_state (permissions_manager, EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY, origin, dialog->autoplay_combo_row);
 }
 
 static void
@@ -362,9 +362,9 @@ ephy_security_dialog_class_init (EphySecurityDialogClass *klass)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-on_ad_combobox_changed (AdwComboRow        *widget,
-                        GParamSpec         *pspec,
-                        EphySecurityDialog *dialog)
+on_ad_combo_row_changed (AdwComboRow        *widget,
+                         GParamSpec         *pspec,
+                         EphySecurityDialog *dialog)
 {
   GSettings *web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   EphyPermissionsManager *permissions_manager;
@@ -390,9 +390,9 @@ on_ad_combobox_changed (AdwComboRow        *widget,
 G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
-handle_permission_combobox_changed (EphySecurityDialog *dialog,
-                                    gint                action,
-                                    EphyPermissionType  permission_type)
+handle_permission_combo_row_changed (EphySecurityDialog *dialog,
+                                     gint                action,
+                                     EphyPermissionType  permission_type)
 {
   EphyPermissionsManager *permissions_manager;
   EphyPermission permission;
@@ -425,68 +425,68 @@ handle_permission_combobox_changed (EphySecurityDialog *dialog,
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-on_notification_combobox_changed (AdwComboRow        *row,
-                                  GParamSpec         *psepc,
-                                  EphySecurityDialog *dialog)
-{
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
-}
-
-static void
-on_save_password_combobox_changed (AdwComboRow        *row,
+on_notification_combo_row_changed (AdwComboRow        *row,
                                    GParamSpec         *psepc,
                                    EphySecurityDialog *dialog)
 {
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_SAVE_PASSWORD);
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
 }
 
 static void
-on_access_location_combobox_changed (AdwComboRow        *row,
-                                     GParamSpec         *psepc,
-                                     EphySecurityDialog *dialog)
-{
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_LOCATION);
-}
-
-static void
-on_access_microphone_combobox_changed (AdwComboRow        *row,
-                                       GParamSpec         *psepc,
-                                       EphySecurityDialog *dialog)
-{
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE);
-}
-
-static void
-on_access_webcam_combobox_changed (AdwComboRow        *row,
-                                   GParamSpec         *psepc,
-                                   EphySecurityDialog *dialog)
-{
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_WEBCAM);
-}
-
-static void
-on_access_display_combobox_changed (AdwComboRow        *row,
+on_save_password_combo_row_changed (AdwComboRow        *row,
                                     GParamSpec         *psepc,
                                     EphySecurityDialog *dialog)
 {
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_DISPLAY);
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_SAVE_PASSWORD);
 }
 
 static void
-on_autoplay_policy_combobox_changed (AdwComboRow        *row,
+on_access_location_combo_row_changed (AdwComboRow        *row,
+                                      GParamSpec         *psepc,
+                                      EphySecurityDialog *dialog)
+{
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_LOCATION);
+}
+
+static void
+on_access_microphone_combo_row_changed (AdwComboRow        *row,
+                                        GParamSpec         *psepc,
+                                        EphySecurityDialog *dialog)
+{
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE);
+}
+
+static void
+on_access_webcam_combo_row_changed (AdwComboRow        *row,
+                                    GParamSpec         *psepc,
+                                    EphySecurityDialog *dialog)
+{
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_WEBCAM);
+}
+
+static void
+on_access_display_combo_row_changed (AdwComboRow        *row,
                                      GParamSpec         *psepc,
                                      EphySecurityDialog *dialog)
 {
-  handle_permission_combobox_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY);
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_ACCESS_DISPLAY);
+}
+
+static void
+on_autoplay_policy_combo_row_changed (AdwComboRow        *row,
+                                      GParamSpec         *psepc,
+                                      EphySecurityDialog *dialog)
+{
+  handle_permission_combo_row_changed (dialog, adw_combo_row_get_selected (row), EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY);
 }
 
 static GtkWidget *
-add_permission_combobox (EphySecurityDialog *dialog,
-                         const gchar        *name,
-                         gpointer            callback,
-                         GtkSizeGroup       *size_group,
-                         gboolean            no_ask,
-                         const gchar        *third_option_name)
+add_permission_combo_row (EphySecurityDialog *dialog,
+                          const gchar        *name,
+                          gpointer            callback,
+                          GtkSizeGroup       *size_group,
+                          gboolean            no_ask,
+                          const gchar        *third_option_name)
 {
   GtkWidget *widget;
   GtkStringList *list;
@@ -514,29 +514,29 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 static void
 ephy_security_dialog_init (EphySecurityDialog *dialog)
 {
-  g_autoptr (GtkSizeGroup) combo_box_size_group = NULL;
+  g_autoptr (GtkSizeGroup) combo_row_size_group = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
   dialog->permission_pos = 0;
-  combo_box_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  combo_row_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->ad_combobox = add_permission_combobox (dialog, _("Advertisements"), on_ad_combobox_changed, combo_box_size_group, TRUE, NULL);
+  dialog->ad_combo_row = add_permission_combo_row (dialog, _("Advertisements"), on_ad_combo_row_changed, combo_row_size_group, TRUE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->notification_combobox = add_permission_combobox (dialog, _("Notifications"), on_notification_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->notification_combo_row = add_permission_combo_row (dialog, _("Notifications"), on_notification_combo_row_changed, combo_row_size_group, FALSE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->save_password_combobox = add_permission_combobox (dialog, _("Password Saving"), on_save_password_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->save_password_combo_row = add_permission_combo_row (dialog, _("Password Saving"), on_save_password_combo_row_changed, combo_row_size_group, FALSE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->access_location_combobox = add_permission_combobox (dialog, _("Location Access"), on_access_location_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->access_location_combo_row = add_permission_combo_row (dialog, _("Location Access"), on_access_location_combo_row_changed, combo_row_size_group, FALSE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->access_microphone_combobox = add_permission_combobox (dialog, _("Microphone Access"), on_access_microphone_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->access_microphone_combo_row = add_permission_combo_row (dialog, _("Microphone Access"), on_access_microphone_combo_row_changed, combo_row_size_group, FALSE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->access_webcam_combobox = add_permission_combobox (dialog, _("Webcam Access"), on_access_webcam_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->access_webcam_combo_row = add_permission_combo_row (dialog, _("Webcam Access"), on_access_webcam_combo_row_changed, combo_row_size_group, FALSE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->access_display_combobox = add_permission_combobox (dialog, _("Display Access"), on_access_display_combobox_changed, combo_box_size_group, FALSE, NULL);
+  dialog->access_display_combo_row = add_permission_combo_row (dialog, _("Display Access"), on_access_display_combo_row_changed, combo_row_size_group, FALSE, NULL);
   /* TRANSLATORS: This is a permission toggle in the Security & Permissions dialog. */
-  dialog->autoplay_combobox = add_permission_combobox (dialog, _("Media Autoplay"), on_autoplay_policy_combobox_changed, combo_box_size_group, FALSE, _("Without Sound"));
+  dialog->autoplay_combo_row = add_permission_combo_row (dialog, _("Media Autoplay"), on_autoplay_policy_combo_row_changed, combo_row_size_group, FALSE, _("Without Sound"));
 }
 
 GtkWidget *
