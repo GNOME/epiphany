@@ -142,6 +142,8 @@ ephy_site_menu_button_init (EphySiteMenuButton *self)
   g_signal_connect_object (manager, "bookmark-removed",
                            G_CALLBACK (on_bookmark_removed), self,
                            G_CONNECT_SWAPPED);
+
+  gtk_svg_play (self->svg);
 }
 
 GtkWidget *
