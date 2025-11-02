@@ -232,7 +232,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
 {
   EphyWebView *ephy_web_view = EPHY_WEB_VIEW (web_view);
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (web_view));
-  GtkFileDialog *dialog;
+  g_autoptr (GtkFileDialog) dialog = NULL;
   g_autofree char *last_directory_path = NULL;
   const char * const *mime_types = webkit_file_chooser_request_get_mime_types (request);
   g_autoptr (GtkFileFilter) all_filter = NULL;
