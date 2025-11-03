@@ -276,7 +276,14 @@ update_suggestions_popover (EphyLocationEntry *self)
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->suggestions_model));
 
   if (n_items > 0) {
-    gtk_widget_set_size_request (self->suggestions_popover, gtk_widget_get_width (GTK_WIDGET (self)), -1);
+    if (self->adaptive_mode == EPHY_ADAPTIVE_MODE_NARROW) {
+      /* We are using the text entry width in narrow mode as otherwise the popover would be too wide
+       * and therefore not drawn on mobile devices.
+       */
+      gtk_widget_set_size_request (self->suggestions_popover, gtk_widget_get_width (GTK_WIDGET (self->text)), -1);
+    } else {
+      gtk_widget_set_size_request (self->suggestions_popover, gtk_widget_get_width (GTK_WIDGET (self)), -1);
+    }
 
     gtk_popover_present (GTK_POPOVER (self->suggestions_popover));
     gtk_popover_popup (GTK_POPOVER (self->suggestions_popover));
