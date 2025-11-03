@@ -734,6 +734,9 @@ on_editable_changed (GtkEditable *editable,
     ephy_embed_set_typed_input (embed, text);
   }
 
+  if (g_strcmp0 (text, self->jump_tab) != 0)
+    g_clear_pointer (&self->jump_tab, g_free);
+
   if (self->insert_completion)
     self->idle_id = g_idle_add_full (G_PRIORITY_HIGH, calc_and_set_prefix, self, NULL);
 }
