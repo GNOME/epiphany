@@ -89,7 +89,8 @@ struct _EphyEmbed {
   gboolean inspector_loaded;
   gboolean progress_bar_enabled;
   gboolean first_load_finished;
-  gboolean do_animate_reader_mode;
+  gboolean animate_reader_mode;
+  gboolean animate_search_engine;
 };
 
 G_DEFINE_FINAL_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -306,16 +307,29 @@ ephy_embed_set_typed_input (EphyEmbed  *embed,
 }
 
 gboolean
-ephy_embed_get_do_animate_reader_mode (EphyEmbed *embed)
+ephy_embed_get_animate_reader_mode (EphyEmbed *embed)
 {
-  return embed->do_animate_reader_mode;
+  return embed->animate_reader_mode;
 }
 
 void
-ephy_embed_set_do_animate_reader_mode (EphyEmbed *embed,
-                                       gboolean   do_animate)
+ephy_embed_set_animate_reader_mode (EphyEmbed *embed,
+                                    gboolean   animate)
 {
-  embed->do_animate_reader_mode = do_animate;
+  embed->animate_reader_mode = animate;
+}
+
+gboolean
+ephy_embed_get_animate_search_engine (EphyEmbed *embed)
+{
+  return embed->animate_search_engine;
+}
+
+void
+ephy_embed_set_animate_search_engine (EphyEmbed *embed,
+                                      gboolean   animate)
+{
+  embed->animate_search_engine = animate;
 }
 
 static void
@@ -331,6 +345,7 @@ load_changed_cb (WebKitWebView   *web_view,
       const char *title = webkit_web_view_get_title (web_view);
 
       embed->first_load_finished = TRUE;
+      embed->animate_search_engine = TRUE;
       if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) || !title || !*title)
         ephy_embed_set_title (embed, NULL);
       break;
@@ -850,7 +865,8 @@ ephy_embed_init (EphyEmbed *embed)
   embed->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
   embed->inspector_loaded = FALSE;
   embed->first_load_finished = FALSE;
-  embed->do_animate_reader_mode = FALSE;
+  embed->animate_reader_mode = FALSE;
+  embed->animate_search_engine = TRUE;
 }
 
 /**

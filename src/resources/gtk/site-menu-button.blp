@@ -38,6 +38,12 @@ menu items_section {
   }
 
   item {
+    label: _("Add Search _Engine…");
+    action: "win.add-search-engine";
+    hidden-when: "action-disabled";
+  }
+
+  item {
     label: _("Text Enco_ding…");
     action: "win.encoding";
   }

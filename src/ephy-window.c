@@ -27,7 +27,6 @@
 #include "context-menu-commands.h"
 #include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
-#include "ephy-add-opensearch-engine-button.h"
 #include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
@@ -106,6 +105,7 @@ const struct {
   { "win.find-prev", { "<shift><Primary>G", NULL } },
   { "win.find-next", { "<Primary>G", NULL } },
   { "win.bookmark-page", { "<Primary>D", "AddFavorite", NULL } },
+  { "win.add-search-engine", { NULL } },
   { "win.bookmarks", { "<alt><Primary>D", NULL } },
   { "win.show-downloads", { "<shift><Primary>Y", NULL } },
   { "win.encoding", { NULL } },
@@ -181,6 +181,8 @@ struct _EphyWindow {
   GtkWidget *header_bin_top;
   GtkWidget *header_bin_bottom;
   GCancellable *cancellable;
+
+  GListModel *search_engine_model;
 
   GList *pending_decisions;
   gulong filters_initialized_id;
@@ -894,6 +896,7 @@ static const GActionEntry window_entries [] = {
   { "find-next", window_cmd_find_next },
   { "bookmark-page", window_cmd_bookmark_page },
   { "bookmarks", window_cmd_bookmarks },
+  { "add-search-engine", window_cmd_add_search_engine, "as" },
   { "show-downloads", window_cmd_show_downloads },
   { "encoding", window_cmd_encoding },
   { "privacy-report", window_cmd_privacy_report },
@@ -2567,6 +2570,130 @@ load_changed_cb (EphyWebView     *view,
 }
 
 static void
+on_search_engine_model_items_changed (GListModel *model,
+                                      guint       position,
+                                      guint       removed,
+                                      guint       added,
+                                      EphyWindow *window)
+{
+  GActionGroup *action_group = ephy_window_get_action_group (window, "win");
+  GAction *action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "add-search-engine");
+  gboolean has_search_engines = g_list_model_get_n_items (model) != 0;
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  EphyLocationEntry *lentry;
+  EphySiteMenuButton *site_menu_button;
+
+  g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
+
+  lentry = EPHY_LOCATION_ENTRY (title_widget);
+  site_menu_button = EPHY_SITE_MENU_BUTTON (ephy_location_entry_get_site_menu_button (lentry));
+
+  /* Only enable the action/item if there is any search engine that can be added. */
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), has_search_engines);
+
+  if (has_search_engines) {
+    ephy_site_menu_button_append_description (site_menu_button, _("Search Engine Available"));
+
+    if (g_list_model_get_n_items (model) == 1) {
+      EphyOpensearchAutodiscoveryLink *autodiscovery_link = g_list_model_get_item (model, 0);
+      g_autofree char *escaped_name = g_markup_escape_text (ephy_opensearch_autodiscovery_link_get_name (autodiscovery_link), -1);
+      /* TRANSLATORS: %s is the name of the search engine for this row in the popover. */
+      g_autofree char *label_str = g_strdup_printf (_("Add “%s”"), escaped_name);
+
+      ephy_site_menu_button_update_search_engine_item (site_menu_button, label_str, FALSE);
+    } else {
+      ephy_site_menu_button_update_search_engine_item (site_menu_button, _("Add Search Engine"), TRUE);
+    }
+
+    if (ephy_embed_get_animate_search_engine (window->active_embed)) {
+      ephy_site_menu_button_animate_search_engine (site_menu_button);
+      ephy_embed_set_animate_search_engine (window->active_embed, FALSE);
+    }
+  } else {
+    ephy_site_menu_button_update_search_engine_item (site_menu_button, _("Add Search Engine"), FALSE);
+  }
+}
+
+static void
+on_search_engine_items_changed (GListModel *manager,
+                                guint       position,
+                                guint       removed,
+                                guint       added,
+                                gpointer    user_data)
+{
+  /* Filter out the links corresponding to any matching search engine that was just added or removed. */
+  if (added > 0)
+    gtk_filter_changed (gtk_filter_list_model_get_filter (GTK_FILTER_LIST_MODEL (user_data)), GTK_FILTER_CHANGE_MORE_STRICT);
+  if (removed > 0)
+    gtk_filter_changed (gtk_filter_list_model_get_filter (GTK_FILTER_LIST_MODEL (user_data)), GTK_FILTER_CHANGE_LESS_STRICT);
+}
+
+static gboolean
+filter_opensearch_links (GObject  *item,
+                         gpointer  user_data)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  EphyOpensearchAutodiscoveryLink *autodiscovery_link = EPHY_OPENSEARCH_AUTODISCOVERY_LINK (item);
+  guint n_engines = g_list_model_get_n_items (G_LIST_MODEL (manager));
+
+  /* The idea here is to detect when a search engine is added from the OpenSearch
+   * button, and to remove its corresponding autodiscovery link from our model
+   * so that it do not show up anymore in the list, for each tab.
+   */
+  for (guint i = 0; i < n_engines; i++) {
+    g_autoptr (EphySearchEngine) engine = EPHY_SEARCH_ENGINE (g_list_model_get_item (G_LIST_MODEL (manager), i));
+
+    /* Filter out any autodiscovery link for which there is a corresponding engine. */
+    if (ephy_search_engine_matches_by_autodiscovery_link (engine, autodiscovery_link))
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
+void
+set_search_engine_model (EphyWindow *window,
+                         GListModel *model)
+{
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+  GtkFilter *filter;
+
+  g_assert (EPHY_IS_WINDOW (window));
+  g_assert (G_IS_LIST_MODEL (model));
+
+  /* self->search_engine_model being NULL happens when setting the model initially */
+  if (window->search_engine_model) {
+    /* First, avoid having previous models from other web view
+     * still update the visibility of the button when browsing
+     * to new pages.
+     */
+    g_signal_handlers_disconnect_by_func (window->search_engine_model,
+                                          G_CALLBACK (on_search_engine_model_items_changed),
+                                          window);
+
+    g_signal_handlers_disconnect_by_func (manager,
+                                          G_CALLBACK (on_search_engine_items_changed),
+                                          window->search_engine_model);
+  }
+
+  g_clear_object (&window->search_engine_model);
+
+  /* Now setup everything back again with the new model. */
+  filter = GTK_FILTER (gtk_custom_filter_new ((GtkCustomFilterFunc)filter_opensearch_links, NULL, NULL));
+  window->search_engine_model = G_LIST_MODEL (gtk_filter_list_model_new (g_object_ref (model), filter));
+  g_signal_connect_object (manager,
+                           "items-changed",
+                           G_CALLBACK (on_search_engine_items_changed),
+                           window->search_engine_model, 0);
+  on_search_engine_model_items_changed (window->search_engine_model, 0, 0,
+                                        g_list_model_get_n_items (window->search_engine_model), window);
+  g_signal_connect_object (window->search_engine_model,
+                           "items-changed",
+                           G_CALLBACK (on_search_engine_model_items_changed),
+                           window, 0);
+}
+
+static void
 ephy_window_connect_active_embed (EphyWindow *window)
 {
   EphyEmbed *embed;
@@ -2587,25 +2714,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   /* This doesn't change the value returned by ephy_web_view_get_location_entry_has_focus(). */
   gtk_widget_grab_focus (GTK_WIDGET (view));
 
-  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
-    GListModel *model = ephy_web_view_get_opensearch_engines (view);
-    EphyAddOpensearchEngineButton *opensearch_button =
-      EPHY_ADD_OPENSEARCH_ENGINE_BUTTON (ephy_location_entry_get_opensearch_button (EPHY_LOCATION_ENTRY (title_widget)));
-    ephy_add_opensearch_engine_button_set_model (opensearch_button, model);
-
-    if (ephy_web_view_get_location_entry_has_focus (view)) {
-      ephy_location_entry_grab_focus_without_selecting (EPHY_LOCATION_ENTRY (title_widget));
-      ephy_location_entry_set_position (EPHY_LOCATION_ENTRY (title_widget), ephy_web_view_get_location_entry_position (view));
-    }
-
-    if (ephy_embed_get_do_animate_reader_mode (embed)) {
-      GtkWidget *site_menu_button = ephy_location_entry_get_site_menu_button (EPHY_LOCATION_ENTRY (title_widget));
-
-      ephy_site_menu_button_animate_reader_mode (EPHY_SITE_MENU_BUTTON (site_menu_button));
-      ephy_embed_set_do_animate_reader_mode (embed, FALSE);
-    }
-  }
-
   sync_tab_security (view, NULL, window);
   sync_tab_document_type (view, NULL, window);
   sync_tab_load_status (view, WEBKIT_LOAD_STARTED, window);
@@ -2618,13 +2726,32 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_page_action (view, NULL, window);
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
+    EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (title_widget);
     gdouble progress = webkit_web_view_get_estimated_load_progress (web_view);
     gboolean loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (web_view));
+    EphySiteMenuButton *site_menu_button;
+    GListModel *search_engine_model;
 
     ephy_location_entry_set_progress (EPHY_LOCATION_ENTRY (title_widget), progress, loading);
     g_signal_connect_object (web_view, "notify::estimated-load-progress",
                              G_CALLBACK (progress_update),
                              window, 0);
+
+    /* Only update the search engine model if the title widget is a location entry.
+     * Otherwise, the site menu button won't be available. */
+    site_menu_button = EPHY_SITE_MENU_BUTTON (ephy_location_entry_get_site_menu_button (lentry));
+    search_engine_model = ephy_web_view_get_opensearch_engines (view);
+    set_search_engine_model (window, search_engine_model);
+
+    if (ephy_web_view_get_location_entry_has_focus (view)) {
+      ephy_location_entry_grab_focus_without_selecting (lentry);
+      ephy_location_entry_set_position (lentry, ephy_web_view_get_location_entry_position (view));
+    }
+
+    if (ephy_embed_get_animate_reader_mode (embed)) {
+      ephy_site_menu_button_animate_reader_mode (site_menu_button);
+      ephy_embed_set_animate_reader_mode (embed, FALSE);
+    }
   }
 
   g_signal_connect_object (web_view, "notify::is-playing-audio",
@@ -2898,7 +3025,7 @@ update_reader_mode (EphyWindow  *window,
   if (active_view != view) {
     EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
 
-    ephy_embed_set_do_animate_reader_mode (embed, enabled && !active);
+    ephy_embed_set_animate_reader_mode (embed, enabled && !active);
     return;
   }
 
@@ -3643,6 +3770,7 @@ ephy_window_dispose (GObject *object)
 
     g_clear_object (&window->hit_test_result);
     g_clear_object (&window->mouse_gesture_controller);
+    g_clear_object (&window->search_engine_model);
 
     g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
@@ -3898,6 +4026,7 @@ static const char *disabled_actions_for_app_mode[] = {
   "save-as-application",
   "encoding",
   "bookmark-page",
+  "add-search-engine",
   "new-tab",
   "home",
   "location-search",
@@ -5136,6 +5265,12 @@ ephy_window_get_action_group (EphyWindow *window,
   return g_hash_table_lookup (window->action_groups, prefix);
 }
 
+GListModel *
+ephy_window_get_search_engine_model (EphyWindow *window)
+{
+  return window->search_engine_model;
+}
+
 gboolean
 ephy_window_get_sidebar_shown (EphyWindow *window)
 {
@@ -5238,5 +5373,12 @@ ephy_window_show_toast (EphyWindow *window,
                         const char *text)
 {
   AdwToast *toast = adw_toast_new (text);
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
+}
+
+void
+ephy_window_add_toast (EphyWindow *window,
+                       AdwToast   *toast)
+{
   adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
 }

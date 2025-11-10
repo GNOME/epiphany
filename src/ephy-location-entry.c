@@ -69,7 +69,6 @@ struct _EphyLocationEntry {
   GtkWidget *url_button;
   GtkWidget *url_button_label;
   GtkWidget *site_menu_button;
-  GtkWidget *opensearch_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *progress_bar;
   GList *page_actions;
@@ -1191,7 +1190,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, suggestions_view);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button_label);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, combined_stop_reload_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, opensearch_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, url_button);
   gtk_widget_class_bind_template_child (widget_class, EphyLocationEntry, progress_bar);
 
@@ -1590,12 +1588,6 @@ ephy_location_entry_start_change_combined_stop_reload_state (EphyLocationEntry *
     gtk_button_set_icon_name (GTK_BUTTON (self->combined_stop_reload_button), "view-refresh-symbolic");
     gtk_widget_set_tooltip_text (self->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
   }
-}
-
-GtkWidget *
-ephy_location_entry_get_opensearch_button (EphyLocationEntry *entry)
-{
-  return entry->opensearch_button;
 }
 
 GtkWidget *

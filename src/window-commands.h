@@ -137,6 +137,9 @@ void window_cmd_bookmark_page                   (GSimpleAction *action,
 void window_cmd_bookmarks                       (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_add_search_engine               (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_show_downloads                  (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

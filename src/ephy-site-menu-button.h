@@ -44,12 +44,18 @@ void       ephy_site_menu_button_clear_description (EphySiteMenuButton *self);
 void       ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
                                                        gboolean            has_bookmark);
 
+void       ephy_site_menu_button_update_search_engine_item (EphySiteMenuButton *self,
+                                                            const char         *item_label,
+                                                            gboolean            has_multiple_engines);
+
 gboolean   ephy_site_menu_button_is_animating (EphySiteMenuButton *self);
 
 void       ephy_site_menu_button_set_do_animation (EphySiteMenuButton *self,
                                                    gboolean            do_animation);
 
 void       ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self);
+
+void       ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self);
 
 void       ephy_site_menu_button_cancel_animation (EphySiteMenuButton *self);
 

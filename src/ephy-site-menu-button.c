@@ -43,6 +43,7 @@ struct _EphySiteMenuButton {
   gboolean do_animation;
   gboolean is_animating;
   unsigned int prev_state;
+  GArray *queued_states;
 };
 
 G_DEFINE_FINAL_TYPE (EphySiteMenuButton, ephy_site_menu_button, GTK_TYPE_BUTTON)
@@ -96,6 +97,9 @@ ephy_site_menu_button_dispose (GObject *object)
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
 
+  g_array_free (self->queued_states, TRUE);
+  self->queued_states = NULL;
+
   gtk_widget_unparent (self->popover_menu);
 
   G_OBJECT_CLASS (ephy_site_menu_button_parent_class)->dispose (object);
@@ -143,6 +147,8 @@ ephy_site_menu_button_init (EphySiteMenuButton *self)
                            G_CALLBACK (on_bookmark_removed), self,
                            G_CONNECT_SWAPPED);
 
+  self->queued_states = g_array_new (FALSE, FALSE, sizeof (int));
+
   gtk_svg_play (self->svg);
 }
 
@@ -171,6 +177,9 @@ ephy_site_menu_button_append_description (EphySiteMenuButton *self,
                                           const char         *section)
 {
   g_autofree char *new_description = NULL;
+
+  if (self->description && strstr (self->description, section))
+    return;
 
   if (self->description)
     new_description = g_strjoin (". ", self->description, section, NULL);
@@ -208,6 +217,74 @@ ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
     g_menu_insert (G_MENU (self->items_section), 3, _("Add _Bookmark…"), "win.bookmark-page");
 }
 
+GVariant *
+create_variant_from_autodiscovery_link (EphyOpensearchAutodiscoveryLink *link)
+{
+  GVariantBuilder *builder = g_variant_builder_new (G_VARIANT_TYPE ("as"));
+  g_autofree char *name = g_markup_escape_text (ephy_opensearch_autodiscovery_link_get_name (link), -1);
+  const char *url = ephy_opensearch_autodiscovery_link_get_url (link);
+  GVariant *variant;
+
+  g_variant_builder_add (builder, "s", name);
+  g_variant_builder_add (builder, "s", url);
+  variant = g_variant_new ("as", builder);
+  g_variant_builder_unref (builder);
+
+  return variant;
+}
+
+void
+ephy_site_menu_button_update_search_engine_item (EphySiteMenuButton *self,
+                                                 const char         *item_label,
+                                                 gboolean            has_multiple_engines)
+{
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW));
+  GListModel *search_engine_model = ephy_window_get_search_engine_model (window);
+  g_autofree GMenuItem *search_engine_item = NULL;
+  const char *name = item_label;
+
+  g_menu_remove (G_MENU (self->items_section), 4);
+
+  if (has_multiple_engines) {
+    /* Create a submenu with a list of the available search engines. */
+    GMenu *sub_menu = g_menu_new ();
+
+    for (guint i = 0; i < g_list_model_get_n_items (search_engine_model); i++) {
+      g_autofree GMenuItem *sub_menu_item = NULL;
+      EphyOpensearchAutodiscoveryLink *link = g_list_model_get_item (search_engine_model, i);
+      GVariant *variant = create_variant_from_autodiscovery_link (link);
+
+      name = g_markup_escape_text (ephy_opensearch_autodiscovery_link_get_name (link), -1);
+
+      sub_menu_item = g_menu_item_new (name, "win.add-search-engine");
+      g_menu_item_set_action_and_target_value (sub_menu_item,
+                                               "win.add-search-engine", variant);
+      g_menu_append_item (sub_menu, sub_menu_item);
+    }
+
+    search_engine_item = g_menu_item_new (item_label, NULL);
+    g_menu_item_set_submenu (search_engine_item, G_MENU_MODEL (sub_menu));
+  } else if (g_list_model_get_n_items (search_engine_model) > 0) {
+    /* Create a menu item that adds the available search engine. */
+    EphyOpensearchAutodiscoveryLink *link = g_list_model_get_item (search_engine_model, 0);
+    GVariant *variant = create_variant_from_autodiscovery_link (link);
+
+    search_engine_item = g_menu_item_new (name, "win.add-search-engine");
+    g_menu_item_set_action_and_target_value (search_engine_item,
+                                             "win.add-search-engine", variant);
+    g_menu_item_set_attribute_value (search_engine_item, "hidden-when",
+                                     g_variant_new_string ("action-disabled"));
+  } else {
+    /* No search engines, so create a placeholder menu item that's invisible.
+     * This is done so this function doesn't remove the wrong menu item when being called. */
+    search_engine_item = g_menu_item_new (name, NULL);
+    g_menu_item_set_attribute_value (search_engine_item, "hidden-when",
+                                     g_variant_new_string ("action-disabled"));
+  }
+
+  g_menu_insert_item (G_MENU (self->items_section), 4, search_engine_item);
+}
+
 gboolean
 ephy_site_menu_button_is_animating (EphySiteMenuButton *self)
 {
@@ -224,27 +301,79 @@ ephy_site_menu_button_set_do_animation (EphySiteMenuButton *self,
 void
 on_animation_timeout (EphySiteMenuButton *self)
 {
-  gtk_svg_set_state (self->svg, self->prev_state);
-
-  self->is_animating = FALSE;
-  self->do_animation = FALSE;
   g_clear_handle_id (&self->timeout_id, g_source_remove);
+
+  if (self->queued_states->len == 0) {
+    gtk_svg_set_state (self->svg, self->prev_state);
+
+    self->is_animating = FALSE;
+    self->do_animation = FALSE;
+  } else {
+    int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
+    int queued_state = g_array_index (self->queued_states, int, 0);
+
+    gtk_svg_set_state (self->svg, queued_state);
+    g_array_remove_index (self->queued_states, 0);
+
+    self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
+  }
 }
 
 void
 ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
 {
   int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
+  int state = gtk_svg_get_state (self->svg);
 
   if (!self->do_animation)
     return;
 
-  if (self->is_animating)
+  /* Cancel the animation if you're not animating the reader mode or search engine.
+   * Otherwise, queue this animation to play after that one. */
+  if (self->is_animating && state % 2 == 0) {
     ephy_site_menu_button_cancel_animation (self);
+  } else if (state == 3) {
+    int queued_state = 1;
 
+    g_array_append_val (self->queued_states, queued_state);
+    return;
+  }
+
+  /* Only set the previous state to the secure/insecure site icons. */
+  if (state % 2 == 0)
+    self->prev_state = state;
   self->is_animating = TRUE;
-  self->prev_state = gtk_svg_get_state (self->svg);
   gtk_svg_set_state (self->svg, 1);
+
+  g_clear_handle_id (&self->timeout_id, g_source_remove);
+  self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
+}
+
+void
+ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self)
+{
+  int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
+  int state = gtk_svg_get_state (self->svg);
+
+  if (!self->do_animation)
+    return;
+
+  /* Cancel the animation if you're not animating the reader mode or search engine.
+   * Otherwise, queue this animation to play after that one. */
+  if (self->is_animating && state % 2 == 0) {
+    ephy_site_menu_button_cancel_animation (self);
+  } else if (state == 1) {
+    int queued_state = 3;
+
+    g_array_append_val (self->queued_states, queued_state);
+    return;
+  }
+
+  /* Only set the previous state to the secure/insecure site icons. */
+  if (state % 2 == 0)
+    self->prev_state = state;
+  self->is_animating = TRUE;
+  gtk_svg_set_state (self->svg, 3);
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
   self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);

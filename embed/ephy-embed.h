@@ -55,9 +55,12 @@ const char      *ephy_embed_get_title                     (EphyEmbed *embed);
 const char      *ephy_embed_get_typed_input               (EphyEmbed *embed);
 void             ephy_embed_set_typed_input               (EphyEmbed  *embed,
                                                            const char *input);
-gboolean         ephy_embed_get_do_animate_reader_mode    (EphyEmbed *embed);
-void             ephy_embed_set_do_animate_reader_mode    (EphyEmbed *embed,
-                                                           gboolean   do_animate);
+gboolean         ephy_embed_get_animate_reader_mode       (EphyEmbed *embed);
+void             ephy_embed_set_animate_reader_mode       (EphyEmbed *embed,
+                                                           gboolean   animate);
+gboolean         ephy_embed_get_animate_search_engine     (EphyEmbed *embed);
+void             ephy_embed_set_animate_search_engine     (EphyEmbed *embed,
+                                                           gboolean   animate);
 void             ephy_embed_attach_notification_container (EphyEmbed *embed);
 void             ephy_embed_detach_notification_container (EphyEmbed *embed);
 WebKitWebViewSessionState

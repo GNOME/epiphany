@@ -46,6 +46,7 @@
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
+#include "ephy-opensearch-engine.h"
 #include "ephy-page-menu-button.h"
 #include "ephy-password-export.h"
 #include "ephy-password-import.h"
@@ -63,6 +64,7 @@
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
+#include "prefs-general-page.h"
 
 #include <gio/gio.h>
 #include <glib.h>
@@ -2839,6 +2841,149 @@ window_cmd_bookmarks (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
 
   ephy_window_toggle_bookmarks (window);
+}
+
+static void
+on_ephy_search_engine_row_expanded (GObject    *object,
+                                    GParamSpec *pspec,
+                                    gpointer    user_data)
+{
+  EphySearchEngineRow *row = EPHY_SEARCH_ENGINE_ROW (object);
+
+  ephy_search_engine_row_focus_bang_entry (row);
+  g_signal_handlers_disconnect_matched (row, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+                                        on_ephy_search_engine_row_expanded, NULL);
+}
+
+static void
+on_ephy_search_engine_row_mapped (GObject  *object,
+                                  gpointer  user_data)
+{
+  EphySearchEngineRow *row = EPHY_SEARCH_ENGINE_ROW (object);
+
+  gtk_widget_grab_focus (GTK_WIDGET (row));
+  g_signal_connect (row, "notify::expanded", G_CALLBACK (on_ephy_search_engine_row_expanded), NULL);
+
+  /* Now expand the just added engine row and focus it so that the GtkViewport
+   * scrolls to it automatically. */
+  adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), TRUE);
+  g_signal_handlers_disconnect_matched (row, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+                                        on_ephy_search_engine_row_mapped, NULL);
+}
+
+typedef struct  {
+  EphyWindow *window;
+  EphySearchEngine *engine;
+} ScrollToEngineData;
+
+static ScrollToEngineData *
+scroll_to_engine_data_new (EphyWindow       *window,
+                           EphySearchEngine *engine)
+{
+  ScrollToEngineData *data = g_new0 (ScrollToEngineData, 1);
+
+  data->window = g_object_ref (window);
+  data->engine = g_object_ref (engine);
+
+  return data;
+}
+
+static void
+scroll_to_engine_data_free (ScrollToEngineData *data)
+{
+  g_object_unref (data->window);
+  g_object_unref (data->engine);
+  g_free (data);
+}
+
+static void
+on_search_engine_added_toast_button_clicked (AdwToast           *toast,
+                                             ScrollToEngineData *data)
+{
+  AdwPreferencesDialog *prefs_dialog = ADW_PREFERENCES_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+  PrefsGeneralPage *general_page;
+  EphySearchEngineListBox *search_engine_list_box;
+  EphySearchEngineRow *row;
+
+  /* Don't rely on the general page being the first one opened: make sure it is
+   * actually the visible one. */
+  general_page = EPHY_PREFS_GENERAL_PAGE (adw_preferences_dialog_get_visible_page (prefs_dialog));
+  search_engine_list_box = prefs_general_page_get_search_engine_list_box (general_page);
+  row = ephy_search_engine_list_box_find_row_for_engine (search_engine_list_box, data->engine);
+
+  /* We just added the engine so there must be a corresponding row. */
+  g_assert (EPHY_IS_SEARCH_ENGINE_ROW (row));
+
+  gtk_widget_activate_action (GTK_WIDGET (data->window), "app.preferences", NULL);
+  g_signal_connect (row, "map", G_CALLBACK (on_ephy_search_engine_row_mapped), NULL);
+
+  scroll_to_engine_data_free (data);
+}
+
+static void
+on_opensearch_engine_loaded (EphyOpensearchAutodiscoveryLink *autodiscovery_link,
+                             GAsyncResult                    *result,
+                             gpointer                         user_data)
+{
+  EphyWindow *window = user_data;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (EphySearchEngine) engine = NULL;
+
+  g_assert (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_OPENSEARCH_AUTODISCOVERY_LINK (autodiscovery_link));
+
+  engine = ephy_opensearch_engine_load_from_link_finish (autodiscovery_link, result, &error);
+  if (!engine) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+      ephy_window_show_toast (window, error->message);
+    }
+  } else {
+    EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());
+    g_autofree char *bang = ephy_search_engine_build_bang_for_name (ephy_search_engine_get_name (engine));
+    g_autofree char *escaped_name = g_markup_escape_text (ephy_search_engine_get_name (engine), -1);
+    g_autofree char *toast_title = g_strdup_printf (_("Search engine “%s” added"), escaped_name);
+    AdwToast *toast = adw_toast_new (toast_title);
+
+    /* Pre-fill the bang if it wouldn't conflict with another search engine,
+     * giving the hint that it can/should be changed for a more suited one
+     * if wanted by focusing the bang entry afterwards.
+     */
+    if (!ephy_search_engine_manager_has_bang (manager, bang))
+      ephy_search_engine_set_bang (engine, bang);
+
+    ephy_search_engine_manager_add_engine (manager, engine);
+    ephy_search_engine_manager_save_to_settings (manager);
+
+    /* Now all web views will get notified for this newly added engine, and remove
+     * their corresponding autodiscovery link in the models. We do not do it
+     * manually here for self->model because that would not remove the link for
+     * all the other tabs, so that's why we let the EphyWebViews take care of it.
+     */
+
+    adw_toast_set_button_label (toast, _("Show"));
+    g_signal_connect (toast, "button-clicked",
+                      G_CALLBACK (on_search_engine_added_toast_button_clicked),
+                      scroll_to_engine_data_new (window, engine));
+    ephy_window_add_toast (window, toast);
+  }
+}
+
+void
+window_cmd_add_search_engine (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  g_autofree const char **search_engine_info = NULL;
+  EphyOpensearchAutodiscoveryLink *autodiscovery_link;
+
+  search_engine_info = g_variant_get_strv (parameter, NULL);
+
+  autodiscovery_link = ephy_opensearch_autodiscovery_link_new (search_engine_info[0],
+                                                               search_engine_info[1]);
+  ephy_opensearch_engine_load_from_link_async (autodiscovery_link, NULL,
+                                               (GAsyncReadyCallback)on_opensearch_engine_loaded,
+                                               window);
 }
 
 void

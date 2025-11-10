@@ -98,6 +98,8 @@ gboolean          ephy_window_is_fullscreen              (EphyWindow *window);
 GActionGroup     *ephy_window_get_action_group           (EphyWindow  *window,
                                                           const char  *prefix);
 
+GListModel       *ephy_window_get_search_engine_model    (EphyWindow  *window);
+
 guint64           ephy_window_get_uid                    (EphyWindow *window);
 
 gboolean          ephy_window_get_sidebar_shown          (EphyWindow *window);
@@ -117,5 +119,8 @@ void              ephy_window_toggle_bookmarks           (EphyWindow *window);
 
 void              ephy_window_show_toast                 (EphyWindow *window,
                                                           const char *text);
+
+void              ephy_window_add_toast                  (EphyWindow *window,
+                                                          AdwToast   *toast);
 
 G_END_DECLS
