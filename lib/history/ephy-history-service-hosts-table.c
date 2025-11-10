@@ -59,9 +59,7 @@ ephy_history_service_add_host_row (EphyHistoryService *self,
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database);
 
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       "INSERT INTO hosts (url, title, visit_count, zoom_level) "
-                                                       "VALUES (?, ?, ?, ?)", &error);
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_ADD_HOST_ROW, &error);
 
   if (error) {
     g_warning ("Could not build hosts table addition statement: %s", error->message);
@@ -75,7 +73,6 @@ ephy_history_service_add_host_row (EphyHistoryService *self,
       !ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error)) {
     g_warning ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -86,8 +83,6 @@ ephy_history_service_add_host_row (EphyHistoryService *self,
   } else {
     host->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
-
-  g_object_unref (statement);
 }
 
 void
@@ -101,9 +96,8 @@ ephy_history_service_update_host_row (EphyHistoryService *self,
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database);
 
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       "UPDATE hosts SET url=?, title=?, visit_count=?, zoom_level=?"
-                                                       "WHERE id=?", &error);
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_UPDATE_HOST_ROW, &error);
+
   if (error) {
     g_warning ("Could not build hosts table modification statement: %s", error->message);
     g_error_free (error);
@@ -119,7 +113,6 @@ ephy_history_service_update_host_row (EphyHistoryService *self,
       !ephy_sqlite_statement_bind_int (statement, 4, host->id, &error)) {
     g_warning ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -128,7 +121,6 @@ ephy_history_service_update_host_row (EphyHistoryService *self,
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
   }
-  g_object_unref (statement);
 }
 
 EphyHistoryHost *
@@ -148,13 +140,9 @@ ephy_history_service_get_host_row (EphyHistoryService *self,
   g_assert (host_string || (host && host->id != -1));
 
   if (host && host->id != -1) {
-    statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                         "SELECT id, url, title, visit_count, zoom_level FROM hosts "
-                                                         "WHERE id=?", &error);
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_GET_HOST_ROW_FOR_ID, &error);
   } else {
-    statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                         "SELECT id, url, title, visit_count, zoom_level FROM hosts "
-                                                         "WHERE url=?", &error);
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_GET_HOST_ROW_FOR_URL, &error);
   }
 
   if (error) {
@@ -171,14 +159,12 @@ ephy_history_service_get_host_row (EphyHistoryService *self,
   if (error) {
     g_warning ("Could not build hosts table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return NULL;
   }
 
   if (!ephy_sqlite_statement_step (statement, &error)) {
     if (error)
       g_error_free (error);
-    g_object_unref (statement);
     return NULL;
   }
 
@@ -197,7 +183,6 @@ ephy_history_service_get_host_row (EphyHistoryService *self,
   host->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3);
   host->zoom_level = ephy_sqlite_statement_get_column_as_double (statement, 4);
 
-  g_object_unref (statement);
   return host;
 }
 
@@ -224,8 +209,7 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database);
 
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       "SELECT id, url, title, visit_count, zoom_level FROM hosts", &error);
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_GET_ALL_HOSTS, &error);
 
   if (error) {
     g_warning ("Could not build hosts query statement: %s", error->message);
@@ -242,7 +226,6 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
     g_warning ("Could not execute hosts table query statement: %s", error->message);
     g_error_free (error);
   }
-  g_object_unref (statement);
 
   return hosts;
 }
@@ -433,7 +416,6 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
                                       EphyHistoryHost    *host)
 {
   EphySQLiteStatement *statement = NULL;
-  const char *sql_statement;
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
@@ -441,13 +423,11 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
 
   g_assert (host->id != -1 || host->url);
 
-  if (host->id != -1)
-    sql_statement = "DELETE FROM hosts WHERE id=?";
-  else
-    sql_statement = "DELETE FROM hosts WHERE url=?";
-
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       sql_statement, &error);
+  if (host->id != -1) {
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_DELETE_HOST_ROW_FOR_ID, &error);
+  } else {
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_DELETE_HOST_ROW_FOR_URL, &error);
+  }
 
   if (error) {
     g_warning ("Could not build urls table query statement: %s", error->message);
@@ -463,7 +443,6 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
   if (error) {
     g_warning ("Could not build hosts table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -472,7 +451,6 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
     g_warning ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
   }
-  g_object_unref (statement);
 }
 
 void

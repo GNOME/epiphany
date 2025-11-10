@@ -61,10 +61,8 @@ ephy_history_service_add_visit_row (EphyHistoryService   *self,
   if (self->in_memory)
     return;
 
-  statement = ephy_sqlite_connection_create_statement (
-    self->history_database,
-    "INSERT INTO visits (url, visit_time, visit_type) "
-    " VALUES (?, ?, ?) ", &error);
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_ADD_VISIT_ROW, &error);
+
   if (error) {
     g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
@@ -76,7 +74,6 @@ ephy_history_service_add_visit_row (EphyHistoryService   *self,
       !ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error)) {
     g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -87,8 +84,6 @@ ephy_history_service_add_visit_row (EphyHistoryService   *self,
   } else {
     visit->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
-
-  g_object_unref (statement);
 }
 
 static EphyHistoryPageVisit *

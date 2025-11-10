@@ -24,6 +24,30 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  /* hosts table */
+  EPHY_HISTORY_STATEMENT_ADD_HOST_ROW,
+  EPHY_HISTORY_STATEMENT_UPDATE_HOST_ROW,
+  EPHY_HISTORY_STATEMENT_GET_HOST_ROW_FOR_ID,
+  EPHY_HISTORY_STATEMENT_GET_HOST_ROW_FOR_URL,
+  EPHY_HISTORY_STATEMENT_GET_ALL_HOSTS,
+  EPHY_HISTORY_STATEMENT_DELETE_HOST_ROW_FOR_ID,
+  EPHY_HISTORY_STATEMENT_DELETE_HOST_ROW_FOR_URL,
+
+  /* urls table */
+  EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_ID,
+  EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_URL,
+  EPHY_HISTORY_STATEMENT_ADD_URL_ROW,
+  EPHY_HISTORY_STATEMENT_UPDATE_URL_ROW,
+  EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_ID,
+  EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_URL,
+
+  /* visits table */
+  EPHY_HISTORY_STATEMENT_ADD_VISIT_ROW,
+  
+  EPHY_HISTORY_STATEMENT_LEN,
+} EphyHistoryServiceStatement;
+
 struct _EphyHistoryService {
   GObject parent_instance;
   char *history_filename;
@@ -36,8 +60,10 @@ struct _EphyHistoryService {
   gboolean scheduled_to_quit;
   gboolean in_memory;
   int queue_urls_visited_id;
+  EphySQLiteStatement **statements;
 };
 
+EphySQLiteStatement *    ephy_history_service_get_cached_statement    (EphyHistoryService *self, EphyHistoryServiceStatement stmt, GError **error);
 gboolean                 ephy_history_service_initialize_urls_table   (EphyHistoryService *self);
 EphyHistoryURL *         ephy_history_service_get_url_row             (EphyHistoryService *self, const char *url_string, EphyHistoryURL *url);
 void                     ephy_history_service_add_url_row             (EphyHistoryService *self, EphyHistoryURL *url);
@@ -54,7 +80,7 @@ void                     ephy_history_service_add_host_row            (EphyHisto
 void                     ephy_history_service_update_host_row         (EphyHistoryService *self, EphyHistoryHost *host);
 EphyHistoryHost *        ephy_history_service_get_host_row            (EphyHistoryService *self, const gchar *url_string, EphyHistoryHost *host);
 GList *                  ephy_history_service_get_all_hosts           (EphyHistoryService *self);
-GList*                   ephy_history_service_find_host_rows          (EphyHistoryService *self, EphyHistoryQuery *query);
+GList *                  ephy_history_service_find_host_rows          (EphyHistoryService *self, EphyHistoryQuery *query);
 EphyHistoryHost *        ephy_history_service_get_host_row_from_url   (EphyHistoryService *self, const gchar *url);
 void                     ephy_history_service_delete_host_row         (EphyHistoryService *self, EphyHistoryHost *host);
 void                     ephy_history_service_delete_orphan_hosts     (EphyHistoryService *self);

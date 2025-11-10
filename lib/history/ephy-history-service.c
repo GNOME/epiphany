@@ -155,6 +155,11 @@ ephy_history_service_finalize (GObject *object)
 
   g_free (self->history_filename);
 
+  for (size_t i = 0; i < EPHY_HISTORY_STATEMENT_LEN; ++i)
+    if (self->statements[i])
+      g_object_unref (self->statements[i]);
+  g_free (self->statements);
+
   G_OBJECT_CLASS (ephy_history_service_parent_class)->finalize (object);
 }
 
@@ -175,6 +180,7 @@ ephy_history_service_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_history_service_parent_class)->constructed (object);
 
+  self->statements = g_malloc0_n (EPHY_HISTORY_STATEMENT_LEN, sizeof (EphySQLiteStatement *));
   self->queue = g_async_queue_new ();
 
   /* This value is checked in several functions to verify that they are only
@@ -685,6 +691,85 @@ ephy_history_service_execute_query_hosts (EphyHistoryService *self,
   *results = hosts;
 
   return TRUE;
+}
+
+EphySQLiteStatement *
+ephy_history_service_get_cached_statement (EphyHistoryService           *self,
+                                           EphyHistoryServiceStatement   stmt,
+                                           GError                      **error)
+{
+  EphySQLiteStatement *statement;
+  const char *sql = NULL;
+
+  g_assert (stmt < EPHY_HISTORY_STATEMENT_LEN);
+
+  if (self->statements[stmt]) {
+    ephy_sqlite_statement_reset ((statement = self->statements[stmt]));
+    return statement;
+  }
+
+  switch (stmt) {
+    case EPHY_HISTORY_STATEMENT_ADD_HOST_ROW:
+      sql = "INSERT INTO hosts (url, title, visit_count, zoom_level) "
+            "VALUES (?, ?, ?, ?)";
+      break;
+    case EPHY_HISTORY_STATEMENT_UPDATE_HOST_ROW:
+      sql = "UPDATE hosts SET url=?, title=?, visit_count=?, zoom_level=?"
+            "WHERE id=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_GET_HOST_ROW_FOR_ID:
+      sql = "SELECT id, url, title, visit_count, zoom_level FROM hosts "
+            "WHERE id=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_GET_HOST_ROW_FOR_URL:
+      sql = "SELECT id, url, title, visit_count, zoom_level FROM hosts "
+            "WHERE url=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_GET_ALL_HOSTS:
+      sql = "SELECT id, url, title, visit_count, zoom_level FROM hosts";
+      break;
+    case EPHY_HISTORY_STATEMENT_DELETE_HOST_ROW_FOR_ID:
+      sql = "DELETE FROM hosts WHERE id=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_DELETE_HOST_ROW_FOR_URL:
+      sql = "DELETE FROM hosts WHERE url=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_ID:
+      sql = "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
+            "WHERE id=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_URL:
+      sql = "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
+            "WHERE url=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_ADD_URL_ROW:
+      sql = "INSERT INTO urls (url, title, visit_count, typed_count, last_visit_time, host, sync_id) "
+            " VALUES (?, ?, ?, ?, ?, ?, ?)";
+      break;
+    case EPHY_HISTORY_STATEMENT_UPDATE_URL_ROW:
+      sql = "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, sync_id=? "
+            "WHERE id=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_ID:
+      sql = "DELETE FROM urls WHERE id=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_URL:
+      sql = "DELETE FROM urls WHERE url=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_ADD_VISIT_ROW:
+      sql = "INSERT INTO visits (url, visit_time, visit_type) "
+            " VALUES (?, ?, ?) ";
+      break;
+    case EPHY_HISTORY_STATEMENT_LEN:
+      break;
+  }
+
+  g_assert (sql);
+
+  self->statements[stmt] = statement =
+    ephy_sqlite_connection_create_statement (self->history_database, sql, error);
+
+  return statement;
 }
 
 void

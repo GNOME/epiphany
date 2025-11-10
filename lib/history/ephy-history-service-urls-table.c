@@ -69,13 +69,9 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
   g_assert (url_string || (url && url->id != -1));
 
   if (url && url->id != -1) {
-    statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                         "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
-                                                         "WHERE id=?", &error);
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_ID, &error);
   } else {
-    statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                         "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
-                                                         "WHERE url=?", &error);
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_URL, &error);
   }
 
   if (error) {
@@ -92,12 +88,10 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
   if (error) {
     g_warning ("Could not build urls table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return NULL;
   }
 
   if (!ephy_sqlite_statement_step (statement, &error)) {
-    g_object_unref (statement);
     return NULL;
   }
 
@@ -119,7 +113,6 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
   url->sync_id = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 7));
 
-  g_object_unref (statement);
   return url;
 }
 
@@ -136,9 +129,8 @@ ephy_history_service_add_url_row (EphyHistoryService *self,
   if (self->in_memory)
     return;
 
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       "INSERT INTO urls (url, title, visit_count, typed_count, last_visit_time, host, sync_id) "
-                                                       " VALUES (?, ?, ?, ?, ?, ?, ?)", &error);
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_ADD_URL_ROW, &error);
+
   if (error) {
     g_warning ("Could not build urls table addition statement: %s", error->message);
     g_error_free (error);
@@ -154,7 +146,6 @@ ephy_history_service_add_url_row (EphyHistoryService *self,
       !ephy_sqlite_statement_bind_string (statement, 6, url->sync_id, &error)) {
     g_warning ("Could not insert URL into urls table: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -165,8 +156,6 @@ ephy_history_service_add_url_row (EphyHistoryService *self,
   } else {
     url->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
-
-  g_object_unref (statement);
 }
 
 void
@@ -182,9 +171,8 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
   if (self->in_memory)
     return;
 
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, sync_id=? "
-                                                       "WHERE id=?", &error);
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_UPDATE_URL_ROW, &error);
+
   if (error) {
     g_warning ("Could not build urls table modification statement: %s", error->message);
     g_error_free (error);
@@ -200,7 +188,6 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
       !ephy_sqlite_statement_bind_int (statement, 6, url->id, &error)) {
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -209,7 +196,6 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
   }
-  g_object_unref (statement);
 }
 
 static EphyHistoryURL *
@@ -401,7 +387,6 @@ ephy_history_service_delete_url (EphyHistoryService *self,
                                  EphyHistoryURL     *url)
 {
   EphySQLiteStatement *statement = NULL;
-  const char *sql_statement;
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
@@ -410,12 +395,9 @@ ephy_history_service_delete_url (EphyHistoryService *self,
   g_assert (url->id != -1 || url->url);
 
   if (url->id != -1)
-    sql_statement = "DELETE FROM urls WHERE id=?";
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_ID, &error);
   else
-    sql_statement = "DELETE FROM urls WHERE url=?";
-
-  statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       sql_statement, &error);
+    statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_URL, &error);
 
   if (error) {
     g_warning ("Could not build urls table query statement: %s", error->message);
@@ -431,7 +413,6 @@ ephy_history_service_delete_url (EphyHistoryService *self,
   if (error) {
     g_warning ("Could not build urls table query statement: %s", error->message);
     g_error_free (error);
-    g_object_unref (statement);
     return;
   }
 
@@ -440,5 +421,4 @@ ephy_history_service_delete_url (EphyHistoryService *self,
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
   }
-  g_object_unref (statement);
 }

@@ -33,6 +33,8 @@ struct _EphySQLiteConnection {
   char *database_path;
   sqlite3 *database;
   EphySQLiteConnectionMode mode;
+
+  EphySQLiteStatement *connection_table_exists_statement;
 };
 
 G_DEFINE_FINAL_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
@@ -47,11 +49,13 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 static void
-ephy_sqlite_connection_finalize (GObject *self)
+ephy_sqlite_connection_finalize (GObject *object)
 {
+  EphySQLiteConnection *self = EPHY_SQLITE_CONNECTION (object);
+  g_clear_object (&self->connection_table_exists_statement);
   g_free (EPHY_SQLITE_CONNECTION (self)->database_path);
   ephy_sqlite_connection_close (EPHY_SQLITE_CONNECTION (self));
-  G_OBJECT_CLASS (ephy_sqlite_connection_parent_class)->finalize (self);
+  G_OBJECT_CLASS (ephy_sqlite_connection_parent_class)->finalize (object);
 }
 
 static void
@@ -294,31 +298,32 @@ ephy_sqlite_connection_table_exists (EphySQLiteConnection *self,
   GError *error = NULL;
   gboolean table_exists = FALSE;
 
-  EphySQLiteStatement *statement = ephy_sqlite_connection_create_statement (self,
-                                                                            "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?", &error);
+  if (!self->connection_table_exists_statement)
+    self->connection_table_exists_statement = ephy_sqlite_connection_create_statement (self,
+                                                                                       "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?", &error);
+  else
+    ephy_sqlite_statement_reset (self->connection_table_exists_statement);
+
   if (error) {
     g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
 
-  ephy_sqlite_statement_bind_string (statement, 0, table_name, &error);
+  ephy_sqlite_statement_bind_string (self->connection_table_exists_statement, 0, table_name, &error);
   if (error) {
-    g_object_unref (statement);
     g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
 
-  ephy_sqlite_statement_step (statement, &error);
+  ephy_sqlite_statement_step (self->connection_table_exists_statement, &error);
   if (error) {
-    g_object_unref (statement);
     g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
 
-  table_exists = ephy_sqlite_statement_get_column_as_int (statement, 0);
-  g_object_unref (statement);
+  table_exists = ephy_sqlite_statement_get_column_as_int (self->connection_table_exists_statement, 0);
   return table_exists;
 }
