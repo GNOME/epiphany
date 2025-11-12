@@ -1628,7 +1628,7 @@ populate_context_menu (WebKitWebView       *web_view,
   if (selected_text && *selected_text) {
     is_selected_text = TRUE;
 
-    if (g_uri_is_valid (selected_text, G_URI_FLAGS_PARSE_RELAXED, NULL)) {
+    if (ephy_embed_utils_address_is_valid (selected_text)) {
       GVariant *value;
 
       value = g_variant_new_string (selected_text);
