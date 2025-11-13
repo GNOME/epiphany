@@ -187,7 +187,7 @@ main (int   argc,
   gboolean arbitrary_url;
   EphyShellStartupContext *ctx;
   EphyEmbedShellMode mode;
-  int status;
+  int status = 1;
   EphyFileHelpersFlags flags;
   GDesktopAppInfo *desktop_info = NULL;
 
@@ -217,7 +217,7 @@ main (int   argc,
 
     if (argc != 3) {
       g_print ("-remote allows exactly one argument\n");
-      exit (1);
+      goto out;
     }
 
     opening = strchr (argv[2], '(');
@@ -228,7 +228,7 @@ main (int   argc,
         opening == argv[2] ||
         opening + 1 >= closing) {
       g_print ("Invalid argument for -remote\n");
-      exit (1);
+      goto out;
     }
 
     command = g_strstrip (g_strndup (argv[2], opening - argv[2]));
@@ -239,7 +239,7 @@ main (int   argc,
     if (g_ascii_strcasecmp (command, "openURL") != 0) {
       g_print ("-remote command \"%s\" not supported\n", command);
       g_free (command);
-      exit (1);
+      goto out;
     }
 
     g_free (command);
@@ -250,7 +250,7 @@ main (int   argc,
     if (!arg_list) {
       g_print ("Invalid argument for -remote\n");
 
-      exit (1);
+      goto out;
     }
 
     /* replace arguments */
@@ -279,7 +279,7 @@ main (int   argc,
     g_print ("Failed to parse arguments: %s\n", error->message);
     g_error_free (error);
     g_option_context_free (option_context);
-    exit (1);
+    goto out;
   }
 
   g_option_context_free (option_context);
@@ -287,34 +287,34 @@ main (int   argc,
   /* Some argument sanity checks*/
   if (application_to_delete && argc > 3) {
     g_print ("Cannot pass any other parameter when using --delete-application\n");
-    exit (1);
+    goto out;
   }
 
   if (private_instance && application_mode) {
     g_print ("Cannot use --private-instance and --application-mode at the same time\n");
-    exit (1);
+    goto out;
   }
 
   if (private_instance && profile_directory) {
     g_print ("Cannot use --private-instance and --profile at the same time\n");
-    exit (1);
+    goto out;
   }
 
   if (automation_mode && (private_instance || incognito_mode || application_mode || profile_directory)) {
     g_print ("Cannot use --automation-mode and --private-instance, --incognito-mode, --application-mode, or --profile at the same time\n");
-    exit (1);
+    goto out;
   }
 
   if (application_mode && profile_directory && !g_file_test (profile_directory, G_FILE_TEST_IS_DIR)) {
     g_print ("--profile must be an existing directory when --application-mode is requested\n");
-    exit (1);
+    goto out;
   }
 
   if (application_mode && !profile_directory) {
     if (desktop_file_basename) {
       if (ephy_is_running_inside_sandbox ()) {
         g_print ("In sandbox, no desktop file can be passed to --application-mode\n");
-        exit (1);
+        goto out;
       } else {
         desktop_info = g_desktop_app_info_new (desktop_file_basename);
 
@@ -323,7 +323,7 @@ main (int   argc,
 
         if (!profile_directory) {
           g_print ("Invalid desktop file passed to --application-mode\n");
-          exit (1);
+          goto out;
         }
       }
     }
@@ -331,7 +331,7 @@ main (int   argc,
 
   if (application_mode && !profile_directory) {
     g_print ("--profile must be used when --application-mode is requested without desktop file path\n");
-    exit (1);
+    goto out;
   }
 
   if (incognito_mode && !profile_directory)
@@ -360,7 +360,7 @@ main (int   argc,
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
       g_print ("Failed to run the migrator process, Web will now abort.\n");
-      exit (1);
+      goto out;
     }
   }
 
@@ -373,7 +373,7 @@ main (int   argc,
 
   if (arguments && arbitrary_url) {
     g_print ("URL loading is locked down.\n");
-    exit (1);
+    goto out;
   }
 
   /* convert arguments to uris or at least to utf8 */
@@ -384,7 +384,7 @@ main (int   argc,
       g_print ("Could not convert to UTF-8: %s!\n",
                error->message);
       g_error_free (error);
-      exit (1);
+      goto out;
     }
     g_strfreev (arguments);
     arguments = args;
@@ -394,7 +394,8 @@ main (int   argc,
    * ephy_file_helpers_init (). */
   if (application_to_delete) {
     ephy_web_application_delete (application_to_delete, NULL);
-    exit (0);
+    status = 0;
+    goto out;
   }
 
   /* Now create the shell */
@@ -453,12 +454,12 @@ main (int   argc,
 
   status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 
+out:
   /* Ensure the EphyShell really gets destroyed. This should be the final reference. */
   g_object_add_weak_pointer (G_OBJECT (ephy_shell), (gpointer *)&ephy_shell);
   g_object_unref (ephy_shell);
   g_assert (!ephy_shell);
 
-  /* FIXME: should free this stuff even when exiting early */
   g_free (desktop_file_basename);
   g_free (profile_directory);
 

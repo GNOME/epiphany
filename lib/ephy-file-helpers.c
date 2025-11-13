@@ -502,7 +502,7 @@ ephy_file_helpers_init (const char            *profile_dir,
 void
 ephy_file_helpers_shutdown (void)
 {
-  g_hash_table_destroy (files);
+  g_clear_pointer (&files, g_hash_table_destroy);
 
   if (mime_table) {
     LOG ("Destroying mime type hashtable");
