@@ -29,16 +29,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-09-12 14:13+0000\n"
-"PO-Revision-Date: 2025-09-14 16:07+0200\n"
-"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
+"POT-Creation-Date: 2025-10-16 16:26+0000\n"
+"PO-Revision-Date: 2025-10-19 14:40+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.6\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
@@ -267,6 +267,32 @@ msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
 "Legt fest, ob das Anwendungsfenster geöffnet bleibt, wenn der letzte Tab "
 "geschlossen wird."
+
+#: data/org.gnome.epiphany.gschema.xml:115
+msgid "Show the WebKit features preferences page."
+msgstr "Die Seite mit den Funktionen von WebKit anzeigen."
+
+#: data/org.gnome.epiphany.gschema.xml:116
+msgid ""
+"Controls whether the preferences window shows the page which allows toggling "
+"experimental and development WebKit features."
+msgstr ""
+"Legt fest, ob das Einstellungsfenster die Seite zeigt, um die "
+"experimentellen und Entwickler-Funktionen von WebKit ein- und auszuschalten."
+
+#: data/org.gnome.epiphany.gschema.xml:120
+msgid "Show internal WebKit features in the features preferences page."
+msgstr ""
+"Interne WeKit-Funktionen in der Seite mit den Funktionseinstellungen "
+"anzeigen."
+
+#: data/org.gnome.epiphany.gschema.xml:121
+msgid ""
+"Controls whether the features page in the preferences window shows internal "
+"WebKit features."
+msgstr ""
+"Legt fest, ob die Seite mit den Funktionseinstellungen interne WebKit-"
+"Funktionen anzeigen soll."
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Reader mode article font style."
@@ -624,6 +650,22 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:292
 msgid "Always show full URL"
 msgstr "Immer die gesamte Adresse anzeigen"
+
+#: data/org.gnome.epiphany.gschema.xml:293
+msgid "Whether to show the full URL in the address bar even when unfocused."
+msgstr ""
+"Legt fest, ob auch bei nicht-fokussiertem Fenster die gesamte Adresse in der "
+"Adressleiste angezeigt werden soll."
+
+#: data/org.gnome.epiphany.gschema.xml:297
+msgid "Automatically open URIs"
+msgstr "Adresssen automatisch öffnen"
+
+#: data/org.gnome.epiphany.gschema.xml:298
+#, fuzzy
+msgid "This is a permission map of security origins to URL schemes."
+msgstr ""
+"Dies ist eine Berechtigungskarte mit Sicherheitverweise? auf URL-Schemas"
 
 #: data/org.gnome.epiphany.gschema.xml:304
 msgid "Web application additional URLs"
@@ -1189,7 +1231,7 @@ msgstr ""
 
 #: embed/ephy-client-certificate-manager.c:321
 #: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:767
-#: embed/ephy-web-view.c:1377 src/ephy-history-dialog.c:888
+#: embed/ephy-web-view.c:1377 src/ephy-history-dialog.c:893
 #: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:267
 #: src/ephy-window.c:2288 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117
@@ -1332,7 +1374,7 @@ msgstr ""
 "Die Adresse »%s« ist nicht autorisiert, auf die Epiphany-Ressource »%s« "
 "zuzugreifen"
 
-#: embed/ephy-embed-utils.c:70
+#: embed/ephy-embed-utils.c:71
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "E-Mail an »%s« senden"
@@ -1345,7 +1387,7 @@ msgstr "E-Mail an »%s« senden"
 #. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
 #.
-#: embed/ephy-embed-utils.c:82
+#: embed/ephy-embed-utils.c:83
 #, c-format
 msgid ", “%s”"
 msgstr ", »%s«"
@@ -1896,7 +1938,7 @@ msgstr "Die genaue Fehlermeldung war: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
 #: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1639
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1643
 msgid "Reload"
 msgstr "Neu laden"
 
@@ -2259,28 +2301,28 @@ msgstr "%-d. %b %Y"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: lib/ephy-web-app-utils.c:326
+#: lib/ephy-web-app-utils.c:327
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
 "Desktop-Dateiname für Web-Anwendungs-Kennung %s konnte nicht bezogen werden"
 
-#: lib/ephy-web-app-utils.c:349
+#: lib/ephy-web-app-utils.c:350
 #, c-format
 msgid "Failed to install desktop file %s: "
 msgstr "Desktop-Datei »%s« konnte nicht installiert werden "
 
-#: lib/ephy-web-app-utils.c:388
+#: lib/ephy-web-app-utils.c:389
 #, c-format
 msgid "Profile directory %s already exists"
 msgstr "Profil-Ordner »%s« existiert bereits"
 
-#: lib/ephy-web-app-utils.c:395
+#: lib/ephy-web-app-utils.c:396
 #, c-format
 msgid "Failed to create directory %s"
 msgstr "Ordner »%s« konnte nicht angelegt werden"
 
-#: lib/ephy-web-app-utils.c:407
+#: lib/ephy-web-app-utils.c:408
 #, c-format
 msgid "Failed to create .app file: %s"
 msgstr ".app-Datei »%s« konnte nicht angelegt werden"
@@ -2541,7 +2583,7 @@ msgid "Save Media As"
 msgstr "Medien speichern unter"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1648
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1652
 msgid "Stop"
 msgstr "Stopp"
 
@@ -2550,52 +2592,52 @@ msgstr "Stopp"
 msgid "Add “%s” as Search Engine"
 msgstr "»%s« als Suchmaschine hinzufügen"
 
-#: src/ephy-certificate-dialog.c:179
+#: src/ephy-certificate-dialog.c:180
 msgid "Show More"
 msgstr "Mehr anzeigen"
 
-#: src/ephy-certificate-dialog.c:253
+#: src/ephy-certificate-dialog.c:254
 msgid "The certificate does not match this website"
 msgstr "Das Zertifikat stimmt nicht mit dieser Webseite überein"
 
-#: src/ephy-certificate-dialog.c:256
+#: src/ephy-certificate-dialog.c:257
 msgid "The certificate has expired"
 msgstr "Das Zertifikat ist abgelaufen"
 
-#: src/ephy-certificate-dialog.c:259
+#: src/ephy-certificate-dialog.c:260
 msgid "The signing certificate authority is not known"
 msgstr "Der Zertifikatsaussteller ist nicht bekannt"
 
-#: src/ephy-certificate-dialog.c:262
+#: src/ephy-certificate-dialog.c:263
 msgid "The certificate contains errors"
 msgstr "Das Zertifikat beinhaltet Fehler"
 
-#: src/ephy-certificate-dialog.c:265
+#: src/ephy-certificate-dialog.c:266
 msgid "The certificate has been revoked"
 msgstr "Das Zertifikat wurde annulliert"
 
-#: src/ephy-certificate-dialog.c:268
+#: src/ephy-certificate-dialog.c:269
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "Das Zertifikat nutzt einen schwachen Signaturalgorithmus"
 
-#: src/ephy-certificate-dialog.c:271
+#: src/ephy-certificate-dialog.c:272
 msgid "The certificate activation time is still in the future"
 msgstr "Die Aktivierungszeit des Zertifikats liegt in der Zukunft"
 
-#: src/ephy-certificate-dialog.c:313
+#: src/ephy-certificate-dialog.c:314
 msgid "The identity of this website has been verified."
 msgstr "Die Identität dieser Webseite wurde bestätigt."
 
-#: src/ephy-certificate-dialog.c:314
+#: src/ephy-certificate-dialog.c:315
 msgid "The identity of this website has not been verified."
 msgstr "Die Identität dieser Webseite wurde nicht bestätigt."
 
 #. Message on certificate dialog
-#: src/ephy-certificate-dialog.c:326
+#: src/ephy-certificate-dialog.c:327
 msgid "No problems have been detected with your connection."
 msgstr "Keine Probleme mit Ihrer Verbindung festgestellt."
 
-#: src/ephy-certificate-dialog.c:329
+#: src/ephy-certificate-dialog.c:330
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
@@ -2707,43 +2749,43 @@ msgstr "_Alles markieren"
 msgid "Link copied"
 msgstr "Link kopiert"
 
-#: src/ephy-history-dialog.c:551
+#: src/ephy-history-dialog.c:556
 msgid "Remove the selected pages from history"
 msgstr "Die gewählten Seiten aus der Chronik löschen"
 
-#: src/ephy-history-dialog.c:558
+#: src/ephy-history-dialog.c:563
 msgid "Copy URL"
 msgstr "Adresse kopieren"
 
-#: src/ephy-history-dialog.c:884
+#: src/ephy-history-dialog.c:889
 msgid "Clear Browsing History?"
 msgstr "Soll die Browser-Chronik geleert werden?"
 
-#: src/ephy-history-dialog.c:885
+#: src/ephy-history-dialog.c:890
 msgid "All visible links will be permanently deleted"
 msgstr "Alle sichtbaren Links werden dauerhaft gelöscht"
 
-#: src/ephy-history-dialog.c:889
+#: src/ephy-history-dialog.c:894
 msgid "Cl_ear"
 msgstr "_Leeren"
 
-#: src/ephy-history-dialog.c:1104
+#: src/ephy-history-dialog.c:1109
 msgid "Unavailable in Incognito Mode"
 msgstr "In Inkognito-Modus nicht verfügbar"
 
-#: src/ephy-history-dialog.c:1107
+#: src/ephy-history-dialog.c:1112
 msgid "Clear History"
 msgstr "Chronik leeren"
 
-#: src/ephy-location-entry.c:334 src/resources/gtk/location-entry.blp:98
+#: src/ephy-location-entry.c:345 src/resources/gtk/location-entry.blp:98
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Nach Webseiten, Lesezeichen und offenen Tabs suchen"
 
-#: src/ephy-location-entry.c:1345
+#: src/ephy-location-entry.c:1349
 msgid "Secure Site"
 msgstr "Sichere Seite"
 
-#: src/ephy-location-entry.c:1347
+#: src/ephy-location-entry.c:1351
 msgid "Insecure Site"
 msgstr "Unsichere Seite"
 
@@ -2847,7 +2889,7 @@ msgstr[1] ""
 "verfolgen"
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
-#: src/ephy-security-dialog.c:184
+#: src/ephy-security-dialog.c:189
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -2858,7 +2900,7 @@ msgstr ""
 "ausgibt."
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
-#: src/ephy-security-dialog.c:191
+#: src/ephy-security-dialog.c:196
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
@@ -2868,60 +2910,68 @@ msgstr ""
 "senden, mitlesen oder Inhalte, die Sie sehen, manipulieren."
 
 #. Label in certificate dialog when site sends mixed content.
-#: src/ephy-security-dialog.c:198
+#: src/ephy-security-dialog.c:203
 msgid "This web site did not properly secure your connection"
 msgstr "Diese Webseite hat Ihre Verbindung nicht ordentlich gesichert"
 
 #. Label in certificate dialog on secure sites.
-#: src/ephy-security-dialog.c:203
+#: src/ephy-security-dialog.c:208
 msgid "Your connection seems to be secure"
 msgstr "Ihre Verbindung scheint sicher zu sein"
 
-#: src/ephy-security-dialog.c:493
+#: src/ephy-security-dialog.c:498
 msgid "Allow"
 msgstr "Erlauben"
 
-#: src/ephy-security-dialog.c:494
+#: src/ephy-security-dialog.c:499
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: src/ephy-security-dialog.c:496
+#: src/ephy-security-dialog.c:501
 msgid "Ask"
 msgstr "Nachfragen"
 
-#: src/ephy-security-dialog.c:519
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:525
 msgid "Advertisements"
 msgstr "Werbung"
 
-#: src/ephy-security-dialog.c:520
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:527
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/ephy-security-dialog.c:521
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:529
 msgid "Password Saving"
 msgstr "Passwortspeicherung"
 
-#: src/ephy-security-dialog.c:522
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:531
 msgid "Location Access"
 msgstr "Standortzugriff"
 
-#: src/ephy-security-dialog.c:523
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:533
 msgid "Microphone Access"
 msgstr "Mikrofonzugriff"
 
-#: src/ephy-security-dialog.c:524
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:535
 msgid "Webcam Access"
 msgstr "Kamerazugriff"
 
-#: src/ephy-security-dialog.c:525
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:537
 msgid "Display Access"
 msgstr "Bildschirmfreigabe"
 
-#: src/ephy-security-dialog.c:526
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:539
 msgid "Media Autoplay"
 msgstr "Automatische Medien-Wiedergabe"
 
-#: src/ephy-security-dialog.c:526
+#: src/ephy-security-dialog.c:539
 msgid "Without Sound"
 msgstr "Ohne Ton"
 
@@ -3543,7 +3593,7 @@ msgstr[1] "Systemsprachen (%s)"
 msgid "Supported Image Files"
 msgstr "Unterstützte Bildformate"
 
-#: src/preferences/webapp-additional-urls-dialog.c:70
+#: src/preferences/webapp-additional-urls-dialog.c:71
 msgid "Remove URL"
 msgstr "Adresse entfernen"
 
