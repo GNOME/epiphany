@@ -1054,8 +1054,6 @@ window_cmd_export_passwords (GSimpleAction *action,
                         g_object_ref (window));
 }
 
-G_GNUC_END_IGNORE_DEPRECATIONS
-
 void
 window_cmd_show_history (GSimpleAction *action,
                          GVariant      *parameter,
