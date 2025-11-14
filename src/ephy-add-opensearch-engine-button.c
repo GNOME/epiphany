@@ -131,23 +131,18 @@ on_opensearch_engine_loaded_cb (EphyOpensearchAutodiscoveryLink *autodiscovery_l
   EphyAddOpensearchEngineButton *self = data->self;
   g_autoptr (GError) error = NULL;
   g_autoptr (EphySearchEngine) engine = NULL;
+  EphyShell *shell = ephy_shell_get_default ();
+  EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
 
+  g_assert (window);
   g_assert (EPHY_IS_OPENSEARCH_AUTODISCOVERY_LINK (autodiscovery_link));
 
   engine = ephy_opensearch_engine_load_from_link_finish (autodiscovery_link, result, &error);
   if (!engine) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
       GtkLabel *row_label = GTK_LABEL (gtk_list_box_row_get_child (data->row));
-      /* Yes this is a terrible way of showing an error message, but libadwaita's
-       * stylesheet is confused if I use a status page and list box inside a GtkStack
-       * when the .menu CSS style class is used on the popover. So instead just
-       * replace the row's name with the error message, with error styling. This is
-       * not ideal at all and not completely immune to models changes (as this is
-       * not stored there but manually changed in the widget tree), but that should
-       * suffice for the few cases where we fail to load the search engine.
-       */
       gtk_widget_add_css_class (GTK_WIDGET (row_label), "error");
-      gtk_label_set_text (row_label, error->message);
+      ephy_window_show_toast (window, error->message);
     }
   } else {
     EphySearchEngineManager *manager =
