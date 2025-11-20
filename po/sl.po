@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-11-05 08:43+0000\n"
-"PO-Revision-Date: 2025-11-08 15:29+0100\n"
+"POT-Creation-Date: 2025-11-19 19:58+0000\n"
+"PO-Revision-Date: 2025-11-20 18:24+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? "
 "3 : 0);\n"
 "n%100==4 ? 3: 0);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2 data/org.gnome.Epiphany.metainfo.xml.in.in:6
 #: embed/ephy-about-handler.c:205 embed/ephy-about-handler.c:237 src/ephy-main.c:104
-#: src/ephy-main.c:268 src/ephy-main.c:428 src/window-commands.c:1229
+#: src/ephy-main.c:268 src/ephy-main.c:429 src/window-commands.c:1227
 msgid "Web"
 msgstr "Brskalnik Splet"
 
@@ -89,8 +89,8 @@ msgstr "Seznam spletnih iskalnikov."
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict corresponding "
 "to a search engine, and with the following supported keys: \"name\" is the name of the "
-"search engine. \"url\" is the search URL with the search term replaced with %s. \"bang"
-"\" is the bang (shortcut word) of the search engine."
+"search engine. \"url\" is the search URL with the search term replaced with %s. "
+"\"bang\" is the bang (shortcut word) of the search engine."
 msgstr ""
 "Seznam iskalnikov vključuje iskalne ukaze za posamezen iskalnik, te pa je mogoče "
 "prilagajati: »name«: ime iskalnika, url: naslov URL za iskanje, ki vključuje vpisani "
@@ -118,13 +118,13 @@ msgstr "Ali naj se zadnja seja samodejno obnovi"
 
 #: data/org.gnome.epiphany.gschema.xml:64
 msgid ""
-"Defines how the session will be restored during startup. Allowed values are "
-"“always” (the previous state of the application is always restored) and “crashed” (the "
-"session is only restored if the application crashes)."
+"Defines how the session will be restored during startup. Allowed values are “always” "
+"(the previous state of the application is always restored) and “crashed” (the session "
+"is only restored if the application crashes)."
 msgstr ""
-"Določa, kako naj se seja med ponovnim zagonom obnovi. Dovoljene vrednosti so "
-"»vedno« (prejšnje stanje programa se vedno obnovi) in »po sesutju« (seja se obnovi le, "
-"če se program sesuje)."
+"Določa, kako naj se seja med ponovnim zagonom obnovi. Dovoljene vrednosti so »vedno« "
+"(prejšnje stanje programa se vedno obnovi) in »po sesutju« (seja se obnovi le, če se "
+"program sesuje)."
 
 #: data/org.gnome.epiphany.gschema.xml:68
 msgid ""
@@ -219,9 +219,9 @@ msgid ""
 "tabs) and “never” (the tabs bar is never shown). This setting is ignored in Pantheon "
 "desktop, and “always” value is used."
 msgstr ""
-"Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so "
-"»vedno« (vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica zavihkov "
-"je prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica zavihkov ni nikoli "
+"Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so »vedno« "
+"(vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica zavihkov je "
+"prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica zavihkov ni nikoli "
 "prikazana). Ta nastavitev je prezrta na namizju Pantheon, kjer je uporabljena možnost "
 "»vedno«."
 
@@ -282,10 +282,10 @@ msgid ""
 "This setting is ignored on systems that provide a system-wide dark style preference, "
 "such as GNOME 42 and newer."
 msgstr ""
-"Izbor barvnega sloga prispevka v bralnem načinu. Dovoljeni vrednosti sta "
-"»svetla« (temno na svetlem ozadju) oziroma »temna« (svetlo na temnem ozadju) barvna "
-"shema. Nastavitev se ne upošteva na sistemih, kjer je nastavljena sistemska temna "
-"tema, kot na primer pri GNOME 42 in novejših."
+"Izbor barvnega sloga prispevka v bralnem načinu. Dovoljeni vrednosti sta »svetla« "
+"(temno na svetlem ozadju) oziroma »temna« (svetlo na temnem ozadju) barvna shema. "
+"Nastavitev se ne upošteva na sistemih, kjer je nastavljena sistemska temna tema, kot "
+"na primer pri GNOME 42 in novejših."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Minimum font size"
@@ -999,7 +999,7 @@ msgid "A browser window"
 msgstr "Okno brskalnika"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1239
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1237
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -1016,7 +1016,7 @@ msgstr "Različica %s"
 msgid "About Web"
 msgstr "O programu"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1231
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1229
 msgid "Epiphany Technology Preview"
 msgstr "Predogled tehnologije Epiphany"
 
@@ -1035,7 +1035,7 @@ msgid "List of installed web apps"
 msgstr "Seznam nameščenih spletnih programov"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2023
+#: embed/ephy-about-handler.c:330 src/window-commands.c:2021
 msgid "Launch"
 msgstr "Zaženi"
 
@@ -1119,8 +1119,8 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:98 src/resources/gtk/history-dialog.blp:55
 #: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:360
-#: src/window-commands.c:565 src/window-commands.c:931 src/window-commands.c:1409
-#: src/window-commands.c:2116 src/window-commands.c:3057
+#: src/window-commands.c:565 src/window-commands.c:931 src/window-commands.c:1407
+#: src/window-commands.c:2114 src/window-commands.c:3055
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -2112,16 +2112,16 @@ msgstr "Preskakovanje oznake <Param>, ker nima imena ali atributa vrednosti"
 #. TRANSLATORS: First %s is the name of the search engine. Second %s is the error message (supposedly partially localized on the GLib level).
 #: lib/ephy-opensearch-engine.c:447
 #, c-format
-msgid "Couldn't parse search engine description file for %s: %s"
-msgstr "Ni bilo mogoče razčleniti datoteke z opisom iskalnika za %s: %s"
+msgid "Couldn't parse search engine description file for %s: "
+msgstr "Ni bilo mogoče razčleniti datoteke z opisom iskalnika za %s: "
 
-#: lib/ephy-opensearch-engine.c:460
+#: lib/ephy-opensearch-engine.c:459
 #, c-format
 msgid "Couldn't create search engine as it did not provide sufficient information!"
 msgstr "Ni možno ustvariti iskalnika, ker ni zagotovljenih dovolj informacij!"
 
 #. TRANSLATORS: The %s is the name of the search engine.
-#: lib/ephy-opensearch-engine.c:518
+#: lib/ephy-opensearch-engine.c:517
 #, c-format
 msgid "Couldn't download search engine description file for %s: "
 msgstr "Ni bilo mogoče prenesti datoteke z opisom iskalnika za %s: "
@@ -2481,7 +2481,7 @@ msgstr "Shrani predstavno datoteko kot"
 msgid "Stop"
 msgstr "Zaustavi"
 
-#: src/ephy-add-opensearch-engine-button.c:206
+#: src/ephy-add-opensearch-engine-button.c:201
 #, c-format
 msgid "Add “%s” as Search Engine"
 msgstr "Dodaj »%s« kot iskalnik"
@@ -3219,11 +3219,11 @@ msgstr "_Dovoli"
 msgid "Leave Website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:3285 src/ephy-window.c:4939 src/window-commands.c:1406
+#: src/ephy-window.c:3285 src/ephy-window.c:4939 src/window-commands.c:1404
 msgid "A form was modified and has not been submitted"
 msgstr "Podatki obrazca so spremenjeni in niso bili poslani."
 
-#: src/ephy-window.c:3286 src/ephy-window.c:4940 src/window-commands.c:1410
+#: src/ephy-window.c:3286 src/ephy-window.c:4940 src/window-commands.c:1408
 msgid "_Discard Form"
 msgstr "_Zavrzi obrazec"
 
@@ -4160,8 +4160,8 @@ msgid ""
 "extensions, visit <a href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr ""
 "Program Epiphany je združljiv s spletnimi razširitvami za Mozilla Firefox. Če želite "
-"poiskati in dodati spletne razširitve, obiščite <a href=\"https://addons.mozilla.org"
-"\">addons.mozilla.org</a>."
+"poiskati in dodati spletne razširitve, obiščite <a href=\"https://"
+"addons.mozilla.org\">addons.mozilla.org</a>."
 
 #: src/resources/gtk/prefs-extensions-page.blp:53
 msgid "No Extensions Installed"
@@ -4933,11 +4933,11 @@ msgstr "Gesla uspešno izvožena!"
 msgid "passwords.csv"
 msgstr "gesla.csv"
 
-#: src/window-commands.c:1226
+#: src/window-commands.c:1224
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1249
+#: src/window-commands.c:1247
 msgid "translator-credits"
 msgstr ""
 "Matej Urbančič <mateju@src.gnome.org>\n"
@@ -4946,60 +4946,60 @@ msgstr ""
 "Matjaž Horvat\n"
 "Tilen Travnik"
 
-#: src/window-commands.c:1405
+#: src/window-commands.c:1403
 msgid "Reload Website?"
 msgstr "Ali želite ponovno naložiti spletišče?"
 
-#: src/window-commands.c:1956
+#: src/window-commands.c:1954
 msgid "New Web App"
 msgstr "Nova spletna aplikacija"
 
-#: src/window-commands.c:2008
+#: src/window-commands.c:2006
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Program »%s« je pripravljen za uporabo"
 
-#: src/window-commands.c:2011
+#: src/window-commands.c:2009
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Spletnega programa »%s« ni mogoče ustvariti: %s"
 
-#: src/window-commands.c:2109
+#: src/window-commands.c:2107
 msgid "Replace Existing Web App?"
 msgstr "Ali želite zamenjati obstoječi spletni program?"
 
-#: src/window-commands.c:2112
+#: src/window-commands.c:2110
 #, c-format
 msgid "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Program z imenom »%s« že obstaja. Z zamenjavo bo predhodni program prepisan."
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2115
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
 # G:6 K:0 O:0
-#: src/window-commands.c:2422
+#: src/window-commands.c:2420
 msgid "Screenshot finished"
 msgstr "Posnetek zaslona je izdelan"
 
-#: src/window-commands.c:2543
+#: src/window-commands.c:2541
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2547
+#: src/window-commands.c:2545
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2593
+#: src/window-commands.c:2591
 msgid "PNG"
 msgstr "PNG"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:3052
+#: src/window-commands.c:3050
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: src/window-commands.c:3053
+#: src/window-commands.c:3051
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in "
 "web pages, allowing you to move around with your keyboard. Do you want to enable caret "
@@ -5009,6 +5009,6 @@ msgstr ""
 "možnost omogoči premakljivo kazalko na spletnih straneh, s katero se je mogoče "
 "premikati po strani s pomočjo tipkovnice. Ali želite omogočiti kazalni način brskanja?"
 
-#: src/window-commands.c:3058
+#: src/window-commands.c:3056
 msgid "_Enable"
 msgstr "_Omogoči"
