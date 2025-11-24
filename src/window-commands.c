@@ -2407,6 +2407,7 @@ take_snapshot_full_cb (GObject      *source,
   g_autofree char *file = user_data;
   EphyShell *shell = ephy_shell_get_default ();
   EphyWindow *window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+  AdwToast *toast;
 
   if (!file)
     return;
@@ -2419,7 +2420,8 @@ take_snapshot_full_cb (GObject      *source,
 
   gdk_texture_save_to_png (texture, file);
 
-  ephy_window_show_toast (window, _("Screenshot finished"));
+  toast = adw_toast_new (_("Screenshot finished"));
+  ephy_window_add_toast (window, toast);
 }
 
 void
@@ -2935,7 +2937,9 @@ on_opensearch_engine_loaded (EphyOpensearchAutodiscoveryLink *autodiscovery_link
   engine = ephy_opensearch_engine_load_from_link_finish (autodiscovery_link, result, &error);
   if (!engine) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-      ephy_window_show_toast (window, error->message);
+      AdwToast *toast = adw_toast_new (error->message);
+
+      ephy_window_add_toast (window, toast);
     }
   } else {
     EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (ephy_embed_shell_get_default ());

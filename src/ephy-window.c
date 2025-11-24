@@ -5369,14 +5369,6 @@ ephy_window_toggle_bookmarks (EphyWindow *self)
 }
 
 void
-ephy_window_show_toast (EphyWindow *window,
-                        const char *text)
-{
-  AdwToast *toast = adw_toast_new (text);
-  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
-}
-
-void
 ephy_window_add_toast (EphyWindow *window,
                        AdwToast   *toast)
 {
