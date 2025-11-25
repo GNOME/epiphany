@@ -26,8 +26,10 @@
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
+#include "ephy-header-bar.h"
 #include "ephy-lang-row.h"
 #include "ephy-langs.h"
+#include "ephy-location-entry.h"
 #include "ephy-settings.h"
 #include "ephy-search-engine-listbox.h"
 #include "ephy-shell.h"
@@ -1380,6 +1382,17 @@ setup_general_page (PrefsGeneralPage *general_page)
 }
 
 static void
+on_always_show_full_url_row_active_changed (GtkWidget *row)
+{
+  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_ancestor (row, EPHY_TYPE_WINDOW));
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (header_bar);
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget))
+    ephy_location_entry_update_url_button_style (EPHY_LOCATION_ENTRY (title_widget));
+}
+
+static void
 prefs_general_page_init (PrefsGeneralPage *general_page)
 {
   EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
@@ -1391,6 +1404,9 @@ prefs_general_page_init (PrefsGeneralPage *general_page)
   setup_general_page (general_page);
 
   general_page->cancellable = g_cancellable_new ();
+
+  g_signal_connect (general_page->always_show_full_url_row, "notify::active",
+                    G_CALLBACK (on_always_show_full_url_row_active_changed), NULL);
 
   gtk_widget_set_visible (general_page->webapp_box,
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION &&

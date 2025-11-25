@@ -316,8 +316,8 @@ get_actual_display_address (EphyLocationEntry *self)
   return ephy_uri_decode (location);
 }
 
-static void
-update_url_button_style (EphyLocationEntry *self)
+void
+ephy_location_entry_update_url_button_style (EphyLocationEntry *self)
 {
   const PangoRectangle empty_rect = {};
   g_autoptr (PangoAttrList) attrs = NULL;
@@ -468,7 +468,7 @@ on_focus_leave (GtkEventControllerFocus *controller,
   /* Only switch to display if the window is still focused. The visible
    * child stays at edit if the user navigated outside the window. */
   if (gtk_widget_has_focus (self->text) || !GTK_IS_WIDGET (focus_widget)) {
-    update_url_button_style (self);
+    ephy_location_entry_update_url_button_style (self);
     gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "display");
   }
 }
@@ -1286,7 +1286,7 @@ ephy_location_entry_do_set_address (EphyTitleWidget *widget,
   final_text = effective_text ? effective_text : text;
 
   ephy_location_entry_set_text (self, final_text);
-  update_url_button_style (self);
+  ephy_location_entry_update_url_button_style (self);
 
   if (final_text != gtk_editable_get_text (GTK_EDITABLE (self->text)))
     ephy_site_menu_button_set_do_animation (EPHY_SITE_MENU_BUTTON (self->site_menu_button), TRUE);
@@ -1325,7 +1325,7 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
   ephy_site_menu_button_clear_description (EPHY_SITE_MENU_BUTTON (self->site_menu_button));
   ephy_site_menu_button_append_description (EPHY_SITE_MENU_BUTTON (self->site_menu_button), description);
 
-  update_url_button_style (self);
+  ephy_location_entry_update_url_button_style (self);
 }
 
 static void

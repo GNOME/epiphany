@@ -78,4 +78,7 @@ void            ephy_location_entry_set_position               (EphyLocationEntr
                                                                 int                position);
 void            ephy_location_entry_set_zoom_level             (EphyLocationEntry *entry,
                                                                 char              *zoom_level);
+
+void            ephy_location_entry_update_url_button_style    (EphyLocationEntry *self);
+
 G_END_DECLS
