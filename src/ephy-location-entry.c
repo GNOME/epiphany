@@ -333,6 +333,7 @@ update_url_button_style (EphyLocationEntry *self)
   g_autofree char *host = NULL;
   g_autofree char *port_str = NULL;
   gint port;
+  int offset = 0;
 
   attrs = pango_attr_list_new ();
 
@@ -359,6 +360,21 @@ update_url_button_style (EphyLocationEntry *self)
   }
   port = get_port_from_url (text);
 
+  if (self->security_level == EPHY_SECURITY_LEVEL_NO_SECURITY
+      || self->security_level == EPHY_SECURITY_LEVEL_MIXED_CONTENT
+      || self->security_level == EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE) {
+    PangoAttribute *color_not_secure = pango_attr_foreground_alpha_new (65535);
+    g_autofree char *new_text = g_strconcat (_("Not Secure — "), text, NULL);
+
+    g_clear_pointer (&text, g_free);
+    text = g_strdup (new_text);
+    offset = strlen ("Not Secure — ");
+
+    color_not_secure->start_index = 0;
+    color_not_secure->end_index = offset;
+    pango_attr_list_insert (attrs, color_not_secure);
+  }
+
   base_domain = ephy_uri_get_base_domain (host);
   if (!base_domain) {
     /* It's probably not in the public suffix list. */
@@ -384,7 +400,7 @@ update_url_button_style (EphyLocationEntry *self)
 
     /* Scheme is hidden */
     start_hidden = pango_attr_shape_new (&empty_rect, &empty_rect);
-    start_hidden->start_index = 0;
+    start_hidden->start_index = offset;
     start_hidden->end_index = strstr (text, host) - text;
     pango_attr_list_insert (attrs, start_hidden);
 
@@ -1297,15 +1313,9 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
                                                      EphySecurityLevel  security_level)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (widget);
-  unsigned int state = 0;
   const char *description;
 
   self->security_level = security_level;
-
-  if (security_level == EPHY_SECURITY_LEVEL_NO_SECURITY
-      || security_level == EPHY_SECURITY_LEVEL_MIXED_CONTENT
-      || security_level == EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE)
-    state = 2;
 
   if (self->security_level == EPHY_SECURITY_LEVEL_STRONG_SECURITY)
     description = _("Secure Site");
@@ -1314,7 +1324,8 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   ephy_site_menu_button_clear_description (EPHY_SITE_MENU_BUTTON (self->site_menu_button));
   ephy_site_menu_button_append_description (EPHY_SITE_MENU_BUTTON (self->site_menu_button), description);
-  ephy_site_menu_button_set_state (EPHY_SITE_MENU_BUTTON (self->site_menu_button), state);
+
+  update_url_button_style (self);
 }
 
 static void

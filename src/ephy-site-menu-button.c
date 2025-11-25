@@ -42,7 +42,6 @@ struct _EphySiteMenuButton {
   guint timeout_id;
   gboolean do_animation;
   gboolean is_animating;
-  unsigned int prev_state;
   GArray *queued_states;
 };
 
@@ -150,6 +149,7 @@ ephy_site_menu_button_init (EphySiteMenuButton *self)
   self->queued_states = g_array_new (FALSE, FALSE, sizeof (int));
 
   gtk_svg_play (self->svg);
+  gtk_svg_set_state (self->svg, 0);
 }
 
 GtkWidget *
@@ -304,7 +304,7 @@ on_animation_timeout (EphySiteMenuButton *self)
   g_clear_handle_id (&self->timeout_id, g_source_remove);
 
   if (self->queued_states->len == 0) {
-    gtk_svg_set_state (self->svg, self->prev_state);
+    gtk_svg_set_state (self->svg, 0);
 
     self->is_animating = FALSE;
     self->do_animation = FALSE;
@@ -323,25 +323,17 @@ void
 ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
 {
   int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
-  int state = gtk_svg_get_state (self->svg);
 
   if (!self->do_animation)
     return;
 
-  /* Cancel the animation if you're not animating the reader mode or search engine.
-   * Otherwise, queue this animation to play after that one. */
-  if (self->is_animating && state % 2 == 0) {
-    ephy_site_menu_button_cancel_animation (self);
-  } else if (state == 3) {
+  if (self->is_animating) {
     int queued_state = 1;
 
     g_array_append_val (self->queued_states, queued_state);
     return;
   }
 
-  /* Only set the previous state to the secure/insecure site icons. */
-  if (state % 2 == 0)
-    self->prev_state = state;
   self->is_animating = TRUE;
   gtk_svg_set_state (self->svg, 1);
 
@@ -353,27 +345,19 @@ void
 ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self)
 {
   int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
-  int state = gtk_svg_get_state (self->svg);
 
   if (!self->do_animation)
     return;
 
-  /* Cancel the animation if you're not animating the reader mode or search engine.
-   * Otherwise, queue this animation to play after that one. */
-  if (self->is_animating && state % 2 == 0) {
-    ephy_site_menu_button_cancel_animation (self);
-  } else if (state == 1) {
-    int queued_state = 3;
+  if (self->is_animating) {
+    int queued_state = 2;
 
     g_array_append_val (self->queued_states, queued_state);
     return;
   }
 
-  /* Only set the previous state to the secure/insecure site icons. */
-  if (state % 2 == 0)
-    self->prev_state = state;
   self->is_animating = TRUE;
-  gtk_svg_set_state (self->svg, 3);
+  gtk_svg_set_state (self->svg, 2);
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
   self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
@@ -382,8 +366,11 @@ ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self)
 void
 ephy_site_menu_button_cancel_animation (EphySiteMenuButton *self)
 {
+  g_clear_handle_id (&self->timeout_id, g_source_remove);
+
   self->is_animating = FALSE;
   self->do_animation = FALSE;
 
-  gtk_svg_set_state (self->svg, self->prev_state);
+  g_array_remove_range (self->queued_states, 0, self->queued_states->len);
+  gtk_svg_set_state (self->svg, 0);
 }
