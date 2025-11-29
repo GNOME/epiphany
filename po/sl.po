@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-11-22 01:59+0000\n"
-"PO-Revision-Date: 2025-11-22 22:00+0100\n"
+"POT-Creation-Date: 2025-11-25 17:28+0000\n"
+"PO-Revision-Date: 2025-11-26 18:15+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1120,7 +1120,7 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: src/resources/gtk/firefox-sync-dialog.blp:98 src/resources/gtk/history-dialog.blp:55
 #: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:362
 #: src/window-commands.c:567 src/window-commands.c:933 src/window-commands.c:1409
-#: src/window-commands.c:2116 src/window-commands.c:3200
+#: src/window-commands.c:2116 src/window-commands.c:3204
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -1878,7 +1878,7 @@ msgstr "Natančen opis napake je: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1930 embed/ephy-web-view.c:1983 embed/ephy-web-view.c:2019
 #: embed/ephy-web-view.c:2055 src/ephy-action-bar-start.c:36
-#: src/ephy-location-entry.c:1577
+#: src/ephy-location-entry.c:1588
 msgid "Reload"
 msgstr "Ponovno naloži"
 
@@ -2477,7 +2477,7 @@ msgid "Save Media As"
 msgstr "Shrani predstavno datoteko kot"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1586
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1597
 msgid "Stop"
 msgstr "Zaustavi"
 
@@ -2682,15 +2682,19 @@ msgstr "Ni na voljo v zasebnem načinu"
 msgid "Clear History"
 msgstr "Počisti zgodovino"
 
-#: src/ephy-location-entry.c:348 src/resources/gtk/location-entry.blp:74
+#: src/ephy-location-entry.c:349 src/resources/gtk/location-entry.blp:74
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Iskanje spletišč, zaznamkov in odprtih zavihkov"
 
-#: src/ephy-location-entry.c:1311
+#: src/ephy-location-entry.c:367
+msgid "Not Secure — "
+msgstr "Ni varno — "
+
+#: src/ephy-location-entry.c:1321
 msgid "Secure Site"
 msgstr "Varno spletno mesto"
 
-#: src/ephy-location-entry.c:1313
+#: src/ephy-location-entry.c:1323
 msgid "Insecure Site"
 msgstr "Spletno mesto ni varno"
 
@@ -4987,24 +4991,24 @@ msgid "_Replace"
 msgstr "_Zamenjaj"
 
 # G:6 K:0 O:0
-#: src/window-commands.c:2422
+#: src/window-commands.c:2423
 msgid "Screenshot finished"
 msgstr "Posnetek zaslona je izdelan"
 
-#: src/window-commands.c:2543
+#: src/window-commands.c:2545
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2547
+#: src/window-commands.c:2549
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2593
+#: src/window-commands.c:2595
 msgid "PNG"
 msgstr "PNG"
 
 # G:1 K:2 O:0
-#: src/window-commands.c:2944
+#: src/window-commands.c:2948
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "Dodan spletni iskalnik »%s«"
@@ -5014,16 +5018,16 @@ msgstr "Dodan spletni iskalnik »%s«"
 #. * manually here for self->model because that would not remove the link for
 #. * all the other tabs, so that's why we let the EphyWebViews take care of it.
 #.
-#: src/window-commands.c:2963
+#: src/window-commands.c:2967
 msgid "Show"
 msgstr "Pokaži"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:3195
+#: src/window-commands.c:3199
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: src/window-commands.c:3196
+#: src/window-commands.c:3200
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in "
 "web pages, allowing you to move around with your keyboard. Do you want to enable caret "
@@ -5033,6 +5037,6 @@ msgstr ""
 "možnost omogoči premakljivo kazalko na spletnih straneh, s katero se je mogoče "
 "premikati po strani s pomočjo tipkovnice. Ali želite omogočiti kazalni način brskanja?"
 
-#: src/window-commands.c:3201
+#: src/window-commands.c:3205
 msgid "_Enable"
 msgstr "_Omogoči"
