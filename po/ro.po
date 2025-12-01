@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-10-10 17:06+0000\n"
-"PO-Revision-Date: 2025-10-12 17:10+0200\n"
+"POT-Creation-Date: 2025-11-10 11:56+0000\n"
+"PO-Revision-Date: 2025-12-01 15:17+0100\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -217,7 +217,7 @@ msgstr ""
 "prestabilit. 1 = Cookie, 2 = Cache HTTP de pe disc, 4 = Date stocate local, "
 "8 = Cache de aplicații web offline, 16 = Baze de date IndexDB, 32 = Baze de "
 "date WebSQL, 64 = Datele modulelor, 128 = Cache ale reglărilor HSTS, 256 = "
-"Datele de prevenire inteligentă a urmăririi."
+"Datele de Prevenire inteligentă a urmăririi."
 
 #: data/org.gnome.epiphany.gschema.xml:101
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -309,7 +309,7 @@ msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
-"O valoare de folosit pentru a suprascrie caracterele sans-serif pentru "
+"O valoare de folosit pentru a înlocui caracterele sans-serif pentru "
 "interfață când „use-gnome-fonts” este stabilit."
 
 #: data/org.gnome.epiphany.gschema.xml:144
@@ -321,7 +321,7 @@ msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr ""
-"O valoare de folosit pentru a suprascrie caracterele serif pentru interfață "
+"O valoare de folosit pentru a înlocui caracterele serif pentru interfață "
 "când „use-gnome-fonts” este stabilit."
 
 #: data/org.gnome.epiphany.gschema.xml:149
@@ -333,7 +333,7 @@ msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
-"O valoare de folosit pentru a suprascrie caracterele monospațiate pentru "
+"O valoare de folosit pentru a înlocui caracterele monospațiate pentru "
 "interfață când „use-gnome-fonts” este stabilit."
 
 #: data/org.gnome.epiphany.gschema.xml:154
@@ -448,23 +448,23 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:209
 msgid "Enable Intelligent Tracking Prevention (ITP)"
-msgstr "Activează Prevenirea Inteligentă a Urmăririi"
+msgstr "Activează Prevenirea inteligentă a urmăririi"
 
 #: data/org.gnome.epiphany.gschema.xml:210
 msgid "Whether to enable Intelligent Tracking Prevention."
-msgstr "Dacă să se activeze Prevenirea Inteligentă a Urmăririi."
+msgstr "Dacă să se activeze Prevenirea inteligentă a urmăririi."
 
 #: data/org.gnome.epiphany.gschema.xml:214
 msgid "Allow websites to store local website data"
-msgstr "Permite paginilor web să stocheze local datele paginii web"
+msgstr "Permite siturilor web să stocheze local datele lor"
 
 #: data/org.gnome.epiphany.gschema.xml:215
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
-"Dacă să se permită paginilor web să salveze cookie-uri, date și baze de date "
-"IndexedDB. Dezactivarea acestei opțiuni va perturba multe pagini web."
+"Dacă să se permită siturilor web să salveze cookie-uri, date și baze de date "
+"IndexedDB. Dezactivarea acestei opțiuni va perturba multe situri web."
 
 #: data/org.gnome.epiphany.gschema.xml:219
 msgid "Default zoom level for new pages"
@@ -629,16 +629,16 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:302
 msgid "The downloads folder"
-msgstr "Dosarul pentru descărcări"
+msgstr "Dosarul în care să se descarce"
 
 #: data/org.gnome.epiphany.gschema.xml:303
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
-"Calea dosarului unde să se descarce fișierele; sau „Downloads” (Descărcate) "
-"pentru a utiliza dosarul prestabilit pentru fișierele descărcate, sau "
-"„Desktop” (Birou) pentru a utiliza dosarul acesta."
+"Calea dosarului în care să se descarce fișierele; sau „Downloads” "
+"(Descărcate) pentru a utiliza dosarul prestabilit pentru fișierele "
+"descărcate, sau „Desktop” (Birou) pentru a utiliza dosarul Birou."
 
 #: data/org.gnome.epiphany.gschema.xml:310
 msgid "Window position"
@@ -1930,7 +1930,7 @@ msgstr "Pagini web"
 msgid "Images"
 msgstr "Imagini"
 
-# A se vedea xdg-user-dirs care se află în freedesktop.org (non-GNOME)
+# Dacă se modifică aici trebuie modificat și aici: https://translationproject.org/domain/xdg-user-dirs.html
 #. If we don't have XDG user dirs info, return an educated guess.
 #. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
@@ -1939,7 +1939,7 @@ msgstr "Imagini"
 msgid "Downloads"
 msgstr "Descărcate"
 
-# A se vedea xdg-user-dirs care se află în freedesktop.org (non-GNOME)
+# Dacă se modifică aici trebuie modificat și aici: https://translationproject.org/domain/xdg-user-dirs.html
 #. If we don't have XDG user dirs info, return an educated guess.
 #: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
 msgid "Desktop"
@@ -2049,18 +2049,17 @@ msgstr "Necunoscut"
 #: lib/ephy-web-app-utils.c:325
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
-msgstr ""
-"Nu s-a putut obține numele de fișier desktop pentru id-ul aplicației web %s"
+msgstr "Nu s-a putut obține numele fișierului pentru id-ul aplicației web %s"
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
 msgid "Failed to install desktop file %s: "
-msgstr "Nu s-a putut instala fișierul desktop %s: "
+msgstr "Nu s-a putut instala fișierul %s: "
 
 #: lib/ephy-web-app-utils.c:387
 #, c-format
 msgid "Profile directory %s already exists"
-msgstr "Dosarul de profil %s există deja"
+msgstr "Dosarul profilului %s există deja"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
@@ -2112,7 +2111,8 @@ msgstr "Parola într-un formular în %s"
 
 #: lib/sync/ephy-sync-service.c:932
 msgid "Response body is empty, do you need to install glib-networking?"
-msgstr "Corpul răspunsului este gol, trebuie instalat glib-networking?"
+msgstr ""
+"Conținutul răspunsului este gol; trebuie să fie instalat glib-networking?"
 
 #: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
@@ -2708,7 +2708,7 @@ msgstr "Conexiunea pare a fi sigură."
 
 #: src/ephy-security-popover.c:245
 msgid "_View Certificate…"
-msgstr "_Vizualizează certificatul…"
+msgstr "_Vezi certificatul…"
 
 #: src/ephy-security-popover.c:492
 msgid "Allow"
@@ -2966,7 +2966,7 @@ msgstr "Să fie navigatorul prestabilit?"
 #: src/ephy-window.c:3285
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
-"Folosește Web ca navigatorul web prestabilit si pentru a deschide legături "
+"Folosește Web ca navigator web prestabilit și pentru a deschide legături "
 "externe"
 
 #: src/ephy-window.c:3287
@@ -3069,7 +3069,7 @@ msgstr "Cache pentru HSTS"
 
 #: src/preferences/clear-data-view.c:74
 msgid "Intelligent Tracking Prevention data"
-msgstr "Date de Prevenire Inteligentă a Urmăririi"
+msgstr "Date de Prevenire inteligentă a urmăririi"
 
 #: src/preferences/ephy-search-engine-listbox.c:29
 msgid "New search engine"
@@ -3098,7 +3098,7 @@ msgstr "Adresa nu ar trebui să conțină termenul de căutare de mai multe ori"
 
 #: src/preferences/ephy-search-engine-row.c:140
 msgid "Address is not a valid URI"
-msgstr "Adresa nu este un URI valid"
+msgstr "Adresa nu este un URI corect"
 
 #: src/preferences/ephy-search-engine-row.c:145
 #, c-format
@@ -3106,7 +3106,7 @@ msgid ""
 "Address is not a valid URL. The address should look like https://"
 "www.example.com/search?q=%s"
 msgstr ""
-"Adresa nu este un URL valid. Adresa ar trebui să arate ca https://"
+"Adresa nu este un URL corect. Adresa ar trebui să arate ca https://"
 "www.example.com/search?q=%s"
 
 #: src/preferences/ephy-search-engine-row.c:188
@@ -3944,7 +3944,7 @@ msgstr "Î_ntreabă la descărcare"
 
 #: src/resources/gtk/prefs-general-page.ui:131
 msgid "_Download Folder"
-msgstr "_Dosarul descărcărilor"
+msgstr "_Descarcă în dosarul"
 
 #: src/resources/gtk/prefs-general-page.ui:171
 msgid "Search Engines"
@@ -4008,19 +4008,19 @@ msgstr "Urmărire web"
 
 #: src/resources/gtk/prefs-privacy-page.ui:13
 msgid "Intelligent _Tracking Prevention"
-msgstr "Prevenire Inteligentă a _Urmăririi"
+msgstr "Prevenire inteligentă a _urmăririi"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
 msgid ""
 "Allow websites to store cookies, databases, and local storage data. "
 "Disabling website data storage will break many websites."
 msgstr ""
-"Dacă să se permită paginilor web să salveze cookie-uri, date și baze de "
-"date. Dezactivarea acestei opțiuni va perturba multe pagini web."
+"Permite siturilor web să salveze cookie-uri, date și baze de date. "
+"Dezactivarea acestei opțiuni va perturba multe pagini web."
 
 #: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "_Website Data Storage"
-msgstr "Stocare de date ale paginii _web"
+msgstr "Stocare de date ale sitului _web"
 
 #: src/resources/gtk/prefs-privacy-page.ui:28
 msgid "Search Suggestions"
@@ -4168,7 +4168,7 @@ msgstr "Scurtături"
 #: src/resources/gtk/shortcuts-dialog.ui:76
 msgctxt "shortcut window"
 msgid "Show Downloads List"
-msgstr "Arată lista cu descărcări"
+msgstr "Arată lista cu descărcate"
 
 #: src/resources/gtk/shortcuts-dialog.ui:86
 msgctxt "shortcut window"
@@ -4478,7 +4478,7 @@ msgstr "URL-ul trecut nu a fost valid: „%s”"
 
 #: src/webapp-provider/ephy-webapp-provider.c:132
 msgid "The name passed was not valid"
-msgstr "Numele trecut nu a fost valid"
+msgstr "Numele trecut nu a fost corect"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
 #, c-format
@@ -4488,7 +4488,7 @@ msgstr "Instalarea aplicației web „%s” (%s) a eșuat: %s"
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
 msgid "The desktop file ID passed ‘%s’ was not valid"
-msgstr "ID-ul de fișier desktop trecut „%s” nu a fost valid"
+msgstr "ID-ul furnizat „%s” pentru fișier, nu era corect"
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
@@ -4631,7 +4631,7 @@ msgstr ""
 
 #: src/window-commands.c:1454
 msgid "Reload Website?"
-msgstr "Se reîncarcă pagina web?"
+msgstr "Se reîncarcă situl web?"
 
 #: src/window-commands.c:2002
 msgid "New Web App"
