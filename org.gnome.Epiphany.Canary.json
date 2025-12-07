@@ -3,6 +3,9 @@
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm21"
+    ],
     "command" : "ephy-wrapper",
     "tags" : [
         "nightly"
@@ -37,19 +40,29 @@
         },
         {
             "name" : "webkitgtk",
-            "buildsystem" : "simple",
-            "build-commands" : [
-                "cp -a lib/libjavascriptcore* /app/lib",
-                "cp -a lib/libwebkitgtk-6* /app/lib",
-                "cp lib/libwebkitgtkinjectedbundle.so /app/lib",
-                "mkdir -p /app/libexec",
-                "cp bin/WebKit*Process /app/libexec",
-                "cp -r install/lib64/pkgconfig /app/lib/",
-                "sed -i 's;/app/webkit/WebKitBuild/Release/install/lib64;/app/lib;g' /app/lib/pkgconfig/*.pc",
-                "sed -i 's;/app/webkit/WebKitBuild/Release/install;/app;g' /app/lib/pkgconfig/*.pc",
-                "cp -r install/include /app/"
+            "append-path": "/usr/lib/sdk/llvm21/bin",
+            "prepend-ld-library-path": "/usr/lib/sdk/llvm21/lib",
+            "buildsystem" : "cmake-ninja",
+            "config-opts": [
+                "-DPORT=GTK",
+                "-DUSE_GTK4=ON",
+                "-DCMAKE_C_COMPILER=/usr/lib/sdk/llvm21/bin/clang",
+                "-DCMAKE_CXX_COMPILER=/usr/lib/sdk/llvm21/bin/clang++",
+                "-DENABLE_SPEECH_SYNTHESIS=OFF",
+                "-DENABLE_WEBXR=OFF",
+                "-DENABLE_THUNDER=OFF",
+                "-DUSE_LIBBACKTRACE=OFF",
+                "-DDEVELOPER_MODE=ON",
+                "-DDEVELOPER_MODE_FATAL_WARNINGS=OFF",
+                "-DUSE_SYSTEM_UNIFDEF=OFF",
+                "-DENABLE_EXPERIMENTAL_FEATURES=ON"
             ],
             "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/WebKit/WebKit.git",
+                    "branch" : "main"
+                }
             ]
         },
         {
