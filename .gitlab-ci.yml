@@ -123,15 +123,14 @@ canary:
   stage: 'test'
   interruptible: true
   tags:
-    - flatpak
+    - webkitgtk
   variables:
     BUNDLE: 'epiphany-canary.flatpak'
   script:
-    - python3 generate-canary-manifest.py
     - flatpak-builder --user --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
     - flatpak build-bundle repo --runtime-repo=${RUNTIME_REPO} ${BUNDLE} org.gnome.Epiphany.Canary
     - tar cf canary-repo.tar repo/
-    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json webkitgtk.zip
+    - rm -rf canary-repo canary_flatpak_app org.gnome.Epiphany.Canary.json
 
   artifacts:
     name: 'Canary Flatpak artifacts'

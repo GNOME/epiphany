@@ -36,20 +36,39 @@
             ]
         },
         {
-            "name" : "webkitgtk",
-            "buildsystem" : "simple",
-            "build-commands" : [
-                "cp -a lib/libjavascriptcore* /app/lib",
-                "cp -a lib/libwebkitgtk-6* /app/lib",
-                "cp lib/libwebkitgtkinjectedbundle.so /app/lib",
-                "mkdir -p /app/libexec",
-                "cp bin/WebKit*Process /app/libexec",
-                "cp -r install/lib64/pkgconfig /app/lib/",
-                "sed -i 's;/app/webkit/WebKitBuild/Release/install/lib64;/app/lib;g' /app/lib/pkgconfig/*.pc",
-                "sed -i 's;/app/webkit/WebKitBuild/Release/install;/app;g' /app/lib/pkgconfig/*.pc",
-                "cp -r install/include /app/"
+            "name": "unifdef",
+            "buildsystem": "simple",
+            "build-commands": [
+                "make CFLAGS=\"-std=c17 -D_POSIX_C_SOURCE=200809L\" prefix=/app install"
             ],
             "sources" : [
+                {
+                    "type": "archive",
+                    "url": "https://dotat.at/prog/unifdef/unifdef-2.12.tar.gz",
+                    "sha256": "fba564a24db7b97ebe9329713ac970627b902e5e9e8b14e19e024eb6e278d10b"
+                }
+            ]
+        },
+        {
+            "name" : "webkitgtk",
+            "buildsystem" : "cmake-ninja",
+            "config-opts": [
+                "-DPORT=GTK",
+                "-DUSE_GTK4=ON",
+                "-DENABLE_SPEECH_SYNTHESIS=OFF",
+                "-DENABLE_WEBXR=OFF",
+                "-DENABLE_THUNDER=OFF",
+                "-DUSE_LIBBACKTRACE=OFF",
+                "-DDEVELOPER_MODE=ON",
+                "-DENABLE_EXPERIMENTAL_FEATURES=ON"
+            ],
+            "no-parallel-make": true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/WebKit/WebKit.git",
+                    "branch" : "main"
+                }
             ]
         },
         {
