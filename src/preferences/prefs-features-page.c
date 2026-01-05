@@ -193,13 +193,21 @@ subtitle_transform_cb (GBinding     *binding,
   EphyAdaptiveMode mode = g_value_get_enum (from_value);
   WebKitFeature *feature = user_data;
   g_autoptr (GEnumClass) status_enum = g_type_class_ref (WEBKIT_TYPE_FEATURE_STATUS);
+  g_autofree char *escaped_description = NULL;
+  const char *description;
 
   if (mode == EPHY_ADAPTIVE_MODE_NARROW)
-    g_value_set_string (to_value, g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
+    description = g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick;
   else
-    g_value_set_string (to_value, webkit_feature_get_details (feature));
+    description = webkit_feature_get_details (feature);
 
-  return TRUE;
+  if (description) {
+    escaped_description = g_markup_escape_text (description, -1);
+    g_value_set_string (to_value, escaped_description);
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 static void
