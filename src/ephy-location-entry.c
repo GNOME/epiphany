@@ -291,18 +291,6 @@ update_suggestions_popover (EphyLocationEntry *self)
   }
 }
 
-static guint
-get_port_from_url (const char *url)
-{
-  g_autoptr (GUri) uri = NULL;
-  g_autoptr (GError) error = NULL;
-
-  uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, &error);
-  if (!uri)
-    g_warning ("Failed to parse URL %s: %s", url, error->message);
-  return g_uri_get_port (uri);
-}
-
 static char *
 get_actual_display_address (EphyLocationEntry *self)
 {
@@ -358,7 +346,14 @@ ephy_location_entry_update_url_button_style (EphyLocationEntry *self)
     LOG ("Failed to get host component for URL %s", text);
     goto out;
   }
-  port = get_port_from_url (text);
+
+  uri = g_uri_parse (text, G_URI_FLAGS_PARSE_RELAXED, &error);
+  if (!uri) {
+    /* The port could be out of range, which is accepted by WebKit but not by GUri. */
+    LOG ("Failed to parse URL %s: %s", text, error->message);
+    goto out;
+  }
+  port = g_uri_get_port (uri);
 
   if (self->security_level == EPHY_SECURITY_LEVEL_NO_SECURITY
       || self->security_level == EPHY_SECURITY_LEVEL_MIXED_CONTENT

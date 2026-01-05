@@ -885,6 +885,9 @@ session_seems_reasonable (GList *windows)
   for (GList *w = windows; w; w = w->next) {
     for (GList *t = ((SessionWindow *)w->data)->tabs; t; t = t->next) {
       const char *url = ((SessionTab *)t->data)->url;
+      const char *first_colon;
+      const char *last_colon;
+      g_autofree char *url_without_port = NULL;
       g_autoptr (GUri) uri = NULL;
 
       if (!should_save_url (url))
@@ -894,7 +897,18 @@ session_seems_reasonable (GList *windows)
       if (g_str_has_prefix (url, "about:"))
         continue;
 
-      uri = g_uri_parse (url,
+      /* Unfortunately WebKit accepts URLs with out of range ports, which
+       * g_uri_parse() does not tolerate, so we have to remove the port before
+       * checking the validity of the URL. This means we could accept garbage
+       * ports, but that's OK because the purpose of this test is only to catch
+       * totally-corrupt URLs. Anything accepted by WebKit needs to be allowed.
+       */
+      url_without_port = g_strdup (url);
+      first_colon = strchr (url_without_port, ':');
+      if ((last_colon = strrchr (url_without_port, ':')) && last_colon != first_colon)
+        *(char *)last_colon = '\0';
+
+      uri = g_uri_parse (url_without_port,
                          G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED,
                          NULL);
       if (uri) {
