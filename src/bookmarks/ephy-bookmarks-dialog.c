@@ -137,7 +137,6 @@ update_bookmarks_order (EphyBookmarksDialog *self)
                                ephy_bookmarks_manager_save_warn_on_error_cancellable (self->manager),
                                ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
-  ephy_bookmarks_manager_sort_bookmarks_order (self->manager);
 }
 
 static void
@@ -1187,7 +1186,7 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
       row = create_tag_row (self, item);
     }
 
-    gtk_list_box_insert (GTK_LIST_BOX (self->bookmarks_list_box), row, index);
+    gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
   }
 
   update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));

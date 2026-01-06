@@ -180,6 +180,7 @@ ephy_bookmarks_import (EphyBookmarksManager  *manager,
 
       ephy_bookmarks_manager_add_to_bookmarks_order (manager, type, item, index);
     }
+
     g_strfreev (list);
   }
 
