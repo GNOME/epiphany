@@ -529,10 +529,9 @@ ephy_about_handler_handle_newtab (EphyAboutHandler       *handler,
 {
   char *data;
 
-  data = g_strdup_printf ("<html><head><title>%s</title>"
+  data = g_strdup_printf ("<html style=\"color-scheme: light dark;\"><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "</head><body style=\"color-scheme: light dark;\">"
-                          "</body></html>",
+                          "</head><body></body></html>",
                           _(NEW_TAB_PAGE_TITLE));
 
   ephy_about_handler_finish_request (request, data, -1);
