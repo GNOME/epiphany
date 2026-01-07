@@ -609,29 +609,6 @@ ephy_bookmarks_manager_get_bookmarks_order (EphyBookmarksManager *self)
   return self->bookmarks_order;
 }
 
-void
-ephy_bookmarks_manager_add_to_bookmarks_order (EphyBookmarksManager *self,
-                                               const char           *type,
-                                               const char           *item,
-                                               int                   index)
-{
-  GVariant *variant;
-
-  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-
-  variant = g_variant_new ("(ssi)", type, item, index);
-  g_sequence_append (self->bookmarks_order, variant);
-}
-
-void
-ephy_bookmarks_manager_clear_bookmarks_order (EphyBookmarksManager *self)
-{
-  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-
-  g_free (self->bookmarks_order);
-  self->bookmarks_order = g_sequence_new (g_free);
-}
-
 int
 sort_bookmarks_order (GVariant *variant_1,
                       GVariant *variant_2)
@@ -645,9 +622,27 @@ sort_bookmarks_order (GVariant *variant_1,
 }
 
 void
-ephy_bookmarks_manager_sort_bookmarks_order (EphyBookmarksManager *self)
+ephy_bookmarks_manager_add_to_bookmarks_order (EphyBookmarksManager *self,
+                                               const char           *type,
+                                               const char           *item,
+                                               int                   index)
 {
-  g_sequence_sort (self->bookmarks_order, (GCompareDataFunc)sort_bookmarks_order, NULL);
+  GVariant *variant;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  variant = g_variant_new ("(ssi)", type, item, index);
+  g_sequence_insert_sorted (self->bookmarks_order, variant,
+                            (GCompareDataFunc)sort_bookmarks_order, NULL);
+}
+
+void
+ephy_bookmarks_manager_clear_bookmarks_order (EphyBookmarksManager *self)
+{
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  g_free (self->bookmarks_order);
+  self->bookmarks_order = g_sequence_new (g_free);
 }
 
 GSequence *

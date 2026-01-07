@@ -76,8 +76,6 @@ gboolean     ephy_bookmarks_manager_save_finish                     (EphyBookmar
 
 GSequence   *ephy_bookmarks_manager_get_bookmarks_order             (EphyBookmarksManager   *self);
 
-void         ephy_bookmarks_manager_sort_bookmarks_order            (EphyBookmarksManager   *self);
-
 void         ephy_bookmarks_manager_add_to_bookmarks_order          (EphyBookmarksManager   *self,
                                                                      const char             *type,
                                                                      const char             *item,
