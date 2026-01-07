@@ -40,6 +40,7 @@ G_DECLARE_FINAL_TYPE (EphyWebView, ephy_web_view, EPHY, WEB_VIEW, WebKitWebView)
                                         "^[0-9a-f:]+:[0-9a-f:]*$|" \
                                         "^https?://[^/\\.[:space:]]+.*$|" \
                                         "^about:.*$|" \
+                                        "^ephy-about:.*$|" \
                                         "^data:.*$|" \
                                         "^file:.*$|" \
                                         "^inspector://.*$|" \
