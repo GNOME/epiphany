@@ -316,6 +316,7 @@ prefs_feature_page_constructed (GObject *object)
       GtkWidget *reset = gtk_button_new_from_icon_name ("edit-undo-symbolic");
       GtkWidget *label = gtk_label_new (g_enum_get_value (status_enum, webkit_feature_get_status (feature))->value_nick);
       gboolean enabled = webkit_settings_get_feature_enabled (settings, feature);
+      const char *details = webkit_feature_get_details (feature);
 
       g_object_bind_property_full (self, "adaptive-mode", label, "visible", G_BINDING_SYNC_CREATE, feature_status_transform_cb, NULL, self, NULL);
       g_object_bind_property_full (self, "adaptive-mode", row, "subtitle", G_BINDING_SYNC_CREATE, subtitle_transform_cb, NULL, feature, NULL);
@@ -323,8 +324,10 @@ prefs_feature_page_constructed (GObject *object)
       adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
       adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row),
                                      webkit_feature_get_name (feature));
-      adw_action_row_set_subtitle (ADW_ACTION_ROW (row),
-                                   webkit_feature_get_details (feature));
+
+      if (details)
+        adw_action_row_set_subtitle (ADW_ACTION_ROW (row), details);
+
       g_object_set_data (G_OBJECT (row), "feature", feature);
 
       gtk_widget_set_valign (switch_widget, GTK_ALIGN_CENTER);
