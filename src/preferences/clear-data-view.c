@@ -58,7 +58,16 @@ G_DEFINE_FINAL_TYPE (ClearDataView, clear_data_view, EPHY_TYPE_DATA_VIEW)
         WEBKIT_WEBSITE_DATA_LOCAL_STORAGE | \
         WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES | \
         WEBKIT_WEBSITE_DATA_HSTS_CACHE | \
-        WEBKIT_WEBSITE_DATA_ITP
+        WEBKIT_WEBSITE_DATA_ITP | \
+        WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT | \
+        WEBKIT_WEBSITE_DATA_SERVICE_WORKER_REGISTRATIONS | \
+        WEBKIT_WEBSITE_DATA_DOM_CACHE
+
+/* Non-persistent data types are not managed by this dialog:
+ *
+ * WEBKIT_WEBSITE_DATA_MEMORY_CACHE
+ * WEBKIT_WEBSITE_DATA_SESSION_STORAGE
+ */
 
 typedef struct {
   guint id;
@@ -73,7 +82,10 @@ static const DataEntry data_entries[] = {
   { 0x008, WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE, N_("Offline web application cache") },
   { 0x010, WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES, N_("IndexedDB databases") },
   { 0x020, WEBKIT_WEBSITE_DATA_HSTS_CACHE, N_("HSTS policies cache") },
-  { 0x040, WEBKIT_WEBSITE_DATA_ITP, N_("Intelligent Tracking Prevention data") }
+  { 0x040, WEBKIT_WEBSITE_DATA_ITP, N_("Intelligent Tracking Prevention data") },
+  { 0x080, WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT, N_("MediaDevices device IDs") },
+  { 0x100, WEBKIT_WEBSITE_DATA_SERVICE_WORKER_REGISTRATIONS, N_("ServiceWorker registrations") },
+  { 0x200, WEBKIT_WEBSITE_DATA_DOM_CACHE, N_("CacheStorage data") }
 };
 
 static WebKitWebsiteDataManager *
