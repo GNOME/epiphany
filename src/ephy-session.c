@@ -864,69 +864,6 @@ save_session_in_thread_finished_cb (GObject      *source_object,
   save_data_free (g_task_get_task_data (G_TASK (res)));
 }
 
-static gboolean
-session_seems_reasonable (GList *windows)
-{
-  /* The goal here is to check for a *corrupted* session. It's perfectly fine
-   * for the session to contain URLs that cannot actually be saved, including
-   * data, blob, empty, and NULL URLs.
-   *
-   * The most common indicator of session corruption is if it contains an
-   * HTTP/HTTPS URL with no host component, so that's what we're really checking
-   * for here.
-   *
-   * Of course the session is not supposed to become corrupted in the first
-   * place, but it's been known to happen if WebKit or Epiphany is seriously
-   * broken for some reason. If we have never successfully loaded any page, or
-   * any web view has a bad URL, then something has probably gone wrong inside
-   * WebKit. Do not clobber an existing good session file with our new bogus
-   * state. Bug #768250.
-   */
-  for (GList *w = windows; w; w = w->next) {
-    for (GList *t = ((SessionWindow *)w->data)->tabs; t; t = t->next) {
-      const char *url = ((SessionTab *)t->data)->url;
-      const char *first_colon;
-      const char *last_colon;
-      g_autofree char *url_without_port = NULL;
-      g_autoptr (GUri) uri = NULL;
-
-      if (!should_save_url (url))
-        continue;
-
-      /* Ignore fake about "URLs." */
-      if (g_str_has_prefix (url, "about:"))
-        continue;
-
-      /* Unfortunately WebKit accepts URLs with out of range ports, which
-       * g_uri_parse() does not tolerate, so we have to remove the port before
-       * checking the validity of the URL. This means we could accept garbage
-       * ports, but that's OK because the purpose of this test is only to catch
-       * totally-corrupt URLs. Anything accepted by WebKit needs to be allowed.
-       */
-      url_without_port = g_strdup (url);
-      first_colon = strchr (url_without_port, ':');
-      if ((last_colon = strrchr (url_without_port, ':')) && last_colon != first_colon)
-        *(char *)last_colon = '\0';
-
-      uri = g_uri_parse (url_without_port,
-                         G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED,
-                         NULL);
-      if (uri) {
-        if (g_uri_get_host (uri) ||
-            strcmp (g_uri_get_scheme (uri), "file") == 0 ||
-            strcmp (g_uri_get_scheme (uri), "ephy-reader") == 0 ||
-            strcmp (g_uri_get_scheme (uri), "view-source") == 0)
-          continue;
-      }
-
-      g_critical ("Refusing to save session due to invalid URL %s", url);
-      return FALSE;
-    }
-  }
-
-  return TRUE;
-}
-
 static void
 save_session_sync (GTask        *task,
                    gpointer      source_object,
@@ -1026,12 +963,6 @@ ephy_session_save_timeout_cb (EphySession *session)
     return G_SOURCE_REMOVE;
 
   data = save_data_new (session);
-  if (!session_seems_reasonable (data->windows)) {
-    save_data_free (data);
-    return G_SOURCE_REMOVE;
-  }
-
-  LOG ("ephy_session_save");
 
   if (ephy_shell_get_n_windows (shell) == 0) {
     session_delete (session);
