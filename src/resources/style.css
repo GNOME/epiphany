@@ -18,6 +18,19 @@
   background-color: #eaf0f7;
 }
 
+@media (prefers-color-scheme: dark) {
+  /* dark style */
+  .incognito-mode .top-bar.raised,
+  .incognito-mode .bottom-bar.raised {
+    background-color: #252f49;
+  }
+
+  .incognito-mode .top-bar.raised:backdrop,
+  .incognito-mode .bottom-bar.raised:backdrop {
+    background-color: #1c2438;
+  }
+}
+
 .incognito-mode .top-bar.raised {
   background-image: cross-fade(10% -gtk-icontheme('user-not-tracked-symbolic'), image(transparent));
   background-position: 168px calc((46px - 64px) / 2);
@@ -43,6 +56,19 @@
 .automation-mode .top-bar.raised:backdrop,
 .automation-mode .bottom-bar.raised:backdrop {
   background-color: #ffbe6f;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* dark style */
+  .automation-mode .top-bar.raised,
+  .automation-mode .bottom-bar.raised {
+    background-color: #733100;
+  }
+
+  .automation-mode .top-bar.raised:backdrop,
+  .automation-mode .bottom-bar.raised:backdrop {
+    background-color: #632300;
+  }
 }
 
 /* Fix awkward padding on the tabs dropdown arrow */
@@ -86,12 +112,34 @@ tabbar .end-action > revealer > menubutton:dir(rtl) {
   min-height: 0;
 }
 
+@media (prefers-contrast: more) {
+  /* high contrast */
+  .entry-icon {
+    opacity: .85;
+  }
+
+  .entry-icon:hover {
+    opacity: 1;
+  }
+
+  .entry-icon:active {
+    opacity: .9;
+  }
+}
+
 .entry-icon.checked > image {
   color: @accent_color;
 }
 
 .entry-icon.bookmarked > image {
   color: @yellow_5;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* dark style */
+  .entry-icon.starred {
+    color: @yellow_1;
+  }
 }
 
 popover.suggestions {
@@ -128,6 +176,13 @@ popover.suggestions listview > row:selected:hover {
 
 popover.suggestions listview > row:selected:active {
   background-color: alpha(currentColor, .19);
+}
+
+@media (prefers-contrast: more) {
+  /* high contrast */
+  popover.suggestions listview > row:selected {
+    box-shadow: inset 0 0 0 1px @borders;
+  }
 }
 
 /* bookmarks */
@@ -202,6 +257,15 @@ dnd > .boxed-list {
 .message-popover .response-area > button:first-child:dir(rtl) {
   border-bottom-right-radius: 12px;
   margin-right: 0;
+}
+
+@media (prefers-contrast: more) {
+  /* high contrast */
+  .response-area > button:hover,
+  .response-area > button:active,
+  .response-area > button:checked {
+    box-shadow: none;
+  }
 }
 
 .progress-indicator {
