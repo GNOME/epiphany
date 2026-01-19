@@ -240,11 +240,14 @@ populate_model_cb (GList    *records,
     GtkWidget *sub_row;
     GtkWidget *button;
     const char *text;
+    const char *username;
 
     row = adw_expander_row_new ();
     g_object_set_data (G_OBJECT (row), "record", record);
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), ephy_password_record_get_origin (record));
-    adw_expander_row_set_subtitle (ADW_EXPANDER_ROW (row), ephy_password_record_get_username (record));
+    username = ephy_password_record_get_username (record);
+    if (username)
+      adw_expander_row_set_subtitle (ADW_EXPANDER_ROW (row), username);
     adw_expander_row_set_show_enable_switch (ADW_EXPANDER_ROW (row), FALSE);
 
     button = gtk_button_new_from_icon_name ("edit-copy-symbolic");
