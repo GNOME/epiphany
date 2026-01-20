@@ -36,6 +36,7 @@
 #include "prefs-features-page.h"
 #include "prefs-general-page.h"
 #include "prefs-extensions-page.h"
+#include "prefs-search-engine-page.h"
 #include "webapp-additional-urls-dialog.h"
 
 struct _EphyPrefsDialog {
@@ -83,6 +84,24 @@ ephy_prefs_dialog_show_clear_data_view (EphyPrefsDialog *prefs_dialog)
 
   clear_data_view = g_object_new (EPHY_TYPE_CLEAR_DATA_VIEW, NULL);
   adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), clear_data_view);
+}
+
+static void
+on_add_search_engine_row_activated (GtkWidget       *add_search_engine_list_box,
+                                    EphyPrefsDialog *prefs_dialog)
+{
+  AdwNavigationPage *page;
+  EphySearchEngine *empty_engine;
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
+  EphySearchEngineManager *manager = ephy_embed_shell_get_search_engine_manager (embed_shell);
+
+  empty_engine = g_object_new (EPHY_TYPE_SEARCH_ENGINE,
+                               "name", _("New search engine"),
+                               "url", "https://www.example.com/search?q=%s",
+                               NULL);
+
+  page = ADW_NAVIGATION_PAGE (prefs_search_engine_page_new (empty_engine, manager, TRUE));
+  adw_preferences_dialog_push_subpage (ADW_PREFERENCES_DIALOG (prefs_dialog), page);
 }
 
 static void
@@ -177,6 +196,8 @@ ephy_prefs_dialog_class_init (EphyPrefsDialogClass *klass)
 static void
 ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
 {
+  EphySearchEngineListBox *search_engine_list_box;
+
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
   gtk_widget_set_size_request (GTK_WIDGET (dialog), 360, 200);
@@ -186,6 +207,13 @@ ephy_prefs_dialog_init (EphyPrefsDialog *dialog)
                            G_CALLBACK (sync_extensions),
                            dialog,
                            G_CONNECT_SWAPPED);
+
+  search_engine_list_box = prefs_general_page_get_search_engine_list_box (dialog->general_page);
+  g_signal_connect_object (search_engine_list_box,
+                           "add-search-engine-row-activated",
+                           G_CALLBACK (on_add_search_engine_row_activated),
+                           dialog,
+                           G_CONNECT_DEFAULT);
 
 #if TECH_PREVIEW || CANARY
   adw_preferences_dialog_add (ADW_PREFERENCES_DIALOG (dialog),

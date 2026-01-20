@@ -65,6 +65,7 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
 #include "prefs-general-page.h"
+#include "prefs-search-engine-page.h"
 
 #include <gio/gio.h>
 #include <glib.h>
@@ -2845,81 +2846,52 @@ window_cmd_bookmarks (GSimpleAction *action,
   ephy_window_toggle_bookmarks (window);
 }
 
-static void
-on_ephy_search_engine_row_expanded (GObject    *object,
-                                    GParamSpec *pspec,
-                                    gpointer    user_data)
-{
-  EphySearchEngineRow *row = EPHY_SEARCH_ENGINE_ROW (object);
-
-  ephy_search_engine_row_focus_bang_entry (row);
-  g_signal_handlers_disconnect_matched (row, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
-                                        on_ephy_search_engine_row_expanded, NULL);
-}
-
-static void
-on_ephy_search_engine_row_mapped (GObject  *object,
-                                  gpointer  user_data)
-{
-  EphySearchEngineRow *row = EPHY_SEARCH_ENGINE_ROW (object);
-
-  gtk_widget_grab_focus (GTK_WIDGET (row));
-  g_signal_connect (row, "notify::expanded", G_CALLBACK (on_ephy_search_engine_row_expanded), NULL);
-
-  /* Now expand the just added engine row and focus it so that the GtkViewport
-   * scrolls to it automatically. */
-  adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), TRUE);
-  g_signal_handlers_disconnect_matched (row, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
-                                        on_ephy_search_engine_row_mapped, NULL);
-}
-
 typedef struct  {
   EphyWindow *window;
   EphySearchEngine *engine;
-} ScrollToEngineData;
+  EphySearchEngineManager *manager;
+} ShowSearchEngineData;
 
-static ScrollToEngineData *
-scroll_to_engine_data_new (EphyWindow       *window,
-                           EphySearchEngine *engine)
+static ShowSearchEngineData *
+show_search_engine_data_new (EphyWindow              *window,
+                             EphySearchEngine        *engine,
+                             EphySearchEngineManager *manager)
 {
-  ScrollToEngineData *data = g_new0 (ScrollToEngineData, 1);
+  ShowSearchEngineData *data = g_new0 (ShowSearchEngineData, 1);
 
   data->window = g_object_ref (window);
   data->engine = g_object_ref (engine);
+  data->manager = g_object_ref (manager);
 
   return data;
 }
 
 static void
-scroll_to_engine_data_free (ScrollToEngineData *data)
+show_search_engine_data_free (ShowSearchEngineData *data)
 {
   g_object_unref (data->window);
   g_object_unref (data->engine);
+  g_object_unref (data->manager);
   g_free (data);
 }
 
 static void
-on_search_engine_added_toast_button_clicked (AdwToast           *toast,
-                                             ScrollToEngineData *data)
+on_search_engine_added_toast_button_clicked (AdwToast             *toast,
+                                             ShowSearchEngineData *data)
 {
-  AdwPreferencesDialog *prefs_dialog = ADW_PREFERENCES_DIALOG (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
-  PrefsGeneralPage *general_page;
-  EphySearchEngineListBox *search_engine_list_box;
-  EphySearchEngineRow *row;
+  EphyShell *shell = ephy_shell_get_default ();
+  AdwPreferencesDialog *prefs_dialog = ADW_PREFERENCES_DIALOG (ephy_shell_get_prefs_dialog (shell));
+  PrefsSearchEnginePage *search_engine_page;
 
   /* Don't rely on the general page being the first one opened: make sure it is
    * actually the visible one. */
-  general_page = EPHY_PREFS_GENERAL_PAGE (adw_preferences_dialog_get_visible_page (prefs_dialog));
-  search_engine_list_box = prefs_general_page_get_search_engine_list_box (general_page);
-  row = ephy_search_engine_list_box_find_row_for_engine (search_engine_list_box, data->engine);
-
-  /* We just added the engine so there must be a corresponding row. */
-  g_assert (EPHY_IS_SEARCH_ENGINE_ROW (row));
+  adw_preferences_dialog_set_visible_page_name (prefs_dialog, "general-page");
 
   gtk_widget_activate_action (GTK_WIDGET (data->window), "app.preferences", NULL);
-  g_signal_connect (row, "map", G_CALLBACK (on_ephy_search_engine_row_mapped), NULL);
+  search_engine_page = prefs_search_engine_page_new (data->engine, data->manager, FALSE);
+  adw_preferences_dialog_push_subpage (prefs_dialog, ADW_NAVIGATION_PAGE (search_engine_page));
 
-  scroll_to_engine_data_free (data);
+  show_search_engine_data_free (data);
 }
 
 static void
@@ -2967,7 +2939,7 @@ on_opensearch_engine_loaded (EphyOpensearchAutodiscoveryLink *autodiscovery_link
     adw_toast_set_button_label (toast, _("Show"));
     g_signal_connect (toast, "button-clicked",
                       G_CALLBACK (on_search_engine_added_toast_button_clicked),
-                      scroll_to_engine_data_new (window, engine));
+                      show_search_engine_data_new (window, engine, manager));
     ephy_window_add_toast (window, toast);
   }
 }

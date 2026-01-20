@@ -1,0 +1,59 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PrefsSearchEnginePage: Adw.NavigationPage {
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: Adw.PreferencesPage {
+      Adw.PreferencesGroup {
+        Adw.EntryRow name_row {
+          title: _("Name");
+        }
+
+        Adw.EntryRow address_row {
+          title: _("Address");
+
+          [suffix]
+          MenuButton {
+            valign: center;
+            tooltip-text: _("More Information");
+            icon-name: "info-outline-symbolic";
+
+            popover: Popover {
+              child: Label {
+                label: _("To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s");
+                halign: center;
+                valign: center;
+                margin-bottom: 6;
+                margin-start: 6;
+                margin-end: 6;
+                margin-top: 6;
+                max-width-chars: 50;
+                wrap: true;
+              };
+            };
+
+            styles [
+              "flat"
+            ]
+          }
+        }
+      }
+
+      Adw.PreferencesGroup {
+        Adw.EntryRow shortcut_row {
+          title: _("Shortcut");
+        }
+      }
+
+      Adw.PreferencesGroup {
+        Adw.ButtonRow button_row {
+          activated => $on_button_row_activated();
+        }
+      }
+    };
+  };
+}
+

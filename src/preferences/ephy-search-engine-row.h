@@ -21,20 +21,18 @@
 
 #pragma once
 
-#include <adwaita.h>
-#include "ephy-search-engine-manager.h"
 #include "ephy-search-engine.h"
+
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_SEARCH_ENGINE_ROW (ephy_search_engine_row_get_type())
 
-G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_ENGINE_ROW, AdwExpanderRow)
+G_DECLARE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, EPHY, SEARCH_ENGINE_ROW, AdwActionRow)
 
-EphySearchEngineRow *ephy_search_engine_row_new                    (EphySearchEngine        *engine,
-                                                                    EphySearchEngineManager *manager);
+EphySearchEngineRow *ephy_search_engine_row_new                    (EphySearchEngine        *engine);
+
 EphySearchEngine    *ephy_search_engine_row_get_engine             (EphySearchEngineRow     *self);
-void                 ephy_search_engine_row_focus_bang_entry       (EphySearchEngineRow *self);
-void                 ephy_search_engine_row_focus_name_entry       (EphySearchEngineRow *self);
 
 G_END_DECLS

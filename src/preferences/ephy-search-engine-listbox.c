@@ -26,6 +26,11 @@
 #include "embed/ephy-embed-shell.h"
 #include "ephy-search-engine-manager.h"
 
+enum {
+  ADD_SEARCH_ENGINE_ROW_ACTIVATED,
+  LAST_SIGNAL
+};
+
 struct _EphySearchEngineListBox {
   AdwBin parent_instance;
 
@@ -47,69 +52,17 @@ struct _EphySearchEngineListBox {
   gboolean is_model_initially_loaded;
 };
 
+static guint signals[LAST_SIGNAL];
+
 G_DEFINE_FINAL_TYPE (EphySearchEngineListBox, ephy_search_engine_list_box, ADW_TYPE_BIN)
-
-/* This signal unexpands all other rows of the list box except the row
- * that just got expanded.
- */
-static void
-on_row_expand_state_changed_cb (AdwExpanderRow          *expanded_row,
-                                GParamSpec              *pspec,
-                                EphySearchEngineListBox *self)
-{
-  GtkListBoxRow *row;
-  int i = 0;
-
-  /* We only unexpand other rows if this is a notify signal for an expanded row. */
-  if (!adw_expander_row_get_expanded (expanded_row))
-    return;
-
-  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->list), i++))) {
-    /* Ignore the row that was just expanded. */
-    if (!ADW_IS_EXPANDER_ROW (row) || ADW_EXPANDER_ROW (row) == expanded_row)
-      continue;
-
-    adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), FALSE);
-  }
-}
-
-static void
-row_expanded_cb (GObject    *object,
-                 GParamSpec *pspec,
-                 gpointer    user_data)
-{
-  EphySearchEngineRow *row = EPHY_SEARCH_ENGINE_ROW (object);
-
-  ephy_search_engine_row_focus_name_entry (row);
-  g_signal_handlers_disconnect_by_func (object, row_expanded_cb, user_data);
-}
-
-static void
-row_mapped_cb (GObject  *row,
-               gpointer  user_data)
-{
-  g_signal_connect (row, "notify::expanded", G_CALLBACK (row_expanded_cb), NULL);
-  /* This will also unexpand all other rows, to make the new one stand out,
-   * in on_row_expand_state_changed_cb().
-   */
-  adw_expander_row_set_expanded (ADW_EXPANDER_ROW (row), TRUE);
-  g_signal_handlers_disconnect_by_func (row, row_mapped_cb, user_data);
-}
-
-#define EMPTY_NEW_SEARCH_ENGINE_NAME (_("New search engine"))
 
 static void
 on_add_button_activated (AdwButtonRow *button,
                          gpointer      user_data)
 {
   EphySearchEngineListBox *self = EPHY_SEARCH_ENGINE_LIST_BOX (user_data);
-  g_autoptr (EphySearchEngine) empty_engine = NULL;
 
-  empty_engine = g_object_new (EPHY_TYPE_SEARCH_ENGINE,
-                               "name", EMPTY_NEW_SEARCH_ENGINE_NAME,
-                               "url", "https://www.example.com/search?q=%s",
-                               NULL);
-  ephy_search_engine_manager_add_engine (self->manager, empty_engine);
+  g_signal_emit (self, signals[ADD_SEARCH_ENGINE_ROW_ACTIVATED], 0);
 }
 
 static GtkWidget *
@@ -121,24 +74,7 @@ list_box_create_row_func (gpointer item,
 
   if (EPHY_IS_SEARCH_ENGINE (item)) {
     EphySearchEngine *engine = EPHY_SEARCH_ENGINE (item);
-    EphySearchEngineRow *row = ephy_search_engine_row_new (engine, self->manager);
-
-    g_signal_connect (row,
-                      "notify::expanded",
-                      G_CALLBACK (on_row_expand_state_changed_cb),
-                      self);
-
-    /* This check ensures we don't try expanding all rows when we initially bind
-     * the model to the list box.
-     */
-    if (self->is_model_initially_loaded) {
-      /* We need to wait until the widget is mapped (i.e. ready to be drawn),
-       * to connect to the "expanded" signal because the animation will not start
-       * before the widget is mapped (or rather, finish instantaneously and
-       * focusing won't work).
-        */
-      g_signal_connect (row, "map", G_CALLBACK (row_mapped_cb), NULL);
-    }
+    EphySearchEngineRow *row = ephy_search_engine_row_new (engine);
 
     return GTK_WIDGET (row);
   }
@@ -171,6 +107,13 @@ ephy_search_engine_list_box_class_init (EphySearchEngineListBoxClass *klass)
   object_class->finalize = ephy_search_engine_list_box_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/search-engine-listbox.ui");
+
+  signals[ADD_SEARCH_ENGINE_ROW_ACTIVATED] =
+    g_signal_new ("add-search-engine-row-activated",
+                  EPHY_TYPE_SEARCH_ENGINE_LIST_BOX,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 
   gtk_widget_class_bind_template_child (widget_class, EphySearchEngineListBox, list);
 }
