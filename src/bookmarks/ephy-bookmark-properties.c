@@ -339,6 +339,39 @@ on_add_tag_entry_activated (AdwEntryRow *row,
     ephy_bookmark_properties_actions_add_tag (self);
 }
 
+static gboolean
+transform_bookmark_url (GBinding     *binding,
+                        const GValue *from_value,
+                        GValue       *to_value,
+                        gpointer      user_data)
+{
+  EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
+  const char *address = g_value_get_string (from_value);
+  const char *error_message = NULL;
+  g_autoptr (GUri) uri = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED, NULL);
+
+  if (g_strcmp0 (address, "") == 0)
+    error_message = _("This field is required");
+  else if (!g_str_has_prefix (address, "http://") && !g_str_has_prefix (address, "https://"))
+    error_message = _("Address must start with either http:// or https://");
+  else if (!uri || !g_uri_get_host (uri) || g_strcmp0 (g_uri_get_host (uri), "") == 0)
+    error_message = _("Address is not a valid URL");
+
+  if (error_message) {
+    gtk_widget_set_tooltip_text (GTK_WIDGET (self->address_row), error_message);
+    gtk_widget_add_css_class (GTK_WIDGET (self->address_row), "error");
+
+    return FALSE;
+  } else {
+    g_value_set_string (to_value, address);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (self->address_row), NULL);
+    gtk_widget_remove_css_class (GTK_WIDGET (self->address_row), "error");
+
+    return TRUE;
+  }
+}
+
+
 static void
 ephy_bookmark_properties_set_property (GObject      *object,
                                        guint         prop_id,
@@ -386,9 +419,15 @@ ephy_bookmark_properties_constructed (GObject *object)
   decoded_address = ephy_uri_decode (address);
   gtk_editable_set_text (GTK_EDITABLE (self->address_row), decoded_address);
 
-  g_object_bind_property (GTK_EDITABLE (self->address_row), "text",
-                          self->bookmark, "bmkUri",
-                          G_BINDING_DEFAULT);
+  g_object_bind_property_full (GTK_EDITABLE (self->address_row), "text",
+                               self->bookmark, "bmkUri",
+                               G_BINDING_SYNC_CREATE,
+                               transform_bookmark_url, NULL,
+                               self, NULL);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->address_row),
+                                  GTK_ACCESSIBLE_PROPERTY_REQUIRED, TRUE,
+                                  -1);
 
   /* Create tag widgets */
   tags = ephy_bookmarks_manager_get_tags (self->manager);
