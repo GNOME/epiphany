@@ -488,7 +488,7 @@ tag_row_drag_begin_cb (AdwActionRow *self,
 
   drag_row = adw_action_row_new ();
   if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
-    drag_image = gtk_image_new_from_icon_name ("heart-filled-symbolic");
+    drag_image = gtk_image_new_from_icon_name ("ephy-heart-filled-symbolic");
   else
     drag_image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic");
   adw_action_row_add_prefix (ADW_ACTION_ROW (drag_row), drag_image);

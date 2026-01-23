@@ -140,7 +140,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
   if (default_tag) {
     GtkWidget *image;
 
-    image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic");
+    image = gtk_image_new_from_icon_name ("ephy-heart-filled-symbolic");
     adw_action_row_add_prefix (ADW_ACTION_ROW (widget), image);
   }
 
