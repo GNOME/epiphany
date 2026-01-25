@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-01-17 22:36+0000\n"
-"PO-Revision-Date: 2026-01-18 23:06+0100\n"
+"POT-Creation-Date: 2026-01-23 23:08+0000\n"
+"PO-Revision-Date: 2026-01-25 07:44+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? "
 "3 : 0);\n"
 "n%100==4 ? 3: 0);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2 data/org.gnome.Epiphany.metainfo.xml.in.in:6
@@ -89,8 +89,8 @@ msgstr "Seznam spletnih iskalnikov."
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict corresponding "
 "to a search engine, and with the following supported keys: \"name\" is the name of the "
-"search engine. \"url\" is the search URL with the search term replaced with %s. "
-"\"bang\" is the bang (shortcut word) of the search engine."
+"search engine. \"url\" is the search URL with the search term replaced with %s. \"bang"
+"\" is the bang (shortcut word) of the search engine."
 msgstr ""
 "Seznam iskalnikov vključuje iskalne ukaze za posamezen iskalnik, te pa je mogoče "
 "prilagajati: »name«: ime iskalnika, url: naslov URL za iskanje, ki vključuje vpisani "
@@ -118,13 +118,13 @@ msgstr "Ali naj se zadnja seja samodejno obnovi"
 
 #: data/org.gnome.epiphany.gschema.xml:64
 msgid ""
-"Defines how the session will be restored during startup. Allowed values are “always” "
-"(the previous state of the application is always restored) and “crashed” (the session "
-"is only restored if the application crashes)."
+"Defines how the session will be restored during startup. Allowed values are "
+"“always” (the previous state of the application is always restored) and “crashed” (the "
+"session is only restored if the application crashes)."
 msgstr ""
-"Določa, kako naj se seja med ponovnim zagonom obnovi. Dovoljene vrednosti so »vedno« "
-"(prejšnje stanje programa se vedno obnovi) in »po sesutju« (seja se obnovi le, če se "
-"program sesuje)."
+"Določa, kako naj se seja med ponovnim zagonom obnovi. Dovoljene vrednosti so "
+"»vedno« (prejšnje stanje programa se vedno obnovi) in »po sesutju« (seja se obnovi le, "
+"če se program sesuje)."
 
 #: data/org.gnome.epiphany.gschema.xml:68
 msgid ""
@@ -219,9 +219,9 @@ msgid ""
 "tabs) and “never” (the tabs bar is never shown). This setting is ignored in Pantheon "
 "desktop, and “always” value is used."
 msgstr ""
-"Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so »vedno« "
-"(vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica zavihkov je "
-"prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica zavihkov ni nikoli "
+"Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so "
+"»vedno« (vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica zavihkov "
+"je prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica zavihkov ni nikoli "
 "prikazana). Ta nastavitev je prezrta na namizju Pantheon, kjer je uporabljena možnost "
 "»vedno«."
 
@@ -282,10 +282,10 @@ msgid ""
 "This setting is ignored on systems that provide a system-wide dark style preference, "
 "such as GNOME 42 and newer."
 msgstr ""
-"Izbor barvnega sloga prispevka v bralnem načinu. Dovoljeni vrednosti sta »svetla« "
-"(temno na svetlem ozadju) oziroma »temna« (svetlo na temnem ozadju) barvna shema. "
-"Nastavitev se ne upošteva na sistemih, kjer je nastavljena sistemska temna tema, kot "
-"na primer pri GNOME 42 in novejših."
+"Izbor barvnega sloga prispevka v bralnem načinu. Dovoljeni vrednosti sta "
+"»svetla« (temno na svetlem ozadju) oziroma »temna« (svetlo na temnem ozadju) barvna "
+"shema. Nastavitev se ne upošteva na sistemih, kjer je nastavljena sistemska temna "
+"tema, kot na primer pri GNOME 42 in novejših."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Minimum font size"
@@ -2386,6 +2386,20 @@ msgstr "Odstranite trenutno oznako"
 msgid "Add Bookmark"
 msgstr "Doda zaznamek"
 
+#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/preferences/ephy-search-engine-row.c:130
+msgid "This field is required"
+msgstr "To polje je obvezno."
+
+#: src/bookmarks/ephy-bookmark-properties.c:356
+#: src/preferences/ephy-search-engine-row.c:135
+msgid "Address must start with either http:// or https://"
+msgstr "Naslov se mora začeti shttp:// ali https://."
+
+#: src/bookmarks/ephy-bookmark-properties.c:358
+msgid "Address is not a valid URL"
+msgstr "Naslov ni veljaven naslov URL"
+
 #: src/bookmarks/ephy-bookmarks-dialog.c:617 src/resources/gtk/bookmark-row.blp:65
 #: src/resources/gtk/lang-row.blp:33
 msgid "Move Controls"
@@ -3407,14 +3421,6 @@ msgstr "Nov iskalnik"
 msgid "A_dd Search Engine"
 msgstr "_Dodaj spletni iskalnik"
 
-#: src/preferences/ephy-search-engine-row.c:130
-msgid "This field is required"
-msgstr "To polje je obvezno."
-
-#: src/preferences/ephy-search-engine-row.c:135
-msgid "Address must start with either http:// or https://"
-msgstr "Naslov se mora začeti shttp:// ali https://."
-
 #: src/preferences/ephy-search-engine-row.c:147
 #, c-format
 msgid "Address must contain the search term represented by %s"
@@ -4181,8 +4187,8 @@ msgid ""
 "extensions, visit <a href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr ""
 "Program Epiphany je združljiv s spletnimi razširitvami za Mozilla Firefox. Če želite "
-"poiskati in dodati spletne razširitve, obiščite <a href=\"https://"
-"addons.mozilla.org\">addons.mozilla.org</a>."
+"poiskati in dodati spletne razširitve, obiščite <a href=\"https://addons.mozilla.org"
+"\">addons.mozilla.org</a>."
 
 #: src/resources/gtk/prefs-extensions-page.blp:53
 msgid "No Extensions Installed"
