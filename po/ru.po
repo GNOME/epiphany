@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-12-10 12:08+0000\n"
-"PO-Revision-Date: 2025-12-10 16:09+0300\n"
+"POT-Creation-Date: 2026-01-23 23:08+0000\n"
+"PO-Revision-Date: 2026-01-25 16:30+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1143,11 +1143,11 @@ msgstr ""
 msgid "Remove from overview"
 msgstr "Удалить"
 
-#: embed/ephy-about-handler.c:600 embed/ephy-about-handler.c:601
+#: embed/ephy-about-handler.c:599 embed/ephy-about-handler.c:600
 msgid "Private Browsing"
 msgstr "Приватный просмотр"
 
-#: embed/ephy-about-handler.c:602
+#: embed/ephy-about-handler.c:601
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1157,14 +1157,14 @@ msgstr ""
 "страницы не будут сохраняться в истории просмотров, сохранённые данные будут "
 "удалены после закрытия окна. Загруженные файлы будут сохранены."
 
-#: embed/ephy-about-handler.c:606
+#: embed/ephy-about-handler.c:605
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Приватный режим скрывает вашу деятельность только от людей, использующих "
 "этот компьютер."
 
-#: embed/ephy-about-handler.c:608
+#: embed/ephy-about-handler.c:607
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1882,7 +1882,7 @@ msgstr "Точная ошибка: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1930 embed/ephy-web-view.c:1983
 #: embed/ephy-web-view.c:2019 embed/ephy-web-view.c:2055
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1588
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1583
 msgid "Reload"
 msgstr "Обновить"
 
@@ -2416,28 +2416,42 @@ msgstr "Удалить текущую метку"
 msgid "Add Bookmark"
 msgstr "Добавить закладку"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:618
+#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/preferences/ephy-search-engine-row.c:130
+msgid "This field is required"
+msgstr "Это поле обязательно к заполнению"
+
+#: src/bookmarks/ephy-bookmark-properties.c:356
+#: src/preferences/ephy-search-engine-row.c:135
+msgid "Address must start with either http:// or https://"
+msgstr "Адрес должен начинаться с http:// или https://"
+
+#: src/bookmarks/ephy-bookmark-properties.c:358
+msgid "Address is not a valid URL"
+msgstr "Адрес не является действительным URL"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:617
 #: src/resources/gtk/bookmark-row.blp:65 src/resources/gtk/lang-row.blp:33
 msgid "Move Controls"
 msgstr "Управление перемещением"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:623
+#: src/bookmarks/ephy-bookmarks-dialog.c:622
 #: src/resources/gtk/bookmark-row.blp:7 src/resources/gtk/lang-row.blp:7
 msgid "Move Up"
 msgstr "Переместить вверх"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:624
+#: src/bookmarks/ephy-bookmarks-dialog.c:623
 #: src/resources/gtk/bookmark-row.blp:11 src/resources/gtk/lang-row.blp:11
 msgid "Move Down"
 msgstr "Переместить вниз"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:809
+#: src/bookmarks/ephy-bookmarks-dialog.c:808
 msgid "Bookmark removed"
 msgstr "Закладка удалена"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:811 src/ephy-window.c:997
-#: src/preferences/prefs-features-page.c:276
+#: src/bookmarks/ephy-bookmarks-dialog.c:810 src/ephy-window.c:997
+#: src/preferences/prefs-features-page.c:284
 msgid "_Undo"
 msgstr "_Отменить"
 
@@ -2451,7 +2465,7 @@ msgstr "Некорректный файл закладок Epiphany: отсут�
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr "Некорректный файл закладок Epiphany: отсутствует таблица закладок"
 
-#: src/bookmarks/ephy-bookmarks-import.c:319
+#: src/bookmarks/ephy-bookmarks-import.c:320
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2459,27 +2473,27 @@ msgstr ""
 "Не удалось открыть базу данных закладок Firefox. Закройте Firefox и "
 "попробуйте снова."
 
-#: src/bookmarks/ephy-bookmarks-import.c:332
-#: src/bookmarks/ephy-bookmarks-import.c:368
+#: src/bookmarks/ephy-bookmarks-import.c:333
+#: src/bookmarks/ephy-bookmarks-import.c:369
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Закладки Firefox не могут быть извлечены!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:535
+#: src/bookmarks/ephy-bookmarks-import.c:536
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "Не удалось открыть базу данных закладок HTML: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:546
+#: src/bookmarks/ephy-bookmarks-import.c:547
 msgid "HTML bookmarks database could not be read."
 msgstr "Не удалось прочитать базу данных закладок HTML."
 
-#: src/bookmarks/ephy-bookmarks-import.c:568
+#: src/bookmarks/ephy-bookmarks-import.c:569
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "База данных закладок HTML не может быть разобрана: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:740
+#: src/bookmarks/ephy-bookmarks-import.c:741
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Не удалось разобрать файл закладок:"
@@ -2505,7 +2519,7 @@ msgid "Save Media As"
 msgstr "Сохранить мультимедиа как"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1597
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1592
 msgid "Stop"
 msgstr "Остановить"
 
@@ -2701,19 +2715,19 @@ msgstr "Недоступно в приватном режиме"
 msgid "Clear History"
 msgstr "Очистить историю"
 
-#: src/ephy-location-entry.c:349 src/resources/gtk/location-entry.blp:74
+#: src/ephy-location-entry.c:337 src/resources/gtk/location-entry.blp:74
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Поиск сайтов, закладок и открытых вкладок"
 
-#: src/ephy-location-entry.c:367
+#: src/ephy-location-entry.c:362
 msgid "Not Secure — "
 msgstr "Небезопасно — "
 
-#: src/ephy-location-entry.c:1321
+#: src/ephy-location-entry.c:1316
 msgid "Secure Site"
 msgstr "Безопасный сайт"
 
-#: src/ephy-location-entry.c:1323
+#: src/ephy-location-entry.c:1318
 msgid "Insecure Site"
 msgstr "Небезопасный сайт"
 
@@ -3340,35 +3354,47 @@ msgstr "Удалить все записи?"
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr "Это очистит все локально хранящиеся записи, и это невозможно отменить."
 
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:79
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:80
 msgid "HTTP disk cache"
 msgstr "Кэш-память HTTP"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:81
 msgid "Local storage data"
 msgstr "Данные локального хранилища"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:82
 msgid "Offline web application cache"
 msgstr "Кэш автономных веб-приложений"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:83
 msgid "IndexedDB databases"
 msgstr "Базы данных IndexedDB"
 
-#: src/preferences/clear-data-view.c:75
+#: src/preferences/clear-data-view.c:84
 msgid "HSTS policies cache"
 msgstr "Кэш политик HSTS"
 
-#: src/preferences/clear-data-view.c:76
+#: src/preferences/clear-data-view.c:85
 msgid "Intelligent Tracking Prevention data"
 msgstr "Интеллектуальные данные по предотвращению слежения"
 
-#: src/preferences/clear-data-view.c:226
+#: src/preferences/clear-data-view.c:86
+msgid "MediaDevices device IDs"
+msgstr "Идентификаторы устройств MediaDevices"
+
+#: src/preferences/clear-data-view.c:87
+msgid "ServiceWorker registrations"
+msgstr "Регистрация ServiceWorker"
+
+#: src/preferences/clear-data-view.c:88
+msgid "CacheStorage data"
+msgstr "Данные CacheStorage"
+
+#: src/preferences/clear-data-view.c:238
 msgid "Data cleared"
 msgstr "Данные очищены"
 
@@ -3380,14 +3406,6 @@ msgstr "Новая поисковая система"
 #: src/preferences/ephy-search-engine-listbox.c:150
 msgid "A_dd Search Engine"
 msgstr "_Добавить поисковую систему"
-
-#: src/preferences/ephy-search-engine-row.c:130
-msgid "This field is required"
-msgstr "Это поле обязательно к заполнению"
-
-#: src/preferences/ephy-search-engine-row.c:135
-msgid "Address must start with either http:// or https://"
-msgstr "Адрес должен начинаться с http:// или https://"
 
 #: src/preferences/ephy-search-engine-row.c:147
 #, c-format
@@ -3506,11 +3524,11 @@ msgstr "Установить"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Открытый файл (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:275
+#: src/preferences/prefs-features-page.c:283
 msgid "All values reset"
 msgstr "Сбросить все значения"
 
-#: src/preferences/prefs-features-page.c:326
+#: src/preferences/prefs-features-page.c:337
 msgid "Reset to default"
 msgstr "Сбросить к значениям по умолчанию"
 
@@ -3646,19 +3664,19 @@ msgstr "Город"
 msgid "Country"
 msgstr "Страна"
 
-#: src/resources/gtk/autofill-view.blp:84
+#: src/resources/gtk/autofill-view.blp:86
 msgid "Credit Card"
 msgstr "Кредитная карта"
 
-#: src/resources/gtk/autofill-view.blp:87
+#: src/resources/gtk/autofill-view.blp:89
 msgid "Type"
 msgstr "Тип"
 
-#: src/resources/gtk/autofill-view.blp:91
+#: src/resources/gtk/autofill-view.blp:93
 msgid "Owner"
 msgstr "Владелец"
 
-#: src/resources/gtk/autofill-view.blp:95
+#: src/resources/gtk/autofill-view.blp:97
 msgid "Number"
 msgstr "Номер"
 
