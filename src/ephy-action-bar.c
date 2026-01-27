@@ -558,6 +558,8 @@ ephy_action_bar_dispose (GObject *object)
   g_cancellable_cancel (action_bar->cancellable);
   g_clear_object (&action_bar->cancellable);
 
+  g_clear_handle_id (&action_bar->downloads_button_attention_timeout_id, g_source_remove);
+
   G_OBJECT_CLASS (ephy_action_bar_parent_class)->dispose (object);
 }
 
