@@ -30,6 +30,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-site-menu-button.h"
 #include "ephy-window.h"
 
 /* Translators: tooltip for the refresh button */
@@ -44,6 +45,7 @@ struct _EphyActionBarStart {
   GtkWidget *combined_stop_reload_button;
   GtkWidget *homepage_button;
   GtkWidget *new_tab_button;
+  GtkWidget *site_menu_button;
   GtkWidget *placeholder;
 
   GtkWidget *history_menu;
@@ -488,6 +490,7 @@ ephy_action_bar_start_constructed (GObject *object)
                              0);
   } else {
     gtk_widget_set_visible (action_bar_start->homepage_button, FALSE);
+    gtk_widget_set_visible (action_bar_start->site_menu_button, TRUE);
   }
 
   /* New Tab Button */
@@ -530,6 +533,9 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         new_tab_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarStart,
+                                        site_menu_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         placeholder);
@@ -608,4 +614,11 @@ ephy_action_bar_start_set_adaptive_mode (EphyActionBarStart *action_bar,
   g_object_set_property (G_OBJECT (action_bar->navigation_forward), "width-request", &val);
 
   g_value_unset (&val);
+}
+
+void
+ephy_action_bar_start_set_zoom_level (EphyActionBarStart *action_bar,
+                                      const char         *zoom_level)
+{
+  ephy_site_menu_button_set_zoom_level (EPHY_SITE_MENU_BUTTON (action_bar->site_menu_button), zoom_level);
 }

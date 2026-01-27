@@ -31,6 +31,7 @@
 #include "ephy-page-menu-button.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-site-menu-button.h"
 #include "ephy-tab-view.h"
 
 #define NEEDS_ATTENTION_ANIMATION_TIMEOUT 2000 /*ms */
@@ -55,6 +56,7 @@ struct _EphyActionBar {
   GtkWidget *navigation_forward;
   GCancellable *cancellable;
   GtkWidget *history_menu;
+  GtkWidget *site_menu_button;
 
   /* Downloads */
   GtkWidget *downloads_button;
@@ -593,6 +595,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_forward);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, bookmarks_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, menu_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, site_menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, downloads_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, downloads_icon);
 
@@ -621,6 +624,8 @@ ephy_action_bar_init (EphyActionBar *action_bar)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (GTK_WIDGET (action_bar->bookmarks_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (GTK_WIDGET (action_bar->site_menu_button),
+                          mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (embed_shell);
@@ -660,4 +665,11 @@ ephy_action_bar_new (EphyWindow *window)
   return g_object_new (EPHY_TYPE_ACTION_BAR,
                        "window", window,
                        NULL);
+}
+
+void
+ephy_action_bar_set_zoom_level (EphyActionBar *self,
+                                const char    *zoom_level)
+{
+  ephy_site_menu_button_set_zoom_level (EPHY_SITE_MENU_BUTTON (self->site_menu_button), zoom_level);
 }

@@ -1619,7 +1619,7 @@ ephy_location_entry_set_position (EphyLocationEntry *self,
 
 void
 ephy_location_entry_set_zoom_level (EphyLocationEntry *entry,
-                                    char              *zoom_level)
+                                    const char        *zoom_level)
 {
   ephy_site_menu_button_set_zoom_level (EPHY_SITE_MENU_BUTTON (entry->site_menu_button), zoom_level);
 }

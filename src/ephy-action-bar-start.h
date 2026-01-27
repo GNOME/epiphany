@@ -40,4 +40,7 @@ GtkWidget          *ephy_action_bar_start_get_placeholder                   (Eph
 void                ephy_action_bar_start_set_adaptive_mode                 (EphyActionBarStart *action_bar,
                                                                              EphyAdaptiveMode    adaptive_mode);
 
+void                ephy_action_bar_start_set_zoom_level                    (EphyActionBarStart *action_bar,
+                                                                             const char         *zoom_level);
+
 G_END_DECLS

@@ -77,7 +77,7 @@ gboolean        ephy_location_entry_has_focus                  (EphyLocationEntr
 void            ephy_location_entry_set_position               (EphyLocationEntry *self,
                                                                 int                position);
 void            ephy_location_entry_set_zoom_level             (EphyLocationEntry *entry,
-                                                                char              *zoom_level);
+                                                                const char        *zoom_level);
 
 void            ephy_location_entry_update_url_button_style    (EphyLocationEntry *self);
 

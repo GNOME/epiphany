@@ -1186,19 +1186,25 @@ sync_tab_zoom (WebKitWebView *web_view,
 {
   GActionGroup *action_group;
   GAction *action;
-  GtkWidget *lentry;
+  GtkWidget *title_widget;
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
+  g_autofree char *zoom_str = NULL;
   double zoom;
 
   if (window->closing)
     return;
 
   zoom = webkit_web_view_get_zoom_level (web_view);
+  zoom_str = g_strdup_printf ("%.f%%", zoom * 100);
 
-  lentry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
-  if (EPHY_IS_LOCATION_ENTRY (lentry)) {
-    g_autofree char *zoom_str = g_strdup_printf ("%.f%%", zoom * 100);
-    ephy_location_entry_set_zoom_level (EPHY_LOCATION_ENTRY (lentry), zoom_str);
+  title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
+    ephy_location_entry_set_zoom_level (EPHY_LOCATION_ENTRY (title_widget), zoom_str);
+  } else {
+    EphyActionBarStart *action_bar_start = ephy_header_bar_get_action_bar_start (EPHY_HEADER_BAR (window->header_bar));
+
+    ephy_action_bar_start_set_zoom_level (action_bar_start, zoom_str);
+    ephy_action_bar_set_zoom_level (EPHY_ACTION_BAR (window->action_bar), zoom_str);
   }
 
   if (zoom >= ZOOM_MAXIMAL)
@@ -4025,6 +4031,7 @@ static const char *disabled_actions_for_app_mode[] = {
   "open",
   "save-as-application",
   "encoding",
+  "toggle-reader-mode",
   "bookmark-page",
   "add-search-engine",
   "new-tab",

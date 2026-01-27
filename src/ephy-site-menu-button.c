@@ -50,6 +50,57 @@ G_DEFINE_FINAL_TYPE (EphySiteMenuButton, ephy_site_menu_button, GTK_TYPE_BUTTON)
 void ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
                                                  gboolean            has_bookmark);
 
+static gboolean
+remove_menu_item (GMenu      *menu,
+                  const char *action_name)
+{
+  int i, n;
+
+  n = g_menu_model_get_n_items (G_MENU_MODEL (menu));
+
+  for (i = 0; i < n; i++) {
+    g_autofree char *item_action = NULL;
+    g_autofree char *submenu_id = NULL;
+    g_autoptr (GMenuModel) section = NULL;
+
+    g_menu_model_get_item_attribute (G_MENU_MODEL (menu),
+                                     i,
+                                     G_MENU_ATTRIBUTE_ACTION,
+                                     "s",
+                                     &item_action);
+
+    if (!g_strcmp0 (action_name, item_action)) {
+      g_menu_remove (menu, i);
+      return TRUE;
+    }
+
+    /* FIXME: this isn't particularly great. Maybe we should have custom
+     * attributes for everything like show-in-app-mode etc? */
+    g_menu_model_get_item_attribute (G_MENU_MODEL (menu),
+                                     i,
+                                     "ephy-submenu-id",
+                                     "s",
+                                     &submenu_id);
+
+    if (!g_strcmp0 (action_name, submenu_id)) {
+      g_menu_remove (menu, i);
+      return TRUE;
+    }
+
+    section = g_menu_model_get_item_link (G_MENU_MODEL (menu),
+                                          i,
+                                          G_MENU_LINK_SECTION);
+
+    if (!G_IS_MENU (section))
+      continue;
+
+    if (remove_menu_item (G_MENU (section), action_name))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 static void
 on_clicked (GtkWidget *button,
             gpointer   user_data)
@@ -126,6 +177,7 @@ ephy_site_menu_button_class_init (EphySiteMenuButtonClass *klass)
 static void
 ephy_site_menu_button_init (EphySiteMenuButton *self)
 {
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
   EphyShell *shell = ephy_shell_get_default ();
   EphyBookmarksManager *manager;
 
@@ -137,6 +189,12 @@ ephy_site_menu_button_init (EphySiteMenuButton *self)
 
   if (!EPHY_IS_SHELL (shell))
     return;
+
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    remove_menu_item (self->menu_model, "win.toggle-reader-mode");
+    remove_menu_item (self->menu_model, "win.bookmark-page");
+    remove_menu_item (self->menu_model, "win.add-search-engine");
+  }
 
   manager = ephy_shell_get_bookmarks_manager (shell);
   g_signal_connect_object (manager, "bookmark-added",
@@ -160,7 +218,7 @@ ephy_site_menu_button_new (void)
 
 void
 ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
-                                      char               *zoom_level)
+                                      const char         *zoom_level)
 {
   gtk_label_set_text (GTK_LABEL (self->zoom_level), zoom_level);
 }
