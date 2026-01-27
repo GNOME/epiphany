@@ -224,9 +224,22 @@ on_bookmarks_button (GtkButton *button,
 }
 
 static void
+ephy_action_bar_end_dispose (GObject *object)
+{
+  EphyActionBarEnd *self = EPHY_ACTION_BAR_END (object);
+
+  g_clear_handle_id (&self->downloads_button_attention_timeout_id, g_source_remove);
+
+  G_OBJECT_CLASS (ephy_action_bar_end_parent_class)->dispose (object);
+}
+
+static void
 ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = ephy_action_bar_end_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar-end.ui");
