@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-11-28 08:06+0000\n"
-"PO-Revision-Date: 2025-11-27 00:13+0300\n"
+"POT-Creation-Date: 2026-01-23 23:08+0000\n"
+"PO-Revision-Date: 2026-01-25 06:20+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -1142,11 +1142,11 @@ msgstr ""
 msgid "Remove from overview"
 msgstr "Genel görünümden kaldır"
 
-#: embed/ephy-about-handler.c:600 embed/ephy-about-handler.c:601
+#: embed/ephy-about-handler.c:599 embed/ephy-about-handler.c:600
 msgid "Private Browsing"
 msgstr "Gizli Tarama"
 
-#: embed/ephy-about-handler.c:602
+#: embed/ephy-about-handler.c:601
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1156,14 +1156,14 @@ msgstr ""
 "sayfalar tarama geçmişinde gözükmeyecek ve depolanan tüm bilgiler pencereyi "
 "kapattığınızda temizlenecek. İndirdiğiniz dosyalar saklanacak."
 
-#: embed/ephy-about-handler.c:606
+#: embed/ephy-about-handler.c:605
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Gizli tarama kipi, etkinliklerinizi yalnızca bu bilgisayarı kullanan "
 "kişilerden saklar."
 
-#: embed/ephy-about-handler.c:608
+#: embed/ephy-about-handler.c:607
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1882,7 +1882,7 @@ msgstr "Ayrıntılı hata: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1930 embed/ephy-web-view.c:1983
 #: embed/ephy-web-view.c:2019 embed/ephy-web-view.c:2055
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1588
+#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1583
 msgid "Reload"
 msgstr "Yeniden Yükle"
 
@@ -2410,28 +2410,42 @@ msgstr "Geçerli etiketi kaldır"
 msgid "Add Bookmark"
 msgstr "Yer İmi Ekle"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:618
+#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/preferences/ephy-search-engine-row.c:130
+msgid "This field is required"
+msgstr "Bu alan gereklidir"
+
+#: src/bookmarks/ephy-bookmark-properties.c:356
+#: src/preferences/ephy-search-engine-row.c:135
+msgid "Address must start with either http:// or https://"
+msgstr "Adres, http:// veya https:// ile başlamalıdır"
+
+#: src/bookmarks/ephy-bookmark-properties.c:358
+msgid "Address is not a valid URL"
+msgstr "Adres geçerli bir URL değil"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:617
 #: src/resources/gtk/bookmark-row.blp:65 src/resources/gtk/lang-row.blp:33
 msgid "Move Controls"
 msgstr "Denetimleri Taşı"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:623
+#: src/bookmarks/ephy-bookmarks-dialog.c:622
 #: src/resources/gtk/bookmark-row.blp:7 src/resources/gtk/lang-row.blp:7
 msgid "Move Up"
 msgstr "Yukarı Taşı"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:624
+#: src/bookmarks/ephy-bookmarks-dialog.c:623
 #: src/resources/gtk/bookmark-row.blp:11 src/resources/gtk/lang-row.blp:11
 msgid "Move Down"
 msgstr "Aşağı Taşı"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:809
+#: src/bookmarks/ephy-bookmarks-dialog.c:808
 msgid "Bookmark removed"
 msgstr "Yer imi kaldırıldı"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:811 src/ephy-window.c:997
-#: src/preferences/prefs-features-page.c:276
+#: src/bookmarks/ephy-bookmarks-dialog.c:810 src/ephy-window.c:997
+#: src/preferences/prefs-features-page.c:284
 msgid "_Undo"
 msgstr "_Geri Al"
 
@@ -2447,34 +2461,34 @@ msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "Dosya geçerli bir Epiphany yer imi dosyası değil: yer imleri tablosu eksik"
 
-#: src/bookmarks/ephy-bookmarks-import.c:319
+#: src/bookmarks/ephy-bookmarks-import.c:320
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
 "Firefox yer imleri veri tabanı açılamadı. Firefox’u kapat ve yeniden dene."
 
-#: src/bookmarks/ephy-bookmarks-import.c:332
-#: src/bookmarks/ephy-bookmarks-import.c:368
+#: src/bookmarks/ephy-bookmarks-import.c:333
+#: src/bookmarks/ephy-bookmarks-import.c:369
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Firefox yer imleri alınamadı!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:535
+#: src/bookmarks/ephy-bookmarks-import.c:536
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "HTML yer imleri veri tabanı açılamadı: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:546
+#: src/bookmarks/ephy-bookmarks-import.c:547
 msgid "HTML bookmarks database could not be read."
 msgstr "HTML yer imleri veri tabanı okunamadı."
 
-#: src/bookmarks/ephy-bookmarks-import.c:568
+#: src/bookmarks/ephy-bookmarks-import.c:569
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "HTML yer imleri veri tabanı ayrıştırılamadı: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:740
+#: src/bookmarks/ephy-bookmarks-import.c:741
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Yer imleri dosyası ayrıştırılamadı:"
@@ -2500,7 +2514,7 @@ msgid "Save Media As"
 msgstr "Ortamı Farklı Kaydet"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1597
+#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1592
 msgid "Stop"
 msgstr "Durdur"
 
@@ -2682,19 +2696,19 @@ msgstr "Gizli Tarama Kipinde Kullanılamıyor"
 msgid "Clear History"
 msgstr "Geçmişi Temizle"
 
-#: src/ephy-location-entry.c:349 src/resources/gtk/location-entry.blp:74
+#: src/ephy-location-entry.c:337 src/resources/gtk/location-entry.blp:74
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Web sitelerini, yer imlerini ve açık sekmeleri ara"
 
-#: src/ephy-location-entry.c:367
+#: src/ephy-location-entry.c:362
 msgid "Not Secure — "
 msgstr "Güvensiz - "
 
-#: src/ephy-location-entry.c:1321
+#: src/ephy-location-entry.c:1316
 msgid "Secure Site"
 msgstr "Güvenli Site"
 
-#: src/ephy-location-entry.c:1323
+#: src/ephy-location-entry.c:1318
 msgid "Insecure Site"
 msgstr "Güvensiz Site"
 
@@ -3319,35 +3333,48 @@ msgstr ""
 "Bu, yerel olarak saklanan tüm girdileri geri alınamayacak biçimde "
 "temizleyecek."
 
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:79
 msgid "Cookies"
 msgstr "Çerezler"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:80
 msgid "HTTP disk cache"
 msgstr "HTTP disk önbelleği"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:81
 msgid "Local storage data"
 msgstr "Yerel depolama verisi"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:82
 msgid "Offline web application cache"
 msgstr "Çevrim dışı web uygulaması önbelleği"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:83
 msgid "IndexedDB databases"
 msgstr "IndexedDB veri tabanları"
 
-#: src/preferences/clear-data-view.c:75
+#: src/preferences/clear-data-view.c:84
 msgid "HSTS policies cache"
 msgstr "HSTS ilke önbelleği"
 
-#: src/preferences/clear-data-view.c:76
+#: src/preferences/clear-data-view.c:85
 msgid "Intelligent Tracking Prevention data"
 msgstr "Akıllı İzleme Önleme verisi"
 
-#: src/preferences/clear-data-view.c:226
+#: src/preferences/clear-data-view.c:86
+msgid "MediaDevices device IDs"
+msgstr "MediaDevices aygıt kimlikleri"
+
+#: src/preferences/clear-data-view.c:87
+msgid "ServiceWorker registrations"
+msgstr "ServiceWorker kayıtları"
+
+#: src/preferences/clear-data-view.c:88
+#| msgid "Local storage data"
+msgid "CacheStorage data"
+msgstr "CacheStorage verisi"
+
+#: src/preferences/clear-data-view.c:238
 msgid "Data cleared"
 msgstr "Veri temizlendi"
 
@@ -3359,14 +3386,6 @@ msgstr "Yeni arama motoru"
 #: src/preferences/ephy-search-engine-listbox.c:150
 msgid "A_dd Search Engine"
 msgstr "Arama Motoru _Ekle"
-
-#: src/preferences/ephy-search-engine-row.c:130
-msgid "This field is required"
-msgstr "Bu alan gereklidir"
-
-#: src/preferences/ephy-search-engine-row.c:135
-msgid "Address must start with either http:// or https://"
-msgstr "Adres, http:// veya https:// ile başlamalıdır"
 
 #: src/preferences/ephy-search-engine-row.c:147
 #, c-format
@@ -3485,11 +3504,11 @@ msgstr "Kur"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Dosya Aç (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:275
+#: src/preferences/prefs-features-page.c:283
 msgid "All values reset"
 msgstr "Tüm değerler sıfırlandı"
 
-#: src/preferences/prefs-features-page.c:326
+#: src/preferences/prefs-features-page.c:337
 msgid "Reset to default"
 msgstr "Öntanımlıya sıfırla"
 
@@ -3623,19 +3642,19 @@ msgstr "Şehir"
 msgid "Country"
 msgstr "Ülke"
 
-#: src/resources/gtk/autofill-view.blp:84
+#: src/resources/gtk/autofill-view.blp:86
 msgid "Credit Card"
 msgstr "Kredi Kartı"
 
-#: src/resources/gtk/autofill-view.blp:87
+#: src/resources/gtk/autofill-view.blp:89
 msgid "Type"
 msgstr "Tür"
 
-#: src/resources/gtk/autofill-view.blp:91
+#: src/resources/gtk/autofill-view.blp:93
 msgid "Owner"
 msgstr "Sahip"
 
-#: src/resources/gtk/autofill-view.blp:95
+#: src/resources/gtk/autofill-view.blp:97
 msgid "Number"
 msgstr "Sayı"
 
