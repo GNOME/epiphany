@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-01-23 23:08+0000\n"
-"PO-Revision-Date: 2026-01-25 07:44+0100\n"
+"POT-Creation-Date: 2026-01-27 22:42+0000\n"
+"PO-Revision-Date: 2026-01-28 08:23+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? "
 "3 : 0);\n"
 "n%100==4 ? 3: 0);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2 data/org.gnome.Epiphany.metainfo.xml.in.in:6
 #: embed/ephy-about-handler.c:205 embed/ephy-about-handler.c:237 src/ephy-main.c:104
-#: src/ephy-main.c:268 src/ephy-main.c:429 src/window-commands.c:1229
+#: src/ephy-main.c:268 src/ephy-main.c:429 src/window-commands.c:1230
 msgid "Web"
 msgstr "Brskalnik Splet"
 
@@ -89,8 +89,8 @@ msgstr "Seznam spletnih iskalnikov."
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict corresponding "
 "to a search engine, and with the following supported keys: \"name\" is the name of the "
-"search engine. \"url\" is the search URL with the search term replaced with %s. \"bang"
-"\" is the bang (shortcut word) of the search engine."
+"search engine. \"url\" is the search URL with the search term replaced with %s. "
+"\"bang\" is the bang (shortcut word) of the search engine."
 msgstr ""
 "Seznam iskalnikov vključuje iskalne ukaze za posamezen iskalnik, te pa je mogoče "
 "prilagajati: »name«: ime iskalnika, url: naslov URL za iskanje, ki vključuje vpisani "
@@ -118,13 +118,13 @@ msgstr "Ali naj se zadnja seja samodejno obnovi"
 
 #: data/org.gnome.epiphany.gschema.xml:64
 msgid ""
-"Defines how the session will be restored during startup. Allowed values are "
-"“always” (the previous state of the application is always restored) and “crashed” (the "
-"session is only restored if the application crashes)."
+"Defines how the session will be restored during startup. Allowed values are “always” "
+"(the previous state of the application is always restored) and “crashed” (the session "
+"is only restored if the application crashes)."
 msgstr ""
-"Določa, kako naj se seja med ponovnim zagonom obnovi. Dovoljene vrednosti so "
-"»vedno« (prejšnje stanje programa se vedno obnovi) in »po sesutju« (seja se obnovi le, "
-"če se program sesuje)."
+"Določa, kako naj se seja med ponovnim zagonom obnovi. Dovoljene vrednosti so »vedno« "
+"(prejšnje stanje programa se vedno obnovi) in »po sesutju« (seja se obnovi le, če se "
+"program sesuje)."
 
 #: data/org.gnome.epiphany.gschema.xml:68
 msgid ""
@@ -219,9 +219,9 @@ msgid ""
 "tabs) and “never” (the tabs bar is never shown). This setting is ignored in Pantheon "
 "desktop, and “always” value is used."
 msgstr ""
-"Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so "
-"»vedno« (vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica zavihkov "
-"je prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica zavihkov ni nikoli "
+"Možnost določa način prikazovanja vrstice zavihkov. Mogoče vrednosti so »vedno« "
+"(vrstica zavihkov je vedno prikazana), »več kot en zavihek« (vrstica zavihkov je "
+"prikazana le, če vsebuje vsaj dva zavihka) in »nikoli« (vrstica zavihkov ni nikoli "
 "prikazana). Ta nastavitev je prezrta na namizju Pantheon, kjer je uporabljena možnost "
 "»vedno«."
 
@@ -282,10 +282,10 @@ msgid ""
 "This setting is ignored on systems that provide a system-wide dark style preference, "
 "such as GNOME 42 and newer."
 msgstr ""
-"Izbor barvnega sloga prispevka v bralnem načinu. Dovoljeni vrednosti sta "
-"»svetla« (temno na svetlem ozadju) oziroma »temna« (svetlo na temnem ozadju) barvna "
-"shema. Nastavitev se ne upošteva na sistemih, kjer je nastavljena sistemska temna "
-"tema, kot na primer pri GNOME 42 in novejših."
+"Izbor barvnega sloga prispevka v bralnem načinu. Dovoljeni vrednosti sta »svetla« "
+"(temno na svetlem ozadju) oziroma »temna« (svetlo na temnem ozadju) barvna shema. "
+"Nastavitev se ne upošteva na sistemih, kjer je nastavljena sistemska temna tema, kot "
+"na primer pri GNOME 42 in novejših."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Minimum font size"
@@ -363,7 +363,7 @@ msgstr "Privzet nabor znakov"
 msgid "Default encoding. Accepted values are the ones WebKitGTK can understand."
 msgstr "Privzeto kodiranje. Ustrezne so vrednosti, ki jih lahko razume sistem WebKitGTK."
 
-#: data/org.gnome.epiphany.gschema.xml:183 src/resources/gtk/prefs-general-page.blp:206
+#: data/org.gnome.epiphany.gschema.xml:183 src/resources/gtk/prefs-general-page.blp:207
 msgid "Languages"
 msgstr "Jeziki"
 
@@ -999,7 +999,7 @@ msgid "A browser window"
 msgstr "Okno brskalnika"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1239
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1240
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -1016,7 +1016,7 @@ msgstr "Različica %s"
 msgid "About Web"
 msgstr "O programu"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1231
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1232
 msgid "Epiphany Technology Preview"
 msgstr "Predogled tehnologije Epiphany"
 
@@ -1035,7 +1035,7 @@ msgid "List of installed web apps"
 msgstr "Seznam nameščenih spletnih programov"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2023
+#: embed/ephy-about-handler.c:330 src/window-commands.c:2024
 msgid "Launch"
 msgstr "Zaženi"
 
@@ -1118,9 +1118,9 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: src/preferences/autofill-view.c:363 src/preferences/extension-view.c:117
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:98 src/resources/gtk/history-dialog.blp:55
-#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:362
-#: src/window-commands.c:567 src/window-commands.c:933 src/window-commands.c:1409
-#: src/window-commands.c:2116 src/window-commands.c:3204
+#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:363
+#: src/window-commands.c:568 src/window-commands.c:934 src/window-commands.c:1410
+#: src/window-commands.c:2117 src/window-commands.c:3176
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -1145,7 +1145,7 @@ msgid "The website %s:%d requests that you provide a certificate for authenticat
 msgstr "Spletišče %s:%d zahteva overitev z ustreznim potrdilom."
 
 # G:9 K:0 O:0
-#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:366
+#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:367
 msgid "_Select"
 msgstr "_Izberi"
 
@@ -2036,7 +2036,7 @@ msgstr "Slike"
 #. If we don't have XDG user dirs info, return an educated guess.
 #: lib/ephy-file-helpers.c:119 lib/ephy-file-helpers.c:195
 #: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:80
-#: src/resources/gtk/prefs-general-page.blp:111
+#: src/resources/gtk/prefs-general-page.blp:112
 msgid "Downloads"
 msgstr "Prejemi"
 
@@ -2387,16 +2387,17 @@ msgid "Add Bookmark"
 msgstr "Doda zaznamek"
 
 #: src/bookmarks/ephy-bookmark-properties.c:354
-#: src/preferences/ephy-search-engine-row.c:130
+#: src/preferences/prefs-search-engine-page.c:92
 msgid "This field is required"
 msgstr "To polje je obvezno."
 
 #: src/bookmarks/ephy-bookmark-properties.c:356
-#: src/preferences/ephy-search-engine-row.c:135
+#: src/preferences/prefs-search-engine-page.c:97
 msgid "Address must start with either http:// or https://"
 msgstr "Naslov se mora začeti shttp:// ali https://."
 
 #: src/bookmarks/ephy-bookmark-properties.c:358
+#: src/preferences/prefs-search-engine-page.c:118
 msgid "Address is not a valid URL"
 msgstr "Naslov ni veljaven naslov URL"
 
@@ -3142,6 +3143,8 @@ msgid "Add “%s”"
 msgstr "Dodaj »%s«"
 
 #: src/ephy-window.c:2605 src/ephy-window.c:2613
+#: src/preferences/prefs-search-engine-page.c:310
+#: src/preferences/prefs-search-engine-page.c:312
 msgid "Add Search Engine"
 msgstr "Dodaj spletni iskalnik"
 
@@ -3246,11 +3249,11 @@ msgstr "_Dovoli"
 msgid "Leave Website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:3412 src/ephy-window.c:5068 src/window-commands.c:1406
+#: src/ephy-window.c:3412 src/ephy-window.c:5068 src/window-commands.c:1407
 msgid "A form was modified and has not been submitted"
 msgstr "Podatki obrazca so spremenjeni in niso bili poslani."
 
-#: src/ephy-window.c:3413 src/ephy-window.c:5069 src/window-commands.c:1410
+#: src/ephy-window.c:3413 src/ephy-window.c:5069 src/window-commands.c:1411
 msgid "_Discard Form"
 msgstr "_Zavrzi obrazec"
 
@@ -3412,79 +3415,11 @@ msgstr "Podatki CacheStorage"
 msgid "Data cleared"
 msgstr "Podatki so odstranjeni"
 
-#: src/preferences/ephy-search-engine-listbox.c:99
-#: src/preferences/prefs-general-page.c:946
-msgid "New search engine"
-msgstr "Nov iskalnik"
-
-#: src/preferences/ephy-search-engine-listbox.c:150
+#: src/preferences/ephy-search-engine-listbox.c:86
 msgid "A_dd Search Engine"
 msgstr "_Dodaj spletni iskalnik"
 
-#: src/preferences/ephy-search-engine-row.c:147
-#, c-format
-msgid "Address must contain the search term represented by %s"
-msgstr "Naslov mora vključevati iskalni niz, ki ga opredeljuje %s"
-
-#: src/preferences/ephy-search-engine-row.c:150
-msgid "Address should not contain the search term several times"
-msgstr "Naslov ne sme vključevati več iskalnih nizov"
-
-#: src/preferences/ephy-search-engine-row.c:156
-msgid "Address is not a valid URI"
-msgstr "Naslov ni veljaven naslov URI"
-
-#: src/preferences/ephy-search-engine-row.c:161
-#, c-format
-msgid ""
-"Address is not a valid URL. The address should look like https://www.example.com/"
-"search?q=%s"
-msgstr ""
-"Naslov ni veljaven naslov URL. Zapis mora biti v obliki https://www.iskalnik.si/search?"
-"q=%s"
-
-#: src/preferences/ephy-search-engine-row.c:194
-msgid "This shortcut is already used."
-msgstr "Ta tipkovna bližnjica je že v uporabi."
-
-#: src/preferences/ephy-search-engine-row.c:196
-msgid "Search shortcuts must not contain any space."
-msgstr "Iskalne bližnjice morajo biti brez preslednih znakov."
-
-#: src/preferences/ephy-search-engine-row.c:204
-msgid "Search shortcuts should start with a symbol such as !, # or @."
-msgstr "Iskalne bližnjice se morajo začeti s simboli, kot so !, # ali @."
-
-#: src/preferences/ephy-search-engine-row.c:211
-msgid "Shortcut (for example !ddg)"
-msgstr "Bližnjica (npr. !ddg)"
-
-#: src/preferences/ephy-search-engine-row.c:211
-#: src/resources/gtk/search-engine-row.blp:27
-msgid "Shortcut"
-msgstr "Tipkovna bližnjica"
-
-#: src/preferences/ephy-search-engine-row.c:231
-#, c-format
-msgid "Address (with search term as %s)"
-msgstr "Naslov (z iskalnim izrazom kot %s)"
-
-# G:0 K:1 O:0
-#: src/preferences/ephy-search-engine-row.c:231 src/resources/gtk/autofill-view.blp:56
-#: src/resources/gtk/bookmark-properties.blp:45
-#: src/resources/gtk/search-engine-row.blp:22
-msgid "Address"
-msgstr "Naslov"
-
-#: src/preferences/ephy-search-engine-row.c:251
-msgid "A name is required"
-msgstr "Zahtevano je ime iskalnika"
-
-#: src/preferences/ephy-search-engine-row.c:253
-msgid "This search engine already exists"
-msgstr "Ta iskalnik že obstaja."
-
-#: src/preferences/ephy-search-engine-row.c:350
+#: src/preferences/ephy-search-engine-row.c:130
 msgid "No search suggestions"
 msgstr "Brez predlogov za iskanje"
 
@@ -3563,6 +3498,73 @@ msgstr[3] "Sistemski jeziki (%s)"
 msgid "Supported Image Files"
 msgstr "Podprte slikovne datoteke"
 
+#: src/preferences/prefs-search-engine-page.c:109
+#, c-format
+msgid "Address must contain the search term represented by %s"
+msgstr "Naslov mora vključevati iskalni niz, ki ga opredeljuje %s"
+
+#: src/preferences/prefs-search-engine-page.c:112
+msgid "Address should not contain the search term several times"
+msgstr "Naslov ne sme vključevati več iskalnih nizov"
+
+#: src/preferences/prefs-search-engine-page.c:123
+#, c-format
+msgid ""
+"Address is not a valid URL. The address should look like https://www.example.com/"
+"search?q=%s"
+msgstr ""
+"Naslov ni veljaven naslov URL. Zapis mora biti v obliki https://www.iskalnik.si/search?"
+"q=%s"
+
+#: src/preferences/prefs-search-engine-page.c:148
+msgid "A name is required"
+msgstr "Zahtevano je ime iskalnika"
+
+#: src/preferences/prefs-search-engine-page.c:150
+msgid "This search engine already exists"
+msgstr "Ta iskalnik že obstaja."
+
+#: src/preferences/prefs-search-engine-page.c:194
+#, c-format
+msgid "Address (with search term as %s)"
+msgstr "Naslov (z iskalnim izrazom kot %s)"
+
+# G:0 K:1 O:0
+#: src/preferences/prefs-search-engine-page.c:194 src/resources/gtk/autofill-view.blp:56
+#: src/resources/gtk/bookmark-properties.blp:45
+#: src/resources/gtk/prefs-search-engine-page.blp:16
+msgid "Address"
+msgstr "Naslov"
+
+#: src/preferences/prefs-search-engine-page.c:207
+msgid "This shortcut is already used."
+msgstr "Ta tipkovna bližnjica je že v uporabi."
+
+#: src/preferences/prefs-search-engine-page.c:209
+msgid "Search shortcuts must not contain any space."
+msgstr "Iskalne bližnjice morajo biti brez preslednih znakov."
+
+#: src/preferences/prefs-search-engine-page.c:217
+msgid "Search shortcuts should start with a symbol such as !, # or @."
+msgstr "Iskalne bližnjice se morajo začeti s simboli, kot so !, # ali @."
+
+#: src/preferences/prefs-search-engine-page.c:227
+msgid "Shortcut (for example !ddg)"
+msgstr "Bližnjica (npr. !ddg)"
+
+#: src/preferences/prefs-search-engine-page.c:227
+#: src/resources/gtk/prefs-search-engine-page.blp:47
+msgid "Shortcut"
+msgstr "Tipkovna bližnjica"
+
+#: src/preferences/prefs-search-engine-page.c:315
+msgid "Edit Search Engine"
+msgstr "Uredi iskalnik"
+
+#: src/preferences/prefs-search-engine-page.c:317
+msgid "Remove Search Engine"
+msgstr "Odstrani iskalnik"
+
 #: src/preferences/webapp-additional-urls-dialog.c:71
 msgid "Remove URL"
 msgstr "Odstrani URL"
@@ -3610,7 +3612,7 @@ msgid "Forward"
 msgstr "Naprej"
 
 #: src/resources/gtk/action-bar-start.blp:84 src/resources/gtk/extension-view.blp:52
-#: src/resources/gtk/prefs-general-page.blp:66
+#: src/resources/gtk/prefs-general-page.blp:67
 msgid "Homepage"
 msgstr "Začetna stran"
 
@@ -3705,7 +3707,7 @@ msgstr "_Dodaj"
 
 # G:3 K:4 O:1
 #: src/resources/gtk/bookmark-properties.blp:41
-#: src/resources/gtk/search-engine-row.blp:18
+#: src/resources/gtk/prefs-search-engine-page.blp:12
 msgid "Name"
 msgstr "Ime"
 
@@ -3715,7 +3717,6 @@ msgid "Tags"
 msgstr "Oznake"
 
 #: src/resources/gtk/bookmark-properties.blp:64 src/resources/gtk/bookmark-row.blp:42
-#: src/resources/gtk/search-engine-row.blp:9
 msgid "Remove"
 msgstr "Odstrani"
 
@@ -3728,7 +3729,7 @@ msgid "Add new tag"
 msgstr "Dodaj novo oznako"
 
 # G:1 K:0 O:0
-#: src/resources/gtk/bookmarks-dialog.blp:18
+#: src/resources/gtk/bookmarks-dialog.blp:18 src/resources/gtk/search-engine-row.blp:9
 msgid "Edit"
 msgstr "Uredi"
 
@@ -3802,7 +3803,7 @@ msgid ""
 msgstr "Tega dejanja ni mogoče razveljaviti. Podatki bodo trajno izbrisani."
 
 #: src/resources/gtk/data-view.blp:12 src/resources/gtk/history-dialog.blp:37
-#: src/resources/gtk/history-dialog.blp:62 src/resources/gtk/prefs-general-page.blp:157
+#: src/resources/gtk/history-dialog.blp:62 src/resources/gtk/prefs-general-page.blp:158
 msgid "Search"
 msgstr "Iskanje"
 
@@ -4002,7 +4003,7 @@ msgstr "Zapri zavihke na _desni"
 msgid "Close _Other Tabs"
 msgstr "Zapri _preostale zavihke"
 
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:293
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:294
 msgid "_Close"
 msgstr "_Zapri"
 
@@ -4187,8 +4188,8 @@ msgid ""
 "extensions, visit <a href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr ""
 "Program Epiphany je združljiv s spletnimi razširitvami za Mozilla Firefox. Če želite "
-"poiskati in dodati spletne razširitve, obiščite <a href=\"https://addons.mozilla.org"
-"\">addons.mozilla.org</a>."
+"poiskati in dodati spletne razširitve, obiščite <a href=\"https://"
+"addons.mozilla.org\">addons.mozilla.org</a>."
 
 #: src/resources/gtk/prefs-extensions-page.blp:53
 msgid "No Extensions Installed"
@@ -4206,111 +4207,111 @@ msgstr "Ponastavi vse"
 msgid "General"
 msgstr "Splošno"
 
-#: src/resources/gtk/prefs-general-page.blp:9
+#: src/resources/gtk/prefs-general-page.blp:10
 msgid "Web App"
 msgstr "Spletni program"
 
-#: src/resources/gtk/prefs-general-page.blp:13
+#: src/resources/gtk/prefs-general-page.blp:14
 msgid "_Icon"
 msgstr "_Ikona"
 
-#: src/resources/gtk/prefs-general-page.blp:23
+#: src/resources/gtk/prefs-general-page.blp:24
 msgid "_Homepage"
 msgstr "_Začetna stran"
 
-#: src/resources/gtk/prefs-general-page.blp:29
+#: src/resources/gtk/prefs-general-page.blp:30
 msgid "_Title"
 msgstr "_Naziv"
 
-#: src/resources/gtk/prefs-general-page.blp:36
+#: src/resources/gtk/prefs-general-page.blp:37
 msgid "Additional _Domains"
 msgstr "Dodatne _domene"
 
-#: src/resources/gtk/prefs-general-page.blp:47
+#: src/resources/gtk/prefs-general-page.blp:48
 msgid "Web Content"
 msgstr "Spletna vsebina"
 
-#: src/resources/gtk/prefs-general-page.blp:50
+#: src/resources/gtk/prefs-general-page.blp:51
 msgid "Block _Advertisements"
 msgstr "Onemogoči _oglasna sporočila"
 
-#: src/resources/gtk/prefs-general-page.blp:55
+#: src/resources/gtk/prefs-general-page.blp:56
 msgid "Block _Popup Windows"
 msgstr "Onemogoči prikazovanje _pojavnih oken"
 
-#: src/resources/gtk/prefs-general-page.blp:60
+#: src/resources/gtk/prefs-general-page.blp:61
 msgid "Block C_ookie Banners"
 msgstr "Blokiraj pasice za pi_škotke"
 
-#: src/resources/gtk/prefs-general-page.blp:70
+#: src/resources/gtk/prefs-general-page.blp:71
 msgid "Most _Visited Pages"
 msgstr "Največkrat _obiskana stran"
 
-#: src/resources/gtk/prefs-general-page.blp:81
+#: src/resources/gtk/prefs-general-page.blp:82
 msgid "_Blank Page"
 msgstr "_Prazna stran"
 
-#: src/resources/gtk/prefs-general-page.blp:93
+#: src/resources/gtk/prefs-general-page.blp:94
 msgid "_Custom"
 msgstr "_Po meri"
 
-#: src/resources/gtk/prefs-general-page.blp:114
+#: src/resources/gtk/prefs-general-page.blp:115
 msgid "Ask o_n Download"
 msgstr "Vprašaj ob _prejemu"
 
-#: src/resources/gtk/prefs-general-page.blp:120
+#: src/resources/gtk/prefs-general-page.blp:121
 msgid "_Download Folder"
 msgstr "Mapa _prejemov"
 
-#: src/resources/gtk/prefs-general-page.blp:160
+#: src/resources/gtk/prefs-general-page.blp:161
 msgid "Search Engine"
 msgstr "Iskalnik"
 
-#: src/resources/gtk/prefs-general-page.blp:164
+#: src/resources/gtk/prefs-general-page.blp:165
 msgid "Incognito Search Engine"
 msgstr "Iskalnik v zasebnem načinu"
 
-#: src/resources/gtk/prefs-general-page.blp:173
+#: src/resources/gtk/prefs-general-page.blp:174
 msgid "Session"
 msgstr "Seja"
 
-#: src/resources/gtk/prefs-general-page.blp:176
+#: src/resources/gtk/prefs-general-page.blp:177
 msgid "Start in _Incognito Mode"
 msgstr "Zaženi brskalnik v _zasebnem načinu"
 
-#: src/resources/gtk/prefs-general-page.blp:181
+#: src/resources/gtk/prefs-general-page.blp:182
 msgid "_Restore Tabs on Startup"
 msgstr "_Zapomni si nazadnje odprte zavihke"
 
-#: src/resources/gtk/prefs-general-page.blp:187
+#: src/resources/gtk/prefs-general-page.blp:188
 msgid "Browsing"
 msgstr "Brskanje"
 
-#: src/resources/gtk/prefs-general-page.blp:190
+#: src/resources/gtk/prefs-general-page.blp:191
 msgid "Mouse _Gestures"
 msgstr "Omogoči _poteze miške"
 
-#: src/resources/gtk/prefs-general-page.blp:195
+#: src/resources/gtk/prefs-general-page.blp:196
 msgid "S_witch Immediately to New Tabs"
 msgstr "Takoj _preklopi na nove zavihke"
 
-#: src/resources/gtk/prefs-general-page.blp:200
+#: src/resources/gtk/prefs-general-page.blp:201
 msgid "Touch _Navigation Gestures"
 msgstr "Poteze za krmarjenje z _dotikom"
 
-#: src/resources/gtk/prefs-general-page.blp:219
+#: src/resources/gtk/prefs-general-page.blp:220
 msgid "_Spell Checking"
 msgstr "_Preverjaj črkovanje"
 
-#: src/resources/gtk/prefs-general-page.blp:225
+#: src/resources/gtk/prefs-general-page.blp:226
 msgid "Developer"
 msgstr "Razvijalec"
 
-#: src/resources/gtk/prefs-general-page.blp:228
+#: src/resources/gtk/prefs-general-page.blp:229
 msgid "Show D_eveloper Actions"
 msgstr "Prikaži možnosti za _razvijalce"
 
-#: src/resources/gtk/prefs-general-page.blp:233
+#: src/resources/gtk/prefs-general-page.blp:234
 msgid "Always Show Full _URL"
 msgstr "Vedno pokaži polni _URL"
 
@@ -4374,6 +4375,19 @@ msgstr "_Samodejno izpolni obrazce"
 #: src/resources/gtk/prefs-privacy-page.blp:60
 msgid "Autofill _Data"
 msgstr "Samodejno izpolni po_datke"
+
+#: src/resources/gtk/prefs-search-engine-page.blp:21
+msgid "More Information"
+msgstr "Več podrobnosti"
+
+#: src/resources/gtk/prefs-search-engine-page.blp:26
+#, c-format
+msgid ""
+"To determine the search address, perform a search using the search engine that you "
+"want to add and replace the search term with %s"
+msgstr ""
+"Za določitev iskalnega naslova je treba z izbranim spletnim iskalnikom izvesti iskanje "
+"in zabeležiti naslov z iskalnim nizom %s."
 
 #: src/resources/gtk/privacy-report.blp:10
 msgid "Privacy Report"
@@ -4882,93 +4896,93 @@ msgstr "Manjkajoče ime ali različica"
 msgid "Failed to determine initiating URI"
 msgstr "Ni bilo mogoče določiti začetnega URI-ja"
 
-#: src/window-commands.c:130
+#: src/window-commands.c:131
 msgid "HTML File"
 msgstr "Datoteka HTML"
 
-#: src/window-commands.c:131
+#: src/window-commands.c:132
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:132 src/window-commands.c:734
+#: src/window-commands.c:133 src/window-commands.c:735
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:133 src/window-commands.c:735
+#: src/window-commands.c:134 src/window-commands.c:736
 msgid "Chromium"
 msgstr "Chromium"
 
 # G:9 K:0 O:0
-#: src/window-commands.c:175 src/window-commands.c:571 src/window-commands.c:897
-#: src/window-commands.c:937
+#: src/window-commands.c:176 src/window-commands.c:572 src/window-commands.c:898
+#: src/window-commands.c:938
 msgid "_Select File"
 msgstr "Izberi _datoteko"
 
 # G:2 K:2 O:0
-#: src/window-commands.c:177 src/window-commands.c:899
+#: src/window-commands.c:178 src/window-commands.c:900
 msgid "I_mport"
 msgstr "U_vozi"
 
-#: src/window-commands.c:330 src/window-commands.c:419 src/window-commands.c:463
-#: src/window-commands.c:486 src/window-commands.c:502
+#: src/window-commands.c:331 src/window-commands.c:420 src/window-commands.c:464
+#: src/window-commands.c:487 src/window-commands.c:503
 msgid "Bookmarks successfully imported!"
 msgstr "Zaznamki so uspešno uvoženi!"
 
 # G:9 K:0 O:0
-#: src/window-commands.c:349
+#: src/window-commands.c:350
 msgid "Select Profile"
 msgstr "Izbor profila"
 
-#: src/window-commands.c:430 src/window-commands.c:692 src/window-commands.c:818
-#: src/window-commands.c:1040
+#: src/window-commands.c:431 src/window-commands.c:693 src/window-commands.c:819
+#: src/window-commands.c:1041
 msgid "Choose File"
 msgstr "Izbor datoteke"
 
-#: src/window-commands.c:557
+#: src/window-commands.c:558
 msgid "Import Bookmarks"
 msgstr "Uvozi zaznamke"
 
-#: src/window-commands.c:585 src/window-commands.c:951
+#: src/window-commands.c:586 src/window-commands.c:952
 msgid "File Type"
 msgstr "Vrsta datoteke"
 
-#: src/window-commands.c:649
+#: src/window-commands.c:650
 msgid "Bookmarks successfully exported!"
 msgstr "Zaznamki so uspešno izvoženi!"
 
 # G:1 K:0 O:0
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:703
+#: src/window-commands.c:704
 msgid "bookmarks.html"
 msgstr "zaznamki.html"
 
 # G:16 K:0 O:29
-#: src/window-commands.c:733
+#: src/window-commands.c:734
 msgid "CSV File"
 msgstr "Datoteka CSV"
 
-#: src/window-commands.c:781 src/window-commands.c:807
+#: src/window-commands.c:782 src/window-commands.c:808
 msgid "Passwords successfully imported!"
 msgstr "Gesla so uspešno uvoženi!"
 
-#: src/window-commands.c:923
+#: src/window-commands.c:924
 msgid "Import Passwords"
 msgstr "Uvozi gesla"
 
-#: src/window-commands.c:999
+#: src/window-commands.c:1000
 msgid "Passwords successfully exported!"
 msgstr "Gesla uspešno izvožena!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1050
+#: src/window-commands.c:1051
 msgid "passwords.csv"
 msgstr "gesla.csv"
 
-#: src/window-commands.c:1226
+#: src/window-commands.c:1227
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1249
+#: src/window-commands.c:1250
 msgid "translator-credits"
 msgstr ""
 "Matej Urbančič <mateju@src.gnome.org>\n"
@@ -4977,56 +4991,56 @@ msgstr ""
 "Matjaž Horvat\n"
 "Tilen Travnik"
 
-#: src/window-commands.c:1405
+#: src/window-commands.c:1406
 msgid "Reload Website?"
 msgstr "Ali želite ponovno naložiti spletišče?"
 
-#: src/window-commands.c:1956
+#: src/window-commands.c:1957
 msgid "New Web App"
 msgstr "Nova spletna aplikacija"
 
-#: src/window-commands.c:2008
+#: src/window-commands.c:2009
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Program »%s« je pripravljen za uporabo"
 
-#: src/window-commands.c:2011
+#: src/window-commands.c:2012
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "Spletnega programa »%s« ni mogoče ustvariti: %s"
 
-#: src/window-commands.c:2109
+#: src/window-commands.c:2110
 msgid "Replace Existing Web App?"
 msgstr "Ali želite zamenjati obstoječi spletni program?"
 
-#: src/window-commands.c:2112
+#: src/window-commands.c:2113
 #, c-format
 msgid "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Program z imenom »%s« že obstaja. Z zamenjavo bo predhodni program prepisan."
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2118
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
 # G:6 K:0 O:0
-#: src/window-commands.c:2423
+#: src/window-commands.c:2424
 msgid "Screenshot finished"
 msgstr "Posnetek zaslona je izdelan"
 
-#: src/window-commands.c:2545
+#: src/window-commands.c:2546
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2549
+#: src/window-commands.c:2550
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2595
+#: src/window-commands.c:2596
 msgid "PNG"
 msgstr "PNG"
 
 # G:1 K:2 O:0
-#: src/window-commands.c:2948
+#: src/window-commands.c:2920
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "Dodan spletni iskalnik »%s«"
@@ -5036,16 +5050,16 @@ msgstr "Dodan spletni iskalnik »%s«"
 #. * manually here for self->model because that would not remove the link for
 #. * all the other tabs, so that's why we let the EphyWebViews take care of it.
 #.
-#: src/window-commands.c:2967
+#: src/window-commands.c:2939
 msgid "Show"
 msgstr "Pokaži"
 
 # G:1 K:0 O:0
-#: src/window-commands.c:3199
+#: src/window-commands.c:3171
 msgid "Enable Caret Browsing Mode?"
 msgstr "Ali naj se omogoči kazalni način brskanja?"
 
-#: src/window-commands.c:3200
+#: src/window-commands.c:3172
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable cursor in "
 "web pages, allowing you to move around with your keyboard. Do you want to enable caret "
@@ -5055,6 +5069,6 @@ msgstr ""
 "možnost omogoči premakljivo kazalko na spletnih straneh, s katero se je mogoče "
 "premikati po strani s pomočjo tipkovnice. Ali želite omogočiti kazalni način brskanja?"
 
-#: src/window-commands.c:3205
+#: src/window-commands.c:3177
 msgid "_Enable"
 msgstr "_Omogoči"
