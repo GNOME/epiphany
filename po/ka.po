@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-01-23 23:08+0000\n"
-"PO-Revision-Date: 2026-01-25 10:07+0100\n"
-"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"POT-Creation-Date: 2026-01-27 22:42+0000\n"
+"PO-Revision-Date: 2026-01-28 05:35+0100\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.desktop.in.in:2
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:429 src/window-commands.c:1229
+#: src/ephy-main.c:429 src/window-commands.c:1230
 msgid "Web"
 msgstr "ვები"
 
@@ -378,7 +378,7 @@ msgstr ""
 "ნაგულისხმევი კოდირება. მისაღებია მნიშვნელობები, რომლებიც WebKitGTK-ს ესმის."
 
 #: data/org.gnome.epiphany.gschema.xml:183
-#: src/resources/gtk/prefs-general-page.blp:206
+#: src/resources/gtk/prefs-general-page.blp:207
 msgid "Languages"
 msgstr "ენები"
 
@@ -1053,7 +1053,7 @@ msgid "A browser window"
 msgstr "ბრაუზერის ფანჯარა"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1239
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1240
 msgid "The GNOME Project"
 msgstr "პროექტი „GNOME“"
 
@@ -1070,7 +1070,7 @@ msgstr "ვერისა %s"
 msgid "About Web"
 msgstr "ვების შესახებ"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1231
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1232
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany ის სატესტო ვერსია"
 
@@ -1089,7 +1089,7 @@ msgid "List of installed web apps"
 msgstr "დაყენებული ვებ აპების სია"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2023
+#: embed/ephy-about-handler.c:330 src/window-commands.c:2024
 msgid "Launch"
 msgstr "გაშვება"
 
@@ -1177,10 +1177,10 @@ msgstr ""
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:98
 #: src/resources/gtk/history-dialog.blp:55
-#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:362
-#: src/window-commands.c:567 src/window-commands.c:933
-#: src/window-commands.c:1409 src/window-commands.c:2116
-#: src/window-commands.c:3204
+#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:363
+#: src/window-commands.c:568 src/window-commands.c:934
+#: src/window-commands.c:1410 src/window-commands.c:2117
+#: src/window-commands.c:3176
 msgid "_Cancel"
 msgstr "_გაუქმება"
 
@@ -1209,7 +1209,7 @@ msgstr ""
 "ვებგვერდი მისამართზე %s:%d მოითხოვს, რომ მიაწოდოთ სერტიფიკატი "
 "ავთენტიკაციისთვის."
 
-#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:366
+#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:367
 msgid "_Select"
 msgstr "_მონიშვნა"
 
@@ -2028,7 +2028,7 @@ msgstr "სურათები"
 #. If we don't have XDG user dirs info, return an educated guess.
 #: lib/ephy-file-helpers.c:119 lib/ephy-file-helpers.c:195
 #: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:80
-#: src/resources/gtk/prefs-general-page.blp:111
+#: src/resources/gtk/prefs-general-page.blp:112
 msgid "Downloads"
 msgstr "გადმოწერები"
 
@@ -2399,16 +2399,17 @@ msgid "Add Bookmark"
 msgstr "სანიშნეს დამატება"
 
 #: src/bookmarks/ephy-bookmark-properties.c:354
-#: src/preferences/ephy-search-engine-row.c:130
+#: src/preferences/prefs-search-engine-page.c:92
 msgid "This field is required"
 msgstr "ამ ველის შევსება აუცილებელია"
 
 #: src/bookmarks/ephy-bookmark-properties.c:356
-#: src/preferences/ephy-search-engine-row.c:135
+#: src/preferences/prefs-search-engine-page.c:97
 msgid "Address must start with either http:// or https://"
 msgstr "მისამართი http:// ან https://-ით უნდა იწყებოდეს"
 
 #: src/bookmarks/ephy-bookmark-properties.c:358
+#: src/preferences/prefs-search-engine-page.c:118
 msgid "Address is not a valid URL"
 msgstr "მისამართი სწორი URL არაა"
 
@@ -3105,6 +3106,8 @@ msgid "Add “%s”"
 msgstr "\"%s\"-ის დამატება"
 
 #: src/ephy-window.c:2605 src/ephy-window.c:2613
+#: src/preferences/prefs-search-engine-page.c:310
+#: src/preferences/prefs-search-engine-page.c:312
 msgid "Add Search Engine"
 msgstr "საძიებო სისტემის დამატება"
 
@@ -3211,11 +3214,11 @@ msgstr "_დაშვება"
 msgid "Leave Website?"
 msgstr "დატოვებთ ვებგვერდს?"
 
-#: src/ephy-window.c:3412 src/ephy-window.c:5068 src/window-commands.c:1406
+#: src/ephy-window.c:3412 src/ephy-window.c:5068 src/window-commands.c:1407
 msgid "A form was modified and has not been submitted"
 msgstr "ფორმა შეიცვალა და არ გადაცემულა"
 
-#: src/ephy-window.c:3413 src/ephy-window.c:5069 src/window-commands.c:1410
+#: src/ephy-window.c:3413 src/ephy-window.c:5069 src/window-commands.c:1411
 msgid "_Discard Form"
 msgstr "_ფორმის მოცილება"
 
@@ -3372,80 +3375,11 @@ msgstr "კეშის საცავის მონაცემები"
 msgid "Data cleared"
 msgstr "მონაცემები გასუფთავდა"
 
-#: src/preferences/ephy-search-engine-listbox.c:99
-#: src/preferences/prefs-general-page.c:946
-msgid "New search engine"
-msgstr "ახალი საძიებო სსტემა"
-
-#: src/preferences/ephy-search-engine-listbox.c:150
+#: src/preferences/ephy-search-engine-listbox.c:86
 msgid "A_dd Search Engine"
 msgstr "საძიებო სისტემის _დამატება"
 
-#: src/preferences/ephy-search-engine-row.c:147
-#, c-format
-msgid "Address must contain the search term represented by %s"
-msgstr "მისამართი უნდა შეიცავდეს ძებნის პირობას, რომელსაც წარმოადგენს %s"
-
-#: src/preferences/ephy-search-engine-row.c:150
-msgid "Address should not contain the search term several times"
-msgstr "მისამართი ძებნის პირობას რამდენჯერმე არ უნდა შეიცავდეს"
-
-#: src/preferences/ephy-search-engine-row.c:156
-msgid "Address is not a valid URI"
-msgstr "მისამართი სწორ URI-ის არ წარმოადგენს"
-
-#: src/preferences/ephy-search-engine-row.c:161
-#, c-format
-msgid ""
-"Address is not a valid URL. The address should look like https://"
-"www.example.com/search?q=%s"
-msgstr ""
-"მისამართი სწორი URL არაა. მისამართი უნდა გამოიყურებოდეს ასე: https://"
-"www.example.com/search?q=%s"
-
-#: src/preferences/ephy-search-engine-row.c:194
-msgid "This shortcut is already used."
-msgstr "ეს მალსახმობი უკვე გამოიყენება."
-
-#: src/preferences/ephy-search-engine-row.c:196
-msgid "Search shortcuts must not contain any space."
-msgstr "ძებნის მალსახმობები არ შეიძლება, გამოტოვებას შეიცავდეს."
-
-#: src/preferences/ephy-search-engine-row.c:204
-msgid "Search shortcuts should start with a symbol such as !, # or @."
-msgstr ""
-"ძებნის მალსახმობები უნდა იწყებოდეს ისეთი სიმბოლოებით, როგორიცაა !, # ან @."
-
-#: src/preferences/ephy-search-engine-row.c:211
-msgid "Shortcut (for example !ddg)"
-msgstr "მალსახმობი (მაგალითად !ddg)"
-
-#: src/preferences/ephy-search-engine-row.c:211
-#: src/resources/gtk/search-engine-row.blp:27
-msgid "Shortcut"
-msgstr "მალსახმობი"
-
-#: src/preferences/ephy-search-engine-row.c:231
-#, c-format
-msgid "Address (with search term as %s)"
-msgstr "მისამართი (საძებნი სტრიქონით, როგორც %s)"
-
-#: src/preferences/ephy-search-engine-row.c:231
-#: src/resources/gtk/autofill-view.blp:56
-#: src/resources/gtk/bookmark-properties.blp:45
-#: src/resources/gtk/search-engine-row.blp:22
-msgid "Address"
-msgstr "მისამართი"
-
-#: src/preferences/ephy-search-engine-row.c:251
-msgid "A name is required"
-msgstr "სახელი აუცილებელია"
-
-#: src/preferences/ephy-search-engine-row.c:253
-msgid "This search engine already exists"
-msgstr "ძებნის ძრავი უკვე არსებობს"
-
-#: src/preferences/ephy-search-engine-row.c:350
+#: src/preferences/ephy-search-engine-row.c:130
 msgid "No search suggestions"
 msgstr "ძებნის მინიშნებების გარეშე"
 
@@ -3524,6 +3458,74 @@ msgstr[1] "სისტემური ენა (%s)"
 msgid "Supported Image Files"
 msgstr "გამოსახულების მხარდაჭერილი ფაილები"
 
+#: src/preferences/prefs-search-engine-page.c:109
+#, c-format
+msgid "Address must contain the search term represented by %s"
+msgstr "მისამართი უნდა შეიცავდეს ძებნის პირობას, რომელსაც წარმოადგენს %s"
+
+#: src/preferences/prefs-search-engine-page.c:112
+msgid "Address should not contain the search term several times"
+msgstr "მისამართი ძებნის პირობას რამდენჯერმე არ უნდა შეიცავდეს"
+
+#: src/preferences/prefs-search-engine-page.c:123
+#, c-format
+msgid ""
+"Address is not a valid URL. The address should look like https://"
+"www.example.com/search?q=%s"
+msgstr ""
+"მისამართი სწორი URL არაა. მისამართი უნდა გამოიყურებოდეს ასე: https://"
+"www.example.com/search?q=%s"
+
+#: src/preferences/prefs-search-engine-page.c:148
+msgid "A name is required"
+msgstr "სახელი აუცილებელია"
+
+#: src/preferences/prefs-search-engine-page.c:150
+msgid "This search engine already exists"
+msgstr "ძებნის ძრავი უკვე არსებობს"
+
+#: src/preferences/prefs-search-engine-page.c:194
+#, c-format
+msgid "Address (with search term as %s)"
+msgstr "მისამართი (საძებნი სტრიქონით, როგორც %s)"
+
+#: src/preferences/prefs-search-engine-page.c:194
+#: src/resources/gtk/autofill-view.blp:56
+#: src/resources/gtk/bookmark-properties.blp:45
+#: src/resources/gtk/prefs-search-engine-page.blp:16
+msgid "Address"
+msgstr "მისამართი"
+
+#: src/preferences/prefs-search-engine-page.c:207
+msgid "This shortcut is already used."
+msgstr "ეს მალსახმობი უკვე გამოიყენება."
+
+#: src/preferences/prefs-search-engine-page.c:209
+msgid "Search shortcuts must not contain any space."
+msgstr "ძებნის მალსახმობები არ შეიძლება, გამოტოვებას შეიცავდეს."
+
+#: src/preferences/prefs-search-engine-page.c:217
+msgid "Search shortcuts should start with a symbol such as !, # or @."
+msgstr ""
+"ძებნის მალსახმობები უნდა იწყებოდეს ისეთი სიმბოლოებით, როგორიცაა !, # ან @."
+
+#: src/preferences/prefs-search-engine-page.c:227
+msgid "Shortcut (for example !ddg)"
+msgstr "მალსახმობი (მაგალითად !ddg)"
+
+#: src/preferences/prefs-search-engine-page.c:227
+#: src/resources/gtk/prefs-search-engine-page.blp:47
+msgid "Shortcut"
+msgstr "მალსახმობი"
+
+#: src/preferences/prefs-search-engine-page.c:315
+msgid "Edit Search Engine"
+msgstr "საძიებო სისტემის ჩასწორება"
+
+#: src/preferences/prefs-search-engine-page.c:317
+msgid "Remove Search Engine"
+msgstr "საძიებო სისტემის წაშლა"
+
 #: src/preferences/webapp-additional-urls-dialog.c:71
 msgid "Remove URL"
 msgstr "URL-ის წაშლა"
@@ -3574,7 +3576,7 @@ msgstr "წინ"
 
 #: src/resources/gtk/action-bar-start.blp:84
 #: src/resources/gtk/extension-view.blp:52
-#: src/resources/gtk/prefs-general-page.blp:66
+#: src/resources/gtk/prefs-general-page.blp:67
 msgid "Homepage"
 msgstr "Homepage"
 
@@ -3664,7 +3666,7 @@ msgid "_Add"
 msgstr "დამატება"
 
 #: src/resources/gtk/bookmark-properties.blp:41
-#: src/resources/gtk/search-engine-row.blp:18
+#: src/resources/gtk/prefs-search-engine-page.blp:12
 msgid "Name"
 msgstr "სახელი"
 
@@ -3675,7 +3677,6 @@ msgstr "ჭდეები"
 
 #: src/resources/gtk/bookmark-properties.blp:64
 #: src/resources/gtk/bookmark-row.blp:42
-#: src/resources/gtk/search-engine-row.blp:9
 msgid "Remove"
 msgstr "წაშლა"
 
@@ -3688,6 +3689,7 @@ msgid "Add new tag"
 msgstr "ახალი ჭდის დამატება"
 
 #: src/resources/gtk/bookmarks-dialog.blp:18
+#: src/resources/gtk/search-engine-row.blp:9
 msgid "Edit"
 msgstr "ჩასწორება"
 
@@ -3760,7 +3762,7 @@ msgstr ""
 
 #: src/resources/gtk/data-view.blp:12 src/resources/gtk/history-dialog.blp:37
 #: src/resources/gtk/history-dialog.blp:62
-#: src/resources/gtk/prefs-general-page.blp:157
+#: src/resources/gtk/prefs-general-page.blp:158
 msgid "Search"
 msgstr "ძებნა"
 
@@ -3955,7 +3957,7 @@ msgstr "_მარჯვნივ მყოფი ჩანართების
 msgid "Close _Other Tabs"
 msgstr "_სხვა ჩანართების დახურვა"
 
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:293
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:294
 msgid "_Close"
 msgstr "_დახურვა"
 
@@ -4157,111 +4159,111 @@ msgstr "ყველას ჩამოყრა"
 msgid "General"
 msgstr "ზოგადი"
 
-#: src/resources/gtk/prefs-general-page.blp:9
+#: src/resources/gtk/prefs-general-page.blp:10
 msgid "Web App"
 msgstr "ვებ აპლიკაცია"
 
-#: src/resources/gtk/prefs-general-page.blp:13
+#: src/resources/gtk/prefs-general-page.blp:14
 msgid "_Icon"
 msgstr "_ხატულა"
 
-#: src/resources/gtk/prefs-general-page.blp:23
+#: src/resources/gtk/prefs-general-page.blp:24
 msgid "_Homepage"
 msgstr "_საწყისი გვერდი"
 
-#: src/resources/gtk/prefs-general-page.blp:29
+#: src/resources/gtk/prefs-general-page.blp:30
 msgid "_Title"
 msgstr "_სათაური"
 
-#: src/resources/gtk/prefs-general-page.blp:36
+#: src/resources/gtk/prefs-general-page.blp:37
 msgid "Additional _Domains"
 msgstr "დამატებითი _დომენები"
 
-#: src/resources/gtk/prefs-general-page.blp:47
+#: src/resources/gtk/prefs-general-page.blp:48
 msgid "Web Content"
 msgstr "ვებ შემცველობა"
 
-#: src/resources/gtk/prefs-general-page.blp:50
+#: src/resources/gtk/prefs-general-page.blp:51
 msgid "Block _Advertisements"
 msgstr "_რეკლამის დაბლოკვა"
 
-#: src/resources/gtk/prefs-general-page.blp:55
+#: src/resources/gtk/prefs-general-page.blp:56
 msgid "Block _Popup Windows"
 msgstr "_მხტუნარა ფანჯრების დაბლოკვა"
 
-#: src/resources/gtk/prefs-general-page.blp:60
+#: src/resources/gtk/prefs-general-page.blp:61
 msgid "Block C_ookie Banners"
 msgstr "ქუქის ბანერების დაბლ_ოკვა"
 
-#: src/resources/gtk/prefs-general-page.blp:70
+#: src/resources/gtk/prefs-general-page.blp:71
 msgid "Most _Visited Pages"
 msgstr "ხშირად _შესული გვერდები"
 
-#: src/resources/gtk/prefs-general-page.blp:81
+#: src/resources/gtk/prefs-general-page.blp:82
 msgid "_Blank Page"
 msgstr "_სუფთა გვერდი"
 
-#: src/resources/gtk/prefs-general-page.blp:93
+#: src/resources/gtk/prefs-general-page.blp:94
 msgid "_Custom"
 msgstr "_ხელით"
 
-#: src/resources/gtk/prefs-general-page.blp:114
+#: src/resources/gtk/prefs-general-page.blp:115
 msgid "Ask o_n Download"
 msgstr "_კითხვა გადმოწერისას"
 
-#: src/resources/gtk/prefs-general-page.blp:120
+#: src/resources/gtk/prefs-general-page.blp:121
 msgid "_Download Folder"
 msgstr "_გადმოწერილი ფაილების საქაღლდე"
 
-#: src/resources/gtk/prefs-general-page.blp:160
+#: src/resources/gtk/prefs-general-page.blp:161
 msgid "Search Engine"
 msgstr "საძიებო სისტემა"
 
-#: src/resources/gtk/prefs-general-page.blp:164
+#: src/resources/gtk/prefs-general-page.blp:165
 msgid "Incognito Search Engine"
 msgstr "ინკოგნიტო საძიებო სსტემა"
 
-#: src/resources/gtk/prefs-general-page.blp:173
+#: src/resources/gtk/prefs-general-page.blp:174
 msgid "Session"
 msgstr "სესია"
 
-#: src/resources/gtk/prefs-general-page.blp:176
+#: src/resources/gtk/prefs-general-page.blp:177
 msgid "Start in _Incognito Mode"
 msgstr "ინკოგნიტო _რეჟიმში გაშვება"
 
-#: src/resources/gtk/prefs-general-page.blp:181
+#: src/resources/gtk/prefs-general-page.blp:182
 msgid "_Restore Tabs on Startup"
 msgstr "ჩანართების აღდგენა _გაშვებისას"
 
-#: src/resources/gtk/prefs-general-page.blp:187
+#: src/resources/gtk/prefs-general-page.blp:188
 msgid "Browsing"
 msgstr "არჩევა"
 
-#: src/resources/gtk/prefs-general-page.blp:190
+#: src/resources/gtk/prefs-general-page.blp:191
 msgid "Mouse _Gestures"
 msgstr "თაგუნას _ჟესტები"
 
-#: src/resources/gtk/prefs-general-page.blp:195
+#: src/resources/gtk/prefs-general-page.blp:196
 msgid "S_witch Immediately to New Tabs"
 msgstr "ახალ ჩანართებზე დაუყოვნებლივი _გადართვა"
 
-#: src/resources/gtk/prefs-general-page.blp:200
+#: src/resources/gtk/prefs-general-page.blp:201
 msgid "Touch _Navigation Gestures"
 msgstr "შეხებით _ნავიგაციის ჟესტები"
 
-#: src/resources/gtk/prefs-general-page.blp:219
+#: src/resources/gtk/prefs-general-page.blp:220
 msgid "_Spell Checking"
 msgstr "მართლწერის _შემოწმება"
 
-#: src/resources/gtk/prefs-general-page.blp:225
+#: src/resources/gtk/prefs-general-page.blp:226
 msgid "Developer"
 msgstr "პროგრამისტი"
 
-#: src/resources/gtk/prefs-general-page.blp:228
+#: src/resources/gtk/prefs-general-page.blp:229
 msgid "Show D_eveloper Actions"
 msgstr "პროგრამისტის ქმე_დებების ჩვენება"
 
-#: src/resources/gtk/prefs-general-page.blp:233
+#: src/resources/gtk/prefs-general-page.blp:234
 msgid "Always Show Full _URL"
 msgstr "ყოველთვის სრ_ული URL-ის ჩვენება"
 
@@ -4325,6 +4327,19 @@ msgstr "ფორმების _ავტოშევსება"
 #: src/resources/gtk/prefs-privacy-page.blp:60
 msgid "Autofill _Data"
 msgstr "_მონაცემების ავტოშევსება"
+
+#: src/resources/gtk/prefs-search-engine-page.blp:21
+msgid "More Information"
+msgstr "მეტი ინფორმაცია"
+
+#: src/resources/gtk/prefs-search-engine-page.blp:26
+#, c-format
+msgid ""
+"To determine the search address, perform a search using the search engine "
+"that you want to add and replace the search term with %s"
+msgstr ""
+"იმისათვის, რომ დაადგინოთ ძებნის მისამართი, მოძებნეთ იმ საძიებო სისტემით, "
+"რომელიც გნებავთ, რომ დაამატოთ და შეცვალეთ ძიების პირობა სტრიქონით %s"
 
 #: src/resources/gtk/privacy-report.blp:10
 msgid "Privacy Report"
@@ -4821,141 +4836,141 @@ msgstr "სახელი ან ვერსია აღმოჩენილ
 msgid "Failed to determine initiating URI"
 msgstr "ინიციატორი URI-ის დადგენა ჩავარდა"
 
-#: src/window-commands.c:130
+#: src/window-commands.c:131
 msgid "HTML File"
 msgstr "HTML ფაილი"
 
-#: src/window-commands.c:131
+#: src/window-commands.c:132
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:132 src/window-commands.c:734
+#: src/window-commands.c:133 src/window-commands.c:735
 msgid "Chrome"
 msgstr "ქრომი"
 
-#: src/window-commands.c:133 src/window-commands.c:735
+#: src/window-commands.c:134 src/window-commands.c:736
 msgid "Chromium"
 msgstr "ქრომი"
 
-#: src/window-commands.c:175 src/window-commands.c:571
-#: src/window-commands.c:897 src/window-commands.c:937
+#: src/window-commands.c:176 src/window-commands.c:572
+#: src/window-commands.c:898 src/window-commands.c:938
 msgid "_Select File"
 msgstr "აირჩიეთ _ფაილი"
 
-#: src/window-commands.c:177 src/window-commands.c:899
+#: src/window-commands.c:178 src/window-commands.c:900
 msgid "I_mport"
 msgstr "შემოტანა"
 
-#: src/window-commands.c:330 src/window-commands.c:419
-#: src/window-commands.c:463 src/window-commands.c:486
-#: src/window-commands.c:502
+#: src/window-commands.c:331 src/window-commands.c:420
+#: src/window-commands.c:464 src/window-commands.c:487
+#: src/window-commands.c:503
 msgid "Bookmarks successfully imported!"
 msgstr "სანიშნეების შემოტანა წარმატებულია!"
 
-#: src/window-commands.c:349
+#: src/window-commands.c:350
 msgid "Select Profile"
 msgstr "აირჩიეთ პროფილი"
 
-#: src/window-commands.c:430 src/window-commands.c:692
-#: src/window-commands.c:818 src/window-commands.c:1040
+#: src/window-commands.c:431 src/window-commands.c:693
+#: src/window-commands.c:819 src/window-commands.c:1041
 msgid "Choose File"
 msgstr "ფაილის არჩევა"
 
-#: src/window-commands.c:557
+#: src/window-commands.c:558
 msgid "Import Bookmarks"
 msgstr "სანიშნეების შემოტანა"
 
-#: src/window-commands.c:585 src/window-commands.c:951
+#: src/window-commands.c:586 src/window-commands.c:952
 msgid "File Type"
 msgstr "ფაილის ტიპი"
 
-#: src/window-commands.c:649
+#: src/window-commands.c:650
 msgid "Bookmarks successfully exported!"
 msgstr "სანიშნეების გატანა წარმატებულია!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:703
+#: src/window-commands.c:704
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
-#: src/window-commands.c:733
+#: src/window-commands.c:734
 msgid "CSV File"
 msgstr "CSV ფაილი"
 
-#: src/window-commands.c:781 src/window-commands.c:807
+#: src/window-commands.c:782 src/window-commands.c:808
 msgid "Passwords successfully imported!"
 msgstr "პაროლების შემოტანა წარმატებულია!"
 
-#: src/window-commands.c:923
+#: src/window-commands.c:924
 msgid "Import Passwords"
 msgstr "პაროლების შემოტანა"
 
-#: src/window-commands.c:999
+#: src/window-commands.c:1000
 msgid "Passwords successfully exported!"
 msgstr "პაროლების გატანა წარმატებულია!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1050
+#: src/window-commands.c:1051
 msgid "passwords.csv"
 msgstr "passwords.csv"
 
-#: src/window-commands.c:1226
+#: src/window-commands.c:1227
 msgid "Epiphany Canary"
 msgstr "ბრაუზერი Epiphany Canary"
 
-#: src/window-commands.c:1249
+#: src/window-commands.c:1250
 msgid "translator-credits"
 msgstr "თემური დოღონაძე"
 
-#: src/window-commands.c:1405
+#: src/window-commands.c:1406
 msgid "Reload Website?"
 msgstr "გადავტვირთო ვებგვერდი?"
 
-#: src/window-commands.c:1956
+#: src/window-commands.c:1957
 msgid "New Web App"
 msgstr "ახალი ვებ აპლიკაცია"
 
-#: src/window-commands.c:2008
+#: src/window-commands.c:2009
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "აპლიკაცია \"%s\" გამოსაყენებლად მზადაა"
 
-#: src/window-commands.c:2011
+#: src/window-commands.c:2012
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "აპლიკაციის '%s' შექმნა შეუძლებელია: %s"
 
-#: src/window-commands.c:2109
+#: src/window-commands.c:2110
 msgid "Replace Existing Web App?"
 msgstr "ჩავანაცვლო არსებული ვებ-აპი?"
 
-#: src/window-commands.c:2112
+#: src/window-commands.c:2113
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "აპლიკაცია სახელით \"%s\" უკვე არსებობს. ჩანაცვლება მას თავზე გადააწერს"
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2118
 msgid "_Replace"
 msgstr "_შეცვლა"
 
-#: src/window-commands.c:2423
+#: src/window-commands.c:2424
 msgid "Screenshot finished"
 msgstr "ეკრანის ანაბეჭდი დასრულდა"
 
-#: src/window-commands.c:2545
+#: src/window-commands.c:2546
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2549
+#: src/window-commands.c:2550
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2595
+#: src/window-commands.c:2596
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2948
+#: src/window-commands.c:2920
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "საძიებო სისტემა \"%s\" დაემატა"
@@ -4965,15 +4980,15 @@ msgstr "საძიებო სისტემა \"%s\" დაემატა
 #. * manually here for self->model because that would not remove the link for
 #. * all the other tabs, so that's why we let the EphyWebViews take care of it.
 #.
-#: src/window-commands.c:2967
+#: src/window-commands.c:2939
 msgid "Show"
 msgstr "ჩვენება"
 
-#: src/window-commands.c:3199
+#: src/window-commands.c:3171
 msgid "Enable Caret Browsing Mode?"
 msgstr "ჩავრთო კარეტით ნავიგაციის რეჟიმი?"
 
-#: src/window-commands.c:3200
+#: src/window-commands.c:3172
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -4983,9 +4998,15 @@ msgstr ""
 "დასვამს გადაადგილებას კურსორს, რითიც საშუალებას გაძლევთ, კლავიატურით იაროთ "
 "ზედ. გნებავთ, ჩართოთ კარეტით მუშაობა?"
 
-#: src/window-commands.c:3205
+#: src/window-commands.c:3177
 msgid "_Enable"
 msgstr "_ჩართვა"
+
+#~ msgid "New search engine"
+#~ msgstr "ახალი საძიებო სსტემა"
+
+#~ msgid "Address is not a valid URI"
+#~ msgstr "მისამართი სწორ URI-ის არ წარმოადგენს"
 
 #, c-format
 #~ msgid "Add “%s” as Search Engine"
@@ -5065,16 +5086,6 @@ msgstr "_ჩართვა"
 
 #~ msgid "Selects Default Search Engine"
 #~ msgstr "აირჩევს ნაგულისხმევ საძიებო სისტემას"
-
-#~ msgid ""
-#~ "To determine the search address, perform a search using the search engine "
-#~ "that you want to add and replace the search term with %s"
-#~ msgstr ""
-#~ "იმისათვის, რომ დაადგინოთ ძებნის მისამართი, მოძებნეთ იმ საძიებო სისტემით, "
-#~ "რომელიც გნებავთ, რომ დაამატოთ და შეცვალეთ ძიების პირობა სტრიქონით %s"
-
-#~ msgid "R_emove Search Engine"
-#~ msgstr "საძიებო სისტემის _წაშლა"
 
 #~ msgctxt "shortcut window"
 #~ msgid "General"
