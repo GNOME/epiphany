@@ -364,7 +364,7 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
   if (!exists) {
     GtkWidget *tag_row = create_tag_row (self, tag);
 
-    gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
+    gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
     update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
     update_bookmarks_order (self);
 
@@ -726,7 +726,7 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
 
       if (!exists) {
         row = create_tag_row (self, tag);
-        gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
+        gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), row);
         update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
         update_bookmarks_order (self);
       }
@@ -834,7 +834,7 @@ ephy_bookmarks_dialog_tag_created_cb (EphyBookmarksDialog  *self,
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
   tag_row = create_tag_row (self, tag);
-  gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
+  gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), tag_row);
   update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
   update_bookmarks_order (self);
 
@@ -1189,11 +1189,11 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
       EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, item);
 
       row = create_bookmark_row (bookmark, self);
+      gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
     } else {
       row = create_tag_row (self, item);
+      gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), row);
     }
-
-    gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
   }
 
   update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
