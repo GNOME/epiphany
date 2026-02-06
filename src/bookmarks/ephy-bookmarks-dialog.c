@@ -166,6 +166,36 @@ update_tags_order (EphyBookmarksDialog *self)
                                NULL);
 }
 
+static int
+tags_order_compare_func (const char *url1,
+                         const char *url2)
+{
+  g_auto (GStrv) split_url1 = g_strsplit_set (url1, ":", 2);
+  g_auto (GStrv) split_url2 = g_strsplit_set (url1, ":", 2);
+  const char *index1 = split_url1[0];
+  const char *index2 = split_url2[0];
+  const char *compare_url1 = split_url1[1];
+  const char *compare_url2 = split_url2[1];
+
+  /* Tags used to only store their URL and not their index.
+   * If this is the case, just set the URL to the iter item. */
+  for (int i = 0; index1[i]; i++) {
+    if (!g_unichar_isdigit (index1[i])) {
+      compare_url1 = url1;
+      break;
+    }
+  }
+
+  for (int i = 0; index2[i]; i++) {
+    if (!g_unichar_isdigit (index2[i])) {
+      compare_url2 = url2;
+      break;
+    }
+  }
+
+  return g_strcmp0 (compare_url1, compare_url2);
+}
+
 static void
 update_tags_order_without_list_box (EphyBookmarksDialog *self,
                                     const char          *tag,
@@ -214,10 +244,14 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
 
     lookup_iter = g_sequence_lookup (urls,
                                      (gpointer)url,
-                                     (GCompareDataFunc)g_strcmp0,
+                                     (GCompareDataFunc)tags_order_compare_func,
                                      NULL);
-    if (!lookup_iter)
-      g_sequence_insert_sorted (urls, g_strdup (url), (GCompareDataFunc)g_strcmp0, NULL);
+    if (!lookup_iter) {
+      int index = g_sequence_get_length (urls) + 1;
+
+      g_sequence_insert_sorted (urls, g_strdup_printf ("%i:%s", index, url),
+                                (GCompareDataFunc)g_strcmp0, NULL);
+    }
   }
 
   ephy_bookmarks_manager_tags_order_clear_tag (self->manager, tag);
