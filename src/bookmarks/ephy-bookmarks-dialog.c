@@ -152,7 +152,10 @@ update_tags_order (EphyBookmarksDialog *self)
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), i++))) {
     const char *bookmark_url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
 
-    g_sequence_append (urls, g_strdup (bookmark_url));
+    g_sequence_insert_sorted (urls,
+                              g_strdup_printf ("%i:%s", i, bookmark_url),
+                              (GCompareDataFunc)g_strcmp0,
+                              NULL);
   }
 
   ephy_bookmarks_manager_tags_order_add_tag (self->manager, self->tag_detail_tag, urls);
@@ -184,6 +187,7 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
          iter = g_sequence_iter_next (iter)) {
       const char *url = g_sequence_get (iter);
       EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
+      int index = g_sequence_iter_get_position (iter);
 
       if (!bookmark)
         continue;
@@ -191,7 +195,10 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
       if (!ephy_bookmark_has_tag (bookmark, tag))
         continue;
 
-      g_sequence_append (urls, g_strdup (url));
+      g_sequence_insert_sorted (urls,
+                                g_strdup_printf ("%i:%s", index, url),
+                                (GCompareDataFunc)g_strcmp0,
+                                NULL);
     }
     g_sequence_free (current_order);
   }
@@ -1201,9 +1208,23 @@ populate_tag_detail_list_box (EphyBookmarksDialog *self,
   for (iter = g_sequence_get_begin_iter (order);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter)) {
-    const char *url = g_sequence_get (iter);
-    EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
-    GtkWidget *row = create_bookmark_row (bookmark, self);
+    g_auto (GStrv) split_string = g_strsplit_set (g_sequence_get (iter), ":", 2);
+    const char *index = split_string[0];
+    const char *url = split_string[1];
+    EphyBookmark *bookmark;
+    GtkWidget *row;
+
+    for (int i = 0; index[i]; i++) {
+      if (!g_unichar_isdigit (index[i])) {
+        /* Tags used to only store their URL and not their index.
+         * If this is the case, just set the URL to the iter item. */
+        url = g_sequence_get (iter);
+        break;
+      }
+    }
+
+    bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, url);
+    row = create_bookmark_row (bookmark, self);
 
     gtk_list_box_append (GTK_LIST_BOX (self->tag_detail_list_box), row);
   }
