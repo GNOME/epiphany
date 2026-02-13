@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2024-08-15 20:53+0000\n"
-"PO-Revision-Date: 2024-08-30 19:48+0500\n"
+"POT-Creation-Date: 2025-08-21 16:26+0000\n"
+"PO-Revision-Date: 2026-02-13 22:23+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,26 +16,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.8\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:6
-#: data/org.gnome.Epiphany.desktop.in.in:3 embed/ephy-about-handler.c:205
+#: data/org.gnome.Epiphany.desktop.in.in:2 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:103 src/ephy-main.c:266
-#: src/ephy-main.c:419 src/window-commands.c:1226
+#: src/ephy-main.c:419 src/window-commands.c:1278
 msgid "Web"
 msgstr "Веб"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:7
-#: data/org.gnome.Epiphany.desktop.in.in:5
+#: data/org.gnome.Epiphany.desktop.in.in:4
 msgid "Browse the web"
 msgstr "Интернетті шолу"
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:9
 msgid ""
-"The web browser for GNOME, featuring tight integration with the desktop and "
-"a simple and intuitive user interface that allows you to focus on your web "
-"pages. If you’re looking for a simple, clean, beautiful view of the web, "
-"this is the browser for you."
+"The web browser for GNOME, featuring tight integration with the desktop and a "
+"simple and intuitive user interface that allows you to focus on your web "
+"pages. If you’re looking for a simple, clean, beautiful view of the web, this "
+"is the browser for you."
 msgstr ""
 "GNOME веб-браузері, жұмыс үстелімен тығыз біріктіру және веб-беттерге назар "
 "аударуға мүмкіндік беретін қарапайым және интуитивті пайдаланушы интерфейсі "
@@ -44,27 +44,28 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.appdata.xml.in.in:15
 msgid "Web is often referred to by its code name, Epiphany."
-msgstr ""
+msgstr "Web қолданбасы жиі өзінің Epiphany кодтық атымен аталады."
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1236
+#: data/org.gnome.Epiphany.appdata.xml.in.in:35 src/window-commands.c:1288
 msgid "The GNOME Project"
 msgstr "GNOME жобасы"
 
-#: data/org.gnome.Epiphany.desktop.in.in:4
+#: data/org.gnome.Epiphany.desktop.in.in:3
 msgid "Web Browser"
 msgstr "Веб браузері"
 
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Epiphany.desktop.in.in:7
+#. Translators: Search terms to find this application. Do NOT translate or
+#. localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Epiphany.desktop.in.in:6
 msgid "web;browser;internet;epiphany;"
 msgstr "web;browser;internet;epiphany;веб;браузер;интернет;"
 
-#: data/org.gnome.Epiphany.desktop.in.in:21
+#: data/org.gnome.Epiphany.desktop.in.in:20
 msgid "New Window"
 msgstr "Жаңа терезе"
 
-#: data/org.gnome.Epiphany.desktop.in.in:25
+#: data/org.gnome.Epiphany.desktop.in.in:24
 msgid "New Incognito Window"
 msgstr "Жаңа инкогнито терезесі"
 
@@ -82,7 +83,7 @@ msgstr "Пайдаланушының үй парағының адресі."
 
 #: data/org.gnome.epiphany.gschema.xml:22
 msgid "Default search engine."
-msgstr "Үнсіз келісім бойынша іздеу жүйесі."
+msgstr "Әдепкі іздеу жүйесі."
 
 #: data/org.gnome.epiphany.gschema.xml:23
 msgid "Name of the search engine selected by default."
@@ -90,785 +91,857 @@ msgstr "Үнсіз келісім бойынша таңдалған іздеу �
 
 #: data/org.gnome.epiphany.gschema.xml:33
 msgid "Deprecated. Please use search-engine-providers instead."
-msgstr ""
+msgstr "Ескірген. Оның орнына search-engine-providers қолданыңыз."
 
-#. TRANSLATORS: These are the prepopulated search engines. You should
-#. add country-specific URL query parameters if appropriate or change
-#. the domain name's TLD. The different query parameters to be used for each
-#. engine is as follows:
-#. - DuckDuckGo: kl=country-language (see https://duckduckgo.com/params)
-#. - Google: hl=lang (see https://developers.google.com/custom-search/docs/xml_results_appendices#interfaceLanguages)
-#. - Bing: cc=country (see https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/language-support)
-#. You are allowed to add search engines here, *if they make sense*. Please
-#. don't add your favorite search engine just because you like it though,
-#. only do it for search engines that are already widely used in this specific country.
-#. Obvious cases where it makes sense are for example adding Yandex for
-#. Russian, or Baidu for Chinese. If you do add a search engine, then please
-#. make sure that you're not making mistakes in the GVariant text (e.g.
-#. missing ', <, > or trailing comma), and that you're keeping the %s
-#. placeholder for the search query. Also please check if they are actually
-#. properly shown in the Preferences if you reset the gsettings key.
-#: data/org.gnome.epiphany.gschema.xml:53
-msgid ""
-"[\n"
-"\t\t\t\t\t{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?"
-"q=%s&t=epiphany'>, 'bang': <'!ddg'>},\n"
-"\t\t\t\t\t{'name': <'Google'>, 'url': <'https://www.google.com/search?"
-"q=%s'>, 'bang': <'!g'>},\n"
-"\t\t\t\t\t{'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, "
-"'bang': <'!b'>}\n"
-"\t\t\t\t]"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:61
+#: data/org.gnome.epiphany.gschema.xml:45
 msgid "List of the search engines."
-msgstr ""
+msgstr "Іздеу жүйелерінің тізімі."
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:46
 msgid ""
 "List of the search engines. It is an array of vardicts with each vardict "
 "corresponding to a search engine, and with the following supported keys: "
-"\"name\" is the name of the search engine. \"url\" is the search URL with "
-"the search term replaced with %s. \"bang\" is the bang (shortcut word) of "
-"the search engine."
+"\"name\" is the name of the search engine. \"url\" is the search URL with the "
+"search term replaced with %s. \"bang\" is the bang (shortcut word) of the "
+"search engine."
 msgstr ""
+"Іздеу жүйелерінің тізімі. Бұл әрқайсысы бір іздеу жүйесіне сәйкес келетін "
+"vardict-тер массиві және келесі қолдау көрсетілетін кілттері бар: \"name\" - "
+"іздеу жүйесінің аты. \"url\" - іздеу термині %s белгісіне ауыстырылатын іздеу "
+"URL адресі. \"bang\" - іздеу жүйесінің bang (жарлық сөзі)."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Enable Google Search Suggestions"
 msgstr "Google іздеу ұсыныстарын іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid "Whether to show Google Search Suggestion in url entry popdown."
-msgstr ""
+msgstr "URL енгізу тізімінде Google іздеу ұсыныстарын көрсету-көрсетпеу."
 
-#: data/org.gnome.epiphany.gschema.xml:77
+#: data/org.gnome.epiphany.gschema.xml:61
 msgid "Force new windows to be opened in tabs"
 msgstr "Жаңа терезелерді беттерде ашылуды мәжбүрлеу"
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:62
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "Жаңа терезе сұрауларын жаңа терезені пайдаланудың орнына беттерде ашуға "
 "мәжбүрлеу."
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid "Whether to automatically restore the last session"
 msgstr "Соңғы сессияны автоматты түрде қалпына келтіру керек пе"
 
-#: data/org.gnome.epiphany.gschema.xml:86
+#: data/org.gnome.epiphany.gschema.xml:70
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored) and "
 "“crashed” (the session is only restored if the application crashes)."
 msgstr ""
+"Іске қосылу кезінде сессияның қалай қалпына келтірілетінін анықтайды. Рұқсат "
+"етілген мәндер: “always” (бағдарламаның алдыңғы күйі әрқашан қалпына "
+"келтіріледі) және “crashed” (сессия тек бағдарлама істен шыққан жағдайда ғана "
+"қалпына келтіріледі)."
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:74
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
+"Сессияны қалпына келтіру кезінде бірден көрінбейтін беттерді жүктеуді кейінге "
+"қалдыру керек пе"
 
-#: data/org.gnome.epiphany.gschema.xml:91
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr ""
+"Бұл опция true мәніне орнатылғанда, сессияны қалпына келтіру кезінде "
+"пайдаланушы оларға ауысқанша дейін беттер жүктеле бастамайды."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "List of adblock filters"
 msgstr "Adblock сүзгілерінің тізімі"
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
-"List of URLs with content filtering rules in JSON format to be used by the "
-"ad blocker."
+"List of URLs with content filtering rules in JSON format to be used by the ad "
+"blocker."
 msgstr ""
+"Жарнама бұғаттағышы қолданатын JSON пішіміндегі мазмұнды сүзу ережелері бар "
+"URL адрестер тізімі."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid "Whether to ask for setting browser as default"
 msgstr "Браузерді бастапқы ретінде орнатуды сұрау керек пе"
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
 "When this option is set to true, browser will ask for being default if it is "
 "not already set."
 msgstr ""
+"Бұл опция true мәніне орнатылғанда, барузер әдепкі ретінде орнатылмаған болса, "
+"оны орнатуды сұрайды."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Start in incognito mode"
 msgstr "Инкогнито режимінде бастау"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "When this option is set to true, browser will always start in incognito mode"
 msgstr ""
 "Бұл параметр true мәніне орнатылғанда, браузер әрқашан инкогнито режимінде "
 "іске қосылады"
 
-#: data/org.gnome.epiphany.gschema.xml:110
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "Active clear data items."
-msgstr ""
+msgstr "Белсенді деректерді тазалау элементтері."
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "Selection (bitmask) which clear data items should be active by default. 1 = "
 "Cookies, 2 = HTTP disk cache, 4 = Local storage data, 8 = Offline web "
-"application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = "
-"Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
-"Prevention data."
+"application cache, 16 = IndexDB databases, 32 = WebSQL databases, 64 = Plugins "
+"data, 128 = HSTS policies cache, 256 = Intelligent Tracking Prevention data."
 msgstr ""
+"Әдепкі бойынша қай деректерді тазалау элементтері белсенді болуы керектігін "
+"таңдау (биттік маска). 1 = Cookies, 2 = HTTP дискілік кэші, 4 = Жергілікті "
+"сақтау деректері, 8 = Офлайн веб-бағдарлама кэші, 16 = IndexDB дерекқоры, 32 = "
+"WebSQL дерекқоры, 64 = Плагиндер деректері, 128 = HSTS саясаттарының кэші, 256 "
+"= Интеллектуалды трекерлерден қорғау деректері."
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
+"Беттер панеліндегі қолжетімді орынды толтыру үшін беттер өлшемін ұлғайту."
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:102
 msgid ""
-"If enabled the tabs will expand to use the entire available space in the "
-"tabs bar. This setting is ignored in Pantheon desktop."
+"If enabled the tabs will expand to use the entire available space in the tabs "
+"bar. This setting is ignored in Pantheon desktop."
 msgstr ""
+"Егер іске қосылса, беттер панеліндегі бүкіл қолжетімді орынды пайдалану үшін "
+"беттер жайылады. Бұл параметр Pantheon жұмыс үстелінде ескерілмейді."
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid "The visibility policy for the tabs bar."
 msgstr "Беттер панелінің көріну саясаты."
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
 "two or more tabs) and “never” (the tabs bar is never shown). This setting is "
 "ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
+"Беттер панелінің қашан көрсетілетінін басқарады. Мүмкін мәндер: “always” "
+"(беттер панелі әрқашан көрсетіледі), “more-than-one” (беттер панелі тек екі "
+"немесе одан да көп бет болғанда ғана көрсетіледі) және “never” (беттер панелі "
+"ешқашан көрсетілмейді). Бұл параметр Pantheon жұмыс үстелінде ескерілмейді "
+"және “always” мәні қолданылады."
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid "Keep window open when closing last tab"
 msgstr "Соңғы бетті жапқанда терезені ашық ұстау"
 
-#: data/org.gnome.epiphany.gschema.xml:128
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
+"Егер іске қосылса, соңғы бетті жапқан кезде бағдарлама терезесі ашық қалады."
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid "Reader mode article font style."
-msgstr ""
+msgstr "Оқу режиміндегі мақаланың қаріп стилі."
 
-#: data/org.gnome.epiphany.gschema.xml:135
+#: data/org.gnome.epiphany.gschema.xml:119
 msgid ""
-"Chooses the style of the main body text for articles in reader mode. "
-"Possible values are “sans” and “serif”."
+"Chooses the style of the main body text for articles in reader mode. Possible "
+"values are “sans” and “serif”."
 msgstr ""
+"Оқу режиміндегі мақалалардың негізгі мәтіні үшін стильді таңдайды. Мүмкін "
+"мәндері: “sans” және “serif”."
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:123
 msgid "Reader mode color scheme."
-msgstr ""
+msgstr "Оқу режимінің түстер схемасы."
 
-#: data/org.gnome.epiphany.gschema.xml:140
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
 "values are “light” (dark text on light background) and “dark” (light text on "
 "dark background). This setting is ignored on systems that provide a system-"
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
+"Оқу режимінде көрсетілетін мақалалар үшін түстер стилін таңдайды. Мүмкін "
+"мәндері: “light” (ашық фондағы күңгірт мәтін) және “dark” (күңгірт фондағы "
+"ашық мәтін). Бұл баптау GNOME 42 және одан жаңа нұсқалары сияқты жүйелік "
+"күңгірт стиль баптауын ұсынатын жүйелерде ескерілмейді."
 
-#: data/org.gnome.epiphany.gschema.xml:146
+#: data/org.gnome.epiphany.gschema.xml:130
 msgid "Minimum font size"
 msgstr "Қаріптің минималды өлшемі"
 
-#: data/org.gnome.epiphany.gschema.xml:150
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid "Use GNOME fonts"
 msgstr "GNOME қаріптерін қолдану"
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:135
 msgid "Use GNOME font settings."
 msgstr "GNOME қаріптер баптауларын қолдану."
 
-#: data/org.gnome.epiphany.gschema.xml:155
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid "Custom sans-serif font"
-msgstr ""
+msgstr "Пайдаланушының sans-serif қарпі"
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:140
 msgid ""
-"A value to be used to override sans-serif desktop font when use-gnome-fonts "
-"is set."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:160
-msgid "Custom serif font"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:161
-msgid ""
-"A value to be used to override serif desktop font when use-gnome-fonts is "
+"A value to be used to override sans-serif desktop font when use-gnome-fonts is "
 "set."
 msgstr ""
+"use-gnome-fonts орнатылған кезде жұмыс үстелінің sans-serif қарпін алмастыру "
+"үшін қолданылатын мән."
 
-#: data/org.gnome.epiphany.gschema.xml:165
-msgid "Custom monospace font"
-msgstr ""
+#: data/org.gnome.epiphany.gschema.xml:144
+msgid "Custom serif font"
+msgstr "Пайдаланушының serif қарпі"
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:145
 msgid ""
-"A value to be used to override monospace desktop font when use-gnome-fonts "
-"is set."
+"A value to be used to override serif desktop font when use-gnome-fonts is set."
 msgstr ""
+"use-gnome-fonts орнатылған кезде жұмыс үстелінің serif қарпін алмастыру үшін "
+"қолданылатын мән."
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:149
+msgid "Custom monospace font"
+msgstr "Пайдаланушының monospace қарпі"
+
+#: data/org.gnome.epiphany.gschema.xml:150
+msgid ""
+"A value to be used to override monospace desktop font when use-gnome-fonts is "
+"set."
+msgstr ""
+"use-gnome-fonts орнатылған кезде жұмыс үстелінің monospace қарпін алмастыру "
+"үшін қолданылатын мән."
+
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Use a custom CSS"
 msgstr "Таңдауыңызша CSS қолдану"
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:155
 msgid "Use a custom CSS file to modify websites own CSS."
-msgstr ""
+msgstr "Веб-сайттардың өз CSS-ін өзгерту үшін пайдаланушының CSS файлын қолдану."
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid "Use a custom JS"
 msgstr "Таңдауыңызша JS қолдану"
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:160
 msgid "Use a custom JS file to modify websites."
-msgstr ""
+msgstr "Веб-сайттарды өзгерту үшін пайдаланушының JS файлын қолдану."
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid "Enable spell checking"
 msgstr "Емлені тексеруді іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:165
 msgid "Spell check any text typed in editable areas."
-msgstr ""
+msgstr "Түзетілетін аймақтарда терілген кез келген мәтіннің емлесін тексеру."
 
-#: data/org.gnome.epiphany.gschema.xml:185
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid "Default encoding"
 msgstr "Үнсіз келісім кодталуы"
 
-#: data/org.gnome.epiphany.gschema.xml:186
-msgid ""
-"Default encoding. Accepted values are the ones WebKitGTK can understand."
-msgstr ""
+#: data/org.gnome.epiphany.gschema.xml:170
+msgid "Default encoding. Accepted values are the ones WebKitGTK can understand."
+msgstr "Әдепкі кодтау. Қабылданатын мәндер — WebKitGTK түсінетін мәндер."
 
-#: data/org.gnome.epiphany.gschema.xml:190
-#: src/resources/gtk/prefs-general-page.ui:221
+#: data/org.gnome.epiphany.gschema.xml:174
+#: src/resources/gtk/prefs-general-page.ui:219
 msgid "Languages"
 msgstr "Тілдер"
 
-#: data/org.gnome.epiphany.gschema.xml:191
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
+"Таңдаулы тілдер. Локаль кодтарының массиві немесе ағымдағы локальді қолдану "
+"үшін “system”."
 
-#: data/org.gnome.epiphany.gschema.xml:195
+#: data/org.gnome.epiphany.gschema.xml:179
 msgid "Allow popups"
-msgstr ""
+msgstr "Қалқымалы терезелерге рұқсат беру"
 
-#: data/org.gnome.epiphany.gschema.xml:196
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
+"Сайттарға JavaScript көмегімен жаңа терезелерді ашуға рұқсат беру (егер "
+"JavaScript іске қосылған болса)."
 
-#: data/org.gnome.epiphany.gschema.xml:200
+#: data/org.gnome.epiphany.gschema.xml:184
 msgid "User agent"
 msgstr "Пайдаланушы агенті"
 
-#: data/org.gnome.epiphany.gschema.xml:201
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr ""
+"Веб-серверлерге браузерді анықтау үшін пайдаланылатын пайдаланушы агентінің "
+"жолы."
 
-#: data/org.gnome.epiphany.gschema.xml:205
+#: data/org.gnome.epiphany.gschema.xml:189
 msgid "Enable adblock"
 msgstr "Adblock-ты іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:206
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid ""
-"Whether to block the embedded advertisements that web pages might want to "
-"show."
-msgstr ""
+"Whether to block the embedded advertisements that web pages might want to show."
+msgstr "Веб-беттер көрсеткісі келетін кірістірілген жарнаманы бұғаттау керек пе."
 
-#: data/org.gnome.epiphany.gschema.xml:210
+#: data/org.gnome.epiphany.gschema.xml:194
 msgid "Remember passwords"
 msgstr "Парольдерді есте сақтау"
 
-#: data/org.gnome.epiphany.gschema.xml:211
+#: data/org.gnome.epiphany.gschema.xml:195
 msgid "Whether to store and prefill passwords in websites."
+msgstr "Веб-сайттарда парольдерді сақтау және алдын ала толтыру керек пе."
+
+#: data/org.gnome.epiphany.gschema.xml:199
+msgid "Autofill form data"
+msgstr "Форма деректерін автоматты түрде толтыру"
+
+#: data/org.gnome.epiphany.gschema.xml:200
+msgid "Whether to auto fill form data in websites."
+msgstr "Веб-сайттарда форма деректерін автоматты түрде толтыру керек пе."
+
+#: data/org.gnome.epiphany.gschema.xml:204
+msgid "Enable site-specific quirks"
+msgstr "Сайтқа тән ерекшеліктерді іске қосу"
+
+#: data/org.gnome.epiphany.gschema.xml:205
+msgid ""
+"Enable quirks to make specific websites work better. You might want to disable "
+"this setting if debugging a specific issue."
 msgstr ""
+"Белгілі бір веб-сайттардың жақсырақ жұмыс істеуі үшін ерекшеліктерді іске "
+"қосу. Белгілі бір мәселені жөндеу кезінде бұл параметрді сөндіру қажет болуы "
+"мүмкін."
+
+#: data/org.gnome.epiphany.gschema.xml:209
+msgid "Enable Intelligent Tracking Prevention (ITP)"
+msgstr "Интеллектуалды бақылаудың алдын алуды (ITP) іске қосу"
+
+#: data/org.gnome.epiphany.gschema.xml:210
+msgid "Whether to enable Intelligent Tracking Prevention."
+msgstr "Интеллектуалды бақылаудың алдын алуды іске қосу керек пе."
+
+#: data/org.gnome.epiphany.gschema.xml:214
+msgid "Allow websites to store local website data"
+msgstr "Веб-сайттарға жергілікті сайт деректерін сақтауға рұқсат беру"
 
 #: data/org.gnome.epiphany.gschema.xml:215
-msgid "Autofill form data"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:216
-#| msgid "Whether to automatically restore the last session"
-msgid "Whether to auto fill form data in websites."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:220
-msgid "Enable site-specific quirks"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:221
 msgid ""
-"Enable quirks to make specific websites work better. You might want to "
-"disable this setting if debugging a specific issue."
+"Whether to allow websites to store cookies, local storage data, and IndexedDB "
+"databases. Disabling this will break many websites."
 msgstr ""
+"Веб-сайттарға cookie файлдарын, жергілікті сақтау деректерін және IndexedDB "
+"дерекқорларын сақтауға рұқсат беру керек пе. Бұны сөндіру көптеген веб-"
+"сайттардың жұмысын бұзады."
 
-#: data/org.gnome.epiphany.gschema.xml:225
-msgid "Enable Intelligent Tracking Prevention (ITP)"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:226
-msgid "Whether to enable Intelligent Tracking Prevention."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:230
-msgid "Allow websites to store local website data"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:231
-msgid ""
-"Whether to allow websites to store cookies, local storage data, and "
-"IndexedDB databases. Disabling this will break many websites."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:235
+#: data/org.gnome.epiphany.gschema.xml:219
 msgid "Default zoom level for new pages"
 msgstr "Жаңа беттер үшін бастапқы масштабы"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable autosearch"
 msgstr "Автоіздеуді іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:240
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid ""
-"Whether to automatically search the web when something that does not look "
-"like a URL is entered in the address bar. If this setting is disabled, "
-"everything will be loaded as a URL unless a search engine is explicitly "
-"selected from the dropdown menu."
+"Whether to automatically search the web when something that does not look like "
+"a URL is entered in the address bar. If this setting is disabled, everything "
+"will be loaded as a URL unless a search engine is explicitly selected from the "
+"dropdown menu."
 msgstr ""
+"Адрес жолағына URL-ға ұқсамайтын нәрсе енгізілгенде, интернеттен автоматты "
+"түрде іздеу керек пе. Егер бұл параметр сөндірулі болса, ашылмалы мәзірден "
+"іздеу жүйесі нақты таңдалмаған жағдайда, барлығы URL ретінде жүктеледі."
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "Enable mouse gestures"
 msgstr "Тышқан ым қимылдарын іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:245
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
-"Тышқан ым қимылдарын іске қосу керек пе. Тышқан қимылдары Opera мінез-"
-"құлқына негізделген және тышқанның ортаңғы батырмасы + ым қимылы арқылы "
-"белсендіріледі."
+"Тышқан ым қимылдарын іске қосу керек пе. Тышқан қимылдары Opera мінез-құлқына "
+"негізделген және тышқанның ортаңғы батырмасы + ым қимылы арқылы белсендіріледі."
 
-#: data/org.gnome.epiphany.gschema.xml:249
-#| msgid "Enable mouse gestures"
+#: data/org.gnome.epiphany.gschema.xml:233
 msgid "Enable navigation gestures"
-msgstr ""
+msgstr "Навигациялық ым қимылдарын іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:250
+#: data/org.gnome.epiphany.gschema.xml:234
 msgid "Whether to enable back and forward navigation gestures."
-msgstr ""
+msgstr "Артқа және алға навигациялық ым қимылдарын іске қосу керек пе."
 
-#: data/org.gnome.epiphany.gschema.xml:254
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "Last upload directory"
 msgstr "Соңғы жүктеп жіберу бумасы"
 
-#: data/org.gnome.epiphany.gschema.xml:255
+#: data/org.gnome.epiphany.gschema.xml:239
 msgid "Keep track of last upload directory"
 msgstr "Соңғы жүктеп жіберу бумасын сақтап отыру"
 
-#: data/org.gnome.epiphany.gschema.xml:259
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "Last download directory"
 msgstr "Соңғы жүктеп алу бумасы"
 
-#: data/org.gnome.epiphany.gschema.xml:260
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid "Keep track of last download directory"
 msgstr "Соңғы жүктеп алу бумасын сақтап отыру"
 
-#: data/org.gnome.epiphany.gschema.xml:264
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid "Hardware acceleration policy"
 msgstr "Құрылғылық үдетуді аясаты"
 
-#: data/org.gnome.epiphany.gschema.xml:265
+#: data/org.gnome.epiphany.gschema.xml:249
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
 "performance on embedded devices, but increases memory usage requirements and "
 "could expose severe hardware-specific graphics driver bugs."
 msgstr ""
+"Аппараттық үдетуді іске қосу керек пе. Ықтимал мәндер: «always» және «never». "
+"Кірістірілген құрылғыларда қолайлы өнімділікке қол жеткізу үшін аппараттық "
+"үдету қажет болуы мүмкін, бірақ ол жадты пайдалану талаптарын арттырады және "
+"аппараттық құралға тән графикалық драйвердің елеулі қателерін көрсетуі мүмкін."
 
-#: data/org.gnome.epiphany.gschema.xml:269
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Always ask for download directory"
 msgstr "Жүктеп алу бумасын әрқашан сұрау"
 
-#: data/org.gnome.epiphany.gschema.xml:270
+#: data/org.gnome.epiphany.gschema.xml:254
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr "Әрбір жүктеп алу үшін буманы таңдау сұхбатын көрсету керек пе."
 
-#: data/org.gnome.epiphany.gschema.xml:274
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Enable immediately switch to new open tab"
 msgstr "Жаңа ашылған бетке автоматты түрде ауысуды іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:275
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Жаңа ашылған бетке автоматты түрде ауысу керек пе."
 
-#: data/org.gnome.epiphany.gschema.xml:279
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Enable WebExtensions"
 msgstr "WebExtensions іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:280
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
 msgstr ""
+"WebExtensions іске қосу керек пе. WebExtensions - кеңейтулерге арналған кросс-"
+"браузерлік жүйе."
 
-#: data/org.gnome.epiphany.gschema.xml:284
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Active WebExtensions"
-msgstr ""
+msgstr "Белсенді WebExtensions"
 
-#: data/org.gnome.epiphany.gschema.xml:285
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid "Indicates which WebExtensions are set to active."
-msgstr ""
+msgstr "Қай WebExtensions белсенді етіп орнатылғанын көрсетеді."
 
-#: data/org.gnome.epiphany.gschema.xml:289
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid "Show developer actions"
 msgstr "Әзірлеуші әрекеттерін көрсету"
 
-#: data/org.gnome.epiphany.gschema.xml:290
+#: data/org.gnome.epiphany.gschema.xml:274
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
+"Әзірлеушінің контексттік мәзір әрекеттерін көрсету керек пе. Бұл Беттің "
+"бастапқы коды мен Элементті зерттеу әрекеттерін пайдалануға мүмкіндік береді."
 
-#: data/org.gnome.epiphany.gschema.xml:296
+#: data/org.gnome.epiphany.gschema.xml:280
 msgid "Web application additional URLs"
-msgstr ""
+msgstr "Веб-қолданбаның қосымша URL-дері"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:281
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Веб қолданбасы ашуы тиіс URL тізімі"
 
-#: data/org.gnome.epiphany.gschema.xml:301
+#: data/org.gnome.epiphany.gschema.xml:285
 msgid "Show navigation buttons in WebApp"
-msgstr ""
+msgstr "WebApp ішінде навигация батырмаларын көрсету"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:286
 msgid "Whether to show buttons for navigation in WebApp."
-msgstr ""
+msgstr "WebApp ішінде навигация үшін батырмаларды көрсету керек пе."
 
-#: data/org.gnome.epiphany.gschema.xml:306
+#: data/org.gnome.epiphany.gschema.xml:290
 msgid "Run in background"
 msgstr "Фонда орындау"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:291
 msgid ""
-"If enabled, application continues running in the background after closing "
-"the window."
+"If enabled, application continues running in the background after closing the "
+"window."
 msgstr ""
 "Іске қосылған болса, терезені жапқаннан кейін қолданба фонда өз жұмысын "
 "жалғастыра береді."
 
-#: data/org.gnome.epiphany.gschema.xml:311
+#: data/org.gnome.epiphany.gschema.xml:295
 msgid "WebApp is system-wide"
-msgstr ""
+msgstr "WebApp бүкіл жүйеге арналған"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:296
 msgid "If enabled, application cannot be edited or removed."
-msgstr ""
+msgstr "Егер іске қосулы болса, қолданба түзетілмейді немесе өшірілмейді."
 
-#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "The downloads folder"
 msgstr "Жүктемелер бумасы"
 
-#: data/org.gnome.epiphany.gschema.xml:319
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
+"Файлдар жүктелетін бума жолы; немесе әдепкі жүктеулер бумасын пайдалану үшін "
+"«Downloads», немесе жұмыс үстелі бумасын пайдалану үшін «Desktop»."
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:310
 msgid "Window position"
 msgstr "Терезе орны"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:311
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
+"Алдыңғы сеанстан қалпына келтірілмеген жаңа терезе үшін пайдаланылатын орын."
 
-#: data/org.gnome.epiphany.gschema.xml:331
+#: data/org.gnome.epiphany.gschema.xml:315
 msgid "Window size"
 msgstr "Терезе өлшемі"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid ""
-"The size to use for a new window that is not restored from a previous "
-"session."
+"The size to use for a new window that is not restored from a previous session."
 msgstr ""
+"Алдыңғы сеанстан қалпына келтірілмеген жаңа терезе үшін пайдаланылатын өлшем."
 
-#: data/org.gnome.epiphany.gschema.xml:336
+#: data/org.gnome.epiphany.gschema.xml:320
 msgid "Is maximized"
 msgstr "Жазық етілген бе"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
+"Алдыңғы сеанстан қалпына келтірілмеген жаңа терезенің бастапқыда жазылған "
+"күйде болу-болмауы."
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:336
 msgid "Disable forward and back buttons"
 msgstr "Алға және артқа батырмаларын сөндіру"
 
-#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:337
 msgid ""
-"If set to “true”, forward and back buttons are disabled, preventing users "
-"from accessing immediate browser history"
+"If set to “true”, forward and back buttons are disabled, preventing users from "
+"accessing immediate browser history"
 msgstr ""
+"Егер «true» мәніне орнатылса, алға және артқа батырмалары сөндіріледі, бұл "
+"пайдаланушылардың барузердің жедел тарихына қол жеткізуіне жол бермейді"
 
-#: data/org.gnome.epiphany.gschema.xml:371
+#: data/org.gnome.epiphany.gschema.xml:355
 msgid "Firefox Sync Token Server URL"
-msgstr ""
+msgstr "Firefox Sync токен серверінің URL адресі"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid "URL to a custom Firefox Sync token server."
-msgstr ""
+msgstr "Пайдаланушы анықтаған Firefox Sync токен серверінің URL адресі."
 
-#: data/org.gnome.epiphany.gschema.xml:376
+#: data/org.gnome.epiphany.gschema.xml:360
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Firefox синхрондау тіркелгісі серверінің URL адресі"
 
-#: data/org.gnome.epiphany.gschema.xml:377
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "URL to a custom Firefox Sync accounts server."
-msgstr ""
+msgstr "Пайдаланушы анықтаған Firefox Sync тіркелгілер серверінің URL адресі."
 
-#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:365
 msgid "Currently signed in sync user"
-msgstr ""
+msgstr "Қазіргі уақытта жүйеге кірген синхрондау пайдаланушысы"
 
-#: data/org.gnome.epiphany.gschema.xml:382
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
+"Mozilla серверлерімен деректерді синхрондау үшін қолданылатын Mozilla "
+"тіркелгісіне байланыстырылған электрондық пошта."
 
-#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:370
 msgid "Last sync timestamp"
 msgstr "Соңғы синхрондау уақытының белгісі"
 
-#: data/org.gnome.epiphany.gschema.xml:387
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Соңғы синхрондау жүргізілген UNIX уақыты, секундпен."
 
-#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:375
 msgid "Sync device ID"
-msgstr ""
+msgstr "Синхрондау құрылғысының ID-і"
 
-#: data/org.gnome.epiphany.gschema.xml:392
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "The sync device ID of the current device."
-msgstr ""
+msgstr "Ағымдағы құрылғының синхрондау құрылғысының ID-і."
 
-#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "Sync device name"
-msgstr ""
+msgstr "Синхрондау құрылғысының аты"
 
-#: data/org.gnome.epiphany.gschema.xml:397
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "The sync device name of the current device."
-msgstr ""
+msgstr "Ағымдағы құрылғының синхрондау құрылғысының аты."
 
-#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "The sync frequency in minutes"
-msgstr ""
+msgstr "Синхрондау жиілігі, минутпен"
 
-#: data/org.gnome.epiphany.gschema.xml:402
+#: data/org.gnome.epiphany.gschema.xml:386
 msgid "The number of minutes between two consecutive syncs."
-msgstr ""
+msgstr "Екі қатарлас синхрондау арасындағы минуттар саны."
 
-#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "Sync data with Firefox"
-msgstr ""
+msgstr "Деректерді Firefox-пен синхрондау"
 
-#: data/org.gnome.epiphany.gschema.xml:407
+#: data/org.gnome.epiphany.gschema.xml:391
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
+"Егер Ephy жинақтары Firefox жинақтарымен синхрондалуы тиіс болса - TRUE, "
+"әйтпесе - FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid "Enable bookmarks sync"
 msgstr "Бетбелгілерді синхрондауды іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:412
+#: data/org.gnome.epiphany.gschema.xml:396
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Егер бетбелгілер жинағы синхрондалуы тиіс болса - TRUE, әйтпесе - FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "Bookmarks sync timestamp"
 msgstr "Бетбелгілерді синхрондаудың уақыт белгісі"
 
-#: data/org.gnome.epiphany.gschema.xml:417
+#: data/org.gnome.epiphany.gschema.xml:401
 msgid "The timestamp at which last bookmarks sync was made."
-msgstr ""
+msgstr "Соңғы бетбелгілерді синхрондау жасалған уақыт белгісі."
 
-#: data/org.gnome.epiphany.gschema.xml:421
-#: data/org.gnome.epiphany.gschema.xml:436
-#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid "Initial sync or normal sync"
-msgstr ""
+msgstr "Бастапқы синхрондау немесе қалыпты синхрондау"
 
-#: data/org.gnome.epiphany.gschema.xml:422
+#: data/org.gnome.epiphany.gschema.xml:406
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"Егер бетбелгілер жинағы бірінші рет синхрондалуы керек болса - TRUE, әйтпесе - "
+"FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "Enable passwords sync"
 msgstr "Парольдерді синхрондауды іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:411
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Егер парольдер жинағы синхрондалуы тиіс болса - TRUE, әйтпесе - FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "Passwords sync timestamp"
-msgstr ""
+msgstr "Парольдерді синхрондау уақыт белгісі"
 
-#: data/org.gnome.epiphany.gschema.xml:432
+#: data/org.gnome.epiphany.gschema.xml:416
 msgid "The timestamp at which last passwords sync was made."
-msgstr ""
+msgstr "Соңғы парольдерді синхрондау жасалған уақыт белгісі."
 
-#: data/org.gnome.epiphany.gschema.xml:437
+#: data/org.gnome.epiphany.gschema.xml:421
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"Егер парольдер жинағы бірінші рет синхрондалуы керек болса - TRUE, әйтпесе - "
+"FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "Enable history sync"
-msgstr ""
+msgstr "Тарихты синхрондауды іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:426
 msgid "TRUE if history collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Егер тарих жинағы синхрондалуы тиіс болса - TRUE, әйтпесе - FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "History sync timestamp"
-msgstr ""
+msgstr "Тарихты синхрондау уақыт белгісі"
 
-#: data/org.gnome.epiphany.gschema.xml:447
+#: data/org.gnome.epiphany.gschema.xml:431
 msgid "The timestamp at which last history sync was made."
-msgstr ""
+msgstr "Тарихты соңғы синхрондау жасалған уақыт белгісі."
 
-#: data/org.gnome.epiphany.gschema.xml:452
+#: data/org.gnome.epiphany.gschema.xml:436
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
-msgstr ""
+msgstr "Тарих жинағын бірінші рет синхрондау керек болса TRUE, әйтпесе FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:456
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "Enable open tabs sync"
 msgstr "Ашық беттерді синхрондауды іске қосу"
 
-#: data/org.gnome.epiphany.gschema.xml:457
+#: data/org.gnome.epiphany.gschema.xml:441
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Ашық беттер жинағы синхрондалуы керек болса TRUE, әйтпесе FALSE."
 
-#: data/org.gnome.epiphany.gschema.xml:461
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid "Open tabs sync timestamp"
-msgstr ""
+msgstr "Ашық беттерді синхрондаудың уақыт белгісі"
 
-#: data/org.gnome.epiphany.gschema.xml:462
+#: data/org.gnome.epiphany.gschema.xml:446
 msgid "The timestamp at which last open tabs sync was made."
-msgstr ""
+msgstr "Ашық беттерді соңғы синхрондау жасалған уақыт белгісі."
 
-#: data/org.gnome.epiphany.gschema.xml:473
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "Decision to apply when microphone permission is requested for this host"
-msgstr ""
+msgstr "Осы хост үшін микрофонға рұқсат сұралғанда іске асырылатын шешім"
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:458
 msgid ""
-"This option is used to save whether a given host has been given permission "
-"to access the user’s microphone. The “undecided” default means the browser "
-"needs to ask the user for permission, while “allow” and “deny” tell it to "
-"automatically make the decision upon request."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:478
-msgid ""
-"Decision to apply when geolocation permission is requested for this host"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:479
-msgid ""
-"This option is used to save whether a given host has been given permission "
-"to access the user’s location. The “undecided” default means the browser "
-"needs to ask the user for permission, while “allow” and “deny” tell it to "
-"automatically make the decision upon request."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:483
-msgid ""
-"Decision to apply when notification permission is requested for this host"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:484
-msgid ""
-"This option is used to save whether a given host has been given permission "
-"to show notifications. The “undecided” default means the browser needs to "
-"ask the user for permission, while “allow” and “deny” tell it to "
-"automatically make the decision upon request."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:488
-msgid ""
-"Decision to apply when save password permission is requested for this host"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:489
-msgid ""
-"This option is used to save whether a given host has been given permission "
-"to save passwords. The “undecided” default means the browser needs to ask "
-"the user for permission, while “allow” and “deny” tell it to automatically "
-"make the decision upon request."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:493
-msgid "Decision to apply when webcam permission is requested for this host"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:494
-msgid ""
-"This option is used to save whether a given host has been given permission "
-"to access the user’s webcam. The “undecided” default means the browser needs "
+"This option is used to save whether a given host has been given permission to "
+"access the user’s microphone. The “undecided” default means the browser needs "
 "to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Бұл опция берілген хостқа пайдаланушының микрофонына қол жеткізуге рұқсат "
+"берілген-берілмегенін сақтау үшін қолданылады. «undecided» әдепкі мәні барузер "
+"пайдаланушыдан рұқсат сұрауы керек екенін білдіреді, ал «allow» және «deny» "
+"мәндері сұрау бойынша автоматты түрде шешім қабылдау керектігін айтады."
 
-#: data/org.gnome.epiphany.gschema.xml:498
+#: data/org.gnome.epiphany.gschema.xml:462
+msgid "Decision to apply when geolocation permission is requested for this host"
+msgstr "Осы хост үшін геолокацияға рұқсат сұралғанда іске асырылатын шешім"
+
+#: data/org.gnome.epiphany.gschema.xml:463
+msgid ""
+"This option is used to save whether a given host has been given permission to "
+"access the user’s location. The “undecided” default means the browser needs to "
+"ask the user for permission, while “allow” and “deny” tell it to automatically "
+"make the decision upon request."
+msgstr ""
+"Бұл опция берілген хостқа пайдаланушының орналасқан жеріне қол жеткізуге "
+"рұқсат берілген-берілмегенін сақтау үшін қолданылады. «undecided» әдепкі мәні "
+"барузер пайдаланушыдан рұқсат сұрауы керек екенін білдіреді, ал «allow» және "
+"«deny» мәндері сұрау бойынша автоматты түрде шешім қабылдау керектігін айтады."
+
+#: data/org.gnome.epiphany.gschema.xml:467
+msgid "Decision to apply when notification permission is requested for this host"
+msgstr "Осы хост үшін хабарландыру рұқсаты сұралғанда іске асырылатын шешім"
+
+#: data/org.gnome.epiphany.gschema.xml:468
+msgid ""
+"This option is used to save whether a given host has been given permission to "
+"show notifications. The “undecided” default means the browser needs to ask the "
+"user for permission, while “allow” and “deny” tell it to automatically make "
+"the decision upon request."
+msgstr ""
+"Бұл опция берілген хостқа хабарландыруларды көрсетуге рұқсат берілген-"
+"берілмегенін сақтау үшін қолданылады. «undecided» әдепкі мәні барузер "
+"пайдаланушыдан рұқсат сұрауы керек екенін білдіреді, ал «allow» және «deny» "
+"мәндері сұрау бойынша автоматты түрде шешім қабылдау керектігін айтады."
+
+#: data/org.gnome.epiphany.gschema.xml:472
+msgid ""
+"Decision to apply when save password permission is requested for this host"
+msgstr "Осы хост үшін парольді сақтауға рұқсат сұралғанда іске асырылатын шешім"
+
+#: data/org.gnome.epiphany.gschema.xml:473
+msgid ""
+"This option is used to save whether a given host has been given permission to "
+"save passwords. The “undecided” default means the browser needs to ask the "
+"user for permission, while “allow” and “deny” tell it to automatically make "
+"the decision upon request."
+msgstr ""
+"Бұл опция берілген хостқа парольдерді сақтауға рұқсат берілген-берілмегенін "
+"сақтау үшін қолданылады. «undecided» әдепкі мәні барузер пайдаланушыдан рұқсат "
+"сұрауы керек екенін білдіреді, ал «allow» және «deny» мәндері сұрау бойынша "
+"автоматты түрде шешім қабылдау керектігін айтады."
+
+#: data/org.gnome.epiphany.gschema.xml:477
+msgid "Decision to apply when webcam permission is requested for this host"
+msgstr "Осы хост үшін веб-камераға рұқсат сұралғанда іске асырылатын шешім"
+
+#: data/org.gnome.epiphany.gschema.xml:478
+msgid ""
+"This option is used to save whether a given host has been given permission to "
+"access the user’s webcam. The “undecided” default means the browser needs to "
+"ask the user for permission, while “allow” and “deny” tell it to automatically "
+"make the decision upon request."
+msgstr ""
+"Бұл опция берілген хостқа пайдаланушының веб-камерасына қол жеткізуге рұқсат "
+"берілген-берілмегенін сақтау үшін қолданылады. «undecided» әдепкі мәні барузер "
+"пайдаланушыдан рұқсат сұрауы керек екенін білдіреді, ал «allow» және «deny» "
+"мәндері сұрау бойынша автоматты түрде шешім қабылдау керектігін айтады."
+
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
-msgstr ""
+msgstr "Осы хост үшін жарнамаға рұқсат сұралғанда іске асырылатын шешім"
 
-#: data/org.gnome.epiphany.gschema.xml:499
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
-"This option is used to save whether a given host has been given permission "
-"to allow advertisements. The “undecided” default means the browser global "
-"setting is used, while “allow” and “deny” tell it to automatically make the "
-"decision upon request."
+"This option is used to save whether a given host has been given permission to "
+"allow advertisements. The “undecided” default means the browser global setting "
+"is used, while “allow” and “deny” tell it to automatically make the decision "
+"upon request."
 msgstr ""
+"Бұл опция берілген хостқа жарнамаларға рұқсат беру-бермеуін сақтау үшін "
+"қолданылады. «undecided» әдепкі мәні барузердің глобалды параметрі "
+"қолданылатынын білдіреді, ал «allow» және «deny» мәндері сұрау бойынша "
+"автоматты түрде шешім қабылдау керектігін айтады."
 
-#: data/org.gnome.epiphany.gschema.xml:503
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid "Decision to apply when an autoplay policy is requested for this host"
-msgstr ""
+msgstr "Осы хост үшін автоойнату саясаты сұралғанда іске асырылатын шешім"
 
-#: data/org.gnome.epiphany.gschema.xml:504
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
-"This option is used to save whether a given host has been given permission "
-"to autoplay. The “undecided” default means to allow autoplay of muted media, "
+"This option is used to save whether a given host has been given permission to "
+"autoplay. The “undecided” default means to allow autoplay of muted media, "
 "while “allow” and “deny” tell it to allow / deny all requests to autoplay "
 "media respectively."
 msgstr ""
+"Бұл опция берілген хостқа автоматты түрде ойнату рұқсаты берілген-берілмегенін "
+"сақтау үшін қолданылады. «undecided» әдепкі мәні дыбысы өшірілген медианы "
+"автоматты түрде ойнатуға рұқсат беруді білдіреді, ал «allow» және «deny» "
+"медианы автоматты түрде ойнатудың барлық сұранымдарына сәйкесінше рұқсат "
+"беру / тыйым салуды білдіреді."
 
 #: embed/ephy-about-handler.c:117 embed/ephy-about-handler.c:119
 msgid "Memory usage"
@@ -883,7 +956,7 @@ msgstr "Нұсқасы %s"
 msgid "About Web"
 msgstr "Осы туралы"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1228
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1280
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany технологиясын алдын ала қарау"
 
@@ -893,215 +966,222 @@ msgstr "Веб үшін қарапайым, таза және әдемі көр�
 
 #. Displayed when opening applications without any installed web apps.
 #: embed/ephy-about-handler.c:271 embed/ephy-about-handler.c:273
-#: embed/ephy-about-handler.c:337 embed/ephy-about-handler.c:363
+#: embed/ephy-about-handler.c:338 embed/ephy-about-handler.c:364
 msgid "Apps"
 msgstr "Қолданбалар"
 
 #: embed/ephy-about-handler.c:274
 msgid "List of installed web apps"
-msgstr ""
+msgstr "Орнатылған веб-қолданбалар тізімі"
 
-#: embed/ephy-about-handler.c:322
+#: embed/ephy-about-handler.c:323
 msgid "Delete"
 msgstr "Өшіру"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:324
+#: embed/ephy-about-handler.c:325
 msgid "Installed on:"
 msgstr "Орнатылған:"
 
-#: embed/ephy-about-handler.c:363
+#: embed/ephy-about-handler.c:364
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
 msgstr ""
+"Таңдаулы веб-сайтыңызды бет мәзіріндегі <b>Веб-қолданба ретінде орнату…</b> "
+"батырмасын шерту арқылы қоса аласыз."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:468
+#: embed/ephy-about-handler.c:469
 msgid "Welcome to Web"
 msgstr "Web браузеріне қош келдіңіз"
 
-#: embed/ephy-about-handler.c:468
+#: embed/ephy-about-handler.c:469
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Шолуды бастаңыз және ең көп қаралатын сайттар осында көрсетілетін болады."
 
-#: embed/ephy-about-handler.c:502
+#: embed/ephy-about-handler.c:503
 #: embed/web-process-extension/resources/js/overview.js:151
 msgid "Remove from overview"
 msgstr "Жалпы шолудан өшіру"
 
-#: embed/ephy-about-handler.c:592 embed/ephy-about-handler.c:593
+#: embed/ephy-about-handler.c:593 embed/ephy-about-handler.c:594
 msgid "Private Browsing"
 msgstr "Жекелік шолу"
 
-#: embed/ephy-about-handler.c:594
+#: embed/ephy-about-handler.c:595
 msgid ""
-"You are currently browsing incognito. Pages viewed in this mode will not "
-"show up in your browsing history and all stored information will be cleared "
-"when you close the window. Files you download will be kept."
+"You are currently browsing incognito. Pages viewed in this mode will not show "
+"up in your browsing history and all stored information will be cleared when "
+"you close the window. Files you download will be kept."
 msgstr ""
-"Сіз қазіргі уақытта инкогнито шолып жатырсыз. Бұл режимде қаралған беттер "
-"шолу журналында көрсетілмейді және терезені жапқанда барлық сақталған "
-"ақпарат тазартылады. Жүктелген файлдар сақталады."
+"Сіз қазіргі уақытта инкогнито шолып жатырсыз. Бұл режимде қаралған беттер шолу "
+"журналында көрсетілмейді және терезені жапқанда барлық сақталған ақпарат "
+"тазартылады. Жүктелген файлдар сақталады."
 
-#: embed/ephy-about-handler.c:598
-msgid ""
-"Incognito mode hides your activity only from people using this computer."
+#: embed/ephy-about-handler.c:599
+msgid "Incognito mode hides your activity only from people using this computer."
 msgstr ""
+"Инкогнито режимі белсенділігіңізді тек осы компьютерді пайдаланатын адамдардан "
+"жасырады."
 
-#: embed/ephy-about-handler.c:600
+#: embed/ephy-about-handler.c:601
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
 "that you visit, and advertisers on these websites may still be tracking you."
 msgstr ""
+"Жұмыста болсаңыз, ол сіздің белсенділігіңізді жұмыс берушіңізден жасырмайды. "
+"Интернет қызметін жеткізушіңіз, үкіметіңіз, басқа үкіметтер, сіз кіретін веб-"
+"сайттар және осы веб-сайттардағы жарнама берушілер сізді әлі де бақылап отыруы "
+"мүмкін."
 
-#: embed/ephy-client-certificate-manager.c:292
+#: embed/ephy-client-certificate-manager.c:294
 msgid "PIN required"
 msgstr "PIN коды қажет"
 
-#: embed/ephy-client-certificate-manager.c:295
+#: embed/ephy-client-certificate-manager.c:297
 #, c-format
 msgid "Please enter PIN for %s, to authenticate at %s:%d."
-msgstr ""
+msgstr "%s үшін ПИН-кодты енгізіңіз, %s:%d адресінде аутентификациядан өту үшін."
 
-#: embed/ephy-client-certificate-manager.c:303
-#: embed/ephy-client-certificate-manager.c:388 embed/ephy-download.c:760
-#: embed/ephy-web-view.c:1348 src/ephy-history-dialog.c:772
-#: src/ephy-window.c:257 src/preferences/autofill-view.c:363
-#: src/preferences/extension-view.c:117 src/preferences/passwords-view.c:179
+#: embed/ephy-client-certificate-manager.c:305
+#: embed/ephy-client-certificate-manager.c:402 embed/ephy-download.c:767
+#: embed/ephy-web-view.c:1347 src/ephy-history-dialog.c:889 src/ephy-window.c:262
+#: src/preferences/autofill-view.c:363 src/preferences/extension-view.c:117
+#: src/preferences/passwords-view.c:178
 #: src/resources/gtk/firefox-sync-dialog.ui:117
-#: src/resources/gtk/history-dialog.ui:50
-#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:338
-#: src/window-commands.c:591 src/window-commands.c:902
-#: src/window-commands.c:1402 src/window-commands.c:2085
-#: src/window-commands.c:2988
+#: src/resources/gtk/history-dialog.ui:58
+#: src/resources/gtk/prefs-lang-dialog.ui:17 src/window-commands.c:357
+#: src/window-commands.c:562 src/window-commands.c:926 src/window-commands.c:1458
+#: src/window-commands.c:2162 src/window-commands.c:3099
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
-#: embed/ephy-client-certificate-manager.c:304
+#: embed/ephy-client-certificate-manager.c:306
 msgid "_Login"
 msgstr "_Логин"
 
-#: embed/ephy-client-certificate-manager.c:374
+#: embed/ephy-client-certificate-manager.c:388
 msgid "Select certificate"
 msgstr "Сертификатты таңдау"
 
-#: embed/ephy-client-certificate-manager.c:377
+#: embed/ephy-client-certificate-manager.c:391
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
-msgstr ""
+msgstr "%s:%d веб-сайты %s үшін аутентификация сертификатын ұсынуыңызды сұрайды."
 
-#: embed/ephy-client-certificate-manager.c:382
+#: embed/ephy-client-certificate-manager.c:396
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
-msgstr ""
+msgstr "%s:%d веб-сайты аутентификация сертификатын ұсынуыңызды сұрайды."
 
-#: embed/ephy-client-certificate-manager.c:389 src/window-commands.c:342
+#: embed/ephy-client-certificate-manager.c:403 src/window-commands.c:361
 msgid "_Select"
 msgstr "Таң_дау"
 
-#: embed/ephy-download.c:708 src/preferences/prefs-general-page.c:554
+#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:554
 msgid "Select a Directory"
 msgstr "Буманы таңдау"
 
-#: embed/ephy-download.c:716
+#: embed/ephy-download.c:723
 msgid "Select the Destination"
-msgstr ""
+msgstr "Мақсатты орынды таңдаңыз"
 
-#: embed/ephy-download.c:758
+#: embed/ephy-download.c:765
 msgid "Download Requested"
-msgstr ""
+msgstr "Жүктеп алу сұралды"
 
-#: embed/ephy-download.c:761
+#: embed/ephy-download.c:768
 msgid "_Download"
 msgstr "Жү_ктеп алу"
 
 #. Type
-#: embed/ephy-download.c:789
+#: embed/ephy-download.c:796
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Түрі: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:795
+#: embed/ephy-download.c:802
 #, c-format
 msgid "Source: %s"
 msgstr "Қайнар көзі: %s"
 
 #. Question
-#: embed/ephy-download.c:801
+#: embed/ephy-download.c:808
 msgid "Where do you want to save the file?"
 msgstr "Файлды қайда сақтағыңыз келеді?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:960
+#: embed/ephy-download.c:967
 #, c-format
 msgid "Finished downloading %s"
 msgstr "%s жүктемесі аяқталды"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:962
+#: embed/ephy-download.c:969 src/ephy-window.c:3686
 msgid "Download finished"
 msgstr "Жүктеме аяқталды"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:514
+#: embed/ephy-embed.c:537
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Толық экраннан шығу үшін %s басыңыз"
 
-#: embed/ephy-embed.c:514
+#: embed/ephy-embed.c:537
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:514
+#: embed/ephy-embed.c:537
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:793
+#: embed/ephy-embed.c:816
 msgid "Web is being controlled by automation"
-msgstr ""
+msgstr "Web қолданбасы автоматтандыру арқылы басқарылып тұр"
 
 #: embed/ephy-embed-autofill.c:115
 msgid "Autofill All Fields"
-msgstr ""
+msgstr "Барлық өрістерді автоматты толтыру"
 
 #: embed/ephy-embed-autofill.c:124
 msgid "Autofill Personal Fields"
-msgstr ""
+msgstr "Жеке өрістерді автоматты толтыру"
 
 #: embed/ephy-embed-autofill.c:132
 msgid "Fill This Field"
-msgstr ""
+msgstr "Бұл өрісті толтыру"
 
 #: embed/ephy-embed-autofill.c:140
 msgid "Do Not Autofill"
-msgstr ""
+msgstr "Автоматты түрде толтырмау"
 
 #: embed/ephy-embed-shell.c:671
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
-msgstr ""
+msgstr "%s URI-і Epiphany %s ресурсы үшін қол жеткізуге өкілетті емес"
 
 #: embed/ephy-embed-utils.c:70
 #, c-format
 msgid "Send an email message to “%s”"
-msgstr ""
+msgstr "“%s” адресіне электрондық пошта хабарламасын жіберу"
 
 #. TRANSLATORS: This string is part of the previous translatable string.
 #. * It is appended for each extraneous mailto: URI email address. For
-#. * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
+#. * example if you have
+#. mailto:foo@example.com,bar@example.com,baz@example.com
 #. * it will show
 #. * Send an email to “foo@example.com”, “bar@example.com”, “baz@example.com”
-#. * when you hover such link, at the same place as regular URLs when you hover
+#. * when you hover such link, at the same place as regular URLs when you
+#. hover
 #. * a link in a web page.
-#.
 #: embed/ephy-embed-utils.c:82
 #, c-format
 msgid ", “%s”"
@@ -1412,7 +1492,6 @@ msgstr "Батыс (_Windows-1252)"
 #. The following encodings are so rarely used that we don't want to
 #. * pollute the "related" part of the encodings menu with them, so we
 #. * set the language group to 0 here.
-#.
 #: embed/ephy-encodings.c:136
 msgid "English (_US-ASCII)"
 msgstr "Ағылшын (_US-ASCII)"
@@ -1435,7 +1514,6 @@ msgstr "Юникод (UTF-3_2 LE)"
 
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
-#.
 #: embed/ephy-encodings.c:219
 #, c-format
 msgid "Unknown (%s)"
@@ -1456,7 +1534,7 @@ msgstr "Ізделетін мәтіннің келесі кездесуін та
 #: embed/ephy-reader-handler.c:309
 #, c-format
 msgid "%s is not a valid URI"
-msgstr ""
+msgstr "%s жарамды URI емес"
 
 #: embed/ephy-search-entry.c:495
 msgid "Text not found"
@@ -1464,7 +1542,7 @@ msgstr "Мәтін табылмады"
 
 #: embed/ephy-search-entry.c:499
 msgid "Search wrapped back to the top"
-msgstr ""
+msgstr "Іздеу басына оралды"
 
 #: embed/ephy-web-view.c:232 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
@@ -1477,193 +1555,206 @@ msgstr "Барлық қолдауы бар түрлер"
 #. Translators: Message appears when insecure password form is focused.
 #: embed/ephy-web-view.c:612
 msgid "This form is not secure ‒ passwords will not be kept private"
-msgstr ""
+msgstr "Бұл форма қауіпсіз емес ‒ парольдердің жекелігі сақталмайды"
 
-#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3422
+#: embed/ephy-web-view.c:613 embed/ephy-web-view.c:3426
 msgid "_Dismiss"
 msgstr "_Елемеу"
 
-#: embed/ephy-web-view.c:788
+#: embed/ephy-web-view.c:789
 msgid "Web process crashed"
-msgstr ""
+msgstr "Веб процесі істен шықты"
 
-#: embed/ephy-web-view.c:791
+#: embed/ephy-web-view.c:792
 msgid "Web process terminated due to exceeding memory limit"
-msgstr ""
+msgstr "Веб процесі жады шектеуінен асқандықтан тоқтатылды"
 
-#: embed/ephy-web-view.c:794
+#: embed/ephy-web-view.c:795
 msgid "Web process terminated by API request"
-msgstr ""
+msgstr "Веб процесі API сұранысымен тоқтатылды"
 
-#: embed/ephy-web-view.c:832
+#: embed/ephy-web-view.c:840
 msgid "Page Unresponsive"
 msgstr "Бет жауап бермейді"
 
-#: embed/ephy-web-view.c:835
+#: embed/ephy-web-view.c:843
 #, c-format
 msgid "The current page “%s” is not responding"
-msgstr ""
+msgstr "Ағымдағы “%s” беті жауап бермейді"
 
-#: embed/ephy-web-view.c:839
+#: embed/ephy-web-view.c:847
 msgid "_Wait"
 msgstr "_Күту"
 
-#: embed/ephy-web-view.c:840
+#: embed/ephy-web-view.c:848
 msgid "Force _Stop"
-msgstr ""
+msgstr "Мәжбүрлі _тоқтату"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1083
+#: embed/ephy-web-view.c:1091
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” жүктеу…"
 
-#: embed/ephy-web-view.c:1085 embed/ephy-web-view.c:1091
+#: embed/ephy-web-view.c:1093 embed/ephy-web-view.c:1099
 msgid "Loading…"
 msgstr "Жүктеу…"
 
-#: embed/ephy-web-view.c:1341
-#| msgid "Web App"
+#: embed/ephy-web-view.c:1340
 msgid "Delete Web App?"
-msgstr ""
+msgstr "Веб қолданбасын өшіру керек пе?"
 
-#: embed/ephy-web-view.c:1344
+#: embed/ephy-web-view.c:1343
 #, c-format
 msgid ""
-"\"%s\" will be removed. You will have to re-install the website as an app "
-"from the menu to use it again."
+"“%s” will be removed. You will have to re-install the website as an app from "
+"the menu to use it again."
 msgstr ""
+"“%s” өшіріледі. Оны қайта пайдалану үшін веб-сайтты мәзірден қолданба ретінде "
+"қайта орнатуыңыз керек болады."
 
-#: embed/ephy-web-view.c:1349 src/preferences/autofill-view.c:364
-#: src/preferences/passwords-view.c:180 src/resources/gtk/history-dialog.ui:148
+#: embed/ephy-web-view.c:1348 src/preferences/autofill-view.c:364
+#: src/preferences/passwords-view.c:179 src/resources/gtk/history-dialog.ui:160
 #: src/resources/gtk/location-entry.ui:303
 msgid "_Delete"
 msgstr "Ө_шіру"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1633
+#: embed/ephy-web-view.c:1626
 msgid ""
 "This website presented identification that belongs to a different website."
-msgstr ""
+msgstr "Бұл веб-сайт басқа веб-сайтқа тиесілі сәйкестендіруді ұсынды."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1638
+#: embed/ephy-web-view.c:1631
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr ""
+"Бұл веб-сайттың сәйкестендіруі сену үшін тым ескі. Компьютеріңіздің "
+"күнтізбесіндегі күнді тексеріңіз."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1643
+#: embed/ephy-web-view.c:1636
 msgid "This website’s identification was not issued by a trusted organization."
-msgstr ""
+msgstr "Бұл веб-сайттың сәйкестендіруін сенімді ұйым бермеген."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1648
+#: embed/ephy-web-view.c:1641
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
+"Бұл веб-сайттың сәйкестендіруін өңдеу мүмкін болмады. Ол зақымдалған болуы "
+"мүмкін."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1653
+#: embed/ephy-web-view.c:1646
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
-msgstr ""
+msgstr "Бұл веб-сайттың сәйкестендіруін оны берген сенімді ұйым қайтып алды."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1658
+#: embed/ephy-web-view.c:1651
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr ""
+"Бұл веб-сайттың сәйкестендіруіне сенуге болмайды, себебі ол өте әлсіз "
+"шифрлеуді қолданады."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1663
+#: embed/ephy-web-view.c:1656
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
 msgstr ""
+"Бұл веб-сайттың сәйкестендіруі тек болашақ күндер үшін жарамды. "
+"Компьютеріңіздің күнтізбесіндегі күнді тексеріңіз."
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1728 embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1721 embed/ephy-web-view.c:1777
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Парақты жүктеу қатесі"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1731
+#: embed/ephy-web-view.c:1724
 msgid "Unable to display this website"
-msgstr ""
+msgstr "Бұл веб-сайтты көрсету мүмкін емес"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1736
+#: embed/ephy-web-view.c:1729
 #, c-format
 msgid "The site at %s seems to be unavailable."
-msgstr ""
+msgstr "%s адресіндегі сайт қолжетімсіз сияқты."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1740
+#: embed/ephy-web-view.c:1733
 msgid ""
-"It may be temporarily inaccessible or moved to a new address. You may wish "
-"to verify that your internet connection is working correctly."
+"It may be temporarily inaccessible or moved to a new address. You may wish to "
+"verify that your internet connection is working correctly."
 msgstr ""
+"Ол уақытша қолжетімді емес немесе жаңа адреске ауысуқан болуы мүмкін. Интернет "
+"байланысыңыздың дұрыс жұмыс істеп тұрғанын тексергіңіз келуі мүмкін."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1743
 #, c-format
 msgid "The precise error was: %s"
-msgstr ""
+msgstr "Нақты қате: %s"
 
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
+#. The button on the unresponsive process error page. DO NOT ADD MNEMONICS
+#. HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1755 embed/ephy-web-view.c:1808
-#: embed/ephy-web-view.c:1844 embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1748 embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1837 embed/ephy-web-view.c:1873
 #: src/ephy-action-bar-start.c:36 src/resources/gtk/page-menu-popover.ui:181
 msgid "Reload"
 msgstr "Қайта жүктеу"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1759 embed/ephy-web-view.c:1812
-#: embed/ephy-web-view.c:1848 embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1752 embed/ephy-web-view.c:1805
+#: embed/ephy-web-view.c:1841 embed/ephy-web-view.c:1877
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1787
+#: embed/ephy-web-view.c:1780
 msgid "Oops! There may be a problem"
-msgstr ""
+msgstr "Әттеген-ай! Мәселе туындаған болуы мүмкін"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1785
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
-msgstr ""
+msgstr "%s беті Вебтің күтпеген жерден жабылуына себеп болуы мүмкін."
 
-#. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1799
+#. Further error details when a site cannot be loaded due to a page crash
+#. error.
+#: embed/ephy-web-view.c:1792
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
-msgstr ""
+msgstr "Егер бұл қайталанса, мәселе туралы %s әзірлеушілеріне хабарлаңыз."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1833
+#: embed/ephy-web-view.c:1826
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Парақты көрсету қатесі"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1836
+#: embed/ephy-web-view.c:1829
 msgid "Oops!"
 msgstr "Әттеген-ай!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1839
+#: embed/ephy-web-view.c:1832
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1672,18 +1763,18 @@ msgstr ""
 "параққа өтіңіз."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1862
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Жауапсыз бет"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1872
+#: embed/ephy-web-view.c:1865
 msgid "Uh-oh!"
 msgstr "Қап!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1868
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1692,72 +1783,79 @@ msgstr ""
 "параққа өтіңіз."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1911
+#: embed/ephy-web-view.c:1904
 #, c-format
 msgid "Security Violation"
 msgstr "Қауіпсіздікті бұзу"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1914
+#: embed/ephy-web-view.c:1907
 msgid "This Connection is Not Secure"
 msgstr "Бұл байланыс қауіпсіз емес"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1919
+#: embed/ephy-web-view.c:1912
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
 "alter information going to or from this site."
 msgstr ""
+"Бұл нақты %s сияқты емес. Шабуылдаушылар осы сайтқа жіберілетін немесе одан "
+"келетін ақпаратты ұрлауға немесе өзгертуге тырысуы мүмкін."
 
-#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
+#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS
+#. HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1929 embed/ephy-web-view.c:1979
+#: embed/ephy-web-view.c:1922 embed/ephy-web-view.c:1972
 msgid "Go Back"
 msgstr "Артқа"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1982
+#: embed/ephy-web-view.c:1925 embed/ephy-web-view.c:1975
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
-#. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1935
+#. The hidden button on the invalid TLS certificate error page. Do not add
+#. mnemonics here.
+#: embed/ephy-web-view.c:1928
 msgid "Accept Risk and Proceed"
 msgstr "Тәуекелді қабылдау және жалғастыру"
 
-#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1939
+#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS
+#. certificate error page.
+#: embed/ephy-web-view.c:1932
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:1955 embed/ephy-web-view.c:1958
 #, c-format
 msgid "File not found"
 msgstr "Файл табылмады"
 
-#: embed/ephy-web-view.c:1970
+#: embed/ephy-web-view.c:1963
 #, c-format
 msgid "%s could not be found."
 msgstr "%s табылмады."
 
-#: embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:1965
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
 "check if it has been moved, renamed, or deleted."
 msgstr ""
+"Файл атындағы регистрді немесе басқа теру қателерін тексеріңіз. Сондай-ақ оның "
+"жылжытылмағанын, атын өзгерту орындалмағанын немесе өшірілмегенін тексеріңіз."
 
-#: embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2028
 msgid "None specified"
 msgstr "Ешнәрсе көрсетілмеген"
 
-#: embed/ephy-web-view.c:2149
+#: embed/ephy-web-view.c:2142
 msgid "Technical information"
 msgstr "Техникалық ақпараты"
 
@@ -1777,7 +1875,7 @@ msgstr "Суреттер"
 #. Translators: tooltip for the downloads button
 #: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
 #: src/resources/gtk/action-bar-end.ui:11
-#: src/resources/gtk/prefs-general-page.ui:123
+#: src/resources/gtk/prefs-general-page.ui:121
 msgid "Downloads"
 msgstr "Жүктемелер"
 
@@ -1798,31 +1896,22 @@ msgstr "\"%s\" ішінде уақытша бумасын жасау мүмкі�
 #: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
-msgstr ""
+msgstr "“%s” файлы бұрыннан бар. Оны басқа жерге жылжытыңыз."
 
 #: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "\"%s\" бумасын жасау сәтсіз аяқталды."
 
-#: lib/ephy-file-helpers.c:716
+#: lib/ephy-file-helpers.c:726
 #, c-format
 msgid "Error removing file %s: %s"
-msgstr ""
+msgstr "%s файлын өшіру қатесі: %s"
 
-#: lib/ephy-file-helpers.c:734
+#: lib/ephy-file-helpers.c:744
 #, c-format
 msgid "Error removing directory %s: %s"
-msgstr ""
-
-#. TRANSLATORS: Please modify the main address of duckduckgo in order to match
-#. * the version used in your country. For example for the french version :
-#. * replace the ".com" with ".fr" :  "https://duckduckgo.fr/?q=%s&amp;t=epiphany"
-#.
-#: lib/ephy-search-engine-manager.h:35
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "%s бумасын өшіру қатесі: %s"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -1830,63 +1919,58 @@ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 #: lib/ephy-sync-utils.c:322
 #, c-format
 msgid "%s’s GNOME Web on %s"
-msgstr ""
+msgstr "%s-ның GNOME Web-і (%s ішінде)"
 
-#. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
+#. Translators: "friendly time" string for the current day, strftime format.
+#. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:236
 msgid "Today %I∶%M %p"
 msgstr "Бүгін %l:%M %p"
 
-#. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
+#. Translators: "friendly time" string for the current day, strftime format.
+#. like "Today 15∶34"
 #: lib/ephy-time-helpers.c:239
 msgid "Today %H∶%M"
 msgstr "Бүгін, %H∶%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12∶34 am"
-#.
 #: lib/ephy-time-helpers.c:254
 msgid "Yesterday %I∶%M %p"
 msgstr "Кеше %l∶%M %p"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 15∶34"
-#.
 #: lib/ephy-time-helpers.c:259
 msgid "Yesterday %H∶%M"
 msgstr "Кеше, уақыты %H∶%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12∶34 am"
-#.
 #: lib/ephy-time-helpers.c:277
 msgid "%a %I∶%M %p"
 msgstr "%a %I∶%M %p"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 15∶34"
-#.
 #: lib/ephy-time-helpers.c:282
 msgid "%a %H∶%M"
 msgstr "%a %H∶%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12∶34 am"
-#.
 #: lib/ephy-time-helpers.c:296
 msgid "%b %d %I∶%M %p"
 msgstr "%b %d %I∶%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
-#.
 #: lib/ephy-time-helpers.c:301
 msgid "%b %d %H∶%M"
 msgstr "%b %d %H∶%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
-#.
 #: lib/ephy-time-helpers.c:307
 msgid "%b %d %Y"
 msgstr "%b %d %Y"
@@ -1900,16 +1984,17 @@ msgstr "Белгісіз"
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
+"%s веб-қолданба идентификаторы үшін жұмыс үстелі файл атын алу сәтсіз аяқталды"
 
 #: lib/ephy-web-app-utils.c:348
 #, c-format
 msgid "Failed to install desktop file %s: "
-msgstr ""
+msgstr "%s жұмыс үстелі файлын орнату сәтсіз аяқталды: "
 
 #: lib/ephy-web-app-utils.c:387
 #, c-format
 msgid "Profile directory %s already exists"
-msgstr ""
+msgstr "%s профиль бумасы бар болып тұр"
 
 #: lib/ephy-web-app-utils.c:394
 #, c-format
@@ -1921,24 +2006,26 @@ msgstr "%s бумасын жасау сәтсіз аяқталды"
 msgid "Failed to create .app file: %s"
 msgstr ".app файлын жасау сәтсіз аяқталды: %s"
 
-#: lib/sync/ephy-password-export.c:121
+#: lib/sync/ephy-password-export.c:123
 msgid "Error in exporting passwords to a CSV file"
-msgstr ""
+msgstr "Парольдерді CSV файлына экспорттау қатесі"
 
 #: lib/sync/ephy-password-import.c:133
 #, c-format
 msgid "Cannot create SQLite connection. Close browser and try again."
-msgstr ""
+msgstr "SQLite байланысын жасау мүмкін емес. Барузерді жауып, қайтадан көріңіз."
 
 #: lib/sync/ephy-password-import.c:142 lib/sync/ephy-password-import.c:152
 #, c-format
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
 msgstr ""
+"Барузердің парольдер дерекқорын ашу мүмкін емес. Барузерді жауып, қайтадан "
+"көріңіз."
 
 #: lib/sync/ephy-password-import.c:360
 msgid "Error in reading CSV file"
-msgstr ""
+msgstr "CSV файлын оқу қатесі"
 
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
@@ -1946,80 +2033,85 @@ msgstr ""
 #: lib/sync/ephy-password-manager.c:450
 #, c-format
 msgid "Password for %s in a form in %s"
-msgstr ""
+msgstr "%s ішіндегі формадағы %s үшін пароль"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
 #: lib/sync/ephy-password-manager.c:454
 #, c-format
 msgid "Password in a form in %s"
-msgstr ""
+msgstr "%s ішіндегі формадағы пароль"
 
 #: lib/sync/ephy-sync-service.c:932
 msgid "Response body is empty, do you need to install glib-networking?"
-msgstr ""
+msgstr "Жауап денесі бос, сізге glib-networking орнату керек пе?"
 
 #: lib/sync/ephy-sync-service.c:990
 msgid "Failed to obtain storage credentials."
-msgstr ""
+msgstr "Сақтау орнының тіркелу мәліметтерін алу сәтсіз аяқталды."
 
 #: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
 #: lib/sync/ephy-sync-service.c:1901
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
-msgstr ""
+msgstr "Синхрондауды жалғастыру үшін Firefox Sync-ке барып, қайтадан кіріңіз."
 
 #: lib/sync/ephy-sync-service.c:1127
 msgid "The password of your Mozilla account seems to have been changed."
-msgstr ""
+msgstr "Mozilla тіркелгіңіздің паролі өзгертілген сияқты."
 
 #: lib/sync/ephy-sync-service.c:1128
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
 msgstr ""
+"Синхрондауды жалғастыру үшін Firefox Sync-ке барып, жаңа парольмен кіріңіз."
 
 #: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
-msgstr ""
+msgstr "Қол қойылған сертификатты алу сәтсіз аяқталды."
 
 #: lib/sync/ephy-sync-service.c:1926
 #, c-format
 msgid "The sync secrets for the current sync user are invalid: %s"
-msgstr ""
+msgstr "Ағымдағы синхрондау пайдаланушысының синхрондау құпиялары жарамсыз: %s"
 
 #: lib/sync/ephy-sync-service.c:1933
 #, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
 msgstr ""
+"Ағымдағы синхрондау пайдаланушысының синхрондау құпиялары жарамды JSON емес: %s"
 
 #: lib/sync/ephy-sync-service.c:1960
 #, c-format
 msgid "Could not find the sync secrets for the current sync user: %s"
 msgstr ""
+"Ағымдағы синхрондау пайдаланушысы үшін синхрондау құпиялары табылмады: %s"
 
 #: lib/sync/ephy-sync-service.c:1966
 msgid "Could not find the sync secrets for the current sync user."
-msgstr ""
+msgstr "Ағымдағы синхрондау пайдаланушысы үшін синхрондау құпиялары табылмады."
 
 #: lib/sync/ephy-sync-service.c:2010
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
 msgstr ""
+"Синхрондау құпияларын сақтау сәтсіз аяқталды (құпиялар қызметі немесе құпиялар "
+"порталы істен шыққан ба?): "
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:2052
 #, c-format
 msgid "The sync secrets of %s"
-msgstr ""
+msgstr "%s синхрондау құпиялары"
 
 #: lib/sync/ephy-sync-service.c:2082
 msgid "Failed to upload client record."
-msgstr ""
+msgstr "Клиент жазбасын жүктеп салу сәтсіз аяқталды."
 
 #: lib/sync/ephy-sync-service.c:2285
 msgid "Failed to upload crypto/keys record."
-msgstr ""
+msgstr "Crypto/keys жазбасын жүктеп салу сәтсіз аяқталды."
 
 #: lib/sync/ephy-sync-service.c:2397
 msgid "Failed to retrieve crypto keys."
@@ -2027,7 +2119,7 @@ msgstr "Криптокілттерін алу сәтсіз аяқталды."
 
 #: lib/sync/ephy-sync-service.c:2451
 msgid "Failed to upload meta/global record."
-msgstr ""
+msgstr "Meta/global жазбасын жүктеп салу сәтсіз аяқталды."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
 #: lib/sync/ephy-sync-service.c:2573
@@ -2035,10 +2127,11 @@ msgstr ""
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
+"Mozilla тіркелгіңіз %d қойма нұсқасын қолданады. Веб тек %d нұсқасын қолдайды."
 
 #: lib/sync/ephy-sync-service.c:2584
 msgid "Failed to verify storage version."
-msgstr ""
+msgstr "Қойма нұсқасын тексеру сәтсіз аяқталды."
 
 #: lib/sync/ephy-sync-service.c:2642
 msgid "Failed to upload device info"
@@ -2046,29 +2139,27 @@ msgstr "Құрылғы ақпаратын жүктеп жіберу сәтсіз
 
 #: lib/sync/ephy-sync-service.c:2718 lib/sync/ephy-sync-service.c:2801
 msgid "Failed to retrieve the Sync Key"
-msgstr ""
+msgstr "Синхрондау кілтін алу сәтсіз аяқталды"
 
-#: src/bookmarks/ephy-bookmark-properties.c:144
-#| msgid "Reload the current page"
+#: src/bookmarks/ephy-bookmark-properties.c:145
 msgid "Select current tag"
 msgstr "Ағымдағы тагты таңдау"
 
-#: src/bookmarks/ephy-bookmark-properties.c:158
-#| msgid "Reload the current page"
+#: src/bookmarks/ephy-bookmark-properties.c:159
 msgid "Remove current tag"
 msgstr "Ағымдағы тагты өшіру"
 
 #: src/bookmarks/ephy-bookmarks-import.c:127
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
-msgstr ""
+msgstr "Файл жарамды Epiphany бетбелгілер файлы емес: тегтер кестесі жоқ"
 
 #: src/bookmarks/ephy-bookmarks-import.c:145
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
-msgstr ""
+msgstr "Файл жарамды Epiphany бетбелгілер файлы емес: бетбелгілер кестесі жоқ"
 
-#: src/bookmarks/ephy-bookmarks-import.c:247
+#: src/bookmarks/ephy-bookmarks-import.c:286
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2076,27 +2167,27 @@ msgstr ""
 "Firefox бетбелгілер дерекқорын ашу мүмкін емес. Firefox браузерін жауып, "
 "әрекетті қайталаңыз."
 
-#: src/bookmarks/ephy-bookmarks-import.c:260
-#: src/bookmarks/ephy-bookmarks-import.c:292
+#: src/bookmarks/ephy-bookmarks-import.c:299
+#: src/bookmarks/ephy-bookmarks-import.c:335
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Firefox бетбелгілерін алу мүмкін емес!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:459
+#: src/bookmarks/ephy-bookmarks-import.c:502
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "HTML бетбелгілер дерекқорын ашу мүмкін емес: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:470
+#: src/bookmarks/ephy-bookmarks-import.c:513
 msgid "HTML bookmarks database could not be read."
 msgstr "HTML бетбелгілер дерекқорын оқу мүмкін емес."
 
-#: src/bookmarks/ephy-bookmarks-import.c:491
+#: src/bookmarks/ephy-bookmarks-import.c:535
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "HTML бетбелгілер дерекқорын талдау мүмкін емес: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:644
+#: src/bookmarks/ephy-bookmarks-import.c:707
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Бетбелгілер файлын талдау мүмкін емес:"
@@ -2122,12 +2213,12 @@ msgid "Save Media As"
 msgstr "Медианы қалайша сақтау"
 
 #. Translators: tooltip for the empty bookmark button
-#: src/ephy-action-bar-end.c:415 src/ephy-location-entry.c:1806
+#: src/ephy-action-bar-end.c:402 src/ephy-location-entry.c:1836
 msgid "Bookmark Page"
 msgstr "Бетті бетбелгілерге қосу"
 
 #. Translators: tooltip for the bookmarked button
-#: src/ephy-action-bar-end.c:423 src/ephy-location-entry.c:1814
+#: src/ephy-action-bar-end.c:410 src/ephy-location-entry.c:1844
 msgid "Edit Bookmark"
 msgstr "Бетбелгіні түзету"
 
@@ -2136,7 +2227,6 @@ msgid "Stop"
 msgstr "Тоқтату"
 
 #: src/ephy-certificate-dialog.c:179
-#| msgid "Show in folder"
 msgid "Show More"
 msgstr "Көбірек көрсету"
 
@@ -2170,11 +2260,11 @@ msgstr "Сертификатты белсендіру уақыты әлі бол
 
 #: src/ephy-certificate-dialog.c:313
 msgid "The identity of this website has been verified."
-msgstr ""
+msgstr "Бұл веб-сайттың сәйкестендіруі расталды."
 
 #: src/ephy-certificate-dialog.c:314
 msgid "The identity of this website has not been verified."
-msgstr ""
+msgstr "Бұл веб-сайттың сәйкестендіруі расталмады."
 
 #. Message on certificate dialog
 #: src/ephy-certificate-dialog.c:326
@@ -2191,6 +2281,7 @@ msgstr ""
 
 #: src/ephy-downloads-popover.c:211 src/resources/gtk/autofill-view.ui:12
 #: src/resources/gtk/passwords-view.ui:27
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:101
 msgid "_Clear All"
 msgstr "Барлығын та_зарту"
 
@@ -2253,7 +2344,6 @@ msgstr "Бастау…"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
-#.
 #: src/ephy-firefox-sync-dialog.c:140
 #, c-format
 msgid "Last synchronized: %s"
@@ -2274,68 +2364,83 @@ msgstr[0] "%u мин"
 msgid "Reload the current page"
 msgstr "Ағымдағы парақты қайта жүктеу"
 
-#: src/ephy-header-bar.c:271
+#: src/ephy-header-bar.c:261
+msgid "Exit Fullscreen"
+msgstr "Толық экраннан шығу"
+
+#: src/ephy-header-bar.c:272
 msgid "Main Menu"
 msgstr "Басты мәзір"
 
-#: src/ephy-header-bar.c:451
+#: src/ephy-header-bar.c:452
 msgid "Stop loading the current page"
 msgstr "Ағымдағы парақты жүктеуді тоқтату"
 
-#: src/ephy-history-dialog.c:137 src/ephy-history-dialog.c:985
-#| msgid "Start in _Incognito Mode"
-msgid "Unavailable in Incognito Mode"
-msgstr ""
+#: src/ephy-history-dialog.c:264
+msgid "De_select All"
+msgstr "Барлығынан таңдауды а_лып тастау"
 
-#: src/ephy-history-dialog.c:481
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:921
+#: src/resources/gtk/history-dialog.ui:50 src/resources/gtk/location-entry.ui:313
+msgid "Select _All"
+msgstr "Барлығын _таңдау"
+
+#: src/ephy-history-dialog.c:454
+msgid "Link copied"
+msgstr "Сілтеме көшірілді"
+
+#: src/ephy-history-dialog.c:552
 msgid "Remove the selected pages from history"
 msgstr "Таңдалған беттерді тарихтан өшіру"
 
-#: src/ephy-history-dialog.c:487
+#: src/ephy-history-dialog.c:559
 msgid "Copy URL"
 msgstr "URL көшіру"
 
-#: src/ephy-history-dialog.c:768
+#: src/ephy-history-dialog.c:885
 msgid "Clear Browsing History?"
-msgstr ""
+msgstr "Шолу тарихын тазарту керек пе?"
 
-#: src/ephy-history-dialog.c:769
-msgid "All links will be permanently deleted"
-msgstr ""
+#: src/ephy-history-dialog.c:886
+msgid "All visible links will be permanently deleted"
+msgstr "Барлық көрінетін сілтемелер біржола өшіріледі"
 
-#: src/ephy-history-dialog.c:773 src/resources/gtk/location-entry.ui:309
+#: src/ephy-history-dialog.c:890 src/resources/gtk/location-entry.ui:309
 msgid "Cl_ear"
 msgstr "Та_зарту"
 
-#: src/ephy-history-dialog.c:988
-#| msgid "Remove all history"
-msgid "Remove All History"
-msgstr ""
+#: src/ephy-history-dialog.c:1105
+msgid "Unavailable in Incognito Mode"
+msgstr "Инкогнито режимінде қолжетімсіз"
+
+#: src/ephy-history-dialog.c:1108
+msgid "Clear History"
+msgstr "Тарихты тазарту"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-location-entry.c:1850 src/ephy-permission-popover.c:271
+#: src/ephy-location-entry.c:1880 src/ephy-permission-popover.c:271
 msgid "Notification Request"
-msgstr ""
+msgstr "Хабарлама сұранымы"
 
-#: src/ephy-location-entry.c:1854
+#: src/ephy-location-entry.c:1884
 msgid "Camera Request"
-msgstr ""
+msgstr "Камера сұранымы"
 
-#: src/ephy-location-entry.c:1858
+#: src/ephy-location-entry.c:1888
 msgid "Microphone Request"
-msgstr ""
+msgstr "Микрофон сұранымы"
 
-#: src/ephy-location-entry.c:1862
+#: src/ephy-location-entry.c:1892
 msgid "Location Request"
-msgstr ""
+msgstr "Орналасу сұранымы"
 
-#: src/ephy-location-entry.c:1866
+#: src/ephy-location-entry.c:1896
 msgid "Webcam and Microphone Request"
-msgstr ""
+msgstr "Веб-камера және микрофон сұранымы"
 
-#: src/ephy-location-entry.c:1870
+#: src/ephy-location-entry.c:1900
 msgid "Permission Request"
-msgstr ""
+msgstr "Рұқсат сұранымы"
 
 #: src/ephy-main.c:113
 msgid "Open a new browser window instead of a new tab"
@@ -2352,10 +2457,12 @@ msgstr "ФАЙЛ"
 #: src/ephy-main.c:121
 msgid "Start an instance with user data read-only"
 msgstr ""
+"Пайдаланушы деректерін тек оқу үшін қолжетімді болатын қолданба данасын іске "
+"қосу"
 
 #: src/ephy-main.c:125
 msgid "Start a private instance with separate user data"
-msgstr ""
+msgstr "Бөлек пайдаланушы деректерімен жеке дананы іске қосу"
 
 #: src/ephy-main.c:130
 msgid "Start a private instance in web application mode"
@@ -2363,11 +2470,11 @@ msgstr "Веб қолданбасы режимінде жеке данасын �
 
 #: src/ephy-main.c:134
 msgid "Start a private instance for WebDriver control"
-msgstr ""
+msgstr "WebDriver басқару үшін жеке дананы іске қосу"
 
 #: src/ephy-main.c:138
 msgid "Custom profile directory for private instance"
-msgstr ""
+msgstr "Жеке дана үшін таңдалған профиль бумасы"
 
 #: src/ephy-main.c:138
 msgid "DIR"
@@ -2385,56 +2492,58 @@ msgstr "Веб параметрлері"
 #: src/ephy-permission-popover.c:273
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
-msgstr ""
+msgstr "“%s” адресіндегі бет сізге хабарламаларды жібергісі келеді"
 
 #. Translators: Geolocation policy for a specific site.
 #: src/ephy-permission-popover.c:278
 msgid "Location Access Request"
-msgstr ""
+msgstr "Орналасуға қол жеткізу сұранымы"
 
 #. Translators: Geolocation policy for a specific site.
 #: src/ephy-permission-popover.c:280
 #, c-format
 msgid "The page at “%s” would like to know your location"
-msgstr ""
+msgstr "“%s” адресіндегі бет сіздің орналасуыңызды білгісі келеді"
 
 #. Translators: Microphone policy for a specific site.
 #: src/ephy-permission-popover.c:285
 msgid "Microphone Access Request"
-msgstr ""
+msgstr "Микрофонға қол жеткізу сұранымы"
 
 #. Translators: Microphone policy for a specific site.
 #: src/ephy-permission-popover.c:287
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
-msgstr ""
+msgstr "“%s” адресіндегі бет сіздің микрофоныңызды пайдаланғысы келеді"
 
 #. Translators: Webcam policy for a specific site.
 #: src/ephy-permission-popover.c:292
 msgid "Webcam Access Request"
-msgstr ""
+msgstr "Вебкамераға қол жеткізу сұранымы"
 
 #. Translators: Webcam policy for a specific site.
 #: src/ephy-permission-popover.c:294
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
-msgstr ""
+msgstr "“%s” адресіндегі бет сіздің вебкамераңызды пайдаланғысы келеді"
 
 #. Translators: Webcam and microphone policy for a specific site.
 #: src/ephy-permission-popover.c:299
 msgid "Webcam and Microphone Access Request"
-msgstr ""
+msgstr "Вебкамера мен микрофонға қол жеткізу сұранымы"
 
 #. Translators: Webcam and microphone policy for a specific site.
 #: src/ephy-permission-popover.c:301
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr ""
+"“%s” адресіндегі бет сіздің вебкамераңызды және микрофоныңызды пайдаланғысы "
+"келеді"
 
 #. Translators: Storage access policy for a specific site.
 #: src/ephy-permission-popover.c:308
 msgid "Website Data Access Request"
-msgstr ""
+msgstr "Веб-сайт деректеріне қол жеткізу сұранымы"
 
 #. Translators: Storage access policy for a specific site.
 #: src/ephy-permission-popover.c:310
@@ -2443,56 +2552,66 @@ msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
 "browsing “%s”. This will allow “%s” to track your activity on “%s”."
 msgstr ""
+"“%s” адресіндегі бет “%s” адресін шолу кезінде өз деректеріне (соның ішінде "
+"cookie файлдарына) қол жеткізгісі келеді. Бұл “%s” үшін сіздің “%s” ішіндегі "
+"әрекеттеріңізді бақылауға мүмкіндік береді."
 
 #. Translators: Clipboard policy for a specific site.
 #: src/ephy-permission-popover.c:315
 msgid "Clipboard Access Request"
-msgstr ""
+msgstr "Алмасу буферіне қол жеткізу сұранымы"
 
 #. Translators: Clipboard policy for a specific site.
 #: src/ephy-permission-popover.c:317
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
-msgstr ""
+msgstr "“%s” адресіндегі бет сіздің алмасу буферіңізге қол жеткізгісі келеді"
 
-#: src/ephy-privacy-report.c:62
+#: src/ephy-privacy-report.c:65
 msgid "Blocked trackers on this site"
-msgstr ""
+msgstr "Бұл сайтта бұғатталған трекерлер"
 
-#: src/ephy-privacy-report.c:82
+#: src/ephy-privacy-report.c:85
 msgid "Sites this tracker was found on"
-msgstr ""
+msgstr "Осы трекер табылған сайттар"
 
-#: src/ephy-privacy-report.c:248
+#: src/ephy-privacy-report.c:254
 #, c-format
-msgid "GNOME Web prevented %u trackers from following you across websites"
-msgstr ""
+msgid "GNOME Web prevented %u tracker from following you across websites"
+msgid_plural "GNOME Web prevented %u trackers from following you across websites"
+msgstr[0] ""
+"GNOME Web %u трекердің сізді веб-сайттар арасында бақылауына жол бермеді"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: src/ephy-security-popover.c:185
 #, c-format
 msgid ""
-"This web site’s digital identification is not trusted. You may have "
-"connected to an attacker pretending to be %s."
+"This web site’s digital identification is not trusted. You may have connected "
+"to an attacker pretending to be %s."
 msgstr ""
+"Бұл веб-сайттың цифрлық сәйкестендіруіне сенім жоқ. Сіз %s ретінде кейіптелген "
+"шабуылдаушыға қосылған болуыңыз мүмкін."
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
 #: src/ephy-security-popover.c:192
 #, c-format
 msgid ""
-"This site has no security. An attacker could see any information you send, "
-"or control the content that you see."
+"This site has no security. An attacker could see any information you send, or "
+"control the content that you see."
 msgstr ""
+"Бұл сайттың қауіпсіздігі жоқ. Шабуылдаушы сіз жіберген кез келген ақпаратты "
+"көре алады немесе сіз көретін мазмұнды басқара алады."
 
 #. Label in certificate popover when site sends mixed content.
 #: src/ephy-security-popover.c:199
 msgid "This web site did not properly secure your connection."
 msgstr ""
+"Бұл веб-сайт байланысыңыздың қауіпсіздігін тиісті түрде қамтамасыз етпеді."
 
 #. Label in certificate popover on secure sites.
 #: src/ephy-security-popover.c:204
 msgid "Your connection seems to be secure."
-msgstr "Байланысыңыз қауіпсіз болып көрінеді."
+msgstr "Байланысыңыз қауіпсіз сияқты."
 
 #: src/ephy-security-popover.c:245
 msgid "_View Certificate…"
@@ -2524,23 +2643,23 @@ msgstr "Хабарламалар"
 
 #: src/ephy-security-popover.c:558
 msgid "Password saving"
-msgstr "Парольдерді сақтау"
+msgstr "Парольді сақтау"
 
 #: src/ephy-security-popover.c:559
 msgid "Location access"
-msgstr "Орналасуға қатынау"
+msgstr "Орналасуға қол жеткізу"
 
 #: src/ephy-security-popover.c:560
 msgid "Microphone access"
-msgstr "Микрофонға қатынау"
+msgstr "Микрофонға қол жеткізу"
 
 #: src/ephy-security-popover.c:561
 msgid "Webcam access"
-msgstr "Веб-камераға қатынау"
+msgstr "Веб-камераға қол жеткізу"
 
 #: src/ephy-security-popover.c:562
 msgid "Media autoplay"
-msgstr "Мультимедиа автоматты түрде ойнату"
+msgstr "Медианы автоойнату"
 
 #: src/ephy-security-popover.c:562
 msgid "Without Sound"
@@ -2552,282 +2671,282 @@ msgid "Open a new tab"
 msgstr "Жаңа бетті ашу"
 
 #. Undo, redo.
-#: src/ephy-window.c:957 src/resources/gtk/location-entry.ui:277
+#: src/ephy-window.c:913 src/resources/gtk/location-entry.ui:277
 msgid "_Undo"
 msgstr "Бол_дырмау"
 
-#: src/ephy-window.c:958
+#: src/ephy-window.c:914
 msgid "Re_do"
 msgstr "Қа_йталау"
 
 #. Edit.
-#: src/ephy-window.c:961 src/resources/gtk/location-entry.ui:287
+#: src/ephy-window.c:917 src/resources/gtk/location-entry.ui:287
 msgid "Cu_t"
 msgstr "Қ_иып алу"
 
-#: src/ephy-window.c:962 src/resources/gtk/location-entry.ui:291
+#: src/ephy-window.c:918 src/resources/gtk/location-entry.ui:291
 msgid "_Copy"
 msgstr "_Көшіріп алу"
 
-#: src/ephy-window.c:963 src/resources/gtk/location-entry.ui:295
+#: src/ephy-window.c:919 src/resources/gtk/location-entry.ui:295
 msgid "_Paste"
 msgstr "Кірі_стіру"
 
-#: src/ephy-window.c:964
+#: src/ephy-window.c:920
 msgid "_Paste Text Only"
 msgstr "Тек мәтінді _кірістіру"
 
-#: src/ephy-window.c:965 src/resources/gtk/location-entry.ui:313
-msgid "Select _All"
-msgstr "Барлығын _таңдау"
-
-#: src/ephy-window.c:967
+#: src/ephy-window.c:923
 msgid "S_end Link by Email…"
 msgstr "Сілтемені эл. поштамен жіб_еру…"
 
-#: src/ephy-window.c:969
+#: src/ephy-window.c:925
 msgid "_Reload"
 msgstr "Қа_йта жүктеу"
 
-#: src/ephy-window.c:970
+#: src/ephy-window.c:926
 msgid "_Back"
 msgstr "Ар_тқа"
 
-#: src/ephy-window.c:971
+#: src/ephy-window.c:927
 msgid "_Forward"
 msgstr "А_лға"
 
 #. Bookmarks
-#: src/ephy-window.c:974
+#: src/ephy-window.c:930
 msgid "Add Boo_kmark…"
 msgstr "Бет_белгіні қосу…"
 
 #. Links.
-#: src/ephy-window.c:978
+#: src/ephy-window.c:934
 msgid "Open Link in New _Window"
 msgstr "Сілтемені жаңа т_ерезеде ашу"
 
-#: src/ephy-window.c:979
+#: src/ephy-window.c:935
 msgid "Open Link in New _Tab"
 msgstr "Сілтемені жаңа бет_те ашу"
 
-#: src/ephy-window.c:980
+#: src/ephy-window.c:936
 msgid "Open Link in I_ncognito Window"
 msgstr "Сілтемені жаңа же_келік терезеде ашу"
 
-#: src/ephy-window.c:981
+#: src/ephy-window.c:937
 msgid "_Save Link As…"
 msgstr "Сілтемені қалайша _сақтау…"
 
-#: src/ephy-window.c:982
+#: src/ephy-window.c:938
 msgid "_Copy Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
-#: src/ephy-window.c:983
+#: src/ephy-window.c:939
 msgid "_Copy E-mail Address"
 msgstr "Эл. пошта адр_есін көшіру"
 
 #. Images.
-#: src/ephy-window.c:987
+#: src/ephy-window.c:943
 msgid "View _Image in New Tab"
 msgstr "С_уретті жаңа бетте қарау"
 
-#: src/ephy-window.c:988
+#: src/ephy-window.c:944
 msgid "Copy I_mage Address"
 msgstr "Су_рет адресін көшіру"
 
-#: src/ephy-window.c:989
+#: src/ephy-window.c:945
 msgid "_Save Image As…"
 msgstr "_Суретті қалайша сақтау…"
 
-#: src/ephy-window.c:990
+#: src/ephy-window.c:946
 msgid "Set as _Wallpaper"
 msgstr "Тү_сқағаз ретінде орналастыру"
 
 #. Video.
-#: src/ephy-window.c:994
+#: src/ephy-window.c:950
 msgid "Open Video in New _Window"
 msgstr "Видеоны жаңа тере_зеде ашу"
 
-#: src/ephy-window.c:995
+#: src/ephy-window.c:951
 msgid "Open Video in New _Tab"
 msgstr "Видеоны жаңа бе_тте ашу"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:952
 msgid "_Save Video As…"
 msgstr "Видеоны қалайша _сақтау…"
 
-#: src/ephy-window.c:997
+#: src/ephy-window.c:953
 msgid "_Copy Video Address"
 msgstr "Видео адресін _көшіру"
 
 #. Audio.
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:957
 msgid "Open Audio in New _Window"
 msgstr "Аудионы жаңа тере_зеде ашу"
 
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:958
 msgid "Open Audio in New _Tab"
 msgstr "Аудионы жаңа бе_тте ашу"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:959
 msgid "_Save Audio As…"
 msgstr "Аудионы қалайша _сақтау…"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:960
 msgid "_Copy Audio Address"
 msgstr "Аудио адресін _көшіру"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:966
 msgid "Save Pa_ge As…"
 msgstr "_Парақты қалайша сақтау…"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:967
 msgid "_Take Screenshot…"
 msgstr "_Скриншотты түсіру…"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:968
 msgid "_Page Source"
 msgstr "_Парақтың бастапқы коды"
 
-#: src/ephy-window.c:1389
+#: src/ephy-window.c:1347
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "\"%s\" интернеттен іздеу"
 
-#: src/ephy-window.c:1418
+#: src/ephy-window.c:1376
 msgid "Open Link"
 msgstr "Сілтемені ашу"
 
-#: src/ephy-window.c:1420
+#: src/ephy-window.c:1378
 msgid "Open Link In New Tab"
 msgstr "Сілтемені жаңа бетте ашу"
 
-#: src/ephy-window.c:1422
+#: src/ephy-window.c:1380
 msgid "Open Link In New Window"
 msgstr "Сілтемені жаңа терезеде ашу"
 
-#: src/ephy-window.c:1424
+#: src/ephy-window.c:1382
 msgid "Open Link In Incognito Window"
 msgstr "Сілтемені жаңа жекелік терезеде ашу"
 
-#: src/ephy-window.c:2807
+#: src/ephy-window.c:2784
 msgid "_Ask Later"
 msgstr "_Кейін сұрау"
 
-#: src/ephy-window.c:2808 src/resources/gtk/permission-popover.ui:51
+#: src/ephy-window.c:2785 src/resources/gtk/permission-popover.ui:51
 msgid "_Deny"
 msgstr "Рұқсат ет_пеу"
 
-#: src/ephy-window.c:2809 src/resources/gtk/permission-popover.ui:66
+#: src/ephy-window.c:2786 src/resources/gtk/permission-popover.ui:66
 msgid "_Allow"
 msgstr "Рұқс_ат ету"
 
-#: src/ephy-window.c:3011 src/ephy-window.c:4529
+#: src/ephy-window.c:2989 src/ephy-window.c:4598
 msgid "Leave Website?"
 msgstr "Веб-сайттан кету керек пе?"
 
-#: src/ephy-window.c:3012 src/ephy-window.c:4530 src/window-commands.c:1399
+#: src/ephy-window.c:2990 src/ephy-window.c:4599 src/window-commands.c:1455
 msgid "A form was modified and has not been submitted"
-msgstr ""
+msgstr "Форма өзгертілген, бірақ жіберілген жоқ"
 
-#: src/ephy-window.c:3013 src/ephy-window.c:4531 src/window-commands.c:1403
+#: src/ephy-window.c:2991 src/ephy-window.c:4600 src/window-commands.c:1459
 msgid "_Discard Form"
-msgstr ""
+msgstr "Форманы еле_меу"
 
-#: src/ephy-window.c:3034
+#: src/ephy-window.c:3012
 msgid "Download operation"
 msgstr "Жүктеп алу әрекеті"
 
-#: src/ephy-window.c:3036
+#: src/ephy-window.c:3014
 msgid "Show details"
 msgstr "Ақпаратын көрсету"
 
-#: src/ephy-window.c:3038
+#: src/ephy-window.c:3016
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
-msgstr[0] ""
+msgstr[0] "%d жүктеп алу әрекеті белсенді"
 
-#: src/ephy-window.c:3308
+#: src/ephy-window.c:3283
 msgid "Set as Default Browser?"
 msgstr "Негізгі браузер ретінде орнату керек пе?"
 
-#: src/ephy-window.c:3310
+#: src/ephy-window.c:3285
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
+"Web-ті үнсіз келісім бойынша браузеріңіз ретінде және сыртқы сілтемелерді ашу "
+"үшін пайдаланыңыз"
 
-#: src/ephy-window.c:3312
+#: src/ephy-window.c:3287
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
 msgstr ""
+"Epiphany Technology Preview-ді үнсіз келісім бойынша браузеріңіз ретінде және "
+"сыртқы сілтемелерді ашу үшін пайдалану"
 
-#: src/ephy-window.c:3316
+#: src/ephy-window.c:3291
 msgid "_Ask Again Later"
-msgstr ""
+msgstr "Кейінірек _сұрау"
 
-#: src/ephy-window.c:3317
+#: src/ephy-window.c:3292
 msgid "_No"
 msgstr "Ж_оқ"
 
-#: src/ephy-window.c:3318
+#: src/ephy-window.c:3293
 msgid "_Yes"
 msgstr "_Иә"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3674
+msgid "Download started"
+msgstr "Жүктеп алу басталды"
+
+#: src/ephy-window.c:3770
 msgid "Save password?"
 msgstr "Парольді сақтау керек пе?"
 
-#: src/ephy-window.c:3768
+#: src/ephy-window.c:3771
 msgid "Passwords can be removed at any time in Preferences"
-msgstr ""
+msgstr "Парольдерді кез келген уақытта Баптаулар ішінен өшіруге болады"
 
-#: src/ephy-window.c:3770
+#: src/ephy-window.c:3773
 msgid "Not Now"
 msgstr "Қазір емес"
 
-#: src/ephy-window.c:3771
+#: src/ephy-window.c:3774
 msgid "Never Save"
 msgstr "Ешқашан сақтамау"
 
-#: src/ephy-window.c:3772
+#: src/ephy-window.c:3775
 msgid "Save"
 msgstr "Сақтау"
 
-#. Translators: tooltip for the bookmarks popover button
-#: src/ephy-window.c:4050 src/resources/gtk/action-bar-end.ui:118
-msgid "Bookmarks"
-msgstr "Бетбелгілер"
-
-#: src/ephy-window.c:4660
+#: src/ephy-window.c:4729
 msgid "Close Multiple Tabs?"
 msgstr "Бірнеше бетті жабу керек пе?"
 
-#: src/ephy-window.c:4661
+#: src/ephy-window.c:4730
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Бұл терезе жабылса, барлық ашық беттер жоғалады"
 
-#: src/ephy-window.c:4662
+#: src/ephy-window.c:4731
 msgid "C_lose Tabs"
 msgstr "Беттерді жа_бу"
 
-#: src/ephy-window.c:4755
+#: src/ephy-window.c:4828
 msgid "New tab opened"
 msgstr "Жаңа бет ашылды"
 
-#: src/ephy-window.c:4759
+#: src/ephy-window.c:4832
 msgid "Switch"
 msgstr "Ауысу"
 
 #: src/preferences/autofill-view.c:359
-#| msgid "Delete All Passwords?"
 msgid "Delete All Entries?"
-msgstr ""
+msgstr "Барлық жазбаларды өшіру керек пе?"
 
 #: src/preferences/autofill-view.c:360
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
+"Бұл барлық жергілікті сақталған жазбаларды тазартады және бұл әрекетті "
+"болдырмау мүмкін емес."
 
 #: src/preferences/clear-data-view.c:68
 msgid "Cookies"
@@ -2839,11 +2958,11 @@ msgstr "HTTP диск кэші"
 
 #: src/preferences/clear-data-view.c:70
 msgid "Local storage data"
-msgstr ""
+msgstr "Жергілікті сақтау орнының деректері"
 
 #: src/preferences/clear-data-view.c:71
 msgid "Offline web application cache"
-msgstr ""
+msgstr "Желіден тыс веб-қолданба кэші"
 
 #: src/preferences/clear-data-view.c:72
 msgid "IndexedDB databases"
@@ -2855,16 +2974,15 @@ msgstr "HSTS саясаттарының кэші"
 
 #: src/preferences/clear-data-view.c:74
 msgid "Intelligent Tracking Prevention data"
-msgstr ""
+msgstr "Зияткерлік трекерлерден қорғау деректері"
 
 #: src/preferences/ephy-search-engine-listbox.c:29
 msgid "New search engine"
 msgstr "Жаңа іздеу жүйесі"
 
 #: src/preferences/ephy-search-engine-listbox.c:305
-#| msgid "A_dd Search Engine…"
 msgid "A_dd Search Engine"
-msgstr ""
+msgstr "Іздеу жүйесін қо_су"
 
 #: src/preferences/ephy-search-engine-row.c:114
 msgid "This field is required"
@@ -2872,39 +2990,41 @@ msgstr "Бұл өріс міндетті"
 
 #: src/preferences/ephy-search-engine-row.c:119
 msgid "Address must start with either http:// or https://"
-msgstr ""
+msgstr "Адрес http:// немесе https://-пен басталуы тиіс"
 
 #: src/preferences/ephy-search-engine-row.c:131
 #, c-format
 msgid "Address must contain the search term represented by %s"
-msgstr ""
+msgstr "Адрес %s түріндегі іздеу сөзін қамтуы тиіс"
 
 #: src/preferences/ephy-search-engine-row.c:134
 msgid "Address should not contain the search term several times"
-msgstr ""
+msgstr "Адрес іздеу сөзін бірнеше рет қамтымауы тиіс"
 
 #: src/preferences/ephy-search-engine-row.c:140
 msgid "Address is not a valid URI"
-msgstr ""
+msgstr "Адрес жарамды URI емес"
 
 #: src/preferences/ephy-search-engine-row.c:145
 #, c-format
 msgid ""
-"Address is not a valid URL. The address should look like https://www.example."
-"com/search?q=%s"
+"Address is not a valid URL. The address should look like https://"
+"www.example.com/search?q=%s"
 msgstr ""
+"Адрес жарамды URL емес. Адрес келесідей болуы тиіс: https://www.example.com/"
+"search?q=%s"
 
 #: src/preferences/ephy-search-engine-row.c:188
 msgid "This shortcut is already used."
-msgstr ""
+msgstr "Бұл жарлық қолданылуда болып тұр."
 
 #: src/preferences/ephy-search-engine-row.c:190
 msgid "Search shortcuts must not contain any space."
-msgstr ""
+msgstr "Іздеу жарлықтарында бос орын болмауы керек."
 
 #: src/preferences/ephy-search-engine-row.c:198
 msgid "Search shortcuts should start with a symbol such as !, # or @."
-msgstr ""
+msgstr "Іздеу жарлықтары !, # немесе @ сияқты таңбадан басталуы керек."
 
 #: src/preferences/ephy-search-engine-row.c:331
 msgid "A name is required"
@@ -2916,7 +3036,7 @@ msgstr "Бұл іздеу жүйесі бар болып тұр"
 
 #: src/preferences/extension-view.c:113
 msgid "Remove Extension"
-msgstr ""
+msgstr "Кеңейтуді өшіру"
 
 #: src/preferences/extension-view.c:114
 msgid "Do you really want to remove this extension?"
@@ -2926,31 +3046,37 @@ msgstr "Бұл кеңейтуді шынымен өшіргіңіз келе м�
 msgid "_Remove"
 msgstr "Ө_шіру"
 
-#: src/preferences/passwords-view.c:175
+#: src/preferences/passwords-view.c:123
+msgid "Password copied"
+msgstr "Пароль көшірілді"
+
+#: src/preferences/passwords-view.c:174
 msgid "Delete All Passwords?"
 msgstr "Барлық парольдерді өшіру керек пе?"
 
-#: src/preferences/passwords-view.c:176
+#: src/preferences/passwords-view.c:175
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
+"Бұл барлық жергілікті сақталған парольдерді тазартады, және бұл әрекетті "
+"болдырмау мүмкін емес."
 
-#: src/preferences/passwords-view.c:235
+#: src/preferences/passwords-view.c:234
 msgid "Copy password"
 msgstr "Парольді көшіріп алу"
 
-#: src/preferences/passwords-view.c:242
+#: src/preferences/passwords-view.c:241
 msgid "Username"
 msgstr "Пайдаланушы аты"
 
-#: src/preferences/passwords-view.c:252
+#: src/preferences/passwords-view.c:251
 msgid "Copy username"
 msgstr "Пайдаланушы атын көшіріп алу"
 
-#: src/preferences/passwords-view.c:259
+#: src/preferences/passwords-view.c:258
 msgid "Password"
 msgstr "Пароль"
 
-#: src/preferences/passwords-view.c:271
+#: src/preferences/passwords-view.c:270
 msgid "Remove Password"
 msgstr "Парольді өшіру"
 
@@ -2971,29 +3097,26 @@ msgid "Dark"
 msgstr "Күңгірт"
 
 #: src/preferences/prefs-extensions-page.c:101
-#| msgid "Enable WebExtensions"
 msgid "Install WebExtension?"
-msgstr ""
+msgstr "WebExtension орнату керек пе?"
 
 #: src/preferences/prefs-extensions-page.c:103
 #, c-format
-#| msgid "Do you want to leave this website?"
 msgid "Do you want to install `%s`?"
-msgstr ""
+msgstr "`%s` орнатқыңыз келе ме?"
 
 #: src/preferences/prefs-extensions-page.c:105
 msgid "Cancel"
 msgstr "Бас тарту"
 
 #: src/preferences/prefs-extensions-page.c:106
-#| msgid "Installed on:"
 msgid "Install"
 msgstr "Орнату"
 
 #. Translators: this is the title of a file chooser dialog.
 #: src/preferences/prefs-extensions-page.c:149
 msgid "Open File (manifest.json/xpi)"
-msgstr ""
+msgstr "Файлды Ашу (manifest.json/xpi)"
 
 #: src/preferences/prefs-general-page.c:202
 #: src/resources/gtk/prefs-lang-dialog.ui:8
@@ -3013,23 +3136,23 @@ msgstr "Қолдауы бар сурет файлдары"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1811
 msgid "Executes only the n-th migration step"
-msgstr ""
+msgstr "Тек n-ші миграция қадамын орындайды"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1815
 msgid "Specifies the required version for the migrator"
-msgstr ""
+msgstr "Мигратор үшін қажетті нұсқаны көрсетеді"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1819
 msgid "Specifies the profile where the migrator should run"
-msgstr ""
+msgstr "Мигратор орындалатын профильді көрсетеді"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1841
 msgid "Web profile migrator"
-msgstr ""
+msgstr "Веб-профиль миграторы"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1842
 msgid "Web profile migrator options"
-msgstr ""
+msgstr "Веб-профиль миграторының опциялары"
 
 #. Translators: tooltip for the webextension actions button
 #: src/resources/gtk/action-bar-end.ui:29
@@ -3040,6 +3163,12 @@ msgstr "Кеңейтулер"
 #: src/resources/gtk/action-bar-end.ui:100
 msgid "View Open Tabs"
 msgstr "Ашық беттерді қарау"
+
+#. Translators: tooltip for the bookmarks popover button
+#: src/resources/gtk/action-bar-end.ui:118
+#: src/resources/gtk/bookmarks-dialog.ui:29
+msgid "Bookmarks"
+msgstr "Бетбелгілер"
 
 #. Translators: tooltip for the back button
 #: src/resources/gtk/action-bar-start.ui:17
@@ -3054,7 +3183,7 @@ msgstr "Алға"
 #. Translators: tooltip for the secret homepage button
 #: src/resources/gtk/action-bar-start.ui:98
 #: src/resources/gtk/extension-view.ui:62
-#: src/resources/gtk/prefs-general-page.ui:73
+#: src/resources/gtk/prefs-general-page.ui:71
 msgid "Homepage"
 msgstr "Үй парағы"
 
@@ -3062,22 +3191,27 @@ msgstr "Үй парағы"
 msgid "Autofill Data"
 msgstr "Деректерді автотолтыру"
 
+#: src/resources/gtk/autofill-view.ui:25
+msgid "Personal"
+msgstr "Жеке"
+
 #: src/resources/gtk/autofill-view.ui:28
 msgid "First Name"
 msgstr "Аты"
 
 #: src/resources/gtk/autofill-view.ui:33
-#| msgid "Name"
 msgid "Last Name"
 msgstr "Тегі"
 
 #: src/resources/gtk/autofill-view.ui:38
-#| msgid "Name"
 msgid "Full Name"
 msgstr "Толық аты"
 
+#: src/resources/gtk/autofill-view.ui:45
+msgid "Contact"
+msgstr "Байланыс"
+
 #: src/resources/gtk/autofill-view.ui:48
-#| msgid "Username"
 msgid "User Name"
 msgstr "Пайдаланушы аты"
 
@@ -3089,13 +3223,17 @@ msgstr "Эл. пошта"
 msgid "Phone"
 msgstr "Телефон"
 
+#: src/resources/gtk/autofill-view.ui:65
+#: src/resources/gtk/bookmark-properties.ui:29
+#: src/resources/gtk/search-engine-row.ui:46
+msgid "Address"
+msgstr "Мекенжайы"
+
 #: src/resources/gtk/autofill-view.ui:68
 msgid "Street"
 msgstr "Көше"
 
 #: src/resources/gtk/autofill-view.ui:73
-#| msgctxt "shortcut window"
-#| msgid "Navigation"
 msgid "Organization"
 msgstr "Ұйым"
 
@@ -3115,6 +3253,10 @@ msgstr "Қала"
 msgid "Country"
 msgstr "Ел"
 
+#: src/resources/gtk/autofill-view.ui:100
+msgid "Credit Card"
+msgstr "Кредиттік карта"
+
 #: src/resources/gtk/autofill-view.ui:103
 msgid "Type"
 msgstr "Түрі"
@@ -3125,7 +3267,7 @@ msgstr "Иесі"
 
 #: src/resources/gtk/autofill-view.ui:113
 msgid "Number"
-msgstr ""
+msgstr "Нөмір"
 
 #: src/resources/gtk/bookmark-properties.ui:10
 msgid "Bookmark"
@@ -3136,11 +3278,6 @@ msgstr "Бетбелгі"
 msgid "Name"
 msgstr "Аты"
 
-#: src/resources/gtk/bookmark-properties.ui:29
-#: src/resources/gtk/search-engine-row.ui:46
-msgid "Address"
-msgstr "Мекенжайы"
-
 #: src/resources/gtk/bookmark-properties.ui:38
 #: src/resources/gtk/bookmark-properties.ui:71
 msgid "Tags"
@@ -3150,26 +3287,23 @@ msgstr "Тегтер"
 msgid "Remove"
 msgstr "Өшіру"
 
-#: src/resources/gtk/bookmark-properties.ui:95
-#| msgid "Add Tag…"
+#: src/resources/gtk/bookmark-properties.ui:94
 msgid "Add Tag"
 msgstr "Тагты қосу"
 
-#: src/resources/gtk/bookmark-properties.ui:105
-#| msgid "Add New URL"
+#: src/resources/gtk/bookmark-properties.ui:104
 msgid "Add new tag"
 msgstr "Жаңа тагты қосу"
 
-#: src/resources/gtk/bookmarks-dialog.ui:10
-#| msgid "Search cookies"
+#: src/resources/gtk/bookmarks-dialog.ui:44
 msgid "Search bookmarks"
-msgstr ""
+msgstr "Бетбелгілерден іздеу"
 
-#: src/resources/gtk/bookmarks-dialog.ui:102
+#: src/resources/gtk/bookmarks-dialog.ui:139
 msgid "No Bookmarks"
 msgstr "Бетбелгілер жоқ"
 
-#: src/resources/gtk/bookmarks-dialog.ui:103
+#: src/resources/gtk/bookmarks-dialog.ui:140
 msgid "Bookmarked pages will appear here"
 msgstr "Бетбелгілердегі парақтар осында көрсетіледі"
 
@@ -3206,17 +3340,19 @@ msgid ""
 "You cannot undo this action. The data you are choosing to clear will be "
 "removed forever."
 msgstr ""
+"Сіз бұл әрекетті болдырмай алмайсыз. Тазарту үшін таңдаған деректер мәңгіге "
+"өшіріледі."
 
-#: src/resources/gtk/data-view.ui:14 src/resources/gtk/history-dialog.ui:38
-#: src/resources/gtk/history-dialog.ui:57
+#: src/resources/gtk/data-view.ui:14 src/resources/gtk/history-dialog.ui:39
+#: src/resources/gtk/history-dialog.ui:65
 msgid "Search"
 msgstr "Іздеу"
 
-#: src/resources/gtk/data-view.ui:66 src/resources/gtk/history-dialog.ui:134
+#: src/resources/gtk/data-view.ui:66 src/resources/gtk/history-dialog.ui:144
 msgid "No Results Found"
 msgstr "Нәтижелер табылмады"
 
-#: src/resources/gtk/data-view.ui:67 src/resources/gtk/history-dialog.ui:135
+#: src/resources/gtk/data-view.ui:67 src/resources/gtk/history-dialog.ui:145
 msgid "Try a different search"
 msgstr "Басқа сөздерді іздеп көріңіз"
 
@@ -3257,9 +3393,8 @@ msgid "Enabled"
 msgstr "Іске қосулы"
 
 #: src/resources/gtk/extension-view.ui:87
-#| msgid "Extensions"
 msgid "Remove Extension…"
-msgstr ""
+msgstr "Кеңейтуді өшіру…"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:9
 msgid "Firefox Sync"
@@ -3271,10 +3406,13 @@ msgstr "Қа_зір синхрондау"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:32
 msgid ""
-"Sign in with your Mozilla account to sync your data with GNOME Web and "
-"Firefox on other computers. GNOME Web is not Firefox and is not produced or "
-"endorsed by Mozilla."
+"Sign in with your Mozilla account to sync your data with GNOME Web and Firefox "
+"on other computers. GNOME Web is not Firefox and is not produced or endorsed "
+"by Mozilla."
 msgstr ""
+"Басқа компьютерлердегі деректеріңізді GNOME Web және Firefox-пен синхрондау "
+"үшін Mozilla тіркелгіңізбен кіріңіз. GNOME Web Firefox емес және оны Mozilla "
+"жасамаған немесе мақұлдамаған."
 
 #: src/resources/gtk/firefox-sync-dialog.ui:49
 msgid "Mozilla Account"
@@ -3322,6 +3460,7 @@ msgstr "Құрылғы аты"
 
 #: src/resources/gtk/firefox-sync-dialog.ui:126
 #: src/resources/gtk/password-popover.ui:94
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:91
 msgid "_Save"
 msgstr "_Сақтау"
 
@@ -3334,28 +3473,26 @@ msgid "History"
 msgstr "Тарих"
 
 #: src/resources/gtk/history-dialog.ui:20
-#: src/resources/gtk/location-entry.ui:98
-#| msgid "C_lear"
-msgid "Clear"
-msgstr "Тазарту"
+msgid "_Clear"
+msgstr "Та_зарту"
 
-#: src/resources/gtk/history-dialog.ui:31
+#: src/resources/gtk/history-dialog.ui:32
 msgid "Select Items"
 msgstr "Нәрселерді таңдау"
 
-#: src/resources/gtk/history-dialog.ui:76
+#: src/resources/gtk/history-dialog.ui:84
 msgid "Search history"
 msgstr "Тарихтен іздеу"
 
-#: src/resources/gtk/history-dialog.ui:127
+#: src/resources/gtk/history-dialog.ui:137
 msgid "No History Found"
 msgstr "Тарих табылмады"
 
-#: src/resources/gtk/history-dialog.ui:128
+#: src/resources/gtk/history-dialog.ui:138
 msgid "Visited pages will be listed here"
 msgstr "Қаралған веб-парақтар осында тізіледі"
 
-#: src/resources/gtk/history-dialog.ui:159
+#: src/resources/gtk/history-dialog.ui:171
 msgid "_Open"
 msgstr "_Ашу"
 
@@ -3369,12 +3506,16 @@ msgstr "Веб-сайттар, бетбелгілер және ашық бетт
 
 #: src/resources/gtk/location-entry.ui:67
 msgid "Website Security Status and Permissions"
-msgstr ""
+msgstr "Веб-сайттың қауіпсіздік күйі және рұқсаттар"
 
 #: src/resources/gtk/location-entry.ui:86
 #: src/resources/gtk/prefs-appearance-page.ui:59
 msgid "Reader Mode"
 msgstr "Оқу режимі"
+
+#: src/resources/gtk/location-entry.ui:98
+msgid "Clear"
+msgstr "Тазарту"
 
 #: src/resources/gtk/location-entry.ui:111
 msgid "View Available Passwords"
@@ -3424,7 +3565,7 @@ msgstr "_Оң жақтан беттерді жабу"
 msgid "Close _Other Tabs"
 msgstr "Б_асқа беттерді жабу"
 
-#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:269
+#: src/resources/gtk/notebook-context-menu.ui:49 src/window-commands.c:288
 msgid "_Close"
 msgstr "_Жабу"
 
@@ -3461,38 +3602,35 @@ msgstr "Бетбелгілерді _импорттау…"
 
 #: src/resources/gtk/page-menu-popover.ui:54
 msgid "E_xport Bookmarks…"
-msgstr "Бетбелгілерді _экспорттау…"
+msgstr "Бетбелгілерді эк_спорттау…"
 
 #: src/resources/gtk/page-menu-popover.ui:60
 msgid "Import _Passwords…"
 msgstr "_Парольдерді импорттау…"
 
 #: src/resources/gtk/page-menu-popover.ui:64
-#| msgid "Import _Passwords…"
 msgid "Export _Passwords…"
-msgstr ""
+msgstr "Парольдерді экспорт_тау…"
 
 #: src/resources/gtk/page-menu-popover.ui:70
-#| msgid "Web App"
 msgid "_Web Apps"
-msgstr ""
+msgstr "_Веб-қолданбалар"
 
 #: src/resources/gtk/page-menu-popover.ui:74
 msgid "Install as _Web App…"
-msgstr ""
+msgstr "_Веб-қолданба ретінде орнату…"
 
 #: src/resources/gtk/page-menu-popover.ui:78
 msgid "Manag_e Web Apps"
-msgstr ""
+msgstr "Веб-қолданбаларды басқ_ару"
 
 #: src/resources/gtk/page-menu-popover.ui:84
 msgid "Text Enco_ding…"
 msgstr "Мәтін ко_дталуы…"
 
 #: src/resources/gtk/page-menu-popover.ui:88
-#| msgid "Privacy"
 msgid "Pri_vacy Report"
-msgstr ""
+msgstr "Ж_екелік есебі"
 
 #: src/resources/gtk/page-menu-popover.ui:94
 msgid "Pr_eferences"
@@ -3526,7 +3664,7 @@ msgstr "Үлкейту"
 
 #: src/resources/gtk/page-menu-popover.ui:159
 msgid "Print…"
-msgstr "Баспаға шығару…"
+msgstr "Басып шығару…"
 
 #: src/resources/gtk/page-menu-popover.ui:166
 msgid "Find…"
@@ -3545,13 +3683,14 @@ msgid ""
 "Passwords are saved only on your device and can be removed at any time in "
 "Preferences"
 msgstr ""
+"Парольдер тек құрылғыңызда сақталады және оларды баптаулардан кез келген "
+"уақытта өшіруге болады"
 
 #: src/resources/gtk/password-popover.ui:64
 msgid "_Never Save"
 msgstr "Ешқаша_н сақтамау"
 
 #: src/resources/gtk/password-popover.ui:79
-#| msgid "Not Now"
 msgid "N_ot Now"
 msgstr "Қазір е_мес"
 
@@ -3576,11 +3715,11 @@ msgstr "Парольдер табылмады"
 msgid "Saved passwords will be listed here"
 msgstr "Сақталған парольдер осында тізіледі"
 
-#: src/resources/gtk/passwords-view.ui:69
+#: src/resources/gtk/passwords-view.ui:73
 msgid "_Copy Password"
 msgstr "Парольді _көшіріп алу"
 
-#: src/resources/gtk/passwords-view.ui:73
+#: src/resources/gtk/passwords-view.ui:77
 msgid "C_opy Username"
 msgstr "Пайдаланушы атын кө_шіріп алу"
 
@@ -3622,7 +3761,7 @@ msgstr "Стилі"
 
 #: src/resources/gtk/prefs-appearance-page.ui:97
 msgid "Use Custom Stylesheet"
-msgstr ""
+msgstr "Пайдаланушы стильдер кестесін қолдану"
 
 #: src/resources/gtk/prefs-appearance-page.ui:111
 msgid "Use Custom JavaScript"
@@ -3634,18 +3773,21 @@ msgstr "Бастапқы масштаб деңгейі"
 
 #: src/resources/gtk/prefs-extensions-page.ui:12
 msgid "Add New Extension"
-msgstr ""
+msgstr "Жаңа кеңейтуді қосу"
 
 #: src/resources/gtk/prefs-extensions-page.ui:13
 msgid "Extensions must be installed manually from their files"
-msgstr ""
+msgstr "Кеңейтулер өз файлдарынан қолмен орнатылуы тиіс"
 
 #: src/resources/gtk/prefs-extensions-page.ui:27
 msgid ""
 "Epiphany is compatible with web extensions for Mozilla Firefox. To find and "
-"add web extensions, visit <a href=\"https://addons.mozilla.org\">addons."
-"mozilla.org</a>"
+"add web extensions, visit <a href=\"https://"
+"addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr ""
+"Epiphany Mozilla Firefox өнімімен веб-кеңейтулермен үйлесімді. Веб-"
+"кеңейтулерді табу және қосу үшін, <a href=\"https://"
+"addons.mozilla.org\">addons.mozilla.org</a> адресіне өтіңіз"
 
 #: src/resources/gtk/prefs-extensions-page.ui:59
 msgid "No Extensions Installed"
@@ -3672,91 +3814,90 @@ msgid "_Title"
 msgstr "_Тақырыбы"
 
 #: src/resources/gtk/prefs-general-page.ui:40
-msgid "_Manage Additional URLs"
-msgstr ""
+msgid "Additional _URLs"
+msgstr "Қосымша _URL адрестері"
 
-#: src/resources/gtk/prefs-general-page.ui:56
+#: src/resources/gtk/prefs-general-page.ui:54
 msgid "Web Content"
 msgstr "Веб құрамасы"
 
-#: src/resources/gtk/prefs-general-page.ui:59
+#: src/resources/gtk/prefs-general-page.ui:57
 msgid "Block _Advertisements"
 msgstr "Ж_арнаманы бұғаттау"
 
-#: src/resources/gtk/prefs-general-page.ui:65
+#: src/resources/gtk/prefs-general-page.ui:63
 msgid "Block _Popup Windows"
-msgstr ""
+msgstr "Қалқымалы _терезелерді бұғаттау"
 
-#: src/resources/gtk/prefs-general-page.ui:77
+#: src/resources/gtk/prefs-general-page.ui:75
 msgid "Most _Visited Pages"
 msgstr "Көбірек қа_ралған парақтар"
 
-#: src/resources/gtk/prefs-general-page.ui:89
+#: src/resources/gtk/prefs-general-page.ui:87
 msgid "_Blank Page"
 msgstr "_Бос бет"
 
-#: src/resources/gtk/prefs-general-page.ui:102
+#: src/resources/gtk/prefs-general-page.ui:100
 msgid "_Custom"
 msgstr "Таң_дауыңызша"
 
-#: src/resources/gtk/prefs-general-page.ui:126
+#: src/resources/gtk/prefs-general-page.ui:124
 msgid "Ask o_n Download"
 msgstr "Жүктеп алу кезі_нде сұрау"
 
-#: src/resources/gtk/prefs-general-page.ui:133
+#: src/resources/gtk/prefs-general-page.ui:131
 msgid "_Download Folder"
 msgstr "Жү_ктеп алу бумасы"
 
-#: src/resources/gtk/prefs-general-page.ui:173
+#: src/resources/gtk/prefs-general-page.ui:171
 msgid "Search Engines"
 msgstr "Іздеу жүйелері"
 
-#: src/resources/gtk/prefs-general-page.ui:181
+#: src/resources/gtk/prefs-general-page.ui:179
 msgid "Session"
 msgstr "Сессия"
 
-#: src/resources/gtk/prefs-general-page.ui:184
+#: src/resources/gtk/prefs-general-page.ui:182
 msgid "Start in _Incognito Mode"
 msgstr "_Инкогнито режимінде бастау"
 
-#: src/resources/gtk/prefs-general-page.ui:190
+#: src/resources/gtk/prefs-general-page.ui:188
 msgid "_Restore Tabs on Startup"
 msgstr "Іске қосылғанда беттерді қалпына келті_ру"
 
-#: src/resources/gtk/prefs-general-page.ui:198
+#: src/resources/gtk/prefs-general-page.ui:196
 msgid "Browsing"
 msgstr "Шолу"
 
-#: src/resources/gtk/prefs-general-page.ui:201
+#: src/resources/gtk/prefs-general-page.ui:199
 msgid "Mouse _Gestures"
 msgstr "Тышқан _ым қимылдары"
 
-#: src/resources/gtk/prefs-general-page.ui:207
+#: src/resources/gtk/prefs-general-page.ui:205
 msgid "S_witch Immediately to New Tabs"
 msgstr "Жаңа беттерге бірден а_уысу"
 
-#: src/resources/gtk/prefs-general-page.ui:213
+#: src/resources/gtk/prefs-general-page.ui:211
 msgid "Touch _Navigation Gestures"
-msgstr ""
+msgstr "Сенсорлық _навигация ым қимылдары"
 
-#: src/resources/gtk/prefs-general-page.ui:236
+#: src/resources/gtk/prefs-general-page.ui:234
 msgid "_Spell Checking"
 msgstr "Емлені тек_серу"
 
-#: src/resources/gtk/prefs-general-page.ui:244
+#: src/resources/gtk/prefs-general-page.ui:242
 msgid "Developer"
 msgstr "Әзірлеуші"
 
-#: src/resources/gtk/prefs-general-page.ui:247
+#: src/resources/gtk/prefs-general-page.ui:245
 msgid "Show D_eveloper Actions"
-msgstr ""
+msgstr "Әзірлеуші ә_рекеттерін көрсету"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:25
 msgid "_Add"
 msgstr "Қо_су"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:45
-#| msgid "Choose a language:"
 msgid "Choose a language"
 msgstr "Тілді таңдау"
 
@@ -3770,15 +3911,20 @@ msgstr "Веб бақылауы"
 
 #: src/resources/gtk/prefs-privacy-page.ui:13
 msgid "Intelligent _Tracking Prevention"
-msgstr ""
+msgstr "Зияткерлік _трекерлерден қорғау"
 
 #: src/resources/gtk/prefs-privacy-page.ui:19
-msgid "Allow websites to store cookies, databases, and local storage data"
+msgid ""
+"Allow websites to store cookies, databases, and local storage data. Disabling "
+"website data storage will break many websites."
 msgstr ""
+"Веб-сайттарға кукилерді, дерекқорларды және жергілікті сақтау деректерін "
+"сақтауға рұқсат беру. Веб-сайт деректерін сақтауды сөндіру көптеген веб-"
+"сайттардың жұмысын бұзады."
 
 #: src/resources/gtk/prefs-privacy-page.ui:20
 msgid "_Website Data Storage"
-msgstr ""
+msgstr "_Веб-сайт деректерін сақтау"
 
 #: src/resources/gtk/prefs-privacy-page.ui:28
 msgid "Search Suggestions"
@@ -3810,38 +3956,43 @@ msgstr "Парольдерді е_сте сақтау"
 
 #: src/resources/gtk/prefs-privacy-page.ui:77
 msgid "Forms and Autofill"
-msgstr ""
+msgstr "Формалар және автотолтыру"
 
 #: src/resources/gtk/prefs-privacy-page.ui:80
 msgid "_Autofill Forms"
-msgstr ""
+msgstr "_Формаларды автотолтыру"
 
 #: src/resources/gtk/prefs-privacy-page.ui:87
 msgid "Autofill _Data"
-msgstr ""
+msgstr "_Деректерді автотолтыру"
 
 #: src/resources/gtk/privacy-report.ui:10
-msgid "Overview"
-msgstr ""
-
-#: src/resources/gtk/privacy-report.ui:21
-#| msgid "Privacy"
 msgid "Privacy Report"
-msgstr ""
+msgstr "Жекелік есебі"
 
-#: src/resources/gtk/privacy-report.ui:41
-#| msgid "Website Data"
+#: src/resources/gtk/privacy-report.ui:34
 msgid "_Websites"
-msgstr ""
+msgstr "_Веб-сайттар"
 
-#: src/resources/gtk/privacy-report.ui:61
+#: src/resources/gtk/privacy-report.ui:59
 msgid "_Trackers"
-msgstr ""
+msgstr "_Трекерлер"
 
-#: src/resources/gtk/privacy-report.ui:90
-#| msgid "Show details"
-msgid "Details"
+#: src/resources/gtk/privacy-report.ui:91
+msgid "No Trackers Blocked"
+msgstr "Бұғатталған трекерлер жоқ"
+
+#: src/resources/gtk/privacy-report.ui:92
+msgid ""
+"Trackers that tried to collect personal information across websites will "
+"appear here"
 msgstr ""
+"Веб-сайттар бойынша жеке ақпаратты жинауға тырысқан трекерлер осында "
+"көрсетіледі"
+
+#: src/resources/gtk/privacy-report.ui:105
+msgid "Details"
+msgstr "Мәліметтер"
 
 #: src/resources/gtk/search-engine-row.ui:8
 msgid "Selects Default Search Engine"
@@ -3853,9 +4004,11 @@ msgstr "Жарлық"
 
 #: src/resources/gtk/search-engine-row.ui:92
 msgid ""
-"To determine the search address, perform a search using the search engine "
-"that you want to add and replace the search term with %s"
+"To determine the search address, perform a search using the search engine that "
+"you want to add and replace the search term with %s"
 msgstr ""
+"Іздеу адресін анықтау үшін, қосқыңыз келетін іздеу жүйесін пайдаланып іздеуді "
+"орындаңыз және іздеу сөзін %s белгісімен алмастырыңыз"
 
 #: src/resources/gtk/search-engine-row.ui:110
 msgid "R_emove Search Engine"
@@ -3884,17 +4037,17 @@ msgstr "Файлды ашу"
 #: src/resources/gtk/shortcuts-dialog.ui:34
 msgctxt "shortcut window"
 msgid "Save Page"
-msgstr "Парақты сақтау"
+msgstr "Бетті сақтау"
 
 #: src/resources/gtk/shortcuts-dialog.ui:40
 msgctxt "shortcut window"
 msgid "Take Screenshot"
-msgstr "Скриншотты түсіру"
+msgstr "Скриншот түсіру"
 
 #: src/resources/gtk/shortcuts-dialog.ui:46
 msgctxt "shortcut window"
 msgid "Print Page"
-msgstr "Парақты баспаға шығару"
+msgstr "Бетті басып шығару"
 
 #: src/resources/gtk/shortcuts-dialog.ui:52
 msgctxt "shortcut window"
@@ -3919,7 +4072,7 @@ msgstr "Жарлықтар"
 #: src/resources/gtk/shortcuts-dialog.ui:76
 msgctxt "shortcut window"
 msgid "Show Downloads List"
-msgstr "Жүктемелер тізімін көрсету"
+msgstr "Жүктеп алынғандар тізімін көрсету"
 
 #: src/resources/gtk/shortcuts-dialog.ui:86
 msgctxt "shortcut window"
@@ -3929,34 +4082,34 @@ msgstr "Навигация"
 #: src/resources/gtk/shortcuts-dialog.ui:89
 msgctxt "shortcut window"
 msgid "Go to Homepage"
-msgstr "Үй парағына өту"
+msgstr "Үй бетіне өту"
 
 #: src/resources/gtk/shortcuts-dialog.ui:95
 msgctxt "shortcut window"
 msgid "Reload Current Page"
-msgstr "Ағымдағы парақты қайта жүктеу"
+msgstr "Ағымдағы бетті қайта жүктеу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:101
 msgctxt "shortcut window"
 msgid "Reload Bypassing Cache"
-msgstr "Кэшті елемей қайта жүктеу"
+msgstr "Кэшті айналып өтіп қайта жүктеу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:107
 msgctxt "shortcut window"
 msgid "Stop Loading Current Page"
-msgstr "Ағымдағы парақты жүктеуді тоқтату"
+msgstr "Ағымдағы бетті жүктеуді тоқтату"
 
 #: src/resources/gtk/shortcuts-dialog.ui:113
 #: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "Go Back to Previous Page"
-msgstr "Алдыңғы бетке оралу"
+msgstr "Алдыңғы бетке қайту"
 
 #: src/resources/gtk/shortcuts-dialog.ui:119
 #: src/resources/gtk/shortcuts-dialog.ui:132
 msgctxt "shortcut window"
 msgid "Go Forward to Next Page"
-msgstr "Келесі бетке өту"
+msgstr "Келесі бетке алға өту"
 
 #: src/resources/gtk/shortcuts-dialog.ui:141
 msgctxt "shortcut window"
@@ -4001,7 +4154,7 @@ msgstr "Ағымдағы бетті оңға жылжыту"
 #: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
 msgid "Duplicate Current Tab"
-msgstr "Ағымдағы бетті қосарлау"
+msgstr "Ағымдағы бетті дубликаттау"
 
 #: src/resources/gtk/shortcuts-dialog.ui:192
 msgctxt "shortcut window"
@@ -4011,7 +4164,7 @@ msgstr "Ашық беттерді қарау"
 #: src/resources/gtk/shortcuts-dialog.ui:202
 msgctxt "shortcut window"
 msgid "Miscellaneous"
-msgstr "Әр түрлі"
+msgstr "Әртүрлі"
 
 #: src/resources/gtk/shortcuts-dialog.ui:205
 msgctxt "shortcut window"
@@ -4019,10 +4172,9 @@ msgid "History"
 msgstr "Тарих"
 
 #: src/resources/gtk/shortcuts-dialog.ui:211
-#| msgid "Clear Website _Data"
 msgctxt "shortcut window"
 msgid "Clear Website Data"
-msgstr ""
+msgstr "Веб-сайт деректерін тазарту"
 
 #: src/resources/gtk/shortcuts-dialog.ui:217
 msgctxt "shortcut window"
@@ -4032,7 +4184,7 @@ msgstr "Баптаулар"
 #: src/resources/gtk/shortcuts-dialog.ui:223
 msgctxt "shortcut window"
 msgid "Bookmark Current Page"
-msgstr "Ағымдағы парақты бетбелгілерге қосу"
+msgstr "Ағымдағы бетті бетбелгілеу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:229
 msgctxt "shortcut window"
@@ -4052,7 +4204,7 @@ msgstr "Бетбелгілерді экспорттау"
 #: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Toggle Caret Browsing"
-msgstr "Мәтіндік курсор навигациясын іске қосу/сөндіру"
+msgstr "Кареткамен шолуды қосу/сөндіру"
 
 #: src/resources/gtk/shortcuts-dialog.ui:257
 msgctxt "shortcut window"
@@ -4062,7 +4214,7 @@ msgstr "Веб қолданбасы"
 #: src/resources/gtk/shortcuts-dialog.ui:260
 msgctxt "shortcut window"
 msgid "Install Site as Web App"
-msgstr ""
+msgstr "Сайтты веб-қолданба ретінде орнату"
 
 #: src/resources/gtk/shortcuts-dialog.ui:270
 msgctxt "shortcut window"
@@ -4092,17 +4244,17 @@ msgstr "Толық экранға"
 #: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "View Page Source"
-msgstr "Парақтың бастапқы кодын қарау"
+msgstr "Беттің бастапқы кодын көру"
 
 #: src/resources/gtk/shortcuts-dialog.ui:303
 msgctxt "shortcut window"
 msgid "Toggle Inspector"
-msgstr "Бақылаушыны іске қосу/сөндіру"
+msgstr "Инспекторды қосу/сөндіру"
 
 #: src/resources/gtk/shortcuts-dialog.ui:309
 msgctxt "shortcut window"
 msgid "Toggle Reader Mode"
-msgstr "Оқу режимін іске қосу/сөндіру"
+msgstr "Оқу режимін қосу/сөндіру"
 
 #: src/resources/gtk/shortcuts-dialog.ui:319
 msgctxt "shortcut window"
@@ -4117,7 +4269,7 @@ msgstr "Қиып алу"
 #: src/resources/gtk/shortcuts-dialog.ui:328
 msgctxt "shortcut window"
 msgid "Copy"
-msgstr "Көшіріп алу"
+msgstr "Көшіру"
 
 #: src/resources/gtk/shortcuts-dialog.ui:334
 msgctxt "shortcut window"
@@ -4142,12 +4294,12 @@ msgstr "Барлығын таңдау"
 #: src/resources/gtk/shortcuts-dialog.ui:358
 msgctxt "shortcut window"
 msgid "Select Page URL"
-msgstr "Парақ сілтемесін таңдау"
+msgstr "Беттің URL адресін таңдау"
 
 #: src/resources/gtk/shortcuts-dialog.ui:364
 msgctxt "shortcut window"
 msgid "Search With Default Search Engine"
-msgstr "Үнсіз келісім бойынша іздеу жүйесімен іздеу"
+msgstr "Әдепкі іздеу жүйесімен іздеу"
 
 #: src/resources/gtk/shortcuts-dialog.ui:370
 msgctxt "shortcut window"
@@ -4157,12 +4309,12 @@ msgstr "Табу"
 #: src/resources/gtk/shortcuts-dialog.ui:376
 msgctxt "shortcut window"
 msgid "Next Find Result"
-msgstr "Келесі табу нәтижесі"
+msgstr "Табылған келесі нәтиже"
 
 #: src/resources/gtk/shortcuts-dialog.ui:382
 msgctxt "shortcut window"
 msgid "Previous Find Result"
-msgstr "Алдыңғы табу нәтижесі"
+msgstr "Табылған алдыңғы нәтиже"
 
 #: src/resources/gtk/synced-tabs-dialog.ui:18
 msgid "Synced Tabs"
@@ -4174,34 +4326,36 @@ msgid ""
 "with this account. Open a tab by double clicking its name (tabs under Local "
 "Tabs cannot be opened)."
 msgstr ""
+"Төменде осы тіркелгімен Firefox Sync қолданатын басқа құрылғыларыңыздың "
+"синхрондалған ашық беттері берілген. Бетті оның атына екі рет шерту арқылы "
+"ашыңыз (Жергілікті беттер астындағы беттерді ашу мүмкін емес)."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:15
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:7
 msgid "Additional URLs"
 msgstr "Қосымша URL адрестері"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:32
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:25
 msgid ""
 "A URL that starts with any of the additional URLs will be opened by the web "
-"application. If you omit the URL scheme, the one from the currently loaded "
-"URL will be used."
+"application. If you omit the URL scheme, the one from the currently loaded URL "
+"will be used."
 msgstr ""
+"Қосымша URL адрестерінің кез келгенімен басталатын URL веб-қолданба арқылы "
+"ашылады. Егер сіз URL схемасын көрсетпесеңіз, қазіргі жүктелген URL "
+"адресіндегі схема пайдаланылады."
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:54
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:35
 msgctxt "Column header in the Additional URLs dialog"
 msgid "URL"
 msgstr "URL"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:81
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:78
 msgid "Add New URL"
 msgstr "Жаңа URL қосу"
 
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:87
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:84
 msgid "Remove Selected URLs"
 msgstr "Таңдалған URL адрестерін өшіру"
-
-#: src/resources/gtk/webapp-additional-urls-dialog.ui:94
-msgid "C_lear All"
-msgstr "Барлығын та_зарту"
 
 #: src/search-provider/ephy-search-provider.c:214
 #, c-format
@@ -4219,16 +4373,16 @@ msgstr "Жергілікті беттер"
 
 #: src/webapp-provider/ephy-webapp-provider.c:120
 msgid "The install_token is required for the Install() method"
-msgstr ""
+msgstr "Install() әдісі үшін install_token қажет"
 
 #: src/webapp-provider/ephy-webapp-provider.c:126
 #, c-format
 msgid "The url passed was not valid: ‘%s’"
-msgstr ""
+msgstr "Берілген URL жарамсыз: ‘%s’"
 
 #: src/webapp-provider/ephy-webapp-provider.c:132
 msgid "The name passed was not valid"
-msgstr ""
+msgstr "Берілген атау жарамсыз болды"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
 #, c-format
@@ -4238,7 +4392,7 @@ msgstr "‘%s’ (%s) веб-қолданбасын орнату сәтсіз а
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
 msgid "The desktop file ID passed ‘%s’ was not valid"
-msgstr ""
+msgstr "Берілген ‘%s’ жұмыс үстелі файлының ID-і жарамсыз болды"
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
 #, c-format
@@ -4257,192 +4411,578 @@ msgstr "%s параметрлері"
 
 #: src/webextension/ephy-web-extension.c:1027
 #, c-format
-#| msgid "Text not found"
 msgid "manifest.json not found"
 msgstr "manifest.json табылмады"
 
 #: src/webextension/ephy-web-extension.c:1033
 #, c-format
-#| msgid "Failed to create directory %s"
 msgid "Failed to parse manifest.json: %s"
-msgstr ""
+msgstr "manifest.json файлын талдау сәтсіз аяқталды: %s"
 
 #: src/webextension/ephy-web-extension.c:1039
 #: src/webextension/ephy-web-extension.c:1045
 #, c-format
 msgid "manifest.json invalid"
-msgstr ""
+msgstr "manifest.json жарамсыз"
 
 #: src/webextension/ephy-web-extension.c:1052
 #, c-format
 msgid "Only manifest_version 2 is supported"
-msgstr ""
+msgstr "Тек manifest_version 2-ге қолдау көрсетіледі"
 
 #: src/webextension/ephy-web-extension.c:1069
 #, c-format
 msgid "Missing name or version"
-msgstr ""
+msgstr "Аты немесе нұсқасы жетіспейді"
 
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
-msgstr ""
+msgstr "Бастапқы URI-ді анықтау сәтсіз аяқталды"
 
 #: src/window-commands.c:125
-msgid "GVDB File"
-msgstr "GVDB файлы"
-
-#: src/window-commands.c:126
 msgid "HTML File"
 msgstr "HTML файлы"
 
-#: src/window-commands.c:127
+#: src/window-commands.c:126
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:128 src/window-commands.c:729
+#: src/window-commands.c:127 src/window-commands.c:727
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:129 src/window-commands.c:730
+#: src/window-commands.c:128 src/window-commands.c:728
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:144 src/window-commands.c:595
-#: src/window-commands.c:864 src/window-commands.c:906
-msgid "Ch_oose File"
+#: src/window-commands.c:170 src/window-commands.c:566 src/window-commands.c:890
+#: src/window-commands.c:930
+msgid "_Select File"
 msgstr "Файлды _таңдау"
 
-#: src/window-commands.c:146 src/window-commands.c:866
+#: src/window-commands.c:172 src/window-commands.c:892
 msgid "I_mport"
 msgstr "И_мпорттау"
 
-#: src/window-commands.c:306 src/window-commands.c:396
-#: src/window-commands.c:446 src/window-commands.c:490
-#: src/window-commands.c:513 src/window-commands.c:529
+#: src/window-commands.c:325 src/window-commands.c:414 src/window-commands.c:458
+#: src/window-commands.c:481 src/window-commands.c:497
 msgid "Bookmarks successfully imported!"
 msgstr "Бетбелгілер сәтті импортталды!"
 
-#: src/window-commands.c:325
+#: src/window-commands.c:344
 msgid "Select Profile"
 msgstr "Профильді таңдау"
 
-#: src/window-commands.c:407 src/window-commands.c:457
-#: src/window-commands.c:687 src/window-commands.c:810
-#: src/window-commands.c:1005
+#: src/window-commands.c:425 src/window-commands.c:685 src/window-commands.c:811
+#: src/window-commands.c:1033
 msgid "Choose File"
 msgstr "Файлды таңдау"
 
-#: src/window-commands.c:578
+#: src/window-commands.c:552
 msgid "Import Bookmarks"
 msgstr "Бетбелгілерді импорттау"
 
-#: src/window-commands.c:608 src/window-commands.c:919
-msgid "From:"
-msgstr "Қайдан:"
+#: src/window-commands.c:580 src/window-commands.c:944
+msgid "File Type"
+msgstr "Файл түрі"
 
-#: src/window-commands.c:648
+#: src/window-commands.c:644
 msgid "Bookmarks successfully exported!"
 msgstr "Бетбелгілер сәтті экспортталды!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:698
+#: src/window-commands.c:696
 msgid "bookmarks.html"
 msgstr "бетбелгілер.html"
 
-#: src/window-commands.c:728
-#| msgid "GVDB File"
+#: src/window-commands.c:726
 msgid "CSV File"
 msgstr "CSV файлы"
 
-#: src/window-commands.c:773 src/window-commands.c:799
+#: src/window-commands.c:774 src/window-commands.c:800
 msgid "Passwords successfully imported!"
 msgstr "Парольдер сәтті импортталды!"
 
-#: src/window-commands.c:890
+#: src/window-commands.c:916
 msgid "Import Passwords"
 msgstr "Парольдерді импорттау"
 
-#: src/window-commands.c:966
-#| msgid "Passwords successfully imported!"
+#: src/window-commands.c:992
 msgid "Passwords successfully exported!"
 msgstr "Парольдер сәтті экспортталды!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1015
-#| msgid "Passwords"
+#: src/window-commands.c:1043
 msgid "passwords.csv"
 msgstr "парольдер.csv"
 
-#: src/window-commands.c:1223
+#: src/window-commands.c:1275
 msgid "Epiphany Canary"
-msgstr ""
+msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1246
+#: src/window-commands.c:1298
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: src/window-commands.c:1398
+#: src/window-commands.c:1454
 msgid "Reload Website?"
 msgstr "Веб-сайтты қайта жүктеу керек пе?"
 
-#: src/window-commands.c:1999
+#: src/window-commands.c:2002
+msgid "New Web App"
+msgstr "Жаңа веб-қолданба"
+
+#: src/window-commands.c:2054
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "\"%s\" қолданбасы қолданылуға дайын"
 
-#: src/window-commands.c:2002
+#: src/window-commands.c:2057
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "\"%s\" қолданбасын жасау мүмкін емес: %s"
 
 #. Translators: Desktop notification when a new web app is created.
-#: src/window-commands.c:2012
+#: src/window-commands.c:2069
 msgid "Launch"
 msgstr "Жөнелту"
 
-#: src/window-commands.c:2078
+#: src/window-commands.c:2155
 msgid "Replace Existing Web App?"
-msgstr ""
+msgstr "Бар веб-қолданбаны алмастыру керек пе?"
 
-#: src/window-commands.c:2081
+#: src/window-commands.c:2158
 #, c-format
-msgid ""
-"An application named “%s” already exists, replacing it will overwrite it"
+msgid "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "\"%s\" деп аталатын веб қолданба бар болып тұр. Оны алмастыру нәтижесінде "
 "үстінен жазылады"
 
-#: src/window-commands.c:2086
+#: src/window-commands.c:2163
 msgid "_Replace"
 msgstr "А_лмастыру"
 
-#: src/window-commands.c:2452
+#: src/window-commands.c:2585
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2456
+#: src/window-commands.c:2589
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2502
+#: src/window-commands.c:2635
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2983
+#: src/window-commands.c:3094
 msgid "Enable Caret Browsing Mode?"
-msgstr ""
+msgstr "Меңзермен шолу режимін іске қосу керек пе?"
 
-#: src/window-commands.c:2984
+#: src/window-commands.c:3095
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
 "want to enable caret browsing?"
 msgstr ""
+"F7 пернесін басу меңзермен шолуды іске қосады немесе сөндіреді. Бұл мүмкіндік "
+"веб-беттерге жылжымалы меңзерді орналастырып, пернетақта арқылы жылжуға "
+"мүмкіндік береді. Меңзермен шолуды іске қосуды қалайсыз ба?"
 
-#: src/window-commands.c:2989
+#: src/window-commands.c:3100
 msgid "_Enable"
 msgstr "Іск_е қосу"
+
+#~ msgid "Incognito search engine"
+#~ msgstr "Инкогнито іздеу жүйесі"
+
+#~ msgid "Name of the search engine selected in incognito mode."
+#~ msgstr "Инкогнито режимінде таңдалған іздеу жүйесінің аты."
+
+#~ msgid "Show url bar at bottom"
+#~ msgstr "URL панелін төменде көрсету"
+
+#~ msgid "Whether to show url bar on bottom."
+#~ msgstr "URL панелін төменде көрсету керек пе."
+
+#~ msgid "Show the WebKit features preferences page."
+#~ msgstr "WebKit мүмкіндіктерінің баптаулары бетін көрсету."
+
+#~ msgid ""
+#~ "Controls whether the preferences window shows the page which allows "
+#~ "toggling experimental and development WebKit features."
+#~ msgstr ""
+#~ "Баптаулар терезесінде тәжірибелік және әзірлеу сатысындағы WebKit "
+#~ "мүмкіндіктерін ауыстыруға мүмкіндік беретін беттің көрсетілуін басқарады."
+
+#~ msgid "Show internal WebKit features in the features preferences page."
+#~ msgstr ""
+#~ "Мүмкіндіктердің баптаулары бетінде WebKit-тің ішкі мүмкіндіктерін көрсету."
+
+#~ msgid ""
+#~ "Controls whether the features page in the preferences window shows internal "
+#~ "WebKit features."
+#~ msgstr ""
+#~ "Баптаулар терезесіндегі мүмкіндіктер бетінде WebKit-тің ішкі "
+#~ "мүмкіндіктерінің көрсетілуін басқарады."
+
+#~ msgid "Default reader mode zoom level."
+#~ msgstr "Оқу режимінің әдепкі масштабтау деңгейі."
+
+#~ msgid "Sets the zoom level for reader mode pages."
+#~ msgstr "Оқу режиміндегі беттер үшін масштабтау деңгейін орнатады."
+
+#~ msgid "Always show full URL"
+#~ msgstr "Әрқашан толық URL көрсету"
+
+#~ msgid "Whether to show the full URL in the address bar even when unfocused."
+#~ msgstr ""
+#~ "Фокуста болмаған кезде де адрес жолағында толық URL-ді көрсету керек пе."
+
+#~ msgid "Automatically open URIs"
+#~ msgstr "URI-ларды автоматты түрде ашу"
+
+#~ msgid "This is a permission map of security origins to URL schemes."
+#~ msgstr "Бұл қауіпсіздік көздерінің URL схемаларына рұқсаттар картасы."
+
+#~ msgid "Decision to apply when display permission is requested for this host"
+#~ msgstr "Осы хост үшін дисплейге рұқсат сұралғанда іске асырылатын шешім"
+
+#~ msgid ""
+#~ "This option is used to save whether a given host has been given permission "
+#~ "to access the user’s display. The “undecided” default means the browser "
+#~ "needs to ask the user for permission, while “allow” and “deny” tell it to "
+#~ "automatically make the decision upon request."
+#~ msgstr ""
+#~ "Бұл опция берілген хостқа пайдаланушының дисплейіне қол жеткізуге рұқсат "
+#~ "берілген-берілмегенін сақтау үшін қолданылады. «undecided» әдепкі мәні "
+#~ "барузер пайдаланушыдан рұқсат сұрауы керек екенін білдіреді, ал «allow» "
+#~ "және «deny» мәндері сұрау бойынша автоматты түрде шешім қабылдау керектігін "
+#~ "айтады."
+
+#~ msgid "Remember Decision"
+#~ msgstr "Шешімді есте сақтау"
+
+#~ msgid "Never"
+#~ msgstr "Ешқашан"
+
+#~ msgid "For Session"
+#~ msgstr "Сессия үшін"
+
+#~ msgid "Permanently"
+#~ msgstr "Тұрақты түрде"
+
+#~ msgid "_Case Sensitive"
+#~ msgstr "_Регистрді ескеру"
+
+#~ msgid "Match Whole _Word Only"
+#~ msgstr "Тек толық _сөзді сәйкестендіру"
+
+#~ msgid "Search Options"
+#~ msgstr "Іздеу опциялары"
+
+#, c-format
+#~ msgid "The %s search engine template URL can't be valid."
+#~ msgstr "%s іздеу жүйесі шаблонының URL адресі жарамды болуы мүмкін емес."
+
+#, c-format
+#~ msgid ""
+#~ "Found unclosed URL template parameter curly bracket at pos %d of URL %s."
+#~ msgstr ""
+#~ "URL %d позициясында %s шаблонының жабылмаған параметрлік фигуралық жақша "
+#~ "табылды."
+
+#, c-format
+#~ msgid "Found URL template parameter at %d in URL %s, but without any name."
+#~ msgstr ""
+#~ "URL %d позициясында %s ішіндегі URL шаблонының параметрі табылды, бірақ "
+#~ "оның аты жоқ."
+
+#, c-format
+#~ msgid "Found unknown URL template parameter %s in URL %s."
+#~ msgstr "Белгісіз URL шаблонының %s параметрі URL %s ішінен табылды."
+
+#, c-format
+#~ msgid ""
+#~ "Parsing of URL template %s succeeded, but no search terms were found so "
+#~ "it's not useful as a search engine."
+#~ msgstr ""
+#~ "URL %s шаблонын талдау сәтті аяқталды, бірақ іздеу терминдері табылмады, "
+#~ "сондықтан ол іздеу жүйесі ретінде пайдалы емес."
+
+#, c-format
+#~ msgid "Skipping <Param> tag as it has no name or value attribute"
+#~ msgstr ""
+#~ "<Param> тегі аты немесе мән атрибуты болмағандықтан өткізіліп жіберіледі"
+
+#, c-format
+#~ msgid "Couldn't parse search engine description file for %s: %s"
+#~ msgstr "%s үшін іздеу жүйесінің сипаттама файлын талдау мүмкін емес: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Couldn't create search engine as it did not provide sufficient information!"
+#~ msgstr ""
+#~ "Іздеу жүйесін жасау мүмкін емес, өйткені ол жеткілікті ақпарат бермеді!"
+
+#, c-format
+#~ msgid "Couldn't download search engine description file for %s: "
+#~ msgstr "%s үшін іздеу жүйесінің сипаттама файлын жүктеп алу мүмкін емес: "
+
+#, c-format
+#~ msgid "Couldn't load search engine suggestions from %s: "
+#~ msgstr "%s ішінен іздеу жүйесінің ұсыныстарын жүктеу мүмкін емес: "
+
+#, c-format
+#~ msgid "No content provided, length %ld"
+#~ msgstr "Мазмұн берілмеді, ұзындығы %ld"
+
+#, c-format
+#~ msgid ""
+#~ "Got empty JSON response or non-array root node or smaller than 2 elements "
+#~ "array root node"
+#~ msgstr ""
+#~ "Бос JSON жауабы немесе массив емес түбірлік түйін немесе 2 элементтен аз "
+#~ "массив түбірлік түйіні алынды"
+
+#, c-format
+#~ msgid "Could not parse JSON suggestions from %s with JSON %s: "
+#~ msgstr "%s ішінен %s JSON-ымен JSON ұсыныстарын талдау мүмкін емес: "
+
+#~ msgid "Add Bookmark"
+#~ msgstr "Бетбелгілерге қосу"
+
+#~ msgid "Move Controls"
+#~ msgstr "Басқару элементтерін жылжыту"
+
+#~ msgid "Move Up"
+#~ msgstr "Жоғары жылжыту"
+
+#~ msgid "Move Down"
+#~ msgstr "Төмен жылжыту"
+
+#~ msgid "Bookmark removed"
+#~ msgstr "Бетбелгі өшірілді"
+
+#, c-format
+#~ msgid "Add “%s” as Search Engine"
+#~ msgstr "“%s” іздеу жүйесі ретінде қосу"
+
+#~ msgid "Select _None"
+#~ msgstr "_Ешнәрсе таңдамау"
+
+#~ msgid "Secure Site"
+#~ msgstr "Қауіпсіз сайт"
+
+#~ msgid "Insecure Site"
+#~ msgstr "Қауіпсіз емес сайт"
+
+#~ msgid "Display Access"
+#~ msgstr "Экранға қол жеткізу"
+
+#~ msgid "Uninstall Web App?"
+#~ msgstr "Веб-қолданбаны өшіру керек пе?"
+
+#~ msgid "This web appʼs data will be permanently deleted"
+#~ msgstr "Бұл веб-қолданбаның деректері біржола өшіріледі"
+
+#~ msgid "_Uninstall"
+#~ msgstr "Ө_шіру"
+
+#~ msgid "Add _Bookmark…"
+#~ msgstr "_Бетбелгі қосу…"
+
+#, c-format
+#~ msgid "Could not load search engines suggestions: %s"
+#~ msgstr "Іздеу жүйелерінің ұсыныстарын жүктеу мүмкін болмады: %s"
+
+#~ msgid "Add _Link to Bookmarks"
+#~ msgstr "Сі_лтемені бетбелгілерге қосу"
+
+#, c-format
+#~ msgid "Allow “%s” to open the “%s” link in an external app"
+#~ msgstr "“%s” үшін “%s” сілтемесін сыртқы қолданбада ашуға рұқсат беру"
+
+#~ msgid "Open in External App?"
+#~ msgstr "Сыртқы қолданбада ашу керек пе?"
+
+#~ msgid "_Open Link"
+#~ msgstr "Сілтемені а_шу"
+
+#~ msgid "Always Allow"
+#~ msgstr "Әрқашан рұқсат ету"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Web App"
+#~ msgstr "Веб-қолданба"
+
+#~ msgid "Data cleared"
+#~ msgstr "Деректер тазартылды"
+
+#~ msgid "Shortcut (for example !ddg)"
+#~ msgstr "Жарлық (мысалы, !ddg)"
+
+#, c-format
+#~ msgid "Address (with search term as %s)"
+#~ msgstr "Адрес (іздеу термині %s ретінде)"
+
+#~ msgid "No search suggestions"
+#~ msgstr "Іздеу ұсыныстары жоқ"
+
+#~ msgid "All values reset"
+#~ msgstr "Барлық мәндер тасталды"
+
+#~ msgid "Reset to default"
+#~ msgstr "Әдепкі күйге қайтару"
+
+#~ msgid "Remove URL"
+#~ msgstr "URL өшіру"
+
+#~ msgid "Add Search Engine"
+#~ msgstr "Іздеу жүйесін қосу"
+
+#~ msgid "Edit"
+#~ msgstr "Түзету"
+
+#~ msgid "Done"
+#~ msgstr "Дайын"
+
+#~ msgid "Close"
+#~ msgstr "Жабу"
+
+#~ msgid "Options"
+#~ msgstr "Опциялар"
+
+#~ msgid "I_mport…"
+#~ msgstr "_Импорттау…"
+
+#~ msgid "E_xport…"
+#~ msgstr "_Экспорттау…"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "Т_олық экранға"
+
+#~ msgid "Passw_ords"
+#~ msgstr "Пар_ольдер"
+
+#~ msgid "_Uninstall Web App"
+#~ msgstr "_Веб-қолданбаны өшіру"
+
+#~ msgid "_Quit"
+#~ msgstr "_Шығу"
+
+#~ msgid "_Import…"
+#~ msgstr "_Импорттау…"
+
+#~ msgid "_Export…"
+#~ msgstr "_Экспорттау…"
+
+#~ msgid "Features"
+#~ msgstr "Мүмкіндіктер"
+
+#~ msgid "Reset All"
+#~ msgstr "Барлығын тастау"
+
+#~ msgid "Additional _Domains"
+#~ msgstr "Қосымша _домендер"
+
+#~ msgid "Incognito Search Engine"
+#~ msgstr "Инкогнито іздеу жүйесі"
+
+#~ msgid "Always Show Full _URL"
+#~ msgstr "Әрқашан толық _URL көрсету"
+
+#~ msgid "Search Su_ggestions"
+#~ msgstr "Іздеу ұ_сыныстары"
+
+#~ msgid "Website _Data"
+#~ msgstr "Веб-сайт _деректері"
+
+#~ msgid "_Security"
+#~ msgstr "Қ_ауіпсіздік"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "General"
+#~ msgstr "Жалпы"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "New Window"
+#~ msgstr "Жаңа терезе"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "New Incognito Window"
+#~ msgstr "Жаңа инкогнито терезесі"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Пернетақта жарлықтары"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Tabs"
+#~ msgstr "Беттер"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "New Tab"
+#~ msgstr "Жаңа бет"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "View Open Tabs"
+#~ msgstr "Ашық беттерді қарау"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "History"
+#~ msgstr "Тарих"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Preferences"
+#~ msgstr "Баптаулар"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Import Bookmarks"
+#~ msgstr "Бетбелгілерді импорттау"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Zoom In"
+#~ msgstr "Үлкейту"
+
+#~ msgctxt "shortcuts dialog"
+#~ msgid "Zoom Out"
+#~ msgstr "Кішірейту"
+
+#~ msgid "Site Menu"
+#~ msgstr "Сайт мәзірі"
+
+#~ msgid "Close _All Tabs"
+#~ msgstr "Барлық _беттерді жабу"
+
+#~ msgid ""
+#~ "URLs that start with the same base domain (example.com) will be opened by "
+#~ "this web app"
+#~ msgstr ""
+#~ "Бірдей негізгі доменнен (example.com) басталатын URL-дер осы веб-қолданба "
+#~ "арқылы ашылады"
+
+#~ msgid "Base Domain"
+#~ msgstr "Негізгі домен"
+
+#~ msgid "Screenshot finished"
+#~ msgstr "Скриншот аяқталды"
+
+#, c-format
+#~ msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+#~ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+
+#~ msgid "C_lear All"
+#~ msgstr "Барлығын та_зарту"
+
+#~ msgid "GVDB File"
+#~ msgstr "GVDB файлы"
+
+#~ msgid "Ch_oose File"
+#~ msgstr "Файлды _таңдау"
+
+#~ msgid "From:"
+#~ msgstr "Қайдан:"
 
 #~ msgid "Bookmark Properties"
 #~ msgstr "Бетбелгі қасиеттері"
@@ -4464,10 +5004,6 @@ msgstr "Іск_е қосу"
 
 #~ msgid "Enable safe browsing"
 #~ msgstr "Қауіпсіз шолуды іске қосу"
-
-#, c-format
-#~ msgid "Security Warning"
-#~ msgstr "Қауіпсіздік ескертуі"
 
 #~ msgid "Unsafe website detected!"
 #~ msgstr "Қауіпсіз емес веб-сайт анықталды!"
@@ -4542,9 +5078,6 @@ msgstr "Іск_е қосу"
 #~ msgid "Toggle reader mode"
 #~ msgstr "Оқу режимін іске қосу/сөндіру"
 
-#~ msgid "Bookmark this page"
-#~ msgstr "Бұл парақты бетбелгілерге қосу"
-
 #~ msgid "There are multiple tabs open."
 #~ msgstr "Бірнеше бет ашық."
 
@@ -4602,9 +5135,6 @@ msgstr "Іск_е қосу"
 #~ msgid "Close page"
 #~ msgstr "Бетті жабу"
 
-#~ msgid "Tabs"
-#~ msgstr "Беттер"
-
 #~ msgid "_Add…"
 #~ msgstr "Қо_су…"
 
@@ -4626,8 +5156,8 @@ msgstr "Іск_е қосу"
 #~ msgid ""
 #~ "A web application named “%s” already exists. Do you want to replace it?"
 #~ msgstr ""
-#~ "\"%s\" деп аталатын веб қолданбасы бар болып тұр. Оны алмастыруды "
-#~ "қалайсыз ба?"
+#~ "\"%s\" деп аталатын веб қолданбасы бар болып тұр. Оны алмастыруды қалайсыз "
+#~ "ба?"
 
 #~ msgid "Save file"
 #~ msgstr "Файлды сақтау"
@@ -4682,9 +5212,6 @@ msgstr "Іск_е қосу"
 #~ msgid "Title:"
 #~ msgstr "Атауы:"
 
-#~ msgid "Manage Search _Engines"
-#~ msgstr "Іздеу жүй_елерін басқару"
-
 #~ msgid "Sm_ooth Scrolling"
 #~ msgstr "Те_гіс айналдыруды іске қосу"
 
@@ -4711,9 +5238,6 @@ msgstr "Іск_е қосу"
 
 #~ msgid "_Copy Location"
 #~ msgstr "_Орналасуын көшіру"
-
-#~ msgid "Preferences"
-#~ msgstr "Баптаулар"
 
 #~ msgid "_Always accept"
 #~ msgstr "Әрқ_ашан қабылдау"
@@ -4819,9 +5343,6 @@ msgstr "Іск_е қосу"
 #~ msgid "_About"
 #~ msgstr "Осы тур_алы"
 
-#~ msgid "_Quit"
-#~ msgstr "_Шығу"
-
 #~ msgid "Filter domains"
 #~ msgstr "Домендерді сүзгілеу"
 
@@ -4869,9 +5390,6 @@ msgstr "Іск_е қосу"
 
 #~ msgid "Search the Web for %s"
 #~ msgstr "%s интернеттен іздеу"
-
-#~ msgid "Contact us at:"
-#~ msgstr "Біздің байланысу адресіміз:"
 
 #~ msgid "Contributors:"
 #~ msgstr "Үлесін қосқандар:"
@@ -4995,9 +5513,6 @@ msgstr "Іск_е қосу"
 #~ msgid_plural "%d bookmarks are similar"
 #~ msgstr[0] "%d бетбелгі ұқсас болып тұр"
 
-#~ msgid "Add Bookmark"
-#~ msgstr "Бетбелгілерге қосу"
-
 #~ msgid "“%s” Properties"
 #~ msgstr "\"%s\" қасиеттері"
 
@@ -5028,9 +5543,6 @@ msgstr "Іск_е қосу"
 
 #~ msgid "_File"
 #~ msgstr "_Файл"
-
-#~ msgid "_Edit"
-#~ msgstr "Тү_зету"
 
 #~ msgid "_View"
 #~ msgstr "Тү_рі"
@@ -5099,9 +5611,6 @@ msgstr "Іск_е қосу"
 #~ msgid "Title"
 #~ msgstr "Үндеу"
 
-#~ msgid "Add _Bookmark"
-#~ msgstr "Б_етбелгілерге қосу"
-
 #~ msgid "_Open…"
 #~ msgstr "А_шу…"
 
@@ -5117,9 +5626,6 @@ msgstr "Іск_е қосу"
 #~ msgid "_Normal Size"
 #~ msgstr "Қалы_пты өлшемі"
 
-#~ msgid "_Add Bookmark…"
-#~ msgstr "Бе_тбелгіні қосу…"
-
 #~ msgid "_Location…"
 #~ msgstr "Орна_ласу…"
 
@@ -5128,9 +5634,6 @@ msgstr "Іск_е қосу"
 
 #~ msgid "_Detach Tab"
 #~ msgstr "Бетті бө_ліп жіберу"
-
-#~ msgid "_Fullscreen"
-#~ msgstr "Т_олық экранға"
 
 #~ msgid "Save As"
 #~ msgstr "Қалайша сақтау"
@@ -5162,8 +5665,7 @@ msgstr "Іск_е қосу"
 #~ msgid ""
 #~ "Legitimate banks, stores, and other public sites will not ask you to do "
 #~ "this."
-#~ msgstr ""
-#~ "Шын банктар, дүкендер, және басқа да сайттар сізден осыны сұрамайды."
+#~ msgstr "Шын банктар, дүкендер, және басқа да сайттар сізден осыны сұрамайды."
 
 #~ msgctxt "accept-risk-access-key"
 #~ msgid "R"
