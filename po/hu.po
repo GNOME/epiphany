@@ -1,5 +1,5 @@
 # Hungarian translation for epiphany.
-# Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 #
 # Andras Timar <timar at gnome dot hu>, 2003.
@@ -7,13 +7,13 @@
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2011, 2018, 2019, 2020.
 # Attila Hammer <hammera at pickup dot hu>, 2014.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2025-09-08 16:49+0000\n"
-"PO-Revision-Date: 2025-09-09 10:03+0200\n"
+"POT-Creation-Date: 2026-02-12 00:06+0000\n"
+"PO-Revision-Date: 2026-02-21 18:42+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:205
 #: embed/ephy-about-handler.c:237 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:428 src/window-commands.c:1229
+#: src/ephy-main.c:429 src/window-commands.c:1230
 msgid "Web"
 msgstr "Web"
 
@@ -65,7 +65,6 @@ msgid "Address of the user’s home page."
 msgstr "A felhasználó kezdőoldala."
 
 #: data/org.gnome.epiphany.gschema.xml:22
-#| msgid "Default search engine."
 msgid "Default search engine"
 msgstr "Alapértelmezett keresőmotor"
 
@@ -74,12 +73,10 @@ msgid "Name of the search engine selected by default."
 msgstr "Az alapértelmezetten kiválasztott keresőmotor neve."
 
 #: data/org.gnome.epiphany.gschema.xml:27
-#| msgid "New search engine"
 msgid "Incognito search engine"
 msgstr "Inkognitó keresőmotor"
 
 #: data/org.gnome.epiphany.gschema.xml:28
-#| msgid "Name of the search engine selected by default."
 msgid "Name of the search engine selected in incognito mode."
 msgstr "Az inkognitó módban kiválasztott keresőmotor neve."
 
@@ -101,12 +98,10 @@ msgstr ""
 "cserélve. A „bang” a keresőmotor által használt rövidítés."
 
 #: data/org.gnome.epiphany.gschema.xml:50
-#| msgid "Enable Google Search Suggestions"
 msgid "Enable Search Suggestions"
 msgstr "Keresési javaslatok engedélyezése"
 
 #: data/org.gnome.epiphany.gschema.xml:51
-#| msgid "Whether to show Google Search Suggestion in url entry popdown."
 msgid "Whether to show Search Suggestion in url entry popdown."
 msgstr ""
 "Megjelenítse-e a keresési javaslatokat az URL bejegyzés lenyíló mezőjében."
@@ -223,7 +218,6 @@ msgid "Show url bar at bottom"
 msgstr "URL-sáv megjelenítése alul"
 
 #: data/org.gnome.epiphany.gschema.xml:101
-#| msgid "Whether to show buttons for navigation in WebApp."
 msgid "Whether to show url bar on bottom."
 msgstr "Alul jelenítse-e meg az URL-sávot."
 
@@ -258,12 +252,18 @@ msgid "Show the WebKit features preferences page."
 msgstr "A WebKit-funkciók beállítási oldalának megjelenítése."
 
 #: data/org.gnome.epiphany.gschema.xml:116
+#| msgid ""
+#| "Controls whether the preferences window shows the page which allows "
+#| "toggling experimental and development WebKit features."
 msgid ""
 "Controls whether the preferences window shows the page which allows toggling "
-"experimental and development WebKit features."
+"experimental and development WebKit features. This setting is ignored in "
+"Tech Preview, and true is always used."
 msgstr ""
 "Azt szabályozza, hogy a beállítások ablak megjelenítse-e azt az oldalt, amelye"
-"n a kísérleti és a fejlesztői WebKit-funkciók be- és kikapcsolhatók."
+"n a kísérleti és a fejlesztői WebKit-funkciók be- és kikapcsolhatók. Ez a beál"
+"lítás figyelmen kívül van hagyva a műszaki előnézetben, és mindig igaz érték v"
+"an használva."
 
 #: data/org.gnome.epiphany.gschema.xml:120
 msgid "Show internal WebKit features in the features preferences page."
@@ -274,8 +274,8 @@ msgid ""
 "Controls whether the features page in the preferences window shows internal "
 "WebKit features."
 msgstr ""
-"Azt szabályozza, hogy a beállítások ablakban lévő funkciók oldala megjelenítse"
-"-e a belső WebKit-funkciókat."
+"Azt szabályozza, hogy a beállítások ablakban lévő funkciók oldala "
+"megjelenítse-e a belső WebKit-funkciókat."
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Reader mode article font style."
@@ -388,7 +388,7 @@ msgstr ""
 "értelmezettek."
 
 #: data/org.gnome.epiphany.gschema.xml:183
-#: src/resources/gtk/prefs-general-page.blp:201
+#: src/resources/gtk/prefs-general-page.blp:207
 msgid "Languages"
 msgstr "Nyelvek"
 
@@ -411,10 +411,18 @@ msgstr ""
 "engedélyezve van)."
 
 #: data/org.gnome.epiphany.gschema.xml:193
+msgid "Hide cookie banner"
+msgstr "Süticsíkok elrejtése"
+
+#: data/org.gnome.epiphany.gschema.xml:194
+msgid "Hide cookie banners."
+msgstr "Süticsíkok elrejtése."
+
+#: data/org.gnome.epiphany.gschema.xml:198
 msgid "User agent"
 msgstr "Felhasználói ügynök"
 
-#: data/org.gnome.epiphany.gschema.xml:194
+#: data/org.gnome.epiphany.gschema.xml:199
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -422,11 +430,11 @@ msgstr ""
 "A böngésző weboldalak felé való azonosítására felhasználói ügynökként "
 "használandó karakterlánc."
 
-#: data/org.gnome.epiphany.gschema.xml:198
+#: data/org.gnome.epiphany.gschema.xml:203
 msgid "Enable adblock"
 msgstr "Reklámblokkoló engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:199
+#: data/org.gnome.epiphany.gschema.xml:204
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -434,27 +442,27 @@ msgstr ""
 "Blokkolja-e a beágyazott reklámokat, amelyeket a weboldalak meg szeretnének "
 "jeleníteni."
 
-#: data/org.gnome.epiphany.gschema.xml:203
+#: data/org.gnome.epiphany.gschema.xml:208
 msgid "Remember passwords"
 msgstr "Emlékezzen a jelszavakra"
 
-#: data/org.gnome.epiphany.gschema.xml:204
+#: data/org.gnome.epiphany.gschema.xml:209
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Jelszavak tárolásának és webhelyeken előre kitöltésének engedélyezése."
 
-#: data/org.gnome.epiphany.gschema.xml:208
+#: data/org.gnome.epiphany.gschema.xml:213
 msgid "Autofill form data"
 msgstr "Űrlapadatok automatikus kitöltése"
 
-#: data/org.gnome.epiphany.gschema.xml:209
+#: data/org.gnome.epiphany.gschema.xml:214
 msgid "Whether to auto fill form data in websites."
 msgstr "Töltse-e ki automatikusan az űrlapadatokat a webhelyeken."
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:218
 msgid "Enable site-specific quirks"
 msgstr "Oldalfüggő kompatibilitási mód engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:214
+#: data/org.gnome.epiphany.gschema.xml:219
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -462,19 +470,19 @@ msgstr ""
 "Engedélyezi a kompatibilitási módot, hogy egyes webhelyek jobban működjenek. "
 "Érdemes lehet kikapcsolni, ha egy bizonyos problémát követ nyomon."
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable Intelligent Tracking Prevention (ITP)"
 msgstr "Intelligens követésmegelőzés (ITP) engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:219
+#: data/org.gnome.epiphany.gschema.xml:224
 msgid "Whether to enable Intelligent Tracking Prevention."
 msgstr "Engedélyezze-e az intelligens követésmegelőzést."
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "Allow websites to store local website data"
 msgstr "Helyi webhelyadatok tárolásának engedélyezése a webhelyek számára"
 
-#: data/org.gnome.epiphany.gschema.xml:224
+#: data/org.gnome.epiphany.gschema.xml:229
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
@@ -482,25 +490,23 @@ msgstr ""
 "Engedélyezze-e a webhelyeknek a sütik, a helyi webhelyadatok és az IndexedDB "
 "adatbázisok tárolását. Ennek letiltása megakadályozza sok webhely működését."
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:233
 msgid "Default zoom level for new pages"
 msgstr "Alapértelmezett nagyítási szint az új oldalaknál"
 
-#: data/org.gnome.epiphany.gschema.xml:232
-#| msgid "Default Zoom Level"
+#: data/org.gnome.epiphany.gschema.xml:237
 msgid "Default reader mode zoom level."
 msgstr "Alapértelmezett megjelenítési mód nagyítási szintje."
 
-#: data/org.gnome.epiphany.gschema.xml:233
-#| msgid "Default zoom level for new pages"
+#: data/org.gnome.epiphany.gschema.xml:238
 msgid "Sets the zoom level for reader mode pages."
 msgstr "Beállítja a nagyítási szintet a megjelenítési mód oldalainál."
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:242
 msgid "Enable autosearch"
 msgstr "Automatikus keresés engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid ""
 "Whether to automatically search the web when something that does not look "
 "like a URL is entered in the address bar. If this setting is disabled, "
@@ -512,11 +518,11 @@ msgstr ""
 "URL-ként lesz betöltve, hacsak nem választanak egyértelműen keresőmotort a "
 "legördülő menüből."
 
-#: data/org.gnome.epiphany.gschema.xml:242
+#: data/org.gnome.epiphany.gschema.xml:247
 msgid "Enable mouse gestures"
 msgstr "Egérgesztusok engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:243
+#: data/org.gnome.epiphany.gschema.xml:248
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
@@ -525,35 +531,35 @@ msgstr ""
 "viselkedésén alapulnak, és a középső egérgomb + gesztus használatával "
 "aktiválhatók."
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid "Enable navigation gestures"
 msgstr "Navigációs gesztusok engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:248
+#: data/org.gnome.epiphany.gschema.xml:253
 msgid "Whether to enable back and forward navigation gestures."
 msgstr "Engedélyezze-e a vissza és előre navigációs gesztusokat."
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid "Last upload directory"
 msgstr "Utolsó feltöltési könyvtár"
 
-#: data/org.gnome.epiphany.gschema.xml:253
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Keep track of last upload directory"
 msgstr "Az utolsó feltöltési könyvtár nyomon követése"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid "Last download directory"
 msgstr "Utolsó letöltési könyvtár"
 
-#: data/org.gnome.epiphany.gschema.xml:258
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Keep track of last download directory"
 msgstr "Az utolsó letöltési könyvtár nyomon követése"
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:267
 msgid "Hardware acceleration policy"
 msgstr "Hardveres gyorsítás irányelve"
 
-#: data/org.gnome.epiphany.gschema.xml:263
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
@@ -566,28 +572,28 @@ msgstr ""
 "megnöveli a memóriahasználati követelményt és számos, a hardverre jellemző "
 "grafikus meghajtó hibát idézhet elő."
 
-#: data/org.gnome.epiphany.gschema.xml:267
+#: data/org.gnome.epiphany.gschema.xml:272
 msgid "Always ask for download directory"
 msgstr "Mindig kérdezzen rá a letöltési könyvtárra"
 
-#: data/org.gnome.epiphany.gschema.xml:268
+#: data/org.gnome.epiphany.gschema.xml:273
 msgid "Whether to present a directory chooser dialog for every download."
 msgstr ""
 "Jelenjen-e meg a könyvtárválasztó párbeszédablak minden egyes letöltésnél."
 
-#: data/org.gnome.epiphany.gschema.xml:272
+#: data/org.gnome.epiphany.gschema.xml:277
 msgid "Enable immediately switch to new open tab"
 msgstr "Azonnal az új nyitott lapra váltás engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:273
+#: data/org.gnome.epiphany.gschema.xml:278
 msgid "Whether to automatically switch to a new open tab."
 msgstr "Automatikusan átváltson-e egy új nyitott lapra."
 
-#: data/org.gnome.epiphany.gschema.xml:277
+#: data/org.gnome.epiphany.gschema.xml:282
 msgid "Enable WebExtensions"
 msgstr "A webkiterjesztések engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:278
+#: data/org.gnome.epiphany.gschema.xml:283
 msgid ""
 "Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
 "extensions."
@@ -595,19 +601,19 @@ msgstr ""
 "Engedélyezze-e a webkiterjesztéseket. A webkiterjesztések a kiterjesztések "
 "olyan rendszere, ami több böngészőben is működik."
 
-#: data/org.gnome.epiphany.gschema.xml:282
+#: data/org.gnome.epiphany.gschema.xml:287
 msgid "Active WebExtensions"
 msgstr "Bekapcsolt webkiterjesztések"
 
-#: data/org.gnome.epiphany.gschema.xml:283
+#: data/org.gnome.epiphany.gschema.xml:288
 msgid "Indicates which WebExtensions are set to active."
 msgstr "Azt jelzi, hogy mely webkiterjesztések vannak aktívra állítva."
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:292
 msgid "Show developer actions"
 msgstr "Fejlesztői műveletek megjelenítése"
 
-#: data/org.gnome.epiphany.gschema.xml:288
+#: data/org.gnome.epiphany.gschema.xml:293
 msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
@@ -615,43 +621,43 @@ msgstr ""
 "Megjelenjenek-e a fejlesztői helyi menü műveletei. Ez lehetővé teszi az "
 "Oldal forrása és az Elem vizsgálata műveletek használatát."
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:297
 msgid "Always show full URL"
 msgstr "Mindig teljes URL megjelenítése"
 
-#: data/org.gnome.epiphany.gschema.xml:293
+#: data/org.gnome.epiphany.gschema.xml:298
 msgid "Whether to show the full URL in the address bar even when unfocused."
 msgstr "A teljes URL jelenjen-e meg a címsorban akkor is, ha nem fókuszált."
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:302
 msgid "Automatically open URIs"
 msgstr "URI-k automatikus megnyitása"
 
-#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:303
 msgid "This is a permission map of security origins to URL schemes."
 msgstr "Ez egy biztonsági eredetű jogosultság-leképezés az URL-sémákhoz."
 
-#: data/org.gnome.epiphany.gschema.xml:304
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid "Web application additional URLs"
 msgstr "Webalkalmazás további URL-ei"
 
-#: data/org.gnome.epiphany.gschema.xml:305
+#: data/org.gnome.epiphany.gschema.xml:310
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Azon URL-ek listája, amelyeket meg kell nyitnia a webalkalmazásnak"
 
-#: data/org.gnome.epiphany.gschema.xml:309
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "Show navigation buttons in WebApp"
 msgstr "Navigációs gombok megjelenítése a webalkalmazásban"
 
-#: data/org.gnome.epiphany.gschema.xml:310
+#: data/org.gnome.epiphany.gschema.xml:315
 msgid "Whether to show buttons for navigation in WebApp."
 msgstr "Megjelenjenek-e a navigációs gombok a webalkalmazásban."
 
-#: data/org.gnome.epiphany.gschema.xml:314
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid "Run in background"
 msgstr "Futtatás a háttérben"
 
-#: data/org.gnome.epiphany.gschema.xml:315
+#: data/org.gnome.epiphany.gschema.xml:320
 msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
@@ -659,21 +665,21 @@ msgstr ""
 "Ha engedélyezve van, akkor az alkalmazás továbbra is fut a háttérben az "
 "ablak bezárása után."
 
-#: data/org.gnome.epiphany.gschema.xml:319
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "WebApp is system-wide"
 msgstr "A webalkalmazás rendszerszintű"
 
-#: data/org.gnome.epiphany.gschema.xml:320
+#: data/org.gnome.epiphany.gschema.xml:325
 msgid "If enabled, application cannot be edited or removed."
 msgstr ""
 "Ha engedélyezve van, akkor az alkalmazás nem szerkeszthető vagy nem "
 "távolítható el."
 
-#: data/org.gnome.epiphany.gschema.xml:326
+#: data/org.gnome.epiphany.gschema.xml:331
 msgid "The downloads folder"
 msgstr "A letöltési mappa"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:332
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -682,11 +688,11 @@ msgstr ""
 "alapértelmezett mappájának, vagy „Desktop” az asztal mappájának "
 "használatához."
 
-#: data/org.gnome.epiphany.gschema.xml:334
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "Window position"
 msgstr "Ablakpozíció"
 
-#: data/org.gnome.epiphany.gschema.xml:335
+#: data/org.gnome.epiphany.gschema.xml:340
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -694,11 +700,11 @@ msgstr ""
 "Az új ablak által használandó pozíció, ha nem egy előző munkamenetből kerül "
 "helyreállításra."
 
-#: data/org.gnome.epiphany.gschema.xml:339
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "Window size"
 msgstr "Ablakméret"
 
-#: data/org.gnome.epiphany.gschema.xml:340
+#: data/org.gnome.epiphany.gschema.xml:345
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -706,11 +712,11 @@ msgstr ""
 "Az új ablak által használandó ablakméret, ha nem egy előző munkamenetből "
 "kerül helyreállításra."
 
-#: data/org.gnome.epiphany.gschema.xml:344
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid "Is maximized"
 msgstr "Teljes méret"
 
-#: data/org.gnome.epiphany.gschema.xml:345
+#: data/org.gnome.epiphany.gschema.xml:350
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -718,11 +724,11 @@ msgstr ""
 "Az új ablak legyen-e teljes méretű, ha nem egy előző munkamenetből kerül "
 "helyreállításra."
 
-#: data/org.gnome.epiphany.gschema.xml:360
+#: data/org.gnome.epiphany.gschema.xml:365
 msgid "Disable forward and back buttons"
 msgstr "Előre és vissza gombok letiltása"
 
-#: data/org.gnome.epiphany.gschema.xml:361
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
@@ -731,27 +737,27 @@ msgstr ""
 "lesznek tiltva, megakadályozva a felhasználókat a böngésző előzményeinek "
 "azonnali elérésében"
 
-#: data/org.gnome.epiphany.gschema.xml:379
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "Firefox Sync Token Server URL"
 msgstr "Firefox szinkronizálási token kiszolgáló URL"
 
-#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "URL to a custom Firefox Sync token server."
 msgstr "Az URL egy egyéni Firefox szinkronizálási token kiszolgálóhoz."
 
-#: data/org.gnome.epiphany.gschema.xml:384
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "Firefox Sync Accounts Server URL"
 msgstr "Firefox szinkronizálási fiók kiszolgálójának URL-e"
 
-#: data/org.gnome.epiphany.gschema.xml:385
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "URL to a custom Firefox Sync accounts server."
 msgstr "Az URL egy egyéni Firefox szinkronizálási fiók kiszolgálójához."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid "Currently signed in sync user"
 msgstr "Jelenleg bejelentkezett Sync felhasználó"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
@@ -759,43 +765,43 @@ msgstr ""
 "A Mozilla-fiókkal összekötött e-mail-cím, amelyet a Mozilla kiszolgálóival "
 "történő adatszinkronizációhoz használ."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid "Last sync timestamp"
 msgstr "Legutóbbi szinkronizálás időbélyege"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "A UNIX idő másodpercben, amikor legutóbb szinkronizált."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid "Sync device ID"
 msgstr "Sync eszközazonosító"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid "The sync device ID of the current device."
 msgstr "A jelenlegi eszköz Sync eszközazonosítója."
 
-#: data/org.gnome.epiphany.gschema.xml:404
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid "Sync device name"
 msgstr "Sync eszköz neve"
 
-#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "The sync device name of the current device."
 msgstr "A jelenlegi eszköz Sync eszközneve."
 
-#: data/org.gnome.epiphany.gschema.xml:409
+#: data/org.gnome.epiphany.gschema.xml:414
 msgid "The sync frequency in minutes"
 msgstr "A szinkronizálási gyakoriság percben"
 
-#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "The number of minutes between two consecutive syncs."
 msgstr "A percek száma két egymást követő szinkronizáció között."
 
-#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Sync data with Firefox"
 msgstr "Adatszinkronizáció a Firefoxszal"
 
-#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:420
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -803,102 +809,102 @@ msgstr ""
 "IGAZ, ha a Web gyűjteményeket szinkronizálni kell a Firefox gyűjteményekkel, "
 "egyébként HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:419
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid "Enable bookmarks sync"
 msgstr "Könyvjelző-szinkronizálás engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "IGAZ, ha a könyvjelzőgyűjtemény szinkronizálandó, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:424
+#: data/org.gnome.epiphany.gschema.xml:429
 msgid "Bookmarks sync timestamp"
 msgstr "Könyvjelzők szinkronizálási időbélyege"
 
-#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Az időbélyeg, amikor a könyvjelzők legutóbb szinkronizálva voltak."
 
-#: data/org.gnome.epiphany.gschema.xml:429
-#: data/org.gnome.epiphany.gschema.xml:444
-#: data/org.gnome.epiphany.gschema.xml:459
+#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:449
+#: data/org.gnome.epiphany.gschema.xml:464
 msgid "Initial sync or normal sync"
 msgstr "Kezdeti vagy normál szinkronizáció"
 
-#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:435
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "IGAZ, ha a könyvjelzőgyűjteményt először kell szinkronizálni, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:434
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "Enable passwords sync"
 msgstr "Jelszavak szinkronizációjának engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "IGAZ, ha a jelszógyűjtemény szinkronizálandó, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:439
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid "Passwords sync timestamp"
 msgstr "Jelszavak szinkronizálási időbélyege"
 
-#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Az időbélyeg, amikor a jelszavak legutóbb szinkronizálva voltak."
 
-#: data/org.gnome.epiphany.gschema.xml:445
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "IGAZ, ha a jelszógyűjteményt először kell szinkronizálni, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:449
+#: data/org.gnome.epiphany.gschema.xml:454
 msgid "Enable history sync"
 msgstr "Előzmények szinkronizációjának engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:450
+#: data/org.gnome.epiphany.gschema.xml:455
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "IGAZ, ha az előzménygyűjtemény szinkronizálandó, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:454
+#: data/org.gnome.epiphany.gschema.xml:459
 msgid "History sync timestamp"
 msgstr "Előzmények szinkronizálási időbélyege"
 
-#: data/org.gnome.epiphany.gschema.xml:455
+#: data/org.gnome.epiphany.gschema.xml:460
 msgid "The timestamp at which last history sync was made."
 msgstr "Az időbélyeg, amikor az előzmények legutóbb szinkronizálva voltak."
 
-#: data/org.gnome.epiphany.gschema.xml:460
+#: data/org.gnome.epiphany.gschema.xml:465
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "IGAZ, ha az előzménygyűjteményt először kell szinkronizálni, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:464
+#: data/org.gnome.epiphany.gschema.xml:469
 msgid "Enable open tabs sync"
 msgstr "Nyitott lapok szinkronizációjának engedélyezése"
 
-#: data/org.gnome.epiphany.gschema.xml:465
+#: data/org.gnome.epiphany.gschema.xml:470
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr "IGAZ, ha a nyitott lapok gyűjteménye szinkronizálandó, különben HAMIS."
 
-#: data/org.gnome.epiphany.gschema.xml:469
+#: data/org.gnome.epiphany.gschema.xml:474
 msgid "Open tabs sync timestamp"
 msgstr "Nyitott lapok szinkronizálási időbélyege"
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:475
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Az időbélyeg, amikor a nyitott lapok legutóbb szinkronizálva voltak."
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:486
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Alkalmazandó döntés, amikor mikrofonengedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:482
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -911,13 +917,13 @@ msgstr ""
 "felhasználó engedélyét, míg az „allow” (engedélyezés) és a „deny” (tiltás) "
 "azt mondja, hogy kéréskor automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:491
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Alkalmazandó döntés, amikor helymeghatározási engedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:487
+#: data/org.gnome.epiphany.gschema.xml:492
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -930,12 +936,12 @@ msgstr ""
 "felhasználó engedélyét, míg az „allow” (engedélyezés) és a „deny” (tiltás) "
 "azt mondja, hogy kéréskor automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:491
+#: data/org.gnome.epiphany.gschema.xml:496
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Alkalmazandó döntés, amikor értesítési engedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:492
+#: data/org.gnome.epiphany.gschema.xml:497
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -948,13 +954,13 @@ msgstr ""
 "engedélyét, míg az „allow” (engedélyezés) és a „deny” (tiltás) azt mondja, "
 "hogy kéréskor automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:496
+#: data/org.gnome.epiphany.gschema.xml:501
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Alkalmazandó döntés, amikor jelszómentési engedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:497
+#: data/org.gnome.epiphany.gschema.xml:502
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -967,11 +973,11 @@ msgstr ""
 "„allow” (engedélyezés) és a „deny” (tiltás) azt mondja, hogy kéréskor "
 "automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:501
+#: data/org.gnome.epiphany.gschema.xml:506
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Alkalmazandó döntés, amikor webkamera-engedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:502
+#: data/org.gnome.epiphany.gschema.xml:507
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -984,17 +990,11 @@ msgstr ""
 "felhasználó engedélyét, míg az „allow” (engedélyezés) és a „deny” (tiltás) "
 "azt mondja, hogy kéréskor automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:506
-#| msgid "Decision to apply when webcam permission is requested for this host"
+#: data/org.gnome.epiphany.gschema.xml:511
 msgid "Decision to apply when display permission is requested for this host"
 msgstr "Alkalmazandó döntés, amikor kijelzőengedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:507
-#| msgid ""
-#| "This option is used to save whether a given host has been given "
-#| "permission to access the user’s location. The “undecided” default means "
-#| "the browser needs to ask the user for permission, while “allow” and "
-#| "“deny” tell it to automatically make the decision upon request."
+#: data/org.gnome.epiphany.gschema.xml:512
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s display. The “undecided” default means the browser "
@@ -1007,12 +1007,12 @@ msgstr ""
 "felhasználó engedélyét, míg az „allow” (engedélyezés) és a „deny” (tiltás) "
 "azt mondja, hogy kéréskor automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:511
+#: data/org.gnome.epiphany.gschema.xml:516
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr "Alkalmazandó döntés, amikor reklámengedélyt kérnek ehhez a géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:512
+#: data/org.gnome.epiphany.gschema.xml:517
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -1025,13 +1025,13 @@ msgstr ""
 "használva, míg az „allow” (engedélyezés) és a „deny” (tiltás) azt mondja, "
 "hogy kéréskor automatikusan végezze el a döntést."
 
-#: data/org.gnome.epiphany.gschema.xml:516
+#: data/org.gnome.epiphany.gschema.xml:521
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
-"Alkalmazandó döntés, amikor automatikus lejátszási engedélyt kérnek ehhez a gé"
-"phez"
+"Alkalmazandó döntés, amikor automatikus lejátszási engedélyt kérnek ehhez a "
+"géphez"
 
-#: data/org.gnome.epiphany.gschema.xml:517
+#: data/org.gnome.epiphany.gschema.xml:522
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -1060,8 +1060,12 @@ msgstr ""
 msgid "Web is often referred to by its code name, Epiphany."
 msgstr "A Webre gyakran annak kódnevével, Epiphany néven hivatkoznak."
 
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:21
+msgid "A browser window"
+msgstr "Egy böngészőablak"
+
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:35 src/window-commands.c:1239
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1240
 msgid "The GNOME Project"
 msgstr "A GNOME projekt"
 
@@ -1078,7 +1082,7 @@ msgstr "%s verzió"
 msgid "About Web"
 msgstr "Web névjegye"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1231
+#: embed/ephy-about-handler.c:207 src/window-commands.c:1232
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany technológiai előzetes"
 
@@ -1097,7 +1101,7 @@ msgid "List of installed web apps"
 msgstr "Telepített webalkalmazások listája"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2020
+#: embed/ephy-about-handler.c:330 src/window-commands.c:2024
 msgid "Launch"
 msgstr "Indítás"
 
@@ -1133,11 +1137,11 @@ msgstr ""
 msgid "Remove from overview"
 msgstr "Eltávolítás az áttekintésből"
 
-#: embed/ephy-about-handler.c:600 embed/ephy-about-handler.c:601
+#: embed/ephy-about-handler.c:599 embed/ephy-about-handler.c:600
 msgid "Private Browsing"
 msgstr "Privát böngészés"
 
-#: embed/ephy-about-handler.c:602
+#: embed/ephy-about-handler.c:601
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1147,14 +1151,14 @@ msgstr ""
 "jelennek meg a böngészési előzményekben és minden tárolt információ törlésre "
 "kerül az ablak bezárásakor. A letöltött fájlok meg lesznek tartva."
 
-#: embed/ephy-about-handler.c:606
+#: embed/ephy-about-handler.c:605
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Az inkognitó mód csak az ezt a számítógépet használó emberek elől rejti el a "
 "tevékenységét."
 
-#: embed/ephy-about-handler.c:608
+#: embed/ephy-about-handler.c:607
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1175,17 +1179,17 @@ msgstr "Adja meg a(z) %s PIN-kódját a(z) %s:%d hitelesítéséhez."
 
 #: embed/ephy-client-certificate-manager.c:321
 #: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:767
-#: embed/ephy-web-view.c:1377 src/ephy-history-dialog.c:888
-#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:267
-#: src/ephy-window.c:2288 src/preferences/autofill-view.c:363
+#: embed/ephy-web-view.c:1379 src/ephy-history-dialog.c:893
+#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:269
+#: src/ephy-window.c:2300 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:98
 #: src/resources/gtk/history-dialog.blp:55
-#: src/resources/gtk/prefs-lang-dialog.blp:18 src/window-commands.c:360
-#: src/window-commands.c:565 src/window-commands.c:931
-#: src/window-commands.c:1409 src/window-commands.c:2113
-#: src/window-commands.c:3054
+#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:363
+#: src/window-commands.c:568 src/window-commands.c:934
+#: src/window-commands.c:1410 src/window-commands.c:2117
+#: src/window-commands.c:3176
 msgid "_Cancel"
 msgstr "Mé_gse"
 
@@ -1213,22 +1217,19 @@ msgid ""
 msgstr ""
 "A(z) %s:%d webhely azt kéri, hogy adjon meg egy tanúsítványt hitelesítéshez."
 
-#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:364
+#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:367
 msgid "_Select"
 msgstr "_Válasszon"
 
 #: embed/ephy-client-certificate-manager.c:489
-#| msgid "Remember passwords"
 msgid "Remember Decision"
 msgstr "Döntés megjegyzése"
 
 #: embed/ephy-client-certificate-manager.c:492
-#| msgid "Never Save"
 msgid "Never"
 msgstr "Soha"
 
 #: embed/ephy-client-certificate-manager.c:493
-#| msgid "Session"
 msgid "For Session"
 msgstr "Munkamenethez"
 
@@ -1236,7 +1237,7 @@ msgstr "Munkamenethez"
 msgid "Permanently"
 msgstr "Véglegesen"
 
-#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:585
+#: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:589
 msgid "Select a Directory"
 msgstr "Válasszon egy könyvtárat"
 
@@ -1276,26 +1277,26 @@ msgid "Finished downloading %s"
 msgstr "A(z) %s letöltése befejeződött"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969 src/ephy-window.c:3920
+#: embed/ephy-download.c:969 src/ephy-window.c:4073
 msgid "Download finished"
 msgstr "Letöltés befejezve"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:537
+#: embed/ephy-embed.c:566
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Nyomja meg az %s billentyűt a teljes képernyő elhagyásához"
 
-#: embed/ephy-embed.c:537
+#: embed/ephy-embed.c:566
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:537
+#: embed/ephy-embed.c:566
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:816
+#: embed/ephy-embed.c:845
 msgid "Web is being controlled by automation"
 msgstr "A Webet automatizáltan felügyelik"
 
@@ -1320,7 +1321,7 @@ msgstr "Ne töltse ki automatikusan"
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "A(z) %s URI nem férhet hozzá a(z) %s Epiphany erőforráshoz"
 
-#: embed/ephy-embed-utils.c:70
+#: embed/ephy-embed-utils.c:72
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "E-mail küldése a(z) „%s” címre"
@@ -1333,7 +1334,7 @@ msgstr "E-mail küldése a(z) „%s” címre"
 #. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
 #.
-#: embed/ephy-embed-utils.c:82
+#: embed/ephy-embed-utils.c:84
 #, c-format
 msgid ", “%s”"
 msgstr ", „%s”"
@@ -1343,7 +1344,7 @@ msgid "Blank page"
 msgstr "Üres oldal"
 
 #. Title for the blank page
-#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.blp:100
+#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.blp:104
 msgid "New Tab"
 msgstr "Új lap"
 
@@ -1671,28 +1672,27 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Ismeretlen (%s)"
 
-#: embed/ephy-find-toolbar.c:289
+#: embed/ephy-find-toolbar.c:290
 msgid "Type to search…"
 msgstr "Gépeljen a kereséshez…"
 
-#: embed/ephy-find-toolbar.c:295
+#: embed/ephy-find-toolbar.c:296
 msgid "Find previous occurrence of the search string"
 msgstr "A szó vagy kifejezés előző előfordulása az oldalon"
 
-#: embed/ephy-find-toolbar.c:302
+#: embed/ephy-find-toolbar.c:303
 msgid "Find next occurrence of the search string"
 msgstr "A szó vagy kifejezés következő előfordulása az oldalon"
 
-#: embed/ephy-find-toolbar.c:322
+#: embed/ephy-find-toolbar.c:323
 msgid "_Case Sensitive"
 msgstr "K_is- és nagybetűk megkülönböztetése"
 
-#: embed/ephy-find-toolbar.c:323
+#: embed/ephy-find-toolbar.c:324
 msgid "Match Whole _Word Only"
 msgstr "Illesztés csak teljes _szóra"
 
-#: embed/ephy-find-toolbar.c:326
-#| msgid "Sync Options"
+#: embed/ephy-find-toolbar.c:327
 msgid "Search Options"
 msgstr "Keresési beállítások"
 
@@ -1709,67 +1709,67 @@ msgstr "A szöveg nem található"
 msgid "Search wrapped back to the top"
 msgstr "A keresés az elejétől folytatódik"
 
-#: embed/ephy-web-view.c:245 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:247 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "Minden fájl"
 
-#: embed/ephy-web-view.c:254 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:256 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr "Minden támogatott típus"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:625
+#: embed/ephy-web-view.c:627
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Ez az űrlap nem biztonságos – a jelszavak nem maradnak titokban"
 
-#: embed/ephy-web-view.c:626 embed/ephy-web-view.c:3642
+#: embed/ephy-web-view.c:628 embed/ephy-web-view.c:3645
 msgid "_Dismiss"
 msgstr "_Eltüntetés"
 
-#: embed/ephy-web-view.c:802
+#: embed/ephy-web-view.c:804
 msgid "Web process crashed"
 msgstr "A Web folyamat összeomlott"
 
-#: embed/ephy-web-view.c:805
+#: embed/ephy-web-view.c:807
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "A Web folyamat befejeződött, mert elérte a memóriakorlátot"
 
-#: embed/ephy-web-view.c:808
+#: embed/ephy-web-view.c:810
 msgid "Web process terminated by API request"
 msgstr "A Web folyamatot befejezte egy API-kérés"
 
-#: embed/ephy-web-view.c:853
+#: embed/ephy-web-view.c:855
 msgid "Page Unresponsive"
 msgstr "Az oldal nem válaszol"
 
-#: embed/ephy-web-view.c:856
+#: embed/ephy-web-view.c:858
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "A jelenlegi „%s” oldal nem válaszol"
 
-#: embed/ephy-web-view.c:860
+#: embed/ephy-web-view.c:862
 msgid "_Wait"
 msgstr "_Várakozás"
 
-#: embed/ephy-web-view.c:861
+#: embed/ephy-web-view.c:863
 msgid "Force _Stop"
 msgstr "_Leállítás kényszerítése"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1107
+#: embed/ephy-web-view.c:1109
 #, c-format
 msgid "Loading “%s”…"
 msgstr "„%s” betöltése…"
 
-#: embed/ephy-web-view.c:1109 embed/ephy-web-view.c:1115
+#: embed/ephy-web-view.c:1111 embed/ephy-web-view.c:1117
 msgid "Loading…"
 msgstr "Betöltés…"
 
-#: embed/ephy-web-view.c:1370
+#: embed/ephy-web-view.c:1372
 msgid "Delete Web App?"
 msgstr "Törli a webalkalmazást?"
 
-#: embed/ephy-web-view.c:1373
+#: embed/ephy-web-view.c:1375
 #, c-format
 msgid ""
 "“%s” will be removed. You will have to re-install the website as an app from "
@@ -1778,13 +1778,13 @@ msgstr ""
 "A(z) „%s” eltávolításra kerül. Újra kell majd telepítenie a webhelyet "
 "alkalmazásként a menüből, hogy újra használhassa."
 
-#: embed/ephy-web-view.c:1378 src/ephy-passwords-view.c:159
+#: embed/ephy-web-view.c:1380 src/ephy-passwords-view.c:159
 #: src/preferences/autofill-view.c:364 src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "_Törlés"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1806
+#: embed/ephy-web-view.c:1808
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1792,7 +1792,7 @@ msgstr ""
 "tartozik."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1811
+#: embed/ephy-web-view.c:1813
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1801,14 +1801,14 @@ msgstr ""
 "dátumot a számítógépe naptárában."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1816
+#: embed/ephy-web-view.c:1818
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Ennek a webhelynek az azonosítóját nem egy megbízható szervezet bocsájtotta "
 "ki."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1821
+#: embed/ephy-web-view.c:1823
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1816,7 +1816,7 @@ msgstr ""
 "lehet."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1826
+#: embed/ephy-web-view.c:1828
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1825,7 +1825,7 @@ msgstr ""
 "amely kibocsájtotta azt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1831
+#: embed/ephy-web-view.c:1833
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1834,7 +1834,7 @@ msgstr ""
 "titkosítást használ."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1836
+#: embed/ephy-web-view.c:1838
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1844,24 +1844,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1901 embed/ephy-web-view.c:1957
+#: embed/ephy-web-view.c:1903 embed/ephy-web-view.c:1959
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Hiba az oldal betöltése közben"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1904
+#: embed/ephy-web-view.c:1906
 msgid "Unable to display this website"
 msgstr "A webhely tartalma nem jeleníthető meg"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1909
+#: embed/ephy-web-view.c:1911
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "A(z) %s helyen lévő oldal nem érhető el."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1913
+#: embed/ephy-web-view.c:1915
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1870,7 +1870,7 @@ msgstr ""
 "lehet ellenőrizni, hogy internetkapcsolata megfelelően működik-e."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1923
+#: embed/ephy-web-view.c:1925
 #, c-format
 msgid "The precise error was: %s"
 msgstr "A pontos hiba ez volt: %s"
@@ -1880,50 +1880,50 @@ msgstr "A pontos hiba ez volt: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1928 embed/ephy-web-view.c:1981
-#: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2053
-#: src/ephy-action-bar-start.c:36 src/ephy-location-entry.c:1635
+#: embed/ephy-web-view.c:1930 embed/ephy-web-view.c:1983
+#: embed/ephy-web-view.c:2019 embed/ephy-web-view.c:2055
+#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1583
 msgid "Reload"
 msgstr "Újratöltés"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1985
-#: embed/ephy-web-view.c:2021 embed/ephy-web-view.c:2057
+#: embed/ephy-web-view.c:1934 embed/ephy-web-view.c:1987
+#: embed/ephy-web-view.c:2023 embed/ephy-web-view.c:2059
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1960
+#: embed/ephy-web-view.c:1962
 msgid "Oops! There may be a problem"
 msgstr "Jaj! Hiba történhetett"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1965
+#: embed/ephy-web-view.c:1967
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "A(z) %s oldal okozhatta a Web váratlan bezárását."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1972
+#: embed/ephy-web-view.c:1974
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Ha ez újra megtörténik, akkor jelentse a problémát a(z) %s fejlesztőinek."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2006
+#: embed/ephy-web-view.c:2008
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Hiba az oldal megjelenítése közben"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2011
 msgid "Oops!"
 msgstr "Hopp!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2012
+#: embed/ephy-web-view.c:2014
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1932,18 +1932,18 @@ msgstr ""
 "másik oldalt a folytatáshoz."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2042
+#: embed/ephy-web-view.c:2044
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Az oldal nem válaszol"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2045
+#: embed/ephy-web-view.c:2047
 msgid "Uh-oh!"
 msgstr "Hoppá!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2048
+#: embed/ephy-web-view.c:2050
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1952,18 +1952,18 @@ msgstr ""
 "másik oldalt a folytatáshoz."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2084
+#: embed/ephy-web-view.c:2086
 #, c-format
 msgid "Security Violation"
 msgstr "Biztonsági probléma"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2087
+#: embed/ephy-web-view.c:2089
 msgid "This Connection is Not Secure"
 msgstr "A kapcsolata nem biztonságos"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2092
+#: embed/ephy-web-view.c:2094
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1975,41 +1975,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2102 embed/ephy-web-view.c:2152
+#: embed/ephy-web-view.c:2104 embed/ephy-web-view.c:2154
 msgid "Go Back"
 msgstr "Ugrás vissza"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2105 embed/ephy-web-view.c:2155
+#: embed/ephy-web-view.c:2107 embed/ephy-web-view.c:2157
 msgctxt "back-access-key"
 msgid "B"
 msgstr "V"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2108
+#: embed/ephy-web-view.c:2110
 msgid "Accept Risk and Proceed"
 msgstr "Kockázat elfogadása és folytatás"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2112
+#: embed/ephy-web-view.c:2114
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "F"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2135 embed/ephy-web-view.c:2138
+#: embed/ephy-web-view.c:2137 embed/ephy-web-view.c:2140
 #, c-format
 msgid "File not found"
 msgstr "A fájl nem található"
 
-#: embed/ephy-web-view.c:2143
+#: embed/ephy-web-view.c:2145
 #, c-format
 msgid "%s could not be found."
 msgstr "A(z) %s nem található."
 
-#: embed/ephy-web-view.c:2145
+#: embed/ephy-web-view.c:2147
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -2019,11 +2019,11 @@ msgstr ""
 "elütéseket. Azt is nézze meg, hogy nem-e lett áthelyezve, átnevezve vagy "
 "törölve."
 
-#: embed/ephy-web-view.c:2208
+#: embed/ephy-web-view.c:2210
 msgid "None specified"
 msgstr "Nincs megadva"
 
-#: embed/ephy-web-view.c:2322
+#: embed/ephy-web-view.c:2324
 msgid "Technical information"
 msgstr "Technikai információk"
 
@@ -2040,42 +2040,42 @@ msgid "Images"
 msgstr "Képek"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:120 lib/ephy-file-helpers.c:196
-#: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:80
-#: src/resources/gtk/prefs-general-page.blp:106
+#: lib/ephy-file-helpers.c:119 lib/ephy-file-helpers.c:195
+#: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:84
+#: src/resources/gtk/prefs-general-page.blp:112
 msgid "Downloads"
 msgstr "Letöltések"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:177 lib/ephy-file-helpers.c:193
+#: lib/ephy-file-helpers.c:176 lib/ephy-file-helpers.c:192
 msgid "Desktop"
 msgstr "Asztal"
 
-#: lib/ephy-file-helpers.c:190
+#: lib/ephy-file-helpers.c:189
 msgid "Home"
 msgstr "Kezdőoldal"
 
-#: lib/ephy-file-helpers.c:427
+#: lib/ephy-file-helpers.c:426
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Az átmeneti könyvtár létrehozása meghiúsult itt: „%s”."
 
-#: lib/ephy-file-helpers.c:547
+#: lib/ephy-file-helpers.c:546
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "A(z) „%s” fájl létezik, tüntesse el az útból."
 
-#: lib/ephy-file-helpers.c:566
+#: lib/ephy-file-helpers.c:565
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "A(z) „%s” könyvtár létrehozása meghiúsult."
 
-#: lib/ephy-file-helpers.c:722
+#: lib/ephy-file-helpers.c:721
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Hiba a(z) %s fájl eltávolításakor: %s"
 
-#: lib/ephy-file-helpers.c:740
+#: lib/ephy-file-helpers.c:739
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Hiba a(z) %s könyvtár eltávolításakor: %s"
@@ -2090,15 +2090,15 @@ msgstr "A(z) %s keresőmotor sablon URL-e nem lehet érvényes."
 msgid ""
 "Found unclosed URL template parameter curly bracket at pos %d of URL %s."
 msgstr ""
-"Lezáratlan kapcsos zárójel található az URL-sablonparaméterében a(z) %2$s URL "
-"%1$d. pozíciójában."
+"Lezáratlan kapcsos zárójel található az URL-sablonparaméterében a(z) %2$s "
+"URL %1$d. pozíciójában."
 
 #: lib/ephy-opensearch-engine.c:220
 #, c-format
 msgid "Found URL template parameter at %d in URL %s, but without any name."
 msgstr ""
-"URL-sablonparaméter található a(z) %2$s URL-ben lévő %1$d. pozícióban, de név "
-"nélkül."
+"URL-sablonparaméter található a(z) %2$s URL-ben lévő %1$d. pozícióban, de "
+"név nélkül."
 
 #: lib/ephy-opensearch-engine.c:243
 #, c-format
@@ -2111,8 +2111,8 @@ msgid ""
 "Parsing of URL template %s succeeded, but no search terms were found so it's "
 "not useful as a search engine."
 msgstr ""
-"A(z) %s URL-sablon feldolgozása sikerült, de nem találhatók keresési kifejezés"
-"ek, ezért nem hasznos keresőmotorként."
+"A(z) %s URL-sablon feldolgozása sikerült, de nem találhatók keresési "
+"kifejezések, ezért nem hasznos keresőmotorként."
 
 #: lib/ephy-opensearch-engine.c:339
 #, c-format
@@ -2123,19 +2123,20 @@ msgstr ""
 #. TRANSLATORS: First %s is the name of the search engine. Second %s is the error message (supposedly partially localized on the GLib level).
 #: lib/ephy-opensearch-engine.c:447
 #, c-format
-msgid "Couldn't parse search engine description file for %s: %s"
-msgstr "Nem sikerült feldolgozni a(z) %s keresőmotor-leírásfájlját: %s"
+#| msgid "Couldn't parse search engine description file for %s: %s"
+msgid "Couldn't parse search engine description file for %s: "
+msgstr "Nem sikerült feldolgozni a(z) %s keresőmotor-leírásfájlját: "
 
-#: lib/ephy-opensearch-engine.c:460
+#: lib/ephy-opensearch-engine.c:459
 #, c-format
 msgid ""
 "Couldn't create search engine as it did not provide sufficient information!"
 msgstr ""
-"Nem sikerült létrehozni keresőmotort, mivel nem biztosított elegendő informáci"
-"ót."
+"Nem sikerült létrehozni keresőmotort, mivel nem biztosított elegendő "
+"információt."
 
 #. TRANSLATORS: The %s is the name of the search engine.
-#: lib/ephy-opensearch-engine.c:518
+#: lib/ephy-opensearch-engine.c:517
 #, c-format
 msgid "Couldn't download search engine description file for %s: "
 msgstr "Nem sikerült letölteni a(z) %s keresőmotor-leírásfájlját: "
@@ -2157,16 +2158,16 @@ msgid ""
 "Got empty JSON response or non-array root node or smaller than 2 elements "
 "array root node"
 msgstr ""
-"Üres JSON-válasz, nem tömb gyökércsomópont vagy 2 elemnél kisebb tömbből álló "
-"gyökércsomópont érkezett"
+"Üres JSON-válasz, nem tömb gyökércsomópont vagy 2 elemnél kisebb tömbből "
+"álló gyökércsomópont érkezett"
 
 #. TRANSLATORS: The first %s is the URL for the search suggestions and the second one is raw JSON content.
 #: lib/ephy-search-engine.c:541 lib/ephy-search-engine.c:556
 #, c-format
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr ""
-"Nem sikerült feldolgozni a(z) %s URL-ből származó JSON-javaslatokat a(z) %s JS"
-"ON-tartalommal: "
+"Nem sikerült feldolgozni a(z) %s URL-ből származó JSON-javaslatokat a(z) %s "
+"JSON-tartalommal: "
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2236,32 +2237,32 @@ msgid "%b %d %Y"
 msgstr "%Y. %b. %-d."
 
 #. impossible time or broken locale settings
-#: lib/ephy-time-helpers.c:317
+#: lib/ephy-time-helpers.c:316
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: lib/ephy-web-app-utils.c:326
+#: lib/ephy-web-app-utils.c:327
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
 "Nem sikerült lekérni az asztali fájl nevét a(z) %s webalkalmazás-azonosítóhoz"
 
-#: lib/ephy-web-app-utils.c:349
+#: lib/ephy-web-app-utils.c:350
 #, c-format
 msgid "Failed to install desktop file %s: "
 msgstr "Nem sikerült telepíteni a(z) %s asztali fájlt: "
 
-#: lib/ephy-web-app-utils.c:388
+#: lib/ephy-web-app-utils.c:389
 #, c-format
 msgid "Profile directory %s already exists"
 msgstr "A(z) %s profilkönyvtár már létezik"
 
-#: lib/ephy-web-app-utils.c:395
+#: lib/ephy-web-app-utils.c:396
 #, c-format
 msgid "Failed to create directory %s"
 msgstr "Nem sikerült létrehozni a(z) %s könyvtárat"
 
-#: lib/ephy-web-app-utils.c:407
+#: lib/ephy-web-app-utils.c:408
 #, c-format
 msgid "Failed to create .app file: %s"
 msgstr "Nem sikerült létrehozni az .app fájlt: %s"
@@ -2421,32 +2422,47 @@ msgid "Remove current tag"
 msgstr "Jelenlegi címke eltávolítása"
 
 #: src/bookmarks/ephy-bookmark-properties.c:289
-#| msgid "Add Boo_kmark…"
 msgid "Add Bookmark"
 msgstr "Könyvjelző hozzáadása"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:618
+#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/preferences/prefs-search-engine-page.c:92
+msgid "This field is required"
+msgstr "Ez a mező kötelező"
+
+#: src/bookmarks/ephy-bookmark-properties.c:356
+#: src/preferences/prefs-search-engine-page.c:97
+msgid "Address must start with either http:// or https://"
+msgstr "A címnek a következők egyikével kell kezdődnie: http:// vagy https://"
+
+#: src/bookmarks/ephy-bookmark-properties.c:358
+#: src/preferences/prefs-search-engine-page.c:118
+#| msgid "Address is not a valid URI"
+msgid "Address is not a valid URL"
+msgstr "A cím nem érvényes URL"
+
+#: src/bookmarks/ephy-bookmarks-dialog.c:658
 #: src/resources/gtk/bookmark-row.blp:65 src/resources/gtk/lang-row.blp:33
 msgid "Move Controls"
 msgstr "Vezérlők áthelyezése"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:623
+#: src/bookmarks/ephy-bookmarks-dialog.c:663
 #: src/resources/gtk/bookmark-row.blp:7 src/resources/gtk/lang-row.blp:7
 msgid "Move Up"
 msgstr "Mozgatás fel"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:624
+#: src/bookmarks/ephy-bookmarks-dialog.c:664
 #: src/resources/gtk/bookmark-row.blp:11 src/resources/gtk/lang-row.blp:11
 msgid "Move Down"
 msgstr "Mozgatás le"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:809
+#: src/bookmarks/ephy-bookmarks-dialog.c:849
 msgid "Bookmark removed"
 msgstr "Könyvjelző eltávolítva"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:811 src/ephy-window.c:986
-#: src/preferences/prefs-features-page.c:276
+#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:998
+#: src/preferences/prefs-features-page.c:284
 msgid "_Undo"
 msgstr "_Visszavonás"
 
@@ -2462,7 +2478,7 @@ msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "A fájl nem egy érvényes Epiphany könyvjelző fájl: hiányzó könyvjelzőtáblázat"
 
-#: src/bookmarks/ephy-bookmarks-import.c:319
+#: src/bookmarks/ephy-bookmarks-import.c:320
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2470,27 +2486,27 @@ msgstr ""
 "A Firefox könyvjelző-adatbázis nem nyitható meg. Zárja be a Firefoxot és "
 "próbálja újra."
 
-#: src/bookmarks/ephy-bookmarks-import.c:332
-#: src/bookmarks/ephy-bookmarks-import.c:368
+#: src/bookmarks/ephy-bookmarks-import.c:333
+#: src/bookmarks/ephy-bookmarks-import.c:369
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "A Firefox könyvjelzők nem kérhetőek le!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:535
+#: src/bookmarks/ephy-bookmarks-import.c:536
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "A HTML-könyvjelzők adatbázisa nem nyitható meg: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:546
+#: src/bookmarks/ephy-bookmarks-import.c:547
 msgid "HTML bookmarks database could not be read."
 msgstr "A HTML-könyvjelzők adatbázisa nem olvasható."
 
-#: src/bookmarks/ephy-bookmarks-import.c:568
+#: src/bookmarks/ephy-bookmarks-import.c:569
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "A HTML-könyvjelzők adatbázisa nem dolgozható fel: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:740
+#: src/bookmarks/ephy-bookmarks-import.c:741
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "A könyvjelzőket tartalmazó fájl nem dolgozható fel:"
@@ -2516,62 +2532,56 @@ msgid "Save Media As"
 msgstr "Média mentése másként"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:575 src/ephy-location-entry.c:1644
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1592
 msgid "Stop"
 msgstr "Leállítás"
 
-#: src/ephy-add-opensearch-engine-button.c:206
-#, c-format
-#| msgid "A_dd Search Engine"
-msgid "Add “%s” as Search Engine"
-msgstr "A(z) „%s” hozzáadása keresőmotorként"
-
-#: src/ephy-certificate-dialog.c:179
+#: src/ephy-certificate-dialog.c:180
 msgid "Show More"
 msgstr "Több megjelenítése"
 
-#: src/ephy-certificate-dialog.c:253
+#: src/ephy-certificate-dialog.c:254
 msgid "The certificate does not match this website"
 msgstr "A tanúsítvány nem egyezik ezzel a webhellyel"
 
-#: src/ephy-certificate-dialog.c:256
+#: src/ephy-certificate-dialog.c:257
 msgid "The certificate has expired"
 msgstr "A tanúsítvány lejárt"
 
-#: src/ephy-certificate-dialog.c:259
+#: src/ephy-certificate-dialog.c:260
 msgid "The signing certificate authority is not known"
 msgstr "Az aláíró hitelesítésszolgáltató ismeretlen"
 
-#: src/ephy-certificate-dialog.c:262
+#: src/ephy-certificate-dialog.c:263
 msgid "The certificate contains errors"
 msgstr "A tanúsítvány hibás"
 
-#: src/ephy-certificate-dialog.c:265
+#: src/ephy-certificate-dialog.c:266
 msgid "The certificate has been revoked"
 msgstr "A tanúsítvány vissza lett vonva"
 
-#: src/ephy-certificate-dialog.c:268
+#: src/ephy-certificate-dialog.c:269
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "A tanúsítványt gyenge aláírási algoritmussal írták alá"
 
-#: src/ephy-certificate-dialog.c:271
+#: src/ephy-certificate-dialog.c:272
 msgid "The certificate activation time is still in the future"
 msgstr "A tanúsítvány aktiválási ideje a jövőben van"
 
-#: src/ephy-certificate-dialog.c:313
+#: src/ephy-certificate-dialog.c:314
 msgid "The identity of this website has been verified."
 msgstr "A webhely azonossága ellenőrizve."
 
-#: src/ephy-certificate-dialog.c:314
+#: src/ephy-certificate-dialog.c:315
 msgid "The identity of this website has not been verified."
 msgstr "A webhely azonossága nincs ellenőrizve."
 
 #. Message on certificate dialog
-#: src/ephy-certificate-dialog.c:326
+#: src/ephy-certificate-dialog.c:327
 msgid "No problems have been detected with your connection."
 msgstr "Nincs észlelt probléma a kapcsolattal."
 
-#: src/ephy-certificate-dialog.c:329
+#: src/ephy-certificate-dialog.c:330
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
@@ -2671,11 +2681,10 @@ msgid "Exit Fullscreen"
 msgstr "Kilépés a teljes képernyőből"
 
 #: src/ephy-history-dialog.c:264
-#| msgid "Select _All"
 msgid "Select _None"
 msgstr "_Semmi kiválasztása"
 
-#: src/ephy-history-dialog.c:267 src/ephy-window.c:994
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:1006
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
@@ -2684,43 +2693,47 @@ msgstr "Ö_sszes kijelölése"
 msgid "Link copied"
 msgstr "Hivatkozás lemásolva"
 
-#: src/ephy-history-dialog.c:551
+#: src/ephy-history-dialog.c:556
 msgid "Remove the selected pages from history"
 msgstr "A kijelölt oldalak eltávolítása az előzményekből"
 
-#: src/ephy-history-dialog.c:558
+#: src/ephy-history-dialog.c:563
 msgid "Copy URL"
 msgstr "URL másolása"
 
-#: src/ephy-history-dialog.c:884
+#: src/ephy-history-dialog.c:889
 msgid "Clear Browsing History?"
 msgstr "Törli a böngészési előzményeket?"
 
-#: src/ephy-history-dialog.c:885
+#: src/ephy-history-dialog.c:890
 msgid "All visible links will be permanently deleted"
 msgstr "Az összes látható hivatkozás véglegesen törölve lesz"
 
-#: src/ephy-history-dialog.c:889
+#: src/ephy-history-dialog.c:894
 msgid "Cl_ear"
 msgstr "_Törlés"
 
-#: src/ephy-history-dialog.c:1104
+#: src/ephy-history-dialog.c:1109
 msgid "Unavailable in Incognito Mode"
 msgstr "Nem érhető el inkognitó módban"
 
-#: src/ephy-history-dialog.c:1107
+#: src/ephy-history-dialog.c:1112
 msgid "Clear History"
 msgstr "Előzmények törlése"
 
-#: src/ephy-location-entry.c:334 src/resources/gtk/location-entry.blp:98
+#: src/ephy-location-entry.c:337 src/resources/gtk/location-entry.blp:74
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Webhelyek, könyvjelzők és nyitott lapok keresése"
 
-#: src/ephy-location-entry.c:1341
+#: src/ephy-location-entry.c:362
+msgid "Not Secure — "
+msgstr "Nem biztonságos — "
+
+#: src/ephy-location-entry.c:1316
 msgid "Secure Site"
 msgstr "Biztonságos oldal"
 
-#: src/ephy-location-entry.c:1343
+#: src/ephy-location-entry.c:1318
 msgid "Insecure Site"
 msgstr "Nem biztonságos oldal"
 
@@ -2781,23 +2794,23 @@ msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Ez törölni fogja az összes helyben tárolt jelszót, és nem vonható vissza."
 
-#: src/ephy-passwords-view.c:252
+#: src/ephy-passwords-view.c:255
 msgid "Copy password"
 msgstr "Jelszó másolása"
 
-#: src/ephy-passwords-view.c:259 src/ephy-window.c:4017
+#: src/ephy-passwords-view.c:262 src/ephy-window.c:4170
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: src/ephy-passwords-view.c:270
+#: src/ephy-passwords-view.c:273
 msgid "Copy username"
 msgstr "Felhasználónév másolása"
 
-#: src/ephy-passwords-view.c:277 src/ephy-window.c:4024
+#: src/ephy-passwords-view.c:280 src/ephy-window.c:4177
 msgid "Password"
 msgstr "Jelszó"
 
-#: src/ephy-passwords-view.c:290
+#: src/ephy-passwords-view.c:293
 msgid "Remove Password"
 msgstr "Jelszó eltávolítása"
 
@@ -2822,40 +2835,32 @@ msgstr[1] ""
 "keresztül"
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
-#: src/ephy-security-dialog.c:184
+#: src/ephy-security-dialog.c:187
 #, c-format
-#| msgid ""
-#| "This web site’s digital identification is not trusted. You may have "
-#| "connected to an attacker pretending to be %s."
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
 "connected to an attacker pretending to be %s"
 msgstr ""
-"Ennek a weboldalnak a digitális azonosítója nem megbízható, esetleg olyan táma"
-"dóhoz csatlakozott, aki %s néven adja ki magát"
+"Ennek a weboldalnak a digitális azonosítója nem megbízható, esetleg olyan "
+"támadóhoz csatlakozott, aki %s néven adja ki magát"
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
-#: src/ephy-security-dialog.c:191
+#: src/ephy-security-dialog.c:194
 #, c-format
-#| msgid ""
-#| "This site has no security. An attacker could see any information you "
-#| "send, or control the content that you see."
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see"
 msgstr ""
-"Ez az oldal nem biztonságos, egy támadó minden elküldött információt láthat, v"
-"agy irányíthatja a tartalmat, amit Ön lát"
+"Ez az oldal nem biztonságos, egy támadó minden elküldött információt láthat, "
+"vagy irányíthatja a tartalmat, amit Ön lát"
 
 #. Label in certificate dialog when site sends mixed content.
-#: src/ephy-security-dialog.c:198
-#| msgid "This web site did not properly secure your connection."
+#: src/ephy-security-dialog.c:201
 msgid "This web site did not properly secure your connection"
 msgstr "Ez a weboldal nem megfelelően biztosította a kapcsolatot"
 
 #. Label in certificate dialog on secure sites.
-#: src/ephy-security-dialog.c:203
-#| msgid "Your connection seems to be secure."
+#: src/ephy-security-dialog.c:206
 msgid "Your connection seems to be secure"
 msgstr "A kapcsolata biztonságosnak látszik"
 
@@ -2873,69 +2878,67 @@ msgstr "Elutasítás"
 msgid "Ask"
 msgstr "Kérdezzen"
 
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
 #: src/ephy-security-dialog.c:519
 msgid "Advertisements"
 msgstr "Reklámok"
 
-#: src/ephy-security-dialog.c:520
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:521
 msgid "Notifications"
 msgstr "Értesítések"
 
-#: src/ephy-security-dialog.c:521
-#| msgid "Password saving"
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:523
 msgid "Password Saving"
 msgstr "Jelszómentés"
 
-#: src/ephy-security-dialog.c:522
-#| msgid "Location access"
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:525
 msgid "Location Access"
 msgstr "Helyadat hozzáférés"
 
-#: src/ephy-security-dialog.c:523
-#| msgid "Microphone access"
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:527
 msgid "Microphone Access"
 msgstr "Mikrofon hozzáférés"
 
-#: src/ephy-security-dialog.c:524
-#| msgid "Webcam access"
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:529
 msgid "Webcam Access"
 msgstr "Webkamera hozzáférés"
 
-#: src/ephy-security-dialog.c:525
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:531
 msgid "Display Access"
 msgstr "Kijelző hozzáférés"
 
-#: src/ephy-security-dialog.c:526
-#| msgid "Media autoplay"
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
+#: src/ephy-security-dialog.c:533
 msgid "Media Autoplay"
 msgstr "Média automatikus lejátszása"
 
-#: src/ephy-security-dialog.c:526
+#: src/ephy-security-dialog.c:533
 msgid "Without Sound"
 msgstr "Hang nélkül"
 
 #: src/ephy-shell.c:414
-#| msgid "Install as _Web App…"
 msgid "Uninstall Web App?"
 msgstr "Eltávolítja a webalkalmazást?"
 
 #: src/ephy-shell.c:414
-#| msgid "All visible links will be permanently deleted"
 msgid "This web appʼs data will be permanently deleted"
 msgstr "A webalkalmazás adatai véglegesen törölve lesznek"
 
 #: src/ephy-shell.c:418
-#| msgid "Install"
 msgid "_Uninstall"
 msgstr "_Eltávolítás"
 
-#: src/ephy-site-menu-button.c:163 src/resources/gtk/site-menu-button.blp:29
-#| msgid "Edit Bookmark"
+#: src/ephy-site-menu-button.c:273 src/resources/gtk/site-menu-button.blp:36
 msgid "Edit _Bookmark…"
 msgstr "_Könyvjelző szerkesztése…"
 
-#: src/ephy-site-menu-button.c:165
-#| msgid "Add Boo_kmark…"
+#: src/ephy-site-menu-button.c:275
 msgid "Add _Bookmark…"
 msgstr "_Könyvjelző hozzáadása…"
 
@@ -2949,159 +2952,158 @@ msgstr "Nem sikerült betölteni a keresőmotorok javaslatait: %s"
 msgid "Open a new tab"
 msgstr "Új lap megnyitása"
 
-#: src/ephy-window.c:987
+#: src/ephy-window.c:999
 msgid "Re_do"
 msgstr "Mé_gis"
 
 #. Edit.
-#: src/ephy-window.c:990
+#: src/ephy-window.c:1002
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: src/ephy-window.c:991
+#: src/ephy-window.c:1003
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: src/ephy-window.c:992
+#: src/ephy-window.c:1004
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: src/ephy-window.c:993
+#: src/ephy-window.c:1005
 msgid "_Paste Text Only"
 msgstr "_Csak szöveg beillesztése"
 
-#: src/ephy-window.c:996
+#: src/ephy-window.c:1008
 msgid "S_end Link by Email…"
 msgstr "Hivatkozás _küldése e-mailben…"
 
-#: src/ephy-window.c:997
-#| msgid "Edit Bookmark"
+#: src/ephy-window.c:1009
 msgid "Add _Link to Bookmarks"
 msgstr "_Hivatkozás hozzáadása a könyvjelzőkhöz"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1011
 msgid "_Reload"
 msgstr "_Frissítés"
 
-#: src/ephy-window.c:1000
+#: src/ephy-window.c:1012
 msgid "_Back"
 msgstr "_Vissza"
 
-#: src/ephy-window.c:1001
+#: src/ephy-window.c:1013
 msgid "_Forward"
 msgstr "_Előre"
 
 #. Bookmarks
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1016
 msgid "Add Boo_kmark…"
 msgstr "_Könyvjelző hozzáadása…"
 
 #. Links.
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1020
 msgid "Open Link in New _Window"
 msgstr "Hivatkozás megnyitása új _ablakban"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1021
 msgid "Open Link in New _Tab"
 msgstr "Hivatkozás megnyitása új _lapon"
 
-#: src/ephy-window.c:1010
+#: src/ephy-window.c:1022
 msgid "Open Link in I_ncognito Window"
 msgstr "Hivatkozás megnyitása i_nkognitó ablakban"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1023
 msgid "_Save Link As…"
 msgstr "Hivatkozás _mentése másként…"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1024
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
 
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1025
 msgid "_Copy E-mail Address"
 msgstr "E-_mail-cím másolása"
 
 #. Images.
-#: src/ephy-window.c:1017
+#: src/ephy-window.c:1029
 msgid "View _Image in New Tab"
 msgstr "_Kép megtekintése új lapon"
 
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1030
 msgid "Copy I_mage Address"
 msgstr "Kép címé_nek másolása"
 
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1031
 msgid "_Save Image As…"
 msgstr "Ké_p mentése másként…"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1032
 msgid "Set as _Wallpaper"
 msgstr "Beállítás _háttérképként"
 
 #. Video.
-#: src/ephy-window.c:1024
+#: src/ephy-window.c:1036
 msgid "Open Video in New _Window"
 msgstr "Videó megnyitása új _ablakban"
 
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1037
 msgid "Open Video in New _Tab"
 msgstr "Videó megnyitása új _lapon"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1038
 msgid "_Save Video As…"
 msgstr "Videó _mentése másként…"
 
-#: src/ephy-window.c:1027
+#: src/ephy-window.c:1039
 msgid "_Copy Video Address"
 msgstr "Videó _címének másolása"
 
 #. Audio.
-#: src/ephy-window.c:1031
+#: src/ephy-window.c:1043
 msgid "Open Audio in New _Window"
 msgstr "Hang megnyitás új _ablakban"
 
-#: src/ephy-window.c:1032
+#: src/ephy-window.c:1044
 msgid "Open Audio in New _Tab"
 msgstr "Hang megnyitása új _lapon"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1045
 msgid "_Save Audio As…"
 msgstr "Hang _mentése másként…"
 
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1046
 msgid "_Copy Audio Address"
 msgstr "Hang _címének másolása"
 
-#: src/ephy-window.c:1040
+#: src/ephy-window.c:1052
 msgid "Save Pa_ge As…"
 msgstr "_Oldal mentése másként…"
 
-#: src/ephy-window.c:1041
+#: src/ephy-window.c:1053
 msgid "_Take Screenshot…"
 msgstr "_Képernyőkép készítése…"
 
-#: src/ephy-window.c:1042
+#: src/ephy-window.c:1054
 msgid "_Page Source"
 msgstr "Oldal fo_rrása"
 
-#: src/ephy-window.c:1423
+#: src/ephy-window.c:1435
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "„%s” keresése a világhálón"
 
-#: src/ephy-window.c:1452
+#: src/ephy-window.c:1464
 msgid "Open Link"
 msgstr "Hivatkozás megnyitása"
 
-#: src/ephy-window.c:1454
+#: src/ephy-window.c:1466
 msgid "Open Link In New Tab"
 msgstr "Hivatkozás megnyitása új lapon"
 
-#: src/ephy-window.c:1456
+#: src/ephy-window.c:1468
 msgid "Open Link In New Window"
 msgstr "Hivatkozás megnyitása új ablakban"
 
-#: src/ephy-window.c:1458
+#: src/ephy-window.c:1470
 msgid "Open Link In Incognito Window"
 msgstr "Hivatkozás megnyitása inkognitó ablakban"
 
@@ -3111,77 +3113,99 @@ msgstr "Hivatkozás megnyitása inkognitó ablakban"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2286
+#: src/ephy-window.c:2298
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr ""
-"A(z) „%s” engedélyezése, hogy a(z) „%s” hivatkozást külső alkalmazásban nyissa"
-" meg"
+"A(z) „%s” engedélyezése, hogy a(z) „%s” hivatkozást külső alkalmazásban "
+"nyissa meg"
 
-#: src/ephy-window.c:2287
+#: src/ephy-window.c:2299
 msgid "Open in External App?"
 msgstr "Megnyitja külső alkalmazásban?"
 
-#: src/ephy-window.c:2289
-#| msgid "Open Link"
+#: src/ephy-window.c:2301
 msgid "_Open Link"
 msgstr "Hivatkozás _megnyitása"
 
-#: src/ephy-window.c:2295
+#: src/ephy-window.c:2307
 msgid "Always Allow"
 msgstr "Mindig engedélyezés"
 
+#: src/ephy-window.c:2595
+#| msgid "Search Engine"
+msgid "Search Engine Available"
+msgstr "Keresőmotor érhető el"
+
+#. TRANSLATORS: %s is the name of the search engine for this row in the popover.
+#: src/ephy-window.c:2601
+#, c-format
+#| msgid ", “%s”"
+msgid "Add “%s”"
+msgstr "„%s” hozzáadása"
+
+#: src/ephy-window.c:2605 src/ephy-window.c:2613
+#: src/preferences/prefs-search-engine-page.c:310
+#: src/preferences/prefs-search-engine-page.c:312
+msgid "Add Search Engine"
+msgstr "Keresőmotor hozzáadása"
+
+#: src/ephy-window.c:3048
+#| msgid "Reader Mode"
+msgid "Reader Mode Available"
+msgstr "Olvasó mód érhető el"
+
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:2995
+#: src/ephy-window.c:3147
 msgid "Notification Request"
 msgstr "Értesítés kérelem"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:2997
+#: src/ephy-window.c:3149
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "A(z) „%s” helyen lévő oldal értesítéseket szeretne küldeni"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3002
+#: src/ephy-window.c:3154
 msgid "Location Access Request"
 msgstr "Helyadat-hozzáférési kérelem"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3004
+#: src/ephy-window.c:3156
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "A(z) „%s” helyen lévő oldal tudni szeretné a tartózkodási helyét"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3009
+#: src/ephy-window.c:3161
 msgid "Microphone Access Request"
 msgstr "Mikrofon-hozzáférési kérelem"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3011
+#: src/ephy-window.c:3163
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "A(z) „%s” helyen lévő oldal használni szeretné a mikrofonját"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3016
+#: src/ephy-window.c:3168
 msgid "Webcam Access Request"
 msgstr "Webkamera-hozzáférési kérelem"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3018
+#: src/ephy-window.c:3170
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "A(z) „%s” helyen lévő oldal használni szeretné a webkameráját"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3023
+#: src/ephy-window.c:3175
 msgid "Webcam and Microphone Access Request"
 msgstr "Webkamera- és mikrofon-hozzáférési kérelem"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3025
+#: src/ephy-window.c:3177
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr ""
@@ -3189,12 +3213,12 @@ msgstr ""
 "mikrofonját"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3039
+#: src/ephy-window.c:3191
 msgid "Website Data Access Request"
 msgstr "Webhelyadat-hozzáférési kérelem"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3041
+#: src/ephy-window.c:3193
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
@@ -3205,68 +3229,68 @@ msgstr ""
 "a(z) „%s” számára a(z) „%s” oldalon végzett tevékenysége követését."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3046
+#: src/ephy-window.c:3198
 msgid "Clipboard Access Request"
 msgstr "Vágólap-hozzáférési kérelem"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3048
+#: src/ephy-window.c:3200
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "A(z) „%s” helyen lévő oldal hozzá szeretne férni a vágólapjához"
 
-#: src/ephy-window.c:3076
+#: src/ephy-window.c:3228
 msgid "_Ask Later"
 msgstr "_Kérdezzen később"
 
 # FF-másolás :)
-#: src/ephy-window.c:3077
+#: src/ephy-window.c:3229
 msgid "_Deny"
 msgstr "_Elutasítás"
 
 # FF-másolás :)
-#: src/ephy-window.c:3078
+#: src/ephy-window.c:3230
 msgid "_Allow"
 msgstr "_Engedélyezés"
 
-#: src/ephy-window.c:3261 src/ephy-window.c:4915
+#: src/ephy-window.c:3411 src/ephy-window.c:5068
 msgid "Leave Website?"
 msgstr "Elhagyja a webhelyet?"
 
-#: src/ephy-window.c:3262 src/ephy-window.c:4916 src/window-commands.c:1406
+#: src/ephy-window.c:3412 src/ephy-window.c:5069 src/window-commands.c:1407
 msgid "A form was modified and has not been submitted"
 msgstr "Egy űrlap módosítva lett és nem került elküldésre"
 
-#: src/ephy-window.c:3263 src/ephy-window.c:4917 src/window-commands.c:1410
+#: src/ephy-window.c:3413 src/ephy-window.c:5070 src/window-commands.c:1411
 msgid "_Discard Form"
 msgstr "Űrlap _elvetése"
 
-#: src/ephy-window.c:3284
+#: src/ephy-window.c:3434
 msgid "Download operation"
 msgstr "Letöltési művelet"
 
-#: src/ephy-window.c:3286
+#: src/ephy-window.c:3436
 msgid "Show details"
 msgstr "Részletek megjelenítése"
 
-#: src/ephy-window.c:3288
+#: src/ephy-window.c:3438
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d letöltési művelet aktív"
 msgstr[1] "%d letöltési művelet aktív"
 
-#: src/ephy-window.c:3566
+#: src/ephy-window.c:3716
 msgid "Set as Default Browser?"
 msgstr "Beállítja alapértelmezett böngészőként?"
 
-#: src/ephy-window.c:3568
+#: src/ephy-window.c:3718
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "A Web használata alapértelmezett webböngészőként és külső hivatkozások "
 "megnyitásához"
 
-#: src/ephy-window.c:3570
+#: src/ephy-window.c:3720
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3274,28 +3298,27 @@ msgstr ""
 "Az Epiphany technológiai előzetesének használata alapértelmezett "
 "webböngészőként és külső hivatkozások megnyitásához"
 
-#: src/ephy-window.c:3574
+#: src/ephy-window.c:3724
 msgid "_Ask Again Later"
 msgstr "_Kérdezzen később újra"
 
-#: src/ephy-window.c:3575
+#: src/ephy-window.c:3725
 msgid "_No"
 msgstr "_Nem"
 
-#: src/ephy-window.c:3576
+#: src/ephy-window.c:3726
 msgid "_Yes"
 msgstr "_Igen"
 
-#: src/ephy-window.c:3908
+#: src/ephy-window.c:4061
 msgid "Download started"
 msgstr "Letöltés elindítva"
 
-#: src/ephy-window.c:3998
-#| msgid "Save password?"
+#: src/ephy-window.c:4151
 msgid "Save Password?"
 msgstr "Menti a jelszót?"
 
-#: src/ephy-window.c:3999
+#: src/ephy-window.c:4152
 msgid ""
 "Passwords are saved only on your device and can be removed at any time in "
 "Preferences"
@@ -3303,48 +3326,45 @@ msgstr ""
 "A jelszavak csak az Ön készülékén kerülnek mentésre, és bármikor "
 "eltávolíthatók a beállításokban"
 
-#: src/ephy-window.c:4001
+#: src/ephy-window.c:4154
 msgid "Not Now"
 msgstr "Most nem"
 
-#: src/ephy-window.c:4002
+#: src/ephy-window.c:4155
 msgid "Never Save"
 msgstr "Soha ne mentse"
 
-#: src/ephy-window.c:4003
+#: src/ephy-window.c:4156
 msgid "Save"
 msgstr "Mentés"
 
-#: src/ephy-window.c:4204
-#| msgid "Web App"
+#: src/ephy-window.c:4357
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Webalkalmazás"
 
-#: src/ephy-window.c:4207
-#| msgctxt "shortcut window"
-#| msgid "Install Site as Web App"
+#: src/ephy-window.c:4360
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Oldal telepítése webalkalmazásként"
 
-#: src/ephy-window.c:5030
+#: src/ephy-window.c:5183
 msgid "Close Multiple Tabs?"
 msgstr "Bezár több lapot?"
 
-#: src/ephy-window.c:5031
+#: src/ephy-window.c:5184
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Ha ez az ablak bezárásra kerül, akkor az összes nyitott lap elvész"
 
-#: src/ephy-window.c:5032
+#: src/ephy-window.c:5185
 msgid "C_lose Tabs"
 msgstr "Lapok _bezárása"
 
-#: src/ephy-window.c:5142
+#: src/ephy-window.c:5301
 msgid "New tab opened"
 msgstr "Új lap nyílt"
 
-#: src/ephy-window.c:5146
+#: src/ephy-window.c:5305
 msgid "Switch"
 msgstr "Átváltás"
 
@@ -3357,122 +3377,60 @@ msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
 "Ez törölni fogja az összes helyben tárolt bejegyzést, és nem vonható vissza."
 
-#: src/preferences/clear-data-view.c:70
+#: src/preferences/clear-data-view.c:79
 msgid "Cookies"
 msgstr "Sütik"
 
-#: src/preferences/clear-data-view.c:71
+#: src/preferences/clear-data-view.c:80
 msgid "HTTP disk cache"
 msgstr "HTTP lemez gyorsítótár"
 
-#: src/preferences/clear-data-view.c:72
+#: src/preferences/clear-data-view.c:81
 msgid "Local storage data"
 msgstr "Helyi tárolóban lévő adatok"
 
-#: src/preferences/clear-data-view.c:73
+#: src/preferences/clear-data-view.c:82
 msgid "Offline web application cache"
 msgstr "Telepített webalkalmazások gyorsítótára"
 
-#: src/preferences/clear-data-view.c:74
+#: src/preferences/clear-data-view.c:83
 msgid "IndexedDB databases"
 msgstr "IndexedDB adatbázisok"
 
-#: src/preferences/clear-data-view.c:75
+#: src/preferences/clear-data-view.c:84
 msgid "HSTS policies cache"
 msgstr "HSTS házirend gyorsítótár"
 
-#: src/preferences/clear-data-view.c:76
+#: src/preferences/clear-data-view.c:85
 msgid "Intelligent Tracking Prevention data"
 msgstr "Intelligens követésmegelőzés adatai"
 
-#: src/preferences/clear-data-view.c:226
+#: src/preferences/clear-data-view.c:86
+msgid "MediaDevices device IDs"
+msgstr "Médiaeszközök eszközazonosítói"
+
+#: src/preferences/clear-data-view.c:87
+msgid "ServiceWorker registrations"
+msgstr "Szolgáltatásfeldolgozók regisztrációi"
+
+#: src/preferences/clear-data-view.c:88
+#| msgid "Local storage data"
+msgid "CacheStorage data"
+msgstr "Gyorsítótár-tároló adatai"
+
+#: src/preferences/clear-data-view.c:238
 msgid "Data cleared"
 msgstr "Adatok törölve"
 
-#: src/preferences/ephy-search-engine-listbox.c:105
-#: src/preferences/prefs-general-page.c:942
+#: src/preferences/ephy-prefs-dialog.c:99
 msgid "New search engine"
 msgstr "Új keresőmotor"
 
-#: src/preferences/ephy-search-engine-listbox.c:156
+#: src/preferences/ephy-search-engine-listbox.c:86
 msgid "A_dd Search Engine"
 msgstr "Keresőmotor hozzáa_dása"
 
 #: src/preferences/ephy-search-engine-row.c:130
-msgid "This field is required"
-msgstr "Ez a mező kötelező"
-
-#: src/preferences/ephy-search-engine-row.c:135
-msgid "Address must start with either http:// or https://"
-msgstr "A címnek a következők egyikével kell kezdődnie: http:// vagy https://"
-
-#: src/preferences/ephy-search-engine-row.c:147
-#, c-format
-msgid "Address must contain the search term represented by %s"
-msgstr "A címnek tartalmaznia kell a keresési kifejezést, amelyet %s jelöl"
-
-#: src/preferences/ephy-search-engine-row.c:150
-msgid "Address should not contain the search term several times"
-msgstr "A cím nem tartalmazhatja többször is a keresési kifejezést"
-
-#: src/preferences/ephy-search-engine-row.c:156
-msgid "Address is not a valid URI"
-msgstr "A cím nem érvényes URI"
-
-#: src/preferences/ephy-search-engine-row.c:161
-#, c-format
-msgid ""
-"Address is not a valid URL. The address should look like https://"
-"www.example.com/search?q=%s"
-msgstr ""
-"A cím nem érvényes URI. A címnek hasonlóan kell kinéznie: https://"
-"www.example.com/search?q=%s"
-
-#: src/preferences/ephy-search-engine-row.c:194
-msgid "This shortcut is already used."
-msgstr "Ez a rövidítés már használatban van."
-
-#: src/preferences/ephy-search-engine-row.c:196
-msgid "Search shortcuts must not contain any space."
-msgstr "A keresési rövidítések nem tartalmazhatnak szóközt."
-
-#: src/preferences/ephy-search-engine-row.c:204
-msgid "Search shortcuts should start with a symbol such as !, # or @."
-msgstr ""
-"A keresési rövidítéseknek ilyen szimbólumokkal kell kezdődniük: !, # vagy @."
-
-#: src/preferences/ephy-search-engine-row.c:211
-msgid "Shortcut (for example !ddg)"
-msgstr "Gyorsbillentyű (például !ddg)"
-
-#: src/preferences/ephy-search-engine-row.c:211
-#: src/resources/gtk/search-engine-row.blp:27
-msgid "Shortcut"
-msgstr "Gyorsbillentyű"
-
-#: src/preferences/ephy-search-engine-row.c:231
-#, c-format
-#| msgid "Address must contain the search term represented by %s"
-msgid "Address (with search term as %s)"
-msgstr "Cím (keresési kifejezéssel, mint %s)"
-
-#: src/preferences/ephy-search-engine-row.c:231
-#: src/resources/gtk/autofill-view.blp:56
-#: src/resources/gtk/bookmark-properties.blp:45
-#: src/resources/gtk/search-engine-row.blp:22
-msgid "Address"
-msgstr "Webcím"
-
-#: src/preferences/ephy-search-engine-row.c:251
-msgid "A name is required"
-msgstr "A név kötelező"
-
-#: src/preferences/ephy-search-engine-row.c:253
-msgid "This search engine already exists"
-msgstr "Ez a keresőmotor már létezik"
-
-#: src/preferences/ephy-search-engine-row.c:350
-#| msgid "Search Suggestions"
 msgid "No search suggestions"
 msgstr "Nincsenek keresési javaslatok"
 
@@ -3526,53 +3484,122 @@ msgstr "Telepítés"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Fájl megnyitása (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:275
+#: src/preferences/prefs-features-page.c:283
 msgid "All values reset"
 msgstr "Összes érték visszaállítva"
 
-#: src/preferences/prefs-features-page.c:326
+#: src/preferences/prefs-features-page.c:337
 msgid "Reset to default"
 msgstr "Visszaállítás az alapértelmezettre"
 
-#: src/preferences/prefs-general-page.c:231
-#: src/resources/gtk/prefs-lang-dialog.blp:8
+#: src/preferences/prefs-general-page.c:210
+#: src/resources/gtk/prefs-lang-dialog.blp:6
 msgid "Add Language"
 msgstr "Nyelv hozzáadása"
 
-#: src/preferences/prefs-general-page.c:394
-#: src/preferences/prefs-general-page.c:550
+#: src/preferences/prefs-general-page.c:402
+#: src/preferences/prefs-general-page.c:554
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Rendszer nyelve (%s)"
 msgstr[1] "Rendszer nyelvei (%s)"
 
-#: src/preferences/prefs-general-page.c:766
+#: src/preferences/prefs-general-page.c:770
 msgid "Supported Image Files"
 msgstr "Támogatott képfájlok"
 
-#: src/preferences/webapp-additional-urls-dialog.c:70
-#| msgid "Remove"
+#: src/preferences/prefs-search-engine-page.c:109
+#, c-format
+msgid "Address must contain the search term represented by %s"
+msgstr "A címnek tartalmaznia kell a keresési kifejezést, amelyet %s jelöl"
+
+#: src/preferences/prefs-search-engine-page.c:112
+msgid "Address should not contain the search term several times"
+msgstr "A cím nem tartalmazhatja többször is a keresési kifejezést"
+
+#: src/preferences/prefs-search-engine-page.c:123
+#, c-format
+msgid ""
+"Address is not a valid URL. The address should look like https://"
+"www.example.com/search?q=%s"
+msgstr ""
+"A cím nem érvényes URI. A címnek hasonlóan kell kinéznie: https://"
+"www.example.com/search?q=%s"
+
+#: src/preferences/prefs-search-engine-page.c:148
+msgid "A name is required"
+msgstr "A név kötelező"
+
+#: src/preferences/prefs-search-engine-page.c:150
+msgid "This search engine already exists"
+msgstr "Ez a keresőmotor már létezik"
+
+#: src/preferences/prefs-search-engine-page.c:194
+#, c-format
+msgid "Address (with search term as %s)"
+msgstr "Cím (keresési kifejezéssel, mint %s)"
+
+#: src/preferences/prefs-search-engine-page.c:194
+#: src/resources/gtk/autofill-view.blp:56
+#: src/resources/gtk/bookmark-properties.blp:45
+#: src/resources/gtk/prefs-search-engine-page.blp:16
+msgid "Address"
+msgstr "Webcím"
+
+#: src/preferences/prefs-search-engine-page.c:207
+msgid "This shortcut is already used."
+msgstr "Ez a rövidítés már használatban van."
+
+#: src/preferences/prefs-search-engine-page.c:209
+msgid "Search shortcuts must not contain any space."
+msgstr "A keresési rövidítések nem tartalmazhatnak szóközt."
+
+#: src/preferences/prefs-search-engine-page.c:217
+msgid "Search shortcuts should start with a symbol such as !, # or @."
+msgstr ""
+"A keresési rövidítéseknek ilyen szimbólumokkal kell kezdődniük: !, # vagy @."
+
+#: src/preferences/prefs-search-engine-page.c:227
+msgid "Shortcut (for example !ddg)"
+msgstr "Gyorsbillentyű (például !ddg)"
+
+#: src/preferences/prefs-search-engine-page.c:227
+#: src/resources/gtk/prefs-search-engine-page.blp:47
+msgid "Shortcut"
+msgstr "Gyorsbillentyű"
+
+#: src/preferences/prefs-search-engine-page.c:315
+#| msgid "Add Search Engine"
+msgid "Edit Search Engine"
+msgstr "Keresőmotor szerkesztése"
+
+#: src/preferences/prefs-search-engine-page.c:317
+#| msgid "Search Engine"
+msgid "Remove Search Engine"
+msgstr "Keresőmotor eltávolítása"
+
+#: src/preferences/webapp-additional-urls-dialog.c:71
 msgid "Remove URL"
 msgstr "URL eltávolítása"
 
-#: src/profile-migrator/ephy-profile-migrator.c:340
+#: src/profile-migrator/ephy-profile-migrator.c:339
 msgid "Executes only the n-th migration step"
 msgstr "Csak az n. költöztetési lépés végrehajtása"
 
-#: src/profile-migrator/ephy-profile-migrator.c:344
+#: src/profile-migrator/ephy-profile-migrator.c:343
 msgid "Specifies the required version for the migrator"
 msgstr "Megadja a szükséges verziót a költöztetőnek"
 
-#: src/profile-migrator/ephy-profile-migrator.c:348
+#: src/profile-migrator/ephy-profile-migrator.c:347
 msgid "Specifies the profile where the migrator should run"
 msgstr "Megadja a költöztető futtatásához használandó profilt"
 
-#: src/profile-migrator/ephy-profile-migrator.c:370
+#: src/profile-migrator/ephy-profile-migrator.c:369
 msgid "Web profile migrator"
 msgstr "Web profilköltöztető"
 
-#: src/profile-migrator/ephy-profile-migrator.c:371
+#: src/profile-migrator/ephy-profile-migrator.c:370
 msgid "Web profile migrator options"
 msgstr "Web profilköltöztető beállításai"
 
@@ -3585,7 +3612,7 @@ msgstr "Kiterjesztések"
 msgid "View Open Tabs"
 msgstr "Nyitott lapok megtekintése"
 
-#: src/resources/gtk/action-bar-end.blp:101 src/resources/gtk/action-bar.blp:67
+#: src/resources/gtk/action-bar-end.blp:101 src/resources/gtk/action-bar.blp:71
 #: src/resources/gtk/bookmarks-dialog.blp:54
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
@@ -3600,16 +3627,11 @@ msgstr "Vissza"
 msgid "Forward"
 msgstr "Előre"
 
-#: src/resources/gtk/action-bar-start.blp:84
+#: src/resources/gtk/action-bar-start.blp:88
 #: src/resources/gtk/extension-view.blp:52
-#: src/resources/gtk/prefs-general-page.blp:61
+#: src/resources/gtk/prefs-general-page.blp:67
 msgid "Homepage"
 msgstr "Kezdőoldal"
-
-#: src/resources/gtk/add-opensearch-engine-button.blp:4
-#| msgid "A_dd Search Engine"
-msgid "Add Search Engine"
-msgstr "Keresőmotor hozzáadása"
 
 #: src/resources/gtk/autofill-view.blp:5
 msgid "Autofill Data"
@@ -3671,19 +3693,19 @@ msgstr "Város"
 msgid "Country"
 msgstr "Ország"
 
-#: src/resources/gtk/autofill-view.blp:84
+#: src/resources/gtk/autofill-view.blp:86
 msgid "Credit Card"
 msgstr "Bankkártya"
 
-#: src/resources/gtk/autofill-view.blp:87
+#: src/resources/gtk/autofill-view.blp:89
 msgid "Type"
 msgstr "Típus"
 
-#: src/resources/gtk/autofill-view.blp:91
+#: src/resources/gtk/autofill-view.blp:93
 msgid "Owner"
 msgstr "Tulajdonos"
 
-#: src/resources/gtk/autofill-view.blp:95
+#: src/resources/gtk/autofill-view.blp:97
 msgid "Number"
 msgstr "Szám"
 
@@ -3692,12 +3714,12 @@ msgid "Bookmark"
 msgstr "Könyvjelző"
 
 #: src/resources/gtk/bookmark-properties.blp:28
-#: src/resources/gtk/prefs-lang-dialog.blp:26
+#: src/resources/gtk/prefs-lang-dialog.blp:24
 msgid "_Add"
 msgstr "_Hozzáadás"
 
 #: src/resources/gtk/bookmark-properties.blp:41
-#: src/resources/gtk/search-engine-row.blp:18
+#: src/resources/gtk/prefs-search-engine-page.blp:12
 msgid "Name"
 msgstr "Név"
 
@@ -3708,7 +3730,6 @@ msgstr "Címkék"
 
 #: src/resources/gtk/bookmark-properties.blp:64
 #: src/resources/gtk/bookmark-row.blp:42
-#: src/resources/gtk/search-engine-row.blp:9
 msgid "Remove"
 msgstr "Eltávolítás"
 
@@ -3721,6 +3742,7 @@ msgid "Add new tag"
 msgstr "Új címke hozzáadása"
 
 #: src/resources/gtk/bookmarks-dialog.blp:18
+#: src/resources/gtk/search-engine-row.blp:9
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -3729,12 +3751,10 @@ msgid "Done"
 msgstr "Kész"
 
 #: src/resources/gtk/bookmarks-dialog.blp:32
-#| msgid "_Close"
 msgid "Close"
 msgstr "Bezárás"
 
 #: src/resources/gtk/bookmarks-dialog.blp:39 src/resources/gtk/data-view.blp:18
-#| msgid "Sync Options"
 msgid "Options"
 msgstr "Beállítások"
 
@@ -3751,12 +3771,10 @@ msgid "Bookmarked pages will appear here"
 msgstr "Itt fognak megjelenni a könyvjelzőzött oldalak"
 
 #: src/resources/gtk/bookmarks-dialog.blp:181
-#| msgid "I_mport"
 msgid "I_mport…"
 msgstr "I_mportálás…"
 
 #: src/resources/gtk/bookmarks-dialog.blp:186
-#| msgid "E_xport Bookmarks…"
 msgid "E_xport…"
 msgstr "E_xportálás…"
 
@@ -3798,7 +3816,7 @@ msgstr ""
 
 #: src/resources/gtk/data-view.blp:12 src/resources/gtk/history-dialog.blp:37
 #: src/resources/gtk/history-dialog.blp:62
-#: src/resources/gtk/prefs-general-page.blp:152
+#: src/resources/gtk/prefs-general-page.blp:158
 msgid "Search"
 msgstr "Keresés"
 
@@ -3952,12 +3970,7 @@ msgstr "_Megnyitás"
 msgid "Delete Language"
 msgstr "Nyelv törlése"
 
-#: src/resources/gtk/location-entry.blp:45
-#: src/resources/gtk/prefs-appearance-page.blp:45
-msgid "Reader Mode"
-msgstr "Olvasó mód"
-
-#: src/resources/gtk/location-entry.blp:220
+#: src/resources/gtk/location-entry.blp:196
 msgid "Paste and _Go"
 msgstr "Beillesztés és _ugrás"
 
@@ -3982,7 +3995,7 @@ msgid "Unp_in Tab"
 msgstr "Lap rögzítésének _feloldása"
 
 #: src/resources/gtk/notebook-context-menu.blp:35
-#: src/resources/gtk/site-menu-button.blp:23
+#: src/resources/gtk/site-menu-button.blp:30
 msgid "_Mute Tab"
 msgstr "Lap _némítása"
 
@@ -3998,7 +4011,7 @@ msgstr "Lapok bezárása j_obbra"
 msgid "Close _Other Tabs"
 msgstr "_Egyéb lapok bezárása"
 
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:291
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:294
 msgid "_Close"
 msgstr "_Bezárás"
 
@@ -4027,7 +4040,6 @@ msgid "Reopen Closed _Tab"
 msgstr "Bezárt _lap újranyitása"
 
 #: src/resources/gtk/page-menu-button.blp:38
-#| msgid "Fullscreen"
 msgid "_Fullscreen"
 msgstr "_Teljes képernyő"
 
@@ -4052,7 +4064,6 @@ msgid "Pri_vacy Report"
 msgstr "Adat_védelmi jelentés"
 
 #: src/resources/gtk/page-menu-button.blp:72
-#| msgid "Passwords"
 msgid "Passw_ords"
 msgstr "_Jelszavak"
 
@@ -4073,13 +4084,10 @@ msgid "_About Web"
 msgstr "A Web _névjegye"
 
 #: src/resources/gtk/page-menu-button.blp:101
-#| msgid "Install as _Web App…"
 msgid "_Uninstall Web App"
 msgstr "Webalkalmazás _eltávolítása"
 
 #: src/resources/gtk/page-menu-button.blp:106
-#| msgctxt "shortcut window"
-#| msgid "Quit"
 msgid "_Quit"
 msgstr "_Kilépés"
 
@@ -4112,12 +4120,10 @@ msgid "C_opy Username"
 msgstr "_Felhasználónév másolása"
 
 #: src/resources/gtk/passwords-view.blp:67
-#| msgid "I_mport"
 msgid "_Import…"
 msgstr "_Importálás…"
 
 #: src/resources/gtk/passwords-view.blp:72
-#| msgid "Export _Passwords…"
 msgid "_Export…"
 msgstr "_Exportálás…"
 
@@ -4144,6 +4150,10 @@ msgstr "Talpas betűkészlet"
 #: src/resources/gtk/prefs-appearance-page.blp:35
 msgid "Monospace Font"
 msgstr "Rögzített szélességű betűkészlet"
+
+#: src/resources/gtk/prefs-appearance-page.blp:45
+msgid "Reader Mode"
+msgstr "Olvasó mód"
 
 #: src/resources/gtk/prefs-appearance-page.blp:48
 msgid "Font Style"
@@ -4196,8 +4206,6 @@ msgid "Features"
 msgstr "Funkciók"
 
 #: src/resources/gtk/prefs-features-page.blp:10
-#| msgctxt "shortcut window"
-#| msgid "Select All"
 msgid "Reset All"
 msgstr "Összes visszaállítása"
 
@@ -4205,114 +4213,115 @@ msgstr "Összes visszaállítása"
 msgid "General"
 msgstr "Általános"
 
-#: src/resources/gtk/prefs-general-page.blp:9
+#: src/resources/gtk/prefs-general-page.blp:10
 msgid "Web App"
 msgstr "Webalkalmazás"
 
-#: src/resources/gtk/prefs-general-page.blp:13
+#: src/resources/gtk/prefs-general-page.blp:14
 msgid "_Icon"
 msgstr "_Ikon"
 
-#: src/resources/gtk/prefs-general-page.blp:23
+#: src/resources/gtk/prefs-general-page.blp:24
 msgid "_Homepage"
 msgstr "_Kezdőoldal"
 
-#: src/resources/gtk/prefs-general-page.blp:29
+#: src/resources/gtk/prefs-general-page.blp:30
 msgid "_Title"
 msgstr "_Cím"
 
-#: src/resources/gtk/prefs-general-page.blp:36
-#| msgid "Additional _URLs"
+#: src/resources/gtk/prefs-general-page.blp:37
 msgid "Additional _Domains"
 msgstr "További _tartományok"
 
-#: src/resources/gtk/prefs-general-page.blp:47
+#: src/resources/gtk/prefs-general-page.blp:48
 msgid "Web Content"
 msgstr "Webtartalom"
 
-#: src/resources/gtk/prefs-general-page.blp:50
+#: src/resources/gtk/prefs-general-page.blp:51
 msgid "Block _Advertisements"
 msgstr "_Reklámok blokkolása"
 
-#: src/resources/gtk/prefs-general-page.blp:55
+#: src/resources/gtk/prefs-general-page.blp:56
 msgid "Block _Popup Windows"
 msgstr "_Felugró ablakok blokkolása"
 
-#: src/resources/gtk/prefs-general-page.blp:65
+#: src/resources/gtk/prefs-general-page.blp:61
+msgid "Block C_ookie Banners"
+msgstr "_Süticsíkok tiltása"
+
+#: src/resources/gtk/prefs-general-page.blp:71
 msgid "Most _Visited Pages"
 msgstr "_Leggyakrabban látogatott oldalak"
 
-#: src/resources/gtk/prefs-general-page.blp:76
+#: src/resources/gtk/prefs-general-page.blp:82
 msgid "_Blank Page"
 msgstr "Ü_res oldal"
 
-#: src/resources/gtk/prefs-general-page.blp:88
+#: src/resources/gtk/prefs-general-page.blp:94
 msgid "_Custom"
 msgstr "_Egyéni"
 
-#: src/resources/gtk/prefs-general-page.blp:109
+#: src/resources/gtk/prefs-general-page.blp:115
 msgid "Ask o_n Download"
 msgstr "Kérdezzen _letöltéskor"
 
-#: src/resources/gtk/prefs-general-page.blp:115
+#: src/resources/gtk/prefs-general-page.blp:121
 msgid "_Download Folder"
 msgstr "_Letöltési mappa"
 
-#: src/resources/gtk/prefs-general-page.blp:155
-#| msgid "Search Engines"
+#: src/resources/gtk/prefs-general-page.blp:161
 msgid "Search Engine"
 msgstr "Keresőmotor"
 
-#: src/resources/gtk/prefs-general-page.blp:159
-#| msgid "Search Engines"
+#: src/resources/gtk/prefs-general-page.blp:165
 msgid "Incognito Search Engine"
 msgstr "Inkognitó keresőmotor"
 
-#: src/resources/gtk/prefs-general-page.blp:168
+#: src/resources/gtk/prefs-general-page.blp:174
 msgid "Session"
 msgstr "Munkamenet"
 
-#: src/resources/gtk/prefs-general-page.blp:171
+#: src/resources/gtk/prefs-general-page.blp:177
 msgid "Start in _Incognito Mode"
 msgstr "Indítás _inkognitó módban"
 
-#: src/resources/gtk/prefs-general-page.blp:176
+#: src/resources/gtk/prefs-general-page.blp:182
 msgid "_Restore Tabs on Startup"
 msgstr "Lapok _visszaállítása indításkor"
 
-#: src/resources/gtk/prefs-general-page.blp:182
+#: src/resources/gtk/prefs-general-page.blp:188
 msgid "Browsing"
 msgstr "Böngészés"
 
-#: src/resources/gtk/prefs-general-page.blp:185
+#: src/resources/gtk/prefs-general-page.blp:191
 msgid "Mouse _Gestures"
 msgstr "Egér_gesztusok"
 
-#: src/resources/gtk/prefs-general-page.blp:190
+#: src/resources/gtk/prefs-general-page.blp:196
 msgid "S_witch Immediately to New Tabs"
 msgstr "_Váltás azonnal az új lapokra"
 
-#: src/resources/gtk/prefs-general-page.blp:195
+#: src/resources/gtk/prefs-general-page.blp:201
 msgid "Touch _Navigation Gestures"
 msgstr "Érintéses _navigációs gesztusok"
 
-#: src/resources/gtk/prefs-general-page.blp:214
+#: src/resources/gtk/prefs-general-page.blp:220
 msgid "_Spell Checking"
 msgstr "_Helyesírás-ellenőrzés"
 
-#: src/resources/gtk/prefs-general-page.blp:220
+#: src/resources/gtk/prefs-general-page.blp:226
 msgid "Developer"
 msgstr "Fejlesztő"
 
-#: src/resources/gtk/prefs-general-page.blp:223
+#: src/resources/gtk/prefs-general-page.blp:229
 msgid "Show D_eveloper Actions"
 msgstr "F_ejlesztői műveletek megjelenítése"
 
-#: src/resources/gtk/prefs-general-page.blp:228
+#: src/resources/gtk/prefs-general-page.blp:234
 msgid "Always Show Full _URL"
 msgstr "Mindig teljes _URL megjelenítése"
 
-#: src/resources/gtk/prefs-lang-dialog.blp:45
+#: src/resources/gtk/prefs-lang-dialog.blp:43
 msgid "Choose a language"
 msgstr "Válasszon egy nyelvet"
 
@@ -4350,7 +4359,6 @@ msgid "Enable search suggestions in the URL entry"
 msgstr "Keresési javaslatok engedélyezése az URL mezőben"
 
 #: src/resources/gtk/prefs-privacy-page.blp:29
-#| msgid "Search Suggestions"
 msgid "Search Su_ggestions"
 msgstr "Keresési ja_vaslatok"
 
@@ -4359,7 +4367,6 @@ msgid "Personal Data"
 msgstr "Személyes adatok"
 
 #: src/resources/gtk/prefs-privacy-page.blp:38
-#| msgid "Website Data"
 msgid "Website _Data"
 msgstr "Webhelya_datok"
 
@@ -4374,6 +4381,20 @@ msgstr "Űrlapok _automatikus kitöltése"
 #: src/resources/gtk/prefs-privacy-page.blp:60
 msgid "Autofill _Data"
 msgstr "A_datok automatikus kitöltése"
+
+#: src/resources/gtk/prefs-search-engine-page.blp:21
+#| msgid "Technical information"
+msgid "More Information"
+msgstr "További információk"
+
+#: src/resources/gtk/prefs-search-engine-page.blp:26
+#, c-format
+msgid ""
+"To determine the search address, perform a search using the search engine "
+"that you want to add and replace the search term with %s"
+msgstr ""
+"A keresési cím meghatározásához végezzen egy keresést a hozzáadandó keresőmoto"
+"rral, és cserélje erre a keresési kifejezést: %s"
 
 #: src/resources/gtk/privacy-report.blp:10
 msgid "Privacy Report"
@@ -4412,443 +4433,341 @@ msgid "_View Certificate…"
 msgstr "_Tanúsítvány megtekintése…"
 
 #: src/resources/gtk/security-dialog.blp:40
-#| msgid "Permissions"
 msgid "_Permissions"
 msgstr "_Jogosultságok"
 
 #: src/resources/gtk/shortcuts-dialog.blp:6
-#| msgid "General"
 msgctxt "shortcuts dialog"
 msgid "General"
 msgstr "Általános"
 
 #: src/resources/gtk/shortcuts-dialog.blp:9
-#| msgid "New Window"
 msgctxt "shortcuts dialog"
 msgid "New Window"
 msgstr "Új ablak"
 
 #: src/resources/gtk/shortcuts-dialog.blp:14
-#| msgid "New Incognito Window"
 msgctxt "shortcuts dialog"
 msgid "New Incognito Window"
 msgstr "Új inkognitóablak"
 
 #: src/resources/gtk/shortcuts-dialog.blp:19
-#| msgctxt "shortcut window"
-#| msgid "Open File"
 msgctxt "shortcuts dialog"
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:24
-#| msgctxt "shortcut window"
-#| msgid "Save Page"
 msgctxt "shortcuts dialog"
 msgid "Save Page"
 msgstr "Oldal mentése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:29
-#| msgctxt "shortcut window"
-#| msgid "Take Screenshot"
 msgctxt "shortcuts dialog"
 msgid "Take Screenshot"
 msgstr "Képernyőkép készítése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:34
-#| msgctxt "shortcut window"
-#| msgid "Print Page"
 msgctxt "shortcuts dialog"
 msgid "Print Page"
 msgstr "Oldal nyomtatása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:39
-#| msgctxt "shortcut window"
-#| msgid "Quit"
 msgctxt "shortcuts dialog"
 msgid "Quit"
 msgstr "Kilépés"
 
 #: src/resources/gtk/shortcuts-dialog.blp:44
-#| msgid "_Keyboard Shortcuts"
 msgctxt "shortcuts dialog"
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
 
 #: src/resources/gtk/shortcuts-dialog.blp:49
-#| msgctxt "shortcut window"
-#| msgid "Help"
 msgctxt "shortcuts dialog"
 msgid "Help"
 msgstr "Súgó"
 
 #: src/resources/gtk/shortcuts-dialog.blp:54
-#| msgctxt "shortcut window"
-#| msgid "Open Menu"
 msgctxt "shortcuts dialog"
 msgid "Open Menu"
 msgstr "Menü megnyitása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:59
-#| msgctxt "shortcut window"
-#| msgid "Show Downloads List"
 msgctxt "shortcuts dialog"
 msgid "Show Downloads List"
 msgstr "Letöltések listájának megjelenítése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:65
-#| msgctxt "shortcut window"
-#| msgid "Navigation"
 msgid "Navigation"
 msgstr "Navigáció"
 
 #: src/resources/gtk/shortcuts-dialog.blp:68
-#| msgctxt "shortcut window"
-#| msgid "Go to Homepage"
 msgctxt "shortcuts dialog"
 msgid "Go to Homepage"
 msgstr "Ugrás a kezdőoldalra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:73
-#| msgctxt "shortcut window"
-#| msgid "Reload Current Page"
 msgctxt "shortcuts dialog"
 msgid "Reload Current Page"
 msgstr "Jelenlegi oldal újratöltése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:78
-#| msgctxt "shortcut window"
-#| msgid "Reload Bypassing Cache"
 msgctxt "shortcuts dialog"
 msgid "Reload Bypassing Cache"
 msgstr "Kikerülő gyorsítótár újratöltése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:83
-#| msgctxt "shortcut window"
-#| msgid "Stop Loading Current Page"
 msgctxt "shortcuts dialog"
 msgid "Stop Loading Current Page"
 msgstr "Jelenlegi oldal betöltésének leállítása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:88
 #: src/resources/gtk/shortcuts-dialog.blp:94
-#| msgctxt "shortcut window"
-#| msgid "Go Back to Previous Page"
 msgctxt "shortcuts dialog"
 msgid "Go Back to Previous Page"
 msgstr "Ugrás vissza az előző oldalra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:100
 #: src/resources/gtk/shortcuts-dialog.blp:106
-#| msgctxt "shortcut window"
-#| msgid "Go Forward to Next Page"
 msgctxt "shortcuts dialog"
 msgid "Go Forward to Next Page"
 msgstr "Ugrás előre a következő oldalra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:113
-#| msgctxt "shortcut window"
-#| msgid "Tabs"
 msgctxt "shortcuts dialog"
 msgid "Tabs"
 msgstr "Lapok"
 
 #: src/resources/gtk/shortcuts-dialog.blp:116
-#| msgid "New Tab"
 msgctxt "shortcuts dialog"
 msgid "New Tab"
 msgstr "Új lap"
 
 #: src/resources/gtk/shortcuts-dialog.blp:121
-#| msgctxt "shortcut window"
-#| msgid "Close Current Tab"
 msgctxt "shortcuts dialog"
 msgid "Close Current Tab"
 msgstr "Jelenlegi lap bezárása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:126
-#| msgctxt "shortcut window"
-#| msgid "Reopen Closed Tab"
 msgctxt "shortcuts dialog"
 msgid "Reopen Closed Tab"
 msgstr "Bezárt lap újranyitása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:131
-#| msgctxt "shortcut window"
-#| msgid "Go to Next Tab"
 msgctxt "shortcuts dialog"
 msgid "Go to Next Tab"
 msgstr "Ugrás a következő lapra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:136
-#| msgctxt "shortcut window"
-#| msgid "Go to Previous Tab"
 msgctxt "shortcuts dialog"
 msgid "Go to Previous Tab"
 msgstr "Ugrás az előző lapra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:141
-#| msgctxt "shortcut window"
-#| msgid "Move Current Tab to the Left"
 msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Left"
 msgstr "Jelenlegi lap mozgatása balra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:146
-#| msgctxt "shortcut window"
-#| msgid "Move Current Tab to the Right"
 msgctxt "shortcuts dialog"
 msgid "Move Current Tab to the Right"
 msgstr "Jelenlegi lap mozgatása jobbra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:151
-#| msgctxt "shortcut window"
-#| msgid "Duplicate Current Tab"
 msgctxt "shortcuts dialog"
 msgid "Duplicate Current Tab"
 msgstr "Jelenlegi lap kettőzése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:156
-#| msgid "View Open Tabs"
 msgctxt "shortcuts dialog"
 msgid "View Open Tabs"
 msgstr "Nyitott lapok megtekintése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:162
-#| msgctxt "shortcut window"
-#| msgid "Miscellaneous"
 msgctxt "shortcuts dialog"
 msgid "Miscellaneous"
 msgstr "Egyebek"
 
 #: src/resources/gtk/shortcuts-dialog.blp:165
-#| msgid "History"
 msgctxt "shortcuts dialog"
 msgid "History"
 msgstr "Előzmények"
 
 #: src/resources/gtk/shortcuts-dialog.blp:170
-#| msgctxt "shortcut window"
-#| msgid "Clear Website Data"
 msgctxt "shortcuts dialog"
 msgid "Clear Website Data"
 msgstr "Webhelyadatok törlése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:175
-#| msgctxt "shortcut window"
-#| msgid "Preferences"
 msgctxt "shortcuts dialog"
 msgid "Preferences"
 msgstr "Beállítások"
 
 #: src/resources/gtk/shortcuts-dialog.blp:180
-#| msgctxt "shortcut window"
-#| msgid "Bookmark Current Page"
 msgctxt "shortcuts dialog"
 msgid "Bookmark Current Page"
 msgstr "Jelenlegi oldal könyvjelzőzése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:185
-#| msgctxt "shortcut window"
-#| msgid "Show Bookmarks List"
 msgctxt "shortcuts dialog"
 msgid "Show Bookmarks List"
 msgstr "Könyvjelzők listájának megjelenítése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:190
-#| msgid "Import Bookmarks"
 msgctxt "shortcuts dialog"
 msgid "Import Bookmarks"
 msgstr "Könyvjelzők importálása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:195
-#| msgctxt "shortcut window"
-#| msgid "Export Bookmarks"
 msgctxt "shortcuts dialog"
 msgid "Export Bookmarks"
 msgstr "Könyvjelzők exportálása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:200
-#| msgctxt "shortcut window"
-#| msgid "Toggle Caret Browsing"
 msgctxt "shortcuts dialog"
 msgid "Toggle Caret Browsing"
 msgstr "Kurzoros böngészés be- vagy kikapcsolása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:206
-#| msgctxt "shortcut window"
-#| msgid "View"
 msgctxt "shortcuts dialog"
 msgid "View"
 msgstr "Nézet"
 
 #: src/resources/gtk/shortcuts-dialog.blp:209
-#| msgctxt "tooltip"
-#| msgid "Zoom In"
 msgctxt "shortcuts dialog"
 msgid "Zoom In"
 msgstr "Nagyítás"
 
 #: src/resources/gtk/shortcuts-dialog.blp:214
-#| msgctxt "tooltip"
-#| msgid "Zoom Out"
 msgctxt "shortcuts dialog"
 msgid "Zoom Out"
 msgstr "Kicsinyítés"
 
 #: src/resources/gtk/shortcuts-dialog.blp:219
-#| msgctxt "shortcut window"
-#| msgid "Reset Zoom"
 msgctxt "shortcuts dialog"
 msgid "Reset Zoom"
 msgstr "Nagyítás visszaállítása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:224
-#| msgid "Fullscreen"
 msgctxt "shortcuts dialog"
 msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
 #: src/resources/gtk/shortcuts-dialog.blp:229
-#| msgctxt "shortcut window"
-#| msgid "View Page Source"
 msgctxt "shortcuts dialog"
 msgid "View Page Source"
 msgstr "Oldal forrásának megtekintése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:234
-#| msgctxt "shortcut window"
-#| msgid "Toggle Inspector"
 msgctxt "shortcuts dialog"
 msgid "Toggle Inspector"
 msgstr "Vizsgáló be- vagy kikapcsolása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:239
-#| msgctxt "shortcut window"
-#| msgid "Toggle Reader Mode"
 msgctxt "shortcuts dialog"
 msgid "Toggle Reader Mode"
 msgstr "Olvasó mód ki- vagy bekapcsolása"
 
 #: src/resources/gtk/shortcuts-dialog.blp:245
-#| msgctxt "shortcut window"
-#| msgid "Editing"
 msgctxt "shortcuts dialog"
 msgid "Editing"
 msgstr "Szerkesztés"
 
 #: src/resources/gtk/shortcuts-dialog.blp:248
-#| msgctxt "shortcut window"
-#| msgid "Cut"
 msgctxt "shortcuts dialog"
 msgid "Cut"
 msgstr "Kivágás"
 
 #: src/resources/gtk/shortcuts-dialog.blp:253
-#| msgctxt "shortcut window"
-#| msgid "Copy"
 msgctxt "shortcuts dialog"
 msgid "Copy"
 msgstr "Másolás"
 
 #: src/resources/gtk/shortcuts-dialog.blp:258
-#| msgctxt "shortcut window"
-#| msgid "Paste"
 msgctxt "shortcuts dialog"
 msgid "Paste"
 msgstr "Beillesztés"
 
 #: src/resources/gtk/shortcuts-dialog.blp:263
-#| msgctxt "shortcut window"
-#| msgid "Undo"
 msgctxt "shortcuts dialog"
 msgid "Undo"
 msgstr "Visszavonás"
 
 #: src/resources/gtk/shortcuts-dialog.blp:268
-#| msgctxt "shortcut window"
-#| msgid "Redo"
 msgctxt "shortcuts dialog"
 msgid "Redo"
 msgstr "Újra"
 
 #: src/resources/gtk/shortcuts-dialog.blp:273
-#| msgctxt "shortcut window"
-#| msgid "Select All"
 msgctxt "shortcuts dialog"
 msgid "Select All"
 msgstr "Összes kijelölése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:278
-#| msgctxt "shortcut window"
-#| msgid "Select Page URL"
 msgctxt "shortcuts dialog"
 msgid "Select Page URL"
 msgstr "Oldal URL-jének kijelölése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:283
-#| msgctxt "shortcut window"
-#| msgid "Search With Default Search Engine"
 msgctxt "shortcuts dialog"
 msgid "Search With Default Search Engine"
 msgstr "Keresés az alapértelmezett keresőmotorral"
 
 #: src/resources/gtk/shortcuts-dialog.blp:288
-#| msgctxt "shortcut window"
-#| msgid "Find"
 msgctxt "shortcuts dialog"
 msgid "Find"
 msgstr "Keresés"
 
 #: src/resources/gtk/shortcuts-dialog.blp:293
-#| msgctxt "shortcut window"
-#| msgid "Next Find Result"
 msgctxt "shortcuts dialog"
 msgid "Next Find Result"
 msgstr "Következő találat"
 
 #: src/resources/gtk/shortcuts-dialog.blp:298
-#| msgctxt "shortcut window"
-#| msgid "Previous Find Result"
 msgctxt "shortcuts dialog"
 msgid "Previous Find Result"
 msgstr "Előző találat"
 
-#: src/resources/gtk/site-menu-button.blp:13
-#| msgid "Find…"
+#: src/resources/gtk/site-menu-button.blp:12
+#| msgid "Reader Mode"
+msgid "_Reader Mode"
+msgstr "_Olvasó mód"
+
+#: src/resources/gtk/site-menu-button.blp:20
 msgid "_Find…"
 msgstr "_Keresés…"
 
-#: src/resources/gtk/site-menu-button.blp:18
-#| msgid "Print…"
+#: src/resources/gtk/site-menu-button.blp:25
 msgid "_Print…"
 msgstr "_Nyomtatás…"
 
-#: src/resources/gtk/site-menu-button.blp:34
+#: src/resources/gtk/site-menu-button.blp:41
+#| msgid "Add Search Engine"
+msgid "Add Search _Engine…"
+msgstr "_Keresőmotor hozzáadása…"
+
+#: src/resources/gtk/site-menu-button.blp:47
 msgid "Text Enco_ding…"
 msgstr "Szövegkó_dolás…"
 
-#: src/resources/gtk/site-menu-button.blp:39
-#| msgid "Website Security Status and Permissions"
+#: src/resources/gtk/site-menu-button.blp:52
 msgid "_Security & Permissions"
 msgstr "_Biztonság és jogosultságok"
 
-#: src/resources/gtk/site-menu-button.blp:58
+#: src/resources/gtk/site-menu-button.blp:71
 msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Kicsinyítés"
 
-#: src/resources/gtk/site-menu-button.blp:64
+#: src/resources/gtk/site-menu-button.blp:77
 msgid "Restore Zoom"
 msgstr "Nagyítás visszaállítása"
 
-#: src/resources/gtk/site-menu-button.blp:73
+#: src/resources/gtk/site-menu-button.blp:86
 msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Nagyítás"
 
-#: src/resources/gtk/site-menu-button.blp:81
-#| msgid "Main Menu"
+#: src/resources/gtk/site-menu-button.blp:94
 msgid "Site Menu"
 msgstr "Webhely menü"
 
@@ -4867,7 +4786,6 @@ msgstr ""
 "kattintva a nevére (a Helyi lapok alatti lapok nem nyithatók meg)."
 
 #: src/resources/gtk/tab-overview-menu.blp:23
-#| msgid "Reload _All Tabs"
 msgid "Close _All Tabs"
 msgstr "Öss_zes lap bezárása"
 
@@ -4880,15 +4798,14 @@ msgid ""
 "URLs that start with the same base domain (example.com) will be opened by "
 "this web app"
 msgstr ""
-"Az azonos alaptartománnyal (example.com) kezdődő URL-eket ez a webalkalmazás f"
-"ogja megnyitni"
+"Az azonos alaptartománnyal (example.com) kezdődő URL-eket ez a webalkalmazás "
+"fogja megnyitni"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:16
 msgid "Base Domain"
 msgstr "Alaptartomány"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:24
-#| msgid "Add New URL"
 msgid "Add URL"
 msgstr "URL hozzáadása"
 
@@ -4975,89 +4892,89 @@ msgstr "Hiányzó név vagy verzió"
 msgid "Failed to determine initiating URI"
 msgstr "Nem sikerült meghatározni a kezdeményező URI-t"
 
-#: src/window-commands.c:128
+#: src/window-commands.c:131
 msgid "HTML File"
 msgstr "HTML-fájl"
 
-#: src/window-commands.c:129
+#: src/window-commands.c:132
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:130 src/window-commands.c:732
+#: src/window-commands.c:133 src/window-commands.c:735
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:131 src/window-commands.c:733
+#: src/window-commands.c:134 src/window-commands.c:736
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:173 src/window-commands.c:569
-#: src/window-commands.c:895 src/window-commands.c:935
+#: src/window-commands.c:176 src/window-commands.c:572
+#: src/window-commands.c:898 src/window-commands.c:938
 msgid "_Select File"
 msgstr "Fájl _kiválasztása"
 
-#: src/window-commands.c:175 src/window-commands.c:897
+#: src/window-commands.c:178 src/window-commands.c:900
 msgid "I_mport"
 msgstr "I_mportálás"
 
-#: src/window-commands.c:328 src/window-commands.c:417
-#: src/window-commands.c:461 src/window-commands.c:484
-#: src/window-commands.c:500
+#: src/window-commands.c:331 src/window-commands.c:420
+#: src/window-commands.c:464 src/window-commands.c:487
+#: src/window-commands.c:503
 msgid "Bookmarks successfully imported!"
 msgstr "Könyvjelzők sikeresen importálva!"
 
-#: src/window-commands.c:347
+#: src/window-commands.c:350
 msgid "Select Profile"
 msgstr "Válasszon profilt"
 
-#: src/window-commands.c:428 src/window-commands.c:690
-#: src/window-commands.c:816 src/window-commands.c:1038
+#: src/window-commands.c:431 src/window-commands.c:693
+#: src/window-commands.c:819 src/window-commands.c:1041
 msgid "Choose File"
 msgstr "Válasszon fájlt"
 
-#: src/window-commands.c:555
+#: src/window-commands.c:558
 msgid "Import Bookmarks"
 msgstr "Könyvjelzők importálása"
 
-#: src/window-commands.c:583 src/window-commands.c:949
+#: src/window-commands.c:586 src/window-commands.c:952
 msgid "File Type"
 msgstr "Fájltípus"
 
-#: src/window-commands.c:647
+#: src/window-commands.c:650
 msgid "Bookmarks successfully exported!"
 msgstr "Könyvjelzők sikeresen exportálva!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:701
+#: src/window-commands.c:704
 msgid "bookmarks.html"
 msgstr "könyvjelzők.html"
 
-#: src/window-commands.c:731
+#: src/window-commands.c:734
 msgid "CSV File"
 msgstr "CSV-fájl"
 
-#: src/window-commands.c:779 src/window-commands.c:805
+#: src/window-commands.c:782 src/window-commands.c:808
 msgid "Passwords successfully imported!"
 msgstr "A jelszavak sikeresen importálva!"
 
-#: src/window-commands.c:921
+#: src/window-commands.c:924
 msgid "Import Passwords"
 msgstr "Jelszavak importálása"
 
-#: src/window-commands.c:997
+#: src/window-commands.c:1000
 msgid "Passwords successfully exported!"
 msgstr "A jelszavak sikeresen exportálva!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1048
+#: src/window-commands.c:1051
 msgid "passwords.csv"
 msgstr "jelszavak.csv"
 
-#: src/window-commands.c:1226
+#: src/window-commands.c:1227
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1249
+#: src/window-commands.c:1250
 msgid "translator-credits"
 msgstr ""
 "Dvornik László <dvornik at gnome dot hu>\n"
@@ -5067,60 +4984,75 @@ msgstr ""
 "Tímár András <timar at gnome dot hu>\n"
 "Úr Balázs <ur dot balazs at fsf dot hu>"
 
-#: src/window-commands.c:1405
+#: src/window-commands.c:1406
 msgid "Reload Website?"
 msgstr "Újratölti a webhelyet?"
 
-#: src/window-commands.c:1953
+#: src/window-commands.c:1957
 msgid "New Web App"
 msgstr "Új webalkalmazás"
 
-#: src/window-commands.c:2005
+#: src/window-commands.c:2009
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "A(z) „%s” alkalmazás használatra kész"
 
-#: src/window-commands.c:2008
+#: src/window-commands.c:2012
 #, c-format
 msgid "The application “%s” could not be created: %s"
 msgstr "A(z) „%s” alkalmazás nem hozható létre: %s"
 
-#: src/window-commands.c:2106
+#: src/window-commands.c:2110
 msgid "Replace Existing Web App?"
 msgstr "Lecseréli a meglévő webalkalmazást?"
 
-#: src/window-commands.c:2109
+#: src/window-commands.c:2113
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr "Már létezik egy „%s” nevű alkalmazás, a cseréje felül fogja írni"
 
-#: src/window-commands.c:2114
+#: src/window-commands.c:2118
 msgid "_Replace"
 msgstr "_Csere"
 
-#: src/window-commands.c:2419
-#| msgid "Download finished"
+#: src/window-commands.c:2424
 msgid "Screenshot finished"
 msgstr "Képernyőkép befejezve"
 
-#: src/window-commands.c:2540
+#: src/window-commands.c:2546
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2544
+#: src/window-commands.c:2550
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2590
+#: src/window-commands.c:2596
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:3049
+#: src/window-commands.c:2920
+#, c-format
+#| msgid "Search the Web for “%s”"
+msgid "Search engine “%s” added"
+msgstr "A(z) „%s” keresőmotor hozzáadva"
+
+#. Now all web views will get notified for this newly added engine, and remove
+#. * their corresponding autodiscovery link in the models. We do not do it
+#. * manually here for self->model because that would not remove the link for
+#. * all the other tabs, so that's why we let the EphyWebViews take care of it.
+#.
+#: src/window-commands.c:2939
+#| msgid "Show More"
+msgid "Show"
+msgstr "Megjelenítés"
+
+#: src/window-commands.c:3171
 msgid "Enable Caret Browsing Mode?"
 msgstr "Engedélyezi a kurzoros böngészési módot?"
 
-#: src/window-commands.c:3050
+#: src/window-commands.c:3172
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -5130,6 +5062,6 @@ msgstr ""
 "szolgáltatás egy mozgatható kurzort helyez el a weboldalakon, lehetővé téve "
 "a billentyűzettel való mozgást. Be szeretné kapcsolni a kurzoros böngészést?"
 
-#: src/window-commands.c:3055
+#: src/window-commands.c:3177
 msgid "_Enable"
 msgstr "_Engedélyezés"
