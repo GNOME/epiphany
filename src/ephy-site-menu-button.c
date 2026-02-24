@@ -156,6 +156,18 @@ ephy_site_menu_button_dispose (GObject *object)
 }
 
 static void
+ephy_site_menu_button_realize (GtkWidget *widget)
+{
+  EphySiteMenuButton *self = EPHY_SITE_MENU_BUTTON (widget);
+  GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
+
+  gtk_svg_set_frame_clock (self->svg, gtk_widget_get_frame_clock (window));
+  gtk_svg_play (self->svg);
+
+  GTK_WIDGET_CLASS (ephy_site_menu_button_parent_class)->realize (widget);
+}
+
+static void
 ephy_site_menu_button_class_init (EphySiteMenuButtonClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -164,6 +176,8 @@ ephy_site_menu_button_class_init (EphySiteMenuButtonClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/site-menu-button.ui");
 
   object_class->dispose = ephy_site_menu_button_dispose;
+
+  widget_class->realize = ephy_site_menu_button_realize;
 
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, menu_model);
   gtk_widget_class_bind_template_child (widget_class, EphySiteMenuButton, items_section);
@@ -205,9 +219,6 @@ ephy_site_menu_button_init (EphySiteMenuButton *self)
                            G_CONNECT_SWAPPED);
 
   self->queued_states = g_array_new (FALSE, FALSE, sizeof (int));
-
-  gtk_svg_play (self->svg);
-  gtk_svg_set_state (self->svg, 0);
 }
 
 GtkWidget *
