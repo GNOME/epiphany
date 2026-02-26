@@ -36,6 +36,14 @@ do
         sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
     rm "$FILE".uncrustify
   done
+  find "$DIR" -name "*.blp" ! -path "*/contrib/*" -type f -print0 | while IFS= read -r -d '' FILE;
+  do
+    cp "$FILE" "$FILE.temp"
+    blueprint-compiler format -f "$FILE.temp" > /dev/null
+    diff -urN "$FILE" "$FILE.temp" | \
+        sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
+    rm "$FILE.temp"
+  done
 done
 popd || exit
 

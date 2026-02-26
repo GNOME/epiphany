@@ -20,6 +20,7 @@ template $EphyLocationEntry: Box {
           $EphySiteMenuButton site_menu_button {
             focus-on-click: false;
             valign: center;
+
             styles [
               "entry-icon",
               "start",
@@ -45,7 +46,9 @@ template $EphyLocationEntry: Box {
             action-name: "toolbar.combined-stop-reload";
             icon-name: "view-refresh-symbolic";
 
-            styles [ "entry-icon" ]
+            styles [
+              "entry-icon",
+            ]
 
             GestureClick {
               button: 2;
@@ -159,7 +162,9 @@ template $EphyLocationEntry: Box {
 
                     Image {
                       pixel-size: 16;
-                      gicon: bind ($get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)) as <Gio.Icon>;
+                      gicon: bind (
+                        $get_suggestion_icon(template.item as <$EphySuggestion>.secondary-icon)
+                      ) as <Gio.Icon>;
 
                       layout {
                         column: "2";

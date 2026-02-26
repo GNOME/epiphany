@@ -15,7 +15,9 @@ template $PrefsPrivacyPage: Adw.PreferencesPage {
     }
 
     Adw.SwitchRow enable_website_data_storage_row {
-      subtitle: _("Allow websites to store cookies, databases, and local storage data. Disabling website data storage will break many websites.");
+      subtitle: _(
+        "Allow websites to store cookies, databases, and local storage data. Disabling website data storage will break many websites."
+      );
       title: _("_Website Data Storage");
       use-underline: true;
     }
@@ -67,4 +69,3 @@ template $PrefsPrivacyPage: Adw.PreferencesPage {
     }
   }
 }
-

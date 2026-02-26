@@ -23,7 +23,9 @@ template $PrefsSearchEnginePage: Adw.NavigationPage {
 
             popover: Popover {
               child: Label {
-                label: _("To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s");
+                label: _(
+                  "To determine the search address, perform a search using the search engine that you want to add and replace the search term with %s"
+                );
                 halign: center;
                 valign: center;
                 margin-bottom: 6;
@@ -36,7 +38,7 @@ template $PrefsSearchEnginePage: Adw.NavigationPage {
             };
 
             styles [
-              "flat"
+              "flat",
             ]
           }
         }
@@ -56,4 +58,3 @@ template $PrefsSearchEnginePage: Adw.NavigationPage {
     };
   };
 }
-

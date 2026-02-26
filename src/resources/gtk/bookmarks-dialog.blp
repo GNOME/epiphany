@@ -17,6 +17,7 @@ template $EphyBookmarksDialog: Adw.Bin {
           icon-name: "document-edit-symbolic";
           label: _("Edit");
         };
+
         clicked => $on_edit_button_clicked();
       }
 
@@ -135,8 +136,9 @@ template $EphyBookmarksDialog: Adw.Bin {
 
                     center-widget: Label tag_detail_label {
                       styles [
-                        "heading"
+                        "heading",
                       ]
+
                       ellipsize: end;
                       max-width-chars: 0;
                       hexpand: true;
@@ -186,5 +188,5 @@ menu options_menu {
       label: _("E_xport…");
       action: "app.export-bookmarks";
     }
-}
+  }
 }

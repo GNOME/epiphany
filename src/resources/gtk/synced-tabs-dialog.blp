@@ -22,7 +22,9 @@ template $SyncedTabsDialog: Adw.Window {
         xalign: 0;
         wrap: true;
         max-width-chars: 50;
-        label: _("Below are the synced open tabs of your other devices that use Firefox Sync with this account. Open a tab by double clicking its name (tabs under Local Tabs cannot be opened).");
+        label: _(
+          "Below are the synced open tabs of your other devices that use Firefox Sync with this account. Open a tab by double clicking its name (tabs under Local Tabs cannot be opened)."
+        );
       }
 
       Box {
@@ -56,4 +58,3 @@ template $SyncedTabsDialog: Adw.Window {
     };
   };
 }
-
