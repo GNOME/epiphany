@@ -746,7 +746,7 @@ ephy_window_close_request (GtkWindow *window)
 
 static void
 update_link_actions_sensitivity (EphyWindow *window,
-                                 gboolean    link_has_web_scheme)
+                                 gboolean    can_open)
 {
   GAction *action;
   GActionGroup *action_group;
@@ -755,15 +755,15 @@ update_link_actions_sensitivity (EphyWindow *window,
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "open-link-in-new-window");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), link_has_web_scheme);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_open);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "open-link-in-new-tab");
-  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_CONTEXT, !link_has_web_scheme);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_CONTEXT, !can_open);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "open-link-in-incognito-window");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), link_has_web_scheme);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_open);
 }
 
 static void
@@ -1667,13 +1667,11 @@ populate_context_menu (WebKitWebView       *web_view,
 
   if (webkit_hit_test_result_context_is_link (hit_test_result)) {
     const char *uri;
-    gboolean link_has_web_scheme;
 
     uri = webkit_hit_test_result_get_link_uri (hit_test_result);
-    link_has_web_scheme = ephy_embed_utils_address_has_web_scheme (uri);
 
     update_edit_actions_sensitivity (window, TRUE);
-    update_link_actions_sensitivity (window, link_has_web_scheme);
+    update_link_actions_sensitivity (window, ephy_embed_utils_address_is_valid (uri));
 
     if (!app_mode) {
       add_action_to_context_menu (context_menu, popup_action_group,
@@ -1920,7 +1918,7 @@ save_target_uri (EphyWindow    *window,
   if (location) {
     LOG ("Location: %s", location);
 
-    retval = ephy_embed_utils_address_has_web_scheme (location);
+    retval = ephy_embed_utils_address_is_valid (location);
     if (retval) {
       EphyDownload *download;
 
