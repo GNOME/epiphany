@@ -88,6 +88,7 @@ struct _EphyWebView {
   guint history_frozen : 1;
   guint ever_committed : 1;
   guint in_auth_dialog : 1;
+  guint placeholder_load : 1;
 
   char *address;
   char *display_address;
@@ -1225,7 +1226,7 @@ update_security_status_for_committed_load (EphyWebView *view,
     g_object_ref (view->certificate);
     security_level = view->tls_errors == 0 ?
                      EPHY_SECURITY_LEVEL_STRONG_SECURITY : EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE;
-  } else if (!embed || ephy_embed_has_load_pending (embed)) {
+  } else if (!embed || view->placeholder_load) {
     security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
   }
 
@@ -1701,8 +1702,8 @@ load_changed_cb (WebKitWebView   *web_view,
       /* Ensure we load the icon for this web view, if available. */
       _ephy_web_view_update_icon (view);
 
-      /* Reset visit type. */
       view->visit_type = EPHY_PAGE_VISIT_NONE;
+      view->placeholder_load = FALSE;
 
       if (view->entering_reader_mode) {
         view->entering_reader_mode = FALSE;
@@ -1772,6 +1773,8 @@ ephy_web_view_set_placeholder (EphyWebView *view,
    * doing a load here is the simplest way to replace the loading
    * spinner with the favicon. */
   ephy_web_view_freeze_history (view);
+
+  view->placeholder_load = TRUE;
 
   effective_uri = ephy_embed_utils_normalize_address (uri);
   html = g_markup_printf_escaped ("<head><title>%s</title></head>", title);
