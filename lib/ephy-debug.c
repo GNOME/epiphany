@@ -159,7 +159,7 @@ ephy_profiler_new (const char *name,
 static gboolean
 ephy_should_profile (const char *module)
 {
-  char *slash;
+  const char *slash;
   gboolean result = FALSE;
   guint i;
 

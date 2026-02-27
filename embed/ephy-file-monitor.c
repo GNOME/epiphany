@@ -165,7 +165,7 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
                                    const char      *address)
 {
   gboolean local;
-  char *anchor;
+  const char *anchor;
   char *url;
   GFile *file;
   GFileType file_type;

@@ -2385,7 +2385,7 @@ get_suggested_filename (EphyEmbed  *embed,
   suggested_filename = webkit_uri_response_get_suggested_filename (response);
   if (!suggested_filename) {
     const char *path = g_uri_get_path (uri);
-    char *last_slash = strrchr (path, '/');
+    const char *last_slash = strrchr (path, '/');
     if (last_slash)
       path = last_slash + 1;
 
