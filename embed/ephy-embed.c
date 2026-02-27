@@ -689,8 +689,6 @@ load_delayed_request_if_mapped (gpointer user_data)
    * whether the page is a placeholder (to avoid showing the spinner on tabs while restoring the session),
    * so after removing the placeholder we need to notify it again. */
   g_object_notify (G_OBJECT (web_view), "is-loading");
-
-  return;
 }
 
 static void
