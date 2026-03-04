@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
 "POT-Creation-Date: 2026-03-02 23:01+0000\n"
-"PO-Revision-Date: 2026-03-04 10:15+0100\n"
+"PO-Revision-Date: 2026-03-04 13:29+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -92,6 +92,11 @@ msgid ""
 "the search term replaced with %s. \"bang\" is the bang (shortcut word) of "
 "the search engine."
 msgstr ""
+"Lista dels motors de recèrca. Es una taula de vardicts ont cada vardict "
+"correspond a un motor de recèrca, amb las claus seguentas suportadas : "
+"« name » es lo nom del motor de recèrca. « url » es l'URL de recèrca amb lo "
+"tèrme de recèrca remplaçat per %s. « bang » es lo bang (mot acorchit) del "
+"motor de recèrca."
 
 #: data/org.gnome.epiphany.gschema.xml:50
 msgid "Enable Search Suggestions"
@@ -168,7 +173,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:78
 msgid "Whether to ask for setting browser as default"
-msgstr ""
+msgstr "Indica se cal demandar a definir lo navigador coma aquel per defaut"
 
 #: data/org.gnome.epiphany.gschema.xml:79
 #, fuzzy
@@ -201,7 +206,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:88
 msgid "Active clear data items."
-msgstr ""
+msgstr "Elements actiu pel netejatge de donadas"
 
 #: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
@@ -211,6 +216,12 @@ msgid ""
 "Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
 "Prevention data."
 msgstr ""
+"Seleccion (masca de bits) quines elements de donadas de netejar devon èsser "
+"actius per defaut. 1 = cookies, 2 = cache del disc HTTP, 4 = donadas "
+"d'emmagazinatge local, 8 = cache de l'aplicacion web fòra linha, 16 = basas "
+"de donadas IndexDB, 32 = basas de donadas WebSQL, 64 = donadas dels plugins, "
+"128 = cache de las politicas HSTS, 256 = donadas de la prevencion "
+"intelligenta del seguiment"
 
 #: data/org.gnome.epiphany.gschema.xml:95
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -232,7 +243,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:100
 msgid "Show url bar at bottom"
-msgstr ""
+msgstr "Afichar la barra d'adreça en bas"
 
 #: data/org.gnome.epiphany.gschema.xml:101
 #, fuzzy
@@ -263,15 +274,17 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "Keep window open when closing last tab"
-msgstr ""
+msgstr "Gardar la fenèstra dobèrta en tampant lo darrièr onglet"
 
 #: data/org.gnome.epiphany.gschema.xml:111
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
+"S'es activat, la fenèstra de l'aplicacion demòra dobèrta al moment de tampar "
+"lo darrièr onglet."
 
 #: data/org.gnome.epiphany.gschema.xml:115
 msgid "Show the WebKit features preferences page."
-msgstr ""
+msgstr "Afichar la pagina de las preferéncias de las foncionalitats de WebKit."
 
 #: data/org.gnome.epiphany.gschema.xml:116
 msgid ""
@@ -279,26 +292,36 @@ msgid ""
 "experimental and development WebKit features. This setting is ignored in "
 "Tech Preview, and true is always used."
 msgstr ""
+"Contròtla se la fenèstra de las preferéncias aficha la pagina que permet de "
+"bascular las foncionalitats experimentalas e de desvolopament de WebKit. "
+"Aqueste reglatge es ignorat dins la Tech Preview, e la valor « true » "
+"(verai) es totjorn utilizada."
 
 #: data/org.gnome.epiphany.gschema.xml:120
 msgid "Show internal WebKit features in the features preferences page."
 msgstr ""
+"Afichar las foncionalitats intèrnas de WebKit dins la pagina de las "
+"preferéncias de las foncionalitats."
 
 #: data/org.gnome.epiphany.gschema.xml:121
 msgid ""
 "Controls whether the features page in the preferences window shows internal "
 "WebKit features."
 msgstr ""
+"Contròtla se la pagina de las foncionalitats de la fenèstra de las "
+"preferéncias aficha las foncionalitats intèrnas de WebKit."
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Reader mode article font style."
-msgstr ""
+msgstr "Estil de polissa pels articles en mòde lectura"
 
 #: data/org.gnome.epiphany.gschema.xml:128
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
+"Causís l'estil del còs del tèxt principal pels articles en mòde lector. Las "
+"valors possiblas son « sans » e « serif »."
 
 #: data/org.gnome.epiphany.gschema.xml:132
 msgid "Reader mode color scheme."
@@ -311,6 +334,11 @@ msgid ""
 "dark background). This setting is ignored on systems that provide a system-"
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
+"Selecciona l'estil de las colors pels articles afichats en mòde lector. Las "
+"valors possiblas son « light » (tèxte escur sus fons clar) e « dark » (tèxte "
+"clar sus fons escur). Aqueste reglatge es ignorat suls sistèmas que "
+"prepausan una preferéncia de mòde escur a l'escala del sistèma, coma GNOME "
+"42 e las versions mai recentas."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Minimum font size"
@@ -428,11 +456,11 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:193
 msgid "Hide cookie banner"
-msgstr ""
+msgstr "Rescondre la bandièra de cookies"
 
 #: data/org.gnome.epiphany.gschema.xml:194
 msgid "Hide cookie banners."
-msgstr ""
+msgstr "Rescondre las bandièras de cookies"
 
 #: data/org.gnome.epiphany.gschema.xml:198
 msgid "User agent"
@@ -468,7 +496,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:213
 msgid "Autofill form data"
-msgstr ""
+msgstr "Emplenar automaticament las donadas"
 
 #: data/org.gnome.epiphany.gschema.xml:214
 #, fuzzy
@@ -492,21 +520,24 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable Intelligent Tracking Prevention (ITP)"
-msgstr ""
+msgstr "Activar la prevencion intelligenta del seguiment (ITP)"
 
 #: data/org.gnome.epiphany.gschema.xml:224
 msgid "Whether to enable Intelligent Tracking Prevention."
-msgstr ""
+msgstr "Indica se cal activar la prevencion intelligenta del seguiment."
 
 #: data/org.gnome.epiphany.gschema.xml:228
 msgid "Allow websites to store local website data"
-msgstr ""
+msgstr "Autorizar los sites web a servar de donadas localas"
 
 #: data/org.gnome.epiphany.gschema.xml:229
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
+"Autorizar o non los sites web a servar de cookies, de donadas d'estocatge "
+"local e de basas de donadas IndexedDB. La desactivacion d'aquesta foncion "
+"empacharà nombroses sites de foncionar."
 
 #: data/org.gnome.epiphany.gschema.xml:233
 msgid "Default zoom level for new pages"
@@ -535,20 +566,27 @@ msgid ""
 "everything will be loaded as a URL unless a search engine is explicitly "
 "selected from the dropdown menu."
 msgstr ""
+"Permet de cercar automaticament sul web quand quicòm que sembla pas a una "
+"URL es picat dins la barra d'adreça. Se aqueste paramètre es desactivat, tot "
+"serà cargat coma una URL, levat se un motor de recèrca es seleccionat "
+"explicitament dins lo menú desenrotlant."
 
 #: data/org.gnome.epiphany.gschema.xml:247
 msgid "Enable mouse gestures"
-msgstr ""
+msgstr "Activar los gèstes de mirga"
 
 #: data/org.gnome.epiphany.gschema.xml:248
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
+"Activar o non los gèstes de mirga. Los gèstes de mirga son basats sul "
+"compòrtament d'Opera e s'activan en utilizant lo boton del mièg de la mirga "
+"+ gèste."
 
 #: data/org.gnome.epiphany.gschema.xml:252
 msgid "Enable navigation gestures"
-msgstr ""
+msgstr "Activar la navigacion amb gèstes"
 
 #: data/org.gnome.epiphany.gschema.xml:253
 #, fuzzy
@@ -559,16 +597,12 @@ msgstr ""
 "contactes."
 
 #: data/org.gnome.epiphany.gschema.xml:257
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Last upload directory"
-msgstr "Seleccionar un repertòri"
+msgstr "Darrièr repertòri de mandadís"
 
 #: data/org.gnome.epiphany.gschema.xml:258
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Keep track of last upload directory"
-msgstr "Seleccionar un repertòri"
+msgstr "Memorizar lo darrièr repertòri de mandadís"
 
 #: data/org.gnome.epiphany.gschema.xml:262
 msgid "Last download directory"
@@ -576,11 +610,11 @@ msgstr "Darrièr repertòri de telecargament"
 
 #: data/org.gnome.epiphany.gschema.xml:263
 msgid "Keep track of last download directory"
-msgstr ""
+msgstr "Memorizar lo darrièr repertòri de telecargament"
 
 #: data/org.gnome.epiphany.gschema.xml:267
 msgid "Hardware acceleration policy"
-msgstr ""
+msgstr "Politica d’acceleracion materiala"
 
 #: data/org.gnome.epiphany.gschema.xml:268
 msgid ""
@@ -589,10 +623,15 @@ msgid ""
 "performance on embedded devices, but increases memory usage requirements and "
 "could expose severe hardware-specific graphics driver bugs."
 msgstr ""
+"Permetre o non l'acceleracion materiala. Las valors possiblas son « always » "
+"e « never ». L'acceleracion materiala pòt èsser necessària per aténher de "
+"performanças acceptablas suls aparelhs embarcats, mas aumenta los besonhs en "
+"memòria e poiriá revelar de bugs grèus especifics al pilòt grafic del "
+"material."
 
 #: data/org.gnome.epiphany.gschema.xml:272
 msgid "Always ask for download directory"
-msgstr ""
+msgstr "Totjorn demandar lo repertòri de telecargament"
 
 #: data/org.gnome.epiphany.gschema.xml:273
 msgid "Whether to present a directory chooser dialog for every download."
@@ -1165,7 +1204,7 @@ msgstr "Una vista simpla, neta e bèla del Web"
 #: embed/ephy-about-handler.c:274 embed/ephy-about-handler.c:277
 #: embed/ephy-about-handler.c:345 embed/ephy-about-handler.c:371
 msgid "Apps"
-msgstr ""
+msgstr "Aplicacions"
 
 #: embed/ephy-about-handler.c:278
 #, fuzzy
@@ -1295,28 +1334,22 @@ msgid "_Select"
 msgstr "_Seleccionar"
 
 #: embed/ephy-client-certificate-manager.c:489
-#, fuzzy
-#| msgid "Remember password"
 msgid "Remember Decision"
-msgstr "Se remembrar del senhal"
+msgstr "Se remembrar de la decision"
 
 #: embed/ephy-client-certificate-manager.c:492
 msgid "Never"
 msgstr "Pas jamai"
 
 #: embed/ephy-client-certificate-manager.c:493
-#, fuzzy
-#| msgid "Session"
 msgid "For Session"
-msgstr "Session"
+msgstr "Pendent la session"
 
 #: embed/ephy-client-certificate-manager.c:494
 msgid "Permanently"
 msgstr "Permanentament"
 
 #: embed/ephy-download.c:715 src/preferences/prefs-general-page.c:589
-#, fuzzy
-#| msgid "Select a directory"
 msgid "Select a Directory"
 msgstr "Seleccionar un repertòri"
 
@@ -2383,10 +2416,8 @@ msgstr ""
 "Tampatz Firefox e ensajar tornamai."
 
 #: lib/sync/ephy-password-import.c:361
-#, fuzzy
-#| msgid "Error sending a file"
 msgid "Error in reading CSV file"
-msgstr "Error d'envoi del fichièr"
+msgstr "Error al moment de la lectura del fichièr CSV"
 
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
@@ -2552,10 +2583,8 @@ msgstr "L'adreça deu començar per http:// o https://"
 
 #: src/bookmarks/ephy-bookmark-properties.c:358
 #: src/preferences/prefs-search-engine-page.c:118
-#, fuzzy
-#| msgid "%s is not a valid URI"
 msgid "Address is not a valid URL"
-msgstr "« %s » es pas una URI valida"
+msgstr "L’adreça es pas una URL valida"
 
 #: src/bookmarks/ephy-bookmarks-dialog.c:658
 #: src/resources/gtk/bookmark-row.blp:66 src/resources/gtk/lang-row.blp:34
@@ -3116,20 +3145,16 @@ msgid "_Paste"
 msgstr "_Pegar"
 
 #: src/ephy-window.c:1005
-#, fuzzy
-#| msgid "Text only"
 msgid "_Paste Text Only"
-msgstr "Sonque tèxt"
+msgstr "Pegar coma _tèxte"
 
 #: src/ephy-window.c:1008
 msgid "S_end Link by Email…"
 msgstr "_Mandar lo ligam per corrièr electronic…"
 
 #: src/ephy-window.c:1009
-#, fuzzy
-#| msgid "Add _Bookmark"
 msgid "Add _Link to Bookmarks"
-msgstr "Apondre un _favorit"
+msgstr "Apondre lo _ligam als marcapaginas"
 
 #: src/ephy-window.c:1011
 msgid "_Reload"
@@ -3246,10 +3271,8 @@ msgid "Open Link"
 msgstr "Dobrir lo ligam"
 
 #: src/ephy-window.c:1466
-#, fuzzy
-#| msgid "Open Link in New _Tab"
 msgid "Open Link In New Tab"
-msgstr "Dobrir lo ligam dins un _onglet novèl"
+msgstr "Dobrir lo ligam dins un onglet novèl"
 
 #: src/ephy-window.c:1468
 msgid "Open Link In New Window"
@@ -3283,10 +3306,8 @@ msgid "Always Allow"
 msgstr "Totjorn autorizar"
 
 #: src/ephy-window.c:2595
-#, fuzzy
-#| msgid "Search Engines"
 msgid "Search Engine Available"
-msgstr "Motors de recèrca"
+msgstr "Cercar dins los motors de recèrca disponibles"
 
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
 #: src/ephy-window.c:2601
@@ -3297,10 +3318,8 @@ msgstr "Apondre « %s »"
 #: src/ephy-window.c:2605 src/ephy-window.c:2613
 #: src/preferences/prefs-search-engine-page.c:310
 #: src/preferences/prefs-search-engine-page.c:312
-#, fuzzy
-#| msgid "A_dd Search Engine…"
 msgid "Add Search Engine"
-msgstr "Apon_dre un motor de recèrca…"
+msgstr "Apondre un motor de recèrca"
 
 #: src/ephy-window.c:3048
 msgid "Reader Mode Available"
@@ -3445,8 +3464,8 @@ msgstr "Afichar los detalhs"
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d operacion de telecargament activa"
+msgstr[1] "%d operacions de telecargament activas"
 
 #: src/ephy-window.c:3716
 msgid "Set as Default Browser?"
@@ -3519,7 +3538,7 @@ msgstr "Tampar mantun onglet ?"
 
 #: src/ephy-window.c:5184
 msgid "If this window is closed, all open tabs will be lost"
-msgstr ""
+msgstr "S’aquesta fenèstra es tampada, totes los onglets seràn perduts"
 
 #: src/ephy-window.c:5185
 msgid "C_lose Tabs"
@@ -3668,7 +3687,7 @@ msgstr ""
 
 #: src/preferences/prefs-features-page.c:337
 msgid "Reset to default"
-msgstr ""
+msgstr "Reïnicializar los paramètres"
 
 #: src/preferences/prefs-general-page.c:210
 #: src/resources/gtk/prefs-lang-dialog.blp:6
@@ -3725,7 +3744,7 @@ msgstr "Adreça"
 
 #: src/preferences/prefs-search-engine-page.c:207
 msgid "This shortcut is already used."
-msgstr ""
+msgstr "L'acorchi de clavièr es ja utilizat."
 
 #: src/preferences/prefs-search-engine-page.c:209
 msgid "Search shortcuts must not contain any space."
@@ -4179,7 +4198,7 @@ msgstr "Cap de resultat pas trobat"
 
 #: src/resources/gtk/history-dialog.blp:125
 msgid "Visited pages will be listed here"
-msgstr ""
+msgstr "Las paginas consultadas seràn listadas aicí"
 
 #: src/resources/gtk/history-dialog.blp:155
 msgid "_Open"
@@ -4488,7 +4507,7 @@ msgstr "Blocar las _fenèstras sorgissentas"
 
 #: src/resources/gtk/prefs-general-page.blp:61
 msgid "Block C_ookie Banners"
-msgstr ""
+msgstr "Blocar las bandièras de c_ookies"
 
 #: src/resources/gtk/prefs-general-page.blp:71
 msgid "Most _Visited Pages"
@@ -4763,7 +4782,7 @@ msgstr "Recargar la pagina actuala"
 #: src/resources/gtk/shortcuts-dialog.blp:78
 msgctxt "shortcuts dialog"
 msgid "Reload Bypassing Cache"
-msgstr ""
+msgstr "Recargar en ignorant lo cache"
 
 #: src/resources/gtk/shortcuts-dialog.blp:83
 msgctxt "shortcuts dialog"
