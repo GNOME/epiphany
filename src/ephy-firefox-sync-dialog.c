@@ -28,12 +28,15 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-sync-crypto.h"
 #include "ephy-sync-service.h"
 #include "ephy-sync-utils.h"
 #include "ephy-time-helpers.h"
 #include "synced-tabs-dialog.h"
 
-#define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v3"
+/* TODO: Register a proper Epiphany-specific client_id with Mozilla before shipping. */
+#define FXA_CLIENT_ID ""
+#define FXA_OLDSYNC_SCOPE "https://identity.mozilla.com/apps/oldsync"
 
 #define EPHY_TYPE_SYNC_FREQUENCY (ephy_sync_frequency_get_type ())
 
@@ -90,6 +93,13 @@ struct _EphyFirefoxSyncDialog {
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
   WebKitUserScript *fxa_script;
+
+  /* OAuth sign-in state (ephemeral, discarded after sign-in). */
+  SyncCryptoPKCEChallenge *pkce_challenge;
+  SyncCryptoECDHKeyPair *ecdh_key_pair;
+  char *oauth_state;
+  char *sign_in_email;
+  char *sign_in_uid;
 };
 
 G_DEFINE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, ADW_TYPE_WINDOW)
@@ -172,6 +182,54 @@ sync_sign_in_details_show (EphyFirefoxSyncDialog *sync_dialog,
   g_free (message);
 }
 
+/* Build FxA OAuth URL with PKCE, ECDH keys_jwk, and random state.
+ * Ref: FxAccountsOAuth.sys.mjs beginOAuthFlow().
+ */
+static char *
+sync_build_oauth_url (EphyFirefoxSyncDialog *sync_dialog)
+{
+  g_autofree char *jwk = NULL;
+  g_autofree char *keys_jwk = NULL;
+  guint8 state_bytes[16];
+  char *url;
+
+  /* Generate fresh PKCE challenge and ECDH key pair. */
+  g_clear_pointer (&sync_dialog->pkce_challenge, ephy_sync_crypto_pkce_challenge_free);
+  g_clear_pointer (&sync_dialog->ecdh_key_pair, ephy_sync_crypto_ecdh_key_pair_free);
+  g_clear_pointer (&sync_dialog->oauth_state, g_free);
+
+  sync_dialog->pkce_challenge = ephy_sync_crypto_pkce_challenge_new ();
+  sync_dialog->ecdh_key_pair = ephy_sync_crypto_ecdh_key_pair_new ();
+
+  /* Generate random state parameter. */
+  ephy_sync_utils_generate_random_bytes (NULL, 16, state_bytes);
+  sync_dialog->oauth_state = ephy_sync_utils_base64_urlsafe_encode (state_bytes, 16, TRUE);
+
+  /* keys_jwk = base64url(JWK of our ECDH public key). */
+  jwk = ephy_sync_crypto_ecdh_key_pair_to_jwk (sync_dialog->ecdh_key_pair);
+  keys_jwk = ephy_sync_utils_base64_urlsafe_encode ((const guint8 *)jwk, strlen (jwk), TRUE);
+
+  url = g_strdup_printf (
+    "https://accounts.firefox.com/authorization?"
+    "client_id=%s"
+    "&scope=%s%%20profile%%3Awrite"
+    "&state=%s"
+    "&code_challenge=%s"
+    "&code_challenge_method=S256"
+    "&access_type=offline"
+    "&keys_jwk=%s"
+    "&response_type=code"
+    "&action=email"
+    "&context=oauth_webchannel_v1",
+    FXA_CLIENT_ID,
+    FXA_OLDSYNC_SCOPE,
+    sync_dialog->oauth_state,
+    sync_dialog->pkce_challenge->code_challenge,
+    keys_jwk);
+
+  return url;
+}
+
 static void
 sync_sign_in_error_cb (EphySyncService       *service,
                        const char            *error,
@@ -182,7 +240,10 @@ sync_sign_in_error_cb (EphySyncService       *service,
 
   /* Display the error message and reload the iframe. */
   sync_sign_in_details_show (sync_dialog, error);
-  webkit_web_view_load_uri (sync_dialog->fxa_web_view, FXA_IFRAME_URL);
+  {
+    g_autofree char *url = sync_build_oauth_url (sync_dialog);
+    webkit_web_view_load_uri (sync_dialog->fxa_web_view, url);
+  }
 }
 
 static void
@@ -203,10 +264,16 @@ sync_secrets_store_finished_cb (EphySyncService       *service,
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (sync_dialog, error->message);
-    webkit_web_view_load_uri (sync_dialog->fxa_web_view, FXA_IFRAME_URL);
+    {
+      g_autofree char *url = sync_build_oauth_url (sync_dialog);
+      webkit_web_view_load_uri (sync_dialog->fxa_web_view, url);
+    }
   }
 }
 
+/* Send a WebChannelMessageToContent event to the FxA page.
+ * Ref: FxAccountsWebChannel.sys.mjs _sendMessage().
+ */
 static void
 sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
                              const char            *web_channel_id,
@@ -224,12 +291,12 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
   g_assert (EPHY_FIREFOX_SYNC_DIALOG (sync_dialog));
   g_assert (web_channel_id);
   g_assert (command);
-  g_assert (message_id);
   g_assert (data);
 
   message = json_object_new ();
   json_object_set_string_member (message, "command", command);
-  json_object_set_string_member (message, "messageId", message_id);
+  if (message_id)
+    json_object_set_string_member (message, "messageId", message_id);
   json_object_set_object_member (message, "data", json_object_ref (data));
   detail = json_object_new ();
   json_object_set_string_member (detail, "id", web_channel_id);
@@ -239,8 +306,7 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
 
   type = "WebChannelMessageToContent";
   detail_str = json_to_string (node, FALSE);
-  script = g_strdup_printf ("let e = new window.CustomEvent(\"%s\", {detail: %s});"
-                            "window.dispatchEvent(e);",
+  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"%s\", {detail: %s}));",
                             type, detail_str);
 
   /* We don't expect any response from the server. */
@@ -252,6 +318,9 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
   json_node_unref (node);
 }
 
+/* Parse a WebChannelMessageToChrome event from the FxA page.
+ * Ref: FxAccountsWebChannel.sys.mjs _receiveMessage().
+ */
 static gboolean
 sync_parse_message_from_fxa_content (const char  *message,
                                      char       **web_channel_id,
@@ -261,6 +330,7 @@ sync_parse_message_from_fxa_content (const char  *message,
                                      char       **error_msg)
 {
   JsonNode *node;
+  JsonNode *detail_node = NULL;
   JsonObject *object;
   JsonObject *detail;
   JsonObject *msg;
@@ -302,41 +372,74 @@ sync_parse_message_from_fxa_content (const char  *message,
     error = "Message is not a JSON object";
     goto out_error;
   }
-  type = json_object_get_string_member (object, "type");
-  if (!type) {
+
+  if (!json_object_has_member (object, "type") ||
+      !JSON_NODE_HOLDS_VALUE (json_object_get_member (object, "type"))) {
     error = "Message has missing or invalid 'type' member";
     goto out_error;
-  } else if (strcmp (type, "WebChannelMessageToChrome")) {
+  }
+  type = json_object_get_string_member (object, "type");
+  if (!type || strcmp (type, "WebChannelMessageToChrome")) {
     error = "Message type is not WebChannelMessageToChrome";
     goto out_error;
   }
-  detail = json_object_get_object_member (object, "detail");
-  if (!detail) {
-    error = "Message has missing or invalid 'detail' member";
-    goto out_error;
-  }
-  channel_id = json_object_get_string_member (detail, "id");
-  if (!channel_id) {
-    error = "'Detail' object has missing or invalid 'id' member";
-    goto out_error;
-  }
-  msg = json_object_get_object_member (detail, "message");
-  if (!msg) {
-    error = "'Detail' object has missing or invalid 'message' member";
-    goto out_error;
-  }
-  cmd = json_object_get_string_member (msg, "command");
-  if (!cmd) {
-    error = "'Message' object has missing or invalid 'command' member";
+
+  if (!json_object_has_member (object, "detail")) {
+    error = "Message has missing 'detail' member";
     goto out_error;
   }
 
+  /* The FxA content server sends detail as a JSON string, not an object. */
+  if (JSON_NODE_HOLDS_VALUE (json_object_get_member (object, "detail"))) {
+    const char *detail_str = json_object_get_string_member (object, "detail");
+    if (!detail_str) {
+      error = "Message 'detail' is not a string or object";
+      goto out_error;
+    }
+    detail_node = json_from_string (detail_str, NULL);
+    if (!detail_node || !JSON_NODE_HOLDS_OBJECT (detail_node)) {
+      error = "Message 'detail' string is not valid JSON object";
+      goto out_error;
+    }
+    detail = json_node_get_object (detail_node);
+  } else if (JSON_NODE_HOLDS_OBJECT (json_object_get_member (object, "detail"))) {
+    detail = json_object_get_object_member (object, "detail");
+  } else {
+    error = "Message 'detail' has unexpected type";
+    goto out_error;
+  }
+
+  if (!json_object_has_member (detail, "id") ||
+      !JSON_NODE_HOLDS_VALUE (json_object_get_member (detail, "id"))) {
+    error = "'Detail' object has missing or invalid 'id' member";
+    goto out_error;
+  }
+  channel_id = json_object_get_string_member (detail, "id");
+
+  if (!json_object_has_member (detail, "message") ||
+      !JSON_NODE_HOLDS_OBJECT (json_object_get_member (detail, "message"))) {
+    error = "'Detail' object has missing or invalid 'message' member";
+    goto out_error;
+  }
+  msg = json_object_get_object_member (detail, "message");
+
+  if (!json_object_has_member (msg, "command") ||
+      !JSON_NODE_HOLDS_VALUE (json_object_get_member (msg, "command"))) {
+    error = "'Message' object has missing or invalid 'command' member";
+    goto out_error;
+  }
+  cmd = json_object_get_string_member (msg, "command");
+
   *web_channel_id = g_strdup (channel_id);
   *command = g_strdup (cmd);
-  *message_id = json_object_has_member (msg, "messageId") ?
-                g_strdup (json_object_get_string_member (msg, "messageId")) :
-                NULL;
-  if (json_object_has_member (msg, "data"))
+  if (json_object_has_member (msg, "messageId") &&
+      JSON_NODE_HOLDS_VALUE (json_object_get_member (msg, "messageId")))
+    *message_id = g_strdup (json_object_get_string_member (msg, "messageId"));
+  else
+    *message_id = NULL;
+
+  if (json_object_has_member (msg, "data") &&
+      JSON_NODE_HOLDS_OBJECT (json_object_get_member (msg, "data")))
     msg_data = json_object_get_object_member (msg, "data");
   *data = msg_data ? json_object_ref (msg_data) : NULL;
 
@@ -351,11 +454,148 @@ out_error:
   *error_msg = g_strdup (error);
 
 out_no_error:
+  if (detail_node)
+    json_node_unref (detail_node);
   json_node_unref (node);
 
   return success;
 }
 
+/* OAuth token exchange callback (POST /oauth/token). Decrypts the
+ * scoped-keys JWE and calls sign_in() with the derived Sync key.
+ * Ref: FxAccountsOAuth.sys.mjs completeOAuthFlow().
+ */
+static void
+sync_oauth_token_exchange_cb (SoupSession  *session,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (user_data);
+  g_autoptr (GBytes) bytes = NULL;
+  g_autoptr (GError) error = NULL;
+  SoupMessage *msg;
+  g_autoptr (JsonNode) node = NULL;
+  JsonObject *json;
+  g_autoptr (JsonNode) keys_node = NULL;
+  JsonObject *keys_json;
+  JsonObject *oldsync_key;
+  const char *access_token;
+  const char *refresh_token;
+  const char *keys_jwe;
+  const char *kid;
+  const char *k_b64;
+  g_autofree char *decrypted_keys = NULL;
+  g_autofree guint8 *sync_key = NULL;
+  gsize sync_key_len;
+  g_autofree char *sync_key_hex = NULL;
+  guint status_code;
+  gconstpointer data;
+
+  bytes = soup_session_send_and_read_finish (session, result, &error);
+  if (!bytes) {
+    g_warning ("Failed to exchange OAuth code: %s", error->message);
+    goto out_error;
+  }
+
+  msg = soup_session_get_async_result_message (session, result);
+  status_code = soup_message_get_status (msg);
+  if (status_code != 200) {
+    data = g_bytes_get_data (bytes, NULL);
+    g_warning ("Token exchange failed. Status: %u, response: %s",
+               status_code, data ? (const char *)data : "(null)");
+    goto out_error;
+  }
+
+  data = g_bytes_get_data (bytes, NULL);
+  if (!data) {
+    g_warning ("Empty response from token exchange");
+    goto out_error;
+  }
+
+  node = json_from_string (data, &error);
+  if (error) {
+    g_warning ("Token response is not valid JSON: %s", error->message);
+    goto out_error;
+  }
+  json = json_node_get_object (node);
+  if (!json) {
+    g_warning ("Token response is not a JSON object");
+    goto out_error;
+  }
+
+  access_token = json_object_get_string_member (json, "access_token");
+  refresh_token = json_object_get_string_member (json, "refresh_token");
+  keys_jwe = json_object_get_string_member (json, "keys_jwe");
+  if (!access_token || !keys_jwe) {
+    g_warning ("Token response missing access_token or keys_jwe");
+    goto out_error;
+  }
+  if (!refresh_token)
+    refresh_token = "";
+
+  /* Decrypt the keys_jwe to get the scoped sync key. */
+  decrypted_keys = ephy_sync_crypto_decrypt_jwe (keys_jwe, sync_dialog->ecdh_key_pair);
+  if (!decrypted_keys) {
+    g_warning ("Failed to decrypt keys_jwe");
+    goto out_error;
+  }
+
+  keys_node = json_from_string (decrypted_keys, &error);
+  if (error || !keys_node) {
+    g_warning ("Decrypted keys is not valid JSON");
+    goto out_error;
+  }
+  keys_json = json_node_get_object (keys_node);
+  if (!keys_json) {
+    g_warning ("Decrypted keys is not a JSON object");
+    goto out_error;
+  }
+  oldsync_key = json_object_get_object_member (keys_json, FXA_OLDSYNC_SCOPE);
+  if (!oldsync_key) {
+    g_warning ("Decrypted keys missing oldsync scope");
+    goto out_error;
+  }
+
+  kid = json_object_get_string_member (oldsync_key, "kid");
+  k_b64 = json_object_get_string_member (oldsync_key, "k");
+  if (!kid || !k_b64) {
+    g_warning ("Scoped key missing kid or k");
+    goto out_error;
+  }
+
+  /* Decode the scoped key (base64url) and convert to hex for storage. */
+  sync_key = ephy_sync_utils_base64_urlsafe_decode (k_b64, &sync_key_len, TRUE);
+  if (!sync_key || (sync_key_len != 32 && sync_key_len != 64)) {
+    g_warning ("Invalid scoped key length: %" G_GSIZE_FORMAT, sync_key_len);
+    goto out_error;
+  }
+  sync_key_hex = ephy_sync_utils_encode_hex (sync_key, sync_key_len);
+
+  /* Sign in with the OAuth tokens and scoped key. */
+  ephy_sync_service_sign_in (ephy_shell_get_sync_service (ephy_shell_get_default ()),
+                             sync_dialog->sign_in_email,
+                             sync_dialog->sign_in_uid,
+                             access_token, refresh_token,
+                             sync_key_hex, kid);
+
+  goto out_cleanup;
+
+out_error:
+  sync_sign_in_details_show (sync_dialog, _("Something went wrong, please try again later."));
+
+out_cleanup:
+  /* Clean up ephemeral OAuth state. */
+  g_clear_pointer (&sync_dialog->pkce_challenge, ephy_sync_crypto_pkce_challenge_free);
+  g_clear_pointer (&sync_dialog->ecdh_key_pair, ephy_sync_crypto_ecdh_key_pair_free);
+  g_clear_pointer (&sync_dialog->oauth_state, g_free);
+  g_clear_pointer (&sync_dialog->sign_in_email, g_free);
+  g_clear_pointer (&sync_dialog->sign_in_uid, g_free);
+}
+
+/* Dispatch WebChannel commands from the FxA content server
+ * (fxa_status, can_link_account, oauth_login, login).
+ * Ref: FxAccountsWebChannel.sys.mjs _promiseMessage().
+ */
 static void
 sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
                                   JSCValue                 *value,
@@ -384,18 +624,134 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
     goto out;
   }
 
-  LOG ("WebChannelMessageToChrome: received %s command", command);
+  LOG ("WebChannel: received command '%s'", command);
 
-  if (!g_strcmp0 (command, "fxaccounts:can_link_account")) {
-    /* Confirm a relink. Respond with {ok: true}. */
+  if (!g_strcmp0 (command, "fxaccounts:fxa_status")) {
+    /* Respond with our capabilities and sign-in status. */
     JsonObject *response = json_object_new ();
-    json_object_set_boolean_member (response, "ok", TRUE);
+    JsonObject *capabilities = json_object_new ();
+    JsonArray *engines = json_array_new ();
+    json_array_add_string_element (engines, "bookmarks");
+    json_array_add_string_element (engines, "history");
+    json_array_add_string_element (engines, "passwords");
+    json_array_add_string_element (engines, "tabs");
+    json_object_set_boolean_member (capabilities, "choose_what_to_sync", TRUE);
+    json_object_set_boolean_member (capabilities, "pairing", FALSE);
+    json_object_set_array_member (capabilities, "engines", engines);
+    json_object_set_object_member (response, "capabilities", capabilities);
+    json_object_set_null_member (response, "signedInUser");
     sync_message_to_fxa_content (sync_dialog, web_channel_id, command, message_id, response);
     json_object_unref (response);
+  } else if (!g_strcmp0 (command, "fxaccounts:can_link_account")) {
+    /* Confirm a relink and capture the email/uid. */
+    if (data) {
+      if (json_object_has_member (data, "email")) {
+        g_free (sync_dialog->sign_in_email);
+        sync_dialog->sign_in_email = g_strdup (json_object_get_string_member (data, "email"));
+      }
+      if (json_object_has_member (data, "uid")) {
+        g_free (sync_dialog->sign_in_uid);
+        sync_dialog->sign_in_uid = g_strdup (json_object_get_string_member (data, "uid"));
+      }
+    }
+    {
+      JsonObject *response = json_object_new ();
+      json_object_set_boolean_member (response, "ok", TRUE);
+      sync_message_to_fxa_content (sync_dialog, web_channel_id, command, message_id, response);
+      json_object_unref (response);
+    }
+  } else if (!g_strcmp0 (command, "fxaccounts:oauth_login")) {
+    /* Exchange the authorization code for tokens. */
+    const char *code;
+    const char *state;
+    SoupMessage *msg;
+    SoupMessageHeaders *request_headers;
+    char *request_body;
+    char *url;
+    const char *content_type = "application/json; charset=utf-8";
+    g_autofree char *accounts_server = NULL;
+    g_autoptr (GBytes) bytes = NULL;
+    SoupSession *soup_session;
+
+    if (!data) {
+      g_warning ("fxaccounts:oauth_login has no data");
+      is_error = TRUE;
+      goto out;
+    }
+
+    code = json_object_has_member (data, "code") ?
+           json_object_get_string_member (data, "code") : NULL;
+    state = json_object_has_member (data, "state") ?
+            json_object_get_string_member (data, "state") : NULL;
+    if (!code) {
+      g_warning ("OAuth login data missing 'code'");
+      is_error = TRUE;
+      goto out;
+    }
+
+    /* Verify state matches. */
+    if (!state || !sync_dialog->oauth_state ||
+        g_strcmp0 (state, sync_dialog->oauth_state)) {
+      g_warning ("OAuth state mismatch");
+      is_error = TRUE;
+      goto out;
+    }
+
+    /* Capture email/uid from oauth_login data if available. */
+    if (json_object_has_member (data, "email")) {
+      g_free (sync_dialog->sign_in_email);
+      sync_dialog->sign_in_email = g_strdup (json_object_get_string_member (data, "email"));
+    }
+    if (json_object_has_member (data, "uid")) {
+      g_free (sync_dialog->sign_in_uid);
+      sync_dialog->sign_in_uid = g_strdup (json_object_get_string_member (data, "uid"));
+    }
+
+    if (!sync_dialog->sign_in_email || !sync_dialog->sign_in_uid) {
+      g_warning ("Missing email or uid for sign-in");
+      is_error = TRUE;
+      goto out;
+    }
+
+    /* Exchange authorization code for tokens. */
+    accounts_server = ephy_sync_utils_get_accounts_server ();
+    url = g_strdup_printf ("%s/oauth/token", accounts_server);
+    request_body = g_strdup_printf (
+      "{\"client_id\":\"%s\","
+      "\"grant_type\":\"authorization_code\","
+      "\"code\":\"%s\","
+      "\"code_verifier\":\"%s\"}",
+      FXA_CLIENT_ID, code, sync_dialog->pkce_challenge->code_verifier);
+
+    msg = soup_message_new (SOUP_METHOD_POST, url);
+    bytes = g_bytes_new_take (request_body, strlen (request_body));
+    soup_message_set_request_body_from_bytes (msg, content_type, bytes);
+    request_headers = soup_message_get_request_headers (msg);
+    soup_message_headers_append (request_headers, "content-type", content_type);
+
+    soup_session = soup_session_new ();
+    soup_session_send_and_read_async (soup_session, msg, G_PRIORITY_DEFAULT, NULL,
+                                      (GAsyncReadyCallback)sync_oauth_token_exchange_cb,
+                                      sync_dialog);
+    g_object_unref (soup_session);
+    g_free (url);
   } else if (!g_strcmp0 (command, "fxaccounts:login")) {
-    g_warning ("fxaccounts:login is no longer supported, OAuth flow required");
-    is_error = TRUE;
-    goto out;
+    if (!data)
+      goto out;
+
+    /* The FxA server sends fxaccounts:login with session credentials
+     * before sending fxaccounts:oauth_login with the OAuth code.
+     * Just capture email/uid and wait for the OAuth message.
+     */
+    if (json_object_has_member (data, "email")) {
+      g_free (sync_dialog->sign_in_email);
+      sync_dialog->sign_in_email = g_strdup (json_object_get_string_member (data, "email"));
+    }
+    if (json_object_has_member (data, "uid")) {
+      g_free (sync_dialog->sign_in_uid);
+      sync_dialog->sign_in_uid = g_strdup (json_object_get_string_member (data, "uid"));
+    }
+    LOG ("fxaccounts:login received, waiting for fxaccounts:oauth_login");
   }
 
 out:
@@ -409,7 +765,11 @@ out:
 
   if (is_error) {
     sync_sign_in_details_show (sync_dialog, _("Something went wrong, please try again later."));
-    webkit_web_view_load_uri (sync_dialog->fxa_web_view, FXA_IFRAME_URL);
+    {
+      char *url = sync_build_oauth_url (sync_dialog);
+      webkit_web_view_load_uri (sync_dialog->fxa_web_view, url);
+      g_free (url);
+    }
   }
 }
 
@@ -436,6 +796,10 @@ sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
 }
 
 static void
+/* Set up the WebKitWebView for FxA sign-in. Injects a user script to
+ * relay WebChannelMessageToChrome events to our native handler.
+ * Ref: FxAccountsWebChannel.sys.mjs _setupChannel().
+ */
 sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
 {
   EphyEmbedShell *shell;
@@ -443,6 +807,7 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
   const char *script;
+  g_autofree char *fxa_url = NULL;
 
   if (!sync_dialog->fxa_web_view) {
     script =
@@ -505,7 +870,8 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
     g_object_unref (sync_context);
   }
 
-  webkit_web_view_load_uri (sync_dialog->fxa_web_view, FXA_IFRAME_URL);
+  fxa_url = sync_build_oauth_url (sync_dialog);
+  webkit_web_view_load_uri (sync_dialog->fxa_web_view, fxa_url);
   gtk_widget_set_visible (sync_dialog->sync_firefox_iframe_label, FALSE);
 }
 
@@ -623,6 +989,12 @@ prefs_sync_page_finalize (GObject *object)
     webkit_user_script_unref (sync_dialog->fxa_script);
     g_object_unref (sync_dialog->fxa_manager);
   }
+
+  g_clear_pointer (&sync_dialog->pkce_challenge, ephy_sync_crypto_pkce_challenge_free);
+  g_clear_pointer (&sync_dialog->ecdh_key_pair, ephy_sync_crypto_ecdh_key_pair_free);
+  g_clear_pointer (&sync_dialog->oauth_state, g_free);
+  g_clear_pointer (&sync_dialog->sign_in_email, g_free);
+  g_clear_pointer (&sync_dialog->sign_in_uid, g_free);
 
   G_OBJECT_CLASS (ephy_firefox_sync_dialog_parent_class)->finalize (object);
 }
