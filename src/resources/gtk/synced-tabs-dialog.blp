@@ -3,6 +3,7 @@ using Adw 1;
 
 template $SyncedTabsDialog: Adw.Window {
   height-request: 500;
+  width-request: 400;
   modal: true;
   destroy-with-parent: true;
   title: _("Synced Tabs");
@@ -27,32 +28,16 @@ template $SyncedTabsDialog: Adw.Window {
         );
       }
 
-      Box {
-        orientation: vertical;
-        spacing: 6;
+      ScrolledWindow {
+        vexpand: true;
+        hscrollbar-policy: never;
 
-        ScrolledWindow {
-          vexpand: true;
+        ListBox list_box {
+          selection-mode: none;
 
-          TreeView treeview {
-            headers-visible: false;
-            row-activated => $treeview_row_activated_cb();
-
-            [internal-child selection]
-            TreeSelection {
-              mode: single;
-            }
-
-            TreeViewColumn {
-              CellRendererPixbuf {}
-            }
-
-            TreeViewColumn {
-              CellRendererText {
-                ellipsize: end;
-              }
-            }
-          }
+          styles [
+            "boxed-list",
+          ]
         }
       }
     };

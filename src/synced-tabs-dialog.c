@@ -33,22 +33,12 @@ struct _SyncedTabsDialog {
   AdwWindow parent_instance;
 
   EphyOpenTabsManager *manager;
-
   WebKitFaviconDatabase *database;
-
-  GtkTreeModel *treestore;
-  GtkWidget *treeview;
-
+  GtkWidget *list_box;
   GCancellable *cancellable;
 };
 
 G_DEFINE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, ADW_TYPE_WINDOW)
-
-enum {
-  ICON_COLUMN,
-  TITLE_COLUMN,
-  URL_COLUMN
-};
 
 enum {
   PROP_0,
@@ -59,182 +49,144 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 typedef struct {
-  SyncedTabsDialog *dialog;
-  char *title;
+  GtkWidget *row;
   char *url;
-  guint parent_index;
-} PopulateRowAsyncData;
+} FaviconAsyncData;
 
-static PopulateRowAsyncData *
-populate_row_async_data_new (SyncedTabsDialog *dialog,
-                             const char       *title,
-                             const char       *url,
-                             guint             parent_index)
+static FaviconAsyncData *
+favicon_async_data_new (GtkWidget  *row,
+                        const char *url)
 {
-  PopulateRowAsyncData *data;
-
-  data = g_new (PopulateRowAsyncData, 1);
-  data->dialog = g_object_ref (dialog);
-  data->title = g_strdup (title);
+  FaviconAsyncData *data = g_new (FaviconAsyncData, 1);
+  data->row = g_object_ref (row);
   data->url = g_strdup (url);
-  data->parent_index = parent_index;
-
   return data;
 }
 
 static void
-populate_row_async_data_free (PopulateRowAsyncData *data)
+favicon_async_data_free (FaviconAsyncData *data)
 {
-  g_object_unref (data->dialog);
-  g_free (data->title);
+  g_object_unref (data->row);
   g_free (data->url);
   g_free (data);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
-treeview_row_activated_cb (GtkTreeView       *view,
-                           GtkTreePath       *path,
-                           GtkTreeViewColumn *column,
-                           gpointer           user_data)
+tab_row_activated_cb (AdwActionRow *row,
+                      gpointer      user_data)
 {
+  SyncedTabsDialog *dialog = EPHY_SYNCED_TABS_DIALOG (user_data);
+  const char *url;
   EphyShell *shell;
   EphyEmbed *embed;
   GtkWindow *window;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  char *url;
-  char *path_str;
 
-  /* No action on top-level rows. */
-  if (gtk_tree_path_get_depth (path) == 1)
+  url = g_object_get_data (G_OBJECT (row), "tab-url");
+  if (!url)
     return;
-
-  /* No action on local tabs, i.e. children of first top-level row. */
-  path_str = gtk_tree_path_to_string (path);
-  if (g_str_has_prefix (path_str, "0:"))
-    goto out;
-
-  model = gtk_tree_view_get_model (view);
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, URL_COLUMN, &url, -1);
 
   shell = ephy_shell_get_default ();
   window = gtk_application_get_active_window (GTK_APPLICATION (shell));
   embed = ephy_shell_new_tab (shell, EPHY_WINDOW (window),
                               NULL, EPHY_NEW_TAB_JUMP);
   ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
-
-  g_free (url);
-out:
-  g_free (path_str);
+  gtk_window_close (GTK_WINDOW (dialog));
 }
 
 static void
-synced_tabs_dialog_favicon_loaded_cb (GObject      *source,
-                                      GAsyncResult *result,
-                                      gpointer      user_data)
+favicon_loaded_cb (GObject      *source,
+                   GAsyncResult *result,
+                   gpointer      user_data)
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
-  PopulateRowAsyncData *data = (PopulateRowAsyncData *)user_data;
+  FaviconAsyncData *data = user_data;
   g_autoptr (GdkTexture) texture = NULL;
   g_autoptr (GIcon) favicon = NULL;
   g_autoptr (GError) error = NULL;
-  GtkTreeIter parent_iter;
-  char *escaped_url;
 
   texture = webkit_favicon_database_get_favicon_finish (database, result, &error);
-  if (!texture && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+  if (!texture && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    favicon_async_data_free (data);
     return;
+  }
 
   favicon = ephy_favicon_get_from_texture_scaled (texture, FAVICON_SIZE, FAVICON_SIZE);
-
-  gtk_tree_model_get_iter_first (data->dialog->treestore, &parent_iter);
-  for (guint i = 0; i < data->parent_index; i++)
-    gtk_tree_model_iter_next (data->dialog->treestore, &parent_iter);
-
   if (!favicon) {
     const char *icon_name = ephy_get_fallback_favicon_name (data->url, EPHY_FAVICON_TYPE_SHOW_MISSING_PLACEHOLDER);
-
     if (!icon_name)
       icon_name = "adw-tab-icon-missing-symbolic";
-
     favicon = g_themed_icon_new (icon_name);
   }
 
-  escaped_url = g_markup_escape_text (data->url, -1);
-  gtk_tree_store_insert_with_values (GTK_TREE_STORE (data->dialog->treestore),
-                                     NULL, &parent_iter, -1,
-                                     ICON_COLUMN, favicon,
-                                     TITLE_COLUMN, data->title,
-                                     URL_COLUMN, escaped_url,
-                                     -1);
+  adw_action_row_add_prefix (ADW_ACTION_ROW (data->row),
+                             gtk_image_new_from_gicon (favicon));
 
-  g_free (escaped_url);
-  populate_row_async_data_free (data);
+  favicon_async_data_free (data);
 }
 
 static void
 synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
                                          EphyOpenTabsRecord *record,
-                                         gboolean            is_local,
-                                         guint               index)
+                                         gboolean            is_local)
 {
-  PopulateRowAsyncData *data;
-  JsonArray *url_history;
+  GtkWidget *expander;
   GList *tabs;
-  const char *title;
-  const char *url;
-  g_autoptr (GIcon) icon = NULL;
-
-  g_assert (EPHY_IS_SYNCED_TABS_DIALOG (dialog));
-  g_assert (EPHY_IS_OPEN_TABS_RECORD (record));
+  const char *device_name;
 
   if (is_local)
-    title = _("Local Tabs");
+    device_name = _("Local Tabs");
   else
-    title = ephy_open_tabs_record_get_client_name (record);
+    device_name = ephy_open_tabs_record_get_client_name (record);
 
-  icon = g_themed_icon_new ("computer-symbolic");
-
-  /* Insert top-level row. */
-  gtk_tree_store_insert_with_values (GTK_TREE_STORE (dialog->treestore),
-                                     NULL, NULL, -1,
-                                     ICON_COLUMN, icon,
-                                     TITLE_COLUMN, title,
-                                     URL_COLUMN, NULL,
-                                     -1);
+  expander = adw_expander_row_new ();
+  adw_expander_row_set_expanded (ADW_EXPANDER_ROW (expander), TRUE);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (expander), device_name);
+  adw_expander_row_add_prefix (ADW_EXPANDER_ROW (expander),
+                               gtk_image_new_from_icon_name ("computer-symbolic"));
 
   tabs = ephy_open_tabs_record_get_tabs (record);
   for (GList *l = tabs; l && l->data; l = l->next) {
-    title = json_object_get_string_member (l->data, "title");
-    url_history = json_object_get_array_member (l->data, "urlHistory");
-    url = json_array_get_string_element (url_history, 0);
+    const char *title = json_object_get_string_member (l->data, "title");
+    JsonArray *url_history = json_object_get_array_member (l->data, "urlHistory");
+    const char *url = json_array_get_string_element (url_history, 0);
+    GtkWidget *tab_row;
 
-    data = populate_row_async_data_new (dialog, title, url, index);
+    tab_row = adw_action_row_new ();
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (tab_row), title);
+    adw_action_row_set_subtitle (ADW_ACTION_ROW (tab_row), url);
+    gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (tab_row), !is_local);
+    adw_action_row_set_subtitle_lines (ADW_ACTION_ROW (tab_row), 1);
+    adw_action_row_set_title_lines (ADW_ACTION_ROW (tab_row), 1);
+    g_object_set_data_full (G_OBJECT (tab_row), "tab-url", g_strdup (url), g_free);
+
+    if (!is_local)
+      g_signal_connect (tab_row, "activated",
+                        G_CALLBACK (tab_row_activated_cb), dialog);
+
+    /* Load favicon asynchronously. */
     webkit_favicon_database_get_favicon (dialog->database, url,
                                          dialog->cancellable,
-                                         synced_tabs_dialog_favicon_loaded_cb,
-                                         data);
+                                         favicon_loaded_cb,
+                                         favicon_async_data_new (tab_row, url));
+
+    adw_expander_row_add_row (ADW_EXPANDER_ROW (expander), tab_row);
   }
+
+  gtk_list_box_append (GTK_LIST_BOX (dialog->list_box), expander);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 synced_tabs_dialog_populate_model (SyncedTabsDialog *dialog)
 {
   EphyOpenTabsRecord *record;
   GList *remotes;
-  guint index = 0;
 
-  /* Insert local tabs. */
   record = ephy_open_tabs_manager_get_local_tabs (dialog->manager);
-  synced_tabs_dialog_populate_from_record (dialog, record, TRUE, index++);
+  synced_tabs_dialog_populate_from_record (dialog, record, TRUE);
 
-  /* Insert remote tabs. */
   remotes = ephy_open_tabs_manager_get_remote_tabs (dialog->manager);
   for (GList *l = remotes; l && l->data; l = l->next)
-    synced_tabs_dialog_populate_from_record (dialog, l->data, FALSE, index++);
+    synced_tabs_dialog_populate_from_record (dialog, l->data, FALSE);
 
   g_object_unref (record);
 }
@@ -320,30 +272,19 @@ synced_tabs_dialog_class_init (SyncedTabsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/synced-tabs-dialog.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, SyncedTabsDialog, treestore);
-  gtk_widget_class_bind_template_child (widget_class, SyncedTabsDialog, treeview);
-  gtk_widget_class_bind_template_callback (widget_class, treeview_row_activated_cb);
+  gtk_widget_class_bind_template_child (widget_class, SyncedTabsDialog, list_box);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 synced_tabs_dialog_init (SyncedTabsDialog *dialog)
 {
-  GtkTreeStore *store;
-
   gtk_widget_init_template (GTK_WIDGET (dialog));
-
-  store = gtk_tree_store_new (3, G_TYPE_ICON, G_TYPE_STRING, G_TYPE_STRING);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (dialog->treeview), GTK_TREE_MODEL (store));
-  gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (dialog->treeview), URL_COLUMN);
 
   dialog->database = ephy_embed_shell_get_favicon_database (ephy_embed_shell_get_default ());
   dialog->cancellable = g_cancellable_new ();
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 SyncedTabsDialog *
 synced_tabs_dialog_new (EphyOpenTabsManager *manager)
