@@ -833,6 +833,9 @@ write_ephy_window (xmlTextWriterPtr  writer,
   for (l = window->tabs; l; l = l->next) {
     SessionTab *tab = (SessionTab *)l->data;
 
+    /* Pinned tabs are sorted before unpinned tabs, so we can stop checking
+     * after the first unpinned tab.
+     */
     if (only_pinned_tabs && !tab->pinned)
       break;
 
