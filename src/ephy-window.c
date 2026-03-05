@@ -163,6 +163,7 @@ struct _EphyWindow {
   GtkWidget *bottom_sheet;
   GtkWidget *bookmarks_dialog;
   EphyEmbed *active_embed;
+  EphyEmbed *previous_embed;
   EphyWindowChrome chrome;
   WebKitHitTestResult *context_event;
   WebKitHitTestResult *hit_test_result;
@@ -198,6 +199,7 @@ struct _EphyWindow {
   guint updating_address : 1;
   guint force_close : 1;
   guint checking_modified_forms : 1;
+  guint checking_tab_modified_forms : 1;
   guint has_modified_forms : 1;
   guint confirmed_close_with_multiple_tabs : 1;
   guint present_on_insert : 1;
@@ -2895,8 +2897,18 @@ ephy_window_set_active_tab (EphyWindow *window,
   if (old_embed == new_embed)
     return;
 
-  if (old_embed)
+  if (old_embed) {
+    /* This function is called when the active tab is closed, since a new one
+     * has to be set. This causes issues with setting previous_embed, since
+     * the previous embed has been closed. checking_tab_modified_forms is briefly
+     * true when a tab is being closed, so we make sure it's false before setting
+     * previous_embed. That way, we know it wasn't closed.
+     */
+    if (!window->checking_tab_modified_forms)
+      window->previous_embed = old_embed;
+
     ephy_window_disconnect_active_embed (window);
+  }
 
   window->active_embed = new_embed;
 
@@ -3300,6 +3312,7 @@ ephy_window_close_tab (EphyWindow *window,
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
+  EphyWebView *view = ephy_embed_get_web_view (tab);
   gboolean keep_window_open = FALSE;
 
   /* This function can be called many times for the same embed if the
@@ -3314,8 +3327,6 @@ ephy_window_close_tab (EphyWindow *window,
     keep_window_open = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_KEEP_WINDOW_OPEN);
 
   if (keep_window_open && ephy_tab_view_get_n_pages (window->tab_view) == 1) {
-    EphyWebView *view = ephy_embed_get_web_view (tab);
-
     if (ephy_web_view_get_is_blank (view) ||
         ephy_web_view_is_newtab (view) ||
         ephy_web_view_is_overview (view))
@@ -3332,8 +3343,16 @@ ephy_window_close_tab (EphyWindow *window,
    * tab, even if it wasn't at the start of this function.
    */
   if (!window->closing && ephy_tab_view_get_n_pages (window->tab_view) == 0 &&
-      !adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview)))
+      !adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview))) {
     gtk_window_destroy (GTK_WINDOW (window));
+    return;
+  }
+
+  /* If the user just closed a new tab, go back to the last focused tab. */
+  if (window->previous_embed && ephy_web_view_is_overview (view)) {
+    ephy_tab_view_select_page (window->tab_view, GTK_WIDGET (window->previous_embed));
+    window->previous_embed = NULL;
+  }
 }
 
 typedef struct {
@@ -3379,6 +3398,7 @@ tab_has_modified_forms_dialog_cb (AdwAlertDialog          *dialog,
      * see ephy_window_check_modified_forms().
      */
     adw_tab_view_close_page_finish (tab_view, data->page, TRUE);
+    data->window->checking_tab_modified_forms = FALSE;
     ephy_window_close_tab (data->window, data->embed);
   } else {
     adw_tab_view_close_page_finish (tab_view, data->page, FALSE);
@@ -3394,6 +3414,7 @@ tab_has_modified_forms_cb (EphyWebView             *view,
 {
   gboolean has_modified_forms;
 
+  data->window->checking_tab_modified_forms = TRUE;
   has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
 
   if (data->window && data->embed && data->page) {
@@ -3401,6 +3422,7 @@ tab_has_modified_forms_cb (EphyWebView             *view,
 
     if (!has_modified_forms) {
       adw_tab_view_close_page_finish (tab_view, data->page, TRUE);
+      data->window->checking_tab_modified_forms = FALSE;
       ephy_window_close_tab (data->window, data->embed);
     } else {
       AdwDialog *dialog;
