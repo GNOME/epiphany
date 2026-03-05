@@ -393,27 +393,9 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
     sync_message_to_fxa_content (sync_dialog, web_channel_id, command, message_id, response);
     json_object_unref (response);
   } else if (!g_strcmp0 (command, "fxaccounts:login")) {
-    /* Extract sync tokens and pass them to the sync service. */
-    const char *email = json_object_get_string_member (data, "email");
-    const char *uid = json_object_get_string_member (data, "uid");
-    const char *session_token = json_object_get_string_member (data, "sessionToken");
-    const char *key_fetch_token = json_object_get_string_member (data, "keyFetchToken");
-    const char *unwrap_kb = json_object_get_string_member (data, "unwrapBKey");
-
-    if (!email || !uid || !session_token || !key_fetch_token || !unwrap_kb) {
-      g_warning ("Message data has missing or invalid members");
-      is_error = TRUE;
-      goto out;
-    }
-    if (!json_object_has_member (data, "verified") ||
-        !JSON_NODE_HOLDS_VALUE (json_object_get_member (data, "verified"))) {
-      g_warning ("Message data has missing or invalid 'verified' member");
-      is_error = TRUE;
-      goto out;
-    }
-
-    ephy_sync_service_sign_in (ephy_shell_get_sync_service (ephy_shell_get_default ()),
-                               email, uid, session_token, key_fetch_token, unwrap_kb);
+    g_warning ("fxaccounts:login is no longer supported, OAuth flow required");
+    is_error = TRUE;
+    goto out;
   }
 
 out:

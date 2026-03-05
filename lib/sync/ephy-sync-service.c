@@ -55,9 +55,6 @@ struct _EphySyncService {
   gint64 storage_credentials_expiry_time;
   GQueue *storage_queue;
 
-  char *certificate;
-  SyncCryptoRSAKeyPair *key_pair;
-
   gboolean sync_periodically;
   gboolean is_signing_in;
 };
@@ -66,16 +63,20 @@ G_DEFINE_FINAL_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 enum {
   UID,
-  SESSION_TOKEN,
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
   MASTER_KEY,
+  KEY_ID,
   CRYPTO_KEYS,
   LAST_SECRET
 };
 
 static const char * const secrets[LAST_SECRET] = {
   "uid",
-  "session_token",
+  "access_token",
+  "refresh_token",
   "master_key",
+  "key_id",
   "crypto_keys"
 };
 
@@ -110,18 +111,6 @@ typedef struct {
   SoupSessionCallback callback;
   gpointer user_data;
 } StorageRequestAsyncData;
-
-typedef struct {
-  EphySyncService *service;
-  char *email;
-  char *uid;
-  char *session_token;
-  char *unwrap_kb;
-  char *token_id_hex;
-  guint8 *req_hmac_key;
-  guint8 *resp_hmac_key;
-  guint8 *resp_xor_key;
-} SignInAsyncData;
 
 typedef struct {
   EphySyncService *service;
@@ -245,53 +234,6 @@ storage_request_async_ready_cb (SoupSession             *session,
                           (GDestroyNotify)g_bytes_unref);
   data->callback (session, msg, data->user_data);
   storage_request_async_data_free (data);
-}
-
-static SignInAsyncData *
-sign_in_async_data_new (EphySyncService *service,
-                        const char      *email,
-                        const char      *uid,
-                        const char      *session_token,
-                        const char      *unwrap_kb,
-                        const char      *token_id_hex,
-                        const guint8    *req_hmac_key,
-                        const guint8    *resp_hmac_key,
-                        const guint8    *resp_xor_key)
-{
-  SignInAsyncData *data;
-
-  data = g_new (SignInAsyncData, 1);
-  data->service = g_object_ref (service);
-  data->email = g_strdup (email);
-  data->uid = g_strdup (uid);
-  data->session_token = g_strdup (session_token);
-  data->unwrap_kb = g_strdup (unwrap_kb);
-  data->token_id_hex = g_strdup (token_id_hex);
-  data->req_hmac_key = g_malloc (32);
-  memcpy (data->req_hmac_key, req_hmac_key, 32);
-  data->resp_hmac_key = g_malloc (32);
-  memcpy (data->resp_hmac_key, resp_hmac_key, 32);
-  data->resp_xor_key = g_malloc (2 * 32);
-  memcpy (data->resp_xor_key, resp_xor_key, 2 * 32);
-
-  return data;
-}
-
-static void
-sign_in_async_data_free (SignInAsyncData *data)
-{
-  g_assert (data);
-
-  g_object_unref (data->service);
-  g_free (data->email);
-  g_free (data->uid);
-  g_free (data->session_token);
-  g_free (data->unwrap_kb);
-  g_free (data->token_id_hex);
-  g_free (data->req_hmac_key);
-  g_free (data->resp_hmac_key);
-  g_free (data->resp_xor_key);
-  g_free (data);
 }
 
 static SyncCollectionAsyncData *
@@ -496,7 +438,6 @@ ephy_sync_service_clear_storage_credentials (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  g_clear_pointer (&self->certificate, g_free);
   g_clear_pointer (&self->storage_endpoint, g_free);
   g_clear_pointer (&self->storage_credentials_id, g_free);
   g_clear_pointer (&self->storage_credentials_key, g_free);
@@ -519,84 +460,42 @@ ephy_sync_service_storage_credentials_is_expired (EphySyncService *self)
 }
 
 static void
-ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
-                                 const char          *endpoint,
-                                 const char          *id,
-                                 guint8              *key,
-                                 gsize                key_len,
-                                 const char          *request_body,
-                                 SoupSessionCallback  callback,
-                                 gpointer             user_data)
+ephy_sync_service_fxa_bearer_post (EphySyncService     *self,
+                                   const char          *endpoint,
+                                   const char          *access_token,
+                                   const char          *request_body,
+                                   SoupSessionCallback  callback,
+                                   gpointer             user_data)
 {
-  SyncCryptoHawkOptions *options;
-  SyncCryptoHawkHeader *header;
   SoupMessage *msg;
   SoupMessageHeaders *request_headers;
   char *url;
+  char *authorization;
   const char *content_type = "application/json; charset=utf-8";
   g_autofree char *accounts_server = NULL;
   g_autoptr (GBytes) bytes = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (endpoint);
-  g_assert (id);
-  g_assert (key);
+  g_assert (access_token);
   g_assert (request_body);
 
   accounts_server = ephy_sync_utils_get_accounts_server ();
   url = g_strdup_printf ("%s/%s", accounts_server, endpoint);
+  authorization = g_strdup_printf ("Bearer %s", access_token);
+
   msg = soup_message_new (SOUP_METHOD_POST, url);
   bytes = g_bytes_new (request_body, strlen (request_body));
   soup_message_set_request_body_from_bytes (msg, content_type, bytes);
   request_headers = soup_message_get_request_headers (msg);
-
-  options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
-                                               NULL, NULL, NULL, request_body,
-                                               NULL);
-  header = ephy_sync_crypto_hawk_header_new (url, "POST", id, key, key_len, options);
-  soup_message_headers_append (request_headers, "authorization", header->header);
+  soup_message_headers_append (request_headers, "authorization", authorization);
   soup_message_headers_append (request_headers, "content-type", content_type);
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)send_and_read_async_ready_cb,
                                     send_and_read_async_data_new (callback, user_data));
 
   g_free (url);
-  ephy_sync_crypto_hawk_options_free (options);
-  ephy_sync_crypto_hawk_header_free (header);
-}
-
-static void
-ephy_sync_service_fxa_hawk_get (EphySyncService     *self,
-                                const char          *endpoint,
-                                const char          *id,
-                                guint8              *key,
-                                gsize                key_len,
-                                SoupSessionCallback  callback,
-                                gpointer             user_data)
-{
-  SyncCryptoHawkHeader *header;
-  SoupMessage *msg;
-  SoupMessageHeaders *request_headers;
-  char *url;
-  g_autofree char *accounts_server = NULL;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (endpoint);
-  g_assert (id);
-  g_assert (key);
-
-  accounts_server = ephy_sync_utils_get_accounts_server ();
-  url = g_strdup_printf ("%s/%s", accounts_server, endpoint);
-  msg = soup_message_new (SOUP_METHOD_GET, url);
-  header = ephy_sync_crypto_hawk_header_new (url, "GET", id, key, key_len, NULL);
-  request_headers = soup_message_get_request_headers (msg);
-  soup_message_headers_append (request_headers, "authorization", header->header);
-  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
-                                    (GAsyncReadyCallback)send_and_read_async_ready_cb,
-                                    send_and_read_async_data_new (callback, user_data));
-
-  g_free (url);
-  ephy_sync_crypto_hawk_header_free (header);
+  g_free (authorization);
 }
 
 static void
@@ -683,92 +582,6 @@ ephy_sync_service_clear_storage_queue (EphySyncService *self)
     storage_request_async_data_free (g_queue_pop_head (self->storage_queue));
 }
 
-static gboolean
-ephy_sync_service_verify_certificate (EphySyncService *self,
-                                      const char      *certificate)
-{
-  JsonParser *parser;
-  JsonObject *json;
-  JsonObject *principal;
-  GError *error = NULL;
-  g_autoptr (GUri) uri = NULL;
-  char **pieces;
-  char *header;
-  char *payload;
-  char *expected = NULL;
-  const char *alg;
-  const char *email;
-  gsize len;
-  gboolean retval = FALSE;
-  g_autofree char *accounts_server = NULL;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (ephy_sync_service_get_secret (self, secrets[UID]));
-  g_assert (certificate);
-
-  pieces = g_strsplit (certificate, ".", 0);
-  header = (char *)ephy_sync_utils_base64_urlsafe_decode (pieces[0], &len, TRUE);
-  payload = (char *)ephy_sync_utils_base64_urlsafe_decode (pieces[1], &len, TRUE);
-  parser = json_parser_new ();
-
-  json_parser_load_from_data (parser, header, -1, &error);
-  if (error) {
-    g_warning ("Header is not a valid JSON: %s", error->message);
-    goto out;
-  }
-  json = json_node_get_object (json_parser_get_root (parser));
-  if (!json) {
-    g_warning ("JSON node does not hold a JSON object");
-    goto out;
-  }
-  alg = json_object_get_string_member (json, "alg");
-  if (!alg) {
-    g_warning ("JSON object has missing or invalid 'alg' member");
-    goto out;
-  }
-  if (g_strcmp0 (alg, "RS256")) {
-    g_warning ("Expected algorithm RS256, found %s", alg);
-    goto out;
-  }
-  json_parser_load_from_data (parser, payload, -1, &error);
-  if (error) {
-    g_warning ("Payload is not a valid JSON: %s", error->message);
-    goto out;
-  }
-  json = json_node_get_object (json_parser_get_root (parser));
-  if (!json) {
-    g_warning ("JSON node does not hold a JSON object");
-    goto out;
-  }
-  principal = json_object_get_object_member (json, "principal");
-  if (!principal) {
-    g_warning ("JSON object has missing or invalid 'principal' member");
-    goto out;
-  }
-  email = json_object_get_string_member (principal, "email");
-  if (!email) {
-    g_warning ("JSON object has missing or invalid 'email' member");
-    goto out;
-  }
-  accounts_server = ephy_sync_utils_get_accounts_server ();
-  uri = g_uri_parse (accounts_server, G_URI_FLAGS_PARSE_RELAXED, NULL);
-  expected = g_strdup_printf ("%s@%s",
-                              ephy_sync_service_get_secret (self, secrets[UID]),
-                              g_uri_get_host (uri));
-  retval = g_strcmp0 (email, expected) == 0;
-
-out:
-  g_free (expected);
-  g_object_unref (parser);
-  g_free (payload);
-  g_free (header);
-  g_strfreev (pieces);
-  if (error)
-    g_error_free (error);
-
-  return retval;
-}
-
 static void
 forget_secrets_cb (GObject      *source_object,
                    GAsyncResult *result,
@@ -810,111 +623,94 @@ ephy_sync_service_forget_secrets (EphySyncService *self)
 }
 
 static void
-destroy_session_cb (SoupSession *session,
-                    SoupMessage *msg,
-                    gpointer     user_data)
+revoke_token_cb (SoupSession  *session,
+                 GAsyncResult *result,
+                 gpointer      user_data)
 {
+  g_autoptr (GBytes) bytes = NULL;
+  g_autoptr (GError) error = NULL;
+  SoupMessage *msg;
   guint status_code;
-  g_autoptr (GBytes) response_body = NULL;
 
+  bytes = soup_session_send_and_read_finish (session, result, &error);
+  if (!bytes) {
+    g_warning ("Failed to revoke token: %s", error->message);
+    return;
+  }
+
+  msg = soup_session_get_async_result_message (session, result);
   status_code = soup_message_get_status (msg);
-  response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-
   if (status_code != 200) {
-    g_warning ("Failed to destroy session. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+    g_warning ("Failed to revoke OAuth token. Status code: %u", status_code);
   } else {
-    LOG ("Successfully destroyed session");
+    LOG ("Successfully revoked OAuth token");
   }
 }
 
+/* Revoke an OAuth token via POST /oauth/destroy.
+ * Ref: FxAccountsClient.sys.mjs oauthDestroy().
+ */
 static void
-destroy_session_send_and_read_ready_cb (SoupSession  *session,
-                                        GAsyncResult *result,
-                                        gpointer      user_data)
+ephy_sync_service_revoke_token (EphySyncService *self,
+                                const char      *token)
 {
-  GBytes *bytes;
-  SoupMessage *msg;
-  g_autoptr (GError) error = NULL;
-
-  bytes = soup_session_send_and_read_finish (session, result, &error);
-  if (!bytes)
-    g_warning ("Failed to send request: %s", error->message);
-
-  msg = soup_session_get_async_result_message (session, result);
-  g_object_set_data_full (G_OBJECT (msg),
-                          "ephy-request-body", bytes ? bytes : g_bytes_new (NULL, 0),
-                          (GDestroyNotify)g_bytes_unref);
-  destroy_session_cb (session, msg, user_data);
-}
-
-static void
-ephy_sync_service_destroy_session (EphySyncService *self,
-                                   const char      *session_token)
-{
-  SyncCryptoHawkOptions *options;
-  SyncCryptoHawkHeader *header;
   SoupMessage *msg;
   SoupMessageHeaders *request_headers;
-  guint8 *token_id;
-  guint8 *req_hmac_key;
-  guint8 *tmp;
-  char *token_id_hex;
+  char *request_body;
   char *url;
   const char *content_type = "application/json; charset=utf-8";
-  const char *request_body = "{}";
   g_autofree char *accounts_server = NULL;
   g_autoptr (GBytes) bytes = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
-  if (!session_token)
-    session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
-  g_assert (session_token);
 
-  /* This also destroys the device associated with the session token. */
+  if (!token)
+    return;
+
+  /* Revoke the OAuth token via the FxA OAuth server. */
   accounts_server = ephy_sync_utils_get_accounts_server ();
-  url = g_strdup_printf ("%s/session/destroy", accounts_server);
-  ephy_sync_crypto_derive_session_token (session_token, &token_id,
-                                         &req_hmac_key, &tmp);
-  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
+  url = g_strdup_printf ("%s/oauth/destroy", accounts_server);
+  request_body = g_strdup_printf ("{\"token\":\"%s\"}", token);
 
   msg = soup_message_new (SOUP_METHOD_POST, url);
-  bytes = g_bytes_new_static (request_body, strlen (request_body));
+  bytes = g_bytes_new_take (request_body, strlen (request_body));
   soup_message_set_request_body_from_bytes (msg, content_type, bytes);
   request_headers = soup_message_get_request_headers (msg);
-  options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL, content_type,
-                                               NULL, NULL, NULL, request_body,
-                                               NULL);
-  header = ephy_sync_crypto_hawk_header_new (url, "POST", token_id_hex,
-                                             req_hmac_key, 32, options);
-  soup_message_headers_append (request_headers, "authorization", header->header);
   soup_message_headers_append (request_headers, "content-type", content_type);
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
-                                    (GAsyncReadyCallback)destroy_session_send_and_read_ready_cb,
+                                    (GAsyncReadyCallback)revoke_token_cb,
                                     NULL);
 
-  g_free (token_id_hex);
-  g_free (token_id);
-  g_free (req_hmac_key);
-  g_free (tmp);
   g_free (url);
-  ephy_sync_crypto_hawk_options_free (options);
-  ephy_sync_crypto_hawk_header_free (header);
+}
+
+static void
+ephy_sync_service_revoke_tokens (EphySyncService *self)
+{
+  const char *access_token;
+  const char *refresh_token;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  access_token = ephy_sync_service_get_secret (self, secrets[ACCESS_TOKEN]);
+  refresh_token = ephy_sync_service_get_secret (self, secrets[REFRESH_TOKEN]);
+
+  ephy_sync_service_revoke_token (self, access_token);
+  ephy_sync_service_revoke_token (self, refresh_token);
 }
 
 static void
 ephy_sync_service_report_sign_in_error (EphySyncService *self,
                                         const char      *message,
-                                        const char      *session_token,
                                         gboolean         clear_secrets)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (message);
 
   g_signal_emit (self, signals[SIGN_IN_ERROR], 0, message);
-  ephy_sync_service_destroy_session (self, session_token);
 
   if (clear_secrets) {
+    ephy_sync_service_revoke_tokens (self);
     g_clear_pointer (&self->user, g_free);
     g_hash_table_remove_all (self->secrets);
   }
@@ -991,7 +787,7 @@ out_error:
   suggestion = _("Please visit Firefox Sync and sign in again to continue syncing.");
 
   if (self->is_signing_in)
-    ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
+    ephy_sync_service_report_sign_in_error (self, message, TRUE);
   else
     ephy_notification_show (ephy_notification_new (message, suggestion));
 
@@ -1026,193 +822,43 @@ get_storage_credentials_ready_cb (SoupSession  *session,
   get_storage_credentials_cb (session, msg, user_data);
 }
 
+/* Exchange OAuth access token for Sync storage credentials via the
+ * Token Server (Bearer auth + X-KeyID header).
+ * Ref: sync_auth.sys.mjs SyncAuthManager._fetchTokenUsingOAuth().
+ */
 static void
-ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
+ephy_sync_service_get_storage_credentials (EphySyncService *self)
 {
   SoupMessage *msg;
   SoupMessageHeaders *request_headers;
-  guint8 *kb;
-  char *hashed_kb;
-  char *client_state;
-  char *audience;
-  char *assertion;
+  const char *access_token;
+  const char *key_id;
   char *authorization;
   g_autofree char *token_server = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (self->certificate);
-  g_assert (self->key_pair);
+
+  access_token = ephy_sync_service_get_secret (self, secrets[ACCESS_TOKEN]);
+  key_id = ephy_sync_service_get_secret (self, secrets[KEY_ID]);
+  if (!access_token || !key_id) {
+    g_warning ("Missing access token or key ID for Token Server request");
+    ephy_sync_service_clear_storage_queue (self);
+    self->locked = FALSE;
+    return;
+  }
 
   token_server = ephy_sync_utils_get_token_server ();
-  audience = ephy_sync_utils_get_audience (token_server);
-  assertion = ephy_sync_crypto_create_assertion (self->certificate, audience,
-                                                 300, self->key_pair);
-  kb = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
-  hashed_kb = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kb, 32);
-  client_state = g_strndup (hashed_kb, 32);
-  authorization = g_strdup_printf ("BrowserID %s", assertion);
+  authorization = g_strdup_printf ("Bearer %s", access_token);
 
   msg = soup_message_new (SOUP_METHOD_GET, token_server);
   request_headers = soup_message_get_request_headers (msg);
-  /* We need to add the X-Client-State header so that the Token Server will
-   * recognize accounts that were previously used to sync Firefox data too.
-   */
-  soup_message_headers_append (request_headers, "X-Client-State", client_state);
   soup_message_headers_append (request_headers, "authorization", authorization);
+  soup_message_headers_append (request_headers, "X-KeyID", key_id);
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)get_storage_credentials_ready_cb,
                                     self);
 
-  g_free (kb);
-  g_free (hashed_kb);
-  g_free (client_state);
-  g_free (audience);
-  g_free (assertion);
   g_free (authorization);
-}
-
-static void
-get_signed_certificate_cb (SoupSession *session,
-                           SoupMessage *msg,
-                           gpointer     user_data)
-{
-  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
-  JsonNode *node = NULL;
-  JsonObject *json = NULL;
-  GError *error = NULL;
-  const char *suggestion = NULL;
-  const char *message = NULL;
-  const char *certificate = NULL;
-  guint status_code;
-  g_autoptr (GBytes) response_body = NULL;
-
-  status_code = soup_message_get_status (msg);
-  response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-
-  node = json_from_response_body (response_body, &error);
-  if (error) {
-    g_warning ("Response is not a valid JSON: %s", error->message);
-    goto out_error;
-  }
-  json = json_node_get_object (node);
-  if (!json) {
-    g_warning ("JSON node does not hold a JSON object");
-    goto out_error;
-  }
-
-  if (status_code == 200) {
-    certificate = json_object_get_string_member (json, "cert");
-    if (!certificate) {
-      g_warning ("JSON object has missing or invalid 'cert' member");
-      goto out_error;
-    }
-
-    if (!ephy_sync_service_verify_certificate (self, certificate)) {
-      g_warning ("Invalid certificate");
-      ephy_sync_crypto_rsa_key_pair_free (self->key_pair);
-      goto out_error;
-    }
-
-    self->certificate = g_strdup (certificate);
-    ephy_sync_service_trade_browserid_assertion (self);
-    goto out_no_error;
-  }
-
-  /* Since a new Mozilla Account password implies new tokens, this will fail
-   * with an error code 110 (Invalid authentication token in request signature)
-   * if the user has changed his password since the last time he signed in.
-   * When this happens, notify the user to sign in with the new password.
-   */
-  if (json_object_get_int_member (json, "errno") == 110) {
-    message = _("The password of your Mozilla account seems to have been changed.");
-    suggestion = _("Please visit Firefox Sync and sign in with the new password to continue syncing.");
-    ephy_sync_service_sign_out (self);
-  }
-
-  g_warning ("Failed to sign certificate. Status code: %u, response: %s",
-             status_code, (const char *)g_bytes_get_data (response_body, NULL));
-
-out_error:
-  message = message ? message : _("Failed to obtain signed certificate.");
-  suggestion = suggestion ? suggestion : _("Please visit Firefox Sync and sign in again to continue syncing.");
-
-  if (self->is_signing_in)
-    ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
-  else
-    ephy_notification_show (ephy_notification_new (message, suggestion));
-
-  ephy_sync_service_clear_storage_queue (self);
-  self->locked = FALSE;
-
-out_no_error:
-  if (node)
-    json_node_unref (node);
-  if (error)
-    g_error_free (error);
-}
-
-static void
-ephy_sync_service_get_storage_credentials (EphySyncService *self)
-{
-  JsonNode *node;
-  JsonObject *object_key;
-  JsonObject *object_body;
-  guint8 *token_id;
-  guint8 *req_hmac_key;
-  guint8 *tmp;
-  const char *session_token;
-  char *token_id_hex;
-  char *request_body;
-  char *n;
-  char *e;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-
-  /* To get the storage credentials from the Token Server, we need to create a
-   * BrowserID assertion. For that we need to obtain an identity certificate
-   * signed by the Mozilla Accounts Server.
-   */
-
-  /* Generate a new RSA key pair to sign the new certificate. */
-  if (self->key_pair)
-    ephy_sync_crypto_rsa_key_pair_free (self->key_pair);
-  self->key_pair = ephy_sync_crypto_rsa_key_pair_new ();
-
-  /* Derive tokenID and reqHMACkey from sessionToken. */
-  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
-  if (!session_token)
-    return;
-
-  ephy_sync_crypto_derive_session_token (session_token, &token_id,
-                                         &req_hmac_key, &tmp);
-  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
-
-  n = mpz_get_str (NULL, 10, self->key_pair->public.n);
-  e = mpz_get_str (NULL, 10, self->key_pair->public.e);
-  node = json_node_new (JSON_NODE_OBJECT);
-  object_body = json_object_new ();
-  /* Milliseconds, limited to 24 hours. */
-  json_object_set_int_member (object_body, "duration", 1 * 60 * 60 * 1000);
-  object_key = json_object_new ();
-  json_object_set_string_member (object_key, "algorithm", "RS");
-  json_object_set_string_member (object_key, "n", n);
-  json_object_set_string_member (object_key, "e", e);
-  json_object_set_object_member (object_body, "publicKey", object_key);
-  json_node_set_object (node, object_body);
-  request_body = json_to_string (node, FALSE);
-  ephy_sync_service_fxa_hawk_post (self, "certificate/sign", token_id_hex,
-                                   req_hmac_key, 32, request_body,
-                                   get_signed_certificate_cb, self);
-
-  g_free (request_body);
-  json_object_unref (object_body);
-  json_node_unref (node);
-  g_free (e);
-  g_free (n);
-  g_free (token_id_hex);
-  g_free (tmp);
-  g_free (req_hmac_key);
-  g_free (token_id);
 }
 
 static void
@@ -2008,7 +1654,7 @@ store_secrets_cb (GObject         *source_object,
       return;
     g_warning ("Failed to store sync secrets (is the secret service or secrets portal broken?): %s", error->message);
     g_prefix_error_literal (&error, _("Failed to store sync secrets (is the secret service or secrets portal broken?): "));
-    ephy_sync_service_destroy_session (self, NULL);
+    ephy_sync_service_revoke_tokens (self);
     g_hash_table_remove_all (self->secrets);
   } else {
     LOG ("Successfully stored sync secrets");
@@ -2079,7 +1725,7 @@ upload_client_record_cb (SoupSession *session,
     g_warning ("Failed to upload client record. Status code: %u, response: %s",
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
     if (self->is_signing_in)
-      ephy_sync_service_report_sign_in_error (self, _("Failed to upload client record."), NULL, TRUE);
+      ephy_sync_service_report_sign_in_error (self, _("Failed to upload client record."), TRUE);
   } else {
     LOG ("Successfully uploaded client record");
     if (self->is_signing_in)
@@ -2151,9 +1797,6 @@ ephy_sync_service_finalize (GObject *object)
 
   if (ephy_sync_utils_user_is_signed_in ())
     ephy_sync_service_stop_periodical_sync (self);
-
-  if (self->key_pair)
-    ephy_sync_crypto_rsa_key_pair_free (self->key_pair);
 
   g_free (self->crypto_keys);
   g_slist_free (self->managers);
@@ -2283,7 +1926,7 @@ upload_crypto_keys_cb (SoupSession *session,
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
     ephy_sync_service_report_sign_in_error (self,
                                             _("Failed to upload crypto/keys record."),
-                                            NULL, TRUE);
+                                            TRUE);
   } else {
     LOG ("Successfully uploaded crypto/keys record");
     ephy_sync_service_set_secret (self, secrets[CRYPTO_KEYS], self->crypto_keys);
@@ -2302,7 +1945,7 @@ ephy_sync_service_upload_crypto_keys (EphySyncService *self)
   char *payload;
   char *body;
   const char *kb_hex;
-  guint8 *kb;
+  guint8 *kb = NULL;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   kb_hex = ephy_sync_service_get_secret (self, secrets[MASTER_KEY]);
@@ -2311,8 +1954,22 @@ ephy_sync_service_upload_crypto_keys (EphySyncService *self)
   node = json_node_new (JSON_NODE_OBJECT);
   record = json_object_new ();
   self->crypto_keys = ephy_sync_crypto_generate_crypto_keys ();
-  kb = ephy_sync_utils_decode_hex (kb_hex);
-  bundle = ephy_sync_crypto_derive_master_bundle (kb);
+
+  {
+    gsize hex_len = strlen (kb_hex);
+
+    if (hex_len == 128) {
+      char *aes_hex = g_strndup (kb_hex, 64);
+      char *hmac_hex = g_strndup (kb_hex + 64, 64);
+      bundle = g_new (SyncCryptoKeyBundle, 1);
+      bundle->aes_key_hex = aes_hex;
+      bundle->hmac_key_hex = hmac_hex;
+    } else {
+      kb = ephy_sync_utils_decode_hex (kb_hex);
+      bundle = ephy_sync_crypto_derive_master_bundle (kb);
+    }
+  }
+
   payload = ephy_sync_crypto_encrypt_record (self->crypto_keys, bundle);
   json_object_set_string_member (record, "payload", payload);
   json_object_set_string_member (record, "id", "keys");
@@ -2377,12 +2034,26 @@ get_crypto_keys_cb (SoupSession *session,
     g_warning ("JSON object has missing or invalid 'payload' member");
     goto out_error;
   }
-  /* Derive the Sync Key bundle from kB. The bundle consists of two 32 bytes keys:
-   * the first one used as a symmetric encryption key (AES) and the second one
-   * used as a HMAC key.
+  /* Derive the Sync Key bundle. With OAuth scoped keys the 64-byte key
+   * already contains the AES and HMAC keys concatenated; with the old
+   * BrowserID flow the 32-byte kB needs HKDF derivation.
    */
-  kb = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
-  bundle = ephy_sync_crypto_derive_master_bundle (kb);
+  {
+    const char *master_key_hex = ephy_sync_service_get_secret (self, secrets[MASTER_KEY]);
+    gsize hex_len = master_key_hex ? strlen (master_key_hex) : 0;
+
+    if (hex_len == 128) {
+      /* OAuth scoped key: first 32 bytes = AES, last 32 bytes = HMAC. */
+      char *aes_hex = g_strndup (master_key_hex, 64);
+      char *hmac_hex = g_strndup (master_key_hex + 64, 64);
+      bundle = g_new (SyncCryptoKeyBundle, 1);
+      bundle->aes_key_hex = aes_hex;
+      bundle->hmac_key_hex = hmac_hex;
+    } else {
+      kb = ephy_sync_utils_decode_hex (master_key_hex);
+      bundle = ephy_sync_crypto_derive_master_bundle (kb);
+    }
+  }
   crypto_keys = ephy_sync_crypto_decrypt_record (payload, bundle);
   if (!crypto_keys) {
     g_warning ("Failed to decrypt crypto/keys record");
@@ -2395,7 +2066,7 @@ get_crypto_keys_cb (SoupSession *session,
 
 out_error:
   ephy_sync_service_report_sign_in_error (self, _("Failed to retrieve crypto keys."),
-                                          NULL, TRUE);
+                                          TRUE);
 out_no_error:
   if (bundle)
     ephy_sync_crypto_key_bundle_free (bundle);
@@ -2449,7 +2120,7 @@ upload_meta_global_cb (SoupSession *session,
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
     ephy_sync_service_report_sign_in_error (self,
                                             _("Failed to upload meta/global record."),
-                                            NULL, TRUE);
+                                            TRUE);
   } else {
     LOG ("Successfully uploaded meta/global record");
     ephy_sync_service_get_crypto_keys (self);
@@ -2582,7 +2253,7 @@ verify_storage_version_cb (SoupSession *session,
 
 out_error:
   message = message ? message : g_strdup (_("Failed to verify storage version."));
-  ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
+  ephy_sync_service_report_sign_in_error (self, message, TRUE);
 out_no_error:
   if (parser)
     g_object_unref (parser);
@@ -2638,8 +2309,10 @@ upload_fxa_device_cb (SoupSession *session,
   return;
 
 out_error:
-  if (self->is_signing_in)
-    ephy_sync_service_report_sign_in_error (self, _("Failed to upload device info"), NULL, TRUE);
+  if (self->is_signing_in) {
+    g_warning ("Device registration failed, continuing sign-in without it");
+    ephy_sync_service_verify_storage_version (self);
+  }
 }
 
 static void
@@ -2647,18 +2320,14 @@ ephy_sync_service_upload_fxa_device (EphySyncService *self)
 {
   JsonNode *node;
   JsonObject *object;
-  const char *session_token;
+  const char *access_token;
   char *body;
   char *device_name;
-  char *token_id_hex;
-  guint8 *token_id;
-  guint8 *req_hmac_key;
-  guint8 *tmp;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
-  if (!session_token)
+  access_token = ephy_sync_service_get_secret (self, secrets[ACCESS_TOKEN]);
+  if (!access_token)
     return;
 
   object = json_object_new ();
@@ -2679,46 +2348,36 @@ ephy_sync_service_upload_fxa_device (EphySyncService *self)
   json_node_take_object (node, object);
   body = json_to_string (node, FALSE);
 
-  ephy_sync_crypto_derive_session_token (session_token, &token_id, &req_hmac_key, &tmp);
-  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
-
   LOG ("Uploading device info on FxA Server...");
-  ephy_sync_service_fxa_hawk_post (self, "account/device", token_id_hex,
-                                   req_hmac_key, 32, body,
-                                   upload_fxa_device_cb, self);
+  ephy_sync_service_fxa_bearer_post (self, "account/device", access_token,
+                                     body, upload_fxa_device_cb, self);
 
   g_free (body);
   g_free (device_name);
-  g_free (token_id_hex);
-  g_free (token_id);
-  g_free (req_hmac_key);
-  g_free (tmp);
   json_node_unref (node);
 }
 
-static void
-ephy_sync_service_sign_in_finish (EphySyncService *self,
-                                  SignInAsyncData *data,
-                                  const char      *bundle)
+/* Complete sign-in: store OAuth credentials and derived Sync key.
+ * Ref: FxAccountsWebChannel.sys.mjs oauthLogin().
+ */
+void
+ephy_sync_service_sign_in (EphySyncService *self,
+                           const char      *email,
+                           const char      *uid,
+                           const char      *access_token,
+                           const char      *refresh_token,
+                           const char      *sync_key_hex,
+                           const char      *key_id)
 {
-  guint8 *unwrap_kb;
-  guint8 *ka;
-  guint8 *kb;
-  char *kb_hex;
-
   g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (data);
-  g_assert (bundle);
+  g_assert (email);
+  g_assert (uid);
+  g_assert (access_token);
+  g_assert (refresh_token);
+  g_assert (sync_key_hex);
+  g_assert (key_id);
 
-  /* Derive the master sync keys form the key bundle. */
-  unwrap_kb = ephy_sync_utils_decode_hex (data->unwrap_kb);
-  if (!ephy_sync_crypto_derive_master_keys (bundle, data->resp_hmac_key,
-                                            data->resp_xor_key, unwrap_kb,
-                                            &ka, &kb)) {
-    ephy_sync_service_report_sign_in_error (self, _("Failed to retrieve the Sync Key"),
-                                            data->session_token, FALSE);
-    goto out;
-  }
+  self->is_signing_in = TRUE;
 
   /* Cache the user email until the secrets are stored. We cannot use
    * ephy_sync_utils_set_sync_user() here because that will trigger the
@@ -2728,134 +2387,15 @@ ephy_sync_service_sign_in_finish (EphySyncService *self,
    * disk because the secrets are not yet stored at this point, thus it
    * will be unable to operate.
    */
-  self->user = g_strdup (data->email);
-  ephy_sync_service_set_secret (self, secrets[UID], data->uid);
-  ephy_sync_service_set_secret (self, secrets[SESSION_TOKEN], data->session_token);
-  kb_hex = ephy_sync_utils_encode_hex (kb, 32);
-  ephy_sync_service_set_secret (self, secrets[MASTER_KEY], kb_hex);
+  g_clear_pointer (&self->user, g_free);
+  self->user = g_strdup (email);
+  ephy_sync_service_set_secret (self, secrets[UID], uid);
+  ephy_sync_service_set_secret (self, secrets[ACCESS_TOKEN], access_token);
+  ephy_sync_service_set_secret (self, secrets[REFRESH_TOKEN], refresh_token);
+  ephy_sync_service_set_secret (self, secrets[MASTER_KEY], sync_key_hex);
+  ephy_sync_service_set_secret (self, secrets[KEY_ID], key_id);
 
   ephy_sync_service_upload_fxa_device (self);
-
-  g_free (kb_hex);
-  g_free (kb);
-  g_free (ka);
-out:
-  g_free (unwrap_kb);
-  sign_in_async_data_free (data);
-}
-
-static void
-get_account_keys_cb (SoupSession *session,
-                     SoupMessage *msg,
-                     gpointer     user_data)
-{
-  SignInAsyncData *data = (SignInAsyncData *)user_data;
-  JsonNode *node = NULL;
-  JsonObject *json = NULL;
-  g_autoptr (GError) error = NULL;
-  const char *bundle;
-  guint status_code;
-  g_autoptr (GBytes) response_body = NULL;
-
-  status_code = soup_message_get_status (msg);
-  response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
-
-  node = json_from_response_body (response_body, &error);
-  if (error) {
-    g_warning ("Response is not a valid JSON: %s", error->message);
-    goto out_error;
-  }
-  json = json_node_get_object (node);
-  if (!json) {
-    g_warning ("JSON node does not hold a JSON object");
-    goto out_error;
-  }
-
-  if (status_code == 200) {
-    bundle = json_object_get_string_member (json, "bundle");
-    if (!bundle) {
-      g_warning ("JSON object has invalid or missing 'bundle' member");
-      goto out_error;
-    }
-    /* Extract the master sync keys from the bundle and save tokens. */
-    ephy_sync_service_sign_in_finish (data->service, data, bundle);
-    goto out_no_error;
-  }
-
-  /* If account is not verified, poll the Mozilla Accounts Server
-   * until the verification has completed.
-   */
-  if (json_object_get_int_member (json, "errno") == 104) {
-    LOG ("Account not verified, retrying...");
-    ephy_sync_service_fxa_hawk_get (data->service, "account/keys",
-                                    data->token_id_hex, data->req_hmac_key, 32,
-                                    get_account_keys_cb, data);
-    goto out_no_error;
-  }
-
-  g_warning ("Failed to get /account/keys. Status code: %u, response: %s",
-             status_code, (const char *)g_bytes_get_data (response_body, NULL));
-
-out_error:
-  ephy_sync_service_report_sign_in_error (data->service,
-                                          _("Failed to retrieve the Sync Key"),
-                                          data->session_token, FALSE);
-  sign_in_async_data_free (data);
-out_no_error:
-  if (node)
-    json_node_unref (node);
-}
-
-void
-ephy_sync_service_sign_in (EphySyncService *self,
-                           const char      *email,
-                           const char      *uid,
-                           const char      *session_token,
-                           const char      *key_fetch_token,
-                           const char      *unwrap_kb)
-{
-  SignInAsyncData *data;
-  guint8 *token_id;
-  guint8 *req_hmac_key;
-  guint8 *resp_hmac_key;
-  guint8 *resp_xor_key;
-  char *token_id_hex;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (email);
-  g_assert (uid);
-  g_assert (session_token);
-  g_assert (key_fetch_token);
-  g_assert (unwrap_kb);
-
-  self->is_signing_in = TRUE;
-
-  /* Derive tokenID, reqHMACkey, respHMACkey and respXORkey from keyFetchToken.
-   * tokenID and reqHMACkey are used to sign HAWK GET requests to /account/keys
-   * endpoint. The server looks up the stored table entry with tokenID, checks
-   * the request HMAC for validity, then returns the pre-encrypted response.
-   * See https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#fetching-sync-keys
-   */
-  ephy_sync_crypto_derive_key_fetch_token (key_fetch_token,
-                                           &token_id, &req_hmac_key,
-                                           &resp_hmac_key, &resp_xor_key);
-  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
-
-  /* Get the master sync key bundle from the /account/keys endpoint. */
-  data = sign_in_async_data_new (self, email, uid,
-                                 session_token, unwrap_kb,
-                                 token_id_hex, req_hmac_key,
-                                 resp_hmac_key, resp_xor_key);
-  LOG ("Getting account's Sync Key...");
-  ephy_sync_service_fxa_hawk_get (self, "account/keys",
-                                  token_id_hex, req_hmac_key, 32,
-                                  get_account_keys_cb, data);
-
-  g_free (token_id_hex);
-  g_free (token_id);
-  g_free (req_hmac_key);
-  g_free (resp_hmac_key);
-  g_free (resp_xor_key);
 }
 
 static void
@@ -2949,7 +2489,6 @@ delete_open_tabs_record_cb (SoupSession *session,
                             gpointer     user_data)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
-  const char *session_token;
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
@@ -2966,8 +2505,7 @@ delete_open_tabs_record_cb (SoupSession *session,
   ephy_sync_service_clear_storage_queue (self);
   ephy_sync_service_clear_storage_credentials (self);
 
-  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
-  ephy_sync_service_destroy_session (self, session_token);
+  ephy_sync_service_revoke_tokens (self);
 
   ephy_sync_service_forget_secrets (self);
   ephy_sync_utils_set_device_id (NULL);

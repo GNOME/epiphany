@@ -34,9 +34,10 @@ EphySyncService *ephy_sync_service_new                (gboolean sync_periodicall
 void             ephy_sync_service_sign_in            (EphySyncService *self,
                                                        const char      *email,
                                                        const char      *uid,
-                                                       const char      *session_token,
-                                                       const char      *key_fetch_token,
-                                                       const char      *unwrap_kb);
+                                                       const char      *access_token,
+                                                       const char      *refresh_token,
+                                                       const char      *sync_key_hex,
+                                                       const char      *key_id);
 void             ephy_sync_service_sign_out           (EphySyncService *self);
 void             ephy_sync_service_sync               (EphySyncService *self);
 void             ephy_sync_service_start_sync         (EphySyncService *self);
