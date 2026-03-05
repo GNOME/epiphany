@@ -30,9 +30,13 @@
 #include <json-glib/json-glib.h>
 #include <nettle/aes.h>
 #include <nettle/cbc.h>
+#include <nettle/ecc.h>
+#include <nettle/ecc-curve.h>
+#include <nettle/gcm.h>
 #include <nettle/hkdf.h>
 #include <nettle/hmac.h>
 #include <nettle/bignum.h>
+#include <nettle/sha2.h>
 #include <string.h>
 
 #if !NETTLE_USE_MINI_GMP
@@ -1159,4 +1163,399 @@ out:
     g_error_free (error);
 
   return cleartext;
+}
+
+/* RFC 7636 PKCE challenge (S256).
+ * Ref: FxAccountsOAuth.sys.mjs beginOAuthFlow().
+ */
+SyncCryptoPKCEChallenge *
+ephy_sync_crypto_pkce_challenge_new (void)
+{
+  SyncCryptoPKCEChallenge *challenge;
+  guint8 random_bytes[32];
+  guint8 digest[SHA256_DIGEST_SIZE];
+  struct sha256_ctx ctx;
+
+  /* Generate 32 random bytes for the code_verifier. */
+  ephy_sync_utils_generate_random_bytes (NULL, 32, random_bytes);
+
+  challenge = g_new (SyncCryptoPKCEChallenge, 1);
+  challenge->code_verifier = ephy_sync_utils_base64_urlsafe_encode (random_bytes, 32, TRUE);
+
+  /* code_challenge = base64url(SHA-256(code_verifier)). */
+  sha256_init (&ctx);
+  sha256_update (&ctx, strlen (challenge->code_verifier),
+                 (const uint8_t *)challenge->code_verifier);
+  sha256_digest (&ctx, SHA256_DIGEST_SIZE, digest);
+  challenge->code_challenge = ephy_sync_utils_base64_urlsafe_encode (digest, SHA256_DIGEST_SIZE, TRUE);
+
+  return challenge;
+}
+
+void
+ephy_sync_crypto_pkce_challenge_free (SyncCryptoPKCEChallenge *challenge)
+{
+  g_assert (challenge);
+
+  g_free (challenge->code_verifier);
+  g_free (challenge->code_challenge);
+  g_free (challenge);
+}
+
+/* ECDH P-256 key pair for JWE key agreement (ECDH-ES). The public key
+ * is sent as keys_jwk; the FxA server encrypts scoped keys with it.
+ * Ref: FxAccountsOAuth.sys.mjs beginOAuthFlow().
+ */
+SyncCryptoECDHKeyPair *
+ephy_sync_crypto_ecdh_key_pair_new (void)
+{
+  SyncCryptoECDHKeyPair *key_pair;
+  const struct ecc_curve *curve;
+
+  curve = nettle_get_secp_256r1 ();
+
+  key_pair = g_new (SyncCryptoECDHKeyPair, 1);
+  ecc_scalar_init (&key_pair->private_key, curve);
+  ecc_point_init (&key_pair->public_key, curve);
+
+  /* Generate a random private key scalar. */
+  ecc_scalar_random (&key_pair->private_key,
+                     NULL, ephy_sync_utils_generate_random_bytes);
+
+  /* Compute public key = private_key * G. */
+  ecc_point_mul_g (&key_pair->public_key, &key_pair->private_key);
+
+  return key_pair;
+}
+
+void
+ephy_sync_crypto_ecdh_key_pair_free (SyncCryptoECDHKeyPair *key_pair)
+{
+  g_assert (key_pair);
+
+  ecc_scalar_clear (&key_pair->private_key);
+  ecc_point_clear (&key_pair->public_key);
+  g_free (key_pair);
+}
+
+/* Export ECDH public key as JWK (RFC 7517) for the keys_jwk parameter.
+ * Ref: FxAccountsOAuth.sys.mjs beginOAuthFlow().
+ */
+char *
+ephy_sync_crypto_ecdh_key_pair_to_jwk (SyncCryptoECDHKeyPair *key_pair)
+{
+  g_autoptr (JsonNode) node = NULL;
+  g_autoptr (JsonObject) object = NULL;
+  mpz_t x, y;
+  guint8 x_bytes[32];
+  guint8 y_bytes[32];
+  g_autofree char *x_b64 = NULL;
+  g_autofree char *y_b64 = NULL;
+  char *jwk;
+  size_t count;
+
+  g_assert (key_pair);
+
+  mpz_init (x);
+  mpz_init (y);
+  ecc_point_get (&key_pair->public_key, x, y);
+
+  /* Export x and y as 32-byte big-endian. */
+  memset (x_bytes, 0, 32);
+  mpz_export (x_bytes, &count, 1, 1, 1, 0, x);
+  /* Right-align if fewer than 32 bytes were written. */
+  if (count < 32) {
+    memmove (x_bytes + (32 - count), x_bytes, count);
+    memset (x_bytes, 0, 32 - count);
+  }
+
+  memset (y_bytes, 0, 32);
+  mpz_export (y_bytes, &count, 1, 1, 1, 0, y);
+  if (count < 32) {
+    memmove (y_bytes + (32 - count), y_bytes, count);
+    memset (y_bytes, 0, 32 - count);
+  }
+
+  x_b64 = ephy_sync_utils_base64_urlsafe_encode (x_bytes, 32, TRUE);
+  y_b64 = ephy_sync_utils_base64_urlsafe_encode (y_bytes, 32, TRUE);
+
+  object = json_object_new ();
+  json_object_set_string_member (object, "kty", "EC");
+  json_object_set_string_member (object, "crv", "P-256");
+  json_object_set_string_member (object, "x", x_b64);
+  json_object_set_string_member (object, "y", y_b64);
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (node, object);
+  jwk = json_to_string (node, FALSE);
+
+  mpz_clear (x);
+  mpz_clear (y);
+
+  return jwk;
+}
+
+/* Perform Concat KDF (single-pass, NIST SP 800-56A, RFC 7518 §4.6)
+ * to derive an AES-256 key from the ECDH shared secret.
+ * OtherInfo = AlgorithmID || PartyUInfo || PartyVInfo || SuppPubInfo
+ * where each is length-prefixed (4 bytes big-endian).
+ */
+static guint8 *
+concat_kdf_sha256 (const guint8 *shared_secret,
+                   gsize         shared_secret_len,
+                   const char   *algorithm,
+                   const char   *apu,
+                   const char   *apv,
+                   gsize         key_len_bits)
+{
+  struct sha256_ctx ctx;
+  guint8 digest[SHA256_DIGEST_SIZE];
+  guint8 *result;
+  guint8 counter[4] = { 0, 0, 0, 1 };
+  guint32 alg_len, apu_len, apv_len, key_len_be;
+  g_autofree guint8 *apu_bytes = NULL;
+  g_autofree guint8 *apv_bytes = NULL;
+  gsize apu_bytes_len = 0;
+  gsize apv_bytes_len = 0;
+
+  if (apu && *apu)
+    apu_bytes = ephy_sync_utils_base64_urlsafe_decode (apu, &apu_bytes_len, TRUE);
+  if (apv && *apv)
+    apv_bytes = ephy_sync_utils_base64_urlsafe_decode (apv, &apv_bytes_len, TRUE);
+
+  alg_len = GUINT32_TO_BE (strlen (algorithm));
+  apu_len = GUINT32_TO_BE (apu_bytes_len);
+  apv_len = GUINT32_TO_BE (apv_bytes_len);
+  key_len_be = GUINT32_TO_BE (key_len_bits);
+
+  sha256_init (&ctx);
+  /* Round counter (always 1 for 256-bit key). */
+  sha256_update (&ctx, 4, counter);
+  /* Shared secret (Z). */
+  sha256_update (&ctx, shared_secret_len, shared_secret);
+  /* AlgorithmID: length-prefixed algorithm string. */
+  sha256_update (&ctx, 4, (const uint8_t *)&alg_len);
+  sha256_update (&ctx, strlen (algorithm), (const uint8_t *)algorithm);
+  /* PartyUInfo: length-prefixed. */
+  sha256_update (&ctx, 4, (const uint8_t *)&apu_len);
+  if (apu_bytes_len > 0)
+    sha256_update (&ctx, apu_bytes_len, apu_bytes);
+  /* PartyVInfo: length-prefixed. */
+  sha256_update (&ctx, 4, (const uint8_t *)&apv_len);
+  if (apv_bytes_len > 0)
+    sha256_update (&ctx, apv_bytes_len, apv_bytes);
+  /* SuppPubInfo: key length in bits as 4-byte big-endian. */
+  sha256_update (&ctx, 4, (const uint8_t *)&key_len_be);
+  sha256_digest (&ctx, SHA256_DIGEST_SIZE, digest);
+
+  /* For A256GCM (256 bits), one round of SHA-256 is sufficient. */
+  result = g_malloc (key_len_bits / 8);
+  memcpy (result, digest, key_len_bits / 8);
+
+  return result;
+}
+
+/* Decrypt a JWE (RFC 7516, ECDH-ES + A256GCM) containing scoped keys.
+ * Ref: FxAccountsOAuth.sys.mjs completeOAuthFlow() — decryptJWE().
+ */
+char *
+ephy_sync_crypto_decrypt_jwe (const char            *jwe,
+                              SyncCryptoECDHKeyPair *key_pair)
+{
+  g_autoptr (JsonNode) header_node = NULL;
+  JsonObject *header_json = NULL;
+  JsonObject *epk_json = NULL;
+  g_autoptr (GError) error = NULL;
+  g_auto (GStrv) parts = NULL;
+  g_autofree char *header_str = NULL;
+  char *plaintext = NULL;
+  g_autofree guint8 *iv = NULL;
+  g_autofree guint8 *ciphertext = NULL;
+  g_autofree guint8 *tag = NULL;
+  g_autofree guint8 *derived_key = NULL;
+  gsize header_len, iv_len, ciphertext_len, tag_len;
+  gsize encrypted_key_len;
+
+  g_assert (jwe);
+  g_assert (key_pair);
+
+  /* JWE Compact Serialization: header.encrypted_key.iv.ciphertext.tag */
+  parts = g_strsplit (jwe, ".", 5);
+  if (!parts || !parts[0] || !parts[1] || !parts[2] || !parts[3] || !parts[4]) {
+    g_warning ("Invalid JWE: expected 5 dot-separated parts");
+    return NULL;
+  }
+
+  /* Parse header. */
+  header_str = (char *)ephy_sync_utils_base64_urlsafe_decode (parts[0], &header_len, TRUE);
+  if (!header_str) {
+    g_warning ("Failed to decode JWE header");
+    return NULL;
+  }
+
+  header_node = json_from_string (header_str, &error);
+  if (error) {
+    g_warning ("JWE header is not valid JSON: %s", error->message);
+    return NULL;
+  }
+  header_json = json_node_get_object (header_node);
+  if (!header_json) {
+    g_warning ("JWE header is not a JSON object");
+    return NULL;
+  }
+
+  /* Verify algorithm is ECDH-ES. */
+  {
+    const char *alg = json_object_get_string_member (header_json, "alg");
+    const char *enc = json_object_get_string_member (header_json, "enc");
+    if (!alg || g_strcmp0 (alg, "ECDH-ES")) {
+      g_warning ("Unsupported JWE algorithm: %s", alg ? alg : "(null)");
+      return NULL;
+    }
+    if (!enc || g_strcmp0 (enc, "A256GCM")) {
+      g_warning ("Unsupported JWE encryption: %s", enc ? enc : "(null)");
+      return NULL;
+    }
+  }
+
+  /* For ECDH-ES, encrypted_key must be empty. */
+  {
+    g_autofree guint8 *encrypted_key = ephy_sync_utils_base64_urlsafe_decode (parts[1], &encrypted_key_len, TRUE);
+    if (encrypted_key_len != 0) {
+      g_warning ("ECDH-ES JWE should have empty encrypted key");
+      return NULL;
+    }
+  }
+
+  /* Extract the server's ephemeral public key (epk) from the header. */
+  epk_json = json_object_get_object_member (header_json, "epk");
+  if (!epk_json) {
+    g_warning ("JWE header missing 'epk' member");
+    return NULL;
+  }
+
+  /* Decode IV, ciphertext, and tag. */
+  iv = ephy_sync_utils_base64_urlsafe_decode (parts[2], &iv_len, TRUE);
+  ciphertext = ephy_sync_utils_base64_urlsafe_decode (parts[3], &ciphertext_len, TRUE);
+  tag = ephy_sync_utils_base64_urlsafe_decode (parts[4], &tag_len, TRUE);
+  if (!iv || !ciphertext || !tag) {
+    g_warning ("Failed to decode JWE components");
+    return NULL;
+  }
+  if (tag_len != GCM_DIGEST_SIZE) {
+    g_warning ("Invalid GCM tag length: %" G_GSIZE_FORMAT, tag_len);
+    return NULL;
+  }
+
+  /* Perform ECDH: load server's EPK and compute shared secret. */
+  {
+    const char *epk_x_b64 = json_object_get_string_member (epk_json, "x");
+    const char *epk_y_b64 = json_object_get_string_member (epk_json, "y");
+    const char *epk_crv = json_object_get_string_member (epk_json, "crv");
+    const char *apu = NULL;
+    const char *apv = NULL;
+    g_autofree guint8 *epk_x_bytes = NULL;
+    g_autofree guint8 *epk_y_bytes = NULL;
+    gsize epk_x_len, epk_y_len;
+    struct ecc_point server_pub;
+    struct ecc_point shared_point;
+    const struct ecc_curve *curve;
+    mpz_t sx, sy, rx, ry;
+    guint8 shared_secret[32];
+    size_t count;
+    int success;
+
+    if (!epk_x_b64 || !epk_y_b64) {
+      g_warning ("EPK missing x or y coordinate");
+      return NULL;
+    }
+    if (!epk_crv || g_strcmp0 (epk_crv, "P-256")) {
+      g_warning ("EPK has unsupported curve: %s", epk_crv ? epk_crv : "(null)");
+      return NULL;
+    }
+
+    curve = nettle_get_secp_256r1 ();
+    ecc_point_init (&server_pub, curve);
+    ecc_point_init (&shared_point, curve);
+    mpz_init (sx);
+    mpz_init (sy);
+    mpz_init (rx);
+    mpz_init (ry);
+
+    /* Decode server's EPK x,y coordinates. */
+    epk_x_bytes = ephy_sync_utils_base64_urlsafe_decode (epk_x_b64, &epk_x_len, TRUE);
+    epk_y_bytes = ephy_sync_utils_base64_urlsafe_decode (epk_y_b64, &epk_y_len, TRUE);
+
+    mpz_import (sx, epk_x_len, 1, 1, 1, 0, epk_x_bytes);
+    mpz_import (sy, epk_y_len, 1, 1, 1, 0, epk_y_bytes);
+
+    success = ecc_point_set (&server_pub, sx, sy);
+    if (!success) {
+      g_warning ("Server EPK is not on the curve");
+      mpz_clear (sx);
+      mpz_clear (sy);
+      mpz_clear (rx);
+      mpz_clear (ry);
+      ecc_point_clear (&server_pub);
+      ecc_point_clear (&shared_point);
+      return NULL;
+    }
+
+    /* ECDH: shared_point = private_key * server_pub. */
+    ecc_point_mul (&shared_point, &key_pair->private_key, &server_pub);
+    ecc_point_get (&shared_point, rx, ry);
+
+    /* The shared secret is the x-coordinate of the result point. */
+    memset (shared_secret, 0, 32);
+    mpz_export (shared_secret, &count, 1, 1, 1, 0, rx);
+    if (count < 32) {
+      memmove (shared_secret + (32 - count), shared_secret, count);
+      memset (shared_secret, 0, 32 - count);
+    }
+
+    /* Extract apu/apv from header if present. */
+    if (json_object_has_member (header_json, "apu"))
+      apu = json_object_get_string_member (header_json, "apu");
+    if (json_object_has_member (header_json, "apv"))
+      apv = json_object_get_string_member (header_json, "apv");
+
+    /* Derive the AES-256-GCM key using Concat KDF. */
+    derived_key = concat_kdf_sha256 (shared_secret, 32,
+                                     "A256GCM", apu, apv, 256);
+
+    mpz_clear (sx);
+    mpz_clear (sy);
+    mpz_clear (rx);
+    mpz_clear (ry);
+    ecc_point_clear (&server_pub);
+    ecc_point_clear (&shared_point);
+  }
+
+  /* Decrypt using AES-256-GCM. */
+  {
+    struct gcm_aes256_ctx ctx;
+    g_autofree guint8 *decrypted = NULL;
+    guint8 computed_tag[GCM_DIGEST_SIZE];
+
+    gcm_aes256_set_key (&ctx, derived_key);
+    gcm_aes256_set_iv (&ctx, iv_len, iv);
+    /* AAD is the base64url-encoded header (protected header). */
+    gcm_aes256_update (&ctx, strlen (parts[0]), (const uint8_t *)parts[0]);
+
+    decrypted = g_malloc (ciphertext_len);
+    gcm_aes256_decrypt (&ctx, ciphertext_len, decrypted, ciphertext);
+    gcm_aes256_digest (&ctx, GCM_DIGEST_SIZE, computed_tag);
+
+    /* Verify the authentication tag. */
+    if (memcmp (computed_tag, tag, GCM_DIGEST_SIZE) != 0) {
+      g_warning ("JWE GCM authentication tag mismatch");
+      return NULL;
+    }
+
+    /* Null-terminate the plaintext. */
+    plaintext = g_malloc (ciphertext_len + 1);
+    memcpy (plaintext, decrypted, ciphertext_len);
+    plaintext[ciphertext_len] = '\0';
+  }
+
+  return plaintext;
 }

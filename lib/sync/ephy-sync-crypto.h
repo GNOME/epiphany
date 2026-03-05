@@ -21,6 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <nettle/ecc.h>
 #include <nettle/rsa.h>
 
 G_BEGIN_DECLS
@@ -64,6 +65,16 @@ typedef struct {
   char *aes_key_hex;
   char *hmac_key_hex;
 } SyncCryptoKeyBundle;
+
+typedef struct {
+  char *code_verifier;
+  char *code_challenge;
+} SyncCryptoPKCEChallenge;
+
+typedef struct {
+  struct ecc_scalar private_key;
+  struct ecc_point public_key;
+} SyncCryptoECDHKeyPair;
 
 SyncCryptoHawkOptions *ephy_sync_crypto_hawk_options_new        (const char *app,
                                                                  const char *dlg,
@@ -118,5 +129,15 @@ char                  *ephy_sync_crypto_encrypt_record          (const char     
                                                                  SyncCryptoKeyBundle *bundle);
 char                  *ephy_sync_crypto_decrypt_record          (const char          *payload,
                                                                  SyncCryptoKeyBundle *bundle);
+
+SyncCryptoPKCEChallenge *ephy_sync_crypto_pkce_challenge_new    (void);
+void                   ephy_sync_crypto_pkce_challenge_free     (SyncCryptoPKCEChallenge *challenge);
+
+SyncCryptoECDHKeyPair *ephy_sync_crypto_ecdh_key_pair_new       (void);
+void                   ephy_sync_crypto_ecdh_key_pair_free      (SyncCryptoECDHKeyPair *key_pair);
+char                  *ephy_sync_crypto_ecdh_key_pair_to_jwk    (SyncCryptoECDHKeyPair *key_pair);
+
+char                  *ephy_sync_crypto_decrypt_jwe             (const char            *jwe,
+                                                                 SyncCryptoECDHKeyPair *key_pair);
 
 G_END_DECLS
