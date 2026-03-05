@@ -819,6 +819,17 @@ write_ephy_window (xmlTextWriterPtr  writer,
   if (ret < 0)
     return ret;
 
+  /* It does not make sense to save a window without tabs. This probably
+   * indicates Epiphany has crashed on startup. We would clobber the good
+   * session state file if we were to continue.
+   *
+   * So, set a failure status here. If write_tab() is called in the loop below,
+   * it will overwrite this.
+   *
+   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/2825
+   */
+  ret = -1;
+
   for (l = window->tabs; l; l = l->next) {
     SessionTab *tab = (SessionTab *)l->data;
 
