@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-03-03 21:11+0000\n"
-"PO-Revision-Date: 2026-03-04 18:59+0100\n"
+"POT-Creation-Date: 2026-03-06 01:11+0000\n"
+"PO-Revision-Date: 2026-03-06 12:12+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -76,10 +76,8 @@ msgid "Incognito search engine"
 msgstr "Motor de recèrca Incognito"
 
 #: data/org.gnome.epiphany.gschema.xml:28
-#, fuzzy
-#| msgid "Name of the search engine selected by default."
 msgid "Name of the search engine selected in incognito mode."
-msgstr "Nom del motor de recèrca seleccionat per defaut."
+msgstr "Nom del motor de recèrca seleccionat en mòde incognito."
 
 #: data/org.gnome.epiphany.gschema.xml:39
 msgid "List of the search engines."
@@ -104,11 +102,9 @@ msgid "Enable Search Suggestions"
 msgstr "Activar las suggestions de recèrca"
 
 #: data/org.gnome.epiphany.gschema.xml:51
-#, fuzzy
-#| msgid "Whether to show the contact list in chat rooms."
 msgid "Whether to show Search Suggestion in url entry popdown."
 msgstr ""
-"Indica se cal afichar la lista dels contactes dins los salons de discussion."
+"Afichar o pas la suggestion de recèrca dins la fenèstra de sasida de l'URL."
 
 #: data/org.gnome.epiphany.gschema.xml:55
 msgid "Force new windows to be opened in tabs"
@@ -247,10 +243,8 @@ msgid "Show url bar at bottom"
 msgstr "Afichar la barra d'adreça en bas"
 
 #: data/org.gnome.epiphany.gschema.xml:101
-#, fuzzy
-#| msgid "Whether to show groups in the contact list."
 msgid "Whether to show url bar on bottom."
-msgstr "Indica se cal afichar los gropes dins la lista dels contactes."
+msgstr "Indica se cal afichar la barra d'adreça en bas."
 
 #: data/org.gnome.epiphany.gschema.xml:105
 msgid "The visibility policy for the tabs bar."
@@ -545,10 +539,8 @@ msgid "Default zoom level for new pages"
 msgstr "Nivèl de zoom per defaut per las paginas novèlas"
 
 #: data/org.gnome.epiphany.gschema.xml:237
-#, fuzzy
-#| msgid "Default Zoom Level"
 msgid "Default reader mode zoom level."
-msgstr "Nivèl de zoom per defaut"
+msgstr "Nivèl de zoom per defaut del mòde lectura."
 
 #: data/org.gnome.epiphany.gschema.xml:238
 #, fuzzy
@@ -634,6 +626,18 @@ msgstr ""
 msgid "Always ask for download directory"
 msgstr "Totjorn demandar lo repertòri de telecargament"
 
+#: data/org.gnome.epiphany.gschema.xml:273
+msgid "Whether to present a directory chooser dialog for every download."
+msgstr ""
+"Indica se cal presentar una bóstia de dialòg de causida de repertòri per "
+"cada telecargament."
+
+#: data/org.gnome.epiphany.gschema.xml:277
+#, fuzzy
+#| msgid "Whether to automatically restore the last session"
+msgid "Enable immediately switch to new open tab"
+msgstr "Indica se cal restablir automaticament la darrièra session"
+
 #: data/org.gnome.epiphany.gschema.xml:278
 #, fuzzy
 #| msgid "Whether to automatically restore the last session"
@@ -644,13 +648,33 @@ msgstr "Indica se cal restablir automaticament la darrièra session"
 msgid "Enable WebExtensions"
 msgstr "Activar las WebExtensions"
 
+#: data/org.gnome.epiphany.gschema.xml:283
+msgid ""
+"Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
+"extensions."
+msgstr ""
+"Activar o non las WebExtensions. Las WebExtensions son un sistèma multi-"
+"navigador per las extensions."
+
 #: data/org.gnome.epiphany.gschema.xml:287
 msgid "Active WebExtensions"
 msgstr "WebExtensions activas"
 
+#: data/org.gnome.epiphany.gschema.xml:288
+msgid "Indicates which WebExtensions are set to active."
+msgstr "Indica quinas WebExtensions son activadas."
+
 #: data/org.gnome.epiphany.gschema.xml:292
 msgid "Show developer actions"
 msgstr "Afichar las accions de desvolopament"
+
+#: data/org.gnome.epiphany.gschema.xml:293
+msgid ""
+"Whether to show developer context menu actions. This allows use of the Page "
+"Source and Inspect Element actions."
+msgstr ""
+"Afichar o non las accions del menú contextual per desvolopaires. Aquò permet "
+"d'utilizar las accions Còdi font de la pagina e Inspectar l'element."
 
 #: data/org.gnome.epiphany.gschema.xml:297
 msgid "Always show full URL"
@@ -667,6 +691,12 @@ msgstr ""
 msgid "Automatically open URIs"
 msgstr "Dobrir automaticament las URIs"
 
+#: data/org.gnome.epiphany.gschema.xml:303
+msgid "This is a permission map of security origins to URL schemes."
+msgstr ""
+"Aquò es una mapa de permissions de las originas de seguretat cap als "
+"esquèmas d'URL."
+
 #: data/org.gnome.epiphany.gschema.xml:309
 msgid "Web application additional URLs"
 msgstr "URL suplementàrias de l’aplicacion web"
@@ -674,6 +704,10 @@ msgstr "URL suplementàrias de l’aplicacion web"
 #: data/org.gnome.epiphany.gschema.xml:310
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Lista de las URL que devon se dobrir amb l’aplicacion web"
+
+#: data/org.gnome.epiphany.gschema.xml:314
+msgid "Show navigation buttons in WebApp"
+msgstr "Mostrar los botons de navigacion dins WebApp"
 
 #: data/org.gnome.epiphany.gschema.xml:315
 #, fuzzy
@@ -686,6 +720,25 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:319
 msgid "Run in background"
 msgstr "Executar en rèire plan"
+
+#: data/org.gnome.epiphany.gschema.xml:320
+#, fuzzy
+#| msgid ""
+#| "If enabled application window is kept open when closing the last tab."
+msgid ""
+"If enabled, application continues running in the background after closing "
+"the window."
+msgstr ""
+"S'es activat, la fenèstra de l'aplicacion demòra dobèrta al moment de tampar "
+"lo darrièr onglet."
+
+#: data/org.gnome.epiphany.gschema.xml:324
+msgid "WebApp is system-wide"
+msgstr "WebApp s'aplica a tot lo sistèma"
+
+#: data/org.gnome.epiphany.gschema.xml:325
+msgid "If enabled, application cannot be edited or removed."
+msgstr "S'es activat, l'aplicacion pòt pas èsser modificada ni suprimida."
 
 #: data/org.gnome.epiphany.gschema.xml:331
 msgid "The downloads folder"
@@ -740,10 +793,34 @@ msgstr ""
 msgid "Disable forward and back buttons"
 msgstr "Desactivar los botons « Seguent » e « Precedent »"
 
+#: data/org.gnome.epiphany.gschema.xml:366
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+"Se definit a « true », los botons precedent e seguent son desactivats, çò "
+"qu'empacha los utilizaires d'accedir a l'istoric de navigacion immediat"
+
+#: data/org.gnome.epiphany.gschema.xml:384
+#, fuzzy
+#| msgid "Firefox Account"
+msgid "Firefox Sync Token Server URL"
+msgstr "Compte Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:385
+msgid "URL to a custom Firefox Sync token server."
+msgstr "URL cap a un servidor de getons Firefox Sync personalizat."
+
 #: data/org.gnome.epiphany.gschema.xml:389
 #, fuzzy
 #| msgid "Firefox Account"
 msgid "Firefox Sync Accounts Server URL"
+msgstr "Compte Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:390
+#, fuzzy
+#| msgid "Firefox Account"
+msgid "URL to a custom Firefox Sync accounts server."
 msgstr "Compte Firefox"
 
 #: data/org.gnome.epiphany.gschema.xml:394
@@ -1230,8 +1307,8 @@ msgstr "Picatz lo PIN per %s, per vos autentificar a %s:%d."
 #: embed/ephy-client-certificate-manager.c:321
 #: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:767
 #: embed/ephy-web-view.c:1380 src/ephy-history-dialog.c:893
-#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:269
-#: src/ephy-window.c:2298 src/preferences/autofill-view.c:363
+#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:271
+#: src/ephy-window.c:2300 src/preferences/autofill-view.c:363
 #: src/preferences/extension-view.c:117
 #: src/resources/gtk/bookmark-properties.blp:20
 #: src/resources/gtk/firefox-sync-dialog.blp:100
@@ -1329,7 +1406,7 @@ msgid "Finished downloading %s"
 msgstr "Telecargament acabat : %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:969 src/ephy-window.c:4071
+#: embed/ephy-download.c:969 src/ephy-window.c:4093
 msgid "Download finished"
 msgstr "Telecargament acabat"
 
@@ -2550,7 +2627,7 @@ msgid "Bookmark removed"
 msgstr "Marcapagina suprimit"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:998
+#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1000
 #: src/preferences/prefs-features-page.c:284
 msgid "_Undo"
 msgstr "_Anullar"
@@ -2778,7 +2855,7 @@ msgstr "Quitar lo mòde ecran complèt"
 msgid "Select _None"
 msgstr "Seleccionar _tot"
 
-#: src/ephy-history-dialog.c:267 src/ephy-window.c:1006
+#: src/ephy-history-dialog.c:267 src/ephy-window.c:1008
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Seleccionar _tot"
@@ -2909,7 +2986,7 @@ msgstr ""
 msgid "Copy password"
 msgstr "Copiar lo senhal"
 
-#: src/ephy-passwords-view.c:262 src/ephy-window.c:4168
+#: src/ephy-passwords-view.c:262 src/ephy-window.c:4190
 msgid "Username"
 msgstr "Nom d'utilizaire"
 
@@ -2917,7 +2994,7 @@ msgstr "Nom d'utilizaire"
 msgid "Copy username"
 msgstr "Copiar lo nom d'utilizaire"
 
-#: src/ephy-passwords-view.c:280 src/ephy-window.c:4175
+#: src/ephy-passwords-view.c:280 src/ephy-window.c:4197
 msgid "Password"
 msgstr "Senhal"
 
@@ -3067,158 +3144,158 @@ msgstr "Impossible de cargar las suggestions dels motors de recèrca : %s"
 msgid "Open a new tab"
 msgstr "Dobrir un onglet novèl"
 
-#: src/ephy-window.c:999
+#: src/ephy-window.c:1001
 msgid "Re_do"
 msgstr "Re_far"
 
 #. Edit.
-#: src/ephy-window.c:1002
+#: src/ephy-window.c:1004
 msgid "Cu_t"
 msgstr "_Talhar"
 
-#: src/ephy-window.c:1003
+#: src/ephy-window.c:1005
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/ephy-window.c:1004
+#: src/ephy-window.c:1006
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/ephy-window.c:1005
+#: src/ephy-window.c:1007
 msgid "_Paste Text Only"
 msgstr "Pegar coma _tèxte"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1010
 msgid "S_end Link by Email…"
 msgstr "_Mandar lo ligam per corrièr electronic…"
 
-#: src/ephy-window.c:1009
+#: src/ephy-window.c:1011
 msgid "Add _Link to Bookmarks"
 msgstr "Apondre lo _ligam als marcapaginas"
 
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1013
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1014
 msgid "_Back"
 msgstr "_Tornar"
 
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1015
 msgid "_Forward"
 msgstr "_Seguent"
 
 #. Bookmarks
-#: src/ephy-window.c:1016
+#: src/ephy-window.c:1018
 msgid "Add Boo_kmark…"
 msgstr "_Apondre un marcapagina…"
 
 #. Links.
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1022
 msgid "Open Link in New _Window"
 msgstr "Dobrir lo ligam dins una _fenèstra novèla"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1023
 msgid "Open Link in New _Tab"
 msgstr "Dobrir lo ligam dins un _onglet novèl"
 
-#: src/ephy-window.c:1022
+#: src/ephy-window.c:1024
 msgid "Open Link in I_ncognito Window"
 msgstr "Dobrir lo ligam dins una fenèstra I_ncognito"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1025
 msgid "_Save Link As…"
 msgstr "_Enregistrar lo ligam jos…"
 
-#: src/ephy-window.c:1024
+#: src/ephy-window.c:1026
 msgid "_Copy Link Address"
 msgstr "_Copiar l'adreça del ligam"
 
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1027
 msgid "_Copy E-mail Address"
 msgstr "_Copiar l'adreça electronica"
 
 #. Images.
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1031
 msgid "View _Image in New Tab"
 msgstr "Dobrir l'_Imatge dins un onglet novèl"
 
-#: src/ephy-window.c:1030
+#: src/ephy-window.c:1032
 msgid "Copy I_mage Address"
 msgstr "Copiar l'adreça de l'i_matge"
 
-#: src/ephy-window.c:1031
+#: src/ephy-window.c:1033
 msgid "_Save Image As…"
 msgstr "_Enregistrar l'imatge jos…"
 
-#: src/ephy-window.c:1032
+#: src/ephy-window.c:1034
 msgid "Set as _Wallpaper"
 msgstr "Definir coma p_apièr pintrat"
 
 #. Video.
-#: src/ephy-window.c:1036
+#: src/ephy-window.c:1038
 msgid "Open Video in New _Window"
 msgstr "Dobrir la vidèo dins una _fenèstra novèla"
 
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1039
 msgid "Open Video in New _Tab"
 msgstr "Dobrir la vidèo dins un _onglet novèl"
 
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1040
 msgid "_Save Video As…"
 msgstr "_Enregistrar lo ligam jos…"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1041
 msgid "_Copy Video Address"
 msgstr "_Copiar l'adreça de la vidèo"
 
 #. Audio.
-#: src/ephy-window.c:1043
+#: src/ephy-window.c:1045
 msgid "Open Audio in New _Window"
 msgstr "Dobrir lo document àudio dins una _fenèstra novèla"
 
-#: src/ephy-window.c:1044
+#: src/ephy-window.c:1046
 msgid "Open Audio in New _Tab"
 msgstr "Dobrir lo document àudio dins un _onglet novèl"
 
-#: src/ephy-window.c:1045
+#: src/ephy-window.c:1047
 msgid "_Save Audio As…"
 msgstr "_Enregistrar lo document àudio jos…"
 
-#: src/ephy-window.c:1046
+#: src/ephy-window.c:1048
 msgid "_Copy Audio Address"
 msgstr "_Copiar l'adreça del document àudio"
 
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:1054
 msgid "Save Pa_ge As…"
 msgstr "Enregistrar la pa_gina jos…"
 
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1055
 msgid "_Take Screenshot…"
 msgstr "_Prendre captura d'ecran…"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1056
 msgid "_Page Source"
 msgstr "Font de la _pagina"
 
-#: src/ephy-window.c:1435
+#: src/ephy-window.c:1437
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Recercar « %s » sul Web"
 
-#: src/ephy-window.c:1464
+#: src/ephy-window.c:1466
 msgid "Open Link"
 msgstr "Dobrir lo ligam"
 
-#: src/ephy-window.c:1466
+#: src/ephy-window.c:1468
 msgid "Open Link In New Tab"
 msgstr "Dobrir lo ligam dins un onglet novèl"
 
-#: src/ephy-window.c:1468
+#: src/ephy-window.c:1470
 msgid "Open Link In New Window"
 msgstr "Dobrir lo ligam dins una fenèstra novèla"
 
-#: src/ephy-window.c:1470
+#: src/ephy-window.c:1472
 msgid "Open Link In Incognito Window"
 msgstr "Dobrir lo ligam dins una fenèstra Incognito"
 
@@ -3228,52 +3305,52 @@ msgstr "Dobrir lo ligam dins una fenèstra Incognito"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2296
+#: src/ephy-window.c:2298
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr "Autorizar « %s » a dobrir lo ligam « %s » dins una aplicacion extèrna"
 
-#: src/ephy-window.c:2297
+#: src/ephy-window.c:2299
 msgid "Open in External App?"
 msgstr "Dobrir amb una aplicacion extèrna ?"
 
-#: src/ephy-window.c:2299
+#: src/ephy-window.c:2301
 msgid "_Open Link"
 msgstr "_Dobrir lo ligam"
 
-#: src/ephy-window.c:2305
+#: src/ephy-window.c:2307
 msgid "Always Allow"
 msgstr "Totjorn autorizar"
 
-#: src/ephy-window.c:2593
+#: src/ephy-window.c:2595
 msgid "Search Engine Available"
 msgstr "Cercar dins los motors de recèrca disponibles"
 
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
-#: src/ephy-window.c:2599
+#: src/ephy-window.c:2601
 #, c-format
 msgid "Add “%s”"
 msgstr "Apondre « %s »"
 
-#: src/ephy-window.c:2603 src/ephy-window.c:2611
+#: src/ephy-window.c:2605 src/ephy-window.c:2613
 #: src/preferences/prefs-search-engine-page.c:310
 #: src/preferences/prefs-search-engine-page.c:312
 msgid "Add Search Engine"
 msgstr "Apondre un motor de recèrca"
 
-#: src/ephy-window.c:3046
+#: src/ephy-window.c:3058
 msgid "Reader Mode Available"
 msgstr "Mòde lectura disponible"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3145
+#: src/ephy-window.c:3157
 #, fuzzy
 #| msgid "Notifications"
 msgid "Notification Request"
 msgstr "Notificacions"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3147
+#: src/ephy-window.c:3159
 #, fuzzy, c-format
 #| msgid "The page at %s wants to show desktop notifications."
 msgid "The page at “%s” would like to send you notifications"
@@ -3282,68 +3359,68 @@ msgstr ""
 "burèu."
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3152
+#: src/ephy-window.c:3164
 #, fuzzy
 #| msgid "Location access"
 msgid "Location Access Request"
 msgstr "Accès a la localizacion"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3154
+#: src/ephy-window.c:3166
 #, fuzzy, c-format
 #| msgid "The page at %s wants to know your location."
 msgid "The page at “%s” would like to know your location"
 msgstr "La pagina a %s demanda vòstra localizacion."
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3159
+#: src/ephy-window.c:3171
 #, fuzzy
 #| msgid "Microphone access"
 msgid "Microphone Access Request"
 msgstr "Accès al microfòn"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3161
+#: src/ephy-window.c:3173
 #, fuzzy, c-format
 #| msgid "The page at %s wants to use your microphone."
 msgid "The page at “%s” would like to use your microphone"
 msgstr "La pagina a %s demanda a utilizar vòstre microfòn."
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3166
+#: src/ephy-window.c:3178
 #, fuzzy
 #| msgid "Webcam access"
 msgid "Webcam Access Request"
 msgstr "Accès webcam"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3168
+#: src/ephy-window.c:3180
 #, fuzzy, c-format
 #| msgid "The page at %s wants to use your webcam."
 msgid "The page at “%s” would like to use your webcam"
 msgstr "La pagina a %s demanda d'utilizar vòstra webcam."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3173
+#: src/ephy-window.c:3185
 #, fuzzy
 #| msgid "Microphone access"
 msgid "Webcam and Microphone Access Request"
 msgstr "Accès al microfòn"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3175
+#: src/ephy-window.c:3187
 #, fuzzy, c-format
 #| msgid "The page at %s wants to use your microphone."
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "La pagina a %s demanda a utilizar vòstre microfòn."
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3189
+#: src/ephy-window.c:3201
 msgid "Website Data Access Request"
 msgstr "Demanda d'accès a las donadas del sit Web"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3191
+#: src/ephy-window.c:3203
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
@@ -3354,72 +3431,72 @@ msgstr ""
 "vòstra activitat sus « %s »."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3196
+#: src/ephy-window.c:3208
 msgid "Clipboard Access Request"
 msgstr "Demanda d'accès al quichapapièr"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3198
+#: src/ephy-window.c:3210
 #, fuzzy, c-format
 #| msgid "The page at %s wants to use your webcam."
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "La pagina a %s demanda d'utilizar vòstra webcam."
 
-#: src/ephy-window.c:3226
+#: src/ephy-window.c:3238
 msgid "_Ask Later"
 msgstr "_Demandar mai tard"
 
-#: src/ephy-window.c:3227
+#: src/ephy-window.c:3239
 msgid "_Deny"
 msgstr "_Refusar"
 
-#: src/ephy-window.c:3228
+#: src/ephy-window.c:3240
 msgid "_Allow"
 msgstr "_Permetre"
 
-#: src/ephy-window.c:3409 src/ephy-window.c:5066
+#: src/ephy-window.c:3431 src/ephy-window.c:5088
 #, fuzzy
 #| msgid "Web Website"
 msgid "Leave Website?"
 msgstr "Paginas web"
 
-#: src/ephy-window.c:3410 src/ephy-window.c:5067 src/window-commands.c:1407
+#: src/ephy-window.c:3432 src/ephy-window.c:5089 src/window-commands.c:1407
 #, fuzzy
 #| msgid "A form you modified has not been submitted."
 msgid "A form was modified and has not been submitted"
 msgstr "Un formulari qu'avètz documentat es pas estat somés."
 
-#: src/ephy-window.c:3411 src/ephy-window.c:5068 src/window-commands.c:1411
+#: src/ephy-window.c:3433 src/ephy-window.c:5090 src/window-commands.c:1411
 #, fuzzy
 #| msgid "_Discard form"
 msgid "_Discard Form"
 msgstr "A_bandonar lo formulari"
 
-#: src/ephy-window.c:3432
+#: src/ephy-window.c:3454
 msgid "Download operation"
 msgstr "Operacion de telecargament"
 
-#: src/ephy-window.c:3434
+#: src/ephy-window.c:3456
 msgid "Show details"
 msgstr "Afichar los detalhs"
 
-#: src/ephy-window.c:3436
+#: src/ephy-window.c:3458
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d operacion de telecargament activa"
 msgstr[1] "%d operacions de telecargament activas"
 
-#: src/ephy-window.c:3714
+#: src/ephy-window.c:3736
 msgid "Set as Default Browser?"
 msgstr "Definir coma navegador per defaut ?"
 
-#: src/ephy-window.c:3716
+#: src/ephy-window.c:3738
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Utilizatz Web coma navigador per defaut e per dobrir los ligams extèrnes"
 
-#: src/ephy-window.c:3718
+#: src/ephy-window.c:3740
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3427,27 +3504,27 @@ msgstr ""
 "Utilizar Epiphany Technology Preview coma vòstre navigador web per defaut e "
 "per dobrir de ligams extèrnes"
 
-#: src/ephy-window.c:3722
+#: src/ephy-window.c:3744
 msgid "_Ask Again Later"
 msgstr "_Tornar demandar mai tard"
 
-#: src/ephy-window.c:3723
+#: src/ephy-window.c:3745
 msgid "_No"
 msgstr "_Non"
 
-#: src/ephy-window.c:3724
+#: src/ephy-window.c:3746
 msgid "_Yes"
 msgstr "Ò_c"
 
-#: src/ephy-window.c:4059
+#: src/ephy-window.c:4081
 msgid "Download started"
 msgstr "Telecargament lançat"
 
-#: src/ephy-window.c:4149
+#: src/ephy-window.c:4171
 msgid "Save Password?"
 msgstr "Enregistrar lo senhal ?"
 
-#: src/ephy-window.c:4150
+#: src/ephy-window.c:4172
 msgid ""
 "Passwords are saved only on your device and can be removed at any time in "
 "Preferences"
@@ -3455,50 +3532,50 @@ msgstr ""
 "Los senhals son salvats sonque sus vòstre aparelh e se pòdon suprimir a tot "
 "moment dins las Preferéncias"
 
-#: src/ephy-window.c:4152
+#: src/ephy-window.c:4174
 msgid "Not Now"
 msgstr "Pas ara"
 
-#: src/ephy-window.c:4153
+#: src/ephy-window.c:4175
 #, fuzzy
 #| msgid "_Never Save"
 msgid "Never Save"
 msgstr "Los acceptar pas _jamai"
 
 # Titre de fenèstra
-#: src/ephy-window.c:4154
+#: src/ephy-window.c:4176
 msgid "Save"
 msgstr "Enregistrar"
 
-#: src/ephy-window.c:4355
+#: src/ephy-window.c:4377
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Application web"
 
-#: src/ephy-window.c:4358
+#: src/ephy-window.c:4380
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Installar lo site coma una aplicacion Web"
 
-#: src/ephy-window.c:5181
+#: src/ephy-window.c:5203
 msgid "Close Multiple Tabs?"
 msgstr "Tampar mantun onglet ?"
 
-#: src/ephy-window.c:5182
+#: src/ephy-window.c:5204
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "S’aquesta fenèstra es tampada, totes los onglets seràn perduts"
 
-#: src/ephy-window.c:5183
+#: src/ephy-window.c:5205
 msgid "C_lose Tabs"
 msgstr "Tampar _los onglets"
 
-#: src/ephy-window.c:5299
+#: src/ephy-window.c:5321
 #, fuzzy
 #| msgid "New _tab page"
 msgid "New tab opened"
 msgstr "Novèla pagina en ongle_t"
 
-#: src/ephy-window.c:5303
+#: src/ephy-window.c:5325
 msgid "Switch"
 msgstr "Bascular"
 
@@ -4292,8 +4369,6 @@ msgid "Passwords"
 msgstr "Senhals"
 
 #: src/resources/gtk/passwords-view.blp:12
-#, fuzzy
-#| msgid "Remove all passwords"
 msgid "Remove All Passwords"
 msgstr "Suprimir totes los senhals"
 
@@ -4490,10 +4565,8 @@ msgid "Search Engine"
 msgstr "Motor de recèrca"
 
 #: src/resources/gtk/prefs-general-page.blp:165
-#, fuzzy
-#| msgid "Search Engines"
 msgid "Incognito Search Engine"
-msgstr "Motors de recèrca"
+msgstr "Motor de recèrca Incognito"
 
 #: src/resources/gtk/prefs-general-page.blp:174
 msgid "Session"
@@ -4579,20 +4652,16 @@ msgid "Enable search suggestions in the URL entry"
 msgstr "Gerir los motors de recèrca"
 
 #: src/resources/gtk/prefs-privacy-page.blp:31
-#, fuzzy
-#| msgid "Search Suggestions"
 msgid "Search Su_ggestions"
-msgstr "Suggestions de recèrca"
+msgstr "Su_ggestions de recèrca"
 
 #: src/resources/gtk/prefs-privacy-page.blp:37
 msgid "Personal Data"
 msgstr "Donadas personalas"
 
 #: src/resources/gtk/prefs-privacy-page.blp:40
-#, fuzzy
-#| msgid "Website"
 msgid "Website _Data"
-msgstr "Site Web"
+msgstr "_Donadas de sites Web"
 
 #: src/resources/gtk/prefs-privacy-page.blp:53
 msgid "Forms and Autofill"
@@ -4974,10 +5043,8 @@ msgid "Add Search _Engine…"
 msgstr "Apon_dre un motor de recèrca…"
 
 #: src/resources/gtk/site-menu-button.blp:47
-#, fuzzy
-#| msgid "Text Encoding"
 msgid "Text Enco_ding…"
-msgstr "Encodatge del tèxte"
+msgstr "Enco_datge del tèxte…"
 
 #: src/resources/gtk/site-menu-button.blp:52
 msgid "_Security & Permissions"
@@ -5016,10 +5083,8 @@ msgstr ""
 "son nom (los onglets « locals » pòdon pas èsser dobèrts)."
 
 #: src/resources/gtk/tab-overview-menu.blp:23
-#, fuzzy
-#| msgid "Reload _All Tabs"
 msgid "Close _All Tabs"
-msgstr "Recargar _totes los onglets"
+msgstr "Tampar _totes los onglets"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:5
 msgid "Additional URLs"
@@ -5030,12 +5095,12 @@ msgid ""
 "URLs that start with the same base domain (example.com) will be opened by "
 "this web app"
 msgstr ""
+"Las URL que començan amb lo meteis domeni de basa (example.com) seràn "
+"dobèrtas per aquesta aplicacion web"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:16
-#, fuzzy
-#| msgid "Domain"
 msgid "Base Domain"
-msgstr "Domeni"
+msgstr "Domeni de basa"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:24
 msgid "Add URL"
@@ -5057,12 +5122,12 @@ msgstr "Onglets locals"
 
 #: src/webapp-provider/ephy-webapp-provider.c:120
 msgid "The install_token is required for the Install() method"
-msgstr ""
+msgstr "L'install_token es requerit pel metòde Install()"
 
 #: src/webapp-provider/ephy-webapp-provider.c:126
 #, c-format
 msgid "The url passed was not valid: ‘%s’"
-msgstr ""
+msgstr "L'url transmesa èra pas valida : « %s »"
 
 #: src/webapp-provider/ephy-webapp-provider.c:132
 #, fuzzy
@@ -5079,13 +5144,12 @@ msgstr "Enregistrar lo site en tant qu’aplicacion _Web…"
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
 msgid "The desktop file ID passed ‘%s’ was not valid"
-msgstr ""
+msgstr "L’identificant de fichièr de burèu passat « %s » es pas valid"
 
 #: src/webapp-provider/ephy-webapp-provider.c:185
-#, fuzzy, c-format
-#| msgid "The application “%s” could not be created"
+#, c-format
 msgid "The web application ‘%s’ does not exist"
-msgstr "L’aplicacion « %s » a pas pogut èsser creada"
+msgstr "L’aplicacion Web « %s » existís pas"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
 #, fuzzy, c-format
@@ -5099,15 +5163,14 @@ msgid "Options for %s"
 msgstr "Opcions per %s"
 
 #: src/webextension/ephy-web-extension.c:1027
-#, fuzzy, c-format
-#| msgid "Text not found"
+#, c-format
 msgid "manifest.json not found"
-msgstr "Tèxte pas trobat"
+msgstr "manifest.json introbable"
 
 #: src/webextension/ephy-web-extension.c:1033
 #, c-format
 msgid "Failed to parse manifest.json: %s"
-msgstr ""
+msgstr "Impossible d'analisar manifest.json : %s"
 
 #: src/webextension/ephy-web-extension.c:1039
 #: src/webextension/ephy-web-extension.c:1045
@@ -5118,7 +5181,7 @@ msgstr "manifest.json invalid"
 #: src/webextension/ephy-web-extension.c:1052
 #, c-format
 msgid "Only manifest_version 2 is supported"
-msgstr ""
+msgstr "Sonque manifest_version 2 es pres en carga"
 
 #: src/webextension/ephy-web-extension.c:1069
 #, c-format
@@ -5128,7 +5191,7 @@ msgstr "Nom o version mancanta"
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
-msgstr ""
+msgstr "Fracàs de la determinacion de l'URI d'aviada"
 
 #: src/window-commands.c:131
 msgid "HTML File"
@@ -5192,27 +5255,21 @@ msgid "CSV File"
 msgstr "Fichièr CSV"
 
 #: src/window-commands.c:782 src/window-commands.c:808
-#, fuzzy
-#| msgid "Bookmarks successfully imported!"
 msgid "Passwords successfully imported!"
-msgstr "Los marcapaginas son estats importats !"
+msgstr "Los senhals son estats corrèctament importats !"
 
 #: src/window-commands.c:924
 msgid "Import Passwords"
 msgstr "Importar los senhals"
 
 #: src/window-commands.c:1000
-#, fuzzy
-#| msgid "Bookmarks successfully imported!"
 msgid "Passwords successfully exported!"
-msgstr "Los marcapaginas son estats importats !"
+msgstr "Los senhals son estats corrèctament exportats !"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
 #: src/window-commands.c:1051
-#, fuzzy
-#| msgid "Passwords"
 msgid "passwords.csv"
-msgstr "Senhals"
+msgstr "senhals.csv"
 
 #: src/window-commands.c:1227
 #, fuzzy
@@ -5230,10 +5287,8 @@ msgstr ""
 "  Quentin PAGÈS"
 
 #: src/window-commands.c:1406
-#, fuzzy
-#| msgid "Web Website"
 msgid "Reload Website?"
-msgstr "Paginas web"
+msgstr "Recargar lo site Web ?"
 
 #: src/window-commands.c:1957
 msgid "New Web App"
@@ -5286,10 +5341,9 @@ msgid "PNG"
 msgstr "PNG"
 
 #: src/window-commands.c:2920
-#, fuzzy, c-format
-#| msgid "Search the Web for “%s”"
+#, c-format
 msgid "Search engine “%s” added"
-msgstr "Recercar « %s » sul Web"
+msgstr "Motor de recèrca « %s » apondut"
 
 #. Now all web views will get notified for this newly added engine, and remove
 #. * their corresponding autodiscovery link in the models. We do not do it
