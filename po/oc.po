@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
 "POT-Creation-Date: 2026-03-06 01:11+0000\n"
-"PO-Revision-Date: 2026-03-07 08:24+0100\n"
+"PO-Revision-Date: 2026-03-07 12:48+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -31,7 +31,7 @@ msgstr "Web"
 
 #: data/org.gnome.Epiphany.desktop.in.in:3
 msgid "Web Browser"
-msgstr "Navigador web"
+msgstr "Navigador Web"
 
 #: data/org.gnome.Epiphany.desktop.in.in:4
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:7
@@ -404,11 +404,11 @@ msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Lengas preferidas. Un tablèu dels còdis de las localas o « system » per "
-"utilizar la locala correnta."
+"utilizar la locala actual."
 
 #: data/org.gnome.epiphany.gschema.xml:188
 msgid "Allow popups"
-msgstr "Autorizar las fenèstras popup"
+msgstr "Autorizar las fenèstras sorgissentas"
 
 #: data/org.gnome.epiphany.gschema.xml:189
 msgid ""
@@ -754,7 +754,7 @@ msgstr "URL del servidor de geton de Firefox Sync"
 
 #: data/org.gnome.epiphany.gschema.xml:385
 msgid "URL to a custom Firefox Sync token server."
-msgstr "URL cap a un servidor de getons Firefox Sync personalizat."
+msgstr "URL d’un servidor de getons Firefox Sync personalizat."
 
 #: data/org.gnome.epiphany.gschema.xml:389
 msgid "Firefox Sync Accounts Server URL"
@@ -1146,7 +1146,7 @@ msgstr "Suprimir"
 #. Note for translators: this refers to the installation date.
 #: embed/ephy-about-handler.c:332
 msgid "Installed on:"
-msgstr "Installat lo :"
+msgstr "Installada lo :"
 
 #: embed/ephy-about-handler.c:371
 msgid ""
@@ -1303,7 +1303,7 @@ msgstr "Font : %s"
 #. Question
 #: embed/ephy-download.c:808
 msgid "Where do you want to save the file?"
-msgstr "Ont volètz enregistrar lo fichièr ?"
+msgstr "Ont volètz enregistrar lo fichièr ?"
 
 #. Translators: a desktop notification when a download finishes.
 #: embed/ephy-download.c:967
@@ -1769,7 +1769,8 @@ msgstr "Lo procèssus Web a plantat"
 
 #: embed/ephy-web-view.c:808
 msgid "Web process terminated due to exceeding memory limit"
-msgstr "Lo rocèssus Web acabat per causa de despassament del limit de memòria"
+msgstr ""
+"Lo procèssus Web a acabat per causa de despassament del limit de memòria"
 
 #: embed/ephy-web-view.c:811
 msgid "Web process terminated by API request"
@@ -2020,7 +2021,7 @@ msgstr "Precedent"
 #: embed/ephy-web-view.c:2110 embed/ephy-web-view.c:2160
 msgctxt "back-access-key"
 msgid "B"
-msgstr "Mio"
+msgstr "P"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #: embed/ephy-web-view.c:2113
@@ -2031,7 +2032,7 @@ msgstr "Acceptar la risca e procedir"
 #: embed/ephy-web-view.c:2117
 msgctxt "proceed-anyway-access-key"
 msgid "P"
-msgstr "P"
+msgstr "A"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
@@ -2788,34 +2789,24 @@ msgid "FILE"
 msgstr "FICHIÈR"
 
 #: src/ephy-main.c:122
-#, fuzzy
-#| msgid "Start an instance in netbank mode"
 msgid "Start an instance with user data read-only"
-msgstr "Avia una instància en mòde « banca en linha »"
+msgstr "Aviar una instància amb las donadas utilizaire en lectura sola"
 
 #: src/ephy-main.c:126
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start a private instance with separate user data"
-msgstr "Avia una instància privada"
+msgstr "Aviar una instància privada amb las donadas utilizaire a despart"
 
 #: src/ephy-main.c:131
-#, fuzzy
-#| msgid "Start the browser in application mode"
 msgid "Start a private instance in web application mode"
-msgstr "Aviar lo navigador en mòde aplicacion"
+msgstr "Aviar una instància privada en mòde aplicacion Web"
 
 #: src/ephy-main.c:135
-#, fuzzy
-#| msgid "Start a private instance"
 msgid "Start a private instance for WebDriver control"
-msgstr "Avia una instància privada"
+msgstr "Aviar una instància privada pel contraròtle WebDriver"
 
 #: src/ephy-main.c:139
-#, fuzzy
-#| msgid "Profile directory to use in the private instance"
 msgid "Custom profile directory for private instance"
-msgstr "Dorsièr del perfil a utilizar dins l'instància privada"
+msgstr "Dorsièr del perfil personalizat per l'instància privada"
 
 #: src/ephy-main.c:139
 msgid "DIR"
@@ -2883,36 +2874,28 @@ msgstr[1] ""
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
 #: src/ephy-security-dialog.c:187
-#, fuzzy, c-format
-#| msgid ""
-#| "This web site’s digital identification is not trusted. You may have "
-#| "connected to an attacker pretending to be %s."
+#, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
 "connected to an attacker pretending to be %s"
 msgstr ""
 "L'identitat numerica d'aqueste site Web es pas fisabla. Benlèu que sètz "
-"connectat a un atacant que se fa passar per %s."
+"connectat a un atacant que se fa passar per %s"
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
 #: src/ephy-security-dialog.c:194
-#, fuzzy, c-format
-#| msgid ""
-#| "This site has no security. An attacker could see any information you "
-#| "send, or control the content that you see."
+#, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
 "or control the content that you see"
 msgstr ""
 "Aqueste site es pas securizat. Un atacant pòt veire totas las informacions "
-"que mandatz, o contrarotlar çò que consultatz."
+"que mandatz, o contrarotlar çò que consultatz"
 
 #. Label in certificate dialog when site sends mixed content.
 #: src/ephy-security-dialog.c:201
-#, fuzzy
-#| msgid "This web site did not properly secure your connection."
 msgid "This web site did not properly secure your connection"
-msgstr "Aqueste site Web n'a pas convenablament securizat la connexion."
+msgstr "Aqueste site Web a pas convenablament securizat la connexion"
 
 #. Label in certificate dialog on secure sites.
 #: src/ephy-security-dialog.c:206
@@ -3245,7 +3228,7 @@ msgstr "Demanda d’accès webcam"
 #: src/ephy-window.c:3180
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
-msgstr "La pagina a l'adreça « %s » desira utilizar vòstra webcam."
+msgstr "La pagina a l'adreça « %s » desira utilizar vòstra webcam"
 
 #. Translators: Webcam and microphone policy for a specific site.
 #: src/ephy-window.c:3185
@@ -3302,10 +3285,8 @@ msgid "Leave Website?"
 msgstr "Quitar lo site Web ?"
 
 #: src/ephy-window.c:3432 src/ephy-window.c:5089 src/window-commands.c:1407
-#, fuzzy
-#| msgid "A form you modified has not been submitted."
 msgid "A form was modified and has not been submitted"
-msgstr "Un formulari qu'avètz documentat es pas estat somés."
+msgstr "Un formulari es estat modificat e es pas estat somés"
 
 #: src/ephy-window.c:3433 src/ephy-window.c:5090 src/window-commands.c:1411
 msgid "_Discard Form"
@@ -3376,10 +3357,8 @@ msgid "Not Now"
 msgstr "Pas ara"
 
 #: src/ephy-window.c:4175
-#, fuzzy
-#| msgid "_Never Save"
 msgid "Never Save"
-msgstr "Los acceptar pas _jamai"
+msgstr "Enregistrar pas jamai"
 
 # Titre de fenèstra
 #: src/ephy-window.c:4176
@@ -3389,7 +3368,7 @@ msgstr "Enregistrar"
 #: src/ephy-window.c:4377
 msgctxt "shortcuts dialog"
 msgid "Web App"
-msgstr "Application web"
+msgstr "Application Web"
 
 #: src/ephy-window.c:4380
 msgctxt "shortcuts dialog"
@@ -3409,20 +3388,16 @@ msgid "C_lose Tabs"
 msgstr "Tampar _los onglets"
 
 #: src/ephy-window.c:5321
-#, fuzzy
-#| msgid "New _tab page"
 msgid "New tab opened"
-msgstr "Novèla pagina en ongle_t"
+msgstr "Onglet novèl dobèrt"
 
 #: src/ephy-window.c:5325
 msgid "Switch"
 msgstr "Bascular"
 
 #: src/preferences/autofill-view.c:359
-#, fuzzy
-#| msgid "Delete All Passwords?"
 msgid "Delete All Entries?"
-msgstr "Suprimir totes los senhals ?"
+msgstr "Suprimir totas las entradas ?"
 
 #: src/preferences/autofill-view.c:360
 msgid "This will clear all locally stored entries, and can not be undone."
@@ -3451,10 +3426,8 @@ msgid "IndexedDB databases"
 msgstr "Basas de donadas IndexedDB"
 
 #: src/preferences/clear-data-view.c:84
-#, fuzzy
-#| msgid "HTTP disk cache"
 msgid "HSTS policies cache"
-msgstr "Cache disc HTTP"
+msgstr "Cache de politicas HSTS"
 
 #: src/preferences/clear-data-view.c:85
 msgid "Intelligent Tracking Prevention data"
@@ -3469,10 +3442,8 @@ msgid "ServiceWorker registrations"
 msgstr "Inscripcions dels ServiceWorker"
 
 #: src/preferences/clear-data-view.c:88
-#, fuzzy
-#| msgid "Local storage data"
 msgid "CacheStorage data"
-msgstr "Donadas d'emmagazinatge local"
+msgstr "Donadas d'emmagazinatge CacheStorage"
 
 #: src/preferences/clear-data-view.c:238
 msgid "Data cleared"
@@ -3523,10 +3494,9 @@ msgid "Install WebExtension?"
 msgstr "Installar la WebExtensions ?"
 
 #: src/preferences/prefs-extensions-page.c:103
-#, fuzzy, c-format
-#| msgid "Do you want to leave this website?"
+#, c-format
 msgid "Do you want to install `%s`?"
-msgstr "Volètz quitar aqueste site Web ?"
+msgstr "Volètz installar « %s » ?"
 
 #: src/preferences/prefs-extensions-page.c:105
 msgid "Cancel"
@@ -3841,34 +3811,24 @@ msgid "_Clear Data"
 msgstr "_Escafar las donadas"
 
 #: src/resources/gtk/clear-data-view.blp:7
-#, fuzzy
-#| msgid "Clear selected personal data _from:"
 msgid "Remove selected website data"
-msgstr "Podètz suprimir las donadas que vos _concernisson dins :"
+msgstr "Suprimir las donadas de sites web seleccionadas"
 
 #: src/resources/gtk/clear-data-view.blp:8
-#, fuzzy
-#| msgid "Clear Personal Data"
 msgid "Search website data"
-msgstr "Escafar las donadas personalas"
+msgstr "Cercar dins las donadas dels sites Web"
 
 #: src/resources/gtk/clear-data-view.blp:9
-#, fuzzy
-#| msgid "No Results Found"
 msgid "No Website Data Found"
-msgstr "Cap de resultat pas trobat"
+msgstr "Cap de donada de site Web pas trobada"
 
 #: src/resources/gtk/clear-data-view.blp:10
-#, fuzzy
-#| msgid "Save password in _keyring"
 msgid "Website data will be listed here"
-msgstr "Enregistrar lo senhal dins lo _trossèl de claus"
+msgstr "Las donadas de sites Web apareisseràn aicí"
 
 #: src/resources/gtk/clear-data-view.blp:32
-#, fuzzy
-#| msgid "Clear selected personal data _from:"
 msgid "Clear selected website data:"
-msgstr "Podètz suprimir las donadas que vos _concernisson dins :"
+msgstr "Escafar las donadas de sites web seleccionadas :"
 
 #: src/resources/gtk/clear-data-view.blp:63
 msgid ""
@@ -3897,8 +3857,6 @@ msgid "Text Encoding"
 msgstr "Encodatge del tèxte"
 
 #: src/resources/gtk/encoding-dialog.blp:28
-#, fuzzy
-#| msgid "Use the encoding specified by the document"
 msgid "Use Encoding Specified by Document"
 msgstr "Utilizar l'encodatge indicat pel document"
 
@@ -4066,16 +4024,12 @@ msgid "_Mute Tab"
 msgstr "_Rendre mut"
 
 #: src/resources/gtk/notebook-context-menu.blp:42
-#, fuzzy
-#| msgid "Move Tab _Left"
 msgid "Close Tabs to the _Left"
-msgstr "Desplaçar l'onglet cap a _esquèrra"
+msgstr "Tampar los onglets a _esquèrra"
 
 #: src/resources/gtk/notebook-context-menu.blp:47
-#, fuzzy
-#| msgid "Move Tab _Right"
 msgid "Close Tabs to the _Right"
-msgstr "Desplaçar l'onglet cap a _dreita"
+msgstr "Tampar los onglets a _dreit"
 
 #: src/resources/gtk/notebook-context-menu.blp:52
 msgid "Close _Other Tabs"
@@ -4130,10 +4084,8 @@ msgid "Manag_e Web Apps"
 msgstr "G_estion de las aplicacions Web"
 
 #: src/resources/gtk/page-menu-button.blp:67
-#, fuzzy
-#| msgid "Privacy"
 msgid "Pri_vacy Report"
-msgstr "Vida privada"
+msgstr "R_apòrt de confidencialitat"
 
 #: src/resources/gtk/page-menu-button.blp:72
 msgid "Passw_ords"
@@ -4180,10 +4132,8 @@ msgid "No Passwords Found"
 msgstr "Cap de senhal pas trobat"
 
 #: src/resources/gtk/passwords-view.blp:15
-#, fuzzy
-#| msgid "Save password in _keyring"
 msgid "Saved passwords will be listed here"
-msgstr "Enregistrar lo senhal dins lo _trossèl de claus"
+msgstr "Los senhals enregistrats apareisseràn aquí"
 
 #: src/resources/gtk/passwords-view.blp:53
 msgid "_Copy Password"
@@ -4242,10 +4192,8 @@ msgid "Style"
 msgstr "Estil"
 
 #: src/resources/gtk/prefs-appearance-page.blp:70
-#, fuzzy
-#| msgid "Use custom _stylesheet"
 msgid "Use Custom Stylesheet"
-msgstr "Utilizar un fuèlh d'e_stil personalizat"
+msgstr "Utilizar un fuèlh d'estil personalizat"
 
 #: src/resources/gtk/prefs-appearance-page.blp:83
 msgid "Use Custom JavaScript"
@@ -4283,11 +4231,8 @@ msgid "Features"
 msgstr "Foncionalitats"
 
 #: src/resources/gtk/prefs-features-page.blp:10
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Reset zoom"
 msgid "Reset All"
-msgstr "Reïnicializar lo zoom"
+msgstr "Tot reïnicializar"
 
 #: src/resources/gtk/prefs-general-page.blp:6
 msgid "General"
@@ -4310,26 +4255,20 @@ msgid "_Title"
 msgstr "_Títol"
 
 #: src/resources/gtk/prefs-general-page.blp:37
-#, fuzzy
-#| msgid "Additional URLs"
 msgid "Additional _Domains"
-msgstr "URL suplementàrias"
+msgstr "_Domenis addicionals"
 
 #: src/resources/gtk/prefs-general-page.blp:48
 msgid "Web Content"
 msgstr "Contengut del site"
 
 #: src/resources/gtk/prefs-general-page.blp:51
-#, fuzzy
-#| msgid "Try to block _advertisements"
 msgid "Block _Advertisements"
-msgstr "Ensajar de blocar las p_ublicitats"
+msgstr "Blocar las _publicitats"
 
 #: src/resources/gtk/prefs-general-page.blp:56
-#, fuzzy
-#| msgid "Block popup _windows"
 msgid "Block _Popup Windows"
-msgstr "Blocar las _fenèstras sorgissentas"
+msgstr "Blocar las fenèstras _sorgissentas"
 
 #: src/resources/gtk/prefs-general-page.blp:61
 msgid "Block C_ookie Banners"
@@ -4441,10 +4380,8 @@ msgid "Search Suggestions"
 msgstr "Suggestions de recèrca"
 
 #: src/resources/gtk/prefs-privacy-page.blp:30
-#, fuzzy
-#| msgid "Manage Search Engines"
 msgid "Enable search suggestions in the URL entry"
-msgstr "Gerir los motors de recèrca"
+msgstr "Activar las suggestions de recèrca en picant l’URL"
 
 #: src/resources/gtk/prefs-privacy-page.blp:31
 msgid "Search Su_ggestions"
@@ -4475,24 +4412,17 @@ msgid "More Information"
 msgstr "Mai d'informacions"
 
 #: src/resources/gtk/prefs-search-engine-page.blp:27
-#, fuzzy, c-format
-#| msgid ""
-#| "To determine the search address, perform a search using the search engine "
-#| "that you want to add and check the resulting address. Remove the search "
-#| "term from the resulting address and replace it with %s."
+#, c-format
 msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s"
 msgstr ""
-"Per determinar l’adreça de recèrca, efectuatz una recèrca a partir del motor "
-"de recèrca que volètz apondre e verificatz l’adreça obtenguda. Levatz lo "
-"tèrme recercat de l’adreça obtenguda e remplaçatz lo per %s."
+"Per determinar l'adreça de recèrca, fasètz una recèrca amb lo motor de "
+"recèrca que volètz apondre e remplaçatz lo tèrme cercat per %s"
 
 #: src/resources/gtk/privacy-report.blp:10
-#, fuzzy
-#| msgid "Privacy"
 msgid "Privacy Report"
-msgstr "Vida privada"
+msgstr "Rapòrt de confidencialitat"
 
 #: src/resources/gtk/privacy-report.blp:29
 msgid "_Websites"
@@ -4684,7 +4614,7 @@ msgstr "Divèrs"
 #: src/resources/gtk/shortcuts-dialog.blp:165
 msgctxt "shortcuts dialog"
 msgid "History"
-msgstr "Istòria"
+msgstr "Istoric"
 
 #: src/resources/gtk/shortcuts-dialog.blp:170
 msgctxt "shortcuts dialog"
@@ -4925,16 +4855,13 @@ msgid "The url passed was not valid: ‘%s’"
 msgstr "L'url transmesa èra pas valida : « %s »"
 
 #: src/webapp-provider/ephy-webapp-provider.c:132
-#, fuzzy
-#| msgid "The specified contact is not valid"
 msgid "The name passed was not valid"
-msgstr "Lo contacte especificat es pas valable"
+msgstr "Lo nom donat es pas valid"
 
 #: src/webapp-provider/ephy-webapp-provider.c:144
-#, fuzzy, c-format
-#| msgid "Install Site as Web _Application…"
+#, c-format
 msgid "Installing the web application ‘%s’ (%s) failed: %s"
-msgstr "Enregistrar lo site en tant qu’aplicacion _Web…"
+msgstr "L'installacion de l'aplicacion web « %s » (%s) a fracassat : %s"
 
 #: src/webapp-provider/ephy-webapp-provider.c:176
 #, c-format
@@ -4947,10 +4874,9 @@ msgid "The web application ‘%s’ does not exist"
 msgstr "L’aplicacion Web « %s » existís pas"
 
 #: src/webapp-provider/ephy-webapp-provider.c:190
-#, fuzzy, c-format
-#| msgid "The application “%s” could not be created"
+#, c-format
 msgid "The web application ‘%s’ could not be deleted"
-msgstr "L’aplicacion « %s » a pas pogut èsser creada"
+msgstr "L’aplicacion « %s » a pas pogut èsser suprimida"
 
 #: src/webextension/api/runtime.c:161
 #, c-format
@@ -5067,10 +4993,8 @@ msgid "passwords.csv"
 msgstr "senhals.csv"
 
 #: src/window-commands.c:1227
-#, fuzzy
-#| msgid "Epiphany cannot quit"
 msgid "Epiphany Canary"
-msgstr "Epiphany pòt pas èsser tampat"
+msgstr "Epiphany Canary"
 
 #: src/window-commands.c:1250
 msgid "translator-credits"
@@ -5095,25 +5019,19 @@ msgid "The application “%s” is ready to be used"
 msgstr "L’aplicacion « %s » es prèsta a èsser utilizada"
 
 #: src/window-commands.c:2012
-#, fuzzy, c-format
-#| msgid "The application “%s” could not be created"
+#, c-format
 msgid "The application “%s” could not be created: %s"
-msgstr "L’aplicacion « %s » a pas pogut èsser creada"
+msgstr "L’aplicacion « %s » a pas pogut èsser creada : %s"
 
 #: src/window-commands.c:2110
 msgid "Replace Existing Web App?"
 msgstr "Remplaçar l’aplicacion Web existenta ?"
 
 #: src/window-commands.c:2113
-#, fuzzy, c-format
-#| msgid ""
-#| "An application with the same name already exists. Replacing it will "
-#| "overwrite it."
+#, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
-msgstr ""
-"Una aplicacion amb aqueste nom existís ja. Serà espotida perque la que "
-"volètz crear."
+msgstr "Una aplicacion nomenada « %s » existís ja, la remplaçar l’espotirà"
 
 #: src/window-commands.c:2118
 msgid "_Replace"
@@ -5150,10 +5068,8 @@ msgid "Show"
 msgstr "Afichar"
 
 #: src/window-commands.c:3171
-#, fuzzy
-#| msgid "Enable caret browsing mode?"
 msgid "Enable Caret Browsing Mode?"
-msgstr "Activar lo mòde de navigacion amb lo cursor ?"
+msgstr "Activar lo mòde de navigacion amb lo cursor ?"
 
 #: src/window-commands.c:3172
 msgid ""
