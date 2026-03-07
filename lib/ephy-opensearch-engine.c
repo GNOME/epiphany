@@ -443,7 +443,7 @@ parse_opensearch_xml (AddOpensearch  *data,
    */
   if (!g_markup_parse_context_parse (ctx, file_content, length, &markup_error)) {
     g_propagate_prefixed_error (error, g_steal_pointer (&markup_error),
-                                /* TRANSLATORS: First %s is the name of the search engine. Second %s is the error message (supposedly partially localized on the GLib level). */
+                                /* TRANSLATORS: The %s is the name of the search engine. */
                                 _("Couldn't parse search engine description file for %s: "),
                                 ephy_opensearch_autodiscovery_link_get_name (data->autodiscovery_link));
     return FALSE;
