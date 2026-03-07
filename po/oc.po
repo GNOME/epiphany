@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
 "POT-Creation-Date: 2026-03-06 01:11+0000\n"
-"PO-Revision-Date: 2026-03-06 22:15+0100\n"
+"PO-Revision-Date: 2026-03-07 08:24+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -1040,13 +1040,11 @@ msgstr ""
 "demanda."
 
 #: data/org.gnome.epiphany.gschema.xml:516
-#, fuzzy
-#| msgid "Decision to apply when webcam permission is requested for this host"
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
-"Decision d'aplicar quand la permission d’accedir a la webcam de l’utilizaire "
-"est requesida per aqueste òste"
+"Decision d'aplicar quand l'autorizacion de publicitat es demandada per "
+"aqueste òste"
 
 #: data/org.gnome.epiphany.gschema.xml:517
 msgid ""
@@ -1062,32 +1060,23 @@ msgstr ""
 "meteis sus demanda."
 
 #: data/org.gnome.epiphany.gschema.xml:521
-#, fuzzy
-#| msgid ""
-#| "Decision to apply when notification permission is requested for this host"
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
-"Decision d'aplicar quand la permission de notification es requesida per "
+"Decision d'aplicar quand una politica de lectura automatica es demandada per "
 "aqueste òste"
 
 #: data/org.gnome.epiphany.gschema.xml:522
-#, fuzzy
-#| msgid ""
-#| "This option is used to save whether a given host has been given "
-#| "permission to save passwords. The “undecided” default means the browser "
-#| "needs to ask the user for permission, while “allow” and “deny” tell it to "
-#| "automatically make the decision upon request."
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
 "while “allow” and “deny” tell it to allow / deny all requests to autoplay "
 "media respectively."
 msgstr ""
-"Aquesta opcion es utilizada per memorizar se un òste donat a recebut la "
-"permission de memorizar los senhals. La valor per defaut « undecided » "
-"significa que lo navigador deu demandar la permission, mentre que « allow » "
-"(autorizar) e « deny » (interdire) li indica la decision que deu prene el-"
-"meteis sus demanda."
+"Aquesta opcion servís a enregistrar se un òste donat a recebut la permission "
+"de lectura automatica. La valor per defaut « undecided » significa autorizar "
+"la lectura automatica dels mèdias sens son, mentre que « allow » e « deny » "
+"li dison d'autorizar / de refusar totas las demandas de lectura automatica "
+"de mèdias respectivament."
 
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:9
 msgid ""
@@ -1240,10 +1229,8 @@ msgid "_Cancel"
 msgstr "_Anullar"
 
 #: embed/ephy-client-certificate-manager.c:322
-#, fuzzy
-#| msgid "Login I_D"
 msgid "_Login"
-msgstr "I_dentificant de connexion"
+msgstr "_Connexion"
 
 #: embed/ephy-client-certificate-manager.c:431
 msgid "Select certificate"
@@ -1974,12 +1961,12 @@ msgstr "Ops !"
 
 #. Error details when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:2017
-#, fuzzy
-#| msgid "Please reload or visit a different page to continue."
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
-msgstr "Recargatz la pagina o visitatz una pagina diferenta per contunhar."
+msgstr ""
+"Una error s'es producha a l'afichatge d'aquesta pagina. Mercés de tornar "
+"cargar o de visitar una autra pagina per contunhar."
 
 #. Page title when web content has become unresponsive.
 #: embed/ephy-web-view.c:2047
@@ -1994,12 +1981,12 @@ msgstr "ÈU !"
 
 #. Error details when web content has become unresponsive.
 #: embed/ephy-web-view.c:2053
-#, fuzzy
-#| msgid "Please reload or visit a different page to continue."
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
-msgstr "Recargatz la pagina o visitatz una pagina diferenta per contunhar."
+msgstr ""
+"Aquesta pagina respond pas dempuèi tròp longtemps. Tornatz cargar o visitatz "
+"una autra pagina per contunhar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:2089
@@ -2303,10 +2290,9 @@ msgid "Failed to install desktop file %s: "
 msgstr "Fracàs de l’installacion del fichièr desktop %s : "
 
 #: lib/ephy-web-app-utils.c:389
-#, fuzzy, c-format
-#| msgid "Profile directory to use in the private instance"
+#, c-format
 msgid "Profile directory %s already exists"
-msgstr "Dorsièr del perfil a utilizar dins l'instància privada"
+msgstr "Lo dorsièr del perfil %s existís ja"
 
 #: lib/ephy-web-app-utils.c:396
 #, c-format
@@ -2329,15 +2315,12 @@ msgstr ""
 "Pòt pas crear la connexion SQLite. Tampatz lo navigador e tornatz ensajar."
 
 #: lib/sync/ephy-password-import.c:142 lib/sync/ephy-password-import.c:152
-#, fuzzy, c-format
-#| msgid ""
-#| "Firefox bookmarks database could not be opened. Close Firefox and try "
-#| "again."
+#, c-format
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
 msgstr ""
-"La basa de donadas dels marcapaginas de Firefox a pas pogut èsser dobèrta. "
-"Tampatz Firefox e ensajar tornamai."
+"La banca de donadas dels senhals del navigador a pas pogut èsser dobèrta. "
+"Tampatz lo navigador e tornatz ensajar."
 
 #: lib/sync/ephy-password-import.c:361
 msgid "Error in reading CSV file"
@@ -2369,29 +2352,22 @@ msgstr "Impossible de retrobar los jornals recents."
 
 #: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
 #: lib/sync/ephy-sync-service.c:1901
-#, fuzzy
-#| msgid "Please visit Preferences and sign in again to continue syncing."
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
-"Visitatz las preferéncias e connectatz-vos per contunhar la sincronizacion."
+"Anatz sus Firefox Sync e tornatz-vos connectar per contunhar la "
+"sincronizacion."
 
 #: lib/sync/ephy-sync-service.c:1127
-#, fuzzy
-#| msgid "The password of your Firefox account seems to have been changed."
 msgid "The password of your Mozilla account seems to have been changed."
-msgstr "Sembla que lo senhal de vòstre compte Firefox a cambiat."
+msgstr "Sembla que lo senhal de vòstre compte Mozilla siá estat cambiat."
 
 #: lib/sync/ephy-sync-service.c:1128
-#, fuzzy
-#| msgid ""
-#| "Please visit Preferences and sign in with the new password to continue "
-#| "syncing."
 msgid ""
 "Please visit Firefox Sync and sign in with the new password to continue "
 "syncing."
 msgstr ""
-"Visitatz las preferéncias e connectatz-vos amb vòstre novèl senhal per "
-"contunhar la sincronizacion."
+"Anatz sus Firefox Sync e connectatz-vos amb lo senhal novèl per contunhar la "
+"sincronizacion."
 
 #: lib/sync/ephy-sync-service.c:1136
 msgid "Failed to obtain signed certificate."
@@ -2455,15 +2431,12 @@ msgstr "Fracàs del mandadís de l’enregistrament meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
 #: lib/sync/ephy-sync-service.c:2573
-#, fuzzy, c-format
-#| msgid ""
-#| "Your Firefox Account uses storage version %d. Web only supports version "
-#| "%d."
+#, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
-"Vòstre compte Firefox utiliza l'emmagazinatge version %d. Web pren pas en "
-"carga que la version %d."
+"Vòstre compte Mozilla utiliza la version d'emmagazinatge %d. Web supòrta "
+"solament la version %d."
 
 #: lib/sync/ephy-sync-service.c:2584
 msgid "Failed to verify storage version."
@@ -2478,18 +2451,12 @@ msgid "Failed to retrieve the Sync Key"
 msgstr "Fracàs de la recuperacion de la clau de synhro"
 
 #: src/bookmarks/ephy-bookmark-properties.c:149
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Close current tab"
 msgid "Select current tag"
-msgstr "Tampar l’onglet actual"
+msgstr "Seleccionar etiqueta actuala"
 
 #: src/bookmarks/ephy-bookmark-properties.c:163
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Reload current page"
 msgid "Remove current tag"
-msgstr "Recargar la pagina actuala"
+msgstr "Suprimir etiqueta actuala"
 
 #: src/bookmarks/ephy-bookmark-properties.c:289
 msgid "Add Bookmark"
@@ -2512,10 +2479,8 @@ msgstr "L’adreça es pas una URL valida"
 
 #: src/bookmarks/ephy-bookmarks-dialog.c:658
 #: src/resources/gtk/bookmark-row.blp:66 src/resources/gtk/lang-row.blp:34
-#, fuzzy
-#| msgid "_Move on Toolbar"
 msgid "Move Controls"
-msgstr "_Desplaçar sus la barra d'aisinas"
+msgstr "Desplaçar los contraròtles"
 
 #: src/bookmarks/ephy-bookmarks-dialog.c:663
 #: src/resources/gtk/bookmark-row.blp:7 src/resources/gtk/lang-row.blp:7
@@ -2524,10 +2489,8 @@ msgstr "Montar"
 
 #: src/bookmarks/ephy-bookmarks-dialog.c:664
 #: src/resources/gtk/bookmark-row.blp:12 src/resources/gtk/lang-row.blp:12
-#, fuzzy
-#| msgid "Down"
 msgid "Move Down"
-msgstr "En bas"
+msgstr "Davalar"
 
 #: src/bookmarks/ephy-bookmarks-dialog.c:849
 msgid "Bookmark removed"
@@ -2756,10 +2719,8 @@ msgid "Exit Fullscreen"
 msgstr "Quitar lo mòde ecran complèt"
 
 #: src/ephy-history-dialog.c:264
-#, fuzzy
-#| msgid "Select _All"
 msgid "Select _None"
-msgstr "Seleccionar _tot"
+msgstr "Seleccionar pas _res"
 
 #: src/ephy-history-dialog.c:267 src/ephy-window.c:1008
 #: src/resources/gtk/history-dialog.blp:47
@@ -2815,16 +2776,12 @@ msgid "Insecure Site"
 msgstr "Site non segur"
 
 #: src/ephy-main.c:114
-#, fuzzy
-#| msgid "Open a new browser window"
 msgid "Open a new browser window instead of a new tab"
-msgstr "Dobrís una novèla fenèstra"
+msgstr "Dobrir una fenèstra novèla del navigador puslèu qu'un onglet novèl"
 
 #: src/ephy-main.c:118
-#, fuzzy
-#| msgid "Load the given session file"
 msgid "Load the given session state file"
-msgstr "Carga lo fichièr de session indicat"
+msgstr "Cargar lo fichièr d'estat de session donat"
 
 #: src/ephy-main.c:118
 msgid "FILE"
@@ -3351,8 +3308,6 @@ msgid "A form was modified and has not been submitted"
 msgstr "Un formulari qu'avètz documentat es pas estat somés."
 
 #: src/ephy-window.c:3433 src/ephy-window.c:5090 src/window-commands.c:1411
-#, fuzzy
-#| msgid "_Discard form"
 msgid "_Discard Form"
 msgstr "A_bandonar lo formulari"
 
@@ -3528,16 +3483,12 @@ msgid "New search engine"
 msgstr "Novèl motor de recèrca"
 
 #: src/preferences/ephy-search-engine-listbox.c:86
-#, fuzzy
-#| msgid "A_dd Search Engine…"
 msgid "A_dd Search Engine"
-msgstr "Apon_dre un motor de recèrca…"
+msgstr "Apon_dre un motor de recèrca"
 
 #: src/preferences/ephy-search-engine-row.c:130
-#, fuzzy
-#| msgid "Search Suggestions"
 msgid "No search suggestions"
-msgstr "Suggestions de recèrca"
+msgstr "Cap de suggestion de recèrca"
 
 #: src/preferences/extension-view.c:113
 msgid "Remove Extension"
@@ -3568,10 +3519,8 @@ msgid "Dark"
 msgstr "Escur"
 
 #: src/preferences/prefs-extensions-page.c:101
-#, fuzzy
-#| msgid "Enable WebExtensions"
 msgid "Install WebExtension?"
-msgstr "Activar las WebExtensions"
+msgstr "Installar la WebExtensions ?"
 
 #: src/preferences/prefs-extensions-page.c:103
 #, fuzzy, c-format
@@ -3677,22 +3626,16 @@ msgid "Shortcut"
 msgstr "Acorchi"
 
 #: src/preferences/prefs-search-engine-page.c:315
-#, fuzzy
-#| msgid "Search Engines"
 msgid "Edit Search Engine"
-msgstr "Motors de recèrca"
+msgstr "Modificar lo motor de recèrca"
 
 #: src/preferences/prefs-search-engine-page.c:317
-#, fuzzy
-#| msgid "_Manage Search Engines"
 msgid "Remove Search Engine"
-msgstr "Gerir los _motors de recèrca"
+msgstr "Suprimir lo motor de recèrca"
 
 #: src/preferences/webapp-additional-urls-dialog.c:71
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove URL"
-msgstr "Levar"
+msgstr "Suprimir l’URL"
 
 #: src/profile-migrator/ephy-profile-migrator.c:339
 msgid "Executes only the n-th migration step"
@@ -3849,10 +3792,8 @@ msgid "Add Tag"
 msgstr "Apondre una etiqueta"
 
 #: src/resources/gtk/bookmark-properties.blp:112
-#, fuzzy
-#| msgid "Add new URL"
 msgid "Add new tag"
-msgstr "Apondre una URL novèla"
+msgstr "Apondre una etiqueta novèla"
 
 #: src/resources/gtk/bookmarks-dialog.blp:18
 #: src/resources/gtk/search-engine-row.blp:9
@@ -3872,20 +3813,16 @@ msgid "Options"
 msgstr "Opcions"
 
 #: src/resources/gtk/bookmarks-dialog.blp:70
-#, fuzzy
-#| msgid "Search domains"
 msgid "Search bookmarks"
-msgstr "Recercar los domenis"
+msgstr "Recercar dins los marcapaginas"
 
 #: src/resources/gtk/bookmarks-dialog.blp:163
 msgid "No Bookmarks"
 msgstr "Cap de marcapagina"
 
 #: src/resources/gtk/bookmarks-dialog.blp:164
-#, fuzzy
-#| msgid "Bookmark some webpages to view them here."
 msgid "Bookmarked pages will appear here"
-msgstr "Apondètz un marcapagina a qualques paginas Web per las afichar aicí."
+msgstr "Las paginas dels marcapaginas apareisseràn aicí"
 
 #: src/resources/gtk/bookmarks-dialog.blp:183
 msgid "I_mport…"
@@ -3896,10 +3833,8 @@ msgid "E_xport…"
 msgstr "E_xportar…"
 
 #: src/resources/gtk/clear-data-view.blp:5
-#, fuzzy
-#| msgid "Website"
 msgid "Website Data"
-msgstr "Site Web"
+msgstr "Donadas de sites Web"
 
 #: src/resources/gtk/clear-data-view.blp:6
 msgid "_Clear Data"
@@ -3968,14 +3903,10 @@ msgid "Use Encoding Specified by Document"
 msgstr "Utilizar l'encodatge indicat pel document"
 
 #: src/resources/gtk/encoding-dialog.blp:57
-#, fuzzy
-#| msgid "Recent encodings"
 msgid "Recent Encodings"
 msgstr "Encodatges recents"
 
 #: src/resources/gtk/encoding-dialog.blp:80
-#, fuzzy
-#| msgid "Related encodings"
 msgid "Related Encodings"
 msgstr "Encodatges aparentats"
 
@@ -4012,18 +3943,14 @@ msgid "Sync _Now"
 msgstr "Sincronizar a_ra"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:28
-#, fuzzy
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web and Firefox "
-#| "on other computers. Web is not produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Mozilla account to sync your data with GNOME Web and "
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
 "endorsed by Mozilla."
 msgstr ""
-"Connectatz-vos a vòstre compte Firefox per sincronizar vòstras donadas de "
-"Web e Firefox sus d’autres ordenadors. Web es pas ni produit, ni pres en "
-"carga per Mozilla."
+"Connectatz-vos amb vòstre compte Mozilla per sincronizar vòstras donadas amb "
+"GNOME Web e Firefox suls autres ordenadors. GNOME Web es pas Firefox e es "
+"pas produch ni avalizat per Mozilla."
 
 #: src/resources/gtk/firefox-sync-dialog.blp:43
 msgid "Mozilla Account"
@@ -4042,34 +3969,24 @@ msgid "Sync Options"
 msgstr "Opcions de sincronizacion"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:62
-#, fuzzy
-#| msgid "_Bookmarks"
 msgid "Sync _Bookmarks"
-msgstr "_Favorits"
+msgstr "Sincronizar los _marcapaginas"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:68
-#, fuzzy
-#| msgid "_Passwords"
 msgid "Sync _Passwords"
-msgstr "Sen_hals"
+msgstr "Sincronizar los _senhals"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:73
-#, fuzzy
-#| msgid "_History"
 msgid "Sync _History"
-msgstr "_Istoric"
+msgstr "Sincronizar l’_istoric"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:78
-#, fuzzy
-#| msgid "Open _Tabs"
 msgid "Sync Open _Tabs"
-msgstr "Ongle_ts dobèrts"
+msgstr "Sincronizar los onglets dobèrts"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:82
-#, fuzzy
-#| msgid "Synced Tabs"
 msgid "S_ynced Tabs"
-msgstr "Onglets sincronizats"
+msgstr "Onglets s_incronizats"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:90
 msgid "Frequency"
@@ -4104,10 +4021,8 @@ msgid "Search history"
 msgstr "Recercar l'istoric"
 
 #: src/resources/gtk/history-dialog.blp:124
-#, fuzzy
-#| msgid "No Results Found"
 msgid "No History Found"
-msgstr "Cap de resultat pas trobat"
+msgstr "Cap d’istoric pas trobat"
 
 #: src/resources/gtk/history-dialog.blp:125
 msgid "Visited pages will be listed here"
@@ -4261,10 +4176,8 @@ msgid "Search passwords"
 msgstr "Recèrca de senhals"
 
 #: src/resources/gtk/passwords-view.blp:14
-#, fuzzy
-#| msgid "Passwords"
 msgid "No Passwords Found"
-msgstr "Senhals"
+msgstr "Cap de senhal pas trobat"
 
 #: src/resources/gtk/passwords-view.blp:15
 #, fuzzy
@@ -4343,10 +4256,8 @@ msgid "Default Zoom Level"
 msgstr "Nivèl de zoom per defaut"
 
 #: src/resources/gtk/prefs-extensions-page.blp:11
-#, fuzzy
-#| msgid "Extensions"
 msgid "Add New Extension"
-msgstr "Extensions"
+msgstr "Apondre una extension novèla"
 
 #: src/resources/gtk/prefs-extensions-page.blp:12
 msgid "Extensions must be installed manually from their files"
