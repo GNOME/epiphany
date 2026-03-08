@@ -171,7 +171,7 @@ tags_order_compare_func (const char *url1,
                          const char *url2)
 {
   g_auto (GStrv) split_url1 = g_strsplit_set (url1, ":", 2);
-  g_auto (GStrv) split_url2 = g_strsplit_set (url1, ":", 2);
+  g_auto (GStrv) split_url2 = g_strsplit_set (url2, ":", 2);
   const char *index1 = split_url1[0];
   const char *index2 = split_url2[0];
   const char *compare_url1 = split_url1[1];
