@@ -350,7 +350,7 @@ ephy_encodings_init (EphyEncodings *encodings)
   char **list;
   guint i;
 
-  LOG ("EphyEncodings initialising");
+  LOG ("EphyEncodings initializing");
 
   encodings->hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify)g_free,

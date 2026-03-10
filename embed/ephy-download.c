@@ -604,7 +604,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
 static void
 ephy_download_init (EphyDownload *download)
 {
-  LOG ("EphyDownload initialising %p", download);
+  LOG ("EphyDownload initializing %p", download);
 
   download->download = NULL;
   download->cancellable = g_cancellable_new ();

@@ -437,7 +437,7 @@ ephy_session_init (EphySession *session)
 {
   EphyShell *shell;
 
-  LOG ("EphySession initialising");
+  LOG ("EphySession initializing");
 
   session->closed_tabs = g_queue_new ();
   shell = ephy_shell_get_default ();

@@ -252,7 +252,7 @@ ephy_lockdown_init (EphyLockdown *lockdown)
 {
   EphyShell *shell;
 
-  LOG ("EphyLockdown initialising");
+  LOG ("EphyLockdown initializing");
 
   shell = ephy_shell_get_default ();
 
