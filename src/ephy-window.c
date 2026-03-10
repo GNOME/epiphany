@@ -729,13 +729,19 @@ static gboolean
 ephy_window_close_request (GtkWindow *window)
 {
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND) &&
-      ephy_is_running_inside_sandbox ()) {
-    g_autoptr (XdpPortal) portal = xdp_portal_new ();
-    g_autoptr (XdpParent) parent_window = xdp_parent_new_gtk (GTK_WINDOW (window));
-    EphyWindow *ephy_window = EPHY_WINDOW (window);
+      g_settings_get_boolean (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_RUN_IN_BACKGROUND)) {
+    if (ephy_is_running_inside_sandbox ()) {
+      g_autoptr (XdpPortal) portal = xdp_portal_new ();
+      g_autoptr (XdpParent) parent_window = xdp_parent_new_gtk (GTK_WINDOW (window));
+      EphyWindow *ephy_window = EPHY_WINDOW (window);
 
-    xdp_portal_request_background (portal, parent_window, NULL, NULL, XDP_BACKGROUND_FLAG_NONE, ephy_window->cancellable, on_request_background, window);
+      xdp_portal_request_background (portal, parent_window, NULL, NULL,
+                                     XDP_BACKGROUND_FLAG_NONE, ephy_window->cancellable,
+                                     on_request_background, window);
+    } else {
+      gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
+    }
+
     return TRUE;
   }
 

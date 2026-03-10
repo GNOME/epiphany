@@ -116,10 +116,7 @@ ephy_page_menu_button_init (EphyPageMenuButton *self)
     remove_menu_item (self->page_menu, "app.firefox-sync-dialog");
     remove_menu_item (self->page_menu, "import-export");
     remove_menu_item (self->page_menu, "webapps");
-  }
-
-  if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION
-      || !ephy_is_running_inside_sandbox ()) {
+  } else {
     remove_menu_item (self->page_menu, "app.run-in-background");
     remove_menu_item (self->page_menu, "app.quit");
   }
