@@ -85,4 +85,7 @@ void          ephy_download_set_initiating_web_extension_info
                                                   (EphyDownload *download,
                                                    const char   *extension_id,
                                                    const char   *extension_name);
+void          ephy_download_set_timeout           (EphyDownload *download,
+                                                   guint         seconds);
+
 G_END_DECLS

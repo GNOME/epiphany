@@ -666,10 +666,14 @@ download_errored_cb (EphyDownload *download,
 
   g_signal_handlers_disconnect_by_data (download, self);
 
-  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    g_warning ("Cannot fetch source for filter %s from <%s>: %s",
+  if (g_error_matches (error, WEBKIT_DOWNLOAD_ERROR, WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER)) {
+    g_warning ("Failed to download filter %s from <%s>: timeout was reached",
+               filter_info_get_identifier (self), self->source_uri);
+  } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    g_warning ("Failed to download filter %s from <%s>: %s",
                filter_info_get_identifier (self), self->source_uri,
                error ? error->message : "Unknown error");
+  }
 
   /* There is not much else we can do if the download failed. Note that it
    * is still possible that if a precompiled version of the filter was found
@@ -751,6 +755,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   json_file = filter_info_get_source_file (self);
   ephy_download_set_destination (download, g_file_peek_path (json_file));
   ephy_download_disable_desktop_notification (download);
+  ephy_download_set_timeout (download, 15 /* seconds */);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (download), TRUE);
 
   g_signal_connect (download, "completed",
