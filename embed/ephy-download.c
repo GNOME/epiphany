@@ -62,6 +62,8 @@ struct _EphyDownload {
   GDateTime *start_time;
   GDateTime *end_time;
   gboolean was_moved;
+
+  guint timeout_id;
 };
 
 G_DEFINE_FINAL_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
@@ -483,6 +485,8 @@ ephy_download_dispose (GObject *object)
   g_clear_pointer (&download->end_time, g_date_time_unref);
   g_clear_pointer (&download->initiated_by_extension_id, g_free);
   g_clear_pointer (&download->initiated_by_extension_name, g_free);
+
+  g_clear_handle_id (&download->timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
@@ -1302,4 +1306,21 @@ ephy_download_set_initiating_web_extension_info (EphyDownload *download,
 
   g_free (download->initiated_by_extension_id);
   download->initiated_by_extension_id = g_strdup (extension_id);
+}
+
+static void
+timeout_reached_cb (EphyDownload *download)
+{
+  ephy_download_cancel (download);
+  download->timeout_id = 0;
+}
+
+void
+ephy_download_set_timeout (EphyDownload *download,
+                           guint         seconds)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  g_clear_handle_id (&download->timeout_id, g_source_remove);
+  download->timeout_id = g_timeout_add_seconds_once (seconds, (GSourceOnceFunc)timeout_reached_cb, download);
 }
