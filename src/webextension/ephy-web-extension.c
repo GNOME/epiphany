@@ -511,6 +511,7 @@ generate_background_page (EphyWebExtension *self,
   GString *background_page = g_string_new ("<html><head><meta charset=\"utf-8\"></head><body>");
   const char *path = "_generated_background_page.html";
   GBytes *bytes;
+  gsize length;
 
   for (unsigned int i = 0; i < json_array_get_length (scripts); i++) {
     const char *script_file = json_array_get_string_element (scripts, i);
@@ -523,8 +524,8 @@ generate_background_page (EphyWebExtension *self,
   }
   g_string_append (background_page, "</body>");
 
-  bytes = g_bytes_new_take (background_page->str, background_page->len);
-  g_string_free (background_page, FALSE);
+  length = background_page->len;
+  bytes = g_bytes_new_take (g_string_free_and_steal (background_page), length);
 
   g_hash_table_insert (self->resources, g_strdup (path), bytes);
 
