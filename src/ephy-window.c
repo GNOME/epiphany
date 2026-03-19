@@ -203,6 +203,7 @@ struct _EphyWindow {
   guint has_modified_forms : 1;
   guint confirmed_close_with_multiple_tabs : 1;
   guint present_on_insert : 1;
+  guint go_to_previous_tab: 1;
 
   GHashTable *action_groups;
 };
@@ -2911,7 +2912,7 @@ ephy_window_set_active_tab (EphyWindow *window,
      * previous_embed. That way, we know it wasn't closed.
      */
     if (!window->checking_tab_modified_forms)
-      window->previous_embed = old_embed;
+      g_set_weak_pointer (&window->previous_embed, old_embed);
 
     ephy_window_disconnect_active_embed (window);
   }
@@ -3355,10 +3356,11 @@ ephy_window_close_tab (EphyWindow *window,
   }
 
   /* If the user just closed a new tab, go back to the last focused tab. */
-  if (window->previous_embed && ephy_web_view_is_overview (view)) {
+  if (window->go_to_previous_tab && window->previous_embed && ephy_web_view_is_overview (view)) {
     ephy_tab_view_select_page (window->tab_view, GTK_WIDGET (window->previous_embed));
-    window->previous_embed = NULL;
+    g_clear_weak_pointer (&window->previous_embed);
   }
+  window->go_to_previous_tab = TRUE;
 }
 
 typedef struct {
@@ -3403,6 +3405,9 @@ tab_has_modified_forms_dialog_cb (AdwAlertDialog          *dialog,
      * codepath for checking modified forms when closing the whole window,
      * see ephy_window_check_modified_forms().
      */
+    if (ephy_tab_view_get_selected_page (data->window->tab_view) != GTK_WIDGET (data->embed))
+      data->window->go_to_previous_tab = FALSE;
+
     adw_tab_view_close_page_finish (tab_view, data->page, TRUE);
     data->window->checking_tab_modified_forms = FALSE;
     ephy_window_close_tab (data->window, data->embed);
@@ -3427,6 +3432,9 @@ tab_has_modified_forms_cb (EphyWebView             *view,
     AdwTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
 
     if (!has_modified_forms) {
+      if (ephy_tab_view_get_selected_page (data->window->tab_view) != GTK_WIDGET (data->embed))
+        data->window->previous_embed = FALSE;
+
       adw_tab_view_close_page_finish (tab_view, data->page, TRUE);
       data->window->checking_tab_modified_forms = FALSE;
       ephy_window_close_tab (data->window, data->embed);
@@ -3800,6 +3808,7 @@ ephy_window_dispose (GObject *object)
 
     g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
+    g_clear_weak_pointer (&window->previous_embed);
     g_clear_pointer (&window->action_labels, g_hash_table_unref);
     g_clear_pointer (&window->action_groups, g_hash_table_unref);
   }
@@ -4718,6 +4727,7 @@ ephy_window_init (EphyWindow *window)
 
   window->uid = window_uid++;
   window->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
+  window->go_to_previous_tab = TRUE;
 
   gtk_window_group_add_window (window_group, GTK_WINDOW (window));
   ephy_shell_register_window (shell, window);
