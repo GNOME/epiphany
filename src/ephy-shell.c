@@ -1647,7 +1647,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   if (url_is_xpi) {
     g_autoptr (GFile) xpi_file = g_file_new_for_uri (url);
     ephy_web_extension_manager_install (ephy_web_extension_manager_get_default (), xpi_file);
-  } else if (url && url[0] != '\0') {
+  } else if (url && url[0] != '\0' && ephy_embed_utils_address_is_valid (url)) {
     ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
 
     /* When reusing an empty tab, the focus is in the location entry */
