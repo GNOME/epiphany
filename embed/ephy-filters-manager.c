@@ -43,6 +43,7 @@ struct _EphyFiltersManager {
   char *filters_dir;
   GHashTable *filter_infos;  /* (unowned char *identifier, owned FilterInfo) */
   GList *filters;            /* (owned WebKitUserContentFilter *) */
+  WebKitUserContentFilter *hush_filter; /* unowned, owned by filters list */
   gint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
@@ -71,6 +72,7 @@ typedef struct {
   gboolean found : 1;    /* WebKitUserContentFilter found during lookup. */
   gboolean local : 1;    /* The source_uri is a local file URI. */
   gboolean done  : 1;    /* Filter setup done (successfully or errored). */
+  gboolean is_hush : 1;  /* Used for hush cookie banner blocking. */
 } FilterInfo;
 
 /* The "saved" fields from the struct above are stored as versioned sidecar
@@ -482,6 +484,8 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                               self->manager->cancellable,
                               (GAsyncReadyCallback)sidecar_saved_cb,
                               self);
+    if (self->is_hush)
+      self->manager->hush_filter = filter;
     self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
   } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Filter %s <%s> cannot be compiled: %s.",
@@ -695,6 +699,8 @@ filter_load_cb (WebKitUserContentFilterStore *store,
          filter_info_get_identifier (self),
          (self->manager->update_time - self->last_update),
          self->manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY);
+    if (self->is_hush)
+      self->manager->hush_filter = filter;
     self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
   } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     filter_info_setup_done (self);
@@ -890,6 +896,8 @@ update_adblock_filter_files_cb (GSettings          *settings,
     return;
   }
 
+  manager->hush_filter = NULL;
+
   /* Only once at a time please! Newest set of filters wins. */
   g_cancellable_cancel (manager->cancellable);
   g_object_unref (manager->cancellable);
@@ -949,6 +957,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
 
     filter_info = filter_info_new ("/org/gnome/epiphany/hush.json", manager);
     filter_info->identifier = g_steal_pointer (&filter_id);
+    filter_info->is_hush = TRUE;
 
     webkit_user_content_filter_store_save (manager->store,
                                            filter_info_get_identifier (filter_info),
@@ -1166,8 +1175,11 @@ ephy_filters_manager_set_ucm_forbids_ads (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
                                           gboolean                  forbids_ads)
 {
-  if (forbids_ads)
+  if (forbids_ads) {
     g_list_foreach (manager->filters, (GFunc)add_filter, ucm);
-  else
+  } else {
     g_list_foreach (manager->filters, (GFunc)remove_filter, ucm);
+    if (manager->hush_filter)
+      webkit_user_content_manager_add_filter (ucm, manager->hush_filter);
+  }
 }
