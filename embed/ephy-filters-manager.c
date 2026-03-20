@@ -888,8 +888,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
 
   g_assert (manager);
 
-  if ((!adblock_enabled && !hush_enabled) ||
-      ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
+  if (!adblock_enabled && !hush_enabled) {
     LOG ("Filters are disabled, skipping update.");
     /* If the ad blocker is disabled, initialization is done. */
     filters_manager_ensure_initialized (manager);
@@ -1025,12 +1024,13 @@ static void
 ephy_filters_manager_constructed (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
   g_autofree char *saved_filters_dir = NULL;
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->constructed (object);
 
-  /* Disable filter manager during tests */
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_TEST)
+  if (mode == EPHY_EMBED_SHELL_MODE_TEST || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     return;
 
   if (!manager->filters_dir) {
