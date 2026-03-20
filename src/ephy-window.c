@@ -2123,23 +2123,33 @@ verify_url_async_data_free (VerifyUrlAsyncData *data)
 
 static gboolean
 accept_navigation_policy_decision (EphyWindow           *window,
+                                   WebKitWebView        *web_view,
                                    WebKitPolicyDecision *decision,
                                    const char           *uri)
 {
   g_autoptr (WebKitWebsitePolicies) website_policies = NULL;
-  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
+  EphyPermission adblock_permission = EPHY_PERMISSION_UNDECIDED;
+  EphyPermission autoplay_permission = EPHY_PERMISSION_UNDECIDED;
   EphyEmbedShell *shell;
   g_autofree char *origin = ephy_uri_to_security_origin (uri);
 
   shell = ephy_embed_shell_get_default ();
 
   if (origin) {
-    permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
-                                                          EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY,
-                                                          origin);
+    adblock_permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
+                                                                  EPHY_PERMISSION_TYPE_SHOW_ADS,
+                                                                  origin);
+
+    autoplay_permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
+                                                                   EPHY_PERMISSION_TYPE_AUTOPLAY_POLICY,
+                                                                   origin);
   }
 
-  switch (permission) {
+  ephy_filters_manager_refresh_ucm_filters (ephy_embed_shell_get_filters_manager (shell),
+                                            webkit_web_view_get_user_content_manager (web_view),
+                                            adblock_permission == EPHY_PERMISSION_DENY || adblock_permission == EPHY_PERMISSION_UNDECIDED);
+
+  switch (autoplay_permission) {
     case EPHY_PERMISSION_UNDECIDED:
       website_policies = webkit_website_policies_new_with_policies ("autoplay", WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND, NULL);
       break;
@@ -2400,7 +2410,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED ||
         (navigation_type == WEBKIT_NAVIGATION_TYPE_OTHER && webkit_navigation_action_is_user_gesture (navigation_action))) {
       if (ephy_web_application_is_uri_allowed (request_uri))
-        return accept_navigation_policy_decision (window, decision, request_uri);
+        return accept_navigation_policy_decision (window, web_view, decision, request_uri);
 
       ephy_file_open_uri_in_default_browser (request_uri, gtk_widget_get_display (GTK_WIDGET (window)));
       webkit_policy_decision_ignore (decision);
@@ -2451,7 +2461,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
         return TRUE;
       }
     } else {
-      return accept_navigation_policy_decision (window, decision, request_uri);
+      return accept_navigation_policy_decision (window, web_view, decision, request_uri);
     }
 
     new_embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
@@ -2478,7 +2488,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
     return TRUE;
   }
 
-  return accept_navigation_policy_decision (window, decision, request_uri);
+  return accept_navigation_policy_decision (window, web_view, decision, request_uri);
 }
 
 static void
