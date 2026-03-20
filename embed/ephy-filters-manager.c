@@ -909,6 +909,11 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                                  NULL,
                                                  (GDestroyNotify)filter_info_free);
 
+  /* The filters are currently added in no particular order by async operations
+   * that race with each other. This is probably fine, because the order the
+   * filters are evaluated in presumably does not matter. I hope.
+   */
+
   if (adblock_enabled) {
     uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
     for (unsigned i = 0; uris[i]; i++) {
