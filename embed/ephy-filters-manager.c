@@ -885,11 +885,13 @@ update_adblock_filter_files_cb (GSettings          *settings,
   const gint64 update_time = g_get_real_time () / G_USEC_PER_SEC;
   g_autoptr (GHashTable) old_filters = NULL;
   g_auto (GStrv) uris = NULL;
+  gboolean adblock_enabled = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
+  gboolean hush_enabled = !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER);
 
   g_assert (manager);
 
-  if ((!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) ||
-      (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION)) {
+  if ((!adblock_enabled && !hush_enabled) ||
+      ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION) {
     LOG ("Filters are disabled, skipping update.");
     /* If the ad blocker is disabled, initialization is done. */
     filters_manager_ensure_initialized (manager);
@@ -910,47 +912,49 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                                  NULL,
                                                  (GDestroyNotify)filter_info_free);
 
-  uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
-  for (unsigned i = 0; uris[i]; i++) {
-    g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
-    FilterInfo *filter_info = NULL;
-    char *old_filter_id = NULL;
+  if (adblock_enabled) {
+    uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+    for (unsigned i = 0; uris[i]; i++) {
+      g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
+      FilterInfo *filter_info = NULL;
+      char *old_filter_id = NULL;
 
-    /* Check whether there was already a FilterInfo for the URI in the old
-     * filters table, and reuse it instead of creating a new one and reloading
-     * the sidecar file from disk.
-     *
-     * Note that the value is stolen from the old hash table in order to
-     * look it up and remove it from the old table *without* destroying it.
-     */
-    if (g_hash_table_steal_extended (old_filters,
-                                     filter_id,
-                                     (void **)&old_filter_id,
-                                     (void **)&filter_info)) {
-      g_assert (strcmp (old_filter_id, filter_id) == 0);
-      g_assert (strcmp (old_filter_id, filter_info_get_identifier (filter_info)) == 0);
-
-      LOG ("Filter %s in old set, stolen and starting setup.", filter_id);
-      filter_info_setup_start (filter_info);
-    } else {
-      /* Filter was not present in the old hash table: create a FilterInfo
-       * for the URI and start by loading its sidecar file.
+      /* Check whether there was already a FilterInfo for the URI in the old
+       * filters table, and reuse it instead of creating a new one and reloading
+       * the sidecar file from disk.
+       *
+       * Note that the value is stolen from the old hash table in order to
+       * look it up and remove it from the old table *without* destroying it.
        */
-      LOG ("Filter %s not in old set, creating anew.", filter_id);
-      filter_info = filter_info_new (uris[i], manager);
-      filter_info->identifier = g_steal_pointer (&filter_id);
-      filter_info_load_sidecar (filter_info,
-                                manager->cancellable,
-                                (GAsyncReadyCallback)sidecar_loaded_cb,
-                                filter_info);
-    }
+      if (g_hash_table_steal_extended (old_filters,
+                                       filter_id,
+                                       (void **)&old_filter_id,
+                                       (void **)&filter_info)) {
+        g_assert (strcmp (old_filter_id, filter_id) == 0);
+        g_assert (strcmp (old_filter_id, filter_info_get_identifier (filter_info)) == 0);
 
-    g_hash_table_replace (manager->filter_infos,
-                          (void *)filter_info_get_identifier (filter_info),
-                          filter_info);
+        LOG ("Filter %s in old set, stolen and starting setup.", filter_id);
+        filter_info_setup_start (filter_info);
+      } else {
+        /* Filter was not present in the old hash table: create a FilterInfo
+         * for the URI and start by loading its sidecar file.
+         */
+        LOG ("Filter %s not in old set, creating anew.", filter_id);
+        filter_info = filter_info_new (uris[i], manager);
+        filter_info->identifier = g_steal_pointer (&filter_id);
+        filter_info_load_sidecar (filter_info,
+                                  manager->cancellable,
+                                  (GAsyncReadyCallback)sidecar_loaded_cb,
+                                  filter_info);
+      }
+
+      g_hash_table_replace (manager->filter_infos,
+                            (void *)filter_info_get_identifier (filter_info),
+                            filter_info);
+    }
   }
 
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER)) {
+  if (hush_enabled) {
     g_autoptr (GBytes) data = g_resources_lookup_data ("/org/gnome/epiphany/hush.json", 0, NULL);
     g_autofree char *filter_id = filter_info_identifier_for_source_uri ("org/gnome/epiphany/hush.json");
     FilterInfo *filter_info = NULL;
