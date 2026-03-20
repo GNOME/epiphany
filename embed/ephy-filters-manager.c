@@ -202,11 +202,10 @@ filter_info_get_identifier (FilterInfo *self)
 static GFile *
 filter_info_get_sidecar_file (FilterInfo *self)
 {
-  const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
   g_autofree char *sidecar_filename = g_strconcat (filter_info_get_identifier (self),
                                                    ADBLOCK_FILTER_SIDECAR_FILE_SUFFIX,
                                                    NULL);
-  return g_file_new_build_filename (filters_dir, sidecar_filename, NULL);
+  return g_file_new_build_filename (self->manager->filters_dir, sidecar_filename, NULL);
 }
 
 static void
@@ -370,8 +369,7 @@ filter_info_get_source_file (FilterInfo *self)
   g_autofree char *filename = g_strdup_printf ("%s-%" G_PID_FORMAT ".json",
                                                filter_info_get_identifier (self),
                                                getpid ());
-  const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
-  return g_file_new_build_filename (filters_dir, filename, NULL);
+  return g_file_new_build_filename (self->manager->filters_dir, filename, NULL);
 }
 
 static gboolean
@@ -1146,12 +1144,6 @@ ephy_filters_manager_new (const char *filters_dir)
   return EPHY_FILTERS_MANAGER (g_object_new (EPHY_TYPE_FILTERS_MANAGER,
                                              "filters-dir", filters_dir,
                                              NULL));
-}
-
-const char *
-ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager)
-{
-  return manager->filters_dir;
 }
 
 gboolean
