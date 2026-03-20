@@ -41,7 +41,7 @@ struct _EphyFiltersManager {
   gboolean is_initialized;
 
   char *filters_dir;
-  GHashTable *filters;  /* (identifier, FilterInfo) */
+  GHashTable *filter_infos;  /* (identifier, FilterInfo) */
   gint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
@@ -779,7 +779,7 @@ accumulate_filter_done (const char *identifier,
                         gboolean   *done)
 {
   g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
-  g_assert (g_hash_table_contains (filter->manager->filters, identifier));
+  g_assert (g_hash_table_contains (filter->manager->filter_infos, identifier));
 
   *done = *done && filter->done;
 }
@@ -789,7 +789,7 @@ filter_info_setup_done (FilterInfo *self)
 {
   gboolean done = self->done = TRUE;
 
-  g_hash_table_foreach (self->manager->filters,
+  g_hash_table_foreach (self->manager->filter_infos,
                         (GHFunc)accumulate_filter_done,
                         &done);
 
@@ -798,7 +798,7 @@ filter_info_setup_done (FilterInfo *self)
 
   if (done) {
     LOG ("Setup completed for %u filters.",
-         g_hash_table_size (self->manager->filters));
+         g_hash_table_size (self->manager->filter_infos));
     filters_manager_ensure_initialized (self->manager);
   }
 }
@@ -831,7 +831,7 @@ remove_unused_filter (const char         *identifier,
   g_autoptr (GFile) sidecar_file = filter_info_get_sidecar_file (filter);
 
   g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
-  g_assert (!g_hash_table_contains (filter->manager->filters, identifier));
+  g_assert (!g_hash_table_contains (filter->manager->filter_infos, identifier));
 
   g_file_delete_async (sidecar_file,
                        G_PRIORITY_LOW,
@@ -894,11 +894,11 @@ update_adblock_filter_files_cb (GSettings          *settings,
   manager->cancellable = g_cancellable_new ();
   manager->update_time = update_time;
 
-  old_filters = g_steal_pointer (&manager->filters);
-  manager->filters = g_hash_table_new_full (g_str_hash,
-                                            g_str_equal,
-                                            NULL,
-                                            (GDestroyNotify)filter_info_free);
+  old_filters = g_steal_pointer (&manager->filter_infos);
+  manager->filter_infos = g_hash_table_new_full (g_str_hash,
+                                                 g_str_equal,
+                                                 NULL,
+                                                 (GDestroyNotify)filter_info_free);
 
   uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
   for (unsigned i = 0; uris[i]; i++) {
@@ -935,7 +935,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                 filter_info);
     }
 
-    g_hash_table_replace (manager->filters,
+    g_hash_table_replace (manager->filter_infos,
                           (void *)filter_info_get_identifier (filter_info),
                           filter_info);
   }
@@ -984,7 +984,7 @@ ephy_filters_manager_finalize (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
 
-  g_clear_pointer (&manager->filters, g_hash_table_unref);
+  g_clear_pointer (&manager->filter_infos, g_hash_table_unref);
   g_free (manager->filters_dir);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->finalize (object);
@@ -1116,10 +1116,10 @@ static void
 ephy_filters_manager_init (EphyFiltersManager *manager)
 {
   manager->cancellable = g_cancellable_new ();
-  manager->filters = g_hash_table_new_full (g_str_hash,
-                                            g_str_equal,
-                                            NULL,
-                                            (GDestroyNotify)filter_info_free);
+  manager->filter_infos = g_hash_table_new_full (g_str_hash,
+                                                 g_str_equal,
+                                                 NULL,
+                                                 (GDestroyNotify)filter_info_free);
 }
 
 EphyFiltersManager *
