@@ -1232,30 +1232,6 @@ update_security_status_for_committed_load (EphyWebView *view,
 }
 
 static void
-update_ucm_ads_state (WebKitWebView *web_view,
-                      const char    *uri)
-{
-  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (web_view);
-  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
-  gboolean enable = FALSE;
-  g_autofree gchar *origin = NULL;
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-
-  origin = ephy_uri_to_security_origin (uri);
-
-  /* Check page setting first in case it overwrites global setting */
-  if (origin)
-    permission = ephy_permissions_manager_get_permission (ephy_embed_shell_get_permissions_manager (shell),
-                                                          EPHY_PERMISSION_TYPE_SHOW_ADS,
-                                                          origin);
-  enable = permission == EPHY_PERMISSION_DENY;
-  if (permission == EPHY_PERMISSION_UNDECIDED && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
-    enable = TRUE;
-
-  ephy_filters_manager_set_ucm_forbids_ads (ephy_embed_shell_get_filters_manager (shell), ucm, enable);
-}
-
-static void
 tls_error_page_message_received_cb (WebKitUserContentManager *manager,
                                     JSCValue                 *message,
                                     EphyWebView              *view)
@@ -1660,7 +1636,6 @@ load_changed_cb (WebKitWebView   *web_view,
       uri = webkit_web_view_get_uri (web_view);
       ephy_web_view_set_committed_location (view, uri);
       update_security_status_for_committed_load (view, uri);
-      update_ucm_ads_state (web_view, uri);
 
       /* History. */
       if (ephy_embed_utils_is_no_show_address (uri))
