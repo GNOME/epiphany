@@ -1171,6 +1171,23 @@ ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
                                           gboolean                  forbids_ads)
 {
+  typedef struct {
+    gboolean forbids_ads;
+    gint64 update_time;
+  } AdblockState;
+
+  AdblockState *current_state = g_object_get_data (G_OBJECT (ucm), "ephy-adblock-state");
+  if (current_state && current_state->forbids_ads == forbids_ads && current_state->update_time == manager->update_time)
+    return;
+
+  if (!current_state) {
+    current_state = g_new (AdblockState, 1);
+    g_object_set_data_full (G_OBJECT (ucm), "ephy-adblock-state", current_state, g_free);
+  }
+
+  current_state->forbids_ads = forbids_ads;
+  current_state->update_time = manager->update_time;
+
   if (forbids_ads) {
     g_list_foreach (manager->filters, (GFunc)add_filter, ucm);
   } else {
