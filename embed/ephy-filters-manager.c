@@ -41,11 +41,11 @@ struct _EphyFiltersManager {
   gboolean is_initialized;
 
   char *filters_dir;
-  GHashTable *filter_infos;  /* (identifier, FilterInfo) */
+  GHashTable *filter_infos;  /* (unowned char *identifier, owned FilterInfo) */
+  GList *filters;            /* (owned WebKitUserContentFilter *) */
   gint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
-  WebKitUserContentFilter *wk_filter;
   WebKitUserContentFilterStore *store;
   gboolean metered;
 };
@@ -463,6 +463,7 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                  FilterInfo                   *self)
 {
   g_autoptr (GError) error = NULL;
+  g_autoptr (WebKitUserContentFilter) filter = NULL;
 
   if (!self->manager)
     return;
@@ -472,16 +473,16 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (self->manager->store == store);
 
-  g_clear_pointer (&self->manager->wk_filter, webkit_user_content_filter_unref);
-  self->manager->wk_filter = webkit_user_content_filter_store_save_finish (self->manager->store,
-                                                                           result,
-                                                                           &error);
-  if (self->manager->wk_filter) {
+  filter = webkit_user_content_filter_store_save_finish (self->manager->store,
+                                                         result,
+                                                         &error);
+  if (filter) {
     LOG ("Filter %s compiled successfully.", filter_info_get_identifier (self));
     filter_info_save_sidecar (self,
                               self->manager->cancellable,
                               (GAsyncReadyCallback)sidecar_saved_cb,
                               self);
+    self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
   } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Filter %s <%s> cannot be compiled: %s.",
                filter_info_get_identifier (self), self->source_uri,
@@ -667,6 +668,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_autoptr (GError) error = NULL;
   g_autoptr (GFile) source_file = NULL;
   g_autoptr (GFile) json_file = NULL;
+  g_autoptr (WebKitUserContentFilter) filter = NULL;
   EphyDownload *download;
 
   if (!self->manager)
@@ -677,19 +679,19 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (store == self->manager->store);
 
-  g_clear_pointer (&self->manager->wk_filter, webkit_user_content_filter_unref);
-  self->manager->wk_filter = webkit_user_content_filter_store_load_finish (self->manager->store,
-                                                                           result,
-                                                                           &error);
-  self->found = (self->manager->wk_filter != NULL);
+  filter = webkit_user_content_filter_store_load_finish (self->manager->store,
+                                                         result,
+                                                         &error);
+  self->found = !!filter;
 
-  if (self->manager->wk_filter) {
+  if (filter) {
     LOG ("Found compiled filter %s.", filter_info_get_identifier (self));
     LOG ("Update %sneeded for filter %s (last %" PRIu64 "s ago, interval %us)",
          filter_info_needs_updating_from_source (self) ? "" : "not ",
          filter_info_get_identifier (self),
          (self->manager->update_time - self->last_update),
          self->manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY);
+    self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
   } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     filter_info_setup_done (self);
     return;
@@ -952,8 +954,9 @@ ephy_filters_manager_dispose (GObject *object)
     g_cancellable_cancel (manager->cancellable);
     g_clear_object (&manager->cancellable);
   }
-  g_clear_pointer (&manager->wk_filter, webkit_user_content_filter_unref);
   g_clear_object (&manager->store);
+
+  g_clear_list (&manager->filters, (GDestroyNotify)webkit_user_content_filter_unref);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->dispose (object);
 }
@@ -1121,16 +1124,27 @@ ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
   return manager->is_initialized;
 }
 
+static void
+add_filter (WebKitUserContentFilter  *filter,
+            WebKitUserContentManager *ucm)
+{
+  webkit_user_content_manager_add_filter (ucm, filter);
+}
+
+static void
+remove_filter (WebKitUserContentFilter  *filter,
+               WebKitUserContentManager *ucm)
+{
+  webkit_user_content_manager_remove_filter (ucm, filter);
+}
+
 void
 ephy_filters_manager_set_ucm_forbids_ads (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
                                           gboolean                  forbids_ads)
 {
-  if (!manager->wk_filter)
-    return;
-
   if (forbids_ads)
-    webkit_user_content_manager_add_filter (ucm, manager->wk_filter);
+    g_list_foreach (manager->filters, (GFunc)add_filter, ucm);
   else
-    webkit_user_content_manager_remove_filter (ucm, manager->wk_filter);
+    g_list_foreach (manager->filters, (GFunc)remove_filter, ucm);
 }
