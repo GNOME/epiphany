@@ -1175,7 +1175,7 @@ remove_filter (WebKitUserContentFilter  *filter,
 }
 
 void
-ephy_filters_manager_set_ucm_forbids_ads (EphyFiltersManager       *manager,
+ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
                                           gboolean                  forbids_ads)
 {

@@ -1254,7 +1254,7 @@ update_ucm_ads_state (WebKitWebView *web_view,
   if (permission == EPHY_PERMISSION_UNDECIDED && g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     enable = TRUE;
 
-  ephy_filters_manager_set_ucm_forbids_ads (ephy_embed_shell_get_filters_manager (shell), ucm, enable);
+  ephy_filters_manager_refresh_ucm_filters (ephy_embed_shell_get_filters_manager (shell), ucm, enable);
 }
 
 static void
