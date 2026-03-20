@@ -2571,9 +2571,6 @@ load_changed_cb (EphyWebView     *view,
 {
   sync_tab_load_status (view, load_event, window);
   sync_tab_address (view, NULL, window);
-
-  if (load_event != WEBKIT_LOAD_STARTED)
-    return;
 }
 
 static void
