@@ -53,15 +53,6 @@ struct _EphyFiltersManager {
 G_DEFINE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
 
 enum {
-  FILTER_READY,
-  FILTER_REMOVED,
-  FILTERS_DISABLED,
-  LAST_SIGNAL,
-};
-
-static guint s_signals[LAST_SIGNAL];
-
-enum {
   PROP_0,
   PROP_FILTERS_DIR,
   PROP_IS_INITIALIZED,
@@ -381,17 +372,6 @@ filter_info_get_source_file (FilterInfo *self)
   return g_file_new_build_filename (filters_dir, filename, NULL);
 }
 
-static void
-filter_info_setup_enable_compiled_filter (FilterInfo              *self,
-                                          WebKitUserContentFilter *wk_filter)
-{
-  g_assert (self);
-  g_assert (wk_filter);
-
-  LOG ("Emitting EphyFiltersManager::filter-ready for %s.", filter_info_get_identifier (self));
-  g_signal_emit (self->manager, s_signals[FILTER_READY], 0, wk_filter);
-}
-
 static gboolean
 filter_info_needs_updating_from_source (const FilterInfo *self)
 {
@@ -498,7 +478,6 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                                                                            &error);
   if (self->manager->wk_filter) {
     LOG ("Filter %s compiled successfully.", filter_info_get_identifier (self));
-    filter_info_setup_enable_compiled_filter (self, self->manager->wk_filter);
     filter_info_save_sidecar (self,
                               self->manager->cancellable,
                               (GAsyncReadyCallback)sidecar_saved_cb,
@@ -710,7 +689,6 @@ filter_load_cb (WebKitUserContentFilterStore *store,
 
   if (self->manager->wk_filter) {
     LOG ("Found compiled filter %s.", filter_info_get_identifier (self));
-    filter_info_setup_enable_compiled_filter (self, self->manager->wk_filter);
     LOG ("Update %sneeded for filter %s (last %" PRIu64 "s ago, interval %us)",
          filter_info_needs_updating_from_source (self) ? "" : "not ",
          filter_info_get_identifier (self),
@@ -855,8 +833,6 @@ remove_unused_filter (const char         *identifier,
   g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
   g_assert (!g_hash_table_contains (filter->manager->filters, identifier));
 
-  LOG ("Emitting EphyFiltersManager::filter-removed for %s.", identifier);
-  g_signal_emit (manager, s_signals[FILTER_REMOVED], 0, identifier);
   g_file_delete_async (sidecar_file,
                        G_PRIORITY_LOW,
                        filter->manager->cancellable,
@@ -907,7 +883,6 @@ update_adblock_filter_files_cb (GSettings          *settings,
   if ((!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) ||
       (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION)) {
     LOG ("Filters are disabled, skipping update.");
-    g_signal_emit (manager, s_signals[FILTERS_DISABLED], 0);
     /* If the ad blocker is disabled, initialization is done. */
     filters_manager_ensure_initialized (manager);
     return;
@@ -1119,29 +1094,6 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
   object_class->finalize = ephy_filters_manager_finalize;
   object_class->set_property = ephy_filters_manager_set_property;
   object_class->get_property = ephy_filters_manager_get_property;
-
-  s_signals[FILTER_READY] =
-    g_signal_new ("filter-ready",
-                  G_OBJECT_CLASS_TYPE (klass),
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  WEBKIT_TYPE_USER_CONTENT_FILTER);
-
-  s_signals[FILTER_REMOVED] =
-    g_signal_new ("filter-removed",
-                  G_OBJECT_CLASS_TYPE (klass),
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_STRING);
-
-  s_signals[FILTERS_DISABLED] =
-    g_signal_new ("filters-disabled",
-                  G_OBJECT_CLASS_TYPE (klass),
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
 
   object_properties[PROP_FILTERS_DIR] =
     g_param_spec_string ("filters-dir",
