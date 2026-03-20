@@ -1036,6 +1036,8 @@ ephy_filters_manager_constructed (GObject *object)
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
+  g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER,
+                           G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
 
   update_adblock_filter_files_cb (NULL, NULL, manager);
 
