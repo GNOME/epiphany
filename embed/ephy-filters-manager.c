@@ -24,8 +24,10 @@
 #include "ephy-debug.h"
 #include "ephy-download.h"
 #include "ephy-file-helpers.h"
+#include "ephy-langs.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-string.h"
 #include "ephy-embed-shell.h"
 
 #include <gio/gio.h>
@@ -875,6 +877,56 @@ sidecar_loaded_cb (GObject      *source_object,
   filter_info_setup_start (self);
 }
 
+/* URLs are provided by https://gitlab.com/eyeo/filterlists/contentblockerlists/-/tree/master  */
+struct adblocker_map {
+  const char *lang;
+  const char *url;
+} adblockers[] = {
+  { "cn", "https://easylist-downloads.adblockplus.org/easylist+easylistchina-minified.json"},
+  { "de", "https://easylist-downloads.adblockplus.org/easylist+easylistgermany-minified.json" },
+  { "es", "https://easylist-downloads.adblockplus.org/easylist+easylistspanish-minified.json"},
+  { "fr", "https://easylist-downloads.adblockplus.org/easylist+liste_fr-minified.json"},
+  { "it", "https://easylist-downloads.adblockplus.org/easylist+easylistitaly-minified.json"},
+  { "nl", "https://easylist-downloads.adblockplus.org/easylist+easylistdutch-minified.json"},
+  { NULL, NULL }
+};
+
+static char **
+compute_localized_filters (EphyFiltersManager *manager)
+{
+  g_auto (GStrv) languages = NULL;
+  const char **default_filters = NULL;
+  g_autoptr (GVariant) default_value = NULL;
+  g_autoptr (GStrvBuilder) builder = NULL;
+  int n_languages;
+
+  /* If the user has touched the value of the setting, respect it exactly. */
+  if (g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS))
+    return g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+
+  default_value = g_settings_get_default_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+  default_filters = g_variant_get_strv (default_value, NULL);
+
+  builder = g_strv_builder_new ();
+  g_strv_builder_addv (builder, default_filters);
+
+  languages = ephy_langs_get_languages ();
+  n_languages = g_strv_length (languages);
+
+  for (int lang = 0; lang < n_languages; lang++) {
+    languages[lang] = g_strdelimit (languages[lang], "_", '\0');
+    languages[lang] = g_strdelimit (languages[lang], "-", '\0');
+  }
+
+  for (int lang = 0; lang < n_languages; lang++) {
+    for (int idx = 0; adblockers[idx].lang; idx++)
+      if (g_ascii_strcasecmp (languages[lang], adblockers[idx].lang) == 0)
+        g_strv_builder_add (builder, adblockers[idx].url);
+  }
+
+  return g_strv_builder_end (builder);
+}
+
 static void
 update_adblock_filter_files_cb (GSettings          *settings,
                                 char               *key,
@@ -924,7 +976,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
    */
 
   if (adblock_enabled) {
-    uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+    uris = compute_localized_filters (manager);
     for (unsigned i = 0; uris[i]; i++) {
       g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
       FilterInfo *filter_info = NULL;
