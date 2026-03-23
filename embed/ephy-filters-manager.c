@@ -888,6 +888,24 @@ update_adblock_filter_files_cb (GSettings          *settings,
 
   g_assert (manager);
 
+  /* This time needs to be always updated if any setting has changed, because
+   * ephy_filters_manager_refresh_ucm_filters() uses it to indicate that the
+   * state of the WebKitUserContentManager needs to be refreshed.
+   *
+   * And we need to always start with a clear state because the user might have
+   * disabled adblocking or removed filters.
+   */
+  manager->update_time = update_time;
+
+  g_clear_list (&manager->filters, (GDestroyNotify)webkit_user_content_filter_unref);
+  manager->hush_filter = NULL;
+
+  old_filters = g_steal_pointer (&manager->filter_infos);
+  manager->filter_infos = g_hash_table_new_full (g_str_hash,
+                                                 g_str_equal,
+                                                 NULL,
+                                                 (GDestroyNotify)filter_info_free);
+
   if (!adblock_enabled && !hush_enabled) {
     LOG ("Filters are disabled, skipping update.");
     /* If the ad blocker is disabled, initialization is done. */
@@ -895,19 +913,10 @@ update_adblock_filter_files_cb (GSettings          *settings,
     return;
   }
 
-  manager->hush_filter = NULL;
-
   /* Only once at a time please! Newest set of filters wins. */
   g_cancellable_cancel (manager->cancellable);
   g_object_unref (manager->cancellable);
   manager->cancellable = g_cancellable_new ();
-  manager->update_time = update_time;
-
-  old_filters = g_steal_pointer (&manager->filter_infos);
-  manager->filter_infos = g_hash_table_new_full (g_str_hash,
-                                                 g_str_equal,
-                                                 NULL,
-                                                 (GDestroyNotify)filter_info_free);
 
   /* The filters are currently added in no particular order by async operations
    * that race with each other. This is probably fine, because the order the
@@ -1164,13 +1173,6 @@ add_filter (WebKitUserContentFilter  *filter,
   webkit_user_content_manager_add_filter (ucm, filter);
 }
 
-static void
-remove_filter (WebKitUserContentFilter  *filter,
-               WebKitUserContentManager *ucm)
-{
-  webkit_user_content_manager_remove_filter (ucm, filter);
-}
-
 void
 ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
@@ -1193,11 +1195,10 @@ ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
   current_state->forbids_ads = forbids_ads;
   current_state->update_time = manager->update_time;
 
-  if (forbids_ads) {
+  webkit_user_content_manager_remove_all_filters (ucm);
+
+  if (forbids_ads)
     g_list_foreach (manager->filters, (GFunc)add_filter, ucm);
-  } else {
-    g_list_foreach (manager->filters, (GFunc)remove_filter, ucm);
-    if (manager->hush_filter)
-      webkit_user_content_manager_add_filter (ucm, manager->hush_filter);
-  }
+  else if (manager->hush_filter)
+    webkit_user_content_manager_add_filter (ucm, manager->hush_filter);
 }
