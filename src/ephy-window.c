@@ -3352,13 +3352,19 @@ ephy_window_close_tab (EphyWindow *window,
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
 
   /* If that was the last tab, destroy the window.
+   * If we're in web app mode, run the logic to determine whether to close or
+   * run in the background. This will happen if the user presses Ctrl+W.
    *
    * Beware: window->closing could be true now, after destroying the
    * tab, even if it wasn't at the start of this function.
    */
   if (!window->closing && ephy_tab_view_get_n_pages (window->tab_view) == 0 &&
       !adw_tab_overview_get_open (ADW_TAB_OVERVIEW (window->overview))) {
-    gtk_window_destroy (GTK_WINDOW (window));
+    if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
+      ephy_window_close_request (GTK_WINDOW (window));
+    else
+      gtk_window_destroy (GTK_WINDOW (window));
+
     return;
   }
 
