@@ -3,6 +3,9 @@
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm21"
+    ],
     "command" : "ephy-wrapper",
     "tags" : [
         "nightly"
@@ -51,15 +54,20 @@
         },
         {
             "name" : "webkitgtk",
+            "append-path": "/usr/lib/sdk/llvm21/bin",
+            "prepend-ld-library-path": "/usr/lib/sdk/llvm21/lib",
             "buildsystem" : "cmake-ninja",
             "config-opts": [
                 "-DPORT=GTK",
                 "-DUSE_GTK4=ON",
+                "-DCMAKE_C_COMPILER=clang",
+                "-DCMAKE_CXX_COMPILER=clang++",
                 "-DENABLE_SPEECH_SYNTHESIS=OFF",
                 "-DENABLE_WEBXR=OFF",
                 "-DENABLE_THUNDER=OFF",
                 "-DUSE_LIBBACKTRACE=OFF",
                 "-DDEVELOPER_MODE=ON",
+                "-DDEVELOPER_MODE_FATAL_WARNINGS=OFF",
                 "-DENABLE_EXPERIMENTAL_FEATURES=ON"
             ],
             "sources" : [
