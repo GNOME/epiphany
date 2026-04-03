@@ -69,12 +69,12 @@ test_create_statement (void)
   g_assert_true (ephy_sqlite_connection_open (connection, &error));
   g_assert_no_error (error);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "CREATE TABLE TEST (id INTEGER)", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "CREATE TABLE TEST (id INTEGER)", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
   g_object_unref (statement);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "BLAHBLAHBLAHBA", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "BLAHBLAHBLAHBA", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_null (statement);
   g_assert_nonnull (error);
   g_clear_error (&error);
@@ -90,28 +90,28 @@ static void
 create_table_and_insert_row (EphySQLiteConnection *connection)
 {
   GError *error = NULL;
-  EphySQLiteStatement *statement = ephy_sqlite_connection_create_statement (connection, "CREATE TABLE test (id INTEGER, text LONGVARCHAR)", &error);
+  EphySQLiteStatement *statement = ephy_sqlite_connection_create_statement (connection, "CREATE TABLE test (id INTEGER, text LONGVARCHAR)", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
   ephy_sqlite_statement_step (statement, &error);
   g_assert_no_error (error);
   g_object_unref (statement);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
   g_assert_false (ephy_sqlite_statement_step (statement, &error));
   g_assert_no_error (error);
   g_object_unref (statement);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "INSERT INTO test (id, text) VALUES (3, \"test\")", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "INSERT INTO test (id, text) VALUES (3, \"test\")", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
   ephy_sqlite_statement_step (statement, &error);
   g_assert_no_error (error);
   g_object_unref (statement);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
 
@@ -165,7 +165,7 @@ test_bind_data (void)
 
   ephy_sqlite_connection_execute (connection, "CREATE TABLE test (id INTEGER, text LONGVARCHAR)", &error);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "INSERT INTO test (id, text) VALUES (?, ?)", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "INSERT INTO test (id, text) VALUES (?, ?)", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
 
@@ -179,7 +179,7 @@ test_bind_data (void)
   g_assert_no_error (error);
   g_object_unref (statement);
 
-  statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", &error);
+  statement = ephy_sqlite_connection_create_statement (connection, "SELECT * FROM test", EPHY_SQLITE_STATEMENT_SHORT_LIVED, &error);
   g_assert_nonnull (statement);
   g_assert_no_error (error);
   g_assert_true (ephy_sqlite_statement_step (statement, &error));

@@ -235,9 +235,10 @@ ephy_sqlite_connection_execute (EphySQLiteConnection  *self,
 }
 
 EphySQLiteStatement *
-ephy_sqlite_connection_create_statement (EphySQLiteConnection  *self,
-                                         const char            *sql,
-                                         GError               **error)
+ephy_sqlite_connection_create_statement (EphySQLiteConnection         *self,
+                                         const char                   *sql,
+                                         EphySQLiteStatementLifetime   lifetime,
+                                         GError                      **error)
 {
   sqlite3_stmt *prepared_statement;
 
@@ -246,7 +247,11 @@ ephy_sqlite_connection_create_statement (EphySQLiteConnection  *self,
     return NULL;
   }
 
-  if (sqlite3_prepare_v2 (self->database, sql, -1, &prepared_statement, NULL) != SQLITE_OK) {
+  if (sqlite3_prepare_v3 (self->database,
+                          sql, -1,
+                          lifetime == EPHY_SQLITE_STATEMENT_LONG_LIVED ? SQLITE_PREPARE_PERSISTENT : 0,
+                          &prepared_statement,
+                          NULL) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
     return NULL;
   }
@@ -300,7 +305,9 @@ ephy_sqlite_connection_table_exists (EphySQLiteConnection *self,
 
   if (!self->connection_table_exists_statement)
     self->connection_table_exists_statement = ephy_sqlite_connection_create_statement (self,
-                                                                                       "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?", &error);
+                                                                                       "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?",
+                                                                                       EPHY_SQLITE_STATEMENT_LONG_LIVED,
+                                                                                       &error);
   else
     ephy_sqlite_statement_reset (self->connection_table_exists_statement);
 

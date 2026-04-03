@@ -305,7 +305,9 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
   }
 
   statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       statement_str->str, &error);
+                                                       statement_str->str,
+                                                       EPHY_SQLITE_STATEMENT_SHORT_LIVED,
+                                                       &error);
   g_string_free (statement_str, TRUE);
 
   if (error) {

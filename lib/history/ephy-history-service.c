@@ -767,7 +767,7 @@ ephy_history_service_get_cached_statement (EphyHistoryService           *self,
   g_assert (sql);
 
   self->statements[stmt] = statement =
-    ephy_sqlite_connection_create_statement (self->history_database, sql, error);
+    ephy_sqlite_connection_create_statement (self->history_database, sql, EPHY_SQLITE_STATEMENT_LONG_LIVED, error);
 
   return statement;
 }

@@ -143,7 +143,7 @@ ephy_password_import_from_chrome (EphyPasswordManager  *manager,
     return FALSE;
   }
 
-  statement = ephy_sqlite_connection_create_statement (connection, statement_str, &my_error);
+  statement = ephy_sqlite_connection_create_statement (connection, statement_str, EPHY_SQLITE_STATEMENT_SHORT_LIVED, &my_error);
   if (my_error) {
     g_warning ("Could not build password query statement: %s", my_error->message);
     g_set_error (error,

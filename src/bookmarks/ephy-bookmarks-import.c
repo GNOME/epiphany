@@ -251,6 +251,7 @@ load_tags_for_bookmark (EphySQLiteConnection *connection,
 
   statement = ephy_sqlite_connection_create_statement (connection,
                                                        statement_str,
+                                                       EPHY_SQLITE_STATEMENT_SHORT_LIVED,
                                                        &error);
   if (error) {
     g_warning ("[Bookmark %d] Could not build tags query statement: %s", bookmark_id, error->message);
@@ -323,6 +324,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
 
   statement = ephy_sqlite_connection_create_statement (connection,
                                                        statement_str,
+                                                       EPHY_SQLITE_STATEMENT_SHORT_LIVED,
                                                        &my_error);
   if (!statement) {
     g_warning ("Could not build bookmarks query statement: %s", my_error->message);

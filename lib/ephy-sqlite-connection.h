@@ -36,6 +36,11 @@ typedef enum {
   EPHY_SQLITE_CONNECTION_MODE_READWRITE
 } EphySQLiteConnectionMode;
 
+typedef enum {
+  EPHY_SQLITE_STATEMENT_SHORT_LIVED,
+  EPHY_SQLITE_STATEMENT_LONG_LIVED
+} EphySQLiteStatementLifetime;
+
 EphySQLiteConnection *  ephy_sqlite_connection_new                     (EphySQLiteConnectionMode  mode, const char *database_path);
 
 gboolean                ephy_sqlite_connection_open                    (EphySQLiteConnection *self, GError **error);
@@ -45,7 +50,7 @@ void                    ephy_sqlite_connection_delete_database         (EphySQLi
 void                    ephy_sqlite_connection_get_error               (EphySQLiteConnection *self, GError **error);
 
 gboolean                ephy_sqlite_connection_execute                 (EphySQLiteConnection *self, const char *sql, GError **error);
-EphySQLiteStatement *   ephy_sqlite_connection_create_statement        (EphySQLiteConnection *self, const char *sql, GError **error);
+EphySQLiteStatement *   ephy_sqlite_connection_create_statement        (EphySQLiteConnection *self, const char *sql, EphySQLiteStatementLifetime lifetime, GError **error);
 gint64                  ephy_sqlite_connection_get_last_insert_id      (EphySQLiteConnection *self);
 void                    ephy_sqlite_connection_enable_foreign_keys     (EphySQLiteConnection *self);
 
