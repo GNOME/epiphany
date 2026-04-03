@@ -908,6 +908,39 @@ ephy_shell_get_lockdown (EphyShell *shell)
 }
 
 static void
+die_cb ()
+{
+  g_error ("One or more EphyWindow objects are still alive long after Epiphany shutdown was requested. This is a bug.");
+}
+
+static void
+ephy_shell_shutdown (GApplication *app)
+{
+  EphyShell *shell = EPHY_SHELL (app);
+
+  /* Refusing to shut down when requested is perhaps controversial, but it's
+   * important to ensure that no EphyWindows are leaked, so let's just keep
+   * going if any windows are still outstanding. This probably means some async
+   * operation has a ref on the window.
+   *
+   * Why is it important to ensure windows are not leaked when shutting down?
+   * It's probably not. But it *is* important to ensure windows are not leaked
+   * in general, and this is a good way to do that. Example motivating bug:
+   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/2130
+   *
+   * If you are debugging a crash in die_cb(), it probably means something is
+   * waiting for something else somewhere. Sometimes this could indicate that
+   * the web process is broken and unable to process messages or run JavaScript.
+   * Good luck.
+   */
+  g_timeout_add_seconds_once (30, (GSourceOnceFunc)die_cb, NULL);
+  while (shell->windows)
+    g_main_context_iteration (NULL, TRUE);
+
+  G_APPLICATION_CLASS (ephy_shell_parent_class)->shutdown (app);
+}
+
+static void
 ephy_shell_constructed (GObject *object)
 {
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_BROWSER &&
@@ -940,6 +973,7 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
+  application_class->shutdown = ephy_shell_shutdown;
 }
 
 static void
@@ -1020,9 +1054,6 @@ ephy_shell_finalize (GObject *object)
 
   g_clear_pointer (&shell->local_startup_context, ephy_shell_startup_context_free);
   g_clear_pointer (&shell->remote_startup_context, ephy_shell_startup_context_free);
-
-  /* Ensure all windows have been destroyed. */
-  g_assert (!shell->windows);
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
