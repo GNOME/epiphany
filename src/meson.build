@@ -35,6 +35,7 @@ libephymain_sources = [
   'ephy-fullscreen-box.c',
   'ephy-header-bar.c',
   'ephy-history-dialog.c',
+  'ephy-history-dialog-row.c',
   'ephy-link.c',
   'ephy-location-controller.c',
   'ephy-location-entry.c',
