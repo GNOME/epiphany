@@ -3368,8 +3368,10 @@ ephy_window_close_tab (EphyWindow *window,
     return;
   }
 
-  /* If the user just closed a new tab, go back to the last focused tab. */
-  if (window->go_to_previous_tab && window->previous_embed && ephy_web_view_is_overview (view)) {
+  /* If the user just closed a new tab, go back to the last focused tab, but
+   * only if it's still attached to this window. */
+  if (window->go_to_previous_tab && ephy_web_view_is_overview (view) &&
+      window->previous_embed && gtk_widget_is_ancestor (GTK_WIDGET (window->previous_embed), GTK_WIDGET (window->tab_view))) {
     ephy_tab_view_select_page (window->tab_view, GTK_WIDGET (window->previous_embed));
     g_clear_weak_pointer (&window->previous_embed);
   }
