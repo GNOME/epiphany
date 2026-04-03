@@ -28,6 +28,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-favicon-helpers.h"
+#include "ephy-history-dialog-row.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -285,16 +286,6 @@ on_select_all_button_clicked (GtkButton         *button,
   update_ui_state (self);
 }
 
-static EphyHistoryURL *
-get_url_from_row (GtkListBoxRow *row)
-{
-  return ephy_history_url_new (adw_action_row_get_subtitle (ADW_ACTION_ROW (row)),
-                               adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row)),
-                               0,
-                               0,
-                               0);
-}
-
 static void
 on_find_urls_cb (gpointer service,
                  gboolean success,
@@ -418,11 +409,11 @@ static void
 delete_checked_rows (EphyHistoryDialog *self)
 {
   g_autoptr (GList) checked_rows = get_checked_rows (self);
-  GList *deleted_urls = NULL;
+  g_autolist (EphyHistoryURL) deleted_urls = NULL;
   GList *iter = NULL;
 
   for (iter = checked_rows; iter; iter = g_list_next (iter)) {
-    EphyHistoryURL *url = get_url_from_row (iter->data);
+    EphyHistoryURL *url = ephy_history_dialog_row_create_history_url (EPHY_HISTORY_DIALOG_ROW (iter->data));
 
     deleted_urls = g_list_prepend (deleted_urls, url);
   }
@@ -432,8 +423,6 @@ delete_checked_rows (EphyHistoryDialog *self)
 
   for (iter = deleted_urls; iter; iter = g_list_next (iter))
     ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
-
-  g_list_free_full (deleted_urls, (GDestroyNotify)ephy_history_url_free);
 }
 
 static GtkWidget *
@@ -447,8 +436,8 @@ row_copy_url_button_clicked (GtkWidget *button,
                              gpointer   user_data)
 {
   EphyHistoryDialog *self = user_data;
-  GtkListBoxRow *row = GTK_LIST_BOX_ROW (gtk_widget_get_ancestor (button, GTK_TYPE_LIST_BOX_ROW));
-  g_autoptr (EphyHistoryURL) url = get_url_from_row (row);
+  EphyHistoryDialogRow *row = EPHY_HISTORY_DIALOG_ROW (gtk_widget_get_ancestor (button, GTK_TYPE_LIST_BOX_ROW));
+  g_autoptr (EphyHistoryURL) url = ephy_history_dialog_row_create_history_url (row);
 
   if (url) {
     AdwToast *toast = adw_toast_new (_("Link copied"));
@@ -515,22 +504,9 @@ create_row (EphyHistoryDialog *self,
   GtkWidget *row;
   GtkWidget *check_button;
   GtkWidget *copy_url_button;
-  g_autofree char *title_escaped = g_markup_escape_text (url->title, -1);
-  g_autofree char *subtitle_escaped = NULL;
-  g_autofree char *decoded_url = ephy_uri_decode (url->url);
-
-  if (!decoded_url)
-    decoded_url = g_strdup (url->url);
-  subtitle_escaped = g_markup_escape_text (decoded_url, -1);
 
   /* Row */
-  row = adw_action_row_new ();
-  adw_action_row_set_title_lines (ADW_ACTION_ROW (row), 1);
-  adw_action_row_set_subtitle_lines (ADW_ACTION_ROW (row), 1);
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), title_escaped);
-  adw_action_row_set_subtitle (ADW_ACTION_ROW (row), subtitle_escaped);
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
-  gtk_widget_set_tooltip_text (row, decoded_url);
+  row = ephy_history_dialog_row_new (url);
 
   /* Fav Icon */
   icon = gtk_image_new ();
@@ -642,7 +618,7 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
   g_autoptr (GList) visible_rows = NULL;
   GtkListBoxRow *row;
   int i = 0;
-  GList *deleted_urls = NULL;
+  g_autolist (EphyHistoryURL) deleted_urls = NULL;
   GList *iter = NULL;
 
   if (g_strcmp0 (search_text, "") == 0) {
@@ -654,7 +630,7 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
       visible_rows = g_list_prepend (visible_rows, row);
 
     for (iter = visible_rows; iter; iter = g_list_next (iter)) {
-      EphyHistoryURL *url = get_url_from_row (iter->data);
+      EphyHistoryURL *url = ephy_history_dialog_row_create_history_url (EPHY_HISTORY_DIALOG_ROW (iter->data));
 
       deleted_urls = g_list_prepend (deleted_urls, url);
     }
@@ -664,8 +640,6 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
 
     for (iter = deleted_urls; iter; iter = g_list_next (iter))
       ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
-
-    g_list_free_full (deleted_urls, (GDestroyNotify)ephy_history_url_free);
   }
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
@@ -790,7 +764,7 @@ on_listbox_row_activated (GtkListBox        *box,
    * row's web page in a new tab*/
   if (!self->selection_active) {
     EphyWindow *window = EPHY_WINDOW (get_target_window (self));
-    g_autoptr (EphyHistoryURL) url = get_url_from_row (row);
+    g_autoptr (EphyHistoryURL) url = ephy_history_dialog_row_create_history_url (EPHY_HISTORY_DIALOG_ROW (row));
     EphyEmbed *embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                            window, NULL, EPHY_NEW_TAB_JUMP);
 
@@ -921,7 +895,7 @@ on_selection_open_button_clicked (GtkWidget         *open_button,
   GList *iter = NULL;
 
   for (iter = checked_rows; iter; iter = g_list_next (iter)) {
-    g_autoptr (EphyHistoryURL) url = get_url_from_row (iter->data);
+    g_autoptr (EphyHistoryURL) url = ephy_history_dialog_row_create_history_url (EPHY_HISTORY_DIALOG_ROW (iter->data));
     EphyEmbed *embed;
 
     embed = ephy_shell_new_tab (ephy_shell_get_default (),
