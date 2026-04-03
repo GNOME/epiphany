@@ -454,12 +454,12 @@ main (int   argc,
 
   status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 
-out:
   /* Ensure the EphyShell really gets destroyed. This should be the final reference. */
   g_object_add_weak_pointer (G_OBJECT (ephy_shell), (gpointer *)&ephy_shell);
   g_object_unref (ephy_shell);
   g_assert (!ephy_shell);
 
+out:
   g_free (desktop_file_basename);
   g_free (profile_directory);
 
