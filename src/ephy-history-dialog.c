@@ -520,7 +520,7 @@ create_row (EphyHistoryDialog *self,
   g_autofree char *decoded_url = ephy_uri_decode (url->url);
 
   if (!decoded_url)
-    decoded_url = url->url;
+    decoded_url = g_strdup (url->url);
   subtitle_escaped = g_markup_escape_text (decoded_url, -1);
 
   /* Row */
