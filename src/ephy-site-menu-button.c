@@ -309,7 +309,7 @@ ephy_site_menu_button_update_search_engine_item (EphySiteMenuButton *self,
 {
   EphyWindow *window = EPHY_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW));
   GListModel *search_engine_model = ephy_window_get_search_engine_model (window);
-  g_autofree GMenuItem *search_engine_item = NULL;
+  g_autoptr (GMenuItem) search_engine_item = NULL;
   const char *name = item_label;
 
   g_menu_remove (G_MENU (self->items_section), 4);
@@ -319,7 +319,7 @@ ephy_site_menu_button_update_search_engine_item (EphySiteMenuButton *self,
     GMenu *sub_menu = g_menu_new ();
 
     for (guint i = 0; i < g_list_model_get_n_items (search_engine_model); i++) {
-      g_autofree GMenuItem *sub_menu_item = NULL;
+      g_autoptr (GMenuItem) sub_menu_item = NULL;
       EphyOpensearchAutodiscoveryLink *link = g_list_model_get_item (search_engine_model, i);
       GVariant *variant = create_variant_from_autodiscovery_link (link);
 
