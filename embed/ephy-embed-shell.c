@@ -1364,6 +1364,20 @@ ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
                            G_CALLBACK (web_process_extension_autofill_askuser_received_cb),
                            shell, 0);
 
+  /* Filter Manager */
+  g_signal_connect_object (priv->filters_manager, "filters-disabled",
+                           G_CALLBACK (webkit_user_content_manager_remove_all_filters),
+                           ucm,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->filters_manager, "filter-ready",
+                           G_CALLBACK (webkit_user_content_manager_add_filter),
+                           ucm,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->filters_manager, "filter-removed",
+                           G_CALLBACK (webkit_user_content_manager_remove_filter_by_id),
+                           ucm,
+                           G_CONNECT_SWAPPED);
+
   /* User Scripts */
   ephy_embed_prefs_apply_user_style (ucm);
   ephy_embed_prefs_apply_user_javascript (ucm);

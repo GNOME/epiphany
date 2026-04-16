@@ -43,16 +43,25 @@ struct _EphyFiltersManager {
   gboolean is_initialized;
 
   char *filters_dir;
-  GHashTable *filter_infos;  /* (unowned char *identifier, owned FilterInfo) */
-  GList *filters;            /* (owned WebKitUserContentFilter *) */
+  GHashTable *filters;  /* (identifier, FilterInfo) */
   gint64 update_time;
   guint update_timeout_id;
   GCancellable *cancellable;
+  WebKitUserContentFilter *wk_filter;
   WebKitUserContentFilterStore *store;
   gboolean metered;
 };
 
 G_DEFINE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
+
+enum {
+  FILTER_READY,
+  FILTER_REMOVED,
+  FILTERS_DISABLED,
+  LAST_SIGNAL,
+};
+
+static guint s_signals[LAST_SIGNAL];
 
 enum {
   PROP_0,
@@ -202,10 +211,11 @@ filter_info_get_identifier (FilterInfo *self)
 static GFile *
 filter_info_get_sidecar_file (FilterInfo *self)
 {
+  const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
   g_autofree char *sidecar_filename = g_strconcat (filter_info_get_identifier (self),
                                                    ADBLOCK_FILTER_SIDECAR_FILE_SUFFIX,
                                                    NULL);
-  return g_file_new_build_filename (self->manager->filters_dir, sidecar_filename, NULL);
+  return g_file_new_build_filename (filters_dir, sidecar_filename, NULL);
 }
 
 static void
@@ -369,7 +379,19 @@ filter_info_get_source_file (FilterInfo *self)
   g_autofree char *filename = g_strdup_printf ("%s-%" G_PID_FORMAT ".json",
                                                filter_info_get_identifier (self),
                                                getpid ());
-  return g_file_new_build_filename (self->manager->filters_dir, filename, NULL);
+  const char *filters_dir = ephy_filters_manager_get_adblock_filters_dir (self->manager);
+  return g_file_new_build_filename (filters_dir, filename, NULL);
+}
+
+static void
+filter_info_setup_enable_compiled_filter (FilterInfo              *self,
+                                          WebKitUserContentFilter *wk_filter)
+{
+  g_assert (self);
+  g_assert (wk_filter);
+
+  LOG ("Emitting EphyFiltersManager::filter-ready for %s.", filter_info_get_identifier (self));
+  g_signal_emit (self->manager, s_signals[FILTER_READY], 0, wk_filter);
 }
 
 static gboolean
@@ -463,7 +485,6 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                  FilterInfo                   *self)
 {
   g_autoptr (GError) error = NULL;
-  g_autoptr (WebKitUserContentFilter) filter = NULL;
 
   if (!self->manager)
     return;
@@ -473,16 +494,17 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (self->manager->store == store);
 
-  filter = webkit_user_content_filter_store_save_finish (self->manager->store,
-                                                         result,
-                                                         &error);
-  if (filter) {
+  g_clear_pointer (&self->manager->wk_filter, webkit_user_content_filter_unref);
+  self->manager->wk_filter = webkit_user_content_filter_store_save_finish (self->manager->store,
+                                                                           result,
+                                                                           &error);
+  if (self->manager->wk_filter) {
     LOG ("Filter %s compiled successfully.", filter_info_get_identifier (self));
+    filter_info_setup_enable_compiled_filter (self, self->manager->wk_filter);
     filter_info_save_sidecar (self,
                               self->manager->cancellable,
                               (GAsyncReadyCallback)sidecar_saved_cb,
                               self);
-    self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
   } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Filter %s <%s> cannot be compiled: %s.",
                filter_info_get_identifier (self), self->source_uri,
@@ -646,11 +668,10 @@ download_errored_cb (EphyDownload *download,
 
   g_signal_handlers_disconnect_by_data (download, self);
 
-  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-    g_warning ("Failed to download filter %s from <%s>: %s",
+  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    g_warning ("Cannot fetch source for filter %s from <%s>: %s",
                filter_info_get_identifier (self), self->source_uri,
                error ? error->message : "Unknown error");
-  }
 
   /* There is not much else we can do if the download failed. Note that it
    * is still possible that if a precompiled version of the filter was found
@@ -669,7 +690,6 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_autoptr (GError) error = NULL;
   g_autoptr (GFile) source_file = NULL;
   g_autoptr (GFile) json_file = NULL;
-  g_autoptr (WebKitUserContentFilter) filter = NULL;
   EphyDownload *download;
 
   if (!self->manager)
@@ -680,19 +700,20 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_assert (self);
   g_assert (store == self->manager->store);
 
-  filter = webkit_user_content_filter_store_load_finish (self->manager->store,
-                                                         result,
-                                                         &error);
-  self->found = !!filter;
+  g_clear_pointer (&self->manager->wk_filter, webkit_user_content_filter_unref);
+  self->manager->wk_filter = webkit_user_content_filter_store_load_finish (self->manager->store,
+                                                                           result,
+                                                                           &error);
+  self->found = (self->manager->wk_filter != NULL);
 
-  if (filter) {
+  if (self->manager->wk_filter) {
     LOG ("Found compiled filter %s.", filter_info_get_identifier (self));
+    filter_info_setup_enable_compiled_filter (self, self->manager->wk_filter);
     LOG ("Update %sneeded for filter %s (last %" PRIu64 "s ago, interval %us)",
          filter_info_needs_updating_from_source (self) ? "" : "not ",
          filter_info_get_identifier (self),
          (self->manager->update_time - self->last_update),
          self->manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY);
-    self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
   } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     filter_info_setup_done (self);
     return;
@@ -777,7 +798,7 @@ accumulate_filter_done (const char *identifier,
                         gboolean   *done)
 {
   g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
-  g_assert (g_hash_table_contains (filter->manager->filter_infos, identifier));
+  g_assert (g_hash_table_contains (filter->manager->filters, identifier));
 
   *done = *done && filter->done;
 }
@@ -787,7 +808,7 @@ filter_info_setup_done (FilterInfo *self)
 {
   gboolean done = self->done = TRUE;
 
-  g_hash_table_foreach (self->manager->filter_infos,
+  g_hash_table_foreach (self->manager->filters,
                         (GHFunc)accumulate_filter_done,
                         &done);
 
@@ -796,7 +817,7 @@ filter_info_setup_done (FilterInfo *self)
 
   if (done) {
     LOG ("Setup completed for %u filters.",
-         g_hash_table_size (self->manager->filter_infos));
+         g_hash_table_size (self->manager->filters));
     filters_manager_ensure_initialized (self->manager);
   }
 }
@@ -829,8 +850,10 @@ remove_unused_filter (const char         *identifier,
   g_autoptr (GFile) sidecar_file = filter_info_get_sidecar_file (filter);
 
   g_assert (strcmp (identifier, filter_info_get_identifier (filter)) == 0);
-  g_assert (!g_hash_table_contains (filter->manager->filter_infos, identifier));
+  g_assert (!g_hash_table_contains (filter->manager->filters, identifier));
 
+  LOG ("Emitting EphyFiltersManager::filter-removed for %s.", identifier);
+  g_signal_emit (manager, s_signals[FILTER_REMOVED], 0, identifier);
   g_file_delete_async (sidecar_file,
                        G_PRIORITY_LOW,
                        filter->manager->cancellable,
@@ -867,87 +890,17 @@ sidecar_loaded_cb (GObject      *source_object,
   filter_info_setup_start (self);
 }
 
-/* URLs are provided by https://gitlab.com/eyeo/filterlists/contentblockerlists/-/tree/master  */
-struct adblocker_map {
-  const char *lang;
-  const char *url;
-} adblockers[] = {
-  { "cn", "https://easylist-downloads.adblockplus.org/easylist+easylistchina-minified.json"},
-  { "de", "https://easylist-downloads.adblockplus.org/easylist+easylistgermany-minified.json" },
-  { "es", "https://easylist-downloads.adblockplus.org/easylist+easylistspanish-minified.json"},
-  { "fr", "https://easylist-downloads.adblockplus.org/easylist+liste_fr-minified.json"},
-  { "it", "https://easylist-downloads.adblockplus.org/easylist+easylistitaly-minified.json"},
-  { "nl", "https://easylist-downloads.adblockplus.org/easylist+easylistdutch-minified.json"},
-  { NULL, NULL }
-};
-
-static char **
-compute_localized_filters (EphyFiltersManager *manager)
-{
-  g_auto (GStrv) languages = NULL;
-  const char **default_filters = NULL;
-  g_autoptr (GVariant) default_value = NULL;
-  g_autoptr (GStrvBuilder) builder = NULL;
-  int n_languages;
-
-  /* If the user has touched the value of the setting, respect it exactly. */
-  if (g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS))
-    return g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
-
-  default_value = g_settings_get_default_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
-  default_filters = g_variant_get_strv (default_value, NULL);
-
-  builder = g_strv_builder_new ();
-  g_strv_builder_addv (builder, default_filters);
-
-  languages = ephy_langs_get_languages ();
-  n_languages = g_strv_length (languages);
-
-  for (int lang = 0; lang < n_languages; lang++) {
-    languages[lang] = g_strdelimit (languages[lang], "_", '\0');
-    languages[lang] = g_strdelimit (languages[lang], "-", '\0');
-  }
-
-  for (int lang = 0; lang < n_languages; lang++) {
-    for (int idx = 0; adblockers[idx].lang; idx++)
-      if (g_ascii_strcasecmp (languages[lang], adblockers[idx].lang) == 0)
-        g_strv_builder_add (builder, adblockers[idx].url);
-  }
-
-  return g_strv_builder_end (builder);
-}
-
 static void
-update_adblock_filter_files_cb (GSettings          *settings,
-                                char               *key,
-                                EphyFiltersManager *manager)
+update_filters (EphyFiltersManager  *manager,
+                char               **uris)
 {
   const gint64 update_time = g_get_real_time () / G_USEC_PER_SEC;
   g_autoptr (GHashTable) old_filters = NULL;
-  g_auto (GStrv) uris = NULL;
-  gboolean adblock_enabled = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
 
-  g_assert (manager);
-
-  /* This time needs to be always updated if any setting has changed, because
-   * ephy_filters_manager_refresh_ucm_filters() uses it to indicate that the
-   * state of the WebKitUserContentManager needs to be refreshed.
-   *
-   * And we need to always start with a clear state because the user might have
-   * disabled adblocking or removed filters.
-   */
-  manager->update_time = update_time;
-
-  g_clear_list (&manager->filters, (GDestroyNotify)webkit_user_content_filter_unref);
-
-  old_filters = g_steal_pointer (&manager->filter_infos);
-  manager->filter_infos = g_hash_table_new_full (g_str_hash,
-                                                 g_str_equal,
-                                                 NULL,
-                                                 (GDestroyNotify)filter_info_free);
-
-  if (!adblock_enabled) {
+  if ((!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) ||
+      (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_AUTOMATION)) {
     LOG ("Filters are disabled, skipping update.");
+    g_signal_emit (manager, s_signals[FILTERS_DISABLED], 0);
     /* If the ad blocker is disabled, initialization is done. */
     filters_manager_ensure_initialized (manager);
     return;
@@ -957,58 +910,70 @@ update_adblock_filter_files_cb (GSettings          *settings,
   g_cancellable_cancel (manager->cancellable);
   g_object_unref (manager->cancellable);
   manager->cancellable = g_cancellable_new ();
+  manager->update_time = update_time;
 
-  /* The filters are currently added in no particular order by async operations
-   * that race with each other. This is probably fine, because the order the
-   * filters are evaluated in presumably does not matter. I hope.
-   */
+  old_filters = g_steal_pointer (&manager->filters);
+  manager->filters = g_hash_table_new_full (g_str_hash,
+                                            g_str_equal,
+                                            NULL,
+                                            (GDestroyNotify)filter_info_free);
 
-  if (adblock_enabled) {
-    uris = compute_localized_filters (manager);
-    for (unsigned i = 0; uris[i]; i++) {
-      g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
-      FilterInfo *filter_info = NULL;
-      char *old_filter_id = NULL;
+  for (unsigned i = 0; uris[i]; i++) {
+    g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
+    FilterInfo *filter_info = NULL;
+    char *old_filter_id = NULL;
 
-      /* Check whether there was already a FilterInfo for the URI in the old
-       * filters table, and reuse it instead of creating a new one and reloading
-       * the sidecar file from disk.
-       *
-       * Note that the value is stolen from the old hash table in order to
-       * look it up and remove it from the old table *without* destroying it.
+    /* Check whether there was already a FilterInfo for the URI in the old
+     * filters table, and reuse it instead of creating a new one and reloading
+     * the sidecar file from disk.
+     *
+     * Note that the value is stolen from the old hash table in order to
+     * look it up and remove it from the old table *without* destroying it.
+     */
+    if (g_hash_table_steal_extended (old_filters,
+                                     filter_id,
+                                     (void **)&old_filter_id,
+                                     (void **)&filter_info)) {
+      g_assert (strcmp (old_filter_id, filter_id) == 0);
+      g_assert (strcmp (old_filter_id, filter_info_get_identifier (filter_info)) == 0);
+
+      LOG ("Filter %s in old set, stolen and starting setup.", filter_id);
+      filter_info_setup_start (filter_info);
+    } else {
+      /* Filter was not present in the old hash table: create a FilterInfo
+       * for the URI and start by loading its sidecar file.
        */
-      if (g_hash_table_steal_extended (old_filters,
-                                       filter_id,
-                                       (void **)&old_filter_id,
-                                       (void **)&filter_info)) {
-        g_assert (strcmp (old_filter_id, filter_id) == 0);
-        g_assert (strcmp (old_filter_id, filter_info_get_identifier (filter_info)) == 0);
-
-        LOG ("Filter %s in old set, stolen and starting setup.", filter_id);
-        filter_info_setup_start (filter_info);
-      } else {
-        /* Filter was not present in the old hash table: create a FilterInfo
-         * for the URI and start by loading its sidecar file.
-         */
-        LOG ("Filter %s not in old set, creating anew.", filter_id);
-        filter_info = filter_info_new (uris[i], manager);
-        filter_info->identifier = g_steal_pointer (&filter_id);
-        filter_info_load_sidecar (filter_info,
-                                  manager->cancellable,
-                                  (GAsyncReadyCallback)sidecar_loaded_cb,
-                                  filter_info);
-      }
-
-      g_hash_table_replace (manager->filter_infos,
-                            (void *)filter_info_get_identifier (filter_info),
-                            filter_info);
+      LOG ("Filter %s not in old set, creating anew.", filter_id);
+      filter_info = filter_info_new (uris[i], manager);
+      filter_info->identifier = g_steal_pointer (&filter_id);
+      filter_info_load_sidecar (filter_info,
+                                manager->cancellable,
+                                (GAsyncReadyCallback)sidecar_loaded_cb,
+                                filter_info);
     }
+
+    g_hash_table_replace (manager->filters,
+                          (void *)filter_info_get_identifier (filter_info),
+                          filter_info);
   }
 
   /* Remove the filters which are no longer in the configured set. */
   g_hash_table_foreach (old_filters,
                         (GHFunc)remove_unused_filter,
                         manager);
+}
+
+static void
+update_adblock_filter_files_cb (GSettings          *settings,
+                                char               *key,
+                                EphyFiltersManager *manager)
+{
+  g_auto (GStrv) uris = NULL;
+
+  g_assert (manager);
+
+  uris = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+  update_filters (manager, uris);
 }
 
 static void
@@ -1022,9 +987,8 @@ ephy_filters_manager_dispose (GObject *object)
     g_cancellable_cancel (manager->cancellable);
     g_clear_object (&manager->cancellable);
   }
+  g_clear_pointer (&manager->wk_filter, webkit_user_content_filter_unref);
   g_clear_object (&manager->store);
-
-  g_clear_list (&manager->filters, (GDestroyNotify)webkit_user_content_filter_unref);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->dispose (object);
 }
@@ -1034,7 +998,7 @@ ephy_filters_manager_finalize (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
 
-  g_clear_pointer (&manager->filter_infos, g_hash_table_unref);
+  g_clear_pointer (&manager->filters, g_hash_table_unref);
   g_free (manager->filters_dir);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->finalize (object);
@@ -1057,17 +1021,70 @@ on_network_metered (GNetworkMonitor    *monitor,
   manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
 }
 
+/* URLs are provided by https://gitlab.com/eyeo/filterlists/contentblockerlists/-/tree/master  */
+struct adblocker_map {
+  const char *lang;
+  const char *url;
+} adblockers[] = {
+  { "cn", "https://easylist-downloads.adblockplus.org/easylist+easylistchina-minified.json"},
+  { "de", "https://easylist-downloads.adblockplus.org/easylist+easylistgermany-minified.json" },
+  { "es", "https://easylist-downloads.adblockplus.org/easylist+easylistspanish-minified.json"},
+  { "fr", "https://easylist-downloads.adblockplus.org/easylist+liste_fr-minified.json"},
+  { "it", "https://easylist-downloads.adblockplus.org/easylist+easylistitaly-minified.json"},
+  { "nl", "https://easylist-downloads.adblockplus.org/easylist+easylistdutch-minified.json"},
+  { NULL, NULL }
+};
+
+#define EASYLIST_DEFAULT "https://easylist-downloads.adblockplus.org/easylist_min_content_blocker.json"
+
+static void
+setup_adblocker_list (EphyFiltersManager *self)
+{
+  g_auto (GStrv) languages = NULL;
+  g_auto (GStrv) filters = NULL;
+  g_auto (GStrv) locale_filters = NULL;
+  int n_languages;
+
+  if (g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS)) {
+    update_adblock_filter_files_cb (NULL, NULL, self);
+    return;
+  }
+
+  languages = ephy_langs_get_languages ();
+  n_languages = g_strv_length (languages);
+
+  locale_filters = g_malloc0_n (2, sizeof (char *));
+  locale_filters[0] = g_strdup (EASYLIST_DEFAULT);
+  locale_filters[1] = NULL;
+
+  for (int lang = 0; lang < n_languages; lang++) {
+    languages[lang] = g_strdelimit (languages[lang], "_", '\0');
+    languages[lang] = g_strdelimit (languages[lang], "-", '\0');
+  }
+
+  for (int lang = 0; lang < n_languages; lang++) {
+    for (int idx = 0; adblockers[idx].lang != NULL; idx++)
+      if (g_ascii_strcasecmp (languages[lang], adblockers[idx].lang) == 0 && !g_strv_contains ((const char * const *)locale_filters, adblockers[idx].url)) {
+        char **tmp = locale_filters;
+
+        locale_filters = ephy_strv_append ((const char * const *)locale_filters, adblockers[idx].url);
+        g_strfreev (tmp);
+      }
+  }
+
+  update_filters (self, locale_filters);
+}
+
 static void
 ephy_filters_manager_constructed (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
   g_autofree char *saved_filters_dir = NULL;
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->constructed (object);
 
-  if (mode == EPHY_EMBED_SHELL_MODE_TEST || mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
+  /* Disable filter manager during tests */
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_TEST)
     return;
 
   if (!manager->filters_dir) {
@@ -1085,7 +1102,7 @@ ephy_filters_manager_constructed (GObject *object)
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
                            G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
 
-  update_adblock_filter_files_cb (NULL, NULL, manager);
+  setup_adblocker_list (manager);
 
   g_signal_connect_object (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager, 0);
   manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
@@ -1146,6 +1163,29 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
   object_class->set_property = ephy_filters_manager_set_property;
   object_class->get_property = ephy_filters_manager_get_property;
 
+  s_signals[FILTER_READY] =
+    g_signal_new ("filter-ready",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  WEBKIT_TYPE_USER_CONTENT_FILTER);
+
+  s_signals[FILTER_REMOVED] =
+    g_signal_new ("filter-removed",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
+
+  s_signals[FILTERS_DISABLED] =
+    g_signal_new ("filters-disabled",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
   object_properties[PROP_FILTERS_DIR] =
     g_param_spec_string ("filters-dir",
                          NULL, NULL,
@@ -1167,10 +1207,10 @@ static void
 ephy_filters_manager_init (EphyFiltersManager *manager)
 {
   manager->cancellable = g_cancellable_new ();
-  manager->filter_infos = g_hash_table_new_full (g_str_hash,
-                                                 g_str_equal,
-                                                 NULL,
-                                                 (GDestroyNotify)filter_info_free);
+  manager->filters = g_hash_table_new_full (g_str_hash,
+                                            g_str_equal,
+                                            NULL,
+                                            (GDestroyNotify)filter_info_free);
 }
 
 EphyFiltersManager *
@@ -1181,17 +1221,16 @@ ephy_filters_manager_new (const char *filters_dir)
                                              NULL));
 }
 
+const char *
+ephy_filters_manager_get_adblock_filters_dir (EphyFiltersManager *manager)
+{
+  return manager->filters_dir;
+}
+
 gboolean
 ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
 {
   return manager->is_initialized;
-}
-
-static void
-add_filter (WebKitUserContentFilter  *filter,
-            WebKitUserContentManager *ucm)
-{
-  webkit_user_content_manager_add_filter (ucm, filter);
 }
 
 void
@@ -1199,25 +1238,11 @@ ephy_filters_manager_set_ucm_forbids_ads (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
                                           gboolean                  forbids_ads)
 {
-  typedef struct {
-    gboolean forbids_ads;
-    gint64 update_time;
-  } AdblockState;
-
-  AdblockState *current_state = g_object_get_data (G_OBJECT (ucm), "ephy-adblock-state");
-  if (current_state && current_state->forbids_ads == forbids_ads && current_state->update_time == manager->update_time)
+  if (!manager->wk_filter)
     return;
 
-  if (!current_state) {
-    current_state = g_new (AdblockState, 1);
-    g_object_set_data_full (G_OBJECT (ucm), "ephy-adblock-state", current_state, g_free);
-  }
-
-  current_state->forbids_ads = forbids_ads;
-  current_state->update_time = manager->update_time;
-
-  webkit_user_content_manager_remove_all_filters (ucm);
-
   if (forbids_ads)
-    g_list_foreach (manager->filters, (GFunc)add_filter, ucm);
+    webkit_user_content_manager_add_filter (ucm, manager->wk_filter);
+  else
+    webkit_user_content_manager_remove_filter (ucm, manager->wk_filter);
 }
