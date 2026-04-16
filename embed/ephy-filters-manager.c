@@ -866,7 +866,11 @@ sidecar_loaded_cb (GObject      *source_object,
   filter_info_setup_start (self);
 }
 
-/* URLs are provided by https://gitlab.com/eyeo/filterlists/contentblockerlists/-/tree/master  */
+/* URLs are provided by https://gitlab.com/eyeo/filterlists/contentblockerlists/-/tree/master
+ *
+ * Note these filters are hardly ideal, because they add all of EasyList again,
+ * whereas what we actually want is only the locale-specific filters. Oh well.
+ */
 struct adblocker_map {
   const char *lang;
   const char *url;
