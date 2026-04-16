@@ -450,7 +450,7 @@ sidecar_saved_cb (GObject      *source_object,
   if (filter_info_save_sidecar_finish (result, &error)) {
     LOG ("Sidecar successfully saved for filter %s.",
          filter_info_get_identifier (self));
-  } else {
+  } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Cannot save sidecar for filter %s: %s",
                filter_info_get_identifier (self),
                error->message);
@@ -468,11 +468,8 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
   g_assert (WEBKIT_IS_USER_CONTENT_FILTER_STORE (store));
   g_assert (result);
   g_assert (self);
-  g_assert (self->manager->store == store);
 
-  filter = webkit_user_content_filter_store_save_finish (self->manager->store,
-                                                         result,
-                                                         &error);
+  filter = webkit_user_content_filter_store_save_finish (store, result, &error);
   if (filter) {
     LOG ("Filter %s compiled successfully.", filter_info_get_identifier (self));
     filter_info_save_sidecar (self,
@@ -488,8 +485,10 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                error->message);
   }
 
-  /* In either case, setting up this filter is done. */
-  filter_info_setup_done (self);
+  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    /* In either case, setting up this filter is done. */
+    filter_info_setup_done (self);
+  }
 }
 
 static void
@@ -563,7 +562,7 @@ json_file_deleted (GObject      *source,
 {
   g_autoptr (GError) error = NULL;
   if (!g_file_delete_finish (G_FILE (source), res, &error))
-    g_warning ("Could not delete filter json file: %s", error->message);
+    g_warning ("Could not delete filter json file %s: %s", g_file_peek_path (G_FILE (source)), error->message);
 }
 
 typedef struct {
@@ -584,7 +583,7 @@ json_file_info_callback (GObject      *source_object,
 
   if (info)
     content_type = g_file_info_get_content_type (info);
-  else
+  else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     g_warning ("Couldn't query filter file %s: %s", ephy_download_get_destination (data->download), error->message);
 
   if (content_type && g_strcmp0 ("application/json", content_type) == 0) {
@@ -596,7 +595,8 @@ json_file_info_callback (GObject      *source_object,
 
     g_file_delete_async (json_file, G_PRIORITY_DEFAULT, NULL, json_file_deleted, NULL);
 
-    filter_info_setup_done (data->self);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      filter_info_setup_done (data->self);
   }
 
   g_object_unref (data->download);
@@ -626,7 +626,7 @@ download_completed_cb (EphyDownload *download,
                            G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
-                           NULL,
+                           self->manager->cancellable,
                            json_file_info_callback,
                            data);
 }
@@ -674,11 +674,11 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_assert (WEBKIT_IS_USER_CONTENT_FILTER_STORE (store));
   g_assert (result);
   g_assert (self);
-  g_assert (store == self->manager->store);
 
-  filter = webkit_user_content_filter_store_load_finish (self->manager->store,
-                                                         result,
-                                                         &error);
+  filter = webkit_user_content_filter_store_load_finish (store, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
   self->found = !!filter;
 
   if (filter) {
@@ -691,9 +691,6 @@ filter_load_cb (WebKitUserContentFilterStore *store,
     if (self->is_hush)
       self->manager->hush_filter = filter;
     self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
-  } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-    filter_info_setup_done (self);
-    return;
   } else if (g_error_matches (error,
                               WEBKIT_USER_CONTENT_FILTER_ERROR,
                               WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND)) {
@@ -732,6 +729,8 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   ephy_download_disable_desktop_notification (download);
   ephy_download_set_timeout (download, 15 /* seconds */);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (download), TRUE);
+
+  /* FIXME: this is wrong because we don't own self and don't have a way to cancel */
 
   g_signal_connect (download, "completed",
                     G_CALLBACK (download_completed_cb), self);
@@ -815,7 +814,8 @@ filter_removed_cb (WebKitUserContentFilterStore *store,
                                                        &error) &&
       !g_error_matches (error,
                         WEBKIT_USER_CONTENT_FILTER_ERROR,
-                        WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND)) {
+                        WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND) &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Cannot remove compiled filter: %s", error->message);
   }
 }
@@ -947,17 +947,24 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                                  NULL,
                                                  (GDestroyNotify)filter_info_free);
 
+  /* Only once at a time please! Newest set of filters wins.
+   *
+   * Warning: the FilterInfo objects are owned by the hash table. This
+   * cancellation is the only thing preventing use after free during async
+   * operations. The code in this file follows the usual rule: async operations
+   * must check for cancellation *before* looking at the filter infos, because
+   * they may be dangling pointers if canceled.
+   */
+  g_cancellable_cancel (manager->cancellable);
+  g_object_unref (manager->cancellable);
+  manager->cancellable = g_cancellable_new ();
+
   if (!adblock_enabled && !hush_enabled) {
     LOG ("Filters are disabled, skipping update.");
     /* If the ad blocker is disabled, initialization is done. */
     filters_manager_ensure_initialized (manager);
     return;
   }
-
-  /* Only once at a time please! Newest set of filters wins. */
-  g_cancellable_cancel (manager->cancellable);
-  g_object_unref (manager->cancellable);
-  manager->cancellable = g_cancellable_new ();
 
   /* The filters are currently added in no particular order by async operations
    * that race with each other. This is probably fine, because the order the
