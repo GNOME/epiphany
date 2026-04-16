@@ -65,6 +65,8 @@ enum {
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
 typedef struct {
+  grefcount ref_count;
+
   EphyFiltersManager *manager;
   char *identifier;      /* Lazily derived from source_uri. */
   char *source_uri;      /* Saved. */
@@ -89,16 +91,33 @@ typedef struct {
 static void filter_info_setup_done (FilterInfo *self);
 
 static void
-filter_info_free (FilterInfo *self)
+filter_info_ref (FilterInfo *self)
 {
-  self->manager = NULL;
-  g_clear_pointer (&self->identifier, g_free);
-  g_clear_pointer (&self->source_uri, g_free);
-  g_clear_pointer (&self->checksum, g_free);
-  g_free (self);
+  g_ref_count_inc (&self->ref_count);
 }
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (FilterInfo, filter_info_free)
+static void
+filter_info_unref (FilterInfo *self)
+{
+  if (g_ref_count_dec (&self->ref_count)) {
+    self->manager = NULL;
+    g_clear_pointer (&self->identifier, g_free);
+    g_clear_pointer (&self->source_uri, g_free);
+    g_clear_pointer (&self->checksum, g_free);
+    g_free (self);
+  }
+}
+
+static GHashTable *
+create_filter_infos_table (void)
+{
+  return g_hash_table_new_full (g_str_hash,
+                                g_str_equal,
+                                NULL,
+                                (GDestroyNotify)filter_info_unref);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (FilterInfo, filter_info_unref)
 
 static FilterInfo *
 filter_info_new (const char         *source_uri,
@@ -110,6 +129,7 @@ filter_info_new (const char         *source_uri,
   g_assert (manager);
 
   self = g_new0 (FilterInfo, 1);
+  g_ref_count_init (&self->ref_count);
   self->source_uri = g_strdup (source_uri);
   self->last_update = G_MININT64;  /* Oldest possible time: never updated. */
   self->manager = manager;
@@ -600,6 +620,7 @@ json_file_info_callback (GObject      *source_object,
   }
 
   g_object_unref (data->download);
+  filter_info_unref (data->self);
   g_free (data);
 }
 
@@ -619,7 +640,7 @@ download_completed_cb (EphyDownload *download,
 
   data = g_new0 (FilterJsonInfoAsyncData, 1);
   data->download = download;
-  data->self = self;
+  data->self = self /* transfers ownership */;
 
   json_file = g_file_new_for_path (ephy_download_get_destination (download));
   g_file_query_info_async (json_file,
@@ -658,6 +679,7 @@ download_errored_cb (EphyDownload *download,
   filter_info_setup_done (self);
 
   g_object_unref (download);
+  filter_info_unref (self);
 }
 
 static void
@@ -730,12 +752,15 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   ephy_download_set_timeout (download, 15 /* seconds */);
   webkit_download_set_allow_overwrite (ephy_download_get_webkit_download (download), TRUE);
 
-  /* FIXME: this is wrong because we don't own self and don't have a way to cancel */
-
   g_signal_connect (download, "completed",
                     G_CALLBACK (download_completed_cb), self);
   g_signal_connect (download, "error",
                     G_CALLBACK (download_errored_cb), self);
+
+  /* Only one of the two callbacks will be called, so this is balanced by the
+   * unref in both callbacks.
+   */
+  filter_info_ref (self);
 }
 
 static void
@@ -957,10 +982,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
   manager->hush_filter = NULL;
 
   old_filters = g_steal_pointer (&manager->filter_infos);
-  manager->filter_infos = g_hash_table_new_full (g_str_hash,
-                                                 g_str_equal,
-                                                 NULL,
-                                                 (GDestroyNotify)filter_info_free);
+  manager->filter_infos = create_filter_infos_table ();
 
   /* Only once at a time please! Newest set of filters wins.
    *
@@ -1217,10 +1239,7 @@ static void
 ephy_filters_manager_init (EphyFiltersManager *manager)
 {
   manager->cancellable = g_cancellable_new ();
-  manager->filter_infos = g_hash_table_new_full (g_str_hash,
-                                                 g_str_equal,
-                                                 NULL,
-                                                 (GDestroyNotify)filter_info_free);
+  manager->filter_infos = create_filter_infos_table ();
 }
 
 EphyFiltersManager *
