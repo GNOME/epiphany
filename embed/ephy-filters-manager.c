@@ -91,7 +91,7 @@ static void filter_info_setup_done (FilterInfo *self);
 static void
 filter_info_free (FilterInfo *self)
 {
-  g_clear_weak_pointer (&self->manager);
+  self->manager = NULL;
   g_clear_pointer (&self->identifier, g_free);
   g_clear_pointer (&self->source_uri, g_free);
   g_clear_pointer (&self->checksum, g_free);
@@ -112,7 +112,8 @@ filter_info_new (const char         *source_uri,
   self = g_new0 (FilterInfo, 1);
   self->source_uri = g_strdup (source_uri);
   self->last_update = G_MININT64;  /* Oldest possible time: never updated. */
-  g_set_weak_pointer (&self->manager, manager);
+  self->manager = manager;
+
   return g_steal_pointer (&self);
 }
 
@@ -467,9 +468,6 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
   g_autoptr (GError) error = NULL;
   g_autoptr (WebKitUserContentFilter) filter = NULL;
 
-  if (!self->manager)
-    return;
-
   g_assert (WEBKIT_IS_USER_CONTENT_FILTER_STORE (store));
   g_assert (result);
   g_assert (self);
@@ -509,9 +507,6 @@ filter_info_setup_load_file (FilterInfo *self,
 
   g_assert (self);
   g_assert (G_IS_FILE (json_file));
-
-  if (!self->manager)
-    return;
 
   /* Some filter source JSON files can be big (tens of megabytes), so instead
    * of reading the data for compilation, just map the source file in memory.
@@ -678,9 +673,6 @@ filter_load_cb (WebKitUserContentFilterStore *store,
   g_autoptr (GFile) json_file = NULL;
   g_autoptr (WebKitUserContentFilter) filter = NULL;
   EphyDownload *download;
-
-  if (!self->manager)
-    return;
 
   g_assert (WEBKIT_IS_USER_CONTENT_FILTER_STORE (store));
   g_assert (result);
