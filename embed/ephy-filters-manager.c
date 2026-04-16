@@ -883,15 +883,20 @@ struct adblocker_map {
 static char **
 compute_localized_filters (EphyFiltersManager *manager)
 {
+  g_auto (GStrv) filters = NULL;
   g_auto (GStrv) languages = NULL;
   const char **default_filters = NULL;
   g_autoptr (GVariant) default_value = NULL;
   g_autoptr (GStrvBuilder) builder = NULL;
   int n_languages;
 
-  /* If the user has touched the value of the setting, respect it exactly. */
-  if (g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS))
-    return g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+  /* If the user has touched the value of the setting, respect it exactly.
+   * (Except the value must not contain duplicates.)
+   */
+  if (g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS)) {
+    filters = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
+    return ephy_strv_remove_all_duplicates ((const char * const *)filters);
+  }
 
   default_value = g_settings_get_default_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_CONTENT_FILTERS);
   default_filters = g_variant_get_strv (default_value, NULL);
@@ -908,12 +913,18 @@ compute_localized_filters (EphyFiltersManager *manager)
   }
 
   for (int lang = 0; lang < n_languages; lang++) {
-    for (int idx = 0; adblockers[idx].lang; idx++)
+    for (int idx = 0; adblockers[idx].lang; idx++) {
       if (g_ascii_strcasecmp (languages[lang], adblockers[idx].lang) == 0)
         g_strv_builder_add (builder, adblockers[idx].url);
+    }
   }
 
-  return g_strv_builder_end (builder);
+  /* Need to guard against duplicates because they will be common. E.g. the
+   * original languages list may contain "it-IT" and "it". But then the code
+   * above sanitizes it to just "it" and "it".
+   */
+  filters = g_strv_builder_end (builder);
+  return ephy_strv_remove_all_duplicates ((const char * const *)filters);
 }
 
 static void
@@ -977,6 +988,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
       g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
       FilterInfo *filter_info = NULL;
       char *old_filter_id = NULL;
+      gboolean is_new = FALSE;
 
       /* Check whether there was already a FilterInfo for the URI in the old
        * filters table, and reuse it instead of creating a new one and reloading
@@ -1007,9 +1019,16 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                   filter_info);
       }
 
-      g_hash_table_replace (manager->filter_infos,
-                            (void *)filter_info_get_identifier (filter_info),
-                            filter_info);
+      is_new = g_hash_table_replace (manager->filter_infos,
+                                     (void *)filter_info_get_identifier (filter_info),
+                                     filter_info);
+
+      /* This assertion is important because the hash table owns the FilterInfo,
+       * but we just started an async operation on the FilterInfo above. If a
+       * FilterInfo gets removed from the table, it will be destroyed, resulting
+       * in use after free. So we must ensure there are no duplicates.
+       */
+      g_assert (is_new);
     }
   }
 

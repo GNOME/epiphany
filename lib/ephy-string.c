@@ -356,3 +356,21 @@ ephy_strv_append (const char * const *strv,
 
   return new_strv;
 }
+
+char **
+ephy_strv_remove_all_duplicates (const char * const *strv)
+{
+  g_autoptr (GStrvBuilder) builder = g_strv_builder_new ();
+
+  guint length = g_strv_length ((char **)strv);
+  for (guint i = 0; i < length; i++) {
+    for (guint j = 0; j < i; j++) {
+      if (strcmp (strv[i], strv[j]) == 0)
+        goto next;
+    }
+    g_strv_builder_add (builder, strv[i]);
+next:
+  }
+
+  return g_strv_builder_end (builder);
+}

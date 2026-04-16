@@ -55,4 +55,6 @@ char    **ephy_strv_remove                     (const char * const *strv,
 char    **ephy_strv_append                     (const char * const *strv,
                                                 const char         *str);
 
+char    **ephy_strv_remove_all_duplicates      (const char * const *strv);
+
 G_END_DECLS
