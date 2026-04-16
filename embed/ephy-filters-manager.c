@@ -1076,6 +1076,11 @@ update_adblock_filter_files_cb (GSettings          *settings,
     }
   }
 
+  /* Remove the filters which are no longer in the configured set. */
+  g_hash_table_foreach (old_filters,
+                        (GHFunc)remove_unused_filter,
+                        manager);
+
   if (hush_enabled) {
     g_autoptr (GBytes) data = g_resources_lookup_data ("/org/gnome/epiphany/hush.json", 0, NULL);
     g_autofree char *filter_id = filter_info_identifier_for_source_uri ("org/gnome/epiphany/hush.json");
@@ -1099,11 +1104,6 @@ update_adblock_filter_files_cb (GSettings          *settings,
     g_clear_pointer (&manager->hush_filter_info, filter_info_unref);
     manager->hush_filter_info = g_steal_pointer (&filter_info);
   }
-
-  /* Remove the filters which are no longer in the configured set. */
-  g_hash_table_foreach (old_filters,
-                        (GHFunc)remove_unused_filter,
-                        manager);
 
   manager->num_filters = i + 1;
   manager->filters = g_new0 (WebKitUserContentFilter *, manager->num_filters);
