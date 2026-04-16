@@ -44,7 +44,8 @@ struct _EphyFiltersManager {
 
   char *filters_dir;
   GHashTable *filter_infos;  /* (unowned char *identifier, owned FilterInfo) */
-  GList *filters;            /* (owned WebKitUserContentFilter *) */
+  WebKitUserContentFilter **filters; /* array of owned WebKitUserContentFilter * */
+  size_t num_filters;
   WebKitUserContentFilter *hush_filter; /* unowned, owned by filters list */
   gint64 update_time;
   guint update_timeout_id;
@@ -72,6 +73,7 @@ typedef struct {
   char *source_uri;      /* Saved. */
   char *checksum;        /* Saved. */
   gint64 last_update;    /* Saved, seconds since the Epoch. */
+  guint index;           /* Not saved. Index in the list of filters. */
 
   gboolean found : 1;    /* WebKitUserContentFilter found during lookup. */
   gboolean local : 1;    /* The source_uri is a local file URI. */
@@ -498,7 +500,7 @@ filter_saved_cb (WebKitUserContentFilterStore *store,
                               self);
     if (self->is_hush)
       self->manager->hush_filter = filter;
-    self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
+    self->manager->filters[self->index] = g_steal_pointer (&filter);
   } else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
     g_warning ("Filter %s <%s> cannot be compiled: %s.",
                filter_info_get_identifier (self), self->source_uri,
@@ -712,7 +714,7 @@ filter_load_cb (WebKitUserContentFilterStore *store,
          self->manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY);
     if (self->is_hush)
       self->manager->hush_filter = filter;
-    self->manager->filters = g_list_append (self->manager->filters, g_steal_pointer (&filter));
+    self->manager->filters[self->index] = g_steal_pointer (&filter);
   } else if (g_error_matches (error,
                               WEBKIT_USER_CONTENT_FILTER_ERROR,
                               WEBKIT_USER_CONTENT_FILTER_ERROR_NOT_FOUND)) {
@@ -957,6 +959,21 @@ compute_localized_filters (EphyFiltersManager *manager)
 }
 
 static void
+clear_filters_list (EphyFiltersManager *manager)
+{
+  if (!manager->filters)
+    return;
+
+  for (size_t i = 0; i < manager->num_filters; i++) {
+    if (manager->filters[i])
+      webkit_user_content_filter_unref (manager->filters[i]);
+  }
+
+  g_clear_pointer (&manager->filters, g_free);
+  manager->num_filters = 0;
+}
+
+static void
 update_adblock_filter_files_cb (GSettings          *settings,
                                 char               *key,
                                 EphyFiltersManager *manager)
@@ -966,6 +983,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
   g_auto (GStrv) uris = NULL;
   gboolean adblock_enabled = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK);
   gboolean hush_enabled = !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER);
+  guint i = 0;
 
   g_assert (manager);
 
@@ -978,7 +996,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
    */
   manager->update_time = update_time;
 
-  g_clear_list (&manager->filters, (GDestroyNotify)webkit_user_content_filter_unref);
+  clear_filters_list (manager);
   manager->hush_filter = NULL;
 
   old_filters = g_steal_pointer (&manager->filter_infos);
@@ -1003,14 +1021,9 @@ update_adblock_filter_files_cb (GSettings          *settings,
     return;
   }
 
-  /* The filters are currently added in no particular order by async operations
-   * that race with each other. This is probably fine, because the order the
-   * filters are evaluated in presumably does not matter. I hope.
-   */
-
   if (adblock_enabled) {
     uris = compute_localized_filters (manager);
-    for (unsigned i = 0; uris[i]; i++) {
+    for (; uris[i]; i++) {
       g_autofree char *filter_id = filter_info_identifier_for_source_uri (uris[i]);
       FilterInfo *filter_info = NULL;
       char *old_filter_id = NULL;
@@ -1031,6 +1044,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
         g_assert (strcmp (old_filter_id, filter_info_get_identifier (filter_info)) == 0);
 
         LOG ("Filter %s in old set, stolen and starting setup.", filter_id);
+        filter_info->index = i;
         filter_info_setup_start (filter_info);
       } else {
         /* Filter was not present in the old hash table: create a FilterInfo
@@ -1039,6 +1053,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
         LOG ("Filter %s not in old set, creating anew.", filter_id);
         filter_info = filter_info_new (uris[i], manager);
         filter_info->identifier = g_steal_pointer (&filter_id);
+        filter_info->index = i;
         filter_info_load_sidecar (filter_info,
                                   manager->cancellable,
                                   (GAsyncReadyCallback)sidecar_loaded_cb,
@@ -1065,6 +1080,7 @@ update_adblock_filter_files_cb (GSettings          *settings,
 
     filter_info = filter_info_new ("/org/gnome/epiphany/hush.json", manager);
     filter_info->identifier = g_steal_pointer (&filter_id);
+    filter_info->index = i; /* already incremented by termination of the for loop */
     filter_info->is_hush = TRUE;
 
     webkit_user_content_filter_store_save (manager->store,
@@ -1079,6 +1095,9 @@ update_adblock_filter_files_cb (GSettings          *settings,
   g_hash_table_foreach (old_filters,
                         (GHFunc)remove_unused_filter,
                         manager);
+
+  manager->num_filters = i + 1;
+  manager->filters = g_new0 (WebKitUserContentFilter *, manager->num_filters);
 }
 
 static void
@@ -1094,8 +1113,6 @@ ephy_filters_manager_dispose (GObject *object)
   }
   g_clear_object (&manager->store);
 
-  g_clear_list (&manager->filters, (GDestroyNotify)webkit_user_content_filter_unref);
-
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->dispose (object);
 }
 
@@ -1103,6 +1120,8 @@ static void
 ephy_filters_manager_finalize (GObject *object)
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
+
+  clear_filters_list (manager);
 
   g_clear_pointer (&manager->filter_infos, g_hash_table_unref);
   g_free (manager->filters_dir);
@@ -1256,13 +1275,6 @@ ephy_filters_manager_get_is_initialized (EphyFiltersManager *manager)
   return manager->is_initialized;
 }
 
-static void
-add_filter (WebKitUserContentFilter  *filter,
-            WebKitUserContentManager *ucm)
-{
-  webkit_user_content_manager_add_filter (ucm, filter);
-}
-
 void
 ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
                                           WebKitUserContentManager *ucm,
@@ -1277,6 +1289,8 @@ ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
   if (current_state && current_state->forbids_ads == forbids_ads && current_state->update_time == manager->update_time)
     return;
 
+  LOG ("Refreshing user content manager %p because state has changed", ucm);
+
   if (!current_state) {
     current_state = g_new (AdblockState, 1);
     g_object_set_data_full (G_OBJECT (ucm), "ephy-adblock-state", current_state, g_free);
@@ -1287,8 +1301,22 @@ ephy_filters_manager_refresh_ucm_filters (EphyFiltersManager       *manager,
 
   webkit_user_content_manager_remove_all_filters (ucm);
 
-  if (forbids_ads)
-    g_list_foreach (manager->filters, (GFunc)add_filter, ucm);
-  else if (manager->hush_filter)
-    webkit_user_content_manager_add_filter (ucm, manager->hush_filter);
+  if (!forbids_ads) {
+    if (manager->hush_filter)
+      webkit_user_content_manager_add_filter (ucm, manager->hush_filter);
+    return;
+  }
+
+  for (size_t i = 0; i < manager->num_filters; i++) {
+    /* It's possible for not all filters to be initialized if (a) a download timed
+     * out, or (b) if the user has just modified the setting and not all filters
+     * have been loaded yet. If so, no choice but to skip it.
+     */
+    if (manager->filters[i]) {
+      LOG ("Added filters object at position %" G_GSIZE_FORMAT " to user content manager %p", i, ucm);
+      webkit_user_content_manager_add_filter (ucm, manager->filters[i]);
+    } else {
+      LOG ("Filters object at position %" G_GSIZE_FORMAT " is missing from the filters list. This is normal only if you just started Epiphany or modified your filters setting, or if the download timed out.", i);
+    }
+  }
 }
