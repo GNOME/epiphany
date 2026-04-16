@@ -38,6 +38,8 @@
 #define ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED 28 * 24 * 60 * 60 /* In seconds */
 #define ADBLOCK_FILTER_SIDECAR_FILE_SUFFIX ".filterinfo"
 
+typedef struct _FilterInfo FilterInfo;
+
 struct _EphyFiltersManager {
   GObject parent_instance;
   gboolean is_initialized;
@@ -46,6 +48,7 @@ struct _EphyFiltersManager {
   GHashTable *filter_infos;  /* (unowned char *identifier, owned FilterInfo) */
   WebKitUserContentFilter **filters; /* array of owned WebKitUserContentFilter * */
   size_t num_filters;
+  FilterInfo *hush_filter_info; /* owned FilterInfo *, only exists here to avoid leaking */
   WebKitUserContentFilter *hush_filter; /* unowned, owned by filters list */
   gint64 update_time;
   guint update_timeout_id;
@@ -65,7 +68,7 @@ enum {
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
-typedef struct {
+struct _FilterInfo {
   grefcount ref_count;
 
   EphyFiltersManager *manager;
@@ -79,7 +82,7 @@ typedef struct {
   gboolean local : 1;    /* The source_uri is a local file URI. */
   gboolean done  : 1;    /* Filter setup done (successfully or errored). */
   gboolean is_hush : 1;  /* Used for hush cookie banner blocking. */
-} FilterInfo;
+};
 
 /* The "saved" fields from the struct above are stored as versioned sidecar
  * metadata files, using GVariant for serialization. An integer indicating
@@ -971,6 +974,7 @@ clear_filters_list (EphyFiltersManager *manager)
 
   g_clear_pointer (&manager->filters, g_free);
   manager->num_filters = 0;
+  manager->hush_filter = NULL;
 }
 
 static void
@@ -997,7 +1001,6 @@ update_adblock_filter_files_cb (GSettings          *settings,
   manager->update_time = update_time;
 
   clear_filters_list (manager);
-  manager->hush_filter = NULL;
 
   old_filters = g_steal_pointer (&manager->filter_infos);
   manager->filter_infos = create_filter_infos_table ();
@@ -1089,6 +1092,12 @@ update_adblock_filter_files_cb (GSettings          *settings,
                                            manager->cancellable,
                                            (GAsyncReadyCallback)filter_saved_cb,
                                            filter_info);
+
+    /* Even if we already have a previous filter info, we still have to do all
+     * the work again anyway, because we have deleted the filter itself.
+     */
+    g_clear_pointer (&manager->hush_filter_info, filter_info_unref);
+    manager->hush_filter_info = g_steal_pointer (&filter_info);
   }
 
   /* Remove the filters which are no longer in the configured set. */
@@ -1125,6 +1134,8 @@ ephy_filters_manager_finalize (GObject *object)
 
   g_clear_pointer (&manager->filter_infos, g_hash_table_unref);
   g_free (manager->filters_dir);
+
+  g_clear_pointer (&manager->hush_filter_info, filter_info_unref);
 
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->finalize (object);
 }
