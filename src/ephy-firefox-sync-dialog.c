@@ -100,6 +100,8 @@ struct _EphyFirefoxSyncDialog {
   char *oauth_state;
   char *sign_in_email;
   char *sign_in_uid;
+
+  gboolean fastly_challenge_retried;
 };
 
 G_DEFINE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, ADW_TYPE_WINDOW)
@@ -795,6 +797,53 @@ sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
   }
 }
 
+/* Fastly bot detection workaround.
+ *
+ * Fastly's challenge page on accounts.firefox.com fingerprints the
+ * browser and POSTs results to an fst-post-back endpoint.  WebKitGTK's
+ * fingerprint is often rejected (HTTP 400) on the first attempt, but
+ * the challenge sets a cookie that lets subsequent loads pass.
+ *
+ * We detect the 400 response and automatically reload the page so the
+ * user doesn't get stuck in the Fastly error page.
+ */
+static void
+fastly_challenge_resource_finished_cb (WebKitWebResource *resource,
+                                       gpointer           user_data)
+{
+  EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (user_data);
+  WebKitURIResponse *response = webkit_web_resource_get_response (resource);
+  const char *uri = webkit_web_resource_get_uri (resource);
+
+  if (!response || !strstr (uri, "fst-post-back"))
+    return;
+
+  if (webkit_uri_response_get_status_code (response) != 200) {
+    if (!sync_dialog->fastly_challenge_retried) {
+      LOG ("Fastly challenge failed (status %u), reloading once",
+           webkit_uri_response_get_status_code (response));
+      sync_dialog->fastly_challenge_retried = TRUE;
+      webkit_web_view_reload (sync_dialog->fxa_web_view);
+    } else {
+      LOG ("Fastly challenge failed again, not retrying");
+    }
+  }
+}
+
+static void
+fastly_resource_load_started_cb (WebKitWebView     *web_view,
+                                 WebKitWebResource *resource,
+                                 WebKitURIRequest  *request,
+                                 gpointer           user_data)
+{
+  const char *uri = webkit_uri_request_get_uri (request);
+
+  if (strstr (uri, "accounts.firefox.com"))
+    g_signal_connect (resource, "finished",
+                      G_CALLBACK (fastly_challenge_resource_finished_cb),
+                      user_data);
+}
+
 static void
 /* Set up the WebKitWebView for FxA sign-in. Injects a user script to
  * relay WebChannelMessageToChrome events to our native handler.
@@ -866,6 +915,10 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
     gtk_widget_set_visible (GTK_WIDGET (sync_dialog->fxa_web_view), TRUE);
     gtk_box_append (GTK_BOX (sync_dialog->sync_firefox_iframe_box),
                     GTK_WIDGET (sync_dialog->fxa_web_view));
+
+    g_signal_connect (sync_dialog->fxa_web_view, "resource-load-started",
+                      G_CALLBACK (fastly_resource_load_started_cb),
+                      sync_dialog);
 
     g_object_unref (sync_context);
   }
