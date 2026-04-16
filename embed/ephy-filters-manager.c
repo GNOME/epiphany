@@ -323,9 +323,8 @@ filter_info_save_sidecar (FilterInfo          *self,
 {
   g_autoptr (GBytes) data = filter_info_get_data_as_bytes (self);
   g_autoptr (GFile) sidecar_file = filter_info_get_sidecar_file (self);
-  g_autofree char *sidecar_file_path = g_file_get_path (sidecar_file);
   g_autofree char *task_name = g_strconcat ("save sidecar file: ",
-                                            sidecar_file_path,
+                                            g_file_peek_path (sidecar_file),
                                             NULL);
   GTask *task = g_task_new (NULL, cancellable, callback, user_data);
   g_task_set_name (task, task_name);
@@ -438,10 +437,8 @@ file_removed_cb (GFile        *file,
 
   if (!g_file_delete_finish (file, result, &error) &&
       !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT) &&
-      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-    g_autofree char *file_path = g_file_get_path (file);
-    g_warning ("Cannot delete '%s': %s", file_path, error->message);
-  }
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    g_warning ("Cannot delete '%s': %s", g_file_peek_path (file), error->message);
 }
 
 static void
