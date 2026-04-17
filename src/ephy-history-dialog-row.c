@@ -61,6 +61,23 @@ ephy_history_dialog_row_get_property (GObject    *object,
   }
 }
 
+static gboolean
+backported_copy_of_g_set_str (char       **str_pointer,
+                              const char  *new_str)
+{
+  char *copy;
+
+  if (*str_pointer == new_str ||
+      (*str_pointer && new_str && strcmp (*str_pointer, new_str) == 0))
+    return FALSE;
+
+  copy = g_strdup (new_str);
+  g_free (*str_pointer);
+  *str_pointer = copy;
+
+  return TRUE;
+}
+
 static void
 ephy_history_dialog_row_set_property (GObject      *object,
                                       guint         prop_id,
@@ -71,10 +88,10 @@ ephy_history_dialog_row_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_URL:
-      g_set_str (&self->url, g_value_dup_string (value));
+      backported_copy_of_g_set_str (&self->url, g_value_dup_string (value));
       break;
     case PROP_TITLE:
-      g_set_str (&self->title, g_value_dup_string (value));
+      backported_copy_of_g_set_str (&self->title, g_value_dup_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
