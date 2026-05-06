@@ -93,6 +93,21 @@ ephy_uri_get_base_domain (const char *hostname)
   return g_strdup (base_domain);
 }
 
+static const char *
+get_first_colon_after_host (const char *authority_start)
+{
+  const char *search_start = authority_start;
+
+  /* Skip colons in IPv6 addresses */
+  if (authority_start[0] == '[') {
+    const char *bracket_close = strchr (authority_start, ']');
+    if (bracket_close)
+      search_start = bracket_close;
+  }
+
+  return g_utf8_strchr (search_start, -1, ':');
+}
+
 char *
 ephy_uri_get_decoded_host (const char *decoded_uri)
 {
@@ -120,7 +135,7 @@ ephy_uri_get_decoded_host (const char *decoded_uri)
 
   authority_start = protocol_end + strlen ("://");
 
-  first_colon = g_utf8_strchr (authority_start, -1, ':');
+  first_colon = get_first_colon_after_host (authority_start);
   first_slash = g_utf8_strchr (authority_start, -1, '/');
   first_question_mark = g_utf8_strchr (authority_start, -1, '?');
   first_octothorpe = g_utf8_strchr (authority_start, -1, '#');
