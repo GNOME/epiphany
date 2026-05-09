@@ -118,6 +118,7 @@ const struct {
   { "win.send-to", { "Send", NULL } },
   { "win.location", { "<Primary>L", "<alt>D", "F6", "Go", "OpenURL", NULL } },
   { "win.location-search", {"<Primary>K", NULL} },
+  { "win.copy-location", { "<shift><Primary>C", NULL } },
   { "win.home", { "<alt>Home", NULL } },
   { "win.tabs-view", { "<shift><Primary>O", NULL } },
 
@@ -919,6 +920,7 @@ static const GActionEntry window_entries [] = {
 
   { "location", window_cmd_go_location },
   { "location-search", window_cmd_location_search },
+  { "copy-location", window_cmd_copy_location },
   { "home", window_cmd_go_home },
   { "tabs-view", window_cmd_go_tabs_view },
   { "switch-new-tab", window_cmd_switch_new_tab },
@@ -4910,6 +4912,37 @@ ephy_window_location_search (EphyWindow *window)
   gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (location_entry));
   gtk_editable_set_text (GTK_EDITABLE (location_entry), entry_text);
   gtk_editable_set_position (GTK_EDITABLE (location_entry), strlen (entry_text));
+}
+
+/**
+ * ephy_window_copy_location:
+ * @window: an #EphyWindow
+ *
+ * Copies the current page address to the clipboard.
+ */
+void
+ephy_window_copy_location (EphyWindow *window)
+{
+  const char *address;
+  GdkClipboard *clipboard;
+  EphyEmbed *embed;
+  AdwToast *toast;
+
+  embed = ephy_window_get_active_embed (window);
+
+  if (!embed)
+    return;
+
+  address = ephy_window_get_location (window);
+
+  if (!address || *address == '\0')
+    return;
+
+  clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
+  gdk_clipboard_set_text (clipboard, address);
+
+  toast = adw_toast_new (_("Page URL copied"));
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
 }
 
 /**

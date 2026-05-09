@@ -3118,6 +3118,14 @@ window_cmd_location_search (GSimpleAction *action,
 }
 
 void
+window_cmd_copy_location (GSimpleAction *action,
+                          GVariant      *parameter,
+                          gpointer       user_data)
+{
+  ephy_window_copy_location (user_data);
+}
+
+void
 window_cmd_go_home (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
