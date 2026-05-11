@@ -18,9 +18,11 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "ephy-site-menu-button.h"
 
 #include "ephy-bookmarks-manager.h"
+#include "ephy-debug.h"
 #include "ephy-embed.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
@@ -238,6 +240,7 @@ void
 ephy_site_menu_button_set_state (EphySiteMenuButton *self,
                                  unsigned int        state)
 {
+  LOG ("Changing state to %u", state);
   gtk_svg_set_state (self->svg, state);
 }
 
@@ -373,6 +376,7 @@ on_animation_timeout (EphySiteMenuButton *self)
   g_clear_handle_id (&self->timeout_id, g_source_remove);
 
   if (self->queued_states->len == 0) {
+    LOG ("Changing state to 0 (normal menu)");
     gtk_svg_set_state (self->svg, 0);
 
     self->is_animating = FALSE;
@@ -381,6 +385,7 @@ on_animation_timeout (EphySiteMenuButton *self)
     int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
     int queued_state = g_array_index (self->queued_states, int, 0);
 
+    LOG ("Changing state to queued state %u", queued_state);
     gtk_svg_set_state (self->svg, queued_state);
     g_array_remove_index (self->queued_states, 0);
 
@@ -399,10 +404,12 @@ ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
   if (self->is_animating) {
     int queued_state = 1;
 
+    LOG ("Queuing future state 1 (reader mode)");
     g_array_append_val (self->queued_states, queued_state);
     return;
   }
 
+  LOG ("Changing state to 1 (reader mode)");
   self->is_animating = TRUE;
   gtk_svg_set_state (self->svg, 1);
 
@@ -421,10 +428,12 @@ ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self)
   if (self->is_animating) {
     int queued_state = 2;
 
+    LOG ("Queuing future state 2 (search engine)");
     g_array_append_val (self->queued_states, queued_state);
     return;
   }
 
+  LOG ("Changing state to 2 (search engine)");
   self->is_animating = TRUE;
   gtk_svg_set_state (self->svg, 2);
 
@@ -440,6 +449,7 @@ ephy_site_menu_button_cancel_animation (EphySiteMenuButton *self)
   self->is_animating = FALSE;
   self->do_animation = FALSE;
 
+  LOG ("Changing state to 0 (normal menu)");
   g_array_remove_range (self->queued_states, 0, self->queued_states->len);
   gtk_svg_set_state (self->svg, 0);
 }
