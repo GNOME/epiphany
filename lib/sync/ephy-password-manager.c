@@ -438,6 +438,7 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
                                     EphyPasswordRecord  *record)
 {
   GHashTable *attributes;
+  const char *id;
   const char *origin;
   const char *target_origin;
   const char *username;
@@ -450,6 +451,7 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
+  id = ephy_password_record_get_id (record);
   origin = ephy_password_record_get_origin (record);
   target_origin = ephy_password_record_get_target_origin (record);
   username = ephy_password_record_get_username (record);
@@ -458,8 +460,8 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   password_field = ephy_password_record_get_password_field (record);
   modified = ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record));
 
-  LOG ("Storing password record for (%s, %s, %s, %s, %s)",
-       origin, target_origin, username, username_field, password_field);
+  LOG ("Storing password record (%s, %s, %s, %s, %s, %s)",
+       id, origin, target_origin, username, username_field, password_field);
 
   if (username) {
     /* Translators: The first %s is the username and the second one is the
@@ -624,8 +626,8 @@ retrieve_secret_cb (GObject        *source_object,
   created = secret_retrievable_get_created (retrievable);
   modified = secret_retrievable_get_modified (retrievable);
 
-  LOG ("Found password record for (%s, %s, %s, %s, %s)",
-       origin, target_origin, username, username_field, password_field);
+  LOG ("Found password record (%s, %s, %s, %s, %s, %s)",
+       id, origin, target_origin, username, username_field, password_field);
 
   if (!id || !origin || !target_origin || !timestamp) {
     LOG ("Password record is corrupted, skipping it...");
@@ -709,8 +711,8 @@ ephy_password_manager_query (EphyPasswordManager              *self,
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
 
-  LOG ("Querying password records for (%s, %s, %s, %s)",
-       origin, username, username_field, password_field);
+  LOG ("Querying password records for (%s, %s, %s, %s, %s)",
+       id, origin, username, username_field, password_field);
 
   attributes = get_attributes_table (id, origin, target_origin, username,
                                      username_field, password_field, -1);
@@ -806,7 +808,8 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
 
   clear_cb_data = manage_record_async_data_new (self, replacement, task);
 
-  LOG ("Forgetting password record for (%s, %s, %s, %s, %s)",
+  LOG ("Forgetting password record (%s, %s, %s, %s, %s, %s)",
+       ephy_password_record_get_id (record),
        ephy_password_record_get_origin (record),
        ephy_password_record_get_target_origin (record),
        ephy_password_record_get_username (record),
