@@ -834,7 +834,17 @@ forget_cb (GList    *records,
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (g_task_get_source_object (task));
   EphyPasswordRecord *record;
 
-  g_assert (g_list_length (records) == 1);
+  /* Since we included ID in our query, this list should always be of length 1.
+   * But in practice, it's not true. Somehow, it's definitely possible to have
+   * multiple password records with the same ID. I don't know how that happens,
+   * but we have to deal with it.
+   *
+   * Note: a second copy of this comment exists in replace_existing_cb().
+   */
+  if (g_list_length (records) > 1) {
+    g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
+    records = deduplicate_records (self, records);
+  }
 
   record = EPHY_PASSWORD_RECORD (records->data);
   g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, record);
@@ -968,7 +978,17 @@ replace_existing_cb (GList    *records,
 {
   ManageRecordAsyncData *data = (ManageRecordAsyncData *)user_data;
 
-  g_assert (g_list_length (records) == 1);
+  /* Since we included ID in our query, this list should always be of length 1.
+   * But in practice, it's not true. Somehow, it's definitely possible to have
+   * multiple password records with the same ID. I don't know how that happens,
+   * but we have to deal with it.
+   *
+   * Note: a second copy of this comment exists in forget_cb().
+   */
+  if (g_list_length (records) > 1) {
+    g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
+    records = deduplicate_records (data->manager, records);
+  }
 
   ephy_password_manager_forget_record (data->manager, records->data, data->record, NULL);
   manage_record_async_data_free (data);
