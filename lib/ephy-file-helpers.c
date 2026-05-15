@@ -782,10 +782,12 @@ ephy_open_default_instance_window (void)
 void
 ephy_open_incognito_window (const char *uri)
 {
-  char *command;
-  GError *error = NULL;
+  g_autofree char *quoted_profile_dir = NULL;
+  g_autofree char *command = NULL;
+  g_autoptr (GError) error = NULL;
 
-  command = g_strdup_printf ("epiphany --incognito-mode --profile %s ", ephy_profile_dir ());
+  quoted_profile_dir = g_shell_quote (ephy_profile_dir ());
+  command = g_strdup_printf ("epiphany --incognito-mode --profile %s -- ", quoted_profile_dir);
 
   if (uri) {
     char *str = g_strconcat (command, uri, NULL);
@@ -795,12 +797,8 @@ ephy_open_incognito_window (const char *uri)
 
   g_spawn_command_line_async (command, &error);
 
-  if (error) {
+  if (error)
     g_warning ("Couldn't open link in incognito window: %s", error->message);
-    g_error_free (error);
-  }
-
-  g_free (command);
 }
 
 void
