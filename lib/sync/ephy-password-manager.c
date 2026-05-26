@@ -336,12 +336,12 @@ ephy_password_manager_cache_add (EphyPasswordManager *self,
 }
 
 static void
-populate_cache_cb (GList    *records,
-                   gpointer  user_data)
+populate_cache_cb (GList    **records,
+                   gpointer   user_data)
 {
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (user_data);
 
-  for (GList *l = records; l && l->data; l = l->next) {
+  for (GList *l = *records; l && l->data; l = l->next) {
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
     const char *origin = ephy_password_record_get_origin (record);
     const char *username = ephy_password_record_get_username (record);
@@ -513,8 +513,8 @@ deduplicate_records (EphyPasswordManager *manager,
 }
 
 static void
-update_credentials_cb (GList    *records,
-                       gpointer  user_data)
+update_credentials_cb (GList    **records,
+                       gpointer   user_data)
 {
   UpdateCredentialsAsyncData *data = (UpdateCredentialsAsyncData *)user_data;
   g_autoptr (EphyPasswordRecord) replacement_record = NULL;
@@ -523,10 +523,10 @@ update_credentials_cb (GList    *records,
   /* Since we didn't include ID in our query, there could be multiple records
    * returned. We only want to have one saved at a time, so delete the rest.
    */
-  if (g_list_length (records) > 1)
-    records = deduplicate_records (data->manager, records);
+  if (g_list_length (*records) > 1)
+    *records = deduplicate_records (data->manager, *records);
 
-  if (records) {
+  if (*records) {
     /* If only password has changed, we can update the existing record directly
      * using ephy_password_manager_store_record(). But if username has also
      * changed, then we need more work, because username is part of the attributes
@@ -537,7 +537,7 @@ update_credentials_cb (GList    *records,
      * For simplicity, let's just always use this way.
      */
 
-    original_record = EPHY_PASSWORD_RECORD (records->data);
+    original_record = EPHY_PASSWORD_RECORD ((*records)->data);
     replacement_record = ephy_password_record_copy (original_record);
 
     ephy_password_record_set_username (replacement_record, data->username);
@@ -670,7 +670,7 @@ out:
 
   if (--data->n_matches == 0) {
     if (data->callback)
-      data->callback (data->records, data->user_data);
+      data->callback (&data->records, data->user_data);
     query_async_data_free (data);
   }
 }
@@ -690,8 +690,10 @@ secret_password_search_cb (GObject        *source_object,
         g_warning ("Failed to search secret storage (is the secret service or secrets portal broken?): %s", error->message);
       g_error_free (error);
     }
-    if (data->callback)
-      data->callback (NULL, data->user_data);
+    if (data->callback) {
+      GList *null_list = NULL;
+      data->callback (&null_list, data->user_data);
+    }
     query_async_data_free (data);
     return;
   }
@@ -842,8 +844,8 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
 }
 
 static void
-forget_cb (GList    *records,
-           gpointer  data)
+forget_cb (GList    **records,
+           gpointer   data)
 {
   GTask *task = data;
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (g_task_get_source_object (task));
@@ -855,12 +857,12 @@ forget_cb (GList    *records,
    *
    * Note: a second copy of this comment exists in replace_existing_cb().
    */
-  if (g_list_length (records) > 1) {
+  if (g_list_length (*records) > 1) {
     g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
-    records = deduplicate_records (self, records);
+    *records = deduplicate_records (self, *records);
   }
 
-  record = EPHY_PASSWORD_RECORD (records->data);
+  record = EPHY_PASSWORD_RECORD ((*records)->data);
   g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, record);
   ephy_password_manager_forget_record (self, record, NULL, task);
 }
@@ -898,8 +900,8 @@ ephy_password_manager_forget (EphyPasswordManager *self,
 }
 
 static void
-forget_all_cb (GList    *records,
-               gpointer  user_data)
+forget_all_cb (GList    **records,
+               gpointer   user_data)
 {
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (user_data);
   GHashTable *attributes;
@@ -908,7 +910,7 @@ forget_all_cb (GList    *records,
   secret_password_clearv (EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
                           (GAsyncReadyCallback)secret_password_clear_cb, NULL);
 
-  for (GList *l = records; l && l->data; l = l->next)
+  for (GList *l = *records; l && l->data; l = l->next)
     g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
 
   ephy_password_manager_cache_clear (self);
@@ -987,8 +989,8 @@ synchronizable_manager_remove (EphySynchronizableManager *manager,
 }
 
 static void
-replace_existing_cb (GList    *records,
-                     gpointer  user_data)
+replace_existing_cb (GList    **records,
+                     gpointer   user_data)
 {
   ManageRecordAsyncData *data = (ManageRecordAsyncData *)user_data;
 
@@ -998,12 +1000,12 @@ replace_existing_cb (GList    *records,
    *
    * Note: a second copy of this comment exists in replace_existing_cb().
    */
-  if (g_list_length (records) > 1) {
+  if (g_list_length (*records) > 1) {
     g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
-    records = deduplicate_records (data->manager, records);
+    *records = deduplicate_records (data->manager, *records);
   }
 
-  ephy_password_manager_forget_record (data->manager, records->data, data->record, NULL);
+  ephy_password_manager_forget_record (data->manager, (*records)->data, data->record, NULL);
   manage_record_async_data_free (data);
 }
 
@@ -1269,17 +1271,17 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
 }
 
 static void
-merge_cb (GList    *records,
-          gpointer  user_data)
+merge_cb (GList    **records,
+          gpointer   user_data)
 {
   MergePasswordsAsyncData *data = (MergePasswordsAsyncData *)user_data;
   GPtrArray *to_upload;
 
   if (data->is_initial)
-    to_upload = ephy_password_manager_handle_initial_merge (data->manager, records,
+    to_upload = ephy_password_manager_handle_initial_merge (data->manager, *records,
                                                             data->remotes_updated);
   else
-    to_upload = ephy_password_manager_handle_regular_merge (data->manager, &records,
+    to_upload = ephy_password_manager_handle_regular_merge (data->manager, records,
                                                             data->remotes_deleted,
                                                             data->remotes_updated);
 

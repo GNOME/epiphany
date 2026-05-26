@@ -44,7 +44,7 @@ const SecretSchema *ephy_password_manager_get_password_schema (void) G_GNUC_CONS
 
 G_DECLARE_FINAL_TYPE (EphyPasswordManager, ephy_password_manager, EPHY, PASSWORD_MANAGER, GObject)
 
-typedef void (*EphyPasswordManagerQueryCallback) (GList *records, gpointer user_data);
+typedef void (*EphyPasswordManagerQueryCallback) (GList **records, gpointer user_data);
 
 typedef struct {
   char *origin;
