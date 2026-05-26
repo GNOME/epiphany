@@ -271,6 +271,22 @@ ephy_password_record_new (const char *id,
                                              NULL));
 }
 
+EphyPasswordRecord *
+ephy_password_record_copy (EphyPasswordRecord *self)
+{
+  EphyPasswordRecord *record = ephy_password_record_new (self->id,
+                                                         self->origin,
+                                                         self->target_origin,
+                                                         self->username,
+                                                         self->password,
+                                                         self->username_field,
+                                                         self->password_field,
+                                                         self->time_created,
+                                                         self->time_password_changed);
+  record->server_time_modified = self->server_time_modified;
+  return record;
+}
+
 const char *
 ephy_password_record_get_id (EphyPasswordRecord *self)
 {
