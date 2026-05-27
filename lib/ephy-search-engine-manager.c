@@ -163,12 +163,12 @@ load_search_engines_from_settings (EphySearchEngineManager *manager)
    * (i.e. validation code has an issue in the prefs).
    */
   if (G_UNLIKELY (manager->engines->len == 0)) {
+    g_warning ("Having no search engine is forbidden. Resetting to default ones instead.");
     g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
     g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
     g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE);
     load_search_engines_from_settings (manager);
-
-    g_warning ("Having no search engine is forbidden. Resetting to default ones instead.");
+    return;
   }
   g_assert (manager->engines->len > 0);
 
