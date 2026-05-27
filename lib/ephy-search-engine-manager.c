@@ -708,7 +708,8 @@ ephy_search_engine_manager_parse_bang_suggestions (EphySearchEngineManager  *man
 /**
  * ephy_search_engine_manager_save_to_settings:
  *
- * Saves the search engines and the default search engine to the GSettings.
+ * Saves the search engines, the default search engine, and the incognito
+ * search engine to the GSettings.
  *
  * You must call this function after having done the changes (e.g. when closing
  * the preferences window).
@@ -747,4 +748,9 @@ ephy_search_engine_manager_save_to_settings (EphySearchEngineManager *manager)
   }
   variant = g_variant_builder_end (&builder);
   g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES, variant);
+
+  g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE,
+                        g_variant_new_string (ephy_search_engine_get_name (manager->default_engine)));
+  g_settings_set_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE,
+                        g_variant_new_string (ephy_search_engine_get_name (manager->incognito_engine)));
 }
