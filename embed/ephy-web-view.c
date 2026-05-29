@@ -2595,13 +2595,13 @@ prepare_for_authentication_dialog (EphyWebView                 *web_view,
 }
 
 static void
-auth_password_query_finished_cb (GList              *records,
-                                 AuthenticationData *data)
+auth_password_query_finished_cb (GList              **records,
+                                 AuthenticationData  *data)
 {
   EphyPasswordRecord *record;
   g_autoptr (WebKitCredential) credential = NULL;
 
-  record = records && records->data ? EPHY_PASSWORD_RECORD (records->data) : NULL;
+  record = (*records) && (*records)->data ? EPHY_PASSWORD_RECORD ((*records)->data) : NULL;
   if (record) {
     credential = webkit_credential_new (ephy_password_record_get_username (record),
                                         ephy_password_record_get_password (record),
@@ -2677,8 +2677,8 @@ password_manager_data_free (PasswordManagerData *data)
 }
 
 static void
-password_manager_query_finished_cb (GList               *records,
-                                    PasswordManagerData *data)
+password_manager_query_finished_cb (GList               **records,
+                                    PasswordManagerData  *data)
 {
   EphyPasswordRecord *record;
   const char *origin;
@@ -2686,7 +2686,7 @@ password_manager_query_finished_cb (GList               *records,
   const char *password = NULL;
   g_autofree char *real_origin = NULL;
 
-  record = records && records->data ? EPHY_PASSWORD_RECORD (records->data) : NULL;
+  record = *records && (*records)->data ? EPHY_PASSWORD_RECORD ((*records)->data) : NULL;
   if (record) {
     username = ephy_password_record_get_username (record);
     password = ephy_password_record_get_password (record);
