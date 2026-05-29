@@ -151,6 +151,8 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
   gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), selected);
   g_signal_connect_object (G_OBJECT (check_button), "toggled", G_CALLBACK (on_check_button_toggled), self, 0);
   adw_action_row_add_prefix (ADW_ACTION_ROW (widget), check_button);
+  adw_action_row_set_activatable_widget (ADW_ACTION_ROW (widget),
+                                         check_button);
 
   label_text = default_tag ? EPHY_BOOKMARKS_FAVORITES_TAG : tag;
 
