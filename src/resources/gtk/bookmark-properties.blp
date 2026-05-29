@@ -4,6 +4,15 @@ using Adw 1;
 template $EphyBookmarkProperties: Adw.Dialog {
   width-request: 360;
 
+  ShortcutController {
+    propagation-phase: capture;
+
+    Shortcut {
+      trigger: "<Control>Return";
+      action: "action(bookmark-properties.save-bookmark)";
+    }
+  }
+
   Adw.NavigationView navigation_view {
     Adw.NavigationPage {
       title: _("Bookmark");
