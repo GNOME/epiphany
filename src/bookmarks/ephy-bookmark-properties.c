@@ -216,6 +216,30 @@ ephy_bookmark_properties_actions_remove_bookmark (EphyBookmarkProperties *self)
 }
 
 static void
+ephy_bookmark_properties_actions_save_bookmark (EphyBookmarkProperties *self)
+{
+  GSequenceIter *iter;
+
+  for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (self->bookmark));
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    const char *tag = g_sequence_get (iter);
+    GSequenceIter *manager_iter;
+
+    manager_iter = g_sequence_lookup (ephy_bookmarks_manager_get_tags (self->manager),
+                                      (gpointer)tag,
+                                      (GCompareDataFunc)ephy_bookmark_tags_compare,
+                                      NULL);
+    if (!manager_iter)
+      ephy_bookmarks_manager_create_tag (self->manager, tag);
+  }
+
+  ephy_bookmarks_manager_add_bookmark (self->manager, self->bookmark);
+
+  adw_dialog_close (ADW_DIALOG (self));
+}
+
+static void
 ephy_bookmark_properties_buffer_text_changed_cb (EphyBookmarkProperties *self,
                                                  GParamSpec             *pspec,
                                                  GtkEntryBuffer         *buffer)
@@ -515,6 +539,8 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
                                    NULL, (GtkWidgetActionActivateFunc)ephy_bookmark_properties_actions_add_tag);
   gtk_widget_class_install_action (widget_class, "bookmark-properties.remove-bookmark",
                                    NULL, (GtkWidgetActionActivateFunc)ephy_bookmark_properties_actions_remove_bookmark);
+  gtk_widget_class_install_action (widget_class, "bookmark-properties.save-bookmark",
+                                   NULL, (GtkWidgetActionActivateFunc)ephy_bookmark_properties_actions_save_bookmark);
 }
 
 static void
