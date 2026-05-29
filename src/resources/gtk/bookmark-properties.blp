@@ -27,7 +27,7 @@ template $EphyBookmarkProperties: Adw.Dialog {
             visible: false;
             label: _("_Add");
             use-underline: true;
-            clicked => $on_add_button_clicked();
+            action-name: "bookmark-properties.save-bookmark";
 
             styles [
               "suggested-action",

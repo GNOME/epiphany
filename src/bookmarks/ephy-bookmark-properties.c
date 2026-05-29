@@ -321,31 +321,6 @@ update_for_new_bookmark (EphyBookmarkProperties *self)
 }
 
 static void
-on_add_button_clicked (GtkButton              *button,
-                       EphyBookmarkProperties *self)
-{
-  GSequenceIter *iter;
-
-  for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (self->bookmark));
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
-    const char *tag = g_sequence_get (iter);
-    GSequenceIter *manager_iter;
-
-    manager_iter = g_sequence_lookup (ephy_bookmarks_manager_get_tags (self->manager),
-                                      (gpointer)tag,
-                                      (GCompareDataFunc)ephy_bookmark_tags_compare,
-                                      NULL);
-    if (!manager_iter)
-      ephy_bookmarks_manager_create_tag (self->manager, tag);
-  }
-
-  ephy_bookmarks_manager_add_bookmark (self->manager, self->bookmark);
-
-  adw_dialog_close (ADW_DIALOG (self));
-}
-
-static void
 on_tags_activated (AdwActionRow *row,
                    gpointer      user_data)
 {
@@ -531,7 +506,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, header_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tag_header_bar);
 
-  gtk_widget_class_bind_template_callback (widget_class, on_add_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_tags_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_add_tag_entry_activated);
 
