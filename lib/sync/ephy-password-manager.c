@@ -515,7 +515,8 @@ update_credentials_cb (GList    *records,
                        gpointer  user_data)
 {
   UpdateCredentialsAsyncData *data = (UpdateCredentialsAsyncData *)user_data;
-  EphyPasswordRecord *record;
+  g_autoptr (EphyPasswordRecord) replacement_record = NULL;
+  EphyPasswordRecord *original_record;
 
   /* Since we didn't include ID in our query, there could be multiple records
    * returned. We only want to have one saved at a time, so delete the rest.
@@ -524,11 +525,25 @@ update_credentials_cb (GList    *records,
     records = deduplicate_records (data->manager, records);
 
   if (records) {
-    record = EPHY_PASSWORD_RECORD (records->data);
-    ephy_password_record_set_username (record, data->username);
-    ephy_password_record_set_password (record, data->password);
-    ephy_password_manager_store_record (data->manager, record);
-    g_signal_emit (data->manager, signals[SYNCHRONIZABLE_MODIFIED], 0, record, FALSE);
+    /* If only password has changed, we can update the existing record directly
+     * using ephy_password_manager_store_record(). But if username has also
+     * changed, then we need more work, because username is part of the attributes
+     * table that serves as the key. We have to delete the original record now,
+     * specifying the new record as replacement, or else adding the new one would
+     * create a second record with the same ID.
+     *
+     * For simplicity, let's just always use this way.
+     */
+
+    original_record = EPHY_PASSWORD_RECORD (records->data);
+    replacement_record = ephy_password_record_copy (original_record);
+
+    ephy_password_record_set_username (replacement_record, data->username);
+    ephy_password_record_set_password (replacement_record, data->password);
+
+    ephy_password_manager_forget_record (data->manager, original_record, replacement_record, NULL);
+
+    g_signal_emit (data->manager, signals[SYNCHRONIZABLE_MODIFIED], 0, replacement_record, FALSE);
   } else {
     LOG ("Attempted to update password record that doesn't exist (likely Epiphany bug)");
   }
@@ -832,9 +847,8 @@ forget_cb (GList    *records,
   EphyPasswordRecord *record;
 
   /* Since we included ID in our query, this list should always be of length 1.
-   * But in practice, it's not true. Somehow, it's definitely possible to have
-   * multiple password records with the same ID. I don't know how that happens,
-   * but we have to deal with it.
+   * But older versions of EphyPasswordManager would accidentally create
+   * duplicate records with the same ID, so we have to handle this.
    *
    * Note: a second copy of this comment exists in replace_existing_cb().
    */
@@ -976,11 +990,10 @@ replace_existing_cb (GList    *records,
   ManageRecordAsyncData *data = (ManageRecordAsyncData *)user_data;
 
   /* Since we included ID in our query, this list should always be of length 1.
-   * But in practice, it's not true. Somehow, it's definitely possible to have
-   * multiple password records with the same ID. I don't know how that happens,
-   * but we have to deal with it.
+   * But older versions of EphyPasswordManager would accidentally create
+   * duplicate records with the same ID, so we have to handle this.
    *
-   * Note: a second copy of this comment exists in forget_cb().
+   * Note: a second copy of this comment exists in replace_existing_cb().
    */
   if (g_list_length (records) > 1) {
     g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
