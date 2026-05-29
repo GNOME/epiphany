@@ -265,11 +265,17 @@ static void
 launch_uri (const char *uri,
             guint       timestamp)
 {
+  g_autofree char *quoted_uri = NULL;
   g_autofree char *str = NULL;
+  g_autoptr (GError) error = NULL;
 
   /* TODO: Handle the timestamp */
-  str = g_strdup_printf ("epiphany %s", uri);
-  g_spawn_command_line_async (str, NULL);
+  quoted_uri = g_shell_quote (uri);
+  str = g_strdup_printf ("epiphany -- %s", quoted_uri);
+  g_spawn_command_line_async (str, &error);
+
+  if (error)
+    g_warning ("Failed to open link %s: %s", quoted_uri, error->message);
 }
 
 static void
