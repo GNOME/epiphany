@@ -227,14 +227,14 @@ on_password_apply (AdwEntryRow *row,
 }
 
 static void
-populate_model_cb (GList    *records,
-                   gpointer  user_data)
+populate_model_cb (GList    **records,
+                   gpointer   user_data)
 {
   EphyPasswordsView *passwords_view = EPHY_PASSWORDS_VIEW (user_data);
 
   ephy_data_view_set_is_loading (EPHY_DATA_VIEW (passwords_view->data_view), FALSE);
 
-  for (GList *l = records; l && l->data; l = l->next) {
+  for (GList *l = *records; l && l->data; l = l->next) {
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
     GtkWidget *row;
     GtkWidget *sub_row;
@@ -301,11 +301,11 @@ populate_model_cb (GList    *records,
     gtk_list_box_append (GTK_LIST_BOX (passwords_view->listbox), row);
   }
 
-  if (g_list_length (records))
+  if (g_list_length (*records))
     ephy_data_view_set_has_data (EPHY_DATA_VIEW (passwords_view->data_view), TRUE);
 
   g_assert (!passwords_view->records);
-  passwords_view->records = g_list_copy_deep (records, (GCopyFunc)g_object_ref, NULL);
+  passwords_view->records = g_list_copy_deep (*records, (GCopyFunc)g_object_ref, NULL);
 }
 
 static void

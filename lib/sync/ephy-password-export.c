@@ -129,8 +129,8 @@ file_contents_replaced_cb (GObject      *source_object,
 }
 
 static void
-ephy_password_manager_query_cb (GList    *records,
-                                gpointer  user_data)
+ephy_password_manager_query_cb (GList    **records,
+                                gpointer   user_data)
 {
   g_autoptr (GTask) task = NULL;
   g_autoptr (GString) csv = NULL;
@@ -161,7 +161,7 @@ ephy_password_manager_query_cb (GList    *records,
 
   g_string_append (csv, "\n");
 
-  for (GList *l = records; l && l->data; l = l->next) {
+  for (GList *l = *records; l && l->data; l = l->next) {
     EphyPasswordRecord *record;
     record = EPHY_PASSWORD_RECORD (l->data);
 
