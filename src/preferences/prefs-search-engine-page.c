@@ -271,7 +271,7 @@ prefs_search_engine_page_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_SEARCH_ENGINE:
-      self->engine = g_value_get_object (value);
+      self->engine = g_value_dup_object (value);
       break;
     case PROP_MANAGER:
       self->manager = g_value_dup_object (value);
