@@ -187,7 +187,10 @@ test_search_engine_manager (void)
   g_assert_true (ephy_search_engine_manager_get_default_engine (manager) == ddg);
 
   g_clear_object (&manager);
+
   g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE);
 }
 
 static void
@@ -274,16 +277,17 @@ test_parse_bang_search (void)
   }
 
   ephy_search_engine_manager_delete_engine (manager, placeholder_engine);
+
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_DEFAULT_SEARCH_ENGINE);
+  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_INCOGNITO_SEARCH_ENGINE);
 }
 
 static void
 test_opensearch (void)
 {
-  g_autoptr (EphySearchEngineManager) manager = ephy_search_engine_manager_new ();
   g_autoptr (EphySearchEngine) opensearch = NULL;
   g_autofree char *built_suggestions_address = NULL;
-
-  g_assert_true (EPHY_IS_SEARCH_ENGINE_MANAGER (manager));
 
   opensearch = g_object_new (EPHY_TYPE_SEARCH_ENGINE, NULL);
   g_assert_true (EPHY_IS_SEARCH_ENGINE (opensearch));
