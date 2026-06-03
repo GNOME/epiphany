@@ -2894,8 +2894,6 @@ on_search_engine_added_toast_button_clicked (AdwToast             *toast,
   gtk_widget_activate_action (GTK_WIDGET (data->window), "app.preferences", NULL);
   search_engine_page = prefs_search_engine_page_new (data->engine, data->manager, FALSE);
   adw_preferences_dialog_push_subpage (prefs_dialog, ADW_NAVIGATION_PAGE (search_engine_page));
-
-  show_search_engine_data_free (data);
 }
 
 static void
@@ -2906,6 +2904,7 @@ on_opensearch_engine_loaded (EphyOpensearchAutodiscoveryLink *autodiscovery_link
   EphyWindow *window = user_data;
   g_autoptr (GError) error = NULL;
   g_autoptr (EphySearchEngine) engine = NULL;
+  ShowSearchEngineData *data;
 
   g_assert (EPHY_IS_WINDOW (window));
   g_assert (EPHY_IS_OPENSEARCH_AUTODISCOVERY_LINK (autodiscovery_link));
@@ -2940,10 +2939,14 @@ on_opensearch_engine_loaded (EphyOpensearchAutodiscoveryLink *autodiscovery_link
      * all the other tabs, so that's why we let the EphyWebViews take care of it.
      */
 
-    adw_toast_set_button_label (toast, _("Show"));
+    data = show_search_engine_data_new (window, engine, manager);
     g_signal_connect (toast, "button-clicked",
                       G_CALLBACK (on_search_engine_added_toast_button_clicked),
-                      show_search_engine_data_new (window, engine, manager));
+                      data);
+    g_object_set_data_full (G_OBJECT (toast), "ephy-show-search-engine-data",
+                            g_steal_pointer (&data), (GDestroyNotify)show_search_engine_data_free);
+
+    adw_toast_set_button_label (toast, _("Show"));
     ephy_window_add_toast (window, toast);
   }
 }
