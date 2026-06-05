@@ -39,6 +39,14 @@ typedef enum {
   EPHY_SNAPSHOT_SERVICE_ERROR_INVALID
 } EphySnapshotServiceError;
 
+/* The below values represent the resolution at which web pages are snapshotted
+ * for the overview.
+ *
+ * To maintain crisp rendering on HiDPI (e.g. 2x Retina) displays, these values
+ * must be synced with the CSS layout in src/resources/about.css.
+ * See the detailed calculations in src/resources/about.css.
+ */
+ 
 #define EPHY_THUMBNAIL_WIDTH 650
 #define EPHY_THUMBNAIL_HEIGHT 540
 

@@ -338,7 +338,36 @@ html.epiphany-html {
 
 /* Note: this CSS is adjusted from Ephy.Overview.Item.setThumbnailPath()
  * in overview.js.
+ *
+ * IMPORTANT: If you change the CSS below such that the thumbnails render larger,
+ * you must also update EPHY_THUMBNAIL_WIDTH and EPHY_THUMBNAIL_HEIGHT in
+ * ephy-snapshot-service.h.
+ *
+ * To maintain crisp rendering on HiDPI (e.g. 2x Retina) displays, the values
+ * in the C header are calculated based on the maximum rendered dimensions:
+ *
+ * 1. Maximum Rendered Width (325px):
+ *    - For viewports < 341px, the grid collapses to 1 column. At a viewport of
+ *      337px (the upper limit of this layout), the column width is 325px
+ *      (viewport width minus 12px margins).
+ *    - For viewports >= 341px, the grid has 2 columns.
+ *    - For viewports >= 500px, the grid has 3 columns in a fixed 800px width.
+ *    Thus, the absolute maximum rendered width of a thumbnail is 325px.
+ *    For 2x HiDPI: EPHY_THUMBNAIL_WIDTH = 325px * 2 = 650.
+ *
+ * 2. Maximum Rendered Height (270px before clipping):
+ *    Since the snapshot is a full-document snapshot, it is almost always taller
+ *    than the thumbnail element. The image is applied as a background with
+ *    'background-size: 100%'.
+ *    When the thumbnail is at its maximum rendered width of 325px, the background
+ *    image scales proportionally. With an image aspect ratio of 1.2037 (650/540),
+ *    the scaled background image height is 325px / 1.2037 = 270px.
+ *    For 2x HiDPI: EPHY_THUMBNAIL_HEIGHT = 270px * 2 = 540.
+ *    (The element's height is capped at 160px, so the remaining 110px of the
+ *     scaled background image is clipped at the bottom, but the visible portion
+ *     still renders at full 2x resolution).
  */
+ 
 .overview-thumbnail {
     height: 160px;
     display: block;
