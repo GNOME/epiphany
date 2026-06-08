@@ -176,6 +176,8 @@ Ephy.Overview = class Overview
             const item = this.#items.pop();
             item.detachFromParent();
         }
+
+        this.#addPlaceholders();
     }
 
     #onThumbnailChanged(url, path)
