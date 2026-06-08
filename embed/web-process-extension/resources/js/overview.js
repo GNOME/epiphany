@@ -101,11 +101,11 @@ Ephy.Overview = class Overview
       }
 
     #removePlaceholders() {
-        const anchors = document.getElementsByTagName('a');
+        const anchors = document.querySelectorAll('a');
 
         for (const anchor of anchors) {
             if (anchor.href === '')
-                document.removeChild(anchor);
+                anchor.remove();
         }
     }
 
