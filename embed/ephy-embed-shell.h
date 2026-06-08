@@ -65,6 +65,7 @@ EphyHistoryService
                   *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 EphyEncodings     *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
+void               ephy_embed_shell_update_overview_urls       (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,
                                                                 GtkPageSetup     *page_setup);
 GtkPageSetup      *ephy_embed_shell_get_page_setup             (EphyEmbedShell   *shell);

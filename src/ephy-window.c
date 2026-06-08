@@ -890,6 +890,8 @@ static const GActionEntry window_entries [] = {
   { "save-as", window_cmd_save_as },
   { "save-as-application", window_cmd_save_as_application },
   { "screenshot", window_cmd_screenshot },
+  { "show-overview-undo-toast", window_cmd_show_overview_undo_toast, "s" },
+  { "undo-overview-remove", window_cmd_undo_overview_remove, "s" },
   { "open-application-manager", window_cmd_open_application_manager },
   { "undo", window_cmd_undo },
   { "redo", window_cmd_redo },

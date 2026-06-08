@@ -98,6 +98,12 @@ void window_cmd_save_as_application             (GSimpleAction *action,
 void window_cmd_screenshot                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_show_overview_undo_toast        (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
+void window_cmd_undo_overview_remove            (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_undo                            (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

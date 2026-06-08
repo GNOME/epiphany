@@ -2639,6 +2639,46 @@ window_cmd_undo (GSimpleAction *action,
 }
 
 void
+window_cmd_show_overview_undo_toast (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  const char *url = g_variant_get_string (parameter, NULL);
+  AdwToast *toast = adw_toast_new (_("Item removed from overview"));
+
+  adw_toast_set_button_label (toast, _("Undo"));
+  adw_toast_set_action_name (toast, "win.undo-overview-remove");
+  adw_toast_set_action_target_value (toast, g_variant_new_string (url));
+
+  ephy_window_add_toast (window, toast);
+}
+
+static void
+undo_overview_remove_cb (EphyHistoryService *service,
+                         gboolean            success,
+                         gpointer            result_data,
+                         EphyEmbedShell     *shell)
+{
+  if (success)
+    ephy_embed_shell_update_overview_urls (shell);
+}
+
+void
+window_cmd_undo_overview_remove (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
+{
+  const char *url = g_variant_get_string (parameter, NULL);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyHistoryService *history = ephy_embed_shell_get_global_history_service (shell);
+
+  ephy_history_service_set_url_hidden (history, url, FALSE, NULL,
+                                       (EphyHistoryJobCallback)undo_overview_remove_cb,
+                                       shell);
+}
+
+void
 window_cmd_redo (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)

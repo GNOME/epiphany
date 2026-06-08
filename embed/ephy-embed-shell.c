@@ -251,7 +251,7 @@ history_service_query_urls_cb (EphyHistoryService *service,
                                                                               g_variant_builder_end (&builder)));
 }
 
-static void
+void
 ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
@@ -289,6 +289,7 @@ web_process_extension_overview_message_received_cb (WebKitUserContentManager *ma
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   g_autofree char *url_to_remove = NULL;
+  GtkWindow *window;
 
   url_to_remove = jsc_value_to_string (message);
 
@@ -296,6 +297,13 @@ web_process_extension_overview_message_received_cb (WebKitUserContentManager *ma
                                        url_to_remove, TRUE, NULL,
                                        (EphyHistoryJobCallback)history_set_url_hidden_cb,
                                        shell);
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+  if (window) {
+    gtk_widget_activate_action (GTK_WIDGET (window),
+                                "win.show-overview-undo-toast",
+                                "s", url_to_remove);
+  }
 }
 
 static char *
