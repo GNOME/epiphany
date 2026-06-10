@@ -33,9 +33,6 @@ GtkWidget *ephy_site_menu_button_new  (void);
 void       ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
                                                  const char         *zoom_level);
 
-void       ephy_site_menu_button_set_state (EphySiteMenuButton *self,
-                                            unsigned int        state);
-
 void       ephy_site_menu_button_append_description (EphySiteMenuButton *self,
                                                      const char         *section);
 
