@@ -237,14 +237,6 @@ ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
 }
 
 void
-ephy_site_menu_button_set_state (EphySiteMenuButton *self,
-                                 unsigned int        state)
-{
-  LOG ("Changing state to %u", state);
-  gtk_svg_set_state (self->svg, state);
-}
-
-void
 ephy_site_menu_button_append_description (EphySiteMenuButton *self,
                                           const char         *section)
 {
