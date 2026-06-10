@@ -168,6 +168,11 @@ var EphyAutofill = {
     });
   },
   fillInput(inputElement, { personal, creditCard }) {
+    const style = window.getComputedStyle(inputElement);
+    if (inputElement.type === 'hidden' || style.display === 'none' || style.visibility === 'hidden') {
+      return;
+    }
+
     const value = inputElement.value;
 
     if (value) {
@@ -226,7 +231,7 @@ var EphyAutofill = {
       return null;
     }
 
-    const labelSelector = `label[for="${id}"]`;
+    const labelSelector = 'label[for="' + CSS.escape(id) + '"]';
     const labelElement = document.querySelector(labelSelector);
 
     if (!labelElement) {
@@ -614,103 +619,32 @@ var EphyAutofill = {
     return width > 1 && height > 1;
   },
   matchers: (() => {
-    const factory = regexes => {
-      const unifiedRegex = new RegExp(
-        regexes.map(regex => `(${regex})`).join('|'),
-        'i'
-      );
-
-      return key => {
-        return !!key.match(unifiedRegex);
-      };
-    };
+    const factory = regex => key => !!key.match(regex);
 
     return {
-      isFirstName: factory([
-        'first.*name',
-        'initials',
-        'fname',
-        'first$',
-        'given.*name'
-      ]),
-      isLastName: factory([
-        'last.*name',
-        'lname',
-        'surname',
-        'last$',
-        'secondname',
-        'family.*name'
-      ]),
-      isFullName: factory([
-        '^name',
-        'full.?name',
-        'your.?name',
-        'customer.?name',
-        'bill.?name',
-        'ship.?name',
-        'name.*first.*last',
-        'firstandlastname'
-      ]),
-      isUsername: factory(['user.?name', 'nick.?name']),
-      isEmail: factory(['e.?mail']),
-      isPhone: factory(['phone', 'mobile']),
+      isFirstName: factory(/first.*name|initials|fname|first$|given.*name/i),
+      isLastName: factory(/last.*name|lname|surname|last$|secondname|family.*name/i),
+      isFullName: factory(/^name|full.?name|your.?name|customer.?name|bill.?name|ship.?name|name.*first.*last|firstandlastname/i),
+      isUsername: factory(/user.?name|nick.?name/i),
+      isEmail: factory(/e.?mail/i),
+      isPhone: factory(/phone|mobile/i),
 
-      isStreetAddress: factory([
-        'address.*line',
-        'address1',
-        'addr1',
-        'street',
-        '(shipping|billing)address$',
-        'house.?name',
-        'address',
-        'line'
-      ]),
-      isOrganization: factory([
-        'company',
-        'business',
-        'organization',
-        'organisation'
-      ]),
-      isPostalCode: factory([
-        'zip',
-        'postal',
-        'post.*code',
-        'pcode',
-        'pin.?code'
-      ]),
-      isCountry: factory(['country', 'countries', 'location']),
-      isState: factory([
-        'province',
-        'region',
-        'state',
-        'county',
-        'region',
-        'province',
-        'county',
-        'principality'
-      ]),
-      isCity: factory(['city', 'town', 'suburb']),
+      isStreetAddress: factory(/address.*line|address1|addr1|street|(shipping|billing)address$|house.?name|address|line/i),
+      isOrganization: factory(/company|business|organization|organisation/i),
+      isPostalCode: factory(/zip|postal|post.*code|pcode|pin.?code/i),
+      isCountry: factory(/country|countries|location/i),
+      isState: factory(/province|region|state|county|principality/i),
+      isCity: factory(/city|town|suburb/i),
 
-      isCardExpdateMonth: factory([
-        'expir',
-        'exp.*mo',
-        'exp.*date',
-        'ccmonth',
-        'cardmonth'
-      ]),
-      isCardExpdateYear: factory(['exp', '^/', 'year']),
-      isCardExpdate: factory(['expir', 'exp.*date']),
-      isNameOnCard: factory([
-        'card.?(holder|owner)',
-        'name.*\\bon\\b.*card',
-        '(card|cc).?name',
-        'cc.?full.?name'
-      ]),
-      isCardNumber: factory(['(card|cc|acct).?(number|#|no|num)']),
-      isCardType: factory(['debit.*card', '(card|cc).?type']),
+      isCardExpdateMonth: factory(/expir|exp.*mo|exp.*date|ccmonth|cardmonth/i),
+      isCardExpdateYear: factory(/exp|^\/|year/i),
+      isCardExpdate: factory(/expir|exp.*date/i),
+      isNameOnCard: factory(/card.?(holder|owner)|name.*\bon\b.*card|(card|cc).?name|cc.?full.?name/i),
+      isCardNumber: factory(/(card|cc|acct).?(number|#|no|num)/i),
+      isCardType: factory(/debit.*card|(card|cc).?type/i),
 
-      isMonth: factory(['month']),
-      isYear: factory(['year'])
+      isMonth: factory(/month/i),
+      isYear: factory(/year/i)
     };
   })(),
   onMousedown(event) {
