@@ -1,6 +1,78 @@
 'use strict';
 
 var Ephy = {};
+ 
+Ephy.DropdownMenu = class DropdownMenu {
+    static #stylesAdded = false;
+
+    static addStyles()
+    {
+        if (DropdownMenu.#stylesAdded)
+            return;
+
+        const styles = `
+          .ephy-dropdown {
+            position: absolute;
+            display: inline-block;
+            z-index: 2147483647;
+          }
+
+          .ephy-dropdown-content {
+            display: block;
+            position: absolute;
+            padding: 6px 0px;
+            background-color: #ffffff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            z-index: 1;
+          }
+
+          .ephy-dropdown-content a {
+            color: #2e2e2e;
+            padding: 10px 14px;
+            text-decoration: none;
+            display: block;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 13.5px;
+            cursor: default;
+            -webkit-user-modify: read-only ! important;
+          }
+
+          .ephy-dropdown-content a:hover {
+            background-color: #f3f3f5;
+            color: #000000;
+          }
+        `;
+
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+        DropdownMenu.#stylesAdded = true;
+    }
+
+    static create(inputElement, id)
+    {
+        DropdownMenu.addStyles();
+
+        const mainDiv = document.createElement('div');
+        mainDiv.id = id;
+        mainDiv.className = 'ephy-dropdown';
+
+        const elementRect = inputElement.getBoundingClientRect();
+        mainDiv.style.width = inputElement.offsetWidth + 'px';
+        mainDiv.style.left = (elementRect.left + window.scrollX) + 'px';
+        mainDiv.style.top = (elementRect.top + elementRect.height + window.scrollY) + 'px';
+
+        const innerDiv = document.createElement('div');
+        innerDiv.className = 'ephy-dropdown-content';
+        mainDiv.appendChild(innerDiv);
+
+        return { mainDiv, innerDiv };
+    }
+};
 
 Ephy.getOpenSearchLinks = function()
 {
@@ -204,56 +276,7 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
 
     #showMenu(showAll)
     {
-        const mainDiv = document.createElement('div');
-        const styles = `
-          .ephy-dropdown {
-            position: absolute;
-            display: inline-block;
-          }
-
-          .ephy-dropdown-content {
-            display: block;
-            position: absolute;
-            padding: 0;
-            background-color: #ffffff;
-            background-clip: padding-box;
-            border-style: solid;
-            border-color: #e0e0e0;
-            border-radius: 9px;
-            border-width: 1px;
-            min-width: 160px;
-            box-shadow: 0 1px 2px transparentize(black, 0.7);
-            z-index: 1;
-          }
-
-          /* Links inside the dropdown */
-          .ephy-dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-          }
-
-          /* Change color of dropdown links on hover */
-          .ephy-dropdown-content a:hover {background-color: #f1f1f1}
-        `;
-
-        let styleSheet = document.createElement("style")
-        styleSheet.textContent = styles;
-        document.head.appendChild(styleSheet);
-
-        mainDiv.id = 'ephy-user-choices-container';
-
-        const elementRect = this.#userElement.getBoundingClientRect();
-
-        mainDiv.className = 'ephy-dropdown';
-        mainDiv.style.width = this.#userElement.offsetWidth + 'px';
-        mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
-        mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
-
-        const innerDiv = document.createElement('div');
-        innerDiv.className = 'ephy-dropdown-content';
-        mainDiv.appendChild(innerDiv);
+        const { mainDiv, innerDiv } = Ephy.DropdownMenu.create(this.#userElement, 'ephy-user-choices-container');
 
         this.#selected = null;
         for (const user of this.#users) {
@@ -701,7 +724,8 @@ Ephy.FormManager = class FormManager
 
     static #isNewPasswordElement(element)
     {
-        return element.getAttribute('autocomplete').includes('new-password');
+        const autocomplete = element.getAttribute('autocomplete');
+        return autocomplete ? autocomplete.includes('new-password') : false;
     }
 
     _newPasswordElementFocused(event)
@@ -710,54 +734,12 @@ Ephy.FormManager = class FormManager
             this._passwordMenuDismiss();
         }
 
-        const mainDiv = document.createElement('div');
-        mainDiv.id = 'ephy-generate-secure-password-container';
-
         const passwordElement = event.target;
-        const elementRect = event.target.getBoundingClientRect();
-
-        // 2147483647 is the maximum value browsers will take for z-index.
-        // See http://stackoverflow.com/questions/8565821/css-max-z-index-value
-        mainDiv.style.cssText = 'position: absolute;' +
-            'z-index: 2147483647;' +
-            'cursor: default;' +
-            'background-color: white;' +
-            'box-shadow: 5px 5px 5px rgba(0,0,0,0.2);' +
-            'border-top: 0px;' +
-            'border-radius: 8px;' +
-            'padding: 12px 0px;' +
-            '-webkit-user-modify: read-only ! important;';
-        mainDiv.style.width = 200; //this._userElement.offsetWidth + 'px';
-        mainDiv.style.left = elementRect.left + document.body.scrollLeft + 'px';
-        mainDiv.style.top = elementRect.top + elementRect.height + document.body.scrollTop + 'px';
-
-        // FIXME: Probably shouldn't use a list here to create only a single element.
-        const ul = document.createElement('ul');
-        ul.style.cssText = 'margin: 0; padding: 0;';
-        ul.tabindex = -1;
-        mainDiv.appendChild(ul);
-
-        this._selected = null;
-
-        const li = document.createElement('li');
-        li.style.cssText = 'list-style-type: none ! important;' +
-            'background-image: none ! important;' +
-            'padding: 3px 6px ! important;' +
-            'color: black;' +
-            'margin: 0px;';
-        // FIXME: selection colors.
-        li.tabindex = -1;
-        ul.appendChild(li);
+        const { mainDiv, innerDiv } = Ephy.DropdownMenu.create(passwordElement, 'ephy-generate-secure-password-container');
 
         const anchor = document.createElement('a');
-        anchor.style.cssText = 'font-weight: normal ! important;' +
-            'font-family: sans ! important;' +
-            'text-decoration: none ! important;' +
-            'color: black;' +
-            '-webkit-user-modify: read-only ! important;';
-        // FIXME: selection colors.
         anchor.textContent = Ephy._("Generate a Secure Password");
-        li.appendChild(anchor);
+        innerDiv.appendChild(anchor);
 
         const removeMenu = () => {
             const menu = document.getElementById('ephy-generate-secure-password-container');
@@ -788,7 +770,7 @@ Ephy.FormManager = class FormManager
         this._passwordMenuDismiss = removeMenu;
 
         // FIXME: Handle keyboard input too
-        li.addEventListener('mousedown', event => {
+        anchor.addEventListener('mousedown', event => {
             passwordElement.value = Ephy.generateSecurePassword();
             removeMenu();
         }, true);
@@ -877,7 +859,7 @@ Ephy.FormManager = class FormManager
 
        if (forAutofill) {
            for (let node of passwordNodes) {
-               if (Ephy.FormManager._isNewPasswordElement(node.element))
+               if (Ephy.FormManager.#isNewPasswordElement(node.element))
                    node.element.addEventListener('focus', this._newPasswordElementFocused.bind(this), true);
                break;
            }
