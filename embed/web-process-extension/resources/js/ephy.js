@@ -34,7 +34,9 @@ Ephy.DropdownMenu = class DropdownMenu {
             color: #2e2e2e;
             padding: 10px 14px;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-family: system-ui, -apple-system, sans-serif;
             font-size: 13.5px;
             cursor: default;
@@ -44,6 +46,36 @@ Ephy.DropdownMenu = class DropdownMenu {
           .ephy-dropdown-content a:hover {
             background-color: #f3f3f5;
             color: #000000;
+          }
+
+          .ephy-dropdown-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5c5c5c;
+          }
+
+          .ephy-dropdown-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+          }
+
+          .ephy-dropdown-title {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 1.2;
+          }
+
+          .ephy-dropdown-subtitle {
+            display: block;
+            font-family: monospace;
+            font-size: 11.5px;
+            color: #6e6e73;
+            line-height: 1.2;
           }
         `;
 
@@ -738,7 +770,52 @@ Ephy.FormManager = class FormManager
         const { mainDiv, innerDiv } = Ephy.DropdownMenu.create(passwordElement, 'ephy-generate-secure-password-container');
 
         const anchor = document.createElement('a');
-        anchor.textContent = Ephy._("Generate a Secure Password");
+
+        // Create the Key Icon
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'ephy-dropdown-icon';
+
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("width", "16");
+        svg.setAttribute("height", "16");
+        svg.setAttribute("viewBox", "0 0 16 16");
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", "currentColor");
+        svg.setAttribute("stroke-width", "2");
+        svg.setAttribute("stroke-linecap", "round");
+        svg.setAttribute("stroke-linejoin", "round");
+
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", "5");
+        circle.setAttribute("cy", "11");
+        circle.setAttribute("r", "3");
+        svg.appendChild(circle);
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", "M7.5 8.5L12 4l2 2-1 1-1-1-1 1-1-1-1 1");
+        svg.appendChild(path);
+
+        iconSpan.appendChild(svg);
+        anchor.appendChild(iconSpan);
+
+        // Pre-generate the password
+        const password = Ephy.generateSecurePassword();
+
+        // Create the text container with title & subtitle (preview)
+        const textDiv = document.createElement('div');
+        textDiv.className = 'ephy-dropdown-text';
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'ephy-dropdown-title';
+        titleSpan.textContent = Ephy._("Use and Save Suggested Password");
+        textDiv.appendChild(titleSpan);
+
+        const passSpan = document.createElement('span');
+        passSpan.className = 'ephy-dropdown-subtitle';
+        passSpan.textContent = password;
+        textDiv.appendChild(passSpan);
+
+        anchor.appendChild(textDiv);
         innerDiv.appendChild(anchor);
 
         const removeMenu = () => {
@@ -771,7 +848,7 @@ Ephy.FormManager = class FormManager
 
         // FIXME: Handle keyboard input too
         anchor.addEventListener('mousedown', event => {
-            passwordElement.value = Ephy.generateSecurePassword();
+            passwordElement.value = password;
             removeMenu();
         }, true);
 

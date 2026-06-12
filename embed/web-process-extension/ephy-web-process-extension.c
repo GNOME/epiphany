@@ -133,8 +133,6 @@ web_page_form_controls_associated (WebKitWebPage *web_page,
   g_autoptr (JSCValue) js_ephy = NULL;
   g_autoptr (JSCValue) js_serializer = NULL;
   g_autoptr (JSCValue) js_result = NULL;
-  guint64 frame_id;
-  guint64 *frame_id_copy;
 
   extension = ephy_web_process_extension_get ();
   js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
@@ -152,14 +150,6 @@ web_page_form_controls_associated (WebKitWebPage *web_page,
                                               JSC_TYPE_VALUE, js_serializer,
                                               G_TYPE_NONE);
   (void)js_result;
-
-  frame_id = webkit_frame_get_id (frame);
-  if (!g_hash_table_contains (extension->frames_map, &frame_id)) {
-    frame_id_copy = g_malloc (sizeof (guint64));
-    *frame_id_copy = frame_id;
-    g_hash_table_insert (extension->frames_map, g_steal_pointer (&frame_id_copy), frame);
-    g_object_weak_ref (G_OBJECT (frame), (GWeakNotify)frame_destroyed_notify, extension);
-  }
 }
 
 static gboolean
