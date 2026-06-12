@@ -704,10 +704,12 @@ Ephy.FormManager = class FormManager
         return element.getAttribute('autocomplete').includes('new-password');
     }
 
-    // FIXME: This code a bad version of Ephy.PreFillUserMenu. The code
-    // duplication should be reconciled somehow.
     _newPasswordElementFocused(event)
     {
+        if (this._passwordMenuDismiss) {
+            this._passwordMenuDismiss();
+        }
+
         const mainDiv = document.createElement('div');
         mainDiv.id = 'ephy-generate-secure-password-container';
 
@@ -757,13 +759,43 @@ Ephy.FormManager = class FormManager
         anchor.textContent = Ephy._("Generate a Secure Password");
         li.appendChild(anchor);
 
+        const removeMenu = () => {
+            const menu = document.getElementById('ephy-generate-secure-password-container');
+            if (menu)
+                menu.parentNode.removeChild(menu);
+
+            passwordElement.removeEventListener('blur', removeMenu);
+            passwordElement.removeEventListener('keydown', onKeyDown);
+            document.removeEventListener('mousedown', onDocMouseDown, true);
+
+            this._passwordMenuDismiss = null;
+        };
+
+        const onKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                removeMenu();
+                event.preventDefault();
+            }
+        };
+
+        const onDocMouseDown = (event) => {
+            const menu = document.getElementById('ephy-generate-secure-password-container');
+            if (menu && !menu.contains(event.target) && event.target !== passwordElement) {
+                removeMenu();
+            }
+        };
+
+        this._passwordMenuDismiss = removeMenu;
+
         // FIXME: Handle keyboard input too
         li.addEventListener('mousedown', event => {
             passwordElement.value = Ephy.generateSecurePassword();
-		    const menu = document.getElementById('ephy-generate-secure-password-container');
-		    if (menu)
-		        menu.parentNode.removeChild(menu);
+            removeMenu();
         }, true);
+
+        passwordElement.addEventListener('blur', removeMenu);
+        passwordElement.addEventListener('keydown', onKeyDown);
+        document.addEventListener('mousedown', onDocMouseDown, true);
 
         document.body.appendChild(mainDiv);
     }
