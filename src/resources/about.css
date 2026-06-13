@@ -417,7 +417,7 @@ html.epiphany-html {
     color: #888;
     width: 24px;
     height: 24px;
-    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-remove-item.svg) center no-repeat, rgba(80,80,80,.3);
+    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-remove-item.svg) center no-repeat, rgba(0,0,0,.55);
     border-radius: 50%;
 }
 
@@ -428,6 +428,51 @@ html.epiphany-html {
 .overview-close-button:active {
     text-shadow: none;
     background-color: #000;
+}
+
+.overview-pin-button {
+    -webkit-transition: all 250ms;
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    opacity: 0.55;
+    z-index: 5;
+    color: #888;
+    width: 24px;
+    height: 24px;
+    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.55);
+    border-radius: 50%;
+}
+
+.overview-item:hover .overview-pin-button,
+.overview-item-pinned .overview-pin-button {
+    opacity: 1;
+}
+
+.overview-pin-button:hover {
+    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.8);
+}
+
+.overview-pin-button:active {
+    text-shadow: none;
+    background-color: #000;
+}
+
+.overview-item-pinned .overview-pin-button {
+    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.75);
+}
+
+.overview-item-pinned .overview-pin-button:hover {
+    background: url(ephy-resource:///org/gnome/epiphany/page-icons/overview-pin-item.svg) center no-repeat, rgba(0,0,0,.85);
+}
+
+.overview-removed .overview-pin-button {
+    display: none;
+}
+
+html[dir="rtl"] .overview-pin-button {
+    right: 20px;
+    left: inherit;
 }
 
 .overview-item:hover {

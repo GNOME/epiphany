@@ -211,6 +211,7 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       GVariantIter iter;
       const char *url;
       const char *title;
+      gboolean pinned;
       GList *items = NULL;
       g_autoptr (GVariant) array = NULL;
 
@@ -218,11 +219,14 @@ ephy_web_process_extension_user_message_received_cb (EphyWebProcessExtension *ex
       if (!parameters)
         return;
 
-      g_variant_get (parameters, "@a(ss)", &array);
+      g_variant_get (parameters, "@a(ssb)", &array);
       g_variant_iter_init (&iter, array);
 
-      while (g_variant_iter_loop (&iter, "(&s&s)", &url, &title))
-        items = g_list_prepend (items, ephy_web_overview_model_item_new (url, title));
+      while (g_variant_iter_loop (&iter, "(&s&sb)", &url, &title, &pinned)) {
+        EphyWebOverviewModelItem *item = ephy_web_overview_model_item_new (url, title);
+        item->pinned = pinned;
+        items = g_list_prepend (items, item);
+      }
 
       ephy_web_overview_model_set_urls (extension->overview_model, g_list_reverse (items));
     }

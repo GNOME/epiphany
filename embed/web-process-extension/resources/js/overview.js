@@ -34,7 +34,7 @@ Ephy.Overview = class Overview
 
         for (let i = 0; i < anchors.length; i++) {
             const anchor = anchors[i];
-            if (anchor.className !== 'overview-item')
+            if (!anchor.classList.contains('overview-item'))
                 continue;
 
             const item = new Ephy.Overview.Item(anchor);
@@ -44,6 +44,14 @@ Ephy.Overview = class Overview
                 this.#removeItem(anchor);
                 event.preventDefault();
             };
+
+            const pinButton = anchor.getElementsByClassName('overview-pin-button')[0];
+            if (pinButton) {
+                pinButton.onclick = (event) => {
+                    this.#togglePinItem(anchor);
+                    event.preventDefault();
+                };
+            }
 
             // URLs and titles are always sent from the UI process, but thumbnails
             // aren't, so update the model with the thumbnail if there's one.
@@ -126,6 +134,12 @@ Ephy.Overview = class Overview
         }, 500);  // This value needs to be synced with the one in about.css
     }
 
+    #togglePinItem(item)
+    {
+        const isPinned = item.classList.contains('overview-item-pinned');
+        window.webkit.messageHandlers.overviewPin.postMessage({ url: item.href, pinned: !isPinned });
+    }
+
     #onURLsChanged(urls)
     {
         const overview = document.getElementById('overview');
@@ -156,6 +170,15 @@ Ephy.Overview = class Overview
                 closeButton.innerHTML = '';
                 closeButton.classList.add('overview-close-button');
                 anchor.appendChild(closeButton);
+                const pinButton = document.createElement('div');
+                pinButton.title = url.pinned ? Ephy._('Unpin from overview') : Ephy._('Pin to overview');
+                pinButton.onclick = (event) => {
+                    this.#togglePinItem(anchor);
+                    event.preventDefault();
+                };
+                pinButton.innerHTML = '';
+                pinButton.classList.add('overview-pin-button');
+                anchor.appendChild(pinButton);
                 const thumbnailSpan = document.createElement('span');
                 thumbnailSpan.classList.add('overview-thumbnail');
                 anchor.appendChild(thumbnailSpan);
@@ -170,6 +193,7 @@ Ephy.Overview = class Overview
             item.setURL(url.url);
             item.setTitle(url.title);
             item.setThumbnailPath(this.#model.getThumbnail(url.url));
+            item.setPinned(url.pinned);
         }
 
         while (this.#items.length > urls.length) {
@@ -277,6 +301,20 @@ Ephy.Overview.Item = class OverviewItem
             this.#thumbnail.style.backgroundImage = '';
             this.#thumbnail.style.backgroundSize = 'auto';
             this.#thumbnail.style.backgroundPosition = 'center';
+        }
+    }
+
+    setPinned(pinned)
+    {
+        const pinButton = this.#item.getElementsByClassName('overview-pin-button')[0];
+        if (pinned) {
+            this.#item.classList.add('overview-item-pinned');
+            if (pinButton)
+                pinButton.title = Ephy._('Unpin from overview');
+        } else {
+            this.#item.classList.remove('overview-item-pinned');
+            if (pinButton)
+                pinButton.title = Ephy._('Pin to overview');
         }
     }
 

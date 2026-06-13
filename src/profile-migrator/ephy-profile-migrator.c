@@ -26,6 +26,7 @@
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
+#include "ephy-sqlite-connection.h"
 
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -274,6 +275,31 @@ migrate_nothing (void)
    */
 }
 
+static void
+migrate_add_pinned_column (void)
+{
+  g_autofree char *filename = g_build_filename (ephy_default_profile_dir (), EPHY_HISTORY_FILE, NULL);
+  EphySQLiteConnection *db;
+  GError *error = NULL;
+
+  db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, filename);
+  if (!ephy_sqlite_connection_open (db, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+      g_warning ("Failed to open history database: %s", error->message);
+    g_clear_error (&error);
+    g_object_unref (db);
+    return;
+  }
+
+  ephy_sqlite_connection_execute (db,
+                                  "ALTER TABLE urls ADD COLUMN pinned INTEGER DEFAULT 0",
+                                  &error);
+  /* Ignore duplicate column errors — the column may already exist. */
+  g_clear_error (&error);
+
+  g_object_unref (db);
+}
+
 /* If adding anything here, you need to edit EPHY_PROFILE_MIGRATION_VERSION
  * in ephy-profile-utils.h. */
 const int EPHY_MINIMUM_MIGRATION_VERSION = 37;
@@ -282,6 +308,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_pre_flatpak_webapps,
   /* 38 */ migrate_gsb_db,
   /* 39 */ migrate_search_engines,
+  /* 40 */ migrate_add_pinned_column,
 };
 
 static gboolean

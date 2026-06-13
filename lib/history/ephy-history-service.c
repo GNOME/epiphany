@@ -42,6 +42,7 @@ typedef enum {
   SET_URL_TITLE,
   SET_URL_ZOOM_LEVEL,
   SET_URL_HIDDEN,
+  SET_URL_PINNED,
   ADD_VISIT,
   ADD_VISITS,
   DELETE_URLS,
@@ -735,11 +736,11 @@ ephy_history_service_get_cached_statement (EphyHistoryService           *self,
       sql = "DELETE FROM hosts WHERE url=?";
       break;
     case EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_ID:
-      sql = "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
+      sql = "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id, pinned FROM urls "
             "WHERE id=?";
       break;
     case EPHY_HISTORY_STATEMENT_GET_URL_ROW_FOR_URL:
-      sql = "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id FROM urls "
+      sql = "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, sync_id, pinned FROM urls "
             "WHERE url=?";
       break;
     case EPHY_HISTORY_STATEMENT_ADD_URL_ROW:
@@ -747,7 +748,7 @@ ephy_history_service_get_cached_statement (EphyHistoryService           *self,
             " VALUES (?, ?, ?, ?, ?, ?, ?)";
       break;
     case EPHY_HISTORY_STATEMENT_UPDATE_URL_ROW:
-      sql = "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, sync_id=? "
+      sql = "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, sync_id=?, pinned=? "
             "WHERE id=?";
       break;
     case EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_ID:
@@ -1072,6 +1073,48 @@ ephy_history_service_set_url_hidden (EphyHistoryService     *self,
 }
 
 static gboolean
+ephy_history_service_execute_set_url_pinned (EphyHistoryService *self,
+                                             EphyHistoryURL     *url,
+                                             gpointer           *result)
+{
+  gboolean pinned;
+
+  pinned = url->pinned;
+
+  if (!ephy_history_service_get_url_row (self, NULL, url)) {
+    /* The URL is not yet in the database, so we can't update it.. */
+    return FALSE;
+  } else {
+    url->pinned = pinned;
+    ephy_history_service_update_url_row (self, url);
+    return TRUE;
+  }
+}
+
+void
+ephy_history_service_set_url_pinned (EphyHistoryService     *self,
+                                     const char             *orig_url,
+                                     gboolean                pinned,
+                                     GCancellable           *cancellable,
+                                     EphyHistoryJobCallback  callback,
+                                     gpointer                user_data)
+{
+  EphyHistoryServiceMessage *message;
+  EphyHistoryURL *url;
+
+  g_assert (EPHY_IS_HISTORY_SERVICE (self));
+  g_assert (orig_url);
+
+  url = ephy_history_url_new (orig_url, NULL, 0, 0, 0);
+  url->pinned = pinned;
+
+  message = ephy_history_service_message_new (self, SET_URL_PINNED,
+                                              url, (GDestroyNotify)ephy_history_url_free,
+                                              NULL, cancellable, callback, user_data);
+  ephy_history_service_send_message (self, message);
+}
+
+static gboolean
 ephy_history_service_execute_get_url (EphyHistoryService *self,
                                       const gchar        *orig_url,
                                       gpointer           *result)
@@ -1286,6 +1329,7 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_title,
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_zoom_level,
   (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_hidden,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_set_url_pinned,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visit,
   (EphyHistoryServiceMethod)ephy_history_service_execute_add_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_delete_urls,

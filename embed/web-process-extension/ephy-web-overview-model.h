@@ -51,6 +51,7 @@ struct _EphyWebOverviewModelItem
 {
   char *url;
   char *title;
+  gboolean pinned;
 };
 
 EphyWebOverviewModelItem *ephy_web_overview_model_item_new  (const char               *url,

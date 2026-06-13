@@ -501,12 +501,15 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     attribute_encoded_title = ephy_encode_for_html_attribute (url->title);
     encoded_url = ephy_encode_for_html_attribute (url->url);
     g_string_append_printf (data_str,
-                            "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
+                            "<a class=\"%s\" title=\"%s\" href=\"%s\">"
                             "  <div class=\"overview-close-button\" title=\"%s\"></div>"
+                            "  <div class=\"overview-pin-button\" title=\"%s\"></div>"
                             "  <span class=\"overview-thumbnail\"%s></span>"
                             "  <span class=\"overview-title\">%s</span>"
                             "</a>",
+                            url->pinned ? "overview-item overview-item-pinned" : "overview-item",
                             attribute_encoded_title, encoded_url, _("Remove from overview"),
+                            url->pinned ? _("Unpin from overview") : _("Pin to overview"),
                             thumbnail_style ? thumbnail_style : "",
                             entity_encoded_title);
   }

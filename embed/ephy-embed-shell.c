@@ -238,11 +238,11 @@ history_service_query_urls_cb (EphyHistoryService *service,
   if (!success)
     return;
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ss)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ssb)"));
   for (l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
 
-    g_variant_builder_add (&builder, "(ss)", url->url, url->title);
+    g_variant_builder_add (&builder, "(ssb)", url->url, url->title, url->pinned);
     ephy_embed_shell_schedule_thumbnail_update (shell, (EphyHistoryURL *)l->data);
   }
 
@@ -349,6 +349,35 @@ web_process_extension_autofill_askuser_received_cb (WebKitUserContentManager *ma
 
   g_signal_emit (shell, signals[AUTOFILL_SIGNAL], 0,
                  page_id, selector, is_fillable_element, has_personal_fields, has_card_fields, x, y, element_width, element_height);
+}
+
+static void
+history_set_url_pinned_cb (EphyHistoryService *service,
+                           gboolean            success,
+                           gpointer            result_data,
+                           EphyEmbedShell     *shell)
+{
+  if (!success)
+    return;
+
+  ephy_embed_shell_update_overview_urls (shell);
+}
+
+static void
+web_process_extension_overview_pin_message_received_cb (WebKitUserContentManager *manager,
+                                                        JSCValue                 *message,
+                                                        EphyEmbedShell           *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  g_autofree char *url = property_to_string_or_null (message, "url");
+  gboolean pinned = property_to_boolean (message, "pinned");
+
+  if (url) {
+    ephy_history_service_set_url_pinned (priv->global_history_service,
+                                         url, pinned, NULL,
+                                         (EphyHistoryJobCallback)history_set_url_pinned_cb,
+                                         shell);
+  }
 }
 
 static void
@@ -1345,6 +1374,13 @@ ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
                            shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
+                                                               "overviewPin",
+                                                               priv->guid);
+  g_signal_connect_object (ucm, "script-message-received::overviewPin",
+                           G_CALLBACK (web_process_extension_overview_pin_message_received_cb),
+                           shell, 0);
+
+  webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "passwordFormFocused",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordFormFocused",
@@ -1385,6 +1421,9 @@ ephy_embed_shell_unregister_ucm (EphyEmbedShell           *shell,
 
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "overview",
+                                                                 priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler (ucm,
+                                                                 "overviewPin",
                                                                  priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (ucm,
                                                                  "passwordFormFocused",

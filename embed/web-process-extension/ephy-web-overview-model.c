@@ -106,6 +106,10 @@ ephy_web_overview_model_urls_to_js_value (EphyWebOverviewModel *model,
     value = jsc_value_new_string (js_context, item->title);
     jsc_value_object_set_property (js_item, "title", value);
 
+    g_clear_object (&value);
+    value = jsc_value_new_boolean (js_context, item->pinned);
+    jsc_value_object_set_property (js_item, "pinned", value);
+
     g_ptr_array_add (urls, g_steal_pointer (&js_item));
   }
 
@@ -324,6 +328,7 @@ ephy_web_overview_model_item_new (const char *url,
   item = g_new0 (EphyWebOverviewModelItem, 1);
   item->url = g_strdup (url);
   item->title = g_strdup (title);
+  item->pinned = FALSE;
 
   return item;
 }

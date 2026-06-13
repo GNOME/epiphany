@@ -147,6 +147,7 @@ ephy_history_url_new (const char *url,
   history_url->visit_count = visit_count;
   history_url->typed_count = typed_count;
   history_url->last_visit_time = last_visit_time;
+  history_url->pinned = FALSE;
   history_url->host = NULL;
   history_url->notify_visit = TRUE;
   history_url->notify_delete = TRUE;
@@ -168,6 +169,7 @@ ephy_history_url_copy (EphyHistoryURL *url)
   copy->id = url->id;
   copy->sync_id = g_strdup (url->sync_id);
   copy->hidden = url->hidden;
+  copy->pinned = url->pinned;
   copy->host = ephy_history_host_copy (url->host);
   copy->notify_visit = url->notify_visit;
   copy->notify_delete = url->notify_delete;

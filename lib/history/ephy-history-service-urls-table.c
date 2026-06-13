@@ -28,9 +28,9 @@ ephy_history_service_initialize_urls_table (EphyHistoryService *self)
 {
   GError *error = NULL;
 
-  if (ephy_sqlite_connection_table_exists (self->history_database, "visits")) {
+  if (ephy_sqlite_connection_table_exists (self->history_database, "visits"))
     return TRUE;
-  }
+
   ephy_sqlite_connection_execute (self->history_database,
                                   "CREATE TABLE urls ("
                                   "id INTEGER PRIMARY KEY,"
@@ -42,7 +42,8 @@ ephy_history_service_initialize_urls_table (EphyHistoryService *self)
                                   "typed_count INTEGER DEFAULT 0 NOT NULL,"
                                   "last_visit_time INTEGER,"
                                   "thumbnail_update_time INTEGER DEFAULT 0," /* this column is legacy, unused */
-                                  "hidden_from_overview INTEGER DEFAULT 0)", &error);
+                                  "hidden_from_overview INTEGER DEFAULT 0,"
+                                  "pinned INTEGER DEFAULT 0 NOT NULL)", &error);
 
   if (error) {
     g_warning ("Could not create urls table: %s", error->message);
@@ -112,6 +113,7 @@ ephy_history_service_get_url_row (EphyHistoryService *self,
   url->last_visit_time = ephy_sqlite_statement_get_column_as_int64 (statement, 5);
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
   url->sync_id = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 7));
+  url->pinned = ephy_sqlite_statement_get_column_as_int (statement, 8);
 
   return url;
 }
@@ -185,7 +187,8 @@ ephy_history_service_update_url_row (EphyHistoryService *self,
       !ephy_sqlite_statement_bind_int64 (statement, 3, url->last_visit_time, &error) ||
       !ephy_sqlite_statement_bind_int (statement, 4, url->hidden, &error) ||
       !ephy_sqlite_statement_bind_string (statement, 5, url->sync_id, &error) ||
-      !ephy_sqlite_statement_bind_int (statement, 6, url->id, &error)) {
+      !ephy_sqlite_statement_bind_int (statement, 6, url->pinned, &error) ||
+      !ephy_sqlite_statement_bind_int (statement, 7, url->id, &error)) {
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
     return;
@@ -212,6 +215,7 @@ create_url_from_statement (EphySQLiteStatement *statement)
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
   url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 7);
   url->sync_id = g_strdup (ephy_sqlite_statement_get_column_as_string (statement, 8));
+  url->pinned = ephy_sqlite_statement_get_column_as_int (statement, 9);
 
   return url;
 }
@@ -235,7 +239,8 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
                                "urls.last_visit_time, "
                                "urls.hidden_from_overview, "
                                "urls.host, "
-                               "urls.sync_id "
+                               "urls.sync_id, "
+                               "urls.pinned "
                                "FROM "
                                "urls ";
 
@@ -272,7 +277,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self,
 
   switch (query->sort_type) {
     case EPHY_HISTORY_SORT_MOST_VISITED:
-      statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count DESC ");
+      statement_str = g_string_append (statement_str, "ORDER BY urls.pinned DESC, urls.visit_count DESC ");
       break;
     case EPHY_HISTORY_SORT_LEAST_VISITED:
       statement_str = g_string_append (statement_str, "ORDER BY urls.visit_count ");
