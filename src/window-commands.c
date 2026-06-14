@@ -3614,3 +3614,22 @@ window_cmd_security_and_permissions (GSimpleAction *action,
 
   adw_dialog_present (ADW_DIALOG (security_dialog), GTK_WIDGET (window));
 }
+
+void
+window_cmd_generate_password (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
+  g_autoptr (WebKitUserMessage) message = NULL;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  if (!embed)
+    return;
+
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+  message = webkit_user_message_new ("PasswordManager.GeneratePassword", NULL);
+  webkit_web_view_send_message_to_page (web_view, g_steal_pointer (&message), NULL, NULL, NULL);
+}

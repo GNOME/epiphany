@@ -420,6 +420,31 @@ create_web_extension_data (const char   *extension_guid,
   return data;
 }
 
+static void
+generate_password_in_active_frame (EphyWebProcessExtension *extension)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, extension->frames_map);
+  while (g_hash_table_iter_next (&iter, &key, &value)) {
+    WebKitFrame *frame = WEBKIT_FRAME (value);
+    g_autoptr (JSCContext) js_context = NULL;
+    g_autoptr (JSCValue) js_ephy = NULL;
+    g_autoptr (JSCValue) js_result = NULL;
+
+    js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
+    if (!js_context)
+      continue;
+
+    js_ephy = jsc_context_get_value (js_context, "Ephy");
+    if (js_ephy && !jsc_value_is_undefined (js_ephy)) {
+      js_result = jsc_value_object_invoke_method (js_ephy, "generateAndFillPassword", G_TYPE_NONE);
+      (void)js_result;
+    }
+  }
+}
+
 static gboolean
 web_page_received_message (WebKitWebPage     *web_page,
                            WebKitUserMessage *message,
@@ -441,8 +466,10 @@ web_page_received_message (WebKitWebPage     *web_page,
     g_variant_get (parameters, "(sv)", &guid, &variant);
     dict = g_variant_dict_new (variant);
 
-    /* WebExtensionData vreated using create_web_extension_data is transferred to hash table */
+    /* WebExtensionData created using create_web_extension_data is transferred to hash table */
     g_hash_table_replace (extension->web_extensions, guid, create_web_extension_data (guid, dict));
+  } else if (g_strcmp0 (name, "PasswordManager.GeneratePassword") == 0) {
+    generate_password_in_active_frame (extension);
   } else {
     g_warning ("Unhandled page message: %s", name);
     return FALSE;
@@ -1023,12 +1050,22 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   g_autoptr (JSCValue) js_function = NULL;
   g_autoptr (JSCValue) js_value = NULL;
   g_autoptr (JSCValue) result = NULL;
+  guint64 frame_id;
+  guint64 *frame_id_copy;
 
   if (PAGE_IS_EXTENSION (page))
     return;
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, world);
   jsc_context_push_exception_handler (js_context, (JSCExceptionHandler)js_exception_handler, NULL, NULL);
+
+  frame_id = webkit_frame_get_id (frame);
+  if (extension->frames_map && !g_hash_table_contains (extension->frames_map, &frame_id)) {
+    frame_id_copy = g_malloc (sizeof (guint64));
+    *frame_id_copy = frame_id;
+    g_hash_table_insert (extension->frames_map, g_steal_pointer (&frame_id_copy), frame);
+    g_object_weak_ref (G_OBJECT (frame), (GWeakNotify)frame_destroyed_notify, extension);
+  }
 
   result = jsc_context_get_value (js_context, "Ephy");
   g_assert (jsc_value_is_undefined (result));
@@ -1211,6 +1248,12 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
 
   g_assert (guid && *guid);
 
+  extension->frames_map = g_hash_table_new_full (g_int64_hash, g_int64_equal,
+                                                 g_free, NULL);
+  extension->view_contexts = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+  extension->web_extensions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                                     (GDestroyNotify)web_extension_data_free);
+
   /* Default script world, used by WebExtensions. */
   g_signal_connect (webkit_script_world_get_default (),
                     "window-object-cleared",
@@ -1237,13 +1280,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension   *extension,
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_process_extension_page_created_cb),
                             extension);
-
-  extension->frames_map = g_hash_table_new_full (g_int64_hash, g_int64_equal,
-                                                 g_free, NULL);
-
-  extension->view_contexts = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
-  extension->web_extensions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                     (GDestroyNotify)web_extension_data_free);
 
   for (guint i = 0; i < g_variant_n_children (web_extensions); i++) {
     g_autoptr (GVariant) child = g_variant_get_child_value (web_extensions, i);
