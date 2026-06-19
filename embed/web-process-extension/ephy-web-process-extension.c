@@ -164,6 +164,8 @@ web_page_context_menu (WebKitWebPage          *web_page,
   WebKitFrame *frame;
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_value = NULL;
+  g_autoptr (JSCValue) js_node = NULL;
+  gboolean is_password = FALSE;
 
   extension = ephy_web_process_extension_get ();
   /* FIXME: this is wrong, see https://gitlab.gnome.org/GNOME/epiphany/issues/442
@@ -178,8 +180,19 @@ web_page_context_menu (WebKitWebPage          *web_page,
   if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
     string = jsc_value_to_string (js_value);
 
+  js_node = webkit_web_hit_test_result_get_js_node (hit_test_result, extension->script_world);
+  if (js_node && jsc_value_is_object (js_node)) {
+    g_autoptr (JSCValue) type_val = jsc_value_object_get_property (js_node, "type");
+    if (type_val && jsc_value_is_string (type_val)) {
+      g_autofree char *type_str = jsc_value_to_string (type_val);
+      if (g_strcmp0 (type_str, "password") == 0)
+        is_password = TRUE;
+    }
+  }
+
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
   g_variant_builder_add (&builder, "{sv}", "SelectedText", g_variant_new_string (string ? g_strstrip (string) : ""));
+  g_variant_builder_add (&builder, "{sv}", "IsPassword", g_variant_new_boolean (is_password));
   webkit_context_menu_set_user_data (context_menu,
                                      g_variant_builder_end (&builder));
 

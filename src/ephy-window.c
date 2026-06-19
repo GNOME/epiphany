@@ -1555,12 +1555,18 @@ should_show_copy_outside_editable (WebKitWebView *view)
 
 static void
 parse_context_menu_user_data (WebKitContextMenu  *context_menu,
-                              const char        **selected_text)
+                              const char        **selected_text,
+                              gboolean           *is_password)
 {
   GVariantDict dict;
 
   g_variant_dict_init (&dict, webkit_context_menu_get_user_data (context_menu));
   g_variant_dict_lookup (&dict, "SelectedText", "&s", selected_text);
+
+  if (is_password) {
+    *is_password = FALSE;
+    g_variant_dict_lookup (&dict, "IsPassword", "b", is_password);
+  }
 }
 
 static gboolean
@@ -1600,6 +1606,7 @@ populate_context_menu (WebKitWebView       *web_view,
   GdkEvent *event = NULL;
   GdkModifierType state = 0;
   gboolean fullscreen_lockdown;
+  gboolean is_password = FALSE;
 
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
                         ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
@@ -1649,7 +1656,7 @@ populate_context_menu (WebKitWebView       *web_view,
     }
   }
 
-  parse_context_menu_user_data (context_menu, &selected_text);
+  parse_context_menu_user_data (context_menu, &selected_text, &is_password);
   if (selected_text && *selected_text) {
     is_selected_text = TRUE;
 
@@ -1768,10 +1775,13 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, window_action_group,
                                 "select-all", window);
-    webkit_context_menu_append (context_menu,
-                                webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu, window_action_group,
-                                "generate-password", window);
+
+    if (is_password && ephy_embed_shell_should_remember_passwords (ephy_embed_shell_get_default ())) {
+      webkit_context_menu_append (context_menu,
+                                  webkit_context_menu_item_new_separator ());
+      add_action_to_context_menu (context_menu, window_action_group,
+                                  "generate-password", window);
+    }
 
     if (can_search_selection)
       add_action_to_context_menu (context_menu, popup_action_group,

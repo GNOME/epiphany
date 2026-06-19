@@ -3,6 +3,9 @@
 var Ephy = {};
 
 Ephy.generateAndFillPassword = function() {
+    if (!Ephy.shouldRememberPasswords())
+        return;
+
     let doc = document;
     let activeElement = doc.activeElement;
 
@@ -65,6 +68,9 @@ Ephy.findTargetPasswordFields = function(passwordElement) {
 };
 
 Ephy.showGeneratePasswordFlyout = function(passwordElement) {
+    if (!Ephy.shouldRememberPasswords())
+        return;
+
     if (Ephy.activePasswordFlyout) {
         Ephy.activePasswordFlyout.dismiss();
     }
@@ -1146,6 +1152,9 @@ Ephy.FormManager = class FormManager
     // user to save submitted passwords.
     #findFormAuthElements(forAutofill)
     {
+        if (!Ephy.shouldRememberPasswords())
+            return null;
+
         const passwordNodes = this.#findPasswordFields();
         if (!passwordNodes || !passwordNodes.length)
             return null;
@@ -1168,10 +1177,9 @@ Ephy.FormManager = class FormManager
 
        if (forAutofill) {
            for (let node of passwordNodes) {
-               if (Ephy.FormManager.#isNewPasswordElement(node.element)) {
+               if (Ephy.FormManager.#isNewPasswordElement(node.element))
                    node.element.addEventListener('focus', this._newPasswordElementFocused.bind(this), true);
-                   break;
-               }
+               break;
            }
        }
 
