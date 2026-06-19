@@ -31,9 +31,87 @@ Ephy.generateAndFillPassword = function() {
 
 Ephy.activePasswordFlyout = null;
 
+Ephy.findUsernameElement = function(passwordElement) {
+    const form = passwordElement.form;
+    if (form) {
+        const elements = Array.from(form.elements);
+        const index = elements.indexOf(passwordElement);
+        for (let i = index - 1; i >= 0; i--) {
+            const el = elements[i];
+            if (el instanceof HTMLInputElement &&
+                ['text', 'email', 'tel', 'url', 'number'].includes(el.type)) {
+                return el;
+            }
+        }
+    }
+
+    const container = passwordElement.getRootNode();
+    const inputs = Array.from(container.querySelectorAll('input'));
+    const index = inputs.indexOf(passwordElement);
+    for (let i = index - 1; i >= 0; i--) {
+        const el = inputs[i];
+        if (el instanceof HTMLInputElement &&
+            ['text', 'email', 'tel', 'url', 'number'].includes(el.type)) {
+            return el;
+        }
+    }
+
+    return null;
+};
+
+Ephy.findPasswordFields = function(container) {
+    return Array.from(container.querySelectorAll('input[type="password"]'));
+};
+
+Ephy.saveGeneratedPassword = function(passwordElement, generatedPassword) {
+    const origin = window.location.origin;
+    let targetOrigin = origin;
+    const form = passwordElement.form;
+    if (form) {
+        try {
+            const action = form.getAttribute('action');
+            if (action) {
+                targetOrigin = new URL(action, window.location).origin;
+            }
+        } catch (e) {}
+    }
+
+    let username = '';
+    let usernameField = '';
+
+    const usernameEl = Ephy.findUsernameElement(passwordElement);
+    if (usernameEl && usernameEl.value) {
+        username = usernameEl.value;
+        usernameField = usernameEl.name || usernameEl.id || '';
+    }
+
+    if (!username) {
+        const profileIdEl = document.getElementById('profileIdentifier');
+        if (profileIdEl && profileIdEl.textContent) {
+            username = profileIdEl.textContent.trim();
+            usernameField = 'identifier';
+        } else {
+            const container = passwordElement.getRootNode();
+            const allTextElements = container.querySelectorAll('div, span, p');
+            for (const el of allTextElements) {
+                const text = el.textContent ? el.textContent.trim() : '';
+                if (text.includes('@') && text.length < 100 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
+                    username = text;
+                    usernameField = 'identifier';
+                    break;
+                }
+            }
+        }
+    }
+
+    const passwordField = passwordElement.name || passwordElement.id || '';
+
+    Ephy.passwordManager.requestSave(origin, targetOrigin, username, generatedPassword, usernameField, passwordField, true);
+};
+
 Ephy.findTargetPasswordFields = function(passwordElement) {
     const container = passwordElement.form || passwordElement.getRootNode();
-    const allFields = Array.from(container.querySelectorAll('input[type="password"]'))
+    const allFields = Ephy.findPasswordFields(container)
         .filter(el => !el.readOnly && el.offsetWidth > 0 && el.offsetHeight > 0);
 
     const activeIndex = allFields.indexOf(passwordElement);
@@ -206,73 +284,7 @@ Ephy.showGeneratePasswordFlyout = function(passwordElement) {
             target.dispatchEvent(new Event('change', { bubbles: true }));
         }
 
-        const origin = window.location.origin;
-        let targetOrigin = origin;
-        const form = passwordElement.form;
-        if (form) {
-            try {
-                const action = form.getAttribute('action');
-                if (action) {
-                    targetOrigin = new URL(action, window.location).origin;
-                }
-            } catch (e) {}
-        }
-
-        // Find username
-        let username = '';
-        let usernameField = '';
-
-        const findUsernameInfo = () => {
-            if (form) {
-                const elements = Array.from(form.elements);
-                const index = elements.indexOf(passwordElement);
-                for (let i = index - 1; i >= 0; i--) {
-                    const el = elements[i];
-                    if (el instanceof HTMLInputElement && 
-                        ['text', 'email', 'tel', 'url', 'number'].includes(el.type) &&
-                        el.value) {
-                        return { value: el.value, field: el.name || el.id || '' };
-                    }
-                }
-            }
-
-            const container = passwordElement.getRootNode();
-            const inputs = Array.from(container.querySelectorAll('input'));
-            const index = inputs.indexOf(passwordElement);
-            for (let i = index - 1; i >= 0; i--) {
-                const el = inputs[i];
-                if (el instanceof HTMLInputElement &&
-                    ['text', 'email', 'tel', 'url', 'number'].includes(el.type) &&
-                    el.value) {
-                    return { value: el.value, field: el.name || el.id || '' };
-                }
-            }
-
-            // Google-specific: on Google's password screen, the email is displayed in an element with id "profileIdentifier"
-            const profileIdEl = document.getElementById('profileIdentifier');
-            if (profileIdEl && profileIdEl.textContent) {
-                return { value: profileIdEl.textContent.trim(), field: 'identifier' };
-            }
-
-            // Look for divs/spans that contain an email address (e.g. text containing @)
-            const allTextElements = container.querySelectorAll('div, span, p');
-            for (const el of allTextElements) {
-                const text = el.textContent ? el.textContent.trim() : '';
-                if (text.includes('@') && text.length < 100 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
-                    return { value: text, field: 'identifier' };
-                }
-            }
-
-            return { value: '', field: '' };
-        };
-
-        const usernameInfo = findUsernameInfo();
-        username = usernameInfo.value;
-        usernameField = usernameInfo.field;
-
-        const passwordField = passwordElement.name || passwordElement.id || '';
-
-        Ephy.passwordManager.requestSave(origin, targetOrigin, username, generatedPassword, usernameField, passwordField, true);
+        Ephy.saveGeneratedPassword(passwordElement, generatedPassword);
 
         removeMenu();
     }, true);
@@ -1130,21 +1142,15 @@ Ephy.FormManager = class FormManager
 
     #findPasswordFields()
     {
-        const passwordFields = [];
-        for (let i = 0; i < this.#form.elements.length; i++) {
-            const element = this.#form.elements[i];
-            if (element instanceof HTMLInputElement && element.type === 'password') {
-                // We only want to process forms with 1-3 fields. A common
-                // case is to have a "change password" form with 3 fields:
-                // Old password, New password, Confirm new password.
-                // Forms with more than 3 password fields are unlikely,
-                // and we don't know how to process them, so reject them
-                if (passwordFields.length === 3)
-                    return null;
-                passwordFields.push({ 'element' : element, 'index' : i });
-            }
-        }
-        return passwordFields;
+        const elements = Ephy.findPasswordFields(this.#form);
+        if (elements.length > 3)
+            return null;
+
+        const formElements = Array.from(this.#form.elements);
+        return elements.map(element => ({
+            'element': element,
+            'index': formElements.indexOf(element)
+        }));
     }
 
     // forAutofill is true if we are loading the page and autofilling saved
@@ -1159,30 +1165,16 @@ Ephy.FormManager = class FormManager
         if (!passwordNodes || !passwordNodes.length)
             return null;
 
-        // Start at the first found password field and search backwards.
-        // Assume the first eligible field to contain username.
-        let usernameNode = null;
-        const firstPasswordNodeData = passwordNodes[0];
-        for (let i = firstPasswordNodeData.index; i >= 0; i--) {
-            const element = this.#form.elements[i];
-            if (element instanceof HTMLInputElement) {
-                if (element.type === 'text' || element.type === 'email' ||
-                    element.type === 'tel' || element.type === 'url' ||
-                    element.type === 'number') {
-                    usernameNode = element;
+        const usernameNode = Ephy.findUsernameElement(passwordNodes[0].element);
+
+        if (forAutofill) {
+            for (let node of passwordNodes) {
+                if (Ephy.FormManager.#isNewPasswordElement(node.element)) {
+                    node.element.addEventListener('focus', this._newPasswordElementFocused.bind(this), true);
                     break;
                 }
             }
         }
-
-       if (forAutofill) {
-           for (let node of passwordNodes) {
-               if (Ephy.FormManager.#isNewPasswordElement(node.element))
-                   node.element.addEventListener('focus', this._newPasswordElementFocused.bind(this), true);
-               break;
-           }
-       }
-
         // Choose password field that contains the password that we want to store
         // To do that, we compare the field values. We can only do this when user
         // submits login data, because otherwise all the fields are empty. In that
