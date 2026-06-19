@@ -166,27 +166,11 @@ Ephy.showGeneratePasswordFlyout = function(passwordElement) {
     const iconSpan = document.createElement('span');
     iconSpan.className = 'ephy-dropdown-icon';
 
-    const keySvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    keySvg.setAttribute("width", "16");
-    keySvg.setAttribute("height", "16");
-    keySvg.setAttribute("viewBox", "0 0 16 16");
-    keySvg.setAttribute("fill", "none");
-    keySvg.setAttribute("stroke", "currentColor");
-    keySvg.setAttribute("stroke-width", "2");
-    keySvg.setAttribute("stroke-linecap", "round");
-    keySvg.setAttribute("stroke-linejoin", "round");
-
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("cx", "5");
-    circle.setAttribute("cy", "11");
-    circle.setAttribute("r", "3");
-    keySvg.appendChild(circle);
-
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M7.5 8.5L12 4l2 2-1 1-1-1-1 1-1-1-1 1");
-    keySvg.appendChild(path);
-
-    iconSpan.appendChild(keySvg);
+    const keyIcon = document.createElement('img');
+    keyIcon.src = 'ephy-resource:///org/gnome/epiphany/page-icons/password-generator.svg';
+    keyIcon.width = 16;
+    keyIcon.height = 16;
+    iconSpan.appendChild(keyIcon);
     anchor.appendChild(iconSpan);
 
     // Create the text container with title & subtitle (preview)
@@ -211,25 +195,11 @@ Ephy.showGeneratePasswordFlyout = function(passwordElement) {
     refreshBtn.className = 'ephy-dropdown-refresh-btn';
     refreshBtn.title = Ephy._("Generate new password");
 
-    const refreshSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    refreshSvg.setAttribute("width", "14");
-    refreshSvg.setAttribute("height", "14");
-    refreshSvg.setAttribute("viewBox", "0 0 24 24");
-    refreshSvg.setAttribute("fill", "none");
-    refreshSvg.setAttribute("stroke", "currentColor");
-    refreshSvg.setAttribute("stroke-width", "2.5");
-    refreshSvg.setAttribute("stroke-linecap", "round");
-    refreshSvg.setAttribute("stroke-linejoin", "round");
-
-    const refreshPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    refreshPath1.setAttribute("d", "M21.5 2v6h-6");
-    refreshSvg.appendChild(refreshPath1);
-
-    const refreshPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    refreshPath2.setAttribute("d", "M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67");
-    refreshSvg.appendChild(refreshPath2);
-
-    refreshBtn.appendChild(refreshSvg);
+    const refreshIcon = document.createElement('img');
+    refreshIcon.src = 'ephy-resource:///org/gnome/epiphany/page-icons/password-generator-refresh.svg';
+    refreshIcon.width = 14;
+    refreshIcon.height = 14;
+    refreshBtn.appendChild(refreshIcon);
     row.appendChild(refreshBtn);
     innerDiv.appendChild(row);
 
@@ -420,6 +390,14 @@ Ephy.DropdownMenu = class DropdownMenu {
           .ephy-dropdown-refresh-btn:hover {
             background-color: #e4e4e7;
             color: #000000;
+          }
+
+          .ephy-dropdown-refresh-btn img {
+            transition: filter 0.2s;
+          }
+
+          .ephy-dropdown-refresh-btn:hover img {
+            filter: brightness(0);
           }
         `;
 
