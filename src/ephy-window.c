@@ -4203,7 +4203,7 @@ save_password_cb (EphyEmbedShell          *shell,
     return;
 
   dialog = adw_alert_dialog_new (_("Save Password?"),
-                                 _("Passwords are saved only on your device and can be removed at any time in Preferences"));
+                                 _("Passwords are saved only on your device and can be removed at any time."));
   adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
                                   "close", _("Not Now"),
                                   "never", _("Never Save"),
