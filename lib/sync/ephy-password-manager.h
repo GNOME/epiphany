@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-const SecretSchema *ephy_password_manager_get_password_schema (void) G_GNUC_CONST;
+const SecretSchema *ephy_password_manager_get_password_schema (void);
 
 #define ID_KEY                    "id"
 #define ORIGIN_KEY                "uri" /* TODO: Rename to "origin". Requires migration. */
