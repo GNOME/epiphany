@@ -1,6 +1,6 @@
 /*!
-  Highlight.js v11.11.0 (git: 40883e19c5)
-  (c) 2006-2024 Josh Goebel <hello@joshgoebel.com> and other contributors
+  Highlight.js v11.11.2 (git: f273f007f8)
+  (c) 2006-2026 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
 var hljs = (function () {
@@ -1558,7 +1558,7 @@ var hljs = (function () {
     return mode;
   }
 
-  var version = "11.11.0";
+  var version = "11.11.2";
 
   class HTMLInjectionError extends Error {
     constructor(reason, html) {
@@ -2080,12 +2080,15 @@ var hljs = (function () {
           }
         }
 
-        // edge case for when illegal matches $ (end of line) which is technically
+        // edge case for when illegal matches $ (end of line/text) which is technically
         // a 0 width match but not a begin/end match so it's not caught by the
-        // first handler (when ignoreIllegals is true)
+        // first handler (when `ignoreIllegals` is true)
         if (match.type === "illegal" && lexeme === "") {
-          // advance so we aren't stuck in an infinite loop
-          modeBuffer += "\n";
+          if (match.index === codeToHighlight.length) ; else {
+            // matched literal `\n` (with `$`) so we must manually add the newline
+            // itself to the modeBuffer so it is not lost when we advance the cursor
+            modeBuffer += "\n";
+          }
           return 1;
         }
 
@@ -2610,6 +2613,10 @@ var hljs = (function () {
       HEXCOLOR: {
         scope: 'number',
         begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
+      },
+      UNICODE_RANGE: {
+        scope: 'number',
+        begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,4}(-[0-9A-Fa-f][0-9A-Fa-f]{0,4})?/
       },
       FUNCTION_DISPATCH: {
         className: "built_in",
@@ -3379,6 +3386,7 @@ var hljs = (function () {
     'transition-timing-function',
     'translate',
     'unicode-bidi',
+    'unicode-range',
     'user-modify',
     'user-select',
     'vector-effect',
@@ -3485,9 +3493,10 @@ var hljs = (function () {
             modes.HEXCOLOR,
             modes.IMPORTANT,
             modes.CSS_NUMBER_MODE,
+            modes.UNICODE_RANGE,
             ...STRINGS,
             // needed to highlight these as strings and to avoid issues with
-            // illegal characters that might be inside urls that would tigger the
+            // illegal characters that might be inside urls that would trigger the
             // languages illegal stack
             {
               begin: /(url|data-uri)\(/,
@@ -3549,6 +3558,7 @@ var hljs = (function () {
   }
 
   const IDENT_RE = '[A-Za-z$_][0-9A-Za-z$_]*';
+
   const KEYWORDS = [
     "as", // for exports
     "in",
@@ -4096,7 +4106,8 @@ var hljs = (function () {
         noneOf([
           ...BUILT_IN_GLOBALS,
           "super",
-          "import"
+          "import",
+          "await",
         ].map(x => `${x}\\s*\\(`)),
         IDENT_RE$1, regex.lookahead(/\s*\(/)),
       className: "title.function",
@@ -4165,7 +4176,7 @@ var hljs = (function () {
       keywords: KEYWORDS$1,
       // this will be extended by TypeScript
       exports: { PARAMS_CONTAINS, CLASS_REFERENCE },
-      illegal: /#(?![$_A-z])/,
+      illegal: /#(?![$_A-Za-z])/,
       contains: [
         hljs.SHEBANG({
           label: "shebang",
