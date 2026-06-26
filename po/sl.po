@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-06-11 22:46+0000\n"
-"PO-Revision-Date: 2026-06-13 17:46+0200\n"
+"POT-Creation-Date: 2026-06-26 13:01+0000\n"
+"PO-Revision-Date: 2026-06-26 18:26+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1066,16 +1066,28 @@ msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Ko začnete z brskanjem, bodo najpogosteje obiskane strani prikazane na tem mestu."
 
-#: embed/ephy-about-handler.c:509
-#: embed/web-process-extension/resources/js/overview.js:151
+#: embed/ephy-about-handler.c:511
+#: embed/web-process-extension/resources/js/overview.js:165
 msgid "Remove from overview"
 msgstr "Odstrani iz pregleda"
 
-#: embed/ephy-about-handler.c:598 embed/ephy-about-handler.c:599
+#: embed/ephy-about-handler.c:512
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:313
+msgid "Unpin from overview"
+msgstr "Odprni iz pregleda"
+
+#: embed/ephy-about-handler.c:512
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:317
+msgid "Pin to overview"
+msgstr "Pripni v pregled"
+
+#: embed/ephy-about-handler.c:601 embed/ephy-about-handler.c:602
 msgid "Private Browsing"
 msgstr "Zasebno brskanje"
 
-#: embed/ephy-about-handler.c:600
+#: embed/ephy-about-handler.c:603
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not show up in "
 "your browsing history and all stored information will be cleared when you close the "
@@ -1085,13 +1097,13 @@ msgstr ""
 "zgodovini brskanja in vsi podatki, pridobljeni med to sejo, bodo po zaprtju okna "
 "izbrisani. Prejete datoteke bodo ohranjene."
 
-#: embed/ephy-about-handler.c:604
+#: embed/ephy-about-handler.c:607
 msgid "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "V zasebnem načinu, lahko prikrijete dejavnosti, ki jih izvajate na spletu pred drugimi "
 "uporabniki tega računalnika."
 
-#: embed/ephy-about-handler.c:606
+#: embed/ephy-about-handler.c:609
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your internet "
 "service provider, your government, other governments, the websites that you visit, and "
@@ -1114,7 +1126,7 @@ msgstr "Vpisati je treba kodo PIN za %s, za overitev dostopa do %s:%d."
 #: embed/ephy-client-certificate-manager.c:321
 #: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:770
 #: embed/ephy-web-view.c:1356 src/ephy-history-dialog.c:867 src/ephy-passwords-view.c:158
-#: src/ephy-shell.c:417 src/ephy-window.c:273 src/ephy-window.c:2321
+#: src/ephy-shell.c:417 src/ephy-window.c:273 src/ephy-window.c:2337
 #: src/preferences/autofill-view.c:363 src/preferences/extension-view.c:117
 #: src/resources/gtk/bookmark-properties.blp:29
 #: src/resources/gtk/firefox-sync-dialog.blp:100 src/resources/gtk/history-dialog.blp:55
@@ -1208,7 +1220,7 @@ msgstr "Prejemanje %s je končano."
 
 # G:6 K:0 O:0
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:972 src/ephy-window.c:4127
+#: embed/ephy-download.c:972 src/ephy-window.c:4143
 msgid "Download finished"
 msgstr "Prejem je končan"
 
@@ -1247,7 +1259,7 @@ msgstr "Izpolni to polje"
 msgid "Do Not Autofill"
 msgstr "Ne izpolnjuj samodejno"
 
-#: embed/ephy-embed-shell.c:679
+#: embed/ephy-embed-shell.c:708
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "Dostop preko naslova URI %s do vira programa %s ni dovoljen."
@@ -2020,6 +2032,14 @@ msgstr "Ni določeno"
 msgid "Technical information"
 msgstr "Tehnični podatki"
 
+#: embed/web-process-extension/resources/js/ephy.js:182
+msgid "Use and Save Suggested Password"
+msgstr "Uporabi in shrani predlagano geslo"
+
+#: embed/web-process-extension/resources/js/ephy.js:196
+msgid "Generate new password"
+msgstr "Ustvari novo geslo"
+
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
 msgstr "Nedoločeno"
@@ -2399,7 +2419,7 @@ msgstr "Zaznamek odstranjen"
 
 # G:5 K:1 O:2
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1011
+#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1012
 #: src/preferences/prefs-features-page.c:284
 msgid "_Undo"
 msgstr "_Razveljavi"
@@ -2634,7 +2654,7 @@ msgid "Select _None"
 msgstr "_Brez izbora"
 
 # G:9 K:0 O:0
-#: src/ephy-history-dialog.c:268 src/ephy-window.c:1019
+#: src/ephy-history-dialog.c:268 src/ephy-window.c:1020
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Izberi _vse"
@@ -2755,7 +2775,7 @@ msgid "Copy password"
 msgstr "Kopiraj geslo"
 
 # G:3 K:4 O:1
-#: src/ephy-passwords-view.c:262 src/ephy-window.c:4224
+#: src/ephy-passwords-view.c:262 src/ephy-window.c:4240
 msgid "Username"
 msgstr "Uporabniško ime"
 
@@ -2764,7 +2784,7 @@ msgstr "Uporabniško ime"
 msgid "Copy username"
 msgstr "Kopiraj uporabniško ime"
 
-#: src/ephy-passwords-view.c:280 src/ephy-window.c:4231
+#: src/ephy-passwords-view.c:280 src/ephy-window.c:4247
 msgid "Password"
 msgstr "Geslo"
 
@@ -2910,179 +2930,183 @@ msgstr "Predlogov iskalnikov ni mogoče naložiti: %s"
 msgid "Open a new tab"
 msgstr "Odpri nov zavihek"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1013
 msgid "Re_do"
 msgstr "_Uveljavi"
 
 #. Edit.
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:1016
 msgid "Cu_t"
 msgstr "_Izreži"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:1016
+#: src/ephy-window.c:1017
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:1017
+#: src/ephy-window.c:1018
 msgid "_Paste"
 msgstr "_Prilepi"
 
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1019
 msgid "_Paste Text Only"
 msgstr "_Prilepi le besedilo"
 
 #: src/ephy-window.c:1021
+msgid "Generate _Password"
+msgstr "Tvori ges_lo"
+
+#: src/ephy-window.c:1023
 msgid "S_end Link by Email…"
 msgstr "P_ošlji povezavo po elektronski pošti …"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1022
+#: src/ephy-window.c:1024
 msgid "Add _Link to Bookmarks"
 msgstr "Dodaj _povezavo med zaznamke"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:1024
+#: src/ephy-window.c:1026
 msgid "_Reload"
 msgstr "_Znova naloži"
 
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1027
 msgid "_Back"
 msgstr "_Nazaj"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1028
 msgid "_Forward"
 msgstr "_Naprej"
 
 #. Bookmarks
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1031
 msgid "Add Boo_kmark…"
 msgstr "_Dodaj zaznamek …"
 
 # G:1 K:2 O:0
 #. Links.
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1035
 msgid "Open Link in New _Window"
 msgstr "Odpri povezavo v _novem oknu"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1036
 msgid "Open Link in New _Tab"
 msgstr "Odpri povezavo v novem _zavihku"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1035
+#: src/ephy-window.c:1037
 msgid "Open Link in I_ncognito Window"
 msgstr "Odpri povezavo v _zasebnem oknu"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:1036
+#: src/ephy-window.c:1038
 msgid "_Save Link As…"
 msgstr "Shrani povezavo _kot …"
 
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1039
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1040
 msgid "_Copy E-mail Address"
 msgstr "_Kopiraj elektronski naslov"
 
 # G:1 K:0 O:0
 #. Images.
-#: src/ephy-window.c:1042
+#: src/ephy-window.c:1044
 msgid "View _Image in New Tab"
 msgstr "Odpri _sliko v novem zavihku"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1043
+#: src/ephy-window.c:1045
 msgid "Copy I_mage Address"
 msgstr "Kopiraj n_aslov slike"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:1044
+#: src/ephy-window.c:1046
 msgid "_Save Image As…"
 msgstr "S_hrani sliko kot …"
 
-#: src/ephy-window.c:1045
+#: src/ephy-window.c:1047
 msgid "Set as _Wallpaper"
 msgstr "Nastavi kot sliko _ozadja"
 
 # G:1 K:0 O:0
 #. Video.
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:1051
 msgid "Open Video in New _Window"
 msgstr "Odpri _video v novem oknu"
 
-#: src/ephy-window.c:1050
+#: src/ephy-window.c:1052
 msgid "Open Video in New _Tab"
 msgstr "Odpri video v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:1051
+#: src/ephy-window.c:1053
 msgid "_Save Video As…"
 msgstr "Shrani video povezavo _kot …"
 
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:1054
 msgid "_Copy Video Address"
 msgstr "Kopiraj _naslov video povezave"
 
 # G:1 K:0 O:0
 #. Audio.
-#: src/ephy-window.c:1056
+#: src/ephy-window.c:1058
 msgid "Open Audio in New _Window"
 msgstr "Odpri _zvok v novem oknu"
 
-#: src/ephy-window.c:1057
+#: src/ephy-window.c:1059
 msgid "Open Audio in New _Tab"
 msgstr "Odpri zvok v novem zavihku"
 
 # G:10 K:0 O:0
-#: src/ephy-window.c:1058
+#: src/ephy-window.c:1060
 msgid "_Save Audio As…"
 msgstr "Shrani zvočno povezavo _kot …"
 
-#: src/ephy-window.c:1059
+#: src/ephy-window.c:1061
 msgid "_Copy Audio Address"
 msgstr "Kopiraj _naslov zvočne povezave"
 
 # G:2 K:0 O:0
-#: src/ephy-window.c:1065
+#: src/ephy-window.c:1067
 msgid "Save Pa_ge As…"
 msgstr "Shrani s_tran kot …"
 
-#: src/ephy-window.c:1066
+#: src/ephy-window.c:1068
 msgid "_Take Screenshot…"
 msgstr "_Zajemi zaslonsko sliko …"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1067
+#: src/ephy-window.c:1069
 msgid "_Page Source"
 msgstr "_Izvorna koda strani"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1448
+#: src/ephy-window.c:1450
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Preišči splet za »%s«"
 
-#: src/ephy-window.c:1477
+#: src/ephy-window.c:1479
 msgid "Open Link"
 msgstr "Odpri povezavo"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:1479
+#: src/ephy-window.c:1481
 msgid "Open Link In New Tab"
 msgstr "Odpri povezavo v novem zavihku"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1481
+#: src/ephy-window.c:1483
 msgid "Open Link In New Window"
 msgstr "Odpri povezavo v novem oknu"
 
 # G:1 K:2 O:0
-#: src/ephy-window.c:1483
+#: src/ephy-window.c:1485
 msgid "Open Link In Incognito Window"
 msgstr "Odpri povezavo v zasebnem oknu"
 
@@ -3092,105 +3116,105 @@ msgstr "Odpri povezavo v zasebnem oknu"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2319
+#: src/ephy-window.c:2335
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr "Dovolite »%s«, da odpre povezavo »%s« v zunanjem programu"
 
-#: src/ephy-window.c:2320
+#: src/ephy-window.c:2336
 msgid "Open in External App?"
 msgstr "Ali želite odpreti v zunanjem programu?"
 
-#: src/ephy-window.c:2322
+#: src/ephy-window.c:2338
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
-#: src/ephy-window.c:2328
+#: src/ephy-window.c:2344
 msgid "Always Allow"
 msgstr "Dovoli vedno"
 
-#: src/ephy-window.c:2613
+#: src/ephy-window.c:2629
 msgid "Search Engine Available"
 msgstr "Spletni iskalnik je na voljo"
 
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
-#: src/ephy-window.c:2619
+#: src/ephy-window.c:2635
 #, c-format
 msgid "Add “%s”"
 msgstr "Dodaj »%s«"
 
-#: src/ephy-window.c:2623 src/ephy-window.c:2631
+#: src/ephy-window.c:2639 src/ephy-window.c:2647
 #: src/preferences/prefs-search-engine-page.c:310
 #: src/preferences/prefs-search-engine-page.c:312
 msgid "Add Search Engine"
 msgstr "Dodaj spletni iskalnik"
 
-#: src/ephy-window.c:3076
+#: src/ephy-window.c:3092
 msgid "Reader Mode Available"
 msgstr "Na voljo je bralni način"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3175
+#: src/ephy-window.c:3191
 msgid "Notification Request"
 msgstr "Zahteva za prikaz obvestil"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3177
+#: src/ephy-window.c:3193
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "Stran na »%s« zahteva dovoljenje za prikazovanje obvestil na namizju."
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3182
+#: src/ephy-window.c:3198
 msgid "Location Access Request"
 msgstr "Zahteva za dostop do mesta"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3184
+#: src/ephy-window.c:3200
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "Stran na »%s« želi pridobiti podatke geolokacije."
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3189
+#: src/ephy-window.c:3205
 msgid "Microphone Access Request"
 msgstr "Zahteva za dostop do mikrofona"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3191
+#: src/ephy-window.c:3207
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "Stran na »%s« zahteva dostop do mikrofona."
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3196
+#: src/ephy-window.c:3212
 msgid "Webcam Access Request"
 msgstr "Zahteva za dostop do spletne kamere"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3198
+#: src/ephy-window.c:3214
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "Stran na »%s« zahteva dostop do spletne kamere."
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3203
+#: src/ephy-window.c:3219
 msgid "Webcam and Microphone Access Request"
 msgstr "Zahteva za dostop do spletne kamere in mikrofona"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3205
+#: src/ephy-window.c:3221
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "Stran »%s« zahteva dostop do mikrofona in spletne kamere."
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3219
+#: src/ephy-window.c:3235
 msgid "Website Data Access Request"
 msgstr "Zahteva za dostop do spletnih podatkov"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3221
+#: src/ephy-window.c:3237
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while browsing "
@@ -3200,49 +3224,49 @@ msgstr ""
 "»%s«. S tem bo lahko »%s« sledil vaši dejavnosti na »%s«."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3226
+#: src/ephy-window.c:3242
 msgid "Clipboard Access Request"
 msgstr "Zahteva za dostop do spletišča"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3228
+#: src/ephy-window.c:3244
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "Stran na »%s« zahteva dostop do odložišča"
 
-#: src/ephy-window.c:3256
+#: src/ephy-window.c:3272
 msgid "_Ask Later"
 msgstr "_Vprašaj kasneje"
 
-#: src/ephy-window.c:3257
+#: src/ephy-window.c:3273
 msgid "_Deny"
 msgstr "_Zavrni"
 
-#: src/ephy-window.c:3258
+#: src/ephy-window.c:3274
 msgid "_Allow"
 msgstr "_Dovoli"
 
-#: src/ephy-window.c:3464 src/ephy-window.c:5154
+#: src/ephy-window.c:3480 src/ephy-window.c:5170
 msgid "Leave Website?"
 msgstr "Ali želite zapustiti so spletišče?"
 
-#: src/ephy-window.c:3465 src/ephy-window.c:5155 src/window-commands.c:1407
+#: src/ephy-window.c:3481 src/ephy-window.c:5171 src/window-commands.c:1407
 msgid "A form was modified and has not been submitted"
 msgstr "Podatki obrazca so spremenjeni in niso bili poslani."
 
-#: src/ephy-window.c:3466 src/ephy-window.c:5156 src/window-commands.c:1411
+#: src/ephy-window.c:3482 src/ephy-window.c:5172 src/window-commands.c:1411
 msgid "_Discard Form"
 msgstr "_Zavrzi obrazec"
 
-#: src/ephy-window.c:3487
+#: src/ephy-window.c:3503
 msgid "Download operation"
 msgstr "Opravilo prejemanja"
 
-#: src/ephy-window.c:3489
+#: src/ephy-window.c:3505
 msgid "Show details"
 msgstr "Pokaži podrobnosti"
 
-#: src/ephy-window.c:3491
+#: src/ephy-window.c:3507
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -3251,15 +3275,15 @@ msgstr[1] "V teku je %d prejemanje"
 msgstr[2] "V teku je %d prejemanji"
 msgstr[3] "V teku je %d prejemanja"
 
-#: src/ephy-window.c:3769
+#: src/ephy-window.c:3785
 msgid "Set as Default Browser?"
 msgstr "Ali želite nastaviti program kot privzeti brskalnik?"
 
-#: src/ephy-window.c:3771
+#: src/ephy-window.c:3787
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Uporabite Splet kot privzeti brskalnik za odpiranje zunanjih povezav"
 
-#: src/ephy-window.c:3773
+#: src/ephy-window.c:3789
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening external "
 "links"
@@ -3267,79 +3291,79 @@ msgstr ""
 "Uporabi preizkusno različico brskalnika Epiphany kot privzet spletni brskalnik in za "
 "odpiranje zunanjih povezav"
 
-#: src/ephy-window.c:3777
+#: src/ephy-window.c:3793
 msgid "_Ask Again Later"
 msgstr "_Vprašaj ponovno kasneje"
 
-#: src/ephy-window.c:3778
+#: src/ephy-window.c:3794
 msgid "_No"
 msgstr "_Ne"
 
-#: src/ephy-window.c:3779
+#: src/ephy-window.c:3795
 msgid "_Yes"
 msgstr "_Da"
 
 # G:6 K:0 O:0
-#: src/ephy-window.c:4115
+#: src/ephy-window.c:4131
 msgid "Download started"
 msgstr "Prenos se je začel"
 
-#: src/ephy-window.c:4205
+#: src/ephy-window.c:4221
 msgid "Save Password?"
 msgstr "Ali želite shraniti geslo?"
 
-#: src/ephy-window.c:4206
+#: src/ephy-window.c:4222
 msgid ""
 "Passwords are saved only on your device and can be removed at any time in Preferences"
 msgstr ""
 "Gesla so shranjena le na vaši napravi in jih je mogoče kadarkoli odstraniti med "
 "Možnostmi programa"
 
-#: src/ephy-window.c:4208
+#: src/ephy-window.c:4224
 msgid "Not Now"
 msgstr "Ne zdaj"
 
-#: src/ephy-window.c:4209
+#: src/ephy-window.c:4225
 msgid "Never Save"
 msgstr "Nikoli ne shrani"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:4210
+#: src/ephy-window.c:4226
 msgid "Save"
 msgstr "Shrani"
 
-#: src/ephy-window.c:4411
+#: src/ephy-window.c:4427
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Spletni program"
 
-#: src/ephy-window.c:4414
+#: src/ephy-window.c:4430
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Namesti kot spletni program"
 
-#: src/ephy-window.c:4946
+#: src/ephy-window.c:4962
 msgid "Page URL copied"
 msgstr "Naslov URL strani je kopiran"
 
-#: src/ephy-window.c:5269
+#: src/ephy-window.c:5285
 msgid "Close Multiple Tabs?"
 msgstr "Ali res želite zapreti več zavihkov?"
 
-#: src/ephy-window.c:5270
+#: src/ephy-window.c:5286
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Če okno zaprete, bodo izgubljeni vsi odprti zavihki."
 
-#: src/ephy-window.c:5271
+#: src/ephy-window.c:5287
 msgid "C_lose Tabs"
 msgstr "Zapri _zavihke"
 
 # G:1 K:0 O:0
-#: src/ephy-window.c:5387
+#: src/ephy-window.c:5403
 msgid "New tab opened"
 msgstr "Odprt je nov zavihek"
 
-#: src/ephy-window.c:5391
+#: src/ephy-window.c:5407
 msgid "Switch"
 msgstr "Preklopi"
 
@@ -3554,23 +3578,23 @@ msgstr "Odstrani iskalnik"
 msgid "Remove URL"
 msgstr "Odstrani URL"
 
-#: src/profile-migrator/ephy-profile-migrator.c:338
+#: src/profile-migrator/ephy-profile-migrator.c:365
 msgid "Executes only the n-th migration step"
 msgstr "Izvede le n-ti korak migracije"
 
-#: src/profile-migrator/ephy-profile-migrator.c:342
+#: src/profile-migrator/ephy-profile-migrator.c:369
 msgid "Specifies the required version for the migrator"
 msgstr "Določa zahtevano različico migratorja"
 
-#: src/profile-migrator/ephy-profile-migrator.c:346
+#: src/profile-migrator/ephy-profile-migrator.c:373
 msgid "Specifies the profile where the migrator should run"
 msgstr "Določa profil, v katerem naj se zažene migrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:368
+#: src/profile-migrator/ephy-profile-migrator.c:395
 msgid "Web profile migrator"
 msgstr "Prenos profila programa Splet"
 
-#: src/profile-migrator/ephy-profile-migrator.c:369
+#: src/profile-migrator/ephy-profile-migrator.c:396
 msgid "Web profile migrator options"
 msgstr "Možnosti prenosa profila programa Splet"
 
