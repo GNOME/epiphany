@@ -210,7 +210,7 @@ emit_urls_visited (EphyHistoryService *self)
   g_signal_emit (self, signals[URLS_VISITED], 0);
   self->queue_urls_visited_id = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -518,7 +518,7 @@ ephy_history_service_execute_job_callback (gpointer data)
 
   if (g_cancellable_is_cancelled (message->cancellable)) {
     ephy_history_service_message_free (message);
-    return FALSE;
+    return G_SOURCE_REMOVE;
   }
 
   if (message->callback)
@@ -529,7 +529,7 @@ ephy_history_service_execute_job_callback (gpointer data)
 
   ephy_history_service_message_free (message);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 typedef struct {
@@ -927,7 +927,7 @@ set_url_title_signal_emit (SignalEmissionContext *ctx)
 
   g_signal_emit (ctx->service, signals[URL_TITLE_CHANGED], 0, url->url, url->title);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -1143,7 +1143,7 @@ delete_urls_signal_emit (SignalEmissionContext *ctx)
 
   g_signal_emit (ctx->service, signals[URL_DELETED], 0, url);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -1181,7 +1181,7 @@ delete_host_signal_emit (SignalEmissionContext *ctx)
 
   g_signal_emit (ctx->service, signals[HOST_DELETED], 0, host);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean
