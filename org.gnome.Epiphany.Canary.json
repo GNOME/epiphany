@@ -67,6 +67,21 @@
             ]
         },
         {
+            "name" : "libpwquality",
+            "buildsystem" : "autotools",
+            "config-opts" : [
+                "--disable-python-bindings",
+                "--with-securedir=/app/lib/security"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/libpwquality/libpwquality.git",
+                    "tag" : "master"
+                }
+            ]
+        },
+        {
             "name" : "epiphany",
             "buildsystem" : "meson",
             "config-opts" : [
