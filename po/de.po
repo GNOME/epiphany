@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-04-06 13:25+0000\n"
-"PO-Revision-Date: 2026-04-13 22:56+0200\n"
+"POT-Creation-Date: 2026-06-03 21:05+0000\n"
+"PO-Revision-Date: 2026-06-23 21:55+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
@@ -675,6 +675,8 @@ msgstr "Adresssen automatisch öffnen"
 #: data/org.gnome.epiphany.gschema.xml:303
 msgid "This is a permission map of security origins to URL schemes."
 msgstr ""
+"Dies ordnet Sicherheitsursprüngen die entsprechenden Berechtigungen für URL-"
+"Schemata zu."
 
 #: data/org.gnome.epiphany.gschema.xml:309
 msgid "Web application additional URLs"
@@ -1254,7 +1256,7 @@ msgstr ""
 #: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:363
 #: src/window-commands.c:568 src/window-commands.c:934
 #: src/window-commands.c:1410 src/window-commands.c:2117
-#: src/window-commands.c:3176
+#: src/window-commands.c:3179
 msgid "_Cancel"
 msgstr "A_bbrechen"
 
@@ -3478,11 +3480,11 @@ msgstr "Daten zur intelligenten Nachverfolgungsunterbindung"
 
 #: src/preferences/clear-data-view.c:86
 msgid "MediaDevices device IDs"
-msgstr ""
+msgstr "Geräte-Kennungen für MediaDevices"
 
 #: src/preferences/clear-data-view.c:87
 msgid "ServiceWorker registrations"
-msgstr ""
+msgstr "ServiceWorker-Registrierungen"
 
 #: src/preferences/clear-data-view.c:88
 msgid "CacheStorage data"
@@ -5109,25 +5111,20 @@ msgstr "MHTML"
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2920
+#: src/window-commands.c:2919
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "Suchmaschine »%s« wurde hinzugefügt"
 
-#. Now all web views will get notified for this newly added engine, and remove
-#. * their corresponding autodiscovery link in the models. We do not do it
-#. * manually here for self->model because that would not remove the link for
-#. * all the other tabs, so that's why we let the EphyWebViews take care of it.
-#.
-#: src/window-commands.c:2939
+#: src/window-commands.c:2945
 msgid "Show"
 msgstr "Anzeigen"
 
-#: src/window-commands.c:3171
+#: src/window-commands.c:3174
 msgid "Enable Caret Browsing Mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: src/window-commands.c:3172
+#: src/window-commands.c:3175
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -5138,7 +5135,7 @@ msgstr ""
 "der Tastatur steuern können. Wollen Sie die Eingabemarke-Navigation "
 "einschalten?"
 
-#: src/window-commands.c:3177
+#: src/window-commands.c:3180
 msgid "_Enable"
 msgstr "_Aktivieren"
 
