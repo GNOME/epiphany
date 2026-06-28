@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-06-25 22:35+0000\n"
-"PO-Revision-Date: 2026-06-26 10:03+0200\n"
+"POT-Creation-Date: 2026-06-26 13:01+0000\n"
+"PO-Revision-Date: 2026-06-28 16:31+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -1163,16 +1163,28 @@ msgstr "Bun venit în Web"
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Începe navigarea și cele mai vizitate situri vor apărea aici."
 
-#: embed/ephy-about-handler.c:509
-#: embed/web-process-extension/resources/js/overview.js:151
+#: embed/ephy-about-handler.c:511
+#: embed/web-process-extension/resources/js/overview.js:165
 msgid "Remove from overview"
-msgstr "Elimină din vederea de ansamblu"
+msgstr "Elimină din prezentare"
 
-#: embed/ephy-about-handler.c:598 embed/ephy-about-handler.c:599
+#: embed/ephy-about-handler.c:512
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:313
+msgid "Unpin from overview"
+msgstr "Desprinde din prezentare"
+
+#: embed/ephy-about-handler.c:512
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:317
+msgid "Pin to overview"
+msgstr "Fixează în prezentare"
+
+#: embed/ephy-about-handler.c:601 embed/ephy-about-handler.c:602
 msgid "Private Browsing"
 msgstr "Navigare privată"
 
-#: embed/ephy-about-handler.c:600
+#: embed/ephy-about-handler.c:603
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1183,14 +1195,14 @@ msgstr ""
 "șterse atunci când fereastra va fi închisă. Fișierele descărcate vor fi "
 "păstrate."
 
-#: embed/ephy-about-handler.c:604
+#: embed/ephy-about-handler.c:607
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Modul incognito ascunde activitatea doar de oamenii care folosesc acest "
 "calculator."
 
-#: embed/ephy-about-handler.c:606
+#: embed/ephy-about-handler.c:609
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1347,7 +1359,7 @@ msgstr "Completează acest spațiu gol"
 msgid "Do Not Autofill"
 msgstr "Nu completa automat"
 
-#: embed/ephy-embed-shell.c:679
+#: embed/ephy-embed-shell.c:708
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI-ul %s nu este autorizat pentru accesarea resursei Epiphany %s"
@@ -3594,23 +3606,23 @@ msgstr "Elimină motorul de căutare"
 msgid "Remove URL"
 msgstr "Elimină URL-ul"
 
-#: src/profile-migrator/ephy-profile-migrator.c:338
+#: src/profile-migrator/ephy-profile-migrator.c:365
 msgid "Executes only the n-th migration step"
 msgstr "Execută doar al n-lea pas de migrare"
 
-#: src/profile-migrator/ephy-profile-migrator.c:342
+#: src/profile-migrator/ephy-profile-migrator.c:369
 msgid "Specifies the required version for the migrator"
 msgstr "Specifică versiunea necesară pentru migrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:346
+#: src/profile-migrator/ephy-profile-migrator.c:373
 msgid "Specifies the profile where the migrator should run"
 msgstr "Specifică profilul unde migratorul ar trebui să ruleze"
 
-#: src/profile-migrator/ephy-profile-migrator.c:368
+#: src/profile-migrator/ephy-profile-migrator.c:395
 msgid "Web profile migrator"
 msgstr "Migrator de profile web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:369
+#: src/profile-migrator/ephy-profile-migrator.c:396
 msgid "Web profile migrator options"
 msgstr "Opțiuni pentru migratorul de profile Web"
 
@@ -5038,7 +5050,7 @@ msgstr "PNG"
 
 #: src/window-commands.c:2648
 msgid "Item removed from overview"
-msgstr "Element eliminat din vederea de ansamblu"
+msgstr "Element eliminat din prezentare"
 
 #: src/window-commands.c:2650
 msgid "Undo"
