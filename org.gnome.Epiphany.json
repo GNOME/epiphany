@@ -51,6 +51,17 @@
             ]
         },
         {
+            "name" : "catch",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://catanzaro.fedorapeople.org/catch-0.1.tar.xz",
+                    "sha256" : "2d67c37b703a64230bbf810524cc8ed39c8cb4519f1ca308dfe13cbbf4eb9e58"
+                }
+            ]
+        },
+        {
             "name" : "epiphany",
             "buildsystem" : "meson",
             "builddir" : true,
@@ -70,6 +81,10 @@
                     "--own-name=org.gnome.Epiphany.WebAppProvider"
                 ]
             },
+            "test-rule" : "",
+            "test-commands" : [
+                "meson test --wrapper=catch"
+            ],
             "sources" : [
                 {
                     "type" : "git",
