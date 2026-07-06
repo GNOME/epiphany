@@ -408,17 +408,26 @@ ephy_about_handler_handle_applications (EphyAboutHandler       *handler,
 
 static void
 history_service_query_urls_cb (EphyHistoryService     *history,
-                               gboolean                success,
-                               GList                  *urls,
-                               WebKitURISchemeRequest *request)
+                               GAsyncResult           *result,
+                               WebKitURISchemeRequest *request_param)
 {
+  g_autoptr (WebKitURISchemeRequest) request = request_param;
   EphySnapshotService *snapshot_service;
   EphyEmbedShell *shell;
   GString *data_str;
   gsize data_length;
   char *lang;
   GList *l;
+  g_autolist (EphyHistoryURL) urls = NULL;
+  g_autoptr (GError) error = NULL;
   guint list_length;
+
+  urls = ephy_history_service_query_urls_finish (history, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to query overview URLs: %s", error->message);
+    return;
+  }
 
   snapshot_service = ephy_snapshot_service_get_default ();
   shell = ephy_embed_shell_get_default ();
@@ -445,7 +454,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
 
   list_length = g_list_length (urls);
 
-  if (list_length == 0 || !success) {
+  if (list_length == 0) {
     GtkIconTheme *icon_theme;
     g_autoptr (GtkIconPaintable) paintable = NULL;
     g_autofree char *path = NULL;
@@ -517,15 +526,14 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                             entity_encoded_title);
   }
 
-  data_str = g_string_append (data_str,
-                              "  </div>\n"
-                              "  </div>\n"
-                              "</body></html>\n");
+  g_string_append (data_str,
+                   "  </div>\n"
+                   "  </div>\n"
+                   "</body></html>\n");
 
 out:
   data_length = data_str->len;
   ephy_about_handler_finish_request (request, g_string_free_and_steal (data_str), data_length);
-  g_object_unref (request);
 }
 
 static gboolean
@@ -568,7 +576,7 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler       *handler,
   history = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   query = ephy_history_query_new_for_overview ();
   ephy_history_service_query_urls (history, query, NULL,
-                                   (EphyHistoryJobCallback)history_service_query_urls_cb,
+                                   (GAsyncReadyCallback)history_service_query_urls_cb,
                                    g_object_ref (request));
   ephy_history_query_free (query);
 

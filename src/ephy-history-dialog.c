@@ -287,19 +287,24 @@ on_select_all_button_clicked (GtkButton         *button,
 }
 
 static void
-on_find_urls_cb (gpointer service,
-                 gboolean success,
-                 gpointer result_data,
-                 gpointer user_data)
+on_find_urls_cb (EphyHistoryService *service,
+                 GAsyncResult       *result,
+                 gpointer            user_data)
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
+  g_autoptr (GError) error = NULL;
+  GList *urls;
 
-  if (!success)
+  urls = ephy_history_service_find_urls_finish (service, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to find URLs: %s", error->message);
     return;
+  }
 
   if (self->urls)
     ephy_history_url_list_free (self->urls);
-  self->urls = ephy_history_url_list_copy (result_data);
+  self->urls = urls;
 
   gtk_list_box_remove_all (GTK_LIST_BOX (self->listbox));
 
@@ -359,7 +364,7 @@ filter_now (EphyHistoryDialog *self)
                                   substrings,
                                   type,
                                   self->cancellable,
-                                  (EphyHistoryJobCallback)on_find_urls_cb, self);
+                                  (GAsyncReadyCallback)on_find_urls_cb, self);
 }
 
 static GList *
@@ -381,12 +386,20 @@ get_checked_rows (EphyHistoryDialog *self)
 }
 
 static void
-on_browse_history_deleted_cb (gpointer service,
-                              gboolean success,
-                              gpointer result_data,
-                              gpointer user_data)
+on_browse_history_deleted_cb (EphyHistoryService *service,
+                              GAsyncResult       *result,
+                              gpointer            user_data)
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
+  g_autoptr (GError) error = NULL;
+  gboolean success;
+
+  success = ephy_history_service_delete_urls_finish (service, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to delete URLs: %s", error->message);
+    return;
+  }
 
   if (success) {
     g_autoptr (GList) checked_rows = get_checked_rows (self);
@@ -418,7 +431,7 @@ delete_checked_rows (EphyHistoryDialog *self)
   }
 
   ephy_history_service_delete_urls (self->history_service, deleted_urls, self->cancellable,
-                                    (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
+                                    (GAsyncReadyCallback)on_browse_history_deleted_cb, self);
 
   for (iter = deleted_urls; iter; iter = g_list_next (iter))
     ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
@@ -635,7 +648,7 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
     }
 
     ephy_history_service_delete_urls (self->history_service, deleted_urls, self->cancellable,
-                                      (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
+                                      (GAsyncReadyCallback)on_browse_history_deleted_cb, self);
 
     for (iter = deleted_urls; iter; iter = g_list_next (iter))
       ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);

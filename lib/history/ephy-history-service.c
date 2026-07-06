@@ -76,25 +76,22 @@ static guint signals[LAST_SIGNAL];
 typedef struct _EphyHistoryServiceMessage {
   EphyHistoryService *service;
   EphyHistoryServiceMessageType type;
-  gpointer *method_argument;
-  gboolean success;
-  gpointer result;
-  gpointer user_data;
-  GCancellable *cancellable;
+  gpointer method_argument;
   GDestroyNotify method_argument_cleanup;
   GDestroyNotify result_cleanup;
-  EphyHistoryJobCallback callback;
+  gboolean success;
+  gpointer result;
+  GTask *task;
 } EphyHistoryServiceMessage;
 
 static gpointer run_history_service_thread (EphyHistoryService *self);
+static void ephy_history_service_complete_task_in_idle_cb (EphyHistoryServiceMessage *message);
 static void ephy_history_service_process_message (EphyHistoryService        *self,
                                                   EphyHistoryServiceMessage *message);
 static gboolean ephy_history_service_execute_quit (EphyHistoryService *self,
                                                    gpointer            data,
                                                    gpointer           *result);
-static void ephy_history_service_quit (EphyHistoryService    *self,
-                                       EphyHistoryJobCallback callback,
-                                       gpointer               user_data);
+static void ephy_history_service_quit (EphyHistoryService *self);
 
 typedef enum {
   PROP_HISTORY_FILENAME = 1,
@@ -146,7 +143,7 @@ ephy_history_service_finalize (GObject *object)
 {
   EphyHistoryService *self = EPHY_HISTORY_SERVICE (object);
 
-  ephy_history_service_quit (self, NULL, NULL);
+  ephy_history_service_quit (self);
 
   if (self->history_thread)
     g_thread_join (self->history_thread);
@@ -339,9 +336,7 @@ ephy_history_service_message_new (EphyHistoryService            *service,
                                   gpointer                       method_argument,
                                   GDestroyNotify                 method_argument_cleanup,
                                   GDestroyNotify                 result_cleanup,
-                                  GCancellable                  *cancellable,
-                                  EphyHistoryJobCallback         callback,
-                                  gpointer                       user_data)
+                                  GTask                         *task)
 {
   EphyHistoryServiceMessage *message = g_new0 (EphyHistoryServiceMessage, 1);
 
@@ -350,9 +345,7 @@ ephy_history_service_message_new (EphyHistoryService            *service,
   message->method_argument = method_argument;
   message->method_argument_cleanup = method_argument_cleanup;
   message->result_cleanup = result_cleanup;
-  message->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-  message->callback = callback;
-  message->user_data = user_data;
+  message->task = task ? g_object_ref (task) : NULL;
 
   return message;
 }
@@ -363,11 +356,10 @@ ephy_history_service_message_free (EphyHistoryServiceMessage *message)
   if (message->method_argument_cleanup)
     message->method_argument_cleanup (message->method_argument);
 
-  if (message->result_cleanup)
+  if (message->result_cleanup && message->result)
     message->result_cleanup (message->result);
 
-  if (message->cancellable)
-    g_object_unref (message->cancellable);
+  g_clear_object (&message->task);
 
   g_free (message);
 }
@@ -506,22 +498,32 @@ run_history_service_thread (EphyHistoryService *self)
 }
 
 static void
-ephy_history_service_execute_job_callback (gpointer data)
+emit_cleared_signal_cb (EphyHistoryService *self)
 {
-  EphyHistoryServiceMessage *message = (EphyHistoryServiceMessage *)data;
+  g_signal_emit (self, signals[CLEARED], 0);
+  g_object_unref (self);
+}
 
-  g_assert (message->callback || message->type == CLEAR);
+static void
+ephy_history_service_complete_task_in_idle_cb (EphyHistoryServiceMessage *message)
+{
+  gboolean is_pointer_method;
 
-  if (g_cancellable_is_cancelled (message->cancellable)) {
+  if (g_task_return_error_if_cancelled (message->task)) {
     ephy_history_service_message_free (message);
     return;
   }
 
-  if (message->callback)
-    message->callback (message->service, message->success, message->result, message->user_data);
-
-  if (message->type == CLEAR)
-    g_signal_emit (message->service, signals[CLEARED], 0);
+  is_pointer_method = (message->type == GET_URL ||
+                       message->type == GET_HOST_FOR_URL ||
+                       message->type == QUERY_URLS ||
+                       message->type == QUERY_VISITS ||
+                       message->type == GET_HOSTS ||
+                       message->type == QUERY_HOSTS);
+  g_task_return_pointer (message->task,
+                         is_pointer_method ? message->result : GINT_TO_POINTER (message->success),
+                         message->result_cleanup);
+  message->result = NULL;
 
   ephy_history_service_message_free (message);
 }
@@ -767,52 +769,88 @@ ephy_history_service_get_cached_statement (EphyHistoryService           *self,
 }
 
 void
-ephy_history_service_add_visit (EphyHistoryService     *self,
-                                EphyHistoryPageVisit   *visit,
-                                GCancellable           *cancellable,
-                                EphyHistoryJobCallback  callback,
-                                gpointer                user_data)
+ephy_history_service_add_visit (EphyHistoryService   *self,
+                                EphyHistoryPageVisit *visit,
+                                GCancellable         *cancellable,
+                                GAsyncReadyCallback   callback,
+                                gpointer              user_data)
 {
+  GTask *task;
   EphyHistoryServiceMessage *message;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (visit);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_add_visit);
+
   message = ephy_history_service_message_new (self, ADD_VISIT,
                                               ephy_history_page_visit_copy (visit),
                                               (GDestroyNotify)ephy_history_page_visit_free,
                                               NULL,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
 }
 
-void
-ephy_history_service_add_visits (EphyHistoryService     *self,
-                                 GList                  *visits,
-                                 GCancellable           *cancellable,
-                                 EphyHistoryJobCallback  callback,
-                                 gpointer                user_data)
+gboolean
+ephy_history_service_add_visit_finish (EphyHistoryService  *self,
+                                       GAsyncResult        *result,
+                                       GError             **error)
 {
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
+}
+
+void
+ephy_history_service_add_visits (EphyHistoryService  *self,
+                                 GList               *visits,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  GTask *task;
   EphyHistoryServiceMessage *message;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (visits);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_add_visits);
+
   message = ephy_history_service_message_new (self, ADD_VISITS,
                                               ephy_history_page_visit_list_copy (visits),
                                               (GDestroyNotify)ephy_history_page_visit_list_free,
                                               NULL,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
 }
 
+gboolean
+ephy_history_service_add_visits_finish (EphyHistoryService  *self,
+                                        GAsyncResult        *result,
+                                        GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
+}
+
 void
-ephy_history_service_find_visits_in_time (EphyHistoryService     *self,
-                                          gint64                  from,
-                                          gint64                  to,
-                                          GCancellable           *cancellable,
-                                          EphyHistoryJobCallback  callback,
-                                          gpointer                user_data)
+ephy_history_service_find_visits_in_time (EphyHistoryService  *self,
+                                          gint64               from,
+                                          gint64               to,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
 {
   EphyHistoryQuery *query;
 
@@ -826,24 +864,50 @@ ephy_history_service_find_visits_in_time (EphyHistoryService     *self,
   ephy_history_query_free (query);
 }
 
-void
-ephy_history_service_query_visits (EphyHistoryService     *self,
-                                   EphyHistoryQuery       *query,
-                                   GCancellable           *cancellable,
-                                   EphyHistoryJobCallback  callback,
-                                   gpointer                user_data)
+GList *
+ephy_history_service_find_visits_in_time_finish (EphyHistoryService  *self,
+                                                 GAsyncResult        *result,
+                                                 GError             **error)
 {
+  return ephy_history_service_query_visits_finish (self, result, error);
+}
+
+void
+ephy_history_service_query_visits (EphyHistoryService  *self,
+                                   EphyHistoryQuery    *query,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  GTask *task;
   EphyHistoryServiceMessage *message;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (query);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_query_visits);
+
   message = ephy_history_service_message_new (self, QUERY_VISITS,
                                               ephy_history_query_copy (query),
                                               (GDestroyNotify)ephy_history_query_free,
                                               (GDestroyNotify)ephy_history_page_visit_list_free,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+GList *
+ephy_history_service_query_visits_finish (EphyHistoryService  *self,
+                                          GAsyncResult        *result,
+                                          GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean
@@ -859,59 +923,113 @@ ephy_history_service_execute_query_urls (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_query_urls (EphyHistoryService     *self,
-                                 EphyHistoryQuery       *query,
-                                 GCancellable           *cancellable,
-                                 EphyHistoryJobCallback  callback,
-                                 gpointer                user_data)
+ephy_history_service_query_urls (EphyHistoryService  *self,
+                                 EphyHistoryQuery    *query,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
 {
+  GTask *task;
   EphyHistoryServiceMessage *message;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (query);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_query_urls);
+
   message = ephy_history_service_message_new (self, QUERY_URLS,
                                               ephy_history_query_copy (query),
                                               (GDestroyNotify)ephy_history_query_free,
                                               (GDestroyNotify)ephy_history_url_list_free,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
 }
 
-void
-ephy_history_service_get_hosts (EphyHistoryService     *self,
-                                GCancellable           *cancellable,
-                                EphyHistoryJobCallback  callback,
-                                gpointer                user_data)
+GList *
+ephy_history_service_query_urls_finish (EphyHistoryService  *self,
+                                        GAsyncResult        *result,
+                                        GError             **error)
 {
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+void
+ephy_history_service_get_hosts (EphyHistoryService  *self,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  GTask *task;
   EphyHistoryServiceMessage *message;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_get_hosts);
 
   message = ephy_history_service_message_new (self, GET_HOSTS,
                                               NULL, NULL,
                                               (GDestroyNotify)ephy_history_host_list_free,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
 }
 
-void
-ephy_history_service_query_hosts (EphyHistoryService     *self,
-                                  EphyHistoryQuery       *query,
-                                  GCancellable           *cancellable,
-                                  EphyHistoryJobCallback  callback,
-                                  gpointer                user_data)
+GList *
+ephy_history_service_get_hosts_finish (EphyHistoryService  *self,
+                                       GAsyncResult        *result,
+                                       GError             **error)
 {
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+void
+ephy_history_service_query_hosts (EphyHistoryService  *self,
+                                  EphyHistoryQuery    *query,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  GTask *task;
   EphyHistoryServiceMessage *message;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_query_hosts);
 
   message = ephy_history_service_message_new (self, QUERY_HOSTS,
                                               ephy_history_query_copy (query),
                                               (GDestroyNotify)ephy_history_query_free,
                                               (GDestroyNotify)ephy_history_host_list_free,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+GList *
+ephy_history_service_query_hosts_finish (EphyHistoryService  *self,
+                                         GAsyncResult        *result,
+                                         GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean
@@ -953,26 +1071,44 @@ ephy_history_service_execute_set_url_title (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_set_url_title (EphyHistoryService     *self,
-                                    const char             *orig_url,
-                                    const char             *title,
-                                    GCancellable           *cancellable,
-                                    EphyHistoryJobCallback  callback,
-                                    gpointer                user_data)
+ephy_history_service_set_url_title (EphyHistoryService  *self,
+                                    const char          *orig_url,
+                                    const char          *title,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
   EphyHistoryURL *url;
   EphyHistoryServiceMessage *message;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (orig_url);
   g_assert (title);
   g_assert (*title != '\0');
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_set_url_title);
+
   url = ephy_history_url_new (orig_url, title, 0, 0, 0);
   message = ephy_history_service_message_new (self, SET_URL_TITLE,
                                               url, (GDestroyNotify)ephy_history_url_free,
-                                              NULL, cancellable, callback, user_data);
+                                              NULL, task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+gboolean
+ephy_history_service_set_url_title_finish (EphyHistoryService  *self,
+                                           GAsyncResult        *result,
+                                           GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
 }
 
 static gboolean
@@ -998,18 +1134,23 @@ ephy_history_service_execute_set_url_zoom_level (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_set_url_zoom_level (EphyHistoryService     *self,
-                                         const char             *url,
-                                         double                  zoom_level,
-                                         GCancellable           *cancellable,
-                                         EphyHistoryJobCallback  callback,
-                                         gpointer                user_data)
+ephy_history_service_set_url_zoom_level (EphyHistoryService  *self,
+                                         const char          *url,
+                                         double               zoom_level,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
   GVariant *variant;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (url);
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_set_url_zoom_level);
 
   /* Ensure that a change value which equals default zoom level is stored as 0.0 */
   if (zoom_level == g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL))
@@ -1019,8 +1160,21 @@ ephy_history_service_set_url_zoom_level (EphyHistoryService     *self,
 
   message = ephy_history_service_message_new (self, SET_URL_ZOOM_LEVEL,
                                               variant, (GDestroyNotify)g_variant_unref,
-                                              NULL, cancellable, callback, user_data);
+                                              NULL, task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+gboolean
+ephy_history_service_set_url_zoom_level_finish (EphyHistoryService  *self,
+                                                GAsyncResult        *result,
+                                                GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
 }
 
 static gboolean
@@ -1043,26 +1197,44 @@ ephy_history_service_execute_set_url_hidden (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_set_url_hidden (EphyHistoryService     *self,
-                                     const char             *orig_url,
-                                     gboolean                hidden,
-                                     GCancellable           *cancellable,
-                                     EphyHistoryJobCallback  callback,
-                                     gpointer                user_data)
+ephy_history_service_set_url_hidden (EphyHistoryService  *self,
+                                     const char          *orig_url,
+                                     gboolean             hidden,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
   EphyHistoryURL *url;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (orig_url);
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_set_url_hidden);
 
   url = ephy_history_url_new (orig_url, NULL, 0, 0, 0);
   url->hidden = hidden;
 
   message = ephy_history_service_message_new (self, SET_URL_HIDDEN,
                                               url, (GDestroyNotify)ephy_history_url_free,
-                                              NULL, cancellable, callback, user_data);
+                                              NULL, task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+gboolean
+ephy_history_service_set_url_hidden_finish (EphyHistoryService  *self,
+                                            GAsyncResult        *result,
+                                            GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
 }
 
 static gboolean
@@ -1085,26 +1257,44 @@ ephy_history_service_execute_set_url_pinned (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_set_url_pinned (EphyHistoryService     *self,
-                                     const char             *orig_url,
-                                     gboolean                pinned,
-                                     GCancellable           *cancellable,
-                                     EphyHistoryJobCallback  callback,
-                                     gpointer                user_data)
+ephy_history_service_set_url_pinned (EphyHistoryService  *self,
+                                     const char          *orig_url,
+                                     gboolean             pinned,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
   EphyHistoryURL *url;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (orig_url);
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_set_url_pinned);
 
   url = ephy_history_url_new (orig_url, NULL, 0, 0, 0);
   url->pinned = pinned;
 
   message = ephy_history_service_message_new (self, SET_URL_PINNED,
                                               url, (GDestroyNotify)ephy_history_url_free,
-                                              NULL, cancellable, callback, user_data);
+                                              NULL, task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+gboolean
+ephy_history_service_set_url_pinned_finish (EphyHistoryService  *self,
+                                            GAsyncResult        *result,
+                                            GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
 }
 
 static gboolean
@@ -1122,21 +1312,39 @@ ephy_history_service_execute_get_url (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_get_url (EphyHistoryService     *self,
-                              const char             *url,
-                              GCancellable           *cancellable,
-                              EphyHistoryJobCallback  callback,
-                              gpointer                user_data)
+ephy_history_service_get_url (EphyHistoryService  *self,
+                              const char          *url,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (url);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_get_url);
+
   message = ephy_history_service_message_new (self, GET_URL,
                                               g_strdup (url), g_free, (GDestroyNotify)ephy_history_url_free,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+EphyHistoryURL *
+ephy_history_service_get_url_finish (EphyHistoryService  *self,
+                                     GAsyncResult        *result,
+                                     GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean
@@ -1155,21 +1363,39 @@ ephy_history_service_execute_get_host_for_url (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_get_host_for_url (EphyHistoryService     *self,
-                                       const char             *url,
-                                       GCancellable           *cancellable,
-                                       EphyHistoryJobCallback  callback,
-                                       gpointer                user_data)
+ephy_history_service_get_host_for_url (EphyHistoryService  *self,
+                                       const char          *url,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (url);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_get_host_for_url);
+
   message = ephy_history_service_message_new (self, GET_HOST_FOR_URL,
                                               g_strdup (url), g_free, (GDestroyNotify)ephy_history_host_free,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
+}
+
+EphyHistoryHost *
+ephy_history_service_get_host_for_url_finish (EphyHistoryService  *self,
+                                              GAsyncResult        *result,
+                                              GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean
@@ -1221,10 +1447,9 @@ delete_host_signal_emit (SignalEmissionContext *ctx)
 }
 
 static gboolean
-ephy_history_service_execute_delete_host (EphyHistoryService     *self,
-                                          EphyHistoryHost        *host,
-                                          EphyHistoryJobCallback  callback,
-                                          gpointer                user_data)
+ephy_history_service_execute_delete_host (EphyHistoryService *self,
+                                          EphyHistoryHost    *host,
+                                          gpointer           *result)
 {
   SignalEmissionContext *ctx;
 
@@ -1255,66 +1480,121 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
   ephy_history_service_open_database_connections (self);
   ephy_history_service_open_transaction (self);
 
+  g_idle_add_once ((GSourceOnceFunc)emit_cleared_signal_cb, g_object_ref (self));
+
   return TRUE;
 }
 
 void
-ephy_history_service_delete_urls (EphyHistoryService     *self,
-                                  GList                  *urls,
-                                  GCancellable           *cancellable,
-                                  EphyHistoryJobCallback  callback,
-                                  gpointer                user_data)
+ephy_history_service_delete_urls (EphyHistoryService  *self,
+                                  GList               *urls,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
   g_assert (urls);
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_delete_urls);
+
   message = ephy_history_service_message_new (self, DELETE_URLS,
                                               ephy_history_url_list_copy (urls), (GDestroyNotify)ephy_history_url_list_free,
-                                              NULL, cancellable, callback, user_data);
+                                              NULL, task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
 }
 
-void
-ephy_history_service_delete_host (EphyHistoryService     *self,
-                                  EphyHistoryHost        *host,
-                                  GCancellable           *cancellable,
-                                  EphyHistoryJobCallback  callback,
-                                  gpointer                user_data)
+gboolean
+ephy_history_service_delete_urls_finish (EphyHistoryService  *self,
+                                         GAsyncResult        *result,
+                                         GError             **error)
 {
-  EphyHistoryServiceMessage *message =
-    ephy_history_service_message_new (self, DELETE_HOST,
-                                      ephy_history_host_copy (host), (GDestroyNotify)ephy_history_host_free,
-                                      NULL, cancellable, callback, user_data);
-  ephy_history_service_send_message (self, message);
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
 }
 
 void
-ephy_history_service_clear (EphyHistoryService     *self,
-                            GCancellable           *cancellable,
-                            EphyHistoryJobCallback  callback,
-                            gpointer                user_data)
+ephy_history_service_delete_host (EphyHistoryService  *self,
+                                  EphyHistoryHost     *host,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  GTask *task;
+  EphyHistoryServiceMessage *message;
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_delete_host);
+
+  message = ephy_history_service_message_new (self, DELETE_HOST,
+                                              ephy_history_host_copy (host), (GDestroyNotify)ephy_history_host_free,
+                                              NULL, task);
+  if (task)
+    g_object_unref (task);
+  ephy_history_service_send_message (self, message);
+}
+
+gboolean
+ephy_history_service_delete_host_finish (EphyHistoryService  *self,
+                                         GAsyncResult        *result,
+                                         GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
+}
+
+void
+ephy_history_service_clear (EphyHistoryService  *self,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
 {
   EphyHistoryServiceMessage *message;
+  GTask *task;
 
   g_assert (EPHY_IS_HISTORY_SERVICE (self));
 
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_clear);
+
   message = ephy_history_service_message_new (self, CLEAR,
                                               NULL, NULL, NULL,
-                                              cancellable, callback, user_data);
+                                              task);
+  if (task)
+    g_object_unref (task);
   ephy_history_service_send_message (self, message);
 }
 
+gboolean
+ephy_history_service_clear_finish (EphyHistoryService  *self,
+                                   GAsyncResult        *result,
+                                   GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
+}
+
 static void
-ephy_history_service_quit (EphyHistoryService     *self,
-                           EphyHistoryJobCallback  callback,
-                           gpointer                user_data)
+ephy_history_service_quit (EphyHistoryService *self)
 {
   EphyHistoryServiceMessage *message =
     ephy_history_service_message_new (self, QUIT,
-                                      NULL, NULL, NULL, NULL,
-                                      callback, user_data);
+                                      NULL, NULL, NULL,
+                                      NULL);
   ephy_history_service_send_message (self, message);
 }
 
@@ -1351,14 +1631,14 @@ ephy_history_service_process_message (EphyHistoryService        *self,
 
   g_assert (self->history_thread == g_thread_self ());
 
-  if (g_cancellable_is_cancelled (message->cancellable) &&
+  if (message->task && message->type != QUIT &&
+      g_cancellable_is_cancelled (g_task_get_cancellable (message->task)) &&
       !ephy_history_service_message_is_write (message)) {
-    ephy_history_service_message_free (message);
+    g_idle_add_once ((GSourceOnceFunc)ephy_history_service_complete_task_in_idle_cb, message);
     return;
   }
 
   method = methods[message->type];
-  message->result = NULL;
   if (message->service->history_database) {
     ephy_history_service_open_transaction (self);
     message->success = method (message->service, message->method_argument, &message->result);
@@ -1367,8 +1647,8 @@ ephy_history_service_process_message (EphyHistoryService        *self,
     message->success = FALSE;
   }
 
-  if (message->callback || message->type == CLEAR)
-    g_idle_add_once ((GSourceOnceFunc)ephy_history_service_execute_job_callback, message);
+  if (message->task)
+    g_idle_add_once ((GSourceOnceFunc)ephy_history_service_complete_task_in_idle_cb, message);
   else
     ephy_history_service_message_free (message);
 
@@ -1378,16 +1658,16 @@ ephy_history_service_process_message (EphyHistoryService        *self,
 /* Public API. */
 
 void
-ephy_history_service_find_urls (EphyHistoryService     *self,
-                                gint64                  from,
-                                gint64                  to,
-                                guint                   limit,
-                                gint                    host,
-                                GList                  *substring_list,
-                                EphyHistorySortType     sort_type,
-                                GCancellable           *cancellable,
-                                EphyHistoryJobCallback  callback,
-                                gpointer                user_data)
+ephy_history_service_find_urls (EphyHistoryService  *self,
+                                gint64               from,
+                                gint64               to,
+                                guint                limit,
+                                gint                 host,
+                                GList               *substring_list,
+                                EphyHistorySortType  sort_type,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
 {
   EphyHistoryQuery *query;
 
@@ -1407,6 +1687,14 @@ ephy_history_service_find_urls (EphyHistoryService     *self,
                                    query, cancellable,
                                    callback, user_data);
   ephy_history_query_free (query);
+}
+
+GList *
+ephy_history_service_find_urls_finish (EphyHistoryService  *self,
+                                       GAsyncResult        *result,
+                                       GError             **error)
+{
+  return ephy_history_service_query_urls_finish (self, result, error);
 }
 
 void
@@ -1433,12 +1721,12 @@ ephy_history_service_visit_url (EphyHistoryService       *self,
 }
 
 void
-ephy_history_service_find_hosts (EphyHistoryService     *self,
-                                 gint64                  from,
-                                 gint64                  to,
-                                 GCancellable           *cancellable,
-                                 EphyHistoryJobCallback  callback,
-                                 gpointer                user_data)
+ephy_history_service_find_hosts (EphyHistoryService  *self,
+                                 gint64               from,
+                                 gint64               to,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
 {
   EphyHistoryQuery *query;
 
@@ -1452,4 +1740,12 @@ ephy_history_service_find_hosts (EphyHistoryService     *self,
   ephy_history_service_query_hosts (self, query,
                                     cancellable, callback, user_data);
   ephy_history_query_free (query);
+}
+
+GList *
+ephy_history_service_find_hosts_finish (EphyHistoryService  *self,
+                                        GAsyncResult        *result,
+                                        GError             **error)
+{
+  return ephy_history_service_query_hosts_finish (self, result, error);
 }

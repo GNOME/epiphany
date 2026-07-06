@@ -475,17 +475,26 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager *self,
 }
 
 static void
-merge_history_cb (EphyHistoryService    *service,
-                  gboolean               success,
-                  GList                 *urls,
-                  MergeHistoryAsyncData *data)
+merge_history_cb (EphyHistoryService *service,
+                  GAsyncResult       *result,
+                  gpointer            user_data)
 {
+  MergeHistoryAsyncData *data = user_data;
   GHashTable *records_ht_id = NULL;
   GHashTable *records_ht_url = NULL;
   GPtrArray *to_upload = NULL;
+  g_autolist (EphyHistoryURL) urls = NULL;
+  g_autoptr (GError) error = NULL;
 
-  if (!success) {
-    g_warning ("Failed to retrieve URLs in history");
+  urls = ephy_history_service_find_urls_finish (service, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    data->callback (NULL, data->user_data);
+    merge_history_async_data_free (data);
+    return;
+  }
+
+  if (error) {
+    g_warning ("Failed to retrieve URLs in history: %s", error->message);
     goto out;
   }
 
@@ -539,7 +548,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
 
   ephy_history_service_find_urls (self->service, -1, -1, -1, 0, NULL,
                                   EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED, NULL,
-                                  (EphyHistoryJobCallback)merge_history_cb,
+                                  (GAsyncReadyCallback)merge_history_cb,
                                   merge_history_async_data_new (self,
                                                                 is_initial,
                                                                 remotes_deleted,

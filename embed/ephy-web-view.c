@@ -474,14 +474,21 @@ take_snapshot (EphyWebView *view)
 
 static void
 history_service_query_urls_cb (EphyHistoryService *service,
-                               gboolean            success,
-                               GList              *urls,
+                               GAsyncResult       *result,
                                EphyWebView        *view)
 {
   const char *url = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+  g_autoptr (GError) error = NULL;
+  g_autolist (EphyHistoryURL) urls = NULL;
 
-  if (!success)
+  urls = ephy_history_service_query_urls_finish (service, result, &error);
+  if (error) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      return;
+
+    g_warning ("Failed to query overview URLs: %s", error->message);
     goto out;
+  }
 
   /* Have we already started a new load? */
   if (g_strcmp0 (url, view->pending_snapshot_uri) != 0)
@@ -499,7 +506,6 @@ history_service_query_urls_cb (EphyHistoryService *service,
 
 out:
   g_clear_pointer (&view->pending_snapshot_uri, g_free);
-  g_object_unref (view);
 }
 
 static gboolean
@@ -523,9 +529,9 @@ maybe_take_snapshot (EphyWebView *view)
    */
   query = ephy_history_query_new_for_overview ();
   query->limit += 5;
-  ephy_history_service_query_urls (service, query, NULL,
-                                   (EphyHistoryJobCallback)history_service_query_urls_cb,
-                                   g_object_ref (view));
+  ephy_history_service_query_urls (service, query, view->cancellable,
+                                   (GAsyncReadyCallback)history_service_query_urls_cb,
+                                   view);
   ephy_history_query_free (query);
 
   return G_SOURCE_REMOVE;
@@ -1013,21 +1019,24 @@ out:
 }
 
 static void
-get_host_for_url_cb (gpointer service,
-                     gboolean success,
-                     gpointer result_data,
-                     gpointer user_data)
+get_host_for_url_cb (EphyHistoryService *service,
+                     GAsyncResult       *result,
+                     EphyWebView        *view)
 {
-  EphyHistoryHost *host;
-  EphyWebView *view;
+  g_autoptr (EphyHistoryHost) host = NULL;
+  g_autoptr (GError) error = NULL;
   double current_zoom;
   double set_zoom;
 
-  if (!success)
+  host = ephy_history_service_get_host_for_url_finish (service, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to get host zoom level: %s", error->message);
     return;
+  }
 
-  view = EPHY_WEB_VIEW (user_data);
-  host = (EphyHistoryHost *)result_data;
+  if (!host)
+    return;
 
   current_zoom = webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW (view));
 
@@ -1055,7 +1064,8 @@ restore_zoom_level (EphyWebView *view,
   if (ephy_embed_utils_address_has_web_scheme (address))
     ephy_history_service_get_host_for_url (view->history_service,
                                            address, view->cancellable,
-                                           (EphyHistoryJobCallback)get_host_for_url_cb, view);
+                                           (GAsyncReadyCallback)get_host_for_url_cb,
+                                           view);
 }
 
 static void

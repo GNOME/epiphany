@@ -227,16 +227,21 @@ web_process_extension_password_form_focused_message_received_cb (WebKitUserConte
 
 static void
 history_service_query_urls_cb (EphyHistoryService *service,
-                               gboolean            success,
-                               GList              *urls,
+                               GAsyncResult       *result,
                                EphyEmbedShell     *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  g_autolist (EphyHistoryURL) urls = NULL;
+  g_autoptr (GError) error = NULL;
   GList *l;
   GVariantBuilder builder;
 
-  if (!success)
+  urls = ephy_history_service_query_urls_finish (service, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to query overview URLs: %s", error->message);
     return;
+  }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ssb)"));
   for (l = urls; l; l = g_list_next (l)) {
@@ -258,8 +263,8 @@ ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
   g_autoptr (EphyHistoryQuery) query = NULL;
 
   query = ephy_history_query_new_for_overview ();
-  ephy_history_service_query_urls (priv->global_history_service, query, NULL,
-                                   (EphyHistoryJobCallback)history_service_query_urls_cb,
+  ephy_history_service_query_urls (priv->global_history_service, query, priv->cancellable,
+                                   (GAsyncReadyCallback)history_service_query_urls_cb,
                                    shell);
 }
 
@@ -272,12 +277,16 @@ history_service_urls_visited_cb (EphyHistoryService *history,
 
 static void
 history_set_url_hidden_cb (EphyHistoryService *service,
-                           gboolean            success,
-                           gpointer            result_data,
+                           GAsyncResult       *result,
                            EphyEmbedShell     *shell)
 {
-  if (!success)
+  g_autoptr (GError) error = NULL;
+
+  if (!ephy_history_service_set_url_hidden_finish (service, result, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to hide URL: %s", error->message);
     return;
+  }
 
   ephy_embed_shell_update_overview_urls (shell);
 }
@@ -294,8 +303,8 @@ web_process_extension_overview_message_received_cb (WebKitUserContentManager *ma
   url_to_remove = jsc_value_to_string (message);
 
   ephy_history_service_set_url_hidden (priv->global_history_service,
-                                       url_to_remove, TRUE, NULL,
-                                       (EphyHistoryJobCallback)history_set_url_hidden_cb,
+                                       url_to_remove, TRUE, priv->cancellable,
+                                       (GAsyncReadyCallback)history_set_url_hidden_cb,
                                        shell);
 
   window = gtk_application_get_active_window (GTK_APPLICATION (shell));
@@ -353,12 +362,16 @@ web_process_extension_autofill_askuser_received_cb (WebKitUserContentManager *ma
 
 static void
 history_set_url_pinned_cb (EphyHistoryService *service,
-                           gboolean            success,
-                           gpointer            result_data,
+                           GAsyncResult       *result,
                            EphyEmbedShell     *shell)
 {
-  if (!success)
+  g_autoptr (GError) error = NULL;
+
+  if (!ephy_history_service_set_url_pinned_finish (service, result, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to pin/unpin URL: %s", error->message);
     return;
+  }
 
   ephy_embed_shell_update_overview_urls (shell);
 }
@@ -374,8 +387,8 @@ web_process_extension_overview_pin_message_received_cb (WebKitUserContentManager
 
   if (url) {
     ephy_history_service_set_url_pinned (priv->global_history_service,
-                                         url, pinned, NULL,
-                                         (EphyHistoryJobCallback)history_set_url_pinned_cb,
+                                         url, pinned, priv->cancellable,
+                                         (GAsyncReadyCallback)history_set_url_pinned_cb,
                                          shell);
   }
 }

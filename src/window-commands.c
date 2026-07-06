@@ -2654,12 +2654,18 @@ window_cmd_show_overview_undo_toast (GSimpleAction *action,
 
 static void
 undo_overview_remove_cb (EphyHistoryService *service,
-                         gboolean            success,
-                         gpointer            result_data,
+                         GAsyncResult       *result,
                          EphyEmbedShell     *shell)
 {
-  if (success)
-    ephy_embed_shell_update_overview_urls (shell);
+  g_autoptr (GError) error = NULL;
+
+  if (!ephy_history_service_set_url_hidden_finish (service, result, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to undo URL removal: %s", error->message);
+    return;
+  }
+
+  ephy_embed_shell_update_overview_urls (shell);
 }
 
 void
@@ -2672,7 +2678,7 @@ window_cmd_undo_overview_remove (GSimpleAction *action,
   EphyHistoryService *history = ephy_embed_shell_get_global_history_service (shell);
 
   ephy_history_service_set_url_hidden (history, url, FALSE, NULL,
-                                       (EphyHistoryJobCallback)undo_overview_remove_cb,
+                                       (GAsyncReadyCallback)undo_overview_remove_cb,
                                        shell);
 }
 

@@ -610,18 +610,25 @@ bookmarks_query (EphySuggestionModel *self,
 
 static void
 history_query_completed_cb (EphyHistoryService *service,
-                            gboolean            success,
-                            gpointer            result_data,
+                            GAsyncResult       *result,
                             gpointer            user_data)
 {
   GTask *task = user_data;
   EphySuggestionModel *self;
   QueryData *data;
-  GList *urls;
+  g_autolist (EphyHistoryURL) urls = NULL;
+  g_autoptr (GError) error = NULL;
 
   self = g_task_get_source_object (task);
   data = g_task_get_task_data (task);
-  urls = (GList *)result_data;
+
+  urls = ephy_history_service_find_urls_finish (service, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to query history suggestions: %s", error->message);
+    query_collection_done (self, g_steal_pointer (&task));
+    return;
+  }
 
   if (strlen (data->query) > 0) {
     for (const GList *p = urls; p; p = p->next) {
@@ -757,7 +764,7 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
                                     qlist,
                                     EPHY_HISTORY_SORT_MOST_VISITED,
                                     cancellable,
-                                    (EphyHistoryJobCallback)history_query_completed_cb,
+                                    (GAsyncReadyCallback)history_query_completed_cb,
                                     task);
   }
 
