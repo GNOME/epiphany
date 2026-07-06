@@ -990,6 +990,8 @@ ephy_embed_shell_constructed (GObject *object)
   priv = ephy_embed_shell_get_instance_private (shell);
   priv->guid = g_dbus_generate_guid ();
 
+  priv->cancellable = g_cancellable_new ();
+
   ephy_embed_shell_create_web_context (shell);
   ephy_embed_shell_create_network_session_if_needed (shell);
 
