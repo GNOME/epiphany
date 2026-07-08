@@ -27,8 +27,8 @@ stages:
 
 .fedora.container.common:
   variables:
-    FDO_DISTRIBUTION_TAG: '2025-05-19.1'
-    FDO_DISTRIBUTION_VERSION: '42'
+    FDO_DISTRIBUTION_TAG: '2026-07-08.1'
+    FDO_DISTRIBUTION_VERSION: '44'
 
 build.container.fedora@x86_64:
   extends:
@@ -39,6 +39,7 @@ build.container.fedora@x86_64:
     GIT_STRATEGY: none
     FDO_EXPIRES_AFTER: 8w
     FDO_DISTRIBUTION_PACKAGES: >-
+      blueprint-compiler
       colordiff
       diffutils
       python3
