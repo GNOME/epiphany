@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 srcdirs="embed lib src"
 uidirs="src/resources/gtk"
 
@@ -16,11 +18,11 @@ files="$c_files $ui_files"
 
 # filter out excluded files
 if [ -f po/POTFILES.skip ]; then
-  files="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.skip && echo "$f"; done)"
+  files="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.skip && echo "$f"; done)" || true
 fi
 
 # find all files that are missing from POTFILES.in
-missing="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.in && echo "$f"; done)"
+missing="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.in && echo "$f"; done)" || true
 if [ ${#missing} -ne 0 ]; then
   echo >&2 "The following files are missing from po/POTFILES.in:"
 
