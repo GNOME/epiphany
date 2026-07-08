@@ -30,10 +30,23 @@ test_ephy_uri_decode (void)
 
   result = ephy_uri_decode ("https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8");
   g_assert_cmpstr (result, ==, "https://ja.wikipedia.org/wiki/メインページ");
-
   g_clear_pointer (&result, g_free);
+
   result = ephy_uri_decode ("https://xn--9dbaqfu.xn--4dbrk0ce/");
   g_assert_cmpstr (result, ==, "https://כולנו.ישראל/");
+}
+
+static void
+test_ephy_uri_get_decoded_host (void)
+{
+  g_autofree char *result = NULL;
+
+  result = ephy_uri_get_decoded_host ("https://example.com:80@www.gnome.org/");
+  g_assert_cmpstr (result, ==, "www.gnome.org");
+  g_clear_pointer (&result, g_free);
+
+  result = ephy_uri_get_decoded_host ("https://[::1]:8080/");
+  g_assert_cmpstr (result, ==, "[::1]");
 }
 
 int
@@ -45,6 +58,7 @@ main (int   argc,
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/lib/ephy-uri-helpers/decode", test_ephy_uri_decode);
+  g_test_add_func ("/lib/ephy-uri-helpers/get-decoded-host", test_ephy_uri_get_decoded_host);
 
   ret = g_test_run ();
 
