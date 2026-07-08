@@ -98,11 +98,12 @@ ephy_uri_get_base_domain (const char *hostname)
 static const char *
 get_first_colon_after_host (const char *authority_start)
 {
-  const char *search_start = authority_start;
+  const char *userinfo_end = strchr (authority_start, '@');
+  const char *search_start = userinfo_end ? userinfo_end + 1 : authority_start;
 
   /* Skip colons in IPv6 addresses */
-  if (authority_start[0] == '[') {
-    const char *bracket_close = strchr (authority_start, ']');
+  if (search_start[0] == '[') {
+    const char *bracket_close = strchr (search_start, ']');
     if (bracket_close)
       search_start = bracket_close;
   }
