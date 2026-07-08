@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 SOURCE_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
 UNCRUSTIFY=$(command -v uncrustify)
