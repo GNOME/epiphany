@@ -285,7 +285,7 @@ ephy_json_array_get_string_with_default (JsonArray  *array,
                                          guint       index,
                                          const char *default_value)
 {
-  const char *value = ephy_json_node_to_string (json_array_get_element (array, index));
+  const char *value = ephy_json_node_to_string (ephy_json_array_get_element (array, index));
   if (!value)
     return default_value;
 
