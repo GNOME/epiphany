@@ -112,13 +112,13 @@ template $PrefsGeneralPage: Adw.PreferencesPage {
     title: _("Downloads");
 
     Adw.SwitchRow ask_on_download_row {
-      title: _("Ask o_n Download");
+      title: _("Ask _Where to Save Files Before Downloading");
       use-underline: true;
     }
 
     Adw.ActionRow download_folder_row {
       sensitive: bind ask_on_download_row.active inverted;
-      title: _("_Download Folder");
+      title: _("Default Download _Folder");
       use-underline: true;
       activatable: true;
       activated => $download_folder_row_activated_cb() swapped;
