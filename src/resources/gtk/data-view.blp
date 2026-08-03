@@ -31,6 +31,7 @@ template $EphyDataView: Adw.NavigationPage {
         SearchEntry search_entry {
           placeholder-text: bind template.search-description;
           search-changed => $on_search_entry_changed();
+          search-delay: 500;
         }
       }
     }

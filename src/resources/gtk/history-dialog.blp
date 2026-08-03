@@ -78,6 +78,7 @@ template $EphyHistoryDialog: Adw.Dialog {
         SearchEntry search_entry {
           placeholder-text: _("Search history");
           search-changed => $on_search_entry_changed();
+          search-delay: 500;
         }
       }
     }

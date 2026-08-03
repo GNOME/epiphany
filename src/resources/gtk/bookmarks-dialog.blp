@@ -69,6 +69,7 @@ template $EphyBookmarksDialog: Adw.Bin {
           SearchEntry search_entry {
             placeholder-text: _("Search bookmarks");
             search-changed => $on_search_entry_changed();
+            search-delay: 500;
 
             EventControllerKey {
               key-pressed => $on_search_entry_key_pressed();
