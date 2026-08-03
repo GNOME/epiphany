@@ -1186,7 +1186,11 @@ ephy_sync_crypto_pkce_challenge_new (void)
   sha256_init (&ctx);
   sha256_update (&ctx, strlen (challenge->code_verifier),
                  (const uint8_t *)challenge->code_verifier);
-  sha256_digest (&ctx, SHA256_DIGEST_SIZE, digest);
+  sha256_digest (&ctx,
+#if NETTLE_VERSION_MAJOR < 4
+                 SHA256_DIGEST_SIZE,
+#endif
+                 digest);
   challenge->code_challenge = ephy_sync_utils_base64_urlsafe_encode (digest, SHA256_DIGEST_SIZE, TRUE);
 
   return challenge;
@@ -1345,7 +1349,11 @@ concat_kdf_sha256 (const guint8 *shared_secret,
     sha256_update (&ctx, apv_bytes_len, apv_bytes);
   /* SuppPubInfo: key length in bits as 4-byte big-endian. */
   sha256_update (&ctx, 4, (const uint8_t *)&key_len_be);
-  sha256_digest (&ctx, SHA256_DIGEST_SIZE, digest);
+  sha256_digest (&ctx,
+#if NETTLE_VERSION_MAJOR < 4
+                 SHA256_DIGEST_SIZE,
+#endif
+                 digest);
 
   /* For A256GCM (256 bits), one round of SHA-256 is sufficient. */
   result = g_malloc (key_len_bits / 8);
@@ -1543,7 +1551,11 @@ ephy_sync_crypto_decrypt_jwe (const char            *jwe,
 
     decrypted = g_malloc (ciphertext_len);
     gcm_aes256_decrypt (&ctx, ciphertext_len, decrypted, ciphertext);
-    gcm_aes256_digest (&ctx, GCM_DIGEST_SIZE, computed_tag);
+    gcm_aes256_digest (&ctx,
+#if NETTLE_VERSION_MAJOR < 4
+                       GCM_DIGEST_SIZE,
+#endif
+                       computed_tag);
 
     /* Verify the authentication tag. */
     if (memcmp (computed_tag, tag, GCM_DIGEST_SIZE) != 0) {
