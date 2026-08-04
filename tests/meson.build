@@ -3,6 +3,7 @@ envs = [
   'G_TEST_BUILDDIR=' + meson.current_build_dir(),
   'GSETTINGS_SCHEMA_DIR=' + join_paths(meson.project_build_root(), 'data'),
   'GSETTINGS_BACKEND=memory',
+  'GTK_IM_MODULE=none',
   'PATH=' + join_paths(meson.project_build_root(), 'src') + ':' + run_command('printenv', 'PATH', check: true).stdout(),
 ]
 
