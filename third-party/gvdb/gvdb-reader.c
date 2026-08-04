@@ -49,6 +49,9 @@ gvdb_table_item_get_key (GvdbTable                   *file,
 {
   guint32 start, end;
 
+  g_assert (file != NULL);
+  g_assert (file->data != NULL);
+
   start = guint32_from_le (item->key_start);
   *size = guint16_from_le (item->key_size);
   end = start + *size;
