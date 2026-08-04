@@ -18,6 +18,7 @@ variables:
 
 stages:
   - prepare
+  - lint
   - test
   - deploy
 
@@ -47,7 +48,7 @@ check-code-style:
   extends:
     - '.fdo.distribution-image@fedora'
     - '.fedora.container.common'
-  stage: 'test'
+  stage: 'lint'
   needs: [ 'build.container.fedora@x86_64' ]
   interruptible: true
   script:
@@ -80,6 +81,19 @@ check-potfiles:
     - bash data/check-potfiles
   artifacts:
     when: on_failure
+
+gobject-linter:
+  stage: lint
+  allow_failure: true
+  image:
+    name: "ghcr.io/bilelmoussaoui/gobject-linter:latest"
+    entrypoint: [""]
+  script:
+    - gobject-linter --format gitlab-codequality > gobject-linter-codequality.json
+  artifacts:
+    expire_in: "1 week"
+    reports:
+      codequality: gobject-linter-codequality.json
 
 flatpak:
   extends:
