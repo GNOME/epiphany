@@ -259,7 +259,7 @@ static void
 ephy_embed_set_title (EphyEmbed  *embed,
                       const char *title)
 {
-  char *new_title;
+  g_autofree char *new_title = NULL;
 
   new_title = g_strdup (title);
   if (!new_title || g_strstrip (new_title)[0] == '\0') {

@@ -77,20 +77,9 @@ ephy_string_blank_chr (char *source)
   return source;
 }
 
-/**
- * ephy_string_shorten: shortens a string
- * @str: the string to shorten, in UTF-8
- * @target_length: the length of the shortened string (in characters)
- *
- * If @str is already short enough, it is returned. Otherwise a new string
- * is allocated and @str is consumed.
- *
- * Return value: a newly allocated string, not longer than target_length
- * characters.
- */
 char *
-ephy_string_shorten (char  *str,
-                     gsize  target_length)
+ephy_string_shorten (const char *str,
+                     gsize       target_length)
 {
   char *new_str;
   glong actual_length;
@@ -118,8 +107,6 @@ ephy_string_shorten (char  *str,
 
   strncpy (new_str, str, bytes);
   strncpy (new_str + bytes, "…", strlen ("…") + 1);
-
-  g_free (str);
 
   return new_str;
 }
