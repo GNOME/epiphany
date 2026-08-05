@@ -217,6 +217,8 @@ typedef enum {
   PROP_ADAPTIVE_MODE,
 } EphyWindowProps;
 
+static GParamSpec *props[PROP_ADAPTIVE_MODE + 1] = { NULL, };
+
 /* Make sure not to overlap with those in ephy-lockdown.c */
 enum {
   SENS_FLAG_CHROME        = 1 << 0,
@@ -4720,15 +4722,15 @@ ephy_window_class_init (EphyWindowClass *klass)
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_property (object_class,
-                                   PROP_ADAPTIVE_MODE,
-                                   g_param_spec_enum ("adaptive-mode",
-                                                      NULL,
-                                                      NULL,
-                                                      EPHY_TYPE_ADAPTIVE_MODE,
-                                                      EPHY_ADAPTIVE_MODE_NORMAL,
-                                                      G_PARAM_READWRITE |
-                                                      G_PARAM_STATIC_STRINGS));
+  props[PROP_ADAPTIVE_MODE] = g_param_spec_enum ("adaptive-mode",
+                                                 NULL,
+                                                 NULL,
+                                                 EPHY_TYPE_ADAPTIVE_MODE,
+                                                 EPHY_ADAPTIVE_MODE_NORMAL,
+                                                 G_PARAM_READWRITE |
+                                                 G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
 
   shell = ephy_shell_get_default ();
   manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
