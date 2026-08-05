@@ -1078,7 +1078,7 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
 
   frame_id = webkit_frame_get_id (frame);
   if (extension->frames_map && !g_hash_table_contains (extension->frames_map, &frame_id)) {
-    frame_id_copy = g_malloc (sizeof (guint64));
+    frame_id_copy = g_new (guint64, 1);
     *frame_id_copy = frame_id;
     g_hash_table_insert (extension->frames_map, g_steal_pointer (&frame_id_copy), frame);
     g_object_weak_ref (G_OBJECT (frame), (GWeakNotify)frame_destroyed_notify, extension);

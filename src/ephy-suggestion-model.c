@@ -376,7 +376,7 @@ query_data_new (const char *query,
 {
   QueryData *data;
 
-  data = g_malloc0 (sizeof (QueryData));
+  data = g_new0 (QueryData, 1);
   data->include_search_engines = include_search_engines;
   data->tabs = g_sequence_new (g_object_unref);
   data->bookmarks = g_sequence_new (g_object_unref);

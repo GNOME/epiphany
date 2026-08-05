@@ -150,7 +150,7 @@ static WebExtensionContentScript *
 web_extension_content_script_new (WebKitUserContentInjectedFrames injected_frames,
                                   WebKitUserScriptInjectionTime   injection_time)
 {
-  WebExtensionContentScript *content_script = g_malloc0 (sizeof (WebExtensionContentScript));
+  WebExtensionContentScript *content_script = g_new0 (WebExtensionContentScript, 1);
 
   content_script->injected_frames = injected_frames;
   content_script->injection_time = injection_time;
@@ -174,7 +174,7 @@ web_extension_content_script_free (WebExtensionContentScript *content_script)
 static WebExtensionOptionsUI *
 web_extension_options_ui_new (const char *page)
 {
-  WebExtensionOptionsUI *options_ui = g_malloc0 (sizeof (WebExtensionOptionsUI));
+  WebExtensionOptionsUI *options_ui = g_new0 (WebExtensionOptionsUI, 1);
 
   options_ui->page = g_strdup (page);
 
@@ -558,7 +558,7 @@ static void
 web_extension_parse_browser_action (EphyWebExtension *self,
                                     JsonObject       *object)
 {
-  WebExtensionBrowserAction *browser_action = g_malloc0 (sizeof (WebExtensionBrowserAction));
+  WebExtensionBrowserAction *browser_action = g_new0 (WebExtensionBrowserAction, 1);
 
   self->browser_action = browser_action;
   self->browser_action->title = ephy_web_extension_manifest_get_localized_string (self, object, "default_title");
@@ -1253,7 +1253,7 @@ web_extension_custom_css_new (EphyWebExtension *self,
                               const char       *code)
 
 {
-  WebExtensionCustomCSS *css = g_malloc0 (sizeof (WebExtensionCustomCSS));
+  WebExtensionCustomCSS *css = g_new0 (WebExtensionCustomCSS, 1);
 
   css->code = g_strdup (code);
   css->style = webkit_user_style_sheet_new_for_world (css->code,
