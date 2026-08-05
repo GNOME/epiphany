@@ -969,9 +969,8 @@ ephy_embed_set_delayed_load_request (EphyEmbed                 *embed,
   g_assert (WEBKIT_IS_URI_REQUEST (request));
 
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
-  g_clear_object (&embed->delayed_request);
 
-  embed->delayed_request = g_object_ref (request);
+  g_set_object (&embed->delayed_request, request);
   if (state)
     embed->delayed_state = webkit_web_view_session_state_ref (state);
 }
