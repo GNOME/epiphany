@@ -128,7 +128,7 @@ real_find (EphyFindToolbar   *toolbar,
 {
   WebKitFindOptions options = WEBKIT_FIND_OPTIONS_NONE;
 
-  if (!g_strcmp0 (toolbar->find_string, ""))
+  if (g_strcmp0 (toolbar->find_string, "") == 0)
     return;
 
   if (direction == EPHY_FIND_DIRECTION_PREV)

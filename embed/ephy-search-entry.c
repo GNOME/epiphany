@@ -386,7 +386,7 @@ ephy_search_entry_set_placeholder_text (EphySearchEntry *self,
 {
   g_return_if_fail (EPHY_IS_SEARCH_ENTRY (self));
 
-  if (!g_strcmp0 (placeholder_text, ephy_search_entry_get_placeholder_text (self)))
+  if (g_strcmp0 (placeholder_text, ephy_search_entry_get_placeholder_text (self)) == 0)
     return;
 
   gtk_text_set_placeholder_text (GTK_TEXT (self->text), placeholder_text);

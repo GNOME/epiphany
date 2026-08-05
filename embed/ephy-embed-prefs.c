@@ -327,7 +327,7 @@ normalize_languages (char **languages)
   langs = g_ptr_array_new ();
 
   for (i = 0; languages && languages[i]; i++) {
-    if (!strcmp (languages[i], "system")) {
+    if (strcmp (languages[i], "system") == 0) {
       char **sys_langs = ephy_langs_get_languages ();
       int j;
 
@@ -362,7 +362,7 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
   array = g_array_new (TRUE, FALSE, sizeof (char *));
 
   for (i = 0; languages[i]; i++) {
-    if (!g_strcmp0 (languages[i], "system")) {
+    if (g_strcmp0 (languages[i], "system") == 0) {
       ephy_langs_append_languages (array);
     } else if (languages[i][0] != '\0') {
       char *str = g_strdup (languages[i]);

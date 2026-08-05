@@ -662,7 +662,7 @@ filename_suggested_dialog_cb (AdwAlertDialog        *dialog,
                               const char            *response,
                               SuggestedFilenameData *data)
 {
-  if (!strcmp (response, "download")) {
+  if (strcmp (response, "download") == 0) {
     g_autofree gchar *directory = g_file_get_path (data->directory);
     WebKitDownload *webkit_download = ephy_download_get_webkit_download (data->download);
 

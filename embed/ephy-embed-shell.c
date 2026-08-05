@@ -124,7 +124,7 @@ ephy_embed_shell_get_view_for_page_id (EphyEmbedShell *self,
 
       real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
 
-      if (g_strcmp0 (real_origin, origin)) {
+      if (g_strcmp0 (real_origin, origin) != 0) {
         g_debug ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
         return NULL;
       }
@@ -158,8 +158,8 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
     for (GList *t = tabs; t && t->data; t = t->next) {
       title = ephy_embed_get_title (t->data);
 
-      if (!g_strcmp0 (title, _(BLANK_PAGE_TITLE)) ||
-          !g_strcmp0 (title, _(NEW_TAB_PAGE_TITLE)))
+      if (g_strcmp0 (title, _(BLANK_PAGE_TITLE)) == 0 ||
+          g_strcmp0 (title, _(NEW_TAB_PAGE_TITLE)) == 0)
         continue;
 
       url = ephy_web_view_get_display_address (ephy_embed_get_web_view (t->data));

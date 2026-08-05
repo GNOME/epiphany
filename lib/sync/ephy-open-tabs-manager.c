@@ -251,7 +251,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
 
   for (GList *l = remotes_updated; l && l->data; l = l->next) {
     /* Exclude the record which describes the local open tabs. */
-    if (!g_strcmp0 (device_bso_id, ephy_open_tabs_record_get_id (l->data)))
+    if (g_strcmp0 (device_bso_id, ephy_open_tabs_record_get_id (l->data)) == 0)
       continue;
 
     self->remote_records = g_list_prepend (self->remote_records, g_object_ref (l->data));

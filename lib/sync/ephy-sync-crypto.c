@@ -1418,11 +1418,11 @@ ephy_sync_crypto_decrypt_jwe (const char            *jwe,
   {
     const char *alg = json_object_get_string_member (header_json, "alg");
     const char *enc = json_object_get_string_member (header_json, "enc");
-    if (!alg || g_strcmp0 (alg, "ECDH-ES")) {
+    if (!alg || g_strcmp0 (alg, "ECDH-ES") != 0) {
       g_warning ("Unsupported JWE algorithm: %s", alg ? alg : "(null)");
       return NULL;
     }
-    if (!enc || g_strcmp0 (enc, "A256GCM")) {
+    if (!enc || g_strcmp0 (enc, "A256GCM") != 0) {
       g_warning ("Unsupported JWE encryption: %s", enc ? enc : "(null)");
       return NULL;
     }
@@ -1479,7 +1479,7 @@ ephy_sync_crypto_decrypt_jwe (const char            *jwe,
       g_warning ("EPK missing x or y coordinate");
       return NULL;
     }
-    if (!epk_crv || g_strcmp0 (epk_crv, "P-256")) {
+    if (!epk_crv || g_strcmp0 (epk_crv, "P-256") != 0) {
       g_warning ("EPK has unsupported curve: %s", epk_crv ? epk_crv : "(null)");
       return NULL;
     }

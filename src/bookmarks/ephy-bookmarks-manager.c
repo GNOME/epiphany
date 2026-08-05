@@ -991,10 +991,10 @@ ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
 
     g_object_get (l->data, "type", &type, "parentid", &parent_id, NULL);
     /* Ignore unfiled bookmarks and everything that is not of type bookmark. */
-    if (g_strcmp0 (type, "bookmark") || !g_strcmp0 (parent_id, "unfiled"))
+    if (g_strcmp0 (type, "bookmark") != 0 || g_strcmp0 (parent_id, "unfiled") == 0)
       goto next;
 
-    if (!g_strcmp0 (parent_id, "mobile") &&
+    if (g_strcmp0 (parent_id, "mobile") == 0 &&
         !ephy_bookmark_has_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG))
       ephy_bookmark_add_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG);
 
@@ -1007,7 +1007,7 @@ ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
     bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self, id);
 
     if (bookmark) {
-      if (!g_strcmp0 (ephy_bookmark_get_url (bookmark), url)) {
+      if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
         /* Same id, same url. Merge tags and reupload. */
         ephy_bookmarks_manager_copy_tags_from_bookmark (self, bookmark, l->data);
         timestamp = ephy_synchronizable_get_server_time_modified (l->data);
@@ -1087,10 +1087,10 @@ ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
 
     g_object_get (l->data, "type", &type, "parentid", &parent_id, NULL);
     /* Ignore unfiled bookmarks and everything that is not of type bookmark. */
-    if (g_strcmp0 (type, "bookmark") || !g_strcmp0 (parent_id, "unfiled"))
+    if (g_strcmp0 (type, "bookmark") != 0 || g_strcmp0 (parent_id, "unfiled") == 0)
       goto next;
 
-    if (!g_strcmp0 (parent_id, "mobile") &&
+    if (g_strcmp0 (parent_id, "mobile") == 0 &&
         !ephy_bookmark_has_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG))
       ephy_bookmark_add_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG);
 

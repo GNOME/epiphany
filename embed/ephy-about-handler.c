@@ -641,19 +641,19 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
 
   path = webkit_uri_scheme_request_get_path (request);
 
-  if (!g_strcmp0 (path, "memory"))
+  if (g_strcmp0 (path, "memory") == 0)
     handled = ephy_about_handler_handle_memory (handler, request);
-  else if (!g_strcmp0 (path, "epiphany"))
+  else if (g_strcmp0 (path, "epiphany") == 0)
     handled = ephy_about_handler_handle_epiphany (handler, request);
-  else if (!g_strcmp0 (path, "applications"))
+  else if (g_strcmp0 (path, "applications") == 0)
     handled = ephy_about_handler_handle_applications (handler, request);
-  else if (!g_strcmp0 (path, "newtab"))
+  else if (g_strcmp0 (path, "newtab") == 0)
     handled = ephy_about_handler_handle_newtab (handler, request);
-  else if (!g_strcmp0 (path, "overview"))
+  else if (g_strcmp0 (path, "overview") == 0)
     handled = ephy_about_handler_handle_html_overview (handler, request);
-  else if (!g_strcmp0 (path, "incognito"))
+  else if (g_strcmp0 (path, "incognito") == 0)
     handled = ephy_about_handler_handle_incognito (handler, request);
-  else if (!path || path[0] == '\0' || !g_strcmp0 (path, "Web") || !g_strcmp0 (path, "web"))
+  else if (!path || path[0] == '\0' || g_strcmp0 (path, "Web") == 0 || g_strcmp0 (path, "web") == 0)
     handled = ephy_about_handler_handle_about (handler, request);
 
   if (!handled)

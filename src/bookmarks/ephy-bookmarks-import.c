@@ -352,7 +352,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
     tags = g_sequence_new (g_free);
     bookmark = ephy_bookmark_new (url, title, tags, guid);
     ephy_bookmark_set_time_added (bookmark, time_added);
-    if (!g_strcmp0 (parent_title, FIREFOX_BOOKMARKS_MOBILE_FOLDER))
+    if (g_strcmp0 (parent_title, FIREFOX_BOOKMARKS_MOBILE_FOLDER) == 0)
       ephy_bookmark_add_tag (bookmark, EPHY_BOOKMARKS_MOBILE_TAG);
     load_tags_for_bookmark (connection, bookmark, bookmark_id);
     tags = ephy_bookmark_get_tags (bookmark);

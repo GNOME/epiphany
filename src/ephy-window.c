@@ -3427,7 +3427,7 @@ tab_has_modified_forms_dialog_cb (AdwAlertDialog          *dialog,
 {
   AdwTabView *tab_view = ephy_tab_view_get_tab_view (data->window->tab_view);
 
-  if (!strcmp (response, "accept")) {
+  if (strcmp (response, "accept") == 0) {
     /* It's safe to close the tab immediately because we are only checking a
      * single tab for modified forms here. There is an entirely separate
      * codepath for checking modified forms when closing the whole window,
@@ -3807,7 +3807,7 @@ is_browser_default (void)
   if (info) {
     g_autofree gchar *id = g_strconcat (APPLICATION_ID, ".desktop", NULL);
 
-    if (!strcmp (g_app_info_get_id (info), id))
+    if (strcmp (g_app_info_get_id (info), id) == 0)
       return TRUE;
   }
 

@@ -1385,7 +1385,7 @@ check_tab_has_modified_forms_confirm_cb (AdwAlertDialog *dialog,
 {
   WebKitWebView *view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-  if (!strcmp (response, "discard")) {
+  if (strcmp (response, "discard") == 0) {
     gtk_widget_grab_focus (GTK_WIDGET (embed));
     webkit_web_view_reload (view);
   }
@@ -2058,7 +2058,7 @@ dialog_save_as_application_confirmation_cb (AdwAlertDialog            *dialog,
                                             const char                *response,
                                             EphyApplicationDialogData *data)
 {
-  if (!strcmp (response, "replace")) {
+  if (strcmp (response, "replace") == 0) {
     ephy_web_application_delete (data->app_id, NULL);
     save_as_application_proceed (data);
   } else {
@@ -3195,7 +3195,7 @@ enable_browse_with_caret_state_cb (AdwAlertDialog *dialog,
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "browse-with-caret");
 
-  if (strcmp (response, "enable")) {
+  if (strcmp (response, "enable") != 0) {
     g_simple_action_set_state (G_SIMPLE_ACTION (action),
                                g_variant_new_boolean (FALSE));
 

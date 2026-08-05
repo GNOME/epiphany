@@ -357,7 +357,7 @@ get_hostname_and_locations (const gchar  *url,
     char *location;
     char *tmp;
 
-    if (!strcmp (scheme, "https")) {
+    if (strcmp (scheme, "https") == 0) {
       /* If scheme is https, we still fake http. */
       location = g_strconcat ("http://", *hostname, "/", NULL);
       host_locations = g_list_append (host_locations, location);

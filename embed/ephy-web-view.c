@@ -834,7 +834,7 @@ on_unresponsive_dialog_response (AdwAlertDialog *dialog,
                                  const char     *response,
                                  EphyWebView    *web_view)
 {
-  if (!strcmp (response, "stop"))
+  if (strcmp (response, "stop") == 0)
     webkit_web_view_terminate_web_process (WEBKIT_WEB_VIEW (web_view));
   else
     web_view->unresponsive_process_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_HIGH,

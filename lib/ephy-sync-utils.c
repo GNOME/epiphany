@@ -290,7 +290,7 @@ ephy_sync_utils_get_device_bso_id (void)
   char *device_id;
 
   device_id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID);
-  if (!g_strcmp0 (device_id, "")) {
+  if (g_strcmp0 (device_id, "") == 0) {
     /* This should never be reached. */
     return g_strnfill (EPHY_SYNC_BSO_ID_LEN, '0');
   }
@@ -314,7 +314,7 @@ ephy_sync_utils_get_device_name (void)
   char *name;
 
   name = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME);
-  if (g_strcmp0 (name, ""))
+  if (g_strcmp0 (name, "") != 0)
     return name;
 
   g_free (name);
@@ -339,7 +339,7 @@ ephy_sync_utils_get_sync_user (void)
 {
   char *user = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
 
-  if (!g_strcmp0 (user, "")) {
+  if (g_strcmp0 (user, "") == 0) {
     g_free (user);
     return NULL;
   }

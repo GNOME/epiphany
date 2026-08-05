@@ -265,19 +265,19 @@ ephy_smaps_pid_to_html (EphySMaps   *smaps,
       char *name = g_match_info_fetch (match_info, 1);
       char **size = NULL;
 
-      if (!strcmp (name, "Size"))
+      if (strcmp (name, "Size") == 0)
         size = &vma->size;
-      else if (!strcmp (name, "Rss"))
+      else if (strcmp (name, "Rss") == 0)
         size = &vma->rss;
-      else if (!strcmp (name, "Pss"))
+      else if (strcmp (name, "Pss") == 0)
         size = &vma->pss;
-      else if (!strcmp (name, "Shared_Clean"))
+      else if (strcmp (name, "Shared_Clean") == 0)
         size = &vma->shared_clean;
-      else if (!strcmp (name, "Shared_Dirty"))
+      else if (strcmp (name, "Shared_Dirty") == 0)
         size = &vma->shared_dirty;
-      else if (!strcmp (name, "Private_Clean"))
+      else if (strcmp (name, "Private_Clean") == 0)
         size = &vma->private_clean;
-      else if (!strcmp (name, "Private_Dirty"))
+      else if (strcmp (name, "Private_Dirty") == 0)
         size = &vma->private_dirty;
 
       if (size)
@@ -310,7 +310,7 @@ out:
   for (p = vma_entries; p; p = p->next) {
     VMA_t *entry = (VMA_t *)p->data;
 
-    if (g_strcmp0 (entry->major, "00") && g_strcmp0 (entry->minor, "00"))
+    if (g_strcmp0 (entry->major, "00") != 0 && g_strcmp0 (entry->minor, "00") != 0)
       add_to_perm_entry (anon_hash, entry);
     else
       add_to_perm_entry (mapped_hash, entry);
@@ -442,7 +442,7 @@ ephy_smaps_pid_children_to_html (EphySMaps *smaps,
     pid_t pid, ppid;
     EphyProcess process;
 
-    if (!strcmp (name, "self"))
+    if (strcmp (name, "self") == 0)
       continue;
 
     pid = get_pid_from_proc_name (name);

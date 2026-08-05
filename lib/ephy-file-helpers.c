@@ -187,13 +187,13 @@ ephy_file_get_display_name (GFile *file)
 
   path = g_file_get_path (file);
 
-  if (!g_strcmp0 (path, g_get_home_dir ()))
+  if (g_strcmp0 (path, g_get_home_dir ()) == 0)
     return g_strdup (_("Home"));
 
-  if (!g_strcmp0 (path, ephy_file_desktop_dir ()))
+  if (g_strcmp0 (path, ephy_file_desktop_dir ()) == 0)
     return g_strdup (_("Desktop"));
 
-  if (!g_strcmp0 (path, ephy_file_download_dir ()))
+  if (g_strcmp0 (path, ephy_file_download_dir ()) == 0)
     return g_strdup (_("Downloads"));
 
   info =

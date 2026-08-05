@@ -381,7 +381,7 @@ sync_parse_message_from_fxa_content (const char  *message,
     goto out_error;
   }
   type = json_object_get_string_member (object, "type");
-  if (!type || strcmp (type, "WebChannelMessageToChrome")) {
+  if (!type || strcmp (type, "WebChannelMessageToChrome") != 0) {
     error = "Message type is not WebChannelMessageToChrome";
     goto out_error;
   }
@@ -628,7 +628,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
 
   LOG ("WebChannel: received command '%s'", command);
 
-  if (!g_strcmp0 (command, "fxaccounts:fxa_status")) {
+  if (g_strcmp0 (command, "fxaccounts:fxa_status") == 0) {
     /* Respond with our capabilities and sign-in status. */
     JsonObject *response = json_object_new ();
     JsonObject *capabilities = json_object_new ();
@@ -644,7 +644,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
     json_object_set_null_member (response, "signedInUser");
     sync_message_to_fxa_content (sync_dialog, web_channel_id, command, message_id, response);
     json_object_unref (response);
-  } else if (!g_strcmp0 (command, "fxaccounts:can_link_account")) {
+  } else if (g_strcmp0 (command, "fxaccounts:can_link_account") == 0) {
     /* Confirm a relink and capture the email/uid. */
     if (data) {
       if (json_object_has_member (data, "email")) {
@@ -660,7 +660,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
       sync_message_to_fxa_content (sync_dialog, web_channel_id, command, message_id, response);
       json_object_unref (response);
     }
-  } else if (!g_strcmp0 (command, "fxaccounts:oauth_login")) {
+  } else if (g_strcmp0 (command, "fxaccounts:oauth_login") == 0) {
     /* Exchange the authorization code for tokens. */
     const char *code;
     const char *state;
@@ -691,7 +691,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
 
     /* Verify state matches. */
     if (!state || !sync_dialog->oauth_state ||
-        g_strcmp0 (state, sync_dialog->oauth_state)) {
+        g_strcmp0 (state, sync_dialog->oauth_state) != 0) {
       g_warning ("OAuth state mismatch");
       is_error = TRUE;
       goto out;
@@ -733,7 +733,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
                                       sync_dialog);
     g_object_unref (soup_session);
     g_free (url);
-  } else if (!g_strcmp0 (command, "fxaccounts:login")) {
+  } else if (g_strcmp0 (command, "fxaccounts:login") == 0) {
     if (!data)
       goto out;
 
@@ -981,7 +981,7 @@ on_sync_device_name_save_button_clicked (GtkWidget             *button,
   const char *text;
 
   text = gtk_editable_get_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry));
-  if (!g_strcmp0 (text, "")) {
+  if (g_strcmp0 (text, "") == 0) {
     char *name = ephy_sync_utils_get_device_name ();
     gtk_editable_set_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry), name);
     g_free (name);

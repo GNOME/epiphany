@@ -53,7 +53,7 @@ server_callback (SoupServer        *server,
   response_headers = soup_server_message_get_response_headers (msg);
   response_body = soup_server_message_get_response_body (msg);
 
-  if (!strcmp (path, "/redirect")) {
+  if (strcmp (path, "/redirect") == 0) {
     soup_server_message_set_status (msg, SOUP_STATUS_MOVED_PERMANENTLY, NULL);
     soup_message_headers_append (response_headers, "Location", "/redirect-result");
   } else {

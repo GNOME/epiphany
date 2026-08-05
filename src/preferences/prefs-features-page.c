@@ -107,7 +107,7 @@ get_or_create_group (GPtrArray  *groups,
 
   for (unsigned i = 0; i < groups->len; i++) {
     group = g_ptr_array_index (groups, i);
-    if (!strcmp (title, adw_preferences_group_get_title (group)))
+    if (strcmp (title, adw_preferences_group_get_title (group)) == 0)
       return group;
   }
 

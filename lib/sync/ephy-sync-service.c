@@ -531,7 +531,7 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
 
   request_headers = soup_message_get_request_headers (msg);
 
-  if (!g_strcmp0 (data->method, SOUP_METHOD_PUT) || !g_strcmp0 (data->method, SOUP_METHOD_POST))
+  if (g_strcmp0 (data->method, SOUP_METHOD_PUT) == 0 || g_strcmp0 (data->method, SOUP_METHOD_POST) == 0)
     soup_message_headers_append (request_headers, "content-type", content_type);
 
   if (data->modified_since >= 0) {

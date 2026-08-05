@@ -358,10 +358,10 @@ matches_filename_or_url (EphyDownload  *download,
     }
   }
 
-  if (query->filename && g_strcmp0 (query->filename, filename))
+  if (query->filename && g_strcmp0 (query->filename, filename) != 0)
     return FALSE;
 
-  if (query->url && g_strcmp0 (query->url, url))
+  if (query->url && g_strcmp0 (query->url, url) != 0)
     return FALSE;
 
   if (query->url_regex || query->filename_regex)

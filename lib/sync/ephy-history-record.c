@@ -308,7 +308,7 @@ serializable_serialize_property (JsonSerializable *serializable,
     return node;
   }
 
-  if (!g_strcmp0 (name, "visits")) {
+  if (g_strcmp0 (name, "visits") == 0) {
     JsonNode *node = json_node_new (JSON_NODE_ARRAY);
     JsonArray *array = json_array_new ();
     GSequence *visits = g_value_get_pointer (value);
@@ -344,7 +344,7 @@ serializable_deserialize_property (JsonSerializable *serializable,
     return TRUE;
   }
 
-  if (!g_strcmp0 (name, "visits")) {
+  if (g_strcmp0 (name, "visits") == 0) {
     JsonArray *array = json_node_get_array (node);
     GSequence *visits = g_sequence_new ((GDestroyNotify)ephy_history_record_visit_free);
 

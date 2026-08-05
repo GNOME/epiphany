@@ -307,7 +307,7 @@ ephy_password_manager_cache_remove (EphyPasswordManager *self,
   usernames = g_hash_table_lookup (self->cache, origin);
   if (usernames) {
     for (GList *l = usernames; l && l->data; l = l->next) {
-      if (g_strcmp0 (username, l->data))
+      if (g_strcmp0 (username, l->data) != 0)
         new_usernames = g_list_prepend (new_usernames, g_strdup (l->data));
     }
     g_hash_table_replace (self->cache, g_strdup (origin), new_usernames);
@@ -330,7 +330,7 @@ ephy_password_manager_cache_add (EphyPasswordManager *self,
 
   usernames = g_hash_table_lookup (self->cache, origin);
   for (GList *l = usernames; l && l->data; l = l->next) {
-    if (!g_strcmp0 (username, l->data))
+    if (g_strcmp0 (username, l->data) == 0)
       return;
   }
   usernames = g_list_prepend (usernames, g_strdup (username));
@@ -1042,7 +1042,7 @@ get_record_by_id (GList      *records,
   g_assert (id);
 
   for (GList *l = records; l && l->data; l = l->next) {
-    if (!g_strcmp0 (ephy_password_record_get_id (l->data), id))
+    if (g_strcmp0 (ephy_password_record_get_id (l->data), id) == 0)
       return l->data;
   }
 
@@ -1058,11 +1058,11 @@ get_record_by_parameters (GList      *records,
                           const char *password_field)
 {
   for (GList *l = records; l && l->data; l = l->next) {
-    if (!g_strcmp0 (ephy_password_record_get_username (l->data), username) &&
-        !g_strcmp0 (ephy_password_record_get_origin (l->data), origin) &&
-        !g_strcmp0 (ephy_password_record_get_target_origin (l->data), target_origin) &&
-        !g_strcmp0 (ephy_password_record_get_username_field (l->data), username_field) &&
-        !g_strcmp0 (ephy_password_record_get_password_field (l->data), password_field))
+    if (g_strcmp0 (ephy_password_record_get_username (l->data), username) == 0 &&
+        g_strcmp0 (ephy_password_record_get_origin (l->data), origin) == 0 &&
+        g_strcmp0 (ephy_password_record_get_target_origin (l->data), target_origin) == 0 &&
+        g_strcmp0 (ephy_password_record_get_username_field (l->data), username_field) == 0 &&
+        g_strcmp0 (ephy_password_record_get_password_field (l->data), password_field) == 0)
       return l->data;
   }
 
@@ -1075,7 +1075,7 @@ delete_record_by_id (GList      *records,
                      const char *id)
 {
   for (GList *l = records; l && l->data; l = l->next) {
-    if (!g_strcmp0 (ephy_password_record_get_id (l->data), id)) {
+    if (g_strcmp0 (ephy_password_record_get_id (l->data), id) == 0) {
       g_object_unref (l->data);
       return g_list_delete_link (records, l);
     }
@@ -1129,7 +1129,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
 
     record = get_record_by_id (local_records, remote_id);
     if (record) {
-      if (!g_strcmp0 (ephy_password_record_get_password (record), remote_password)) {
+      if (g_strcmp0 (ephy_password_record_get_password (record), remote_password) == 0) {
         /* Same id, same password. Nothing to do. */
         g_hash_table_add (dont_upload, g_strdup (remote_id));
       } else {

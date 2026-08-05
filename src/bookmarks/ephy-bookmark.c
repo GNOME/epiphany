@@ -576,7 +576,7 @@ serializable_serialize_property (JsonSerializable *serializable,
   }
 
   /* This is not a Firefox bookmark property, skip it. */
-  if (!g_strcmp0 (name, "time-added"))
+  if (g_strcmp0 (name, "time-added") == 0)
     return NULL;
 
   return json_serializable_default_serialize_property (serializable, name, value, pspec);

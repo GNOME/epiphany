@@ -141,7 +141,7 @@ ephy_langs_normalize_languages (char **languages)
   langs = g_ptr_array_new ();
 
   for (i = 0; languages && languages[i]; i++) {
-    if (!strcmp (languages[i], "system")) {
+    if (strcmp (languages[i], "system") == 0) {
       char **sys_langs = ephy_langs_get_languages ();
       int j;
 

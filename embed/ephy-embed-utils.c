@@ -186,7 +186,7 @@ is_public_domain (const char *address)
     return FALSE;
 
   if (g_regex_match (get_domain_regex (), host, 0, NULL)) {
-    if (!strcmp (host, "localhost"))
+    if (strcmp (host, "localhost") == 0)
       retval = TRUE;
     else {
       const char *end;
@@ -294,7 +294,7 @@ ephy_embed_utils_normalize_address (const char *input_address)
   if (strcmp (address, "about:gpu") == 0)
     return g_strdup ("webkit://gpu");
 
-  if (g_str_has_prefix (address, "about:") && strcmp (address, "about:blank"))
+  if (g_str_has_prefix (address, "about:") && strcmp (address, "about:blank") != 0)
     return g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
 
   if (!ephy_embed_utils_address_has_web_scheme (address)) {
@@ -311,7 +311,7 @@ ephy_embed_utils_normalize_address (const char *input_address)
      * handler for the scheme, and since we'll fail for localhost
      * and IP, we'd fallback to loading it as a domain. */
     if (!scheme ||
-        !g_strcmp0 (scheme, "localhost") ||
+        g_strcmp0 (scheme, "localhost") == 0 ||
         g_hostname_is_ip_address (scheme) ||
         is_host_with_port (address))
       effective_address = g_strconcat ("https://", address, NULL);
@@ -387,7 +387,7 @@ ephy_embed_utils_is_no_show_address (const char *address)
     return FALSE;
 
   for (i = 0; do_not_show_address[i]; i++)
-    if (!strcmp (address, do_not_show_address[i]))
+    if (strcmp (address, do_not_show_address[i]) == 0)
       return TRUE;
 
   return FALSE;
@@ -401,10 +401,10 @@ ephy_embed_utils_get_title_from_address (const char *address)
   if (g_str_has_prefix (address, "file://"))
     return g_strdup (address + 7);
 
-  if (!strcmp (address, EPHY_ABOUT_SCHEME ":overview") ||
-      !strcmp (address, EPHY_ABOUT_SCHEME ":newtab") ||
-      !strcmp (address, "about:overview") ||
-      !strcmp (address, "about:newtab"))
+  if (strcmp (address, EPHY_ABOUT_SCHEME ":overview") == 0 ||
+      strcmp (address, EPHY_ABOUT_SCHEME ":newtab") == 0 ||
+      strcmp (address, "about:overview") == 0 ||
+      strcmp (address, "about:newtab") == 0)
     return g_strdup (_(NEW_TAB_PAGE_TITLE));
 
   decoded_url = ephy_uri_decode (address);

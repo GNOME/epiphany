@@ -384,7 +384,7 @@ serializable_deserialize_property (JsonSerializable *serializable,
                                    JsonNode         *node)
 {
   /* Convert "" back to NULL. */
-  if (G_VALUE_HOLDS_STRING (value) && !g_strcmp0 (json_node_get_string (node), "")) {
+  if (G_VALUE_HOLDS_STRING (value) && g_strcmp0 (json_node_get_string (node), "") == 0) {
     g_value_set_string (value, NULL);
     return TRUE;
   }

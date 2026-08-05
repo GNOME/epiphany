@@ -250,7 +250,7 @@ ephy_sync_debug_prepare_soup_message (const char   *url,
     soup_message_set_request_body_from_bytes (msg, content_type, bytes);
   }
 
-  if (!g_strcmp0 (method, "PUT") || !g_strcmp0 (method, "POST"))
+  if (g_strcmp0 (method, "PUT") == 0 || g_strcmp0 (method, "POST") == 0)
     soup_message_headers_append (request_headers, "content-type", content_type);
 
   header = ephy_sync_crypto_hawk_header_new (url, method, hawk_id,
