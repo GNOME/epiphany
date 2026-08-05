@@ -264,20 +264,14 @@ ephy_search_engine_class_init (EphySearchEngineClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY));
   properties [PROP_SUGGESTIONS_URL] =
     g_param_spec_string ("suggestions-url",
-                         "Suggestions URL",
-                         "The OpenSearch suggestions URL for this search engine",
+                         NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS |
-                          G_PARAM_EXPLICIT_NOTIFY));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
   properties [PROP_OPENSEARCH_URL] =
     g_param_spec_string ("opensearch-url",
-                         "OpenSearch description file URL",
-                         "The OpenSearch description file URL for this search engine",
+                         NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS |
-                          G_PARAM_EXPLICIT_NOTIFY));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

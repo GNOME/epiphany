@@ -147,16 +147,14 @@ ephy_browser_action_class_init (EphyBrowserActionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   properties[PROP_BADGE_TEXT] =
     g_param_spec_string ("badge-text",
-                         "Badge Text",
-                         "The badge text of the browser action",
+                         NULL, NULL,
                          "",
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_BADGE_COLOR] =
     g_param_spec_string ("badge-color",
-                         "Badge Color",
-                         "The badge color of the browser action",
+                         NULL, NULL,
                          "",
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

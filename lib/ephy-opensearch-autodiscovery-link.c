@@ -139,16 +139,14 @@ ephy_opensearch_autodiscovery_link_class_init (EphyOpensearchAutodiscoveryLinkCl
   object_class->set_property = ephy_opensearch_autodiscovery_link_set_property;
 
   properties[PROP_NAME] = g_param_spec_string ("name",
-                                               "name",
-                                               "The name of the autodiscovery link.",
+                                               NULL, NULL,
                                                "",
-                                               G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_URL] = g_param_spec_string ("url",
-                                              "url",
-                                              "The URL of the opensearch description file that was autodiscovered.",
+                                              NULL, NULL,
                                               "",
-                                              G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
