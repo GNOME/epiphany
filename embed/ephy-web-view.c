@@ -3454,10 +3454,8 @@ ephy_web_view_get_best_web_app_icon_finish (EphyWebView   *view,
   if (!data)
     return FALSE;
 
-  if (data->icon_uri && data->icon_uri[0] != '\0') {
-    *icon_uri = data->icon_uri;
-    data->icon_uri = NULL;
-  }
+  if (data->icon_uri && data->icon_uri[0] != '\0')
+    *icon_uri = g_steal_pointer (&data->icon_uri);
 
   if (data->icon_color && data->icon_color[0] != '\0')
     gdk_rgba_parse (icon_color, data->icon_color);
