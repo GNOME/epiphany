@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2024 Jan-Michael Brummer <jan-michael.brummer1@volkswagen.de>
+ *  Copyright © 2024-2026 Jan-Michael Brummer <jan-michael.brummer1@volkswagen.de>
  *
  *  This file is part of Epiphany.
  *
@@ -331,7 +331,7 @@ session_opened_cb (GObject      *obj,
   gtk_widget_add_css_class (entry, "card");
   gtk_text_set_activates_default (GTK_TEXT (gtk_editable_get_delegate (GTK_EDITABLE (entry))), TRUE);
 
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (entry), "PIN");
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (entry), _("PIN"));
   adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), entry);
 
   g_signal_connect (dialog, "response", G_CALLBACK (certificate_pin_response), self);
