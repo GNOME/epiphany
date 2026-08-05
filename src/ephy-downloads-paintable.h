@@ -22,6 +22,8 @@
 
 #include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
 #define EPHY_TYPE_DOWNLOADS_PAINTABLE (ephy_downloads_paintable_get_type())
 
 G_DECLARE_FINAL_TYPE (EphyDownloadsPaintable, ephy_downloads_paintable, EPHY, DOWNLOADS_PAINTABLE, GObject)
