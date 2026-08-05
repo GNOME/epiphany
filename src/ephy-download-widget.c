@@ -344,7 +344,7 @@ ephy_download_widget_constructed (GObject *object)
   EphyDownloadWidget *widget = EPHY_DOWNLOAD_WIDGET (object);
   WebKitDownload *download;
   const char *action_icon_name = NULL;
-  GError *error = NULL;
+  g_autoptr (GError) error = NULL;
   PangoAttrList *status_attrs;
   GtkWidget *grid;
   GtkDragSource *source;

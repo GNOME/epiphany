@@ -1409,11 +1409,11 @@ load_stream_read_cb (GObject      *object,
   GTask *task = G_TASK (user_data);
   LoadFromStreamAsyncData *data;
   gssize bytes_read;
-  GError *error = NULL;
+  g_autoptr (GError) error = NULL;
 
   bytes_read = g_input_stream_read_finish (stream, result, &error);
   if (bytes_read < 0) {
-    load_stream_complete_error (task, error);
+    load_stream_complete_error (task, g_steal_pointer (&error));
 
     return;
   }
@@ -1421,7 +1421,7 @@ load_stream_read_cb (GObject      *object,
   data = g_task_get_task_data (task);
   if (bytes_read == 0) {
     if (!g_markup_parse_context_end_parse (data->parser, &error)) {
-      load_stream_complete_error (task, error);
+      load_stream_complete_error (task, g_steal_pointer (&error));
     } else {
       load_stream_complete (task);
     }
@@ -1430,7 +1430,7 @@ load_stream_read_cb (GObject      *object,
   }
 
   if (!g_markup_parse_context_parse (data->parser, data->buffer, bytes_read, &error)) {
-    load_stream_complete_error (task, error);
+    load_stream_complete_error (task, g_steal_pointer (&error));
 
     return;
   }
