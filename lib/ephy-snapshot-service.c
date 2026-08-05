@@ -321,6 +321,7 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
   g_assert (url);
 
   task = g_task_new (service, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_snapshot_service_save_snapshot_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task,
                         snapshot_async_data_new (service, snapshot, NULL, url),
@@ -589,6 +590,7 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
   g_assert (url);
 
   task = g_task_new (service, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_snapshot_service_get_snapshot_path_for_url_async);
 
   path = ephy_snapshot_service_lookup_cached_snapshot_path (service, url);
   if (path) {
@@ -615,6 +617,7 @@ take_fresh_snapshot_in_background_if_stale (EphySnapshotService *service,
    * used now. This is just to ensure we get a newer snapshot in the future. */
   if (ephy_snapshot_service_lookup_snapshot_freshness (service, data->url) == SNAPSHOT_STALE) {
     task = g_task_new (service, NULL, NULL, NULL);
+    g_task_set_source_tag (task, take_fresh_snapshot_in_background_if_stale);
     g_task_set_task_data (task,
                           data,
                           (GDestroyNotify)snapshot_async_data_free);
@@ -668,6 +671,7 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
   g_assert (webkit_web_view_get_uri (web_view));
 
   task = g_task_new (service, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_snapshot_service_get_snapshot_path_async);
 
   uri = webkit_web_view_get_uri (web_view);
   path = ephy_snapshot_service_lookup_cached_snapshot_path (service, uri);

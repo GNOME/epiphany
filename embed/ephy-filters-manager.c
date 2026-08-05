@@ -297,6 +297,7 @@ filter_info_load_sidecar (FilterInfo          *self,
     /* The FilterInfo itself as used async task data: it already contains
      * all the bits of information needed by the completion callback.
      */
+    g_task_set_source_tag (task, filter_info_load_sidecar);
     g_task_set_task_data (task, self, NULL);
     g_task_set_name (task, task_name);
     g_file_load_bytes_async (sidecar_file,
@@ -352,6 +353,7 @@ filter_info_save_sidecar (FilterInfo          *self,
                                             g_file_peek_path (sidecar_file),
                                             NULL);
   GTask *task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_source_tag (task, filter_info_save_sidecar);
   g_task_set_name (task, task_name);
 
   LOG ("Saving metadata: uri=<%s>, identifier=%s, checksum=%s, last_update=%" PRIu64,

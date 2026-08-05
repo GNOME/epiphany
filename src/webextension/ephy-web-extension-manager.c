@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2019-2022 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2019-2026 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -610,6 +610,7 @@ decompress_xpi (GFile               *extension,
   g_assert (web_extensions_dir);
 
   task = g_task_new (extension, cancellable, callback, user_data);
+  g_task_set_source_tag (task, decompress_xpi);
   g_task_set_task_data (task, g_object_ref (web_extensions_dir), g_object_unref);
   g_task_set_return_on_cancel (task, TRUE);
 
@@ -915,6 +916,7 @@ extension_view_handle_user_message (WebKitWebView     *web_view,
       /* TODO: Cancellable */
       GTask *task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
       ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, json);
+      g_task_set_source_tag (task, extension_view_handle_user_message);
       g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
       handler.execute (data->sender, split[1], json_args, task);
@@ -979,6 +981,7 @@ content_scripts_handle_user_message (WebKitWebView     *web_view,
   if (strcmp (split[0], "storage") == 0) {
     ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, json);
     task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
+    g_task_set_source_tag (task, content_scripts_handle_user_message);
     g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 
     ephy_web_extension_api_storage_handler (data->sender, split[1], json_args, task);
@@ -988,6 +991,7 @@ content_scripts_handle_user_message (WebKitWebView     *web_view,
   if (strcmp (name, "runtime.sendMessage") == 0) {
     ApiHandlerData *data = api_handler_data_new (web_extension, web_view, frame_id, message, json);
     task = g_task_new (web_extension, NULL, (GAsyncReadyCallback)on_web_extension_api_handler_finish, NULL);
+    g_task_set_source_tag (task, content_scripts_handle_user_message);
 
     g_task_set_task_data (task, data, (GDestroyNotify)api_handler_data_free);
 

@@ -1074,6 +1074,7 @@ ephy_web_extension_load_directory_async (GFile *target,
                                          GTask *load_task)
 {
   GTask *directory_task = g_task_new (target, g_task_get_cancellable (load_task), (GAsyncReadyCallback)load_directory_or_xpi_ready_cb, load_task);
+  g_task_set_source_tag (directory_task, ephy_web_extension_load_directory_async);
   g_task_set_task_data (directory_task, GUINT_TO_POINTER (FALSE), NULL);
   g_task_set_return_on_cancel (directory_task, TRUE);
   g_task_run_in_thread (directory_task, load_directory_thread);
@@ -1133,6 +1134,7 @@ ephy_web_extension_load_xpi_async (GFile *target,
                                    GTask *load_task)
 {
   GTask *xpi_task = g_task_new (target, g_task_get_cancellable (load_task), (GAsyncReadyCallback)load_directory_or_xpi_ready_cb, load_task);
+  g_task_set_source_tag (xpi_task, ephy_web_extension_load_xpi_async);
   g_task_set_task_data (xpi_task, GUINT_TO_POINTER (TRUE), NULL);
   g_task_set_return_on_cancel (xpi_task, TRUE);
   g_task_run_in_thread (xpi_task, load_xpi_thread);
@@ -1151,6 +1153,7 @@ ephy_web_extension_load_async (GFile               *target,
   g_assert (info);
 
   task = g_task_new (target, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_extension_load_async);
   g_task_set_return_on_cancel (task, TRUE);
 
   if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)

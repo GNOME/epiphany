@@ -988,6 +988,7 @@ ephy_session_save_timeout_cb (EphySession *session)
   g_object_ref (session);
 
   task = g_task_new (session, NULL, save_session_in_thread_finished_cb, NULL);
+  g_task_set_source_tag (task, ephy_session_save_timeout_cb);
   g_task_set_task_data (task, data, NULL);
   g_task_run_in_thread (task, save_session_sync);
   g_object_unref (task);
@@ -1479,6 +1480,7 @@ ephy_session_load_from_stream (EphySession         *session,
   session->dont_save = TRUE;
 
   task = g_task_new (session, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_session_load_from_stream);
   /* Use a priority lower than drawing events (HIGH_IDLE + 20) to make sure
    * the main window is shown as soon as possible at startup
    */
@@ -1592,6 +1594,7 @@ ephy_session_load (EphySession         *session,
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
   task = g_task_new (session, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_session_load);
   /* Use a priority lower than drawing events (HIGH_IDLE + 20) to make sure
    * the main window is shown as soon as possible at startup
    */
@@ -1670,6 +1673,7 @@ ephy_session_resume (EphySession         *session,
   LOG ("ephy_session_resume");
 
   task = g_task_new (session, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_session_resume);
 
   has_session_state = session_state_file_exists (session);
 

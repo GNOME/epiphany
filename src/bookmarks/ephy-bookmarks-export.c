@@ -230,6 +230,7 @@ ephy_bookmarks_export (EphyBookmarksManager *manager,
     g_hash_table_unref (table);
 
     task = g_task_new (manager, cancellable, callback, user_data);
+    g_task_set_source_tag (task, ephy_bookmarks_export);
     g_task_set_task_data (task, root_table, (GDestroyNotify)g_hash_table_unref);
 
     gvdb_table_write_contents_async (root_table, filename, FALSE,
@@ -255,6 +256,7 @@ ephy_bookmarks_export (EphyBookmarksManager *manager,
     file = g_file_new_for_path (filename);
 
     task = g_task_new (manager, cancellable, callback, user_data);
+    g_task_set_source_tag (task, ephy_bookmarks_export);
     g_task_set_task_data (task, file, (GDestroyNotify)g_object_unref);
 
     bytes = g_bytes_new (html->str, html->len);

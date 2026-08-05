@@ -3336,6 +3336,7 @@ ephy_web_view_has_modified_forms (EphyWebView         *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_view_has_modified_forms);
 
   /* Set timeout to guard against web process hangs. Otherwise, a single
    * unresponsive web process would prevent the window from closing. Note that
@@ -3425,6 +3426,7 @@ ephy_web_view_get_best_web_app_icon (EphyWebView         *view,
   wk_view = WEBKIT_WEB_VIEW (view);
 
   task = g_task_new (view, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_view_get_best_web_app_icon);
   script = g_strdup_printf ("Ephy.getWebAppIcon(\"%s\");", webkit_web_view_get_uri (wk_view));
   webkit_web_view_evaluate_javascript (wk_view,
                                        script, -1,
@@ -3495,6 +3497,7 @@ ephy_web_view_get_web_app_title (EphyWebView         *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_view_get_web_app_title);
   webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
                                        "Ephy.getWebAppTitle();", -1,
                                        ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
@@ -3544,6 +3547,7 @@ ephy_web_view_get_web_app_mobile_capable (EphyWebView         *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_view_get_web_app_mobile_capable);
   webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
                                        "Ephy.getAppleMobileWebAppCapable();", -1,
                                        ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
@@ -4392,6 +4396,7 @@ ephy_web_view_get_web_app_manifest_url (EphyWebView         *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_view_get_web_app_manifest_url);
   webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
                                        "Ephy.getWebAppManifestURL();",
                                        -1,

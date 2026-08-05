@@ -110,6 +110,7 @@ gather_results_async (EphySearchProvider   *self,
   char *search_string;
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gather_results_async);
 
   search_string = g_strjoinv (" ", terms);
   g_task_set_task_data (task, search_string, g_free);

@@ -890,6 +890,7 @@ ephy_password_manager_forget (EphyPasswordManager *self,
   g_assert (id);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_password_manager_forget);
 
   /* synchronizable-deleted signal needs an EphySynchronizable object,
   * therefore we need to obtain the password record first and then emit

@@ -800,6 +800,7 @@ ephy_bookmarks_manager_save (EphyBookmarksManager *self,
   GTask *task;
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_bookmarks_manager_save);
 
   ephy_bookmarks_export (self, self->gvdb_filename, with_bookmarks_order,
                          with_tags_order, cancellable, bookmarks_export_cb, task);

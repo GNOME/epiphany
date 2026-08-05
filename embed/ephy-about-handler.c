@@ -151,6 +151,7 @@ ephy_about_handler_handle_memory (EphyAboutHandler       *handler,
   task = g_task_new (handler, NULL,
                      (GAsyncReadyCallback)handle_memory_finished_cb,
                      g_object_ref (request));
+  g_task_set_source_tag (task, ephy_about_handler_handle_memory);
   g_task_run_in_thread (task, handle_memory_sync);
   g_object_unref (task);
 
@@ -397,6 +398,7 @@ ephy_about_handler_handle_applications (EphyAboutHandler       *handler,
   task = g_task_new (handler, NULL,
                      (GAsyncReadyCallback)handle_applications_finished_cb,
                      g_object_ref (request));
+  g_task_set_source_tag (task, ephy_about_handler_handle_applications);
   g_task_run_in_thread (task, handle_applications_sync);
   g_object_unref (task);
 

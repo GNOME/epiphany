@@ -198,6 +198,7 @@ ephy_password_export (EphyPasswordManager *manager,
   GFile *password_export_file;
 
   task = g_task_new (manager, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_password_export);
   password_export_file = g_file_new_for_path (filename);
 
   g_task_set_task_data (task, password_export_file, (GDestroyNotify)g_object_unref);
