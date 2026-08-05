@@ -323,7 +323,7 @@ prefs_search_engine_page_constructed (GObject *object)
   g_signal_connect_object (self->shortcut_row, "notify::text", G_CALLBACK (on_shortcut_row_text_changed), self, G_CONNECT_SWAPPED);
 
   on_manager_items_changed (self->manager, 0, 0, g_list_model_get_n_items (G_LIST_MODEL (self->manager)), self);
-  g_signal_connect_object (self->manager, "items-changed", G_CALLBACK (on_manager_items_changed), self, 0);
+  g_signal_connect_object (self->manager, "items-changed", G_CALLBACK (on_manager_items_changed), self, G_CONNECT_DEFAULT);
 
   G_OBJECT_CLASS (prefs_search_engine_page_parent_class)->constructed (object);
 }

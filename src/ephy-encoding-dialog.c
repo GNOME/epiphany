@@ -506,7 +506,7 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, show_all_button_clicked_cb);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, GDK_NO_MODIFIER_MASK, "window.close", NULL);
 }
 
 EphyEncodingDialog *

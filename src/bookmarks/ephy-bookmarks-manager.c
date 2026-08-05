@@ -304,13 +304,13 @@ ephy_bookmarks_manager_watch_bookmark (EphyBookmarksManager *self,
                                        EphyBookmark         *bookmark)
 {
   g_signal_connect_object (bookmark, "notify::title",
-                           G_CALLBACK (bookmark_title_changed_cb), self, 0);
+                           G_CALLBACK (bookmark_title_changed_cb), self, G_CONNECT_DEFAULT);
   g_signal_connect_object (bookmark, "notify::bmkUri",
-                           G_CALLBACK (bookmark_url_changed_cb), self, 0);
+                           G_CALLBACK (bookmark_url_changed_cb), self, G_CONNECT_DEFAULT);
   g_signal_connect_object (bookmark, "tag-added",
-                           G_CALLBACK (bookmark_tag_added_cb), self, 0);
+                           G_CALLBACK (bookmark_tag_added_cb), self, G_CONNECT_DEFAULT);
   g_signal_connect_object (bookmark, "tag-removed",
-                           G_CALLBACK (bookmark_tag_removed_cb), self, 0);
+                           G_CALLBACK (bookmark_tag_removed_cb), self, G_CONNECT_DEFAULT);
 }
 
 static void

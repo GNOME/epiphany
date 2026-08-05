@@ -276,7 +276,7 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_g,
                                        GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                        "previous-match", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Escape, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "stop-search", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return,

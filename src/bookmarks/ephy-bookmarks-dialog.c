@@ -484,7 +484,7 @@ create_bookmark_row (gpointer item,
                           g_strdup (EPHY_LIST_BOX_ROW_TYPE_BOOKMARK),
                           (GDestroyNotify)g_free);
 
-  g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, 0);
+  g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
 
   set_row_is_editable (row, is_editing);
 
@@ -668,8 +668,8 @@ create_tag_row (EphyBookmarksDialog *self,
   drag_image = gtk_image_new_from_icon_name ("list-drag-handle-symbolic");
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), drag_image);
 
-  g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, 0);
-  g_signal_connect_object (row, "move-tag-row", G_CALLBACK (row_moved_cb), self, 0);
+  g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, G_CONNECT_DEFAULT);
+  g_signal_connect_object (row, "move-tag-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
 
   source = gtk_drag_source_new ();
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
@@ -712,8 +712,8 @@ ephy_bookmarks_dialog_bookmark_removed_toast (EphyBookmarksDialog *self,
                                               EphyBookmark        *bookmark,
                                               AdwToast            *toast)
 {
-  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, 0);
-  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, 0);
+  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, G_CONNECT_DEFAULT);
+  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, G_CONNECT_DEFAULT);
   adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
 }
 

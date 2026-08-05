@@ -301,7 +301,7 @@ prefs_extensions_page_init (PrefsExtensionsPage *self)
 
   manager = ephy_web_extension_manager_get_default ();
   g_set_weak_pointer (&self->web_extension_manager, manager);
-  g_signal_connect_object (self->web_extension_manager, "changed", G_CALLBACK (on_web_extension_manager_changed), self, 0);
+  g_signal_connect_object (self->web_extension_manager, "changed", G_CALLBACK (on_web_extension_manager_changed), self, G_CONNECT_DEFAULT);
 
   self->cancellable = g_cancellable_new ();
 

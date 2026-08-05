@@ -589,10 +589,10 @@ import_bookmarks_using_option_dialog (EphyWindow *window)
 
   g_signal_connect_object (ADW_COMBO_ROW (combo_row), "notify::selected",
                            G_CALLBACK (bookmarks_row_selected_cb),
-                           GTK_BUTTON (select_button), 0);
+                           GTK_BUTTON (select_button), G_CONNECT_DEFAULT);
   g_signal_connect_object (select_button, "clicked",
                            G_CALLBACK (dialog_bookmarks_import_cb),
-                           ADW_COMBO_ROW (combo_row), 0);
+                           ADW_COMBO_ROW (combo_row), G_CONNECT_DEFAULT);
 
   adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
   update_bookmarks_select_button_label (ADW_COMBO_ROW (combo_row),
@@ -955,7 +955,7 @@ import_passwords_using_option_dialog (EphyWindow *window)
 
   g_signal_connect_object (ADW_COMBO_ROW (combo_row), "notify::selected",
                            G_CALLBACK (passwords_row_selected_cb),
-                           GTK_BUTTON (select_button), 0);
+                           GTK_BUTTON (select_button), G_CONNECT_DEFAULT);
   g_signal_connect (select_button, "clicked",
                     G_CALLBACK (dialog_passwords_import_cb),
                     ADW_COMBO_ROW (combo_row));

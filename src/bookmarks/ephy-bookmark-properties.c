@@ -149,7 +149,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
   gtk_accessible_update_property (GTK_ACCESSIBLE (check_button), GTK_ACCESSIBLE_PROPERTY_LABEL, _("Select current tag"), -1);
   gtk_widget_add_css_class (check_button, "selection-mode");
   gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), selected);
-  g_signal_connect_object (G_OBJECT (check_button), "toggled", G_CALLBACK (on_check_button_toggled), self, 0);
+  g_signal_connect_object (G_OBJECT (check_button), "toggled", G_CALLBACK (on_check_button_toggled), self, G_CONNECT_DEFAULT);
   adw_action_row_add_prefix (ADW_ACTION_ROW (widget), check_button);
   adw_action_row_set_activatable_widget (ADW_ACTION_ROW (widget),
                                          check_button);

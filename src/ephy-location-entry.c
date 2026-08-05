@@ -1242,7 +1242,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   register_activate_shortcuts (widget_class, GDK_SHIFT_MASK | GDK_CONTROL_MASK);
   register_activate_shortcuts (widget_class, GDK_SHIFT_MASK | GDK_ALT_MASK);
 
-  gtk_widget_class_add_binding (widget_class, GDK_KEY_Escape, 0,
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                 (GtkShortcutFunc)ephy_location_entry_reset,
                                 NULL);
 }
@@ -1258,8 +1258,8 @@ ephy_location_entry_init (EphyLocationEntry *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "delete-text", G_CALLBACK (on_delete_text), self, 0);
-  g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "insert-text", G_CALLBACK (on_insert_text), self, 0);
+  g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "delete-text", G_CALLBACK (on_delete_text), self, G_CONNECT_DEFAULT);
+  g_signal_connect_object (G_OBJECT (gtk_editable_get_delegate (GTK_EDITABLE (self->text))), "insert-text", G_CALLBACK (on_insert_text), self, G_CONNECT_DEFAULT);
 }
 
 static const char *

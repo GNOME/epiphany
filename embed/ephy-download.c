@@ -1017,7 +1017,7 @@ download_finished_cb (WebKitDownload *wk_download,
   if (!download->file_monitor)
     g_warning ("Could not add a file monitor for %s, error: %s", g_file_get_uri (file), error->message);
   else
-    g_signal_connect_object (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download, 0);
+    g_signal_connect_object (download->file_monitor, "changed", G_CALLBACK (download_file_monitor_changed), download, G_CONNECT_DEFAULT);
 }
 
 static void
@@ -1045,16 +1045,16 @@ ephy_download_new_internal (WebKitDownload *download)
 
   g_signal_connect_object (download, "notify::response",
                            G_CALLBACK (download_response_changed_cb),
-                           ephy_download, 0);
+                           ephy_download, G_CONNECT_DEFAULT);
   g_signal_connect_object (download, "created-destination",
                            G_CALLBACK (download_created_destination_cb),
-                           ephy_download, 0);
+                           ephy_download, G_CONNECT_DEFAULT);
   g_signal_connect_object (download, "finished",
                            G_CALLBACK (download_finished_cb),
-                           ephy_download, 0);
+                           ephy_download, G_CONNECT_DEFAULT);
   g_signal_connect_object (download, "failed",
                            G_CALLBACK (download_failed_cb),
-                           ephy_download, 0);
+                           ephy_download, G_CONNECT_DEFAULT);
 
   ephy_download->download = g_object_ref (download);
   g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
@@ -1079,7 +1079,7 @@ ephy_download_new (WebKitDownload *download)
 
   g_signal_connect_object (download, "decide-destination",
                            G_CALLBACK (download_decide_destination_cb),
-                           ephy_download, 0);
+                           ephy_download, G_CONNECT_DEFAULT);
 
   return ephy_download;
 }

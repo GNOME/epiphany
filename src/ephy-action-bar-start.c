@@ -487,7 +487,7 @@ ephy_action_bar_start_constructed (GObject *object)
                              "changed::" EPHY_PREFS_HOMEPAGE_URL,
                              G_CALLBACK (homepage_url_changed),
                              action_bar_start->homepage_button,
-                             0);
+                             G_CONNECT_DEFAULT);
   } else {
     gtk_widget_set_visible (action_bar_start->homepage_button, FALSE);
     gtk_widget_set_visible (action_bar_start->site_menu_button, TRUE);

@@ -293,7 +293,7 @@ ephy_location_controller_constructed (GObject *object)
 
   sync_address (controller, NULL, widget);
   g_signal_connect_object (controller, "notify::address",
-                           G_CALLBACK (sync_address), widget, 0);
+                           G_CALLBACK (sync_address), widget, G_CONNECT_DEFAULT);
 
   if (!EPHY_IS_LOCATION_ENTRY (controller->title_widget))
     return;
@@ -312,11 +312,11 @@ ephy_location_controller_constructed (GObject *object)
 
   g_signal_connect_object (widget, "activate",
                            G_CALLBACK (entry_activate_cb),
-                           controller, 0);
+                           controller, G_CONNECT_DEFAULT);
   g_signal_connect_object (widget, "get-location",
-                           G_CALLBACK (get_location_cb), controller, 0);
+                           G_CALLBACK (get_location_cb), controller, G_CONNECT_DEFAULT);
   g_signal_connect_object (widget, "get-title",
-                           G_CALLBACK (get_title_cb), controller, 0);
+                           G_CALLBACK (get_title_cb), controller, G_CONNECT_DEFAULT);
 
   focus_controller = gtk_event_controller_focus_new ();
   g_signal_connect_object (focus_controller, "enter",

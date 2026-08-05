@@ -1083,7 +1083,7 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, get_sync_frequency_minutes_name);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, GDK_NO_MODIFIER_MASK, "window.close", NULL);
 }
 
 static gboolean
@@ -1194,25 +1194,25 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
 
   g_signal_connect_object (service, "sync-secrets-store-finished",
                            G_CALLBACK (sync_secrets_store_finished_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (service, "sync-sign-in-error",
                            G_CALLBACK (sync_sign_in_error_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (service, "sync-finished",
                            G_CALLBACK (sync_finished_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (sync_dialog->sync_bookmarks_row, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (sync_dialog->sync_passwords_row, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (sync_dialog->sync_history_row, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (sync_dialog->sync_open_tabs_row, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
-                           sync_dialog, 0);
+                           sync_dialog, G_CONNECT_DEFAULT);
 
   g_free (user);
   g_free (name);

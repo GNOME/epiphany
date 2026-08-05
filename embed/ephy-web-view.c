@@ -863,7 +863,7 @@ unresponsive_process_timeout_cb (gpointer user_data)
                                   "stop", _("Force _Stop"),
                                   NULL);
 
-  g_signal_connect_object (dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view, 0);
+  g_signal_connect_object (dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view, G_CONNECT_DEFAULT);
   adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (web_view))));
 
   web_view->unresponsive_process_timeout_id = 0;
@@ -1406,19 +1406,19 @@ ephy_web_view_register_message_handler (EphyWebView                    *view,
       webkit_user_content_manager_register_script_message_handler (ucm, "tlsErrorPage", NULL);
       g_signal_connect_object (ucm, "script-message-received::tlsErrorPage",
                                G_CALLBACK (tls_error_page_message_received_cb),
-                               view, 0);
+                               view, G_CONNECT_DEFAULT);
       break;
     case EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER:
       webkit_user_content_manager_register_script_message_handler (ucm, "reloadPage", NULL);
       g_signal_connect_object (ucm, "script-message-received::reloadPage",
                                G_CALLBACK (reload_page_message_received_cb),
-                               view, 0);
+                               view, G_CONNECT_DEFAULT);
       break;
     case EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER:
       webkit_user_content_manager_register_script_message_handler (ucm, "aboutApps", NULL);
       g_signal_connect_object (ucm, "script-message-received::aboutApps",
                                G_CALLBACK (about_apps_message_received_cb),
-                               view, 0);
+                               view, G_CONNECT_DEFAULT);
       break;
   }
 
@@ -2587,7 +2587,7 @@ prepare_for_authentication_dialog (EphyWebView                 *web_view,
   webkit_authentication_request_set_can_save_credentials (request, ephy_embed_shell_should_remember_passwords (shell));
   g_signal_connect_object (request, "authenticated",
                            G_CALLBACK (authenticate_succeeded_cb),
-                           web_view, 0);
+                           web_view, G_CONNECT_DEFAULT);
   web_view->in_auth_dialog = 1;
 }
 
@@ -4089,7 +4089,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect_object (shell, "password-form-focused",
                            G_CALLBACK (password_form_focused_cb),
-                           web_view, 0);
+                           web_view, G_CONNECT_DEFAULT);
 
   gtk_widget_set_overflow (GTK_WIDGET (web_view), GTK_OVERFLOW_HIDDEN);
 
@@ -4099,7 +4099,7 @@ ephy_web_view_init (EphyWebView *web_view)
   gtk_widget_add_controller (GTK_WIDGET (web_view), GTK_EVENT_CONTROLLER (gesture));
   g_signal_connect_object (ephy_embed_shell_get_default (), "autofill",
                            G_CALLBACK (ephy_embed_autofill_signal_received_cb),
-                           web_view, 0);
+                           web_view, G_CONNECT_DEFAULT);
 }
 
 static void

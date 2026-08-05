@@ -478,16 +478,16 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
     toolbar->controller = webkit_web_view_get_find_controller (web_view);
     g_signal_connect_object (toolbar->controller, "found-text",
                              G_CALLBACK (found_text_cb),
-                             toolbar, 0);
+                             toolbar, G_CONNECT_DEFAULT);
     g_signal_connect_object (toolbar->controller, "failed-to-find-text",
                              G_CALLBACK (failed_to_find_text_cb),
-                             toolbar, 0);
+                             toolbar, G_CONNECT_DEFAULT);
     g_signal_connect_object (toolbar->controller, "counted_matches",
                              G_CALLBACK (counted_matches_cb),
-                             toolbar, 0);
+                             toolbar, G_CONNECT_DEFAULT);
     g_signal_connect_object (web_view, "load-changed",
                              G_CALLBACK (ephy_find_toolbar_load_changed_cb),
-                             toolbar, 0);
+                             toolbar, G_CONNECT_DEFAULT);
 
     clear_status (toolbar);
   }

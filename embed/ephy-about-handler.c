@@ -350,7 +350,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                                             128,
                                             1,
                                             GTK_TEXT_DIR_LTR,
-                                            0);
+                                            GTK_ICON_LOOKUP_NONE);
 
     if (paintable) {
       g_autoptr (GFile) file = gtk_icon_paintable_get_file (paintable);
@@ -455,7 +455,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                                             128,
                                             1,
                                             GTK_TEXT_DIR_LTR,
-                                            0);
+                                            GTK_ICON_LOOKUP_NONE);
 
     if (paintable) {
       g_autoptr (GFile) file = gtk_icon_paintable_get_file (paintable);

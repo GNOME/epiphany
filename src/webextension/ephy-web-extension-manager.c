@@ -485,7 +485,7 @@ on_extension_decompressed (GObject      *source,
   }
 
   target = g_file_new_for_path (path);
-  file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, 0, NULL, &error);
+  file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, NULL, &error);
   if (!file_info) {
     g_warning ("Failed to query file info: %s", error->message);
     return;
@@ -650,7 +650,7 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
     ephy_copy_directory (g_file_peek_path (parent), g_file_peek_path (target));
 
     if (target) {
-      file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, 0, self->cancellable, &error);
+      file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, self->cancellable, &error);
       if (!file_info) {
         g_warning ("Failed to query file info: %s", error->message);
         return;
@@ -799,7 +799,7 @@ create_page_action_widget (EphyWebExtensionManager *self,
   gtk_widget_add_css_class (button, "end");
 
   g_signal_connect_object (button, "clicked",
-                           G_CALLBACK (page_action_clicked), web_extension, 0);
+                           G_CALLBACK (page_action_clicked), web_extension, G_CONNECT_DEFAULT);
 
   return g_object_ref (button);
 }
@@ -1238,7 +1238,7 @@ ephy_web_extensions_manager_create_web_extensions_webview (EphyWebExtension *web
     webkit_web_context_register_uri_scheme (web_context, "ephy-webextension", ephy_webextension_scheme_cb, NULL, NULL);
     webkit_security_manager_register_uri_scheme_as_secure (webkit_web_context_get_security_manager (web_context),
                                                            "ephy-webextension");
-    g_signal_connect_object (web_context, "initialize-web-process-extensions", G_CALLBACK (init_web_extension_api), web_extension, 0);
+    g_signal_connect_object (web_context, "initialize-web-process-extensions", G_CALLBACK (init_web_extension_api), web_extension, G_CONNECT_DEFAULT);
   }
 
   web_view = g_object_new (WEBKIT_TYPE_WEB_VIEW,
@@ -1364,7 +1364,7 @@ ephy_web_extension_manager_add_web_extension_to_window (EphyWebExtensionManager 
   }
 
   ephy_web_extension_manager_update_location_entry (self, window);
-  g_signal_connect_object (view, "page-attached", G_CALLBACK (page_attached_cb), web_extension, 0);
+  g_signal_connect_object (view, "page-attached", G_CALLBACK (page_attached_cb), web_extension, G_CONNECT_DEFAULT);
 }
 
 static gboolean

@@ -595,19 +595,19 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 
     g_signal_connect_object (priv->global_history_service, "urls-visited",
                              G_CALLBACK (history_service_urls_visited_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
     g_signal_connect_object (priv->global_history_service, "url-title-changed",
                              G_CALLBACK (history_service_url_title_changed_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
     g_signal_connect_object (priv->global_history_service, "url-deleted",
                              G_CALLBACK (history_service_url_deleted_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
     g_signal_connect_object (priv->global_history_service, "host-deleted",
                              G_CALLBACK (history_service_host_deleted_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
     g_signal_connect_object (priv->global_history_service, "cleared",
                              G_CALLBACK (history_service_cleared_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
   }
 
   return priv->global_history_service;
@@ -878,11 +878,11 @@ ephy_embed_shell_startup (GApplication *application)
 
   g_signal_connect_object (priv->web_context, "initialize-web-process-extensions",
                            G_CALLBACK (initialize_web_process_extensions),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   g_signal_connect_object (priv->web_context, "initialize-notification-permissions",
                            G_CALLBACK (initialize_notification_permissions),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   priv->password_manager = ephy_password_manager_new ();
 
@@ -931,11 +931,11 @@ ephy_embed_shell_startup (GApplication *application)
                            G_CALLBACK (download_started_cb), shell, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::enable-itp",
-                           G_CALLBACK (enable_itp_setting_changed_cb), shell, 0);
+                           G_CALLBACK (enable_itp_setting_changed_cb), shell, G_CONNECT_DEFAULT);
 
   if (!is_private_profile_mode (shell)) {
     g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::remember-passwords",
-                             G_CALLBACK (remember_passwords_setting_changed_cb), shell, 0);
+                             G_CALLBACK (remember_passwords_setting_changed_cb), shell, G_CONNECT_DEFAULT);
   }
 }
 
@@ -1371,42 +1371,42 @@ ephy_embed_shell_register_ucm (EphyEmbedShell           *shell,
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::overview",
                            G_CALLBACK (web_process_extension_overview_message_received_cb),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "overviewPin",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::overviewPin",
                            G_CALLBACK (web_process_extension_overview_pin_message_received_cb),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "passwordFormFocused",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordFormFocused",
                            G_CALLBACK (web_process_extension_password_form_focused_message_received_cb),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "passwordManagerSave",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordManagerSave",
                            G_CALLBACK (web_process_extension_password_manager_save_received_cb),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "passwordManagerRequestSave",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::passwordManagerRequestSave",
                            G_CALLBACK (web_process_extension_password_manager_request_save_received_cb),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   webkit_user_content_manager_register_script_message_handler (ucm,
                                                                "autofillAskUser",
                                                                priv->guid);
   g_signal_connect_object (ucm, "script-message-received::autofillAskUser",
                            G_CALLBACK (web_process_extension_autofill_askuser_received_cb),
-                           shell, 0);
+                           shell, G_CONNECT_DEFAULT);
 
   /* User Scripts */
   ephy_embed_prefs_apply_user_style (ucm);

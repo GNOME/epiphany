@@ -408,11 +408,11 @@ window_added_cb (GtkApplication *application,
 
   tab_view = ephy_tab_view_get_tab_view (ephy_window_get_tab_view (ephy_window));
   g_signal_connect_object (tab_view, "page-attached",
-                           G_CALLBACK (tab_view_page_attached_cb), session, 0);
+                           G_CALLBACK (tab_view_page_attached_cb), session, G_CONNECT_DEFAULT);
   g_signal_connect_object (tab_view, "page-detached",
-                           G_CALLBACK (tab_view_page_detached_cb), session, 0);
+                           G_CALLBACK (tab_view_page_detached_cb), session, G_CONNECT_DEFAULT);
   g_signal_connect_object (tab_view, "page-reordered",
-                           G_CALLBACK (tab_view_page_reordered_cb), session, 0);
+                           G_CALLBACK (tab_view_page_reordered_cb), session, G_CONNECT_DEFAULT);
   g_signal_connect_object (tab_view, "notify::selected-page",
                            G_CALLBACK (tab_view_notify_selected_page_cb), session,
                            G_CONNECT_AFTER);

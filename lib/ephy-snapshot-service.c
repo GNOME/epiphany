@@ -487,13 +487,13 @@ ephy_snapshot_service_take_from_webview (GTask *task)
   else {
     g_signal_connect_object (data->web_view, "destroy",
                              G_CALLBACK (webview_destroyed_cb),
-                             task, 0);
+                             task, G_CONNECT_DEFAULT);
     g_signal_connect_object (data->web_view, "load-changed",
                              G_CALLBACK (webview_load_changed_cb),
-                             task, 0);
+                             task, G_CONNECT_DEFAULT);
     g_signal_connect_object (data->web_view, "load-failed",
                              G_CALLBACK (webview_load_failed_cb),
-                             task, 0);
+                             task, G_CONNECT_DEFAULT);
   }
 
   return FALSE;

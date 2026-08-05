@@ -1034,10 +1034,10 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
                                 (GtkShortcutFunc)shift_activate_cb,
                                 NULL);
 
-  gtk_widget_class_add_binding (widget_class, GDK_KEY_Delete, 0,
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Delete, GDK_NO_MODIFIER_MASK,
                                 (GtkShortcutFunc)delete_selected_cb,
                                 NULL);
-  gtk_widget_class_add_binding (widget_class, GDK_KEY_KP_Delete, 0,
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_KP_Delete, GDK_NO_MODIFIER_MASK,
                                 (GtkShortcutFunc)delete_selected_cb,
                                 NULL);
   gtk_widget_class_add_binding (widget_class, GDK_KEY_F, GDK_CONTROL_MASK,

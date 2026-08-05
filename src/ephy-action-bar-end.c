@@ -327,24 +327,24 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
 
   g_signal_connect_object (downloads_manager, "download-added",
                            G_CALLBACK (download_added_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "download-completed",
                            G_CALLBACK (download_completed_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "download-removed",
                            G_CALLBACK (download_removed_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "estimated-progress-changed",
                            G_CALLBACK (downloads_estimated_progress_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "show-downloads",
                            G_CALLBACK (show_downloads_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
 
   extension_manager = ephy_web_extension_manager_get_default ();
   g_signal_connect_object (extension_manager, "show-browser-action",
                            G_CALLBACK (show_browser_action_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
 
   set_browser_actions (action_bar_end, ephy_web_extension_manager_get_browser_actions (extension_manager));
 
@@ -413,7 +413,7 @@ set_browser_actions (EphyActionBarEnd *action_bar_end,
                            NULL, NULL);
 
   g_signal_connect_object (browser_actions, "items-changed", G_CALLBACK (browser_actions_items_changed_cb),
-                           action_bar_end, 0);
+                           action_bar_end, G_CONNECT_DEFAULT);
 
   browser_actions_items_changed_cb (G_LIST_MODEL (browser_actions), 0, 0, 0, action_bar_end);
 }

@@ -1879,7 +1879,7 @@ populate_context_menu (WebKitWebView       *web_view,
 
   g_signal_connect_object (web_view, "context-menu-dismissed",
                            G_CALLBACK (context_menu_dismissed_cb),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
 
   g_free (search_selection_action_name);
 
@@ -2103,7 +2103,7 @@ create_web_view_cb (WebKitWebView          *web_view,
   new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
   g_signal_connect_object (new_web_view, "ready-to-show",
                            G_CALLBACK (web_view_ready_cb),
-                           web_view, 0);
+                           web_view, G_CONNECT_DEFAULT);
 
   return new_web_view;
 }
@@ -2561,7 +2561,7 @@ decide_policy_cb (WebKitWebView            *web_view,
           g_signal_connect_object (filters_manager,
                                    "notify::is-initialized",
                                    G_CALLBACK (filters_initialized_cb),
-                                   window, 0);
+                                   window, G_CONNECT_DEFAULT);
       }
       return TRUE;
     }
@@ -2715,13 +2715,13 @@ set_search_engine_model (EphyWindow *window,
   g_signal_connect_object (manager,
                            "items-changed",
                            G_CALLBACK (on_search_engine_items_changed),
-                           window->search_engine_model, 0);
+                           window->search_engine_model, G_CONNECT_DEFAULT);
   on_search_engine_model_items_changed (window->search_engine_model, 0, 0,
                                         g_list_model_get_n_items (window->search_engine_model), window);
   g_signal_connect_object (window->search_engine_model,
                            "items-changed",
                            G_CALLBACK (on_search_engine_model_items_changed),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
 }
 
 static void
@@ -2766,7 +2766,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
     ephy_location_entry_set_progress (EPHY_LOCATION_ENTRY (title_widget), progress, loading);
     g_signal_connect_object (web_view, "notify::estimated-load-progress",
                              G_CALLBACK (progress_update),
-                             window, 0);
+                             window, G_CONNECT_DEFAULT);
 
     /* Only update the search engine model if the title widget is a location entry.
      * Otherwise, the site menu button won't be available. */
@@ -2791,45 +2791,45 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   g_signal_connect_object (web_view, "notify::zoom-level",
                            G_CALLBACK (sync_tab_zoom),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
 
   g_signal_connect_object (web_view, "create",
                            G_CALLBACK (create_web_view_cb),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (web_view, "decide-policy",
                            G_CALLBACK (decide_policy_cb),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
 
   g_signal_connect_object (embed, "notify::title",
                            G_CALLBACK (sync_tab_title),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "notify::address",
                            G_CALLBACK (sync_tab_address),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "notify::security-level",
                            G_CALLBACK (sync_tab_security),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "notify::document-type",
                            G_CALLBACK (sync_tab_document_type),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "load-changed",
                            G_CALLBACK (load_changed_cb),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "notify::navigation",
                            G_CALLBACK (sync_tab_navigation),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "notify::is-blank",
                            G_CALLBACK (sync_tab_is_blank),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "context-menu",
                            G_CALLBACK (populate_context_menu),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "mouse-target-changed",
                            G_CALLBACK (ephy_window_mouse_target_changed_cb),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "web-process-terminated",
                            G_CALLBACK (web_process_terminated_cb),
-                           window, 0);
+                           window, G_CONNECT_DEFAULT);
 
   update_mute_action (window, NULL, WEBKIT_WEB_VIEW (view));
 
@@ -3676,24 +3676,24 @@ setup_tab_view (EphyWindow *window)
   g_signal_connect_object (view, "create-window",
                            G_CALLBACK (tab_view_create_window_cb),
                            window,
-                           0);
+                           G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "setup-menu",
                            G_CALLBACK (tab_view_setup_menu_cb),
                            window,
-                           0);
+                           G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "close-page",
                            G_CALLBACK (tab_view_close_page_cb),
                            window,
-                           0);
+                           G_CONNECT_DEFAULT);
 
   g_signal_connect_object (view, "page-attached",
                            G_CALLBACK (tab_view_page_attached_cb),
                            window,
-                           0);
+                           G_CONNECT_DEFAULT);
   g_signal_connect_object (view, "page-detached",
                            G_CALLBACK (tab_view_page_detached_cb),
                            window,
-                           0);
+                           G_CONNECT_DEFAULT);
 
   return tab_view;
 }
@@ -5436,8 +5436,8 @@ ephy_window_bookmark_removed_toast (EphyWindow   *self,
                                     EphyBookmark *bookmark,
                                     AdwToast     *toast)
 {
-  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, 0);
-  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, 0);
+  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, G_CONNECT_DEFAULT);
+  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, G_CONNECT_DEFAULT);
   adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
 }
 

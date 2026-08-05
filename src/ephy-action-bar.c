@@ -644,19 +644,19 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 
   g_signal_connect_object (downloads_manager, "download-added",
                            G_CALLBACK (download_added_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "download-completed",
                            G_CALLBACK (download_completed_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "download-removed",
                            G_CALLBACK (download_removed_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "estimated-progress-changed",
                            G_CALLBACK (downloads_estimated_progress_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
   g_signal_connect_object (downloads_manager, "show-downloads",
                            G_CALLBACK (show_downloads_cb),
-                           object, 0);
+                           object, G_CONNECT_DEFAULT);
 }
 
 EphyActionBar *

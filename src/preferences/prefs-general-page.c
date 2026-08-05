@@ -212,7 +212,7 @@ language_editor_add_function_buttons (PrefsGeneralPage *general_page)
   gtk_list_box_append (GTK_LIST_BOX (general_page->lang_listbox), row);
 
   g_signal_connect_object (general_page->lang_listbox, "row-activated",
-                           G_CALLBACK (language_editor_add_activated), row, 0);
+                           G_CALLBACK (language_editor_add_activated), row, G_CONNECT_DEFAULT);
 }
 
 static void

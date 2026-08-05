@@ -1181,15 +1181,15 @@ ephy_filters_manager_constructed (GObject *object)
 
   /* Note: up here because we must connect *before* reading the settings. */
   g_signal_connect_object (EPHY_SETTINGS_MAIN, "changed::" EPHY_PREFS_CONTENT_FILTERS,
-                           G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
+                           G_CALLBACK (update_adblock_filter_files_cb), manager, G_CONNECT_DEFAULT);
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                           G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
+                           G_CALLBACK (update_adblock_filter_files_cb), manager, G_CONNECT_DEFAULT);
   g_signal_connect_object (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_COOKIE_BANNER,
-                           G_CALLBACK (update_adblock_filter_files_cb), manager, 0);
+                           G_CALLBACK (update_adblock_filter_files_cb), manager, G_CONNECT_DEFAULT);
 
   update_adblock_filter_files_cb (NULL, NULL, manager);
 
-  g_signal_connect_object (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager, 0);
+  g_signal_connect_object (g_network_monitor_get_default (), "notify::network-metered", G_CALLBACK (on_network_metered), manager, G_CONNECT_DEFAULT);
   manager->metered = g_network_monitor_get_network_metered (g_network_monitor_get_default ());
 
   manager->update_timeout_id = g_timeout_add_seconds (manager->metered ? ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED : ADBLOCK_FILTER_UPDATE_FREQUENCY,

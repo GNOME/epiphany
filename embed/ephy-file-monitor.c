@@ -190,7 +190,7 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
   file = g_file_new_for_uri (url);
   file_info = g_file_query_info (file,
                                  G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                                 0, NULL, NULL);
+                                 G_FILE_QUERY_INFO_NONE, NULL, NULL);
   if (!file_info) {
     g_object_unref (file);
     g_free (url);

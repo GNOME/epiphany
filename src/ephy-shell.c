@@ -1114,7 +1114,7 @@ show_notification_cb (WebKitWebView      *web_view,
                       WebKitNotification *notification,
                       gpointer            user_data)
 {
-  g_signal_connect_object (notification, "clicked", G_CALLBACK (webkit_notification_clicked_cb), web_view, 0);
+  g_signal_connect_object (notification, "clicked", G_CALLBACK (webkit_notification_clicked_cb), web_view, G_CONNECT_DEFAULT);
 
   return FALSE;
 }
@@ -1263,11 +1263,11 @@ ephy_shell_get_sync_service (EphyShell *shell)
     g_signal_connect_object (shell->sync_service,
                              "sync-secrets-store-finished",
                              G_CALLBACK (sync_secrets_store_finished_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
     g_signal_connect_object (shell->sync_service,
                              "sync-secrets-load-finished",
                              G_CALLBACK (sync_secrets_load_finished_cb),
-                             shell, 0);
+                             shell, G_CONNECT_DEFAULT);
   }
 #endif
 
