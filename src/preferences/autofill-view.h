@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2021 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2021-2026 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *

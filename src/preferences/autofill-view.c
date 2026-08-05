@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2021-2023 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2021-2026 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -57,7 +57,7 @@ struct _EphyAutoFillView {
   GCancellable *cancellable;
 };
 
-G_DEFINE_TYPE (EphyAutoFillView, ephy_autofill_view, ADW_TYPE_NAVIGATION_PAGE)
+G_DEFINE_FINAL_TYPE (EphyAutoFillView, ephy_autofill_view, ADW_TYPE_NAVIGATION_PAGE)
 
 
 typedef struct {
