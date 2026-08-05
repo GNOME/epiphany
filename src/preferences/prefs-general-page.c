@@ -734,8 +734,7 @@ void
 prefs_general_page_on_pd_close_request (PrefsGeneralPage *general_page)
 {
   if (general_page->webapp_save_id) {
-    g_source_remove (general_page->webapp_save_id);
-    general_page->webapp_save_id = 0;
+    g_clear_handle_id (&general_page->webapp_save_id, g_source_remove);
     save_web_application (general_page);
   }
 }

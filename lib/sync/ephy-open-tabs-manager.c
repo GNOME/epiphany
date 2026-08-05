@@ -167,8 +167,7 @@ ephy_open_tabs_manager_clear_cache (EphyOpenTabsManager *self)
 {
   g_assert (EPHY_IS_OPEN_TABS_MANAGER (self));
 
-  g_list_free_full (self->remote_records, g_object_unref);
-  self->remote_records = NULL;
+  g_clear_list (&self->remote_records, g_object_unref);
 }
 
 const char *
@@ -248,8 +247,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   char *device_bso_id;
 
   device_bso_id = ephy_sync_utils_get_device_bso_id ();
-  g_list_free_full (self->remote_records, g_object_unref);
-  self->remote_records = NULL;
+  g_clear_list (&self->remote_records, g_object_unref);
 
   for (GList *l = remotes_updated; l && l->data; l = l->next) {
     /* Exclude the record which describes the local open tabs. */

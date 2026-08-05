@@ -67,15 +67,9 @@ ephy_sqlite_statement_finalize (GObject *object)
 {
   EphySQLiteStatement *self = EPHY_SQLITE_STATEMENT (object);
 
-  if (self->prepared_statement) {
-    sqlite3_finalize (self->prepared_statement);
-    self->prepared_statement = NULL;
-  }
+  g_clear_pointer (&self->prepared_statement, sqlite3_finalize);
 
-  if (self->connection) {
-    g_object_unref (self->connection);
-    self->connection = NULL;
-  }
+  g_clear_object (&self->connection);
 
   G_OBJECT_CLASS (ephy_sqlite_statement_parent_class)->finalize (object);
 }

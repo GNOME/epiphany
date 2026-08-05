@@ -183,10 +183,7 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
 void
 ephy_sqlite_connection_close (EphySQLiteConnection *self)
 {
-  if (self->database) {
-    sqlite3_close (self->database);
-    self->database = NULL;
-  }
+  g_clear_pointer (&self->database, sqlite3_close);
 }
 
 void

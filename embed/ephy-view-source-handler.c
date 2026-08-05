@@ -43,7 +43,7 @@ typedef struct {
   WebKitURISchemeRequest *scheme_request;
   WebKitWebView *web_view;
   GCancellable *cancellable;
-  guint load_changed_id;
+  gulong load_changed_id;
 } EphyViewSourceRequest;
 
 static EphyViewSourceRequest *
@@ -168,8 +168,7 @@ load_changed_cb (WebKitWebView         *web_view,
                  EphyViewSourceRequest *request)
 {
   if (load_event == WEBKIT_LOAD_FINISHED) {
-    g_signal_handler_disconnect (request->web_view, request->load_changed_id);
-    request->load_changed_id = 0;
+    g_clear_signal_handler (&request->load_changed_id, request->web_view);
 
     ephy_view_source_request_begin_get_source_from_web_view (request, web_view);
   }
@@ -273,8 +272,7 @@ ephy_view_source_handler_dispose (GObject *object)
 
   if (handler->outstanding_requests) {
     g_list_foreach (handler->outstanding_requests, (GFunc)cancel_outstanding_request, NULL);
-    g_list_free (handler->outstanding_requests);
-    handler->outstanding_requests = NULL;
+    g_clear_list (&handler->outstanding_requests, NULL);
   }
 
   G_OBJECT_CLASS (ephy_view_source_handler_parent_class)->dispose (object);

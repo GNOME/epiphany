@@ -265,8 +265,7 @@ ephy_embed_set_title (EphyEmbed  *embed,
   if (!new_title || g_strstrip (new_title)[0] == '\0') {
     const char *address;
 
-    g_free (new_title);
-    new_title = NULL;
+    g_clear_pointer (&new_title, g_free);
 
     address = ephy_web_view_get_address (EPHY_WEB_VIEW (embed->web_view));
     if (address && strcmp (address, "about:blank") != 0)
@@ -350,8 +349,7 @@ load_changed_cb (WebKitWebView   *web_view,
     }
     case WEBKIT_LOAD_STARTED:
       if (embed->first_load_finished) {
-        g_free (embed->typed_input);
-        embed->typed_input = NULL;
+        g_clear_pointer (&embed->typed_input, g_free);
       }
       break;
     case WEBKIT_LOAD_REDIRECTED:
@@ -379,8 +377,7 @@ fullscreen_message_label_hide (EphyEmbed *embed)
 {
   if (embed->fullscreen_message_id) {
     gtk_widget_set_visible (embed->fullscreen_message_label, FALSE);
-    g_source_remove (embed->fullscreen_message_id);
-    embed->fullscreen_message_id = 0;
+    g_clear_handle_id (&embed->fullscreen_message_id, g_source_remove);
   }
 
   return FALSE;

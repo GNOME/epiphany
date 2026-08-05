@@ -2525,8 +2525,7 @@ filters_initialized_cb (EphyFiltersManager *filters_manager,
   g_signal_handler_disconnect (filters_manager, window->filters_initialized_id);
 
   g_list_foreach (window->pending_decisions, (GFunc)resolve_pending_decision, NULL);
-  g_list_free_full (window->pending_decisions, (GDestroyNotify)verify_url_async_data_free);
-  window->pending_decisions = NULL;
+  g_clear_list (&window->pending_decisions, (GDestroyNotify)verify_url_async_data_free);
 }
 
 static gboolean

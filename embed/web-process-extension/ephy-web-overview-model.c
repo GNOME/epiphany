@@ -39,15 +39,9 @@ ephy_web_overview_model_dispose (GObject *object)
 {
   EphyWebOverviewModel *model = EPHY_WEB_OVERVIEW_MODEL (object);
 
-  if (model->items) {
-    g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
-    model->items = NULL;
-  }
+  g_clear_list (&model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
 
-  if (model->thumbnails) {
-    g_hash_table_destroy (model->thumbnails);
-    model->thumbnails = NULL;
-  }
+  g_clear_pointer (&model->thumbnails, g_hash_table_destroy);
 
   g_clear_pointer (&model->urls_listeners, g_hash_table_destroy);
   g_clear_pointer (&model->thumbnail_listeners, g_hash_table_destroy);
@@ -313,8 +307,7 @@ ephy_web_overview_model_clear (EphyWebOverviewModel *model)
   if (!model->items)
     return;
 
-  g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
-  model->items = NULL;
+  g_clear_list (&model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
   ephy_web_overview_model_notify_urls_changed (model);
 }
 

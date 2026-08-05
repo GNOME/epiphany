@@ -429,8 +429,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
                                                        self->history_filename);
   ephy_sqlite_connection_open (self->history_database, &error);
   if (error) {
-    g_object_unref (self->history_database);
-    self->history_database = NULL;
+    g_clear_object (&self->history_database);
 
     if (!g_error_matches (error, EPHY_SQLITE_ERROR, SQLITE_CANTOPEN) ||
         g_file_test (self->history_filename, G_FILE_TEST_EXISTS)) {
@@ -453,8 +452,7 @@ ephy_history_service_close_database_connections (EphyHistoryService *self)
   g_assert (self->history_thread == g_thread_self ());
 
   ephy_sqlite_connection_close (self->history_database);
-  g_object_unref (self->history_database);
-  self->history_database = NULL;
+  g_clear_object (&self->history_database);
 }
 
 static gboolean

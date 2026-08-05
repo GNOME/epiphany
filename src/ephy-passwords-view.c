@@ -86,8 +86,7 @@ forget_clicked (GtkWidget *button,
 
   /* Clear internal state */
   gtk_list_box_remove_all (GTK_LIST_BOX (passwords_view->listbox));
-  g_list_free_full (passwords_view->records, g_object_unref);
-  passwords_view->records = NULL;
+  g_clear_list (&passwords_view->records, g_object_unref);
 
   /* Present loading spinner while waiting for the async forget op to finish */
   ephy_data_view_set_is_loading (EPHY_DATA_VIEW (passwords_view->data_view), TRUE);
@@ -142,8 +141,7 @@ confirmation_dialog_response_cb (EphyPasswordsView *self)
   gtk_list_box_remove_all (GTK_LIST_BOX (self->listbox));
   ephy_data_view_set_has_data (EPHY_DATA_VIEW (self->data_view), FALSE);
 
-  g_list_free_full (self->records, g_object_unref);
-  self->records = NULL;
+  g_clear_list (&self->records, g_object_unref);
 }
 
 static GtkWidget *

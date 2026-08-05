@@ -1512,8 +1512,7 @@ window_cmd_new_tab (GSimpleAction *action,
 
   url = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
   if (g_strcmp0 (url, "about:newtab") != 0) {
-    g_free (url);
-    url = NULL;
+    g_clear_pointer (&url, g_free);
   }
 
   ephy_link_open (EPHY_LINK (window),

@@ -82,14 +82,12 @@ ephy_permissions_manager_dispose (GObject *object)
 
   if (manager->permission_type_permitted_origins) {
     g_hash_table_foreach (manager->permission_type_permitted_origins, free_cached_origin_list, NULL);
-    g_hash_table_destroy (manager->permission_type_permitted_origins);
-    manager->permission_type_permitted_origins = NULL;
+    g_clear_pointer (&manager->permission_type_permitted_origins, g_hash_table_destroy);
   }
 
   if (manager->permission_type_denied_origins) {
     g_hash_table_foreach (manager->permission_type_denied_origins, free_cached_origin_list, NULL);
-    g_hash_table_destroy (manager->permission_type_denied_origins);
-    manager->permission_type_denied_origins = NULL;
+    g_clear_pointer (&manager->permission_type_denied_origins, g_hash_table_destroy);
   }
 
   g_clear_object (&manager->backend);

@@ -58,15 +58,13 @@ ephy_file_monitor_cancel (EphyFileMonitor *monitor)
     LOG ("Cancelling file monitor");
 
     g_file_monitor_cancel (G_FILE_MONITOR (monitor->monitor));
-    g_object_unref (monitor->monitor);
-    monitor->monitor = NULL;
+    g_clear_object (&monitor->monitor);
   }
 
   if (monitor->reload_scheduled_id != 0) {
     LOG ("Cancelling scheduled reload");
 
-    g_source_remove (monitor->reload_scheduled_id);
-    monitor->reload_scheduled_id = 0;
+    g_clear_handle_id (&monitor->reload_scheduled_id, g_source_remove);
   }
 
   monitor->reload_delay_ticks = 0;

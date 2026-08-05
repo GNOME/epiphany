@@ -506,8 +506,7 @@ ephy_file_helpers_shutdown (void)
 
   if (mime_table) {
     LOG ("Destroying mime type hashtable");
-    g_hash_table_destroy (mime_table);
-    mime_table = NULL;
+    g_clear_pointer (&mime_table, g_hash_table_destroy);
   }
 
   g_clear_pointer (&profile_dir_global, g_free);

@@ -339,8 +339,7 @@ ephy_download_widget_dispose (GObject *object)
                                           NULL, NULL, widget);
     g_signal_handlers_disconnect_matched (widget->download, G_SIGNAL_MATCH_DATA, 0, 0,
                                           NULL, NULL, widget);
-    g_object_unref (widget->download);
-    widget->download = NULL;
+    g_clear_object (&widget->download);
   }
 
   G_OBJECT_CLASS (ephy_download_widget_parent_class)->dispose (object);

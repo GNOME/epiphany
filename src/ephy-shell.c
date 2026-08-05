@@ -1035,8 +1035,7 @@ ephy_shell_dispose (GObject *object)
     g_clear_pointer (&shell->open_notification_id, g_free);
   }
 
-  g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
-  shell->open_uris_idle_ids = NULL;
+  g_clear_slist (&shell->open_uris_idle_ids, remove_open_uris_idle_cb);
 
 #if USE_GRANITE
   g_clear_object (&shell->style_provider);
