@@ -1009,8 +1009,7 @@ ephy_bookmarks_dialog_show_tag_detail (EphyBookmarksDialog *self,
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
   gtk_widget_set_state_flags (self->search_entry, GTK_STATE_FLAG_NORMAL, TRUE);
 
-  if (self->tag_detail_tag)
-    g_free (self->tag_detail_tag);
+  g_free (self->tag_detail_tag);
   self->tag_detail_tag = g_strdup (tag);
 
   update_tags_order (self);

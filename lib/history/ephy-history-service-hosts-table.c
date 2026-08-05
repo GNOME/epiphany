@@ -171,10 +171,8 @@ ephy_history_service_get_host_row (EphyHistoryService *self,
   if (!host) {
     host = ephy_history_host_new (NULL, NULL, 0, 0.0);
   } else {
-    if (host->url)
-      g_free (host->url);
-    if (host->title)
-      g_free (host->title);
+    g_free (host->url);
+    g_free (host->title);
   }
 
   host->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
