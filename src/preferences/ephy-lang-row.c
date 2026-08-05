@@ -205,9 +205,8 @@ void
 ephy_lang_row_set_code (EphyLangRow *self,
                         const char  *code)
 {
-  g_free (self->code);
 
-  self->code = g_strdup (code);
+  g_set_str (&self->code, code);
 }
 
 const char *
