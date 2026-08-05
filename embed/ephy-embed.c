@@ -528,7 +528,7 @@ ephy_embed_class_init (EphyEmbedClass *klass)
     g_param_spec_boolean ("progress-bar-enabled",
                           NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
