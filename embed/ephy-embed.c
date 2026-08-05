@@ -583,14 +583,13 @@ leaving_fullscreen_cb (WebKitWebView *web_view,
   return FALSE;
 }
 
-static gboolean
+static void
 pop_statusbar_later_cb (gpointer data)
 {
   EphyEmbed *embed = EPHY_EMBED (data);
 
   ephy_embed_statusbar_pop (embed, embed->tab_message_id);
   embed->pop_statusbar_later_source_id = 0;
-  return FALSE;
 }
 
 static void
@@ -610,19 +609,17 @@ status_message_notify_cb (EphyWebView *view,
     /* A short timeout before hiding the statusbar ensures that while moving
      *  over a series of links, the overlay widget doesn't flicker on and off. */
     if (embed->pop_statusbar_later_source_id == 0) {
-      embed->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
+      embed->pop_statusbar_later_source_id = g_timeout_add_once (250, pop_statusbar_later_cb, embed);
       g_source_set_name_by_id (embed->pop_statusbar_later_source_id, "[epiphany] pop_statusbar_later_cb");
     }
   }
 }
 
-static gboolean
+static void
 clear_progress_cb (EphyEmbed *embed)
 {
   gtk_widget_set_visible (embed->progress, FALSE);
   embed->clear_progress_source_id = 0;
-
-  return FALSE;
 }
 
 static void
@@ -647,9 +644,7 @@ progress_update (EphyWebView *view,
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (embed->web_view));
 
   if (progress == 1.0 || !loading) {
-    embed->clear_progress_source_id = g_timeout_add (500,
-                                                     (GSourceFunc)clear_progress_cb,
-                                                     embed);
+    embed->clear_progress_source_id = g_timeout_add_once (500, (GSourceOnceFunc)clear_progress_cb, embed);
     g_source_set_name_by_id (embed->clear_progress_source_id, "[epiphany] clear_progress_cb");
   } else
     gtk_widget_set_visible (embed->progress, TRUE);

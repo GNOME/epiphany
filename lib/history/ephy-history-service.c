@@ -510,7 +510,7 @@ run_history_service_thread (EphyHistoryService *self)
   return NULL;
 }
 
-static gboolean
+static void
 ephy_history_service_execute_job_callback (gpointer data)
 {
   EphyHistoryServiceMessage *message = (EphyHistoryServiceMessage *)data;
@@ -519,7 +519,7 @@ ephy_history_service_execute_job_callback (gpointer data)
 
   if (g_cancellable_is_cancelled (message->cancellable)) {
     ephy_history_service_message_free (message);
-    return G_SOURCE_REMOVE;
+    return;
   }
 
   if (message->callback)
@@ -529,8 +529,6 @@ ephy_history_service_execute_job_callback (gpointer data)
     g_signal_emit (message->service, signals[CLEARED], 0);
 
   ephy_history_service_message_free (message);
-
-  return G_SOURCE_REMOVE;
 }
 
 typedef struct {
@@ -1375,7 +1373,7 @@ ephy_history_service_process_message (EphyHistoryService        *self,
   }
 
   if (message->callback || message->type == CLEAR)
-    g_idle_add ((GSourceFunc)ephy_history_service_execute_job_callback, message);
+    g_idle_add_once ((GSourceOnceFunc)ephy_history_service_execute_job_callback, message);
   else
     ephy_history_service_message_free (message);
 

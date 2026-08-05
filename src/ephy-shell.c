@@ -492,14 +492,12 @@ register_synchronizable_managers (EphyShell       *shell,
   }
 }
 
-static gboolean
+static void
 start_sync_after_sign_in (EphySyncService *service)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (service));
 
   ephy_sync_service_start_sync (service);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -513,7 +511,7 @@ sync_secrets_store_finished_cb (EphySyncService *service,
   if (!error) {
     register_synchronizable_managers (shell, service);
     /* Allow a 30 seconds window for the user to select their sync options. */
-    g_timeout_add_seconds (30, (GSourceFunc)start_sync_after_sign_in, service);
+    g_timeout_add_seconds_once (30, (GSourceOnceFunc)start_sync_after_sign_in, service);
   }
 }
 

@@ -1356,7 +1356,7 @@ update_mute_action (EphyWindow    *window,
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), webkit_web_view_is_playing_audio (web_view));
 }
 
-static gboolean
+static void
 idle_unref_context_event (EphyWindow *window)
 {
   LOG ("Idle unreffing context event %p", window->context_event);
@@ -1364,7 +1364,6 @@ idle_unref_context_event (EphyWindow *window)
   g_clear_object (&window->context_event);
 
   window->idle_worker = 0;
-  return FALSE;
 }
 
 static void
@@ -1384,7 +1383,7 @@ _ephy_window_unset_context_event (EphyWindow *window)
    */
   if (window->idle_worker == 0 && window->context_event) {
     window->idle_worker =
-      g_idle_add ((GSourceFunc)idle_unref_context_event, window);
+      g_idle_add_once ((GSourceOnceFunc)idle_unref_context_event, window);
   }
 }
 
@@ -2317,7 +2316,7 @@ on_open (AdwAlertDialog *self,
   g_clear_pointer (&data, open_url_permission_data_new_free);
 }
 
-static gboolean
+static void
 ask_for_permission (gpointer user_data)
 {
   OpenURLPermissionData *data = user_data;
@@ -2347,8 +2346,6 @@ ask_for_permission (gpointer user_data)
   adw_dialog_present (dialog, GTK_WIDGET (data->window));
 
   g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (on_open), data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -2398,7 +2395,7 @@ decide_navigation_policy (WebKitWebView            *web_view,
 
       data = open_url_permission_data_new (opener_origin, request, window);
       if (data)
-        g_idle_add (ask_for_permission, data);
+        g_idle_add_once (ask_for_permission, data);
     }
 
     return TRUE;
@@ -3013,24 +3010,20 @@ tab_view_setup_menu_cb (AdwTabView *tab_view,
                              g_variant_new_boolean (muted));
 }
 
-static gboolean
+static void
 present_on_idle_cb (GtkWindow *window)
 {
   gtk_window_present (window);
   g_object_unref (window);
-
-  return FALSE;
 }
 
-static gboolean
+static void
 delayed_remove_child (gpointer data)
 {
   g_autoptr (GtkWidget) widget = GTK_WIDGET (data);
   EphyEmbedContainer *container = EPHY_EMBED_CONTAINER (gtk_widget_get_root (widget));
 
   ephy_embed_container_remove_child (container, EPHY_EMBED (widget));
-
-  return FALSE;
 }
 
 static void
@@ -3042,7 +3035,7 @@ download_only_load_cb (EphyWebView *view,
     return;
   }
 
-  g_idle_add (delayed_remove_child, g_object_ref (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view)));
+  g_idle_add_once (delayed_remove_child, g_object_ref (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view)));
 }
 
 static void
@@ -3312,7 +3305,7 @@ tab_view_page_attached_cb (AdwTabView *tab_view,
 
   if (window->present_on_insert) {
     window->present_on_insert = FALSE;
-    g_idle_add ((GSourceFunc)present_on_idle_cb, g_object_ref (window));
+    g_idle_add_once ((GSourceOnceFunc)present_on_idle_cb, g_object_ref (window));
   }
 }
 

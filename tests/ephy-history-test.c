@@ -52,15 +52,13 @@ test_create_history_service (void)
   g_object_unref (service);
 }
 
-static gboolean
+static void
 destroy_history_service_and_end_main_loop (EphyHistoryService *service)
 {
   GMainLoop *loop = g_object_steal_data (G_OBJECT (service), "main-loop");
 
   g_object_unref (service);
   g_main_loop_quit (loop);
-
-  return FALSE;
 }
 
 static void
@@ -69,7 +67,7 @@ test_create_history_service_and_destroy_later (void)
   g_autoptr (GMainLoop) loop = g_main_loop_new (NULL, FALSE);
   EphyHistoryService *service = ensure_empty_history (test_db_filename ());
 
-  g_timeout_add (100, (GSourceFunc)destroy_history_service_and_end_main_loop, service);
+  g_timeout_add_once (100, (GSourceOnceFunc)destroy_history_service_and_end_main_loop, service);
 
   g_object_set_data (G_OBJECT (service), "main-loop", loop);
 

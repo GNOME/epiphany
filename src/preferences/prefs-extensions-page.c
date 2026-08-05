@@ -92,7 +92,7 @@ on_install_extension (AdwAlertDialog *self,
   g_clear_pointer (&data, ask_for_installation_data_free);
 }
 
-static gboolean
+static void
 ask_for_extension_installation (gpointer user_data)
 {
   AskForExtensionInstallationData *data = user_data;
@@ -112,8 +112,6 @@ ask_for_extension_installation (gpointer user_data)
   g_signal_connect (dialog, "response", G_CALLBACK (on_install_extension), data);
 
   adw_dialog_present (dialog, GTK_WIDGET (data->page));
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -132,7 +130,7 @@ on_add_file_selected (GtkFileDialog       *dialog,
   }
 
   data = ask_for_extension_installation_data_new (g_steal_pointer (&file), self);
-  g_idle_add (ask_for_extension_installation, g_steal_pointer (&data));
+  g_idle_add_once (ask_for_extension_installation, g_steal_pointer (&data));
 }
 
 static void

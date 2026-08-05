@@ -181,11 +181,10 @@ test_already_cancelled_snapshot (void)
   gtk_main ();
 }
 
-static gboolean
+static void
 cancel (GCancellable *cancellable)
 {
   g_cancellable_cancel (cancellable);
-  return FALSE;
 }
 
 static void
@@ -203,7 +202,7 @@ test_snapshot_and_timed_cancellation (void)
                                             cancellable,
                                             (GAsyncReadyCallback)on_snapshot_ready,
                                             &tests);
-  g_timeout_add (15, (GSourceFunc)cancel, cancellable);
+  g_timeout_add_once (15, (GSourceOnceFunc)cancel, cancellable);
   gtk_main ();
 }
 

@@ -143,14 +143,12 @@ real_find (EphyFindToolbar   *toolbar,
   webkit_find_controller_search (toolbar->controller, toolbar->find_string, options, G_MAXUINT);
 }
 
-static gboolean
+static void
 do_search (EphyFindToolbar *toolbar)
 {
   toolbar->find_source_id = 0;
 
   real_find (toolbar, EPHY_FIND_DIRECTION_NEXT);
-
-  return FALSE;
 }
 
 static void
@@ -197,7 +195,7 @@ update_find_string (EphyFindToolbar *toolbar)
     return;
   }
 
-  toolbar->find_source_id = g_timeout_add (300, (GSourceFunc)do_search, toolbar);
+  toolbar->find_source_id = g_timeout_add_once (300, (GSourceOnceFunc)do_search, toolbar);
   g_source_set_name_by_id (toolbar->find_source_id, "[epiphany] do_search");
 }
 

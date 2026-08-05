@@ -3270,7 +3270,7 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_TYPED_ADDRESS]);
 }
 
-static gboolean
+static void
 has_modified_forms_timeout_cb (gpointer user_data)
 {
   GTask *task = user_data;
@@ -3278,8 +3278,6 @@ has_modified_forms_timeout_cb (gpointer user_data)
   g_assert (!g_task_get_completed (task));
   g_task_set_task_data (task, GINT_TO_POINTER (0), NULL);
   g_task_return_boolean (task, FALSE);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -3347,7 +3345,7 @@ ephy_web_view_has_modified_forms (EphyWebView         *view,
    * will be never if the web process is unresponsive, so we always fake
    * completion after a two second delay.
    */
-  id = g_timeout_add_seconds (2, has_modified_forms_timeout_cb, task);
+  id = g_timeout_add_seconds_once (2, has_modified_forms_timeout_cb, task);
   g_task_set_task_data (task, GINT_TO_POINTER (id), NULL);
 
   webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
