@@ -5,7 +5,7 @@
  *  Copyright © 2003, 2004, 2005  Christian Persch
  *  Copyright © 2008  Xan López
  *  Copyright © 2016  Igalia S.L.
- *  Copyright © 2025  Jan-Michael Brummer
+ *  Copyright © 2025-2026  Jan-Michael Brummer
  *
  *  This file is part of Epiphany.
  *
@@ -1160,7 +1160,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
    * Emitted when the user changes the contents of the internal #GtkEntry
    *
    */
-  signals[USER_CHANGED] = g_signal_new ("user_changed", G_OBJECT_CLASS_TYPE (klass),
+  signals[USER_CHANGED] = g_signal_new ("user-changed", G_OBJECT_CLASS_TYPE (klass),
                                         G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
                                         0, NULL, NULL, NULL,
                                         G_TYPE_NONE,

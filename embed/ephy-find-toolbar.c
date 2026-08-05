@@ -481,7 +481,7 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
     g_signal_connect_object (toolbar->controller, "failed-to-find-text",
                              G_CALLBACK (failed_to_find_text_cb),
                              toolbar, G_CONNECT_DEFAULT);
-    g_signal_connect_object (toolbar->controller, "counted_matches",
+    g_signal_connect_object (toolbar->controller, "counted-matches",
                              G_CALLBACK (counted_matches_cb),
                              toolbar, G_CONNECT_DEFAULT);
     g_signal_connect_object (web_view, "load-changed",
