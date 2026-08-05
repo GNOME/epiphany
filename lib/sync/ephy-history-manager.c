@@ -134,8 +134,6 @@ ephy_history_manager_set_property (GObject      *object,
         g_object_unref (self->service);
       self->service = g_object_ref (g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -151,8 +149,6 @@ ephy_history_manager_get_property (GObject    *object,
     case PROP_HISTORY_SERVICE:
       g_value_set_object (value, self->service);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

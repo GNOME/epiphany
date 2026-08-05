@@ -213,9 +213,6 @@ ephy_mouse_gesture_controller_set_property (GObject      *object,
     case PROP_WINDOW:
       self->window = g_value_get_object (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -230,9 +227,6 @@ ephy_mouse_gesture_controller_get_property (GObject    *object,
   switch ((EphyMouseGestureControllerProps)prop_id) {
     case PROP_WINDOW:
       g_value_set_object (value, self->window);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

@@ -346,8 +346,6 @@ ephy_location_controller_set_property (GObject      *object,
     case PROP_TITLE_WIDGET:
       controller->title_widget = EPHY_TITLE_WIDGET (g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -366,8 +364,10 @@ ephy_location_controller_get_property (GObject    *object,
     case PROP_EDITABLE:
       g_value_set_boolean (value, controller->editable);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_WINDOW:
+    case PROP_TITLE_WIDGET:
+      g_assert_not_reached ();
+      break;
   }
 }
 

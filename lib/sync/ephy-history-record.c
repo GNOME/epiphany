@@ -115,8 +115,6 @@ ephy_history_record_set_property (GObject      *object,
         g_sequence_free (self->visits);
       self->visits = g_value_get_pointer (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -141,8 +139,6 @@ ephy_history_record_get_property (GObject    *object,
     case PROP_VISITS:
       g_value_set_pointer (value, self->visits);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

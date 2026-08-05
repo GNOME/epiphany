@@ -359,8 +359,6 @@ ephy_certificate_dialog_set_property (GObject      *object,
     case PROP_TLS_ERRORS:
       dialog->tls_errors = g_value_get_flags (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

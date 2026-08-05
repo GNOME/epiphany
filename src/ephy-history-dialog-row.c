@@ -54,8 +54,6 @@ ephy_history_dialog_row_get_property (GObject    *object,
     case PROP_TITLE:
       g_value_set_string (value, self->title);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -74,8 +72,6 @@ ephy_history_dialog_row_set_property (GObject      *object,
     case PROP_TITLE:
       g_set_str (&self->title, g_value_dup_string (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

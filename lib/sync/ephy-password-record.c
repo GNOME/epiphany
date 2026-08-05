@@ -104,8 +104,6 @@ ephy_password_record_set_property (GObject      *object,
     case PROP_TIME_PASSWORD_CHANGED:
       self->time_password_changed = g_value_get_uint64 (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -145,8 +143,6 @@ ephy_password_record_get_property (GObject    *object,
     case PROP_TIME_PASSWORD_CHANGED:
       g_value_set_uint64 (value, self->time_password_changed);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

@@ -459,9 +459,6 @@ ephy_embed_set_property (GObject      *object,
     case PROP_PROGRESS_BAR_ENABLED:
       embed->progress_bar_enabled = g_value_get_boolean (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -482,9 +479,6 @@ ephy_embed_get_property (GObject    *object,
       break;
     case PROP_PROGRESS_BAR_ENABLED:
       g_value_set_boolean (value, embed->progress_bar_enabled);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

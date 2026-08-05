@@ -121,9 +121,6 @@ ephy_history_service_set_property (GObject      *object,
     case PROP_MEMORY:
       self->in_memory = g_value_get_boolean (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
-      break;
   }
 }
 
@@ -138,8 +135,8 @@ ephy_history_service_get_property (GObject    *object,
     case PROP_HISTORY_FILENAME:
       g_value_set_string (value, self->history_filename);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    case PROP_MEMORY:
+      g_assert_not_reached ();
       break;
   }
 }

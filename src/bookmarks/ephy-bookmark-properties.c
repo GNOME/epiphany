@@ -389,8 +389,6 @@ ephy_bookmark_properties_set_property (GObject      *object,
       if (self->bookmark_is_new)
         update_for_new_bookmark (self);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

@@ -237,9 +237,6 @@ ephy_file_monitor_get_property (GObject    *object,
     case PROP_VIEW:
       g_value_set_object (value, monitor->view);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -254,9 +251,6 @@ ephy_file_monitor_set_property (GObject      *object,
   switch ((EphyFileMonitorProps)prop_id) {
     case PROP_VIEW:
       monitor->view = g_value_get_object (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

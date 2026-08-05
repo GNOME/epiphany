@@ -82,9 +82,6 @@ ephy_encoding_get_property (GObject    *object,
     case PROP_LANGUAGE_GROUPS:
       g_value_set_int (value, encoding->language_groups);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -157,9 +154,6 @@ ephy_encoding_set_property (GObject      *object,
       break;
     case PROP_LANGUAGE_GROUPS:
       encoding->language_groups = g_value_get_int (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

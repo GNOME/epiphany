@@ -146,8 +146,6 @@ ephy_search_entry_set_property (GObject      *object,
     case PROP_FIND_RESULT:
       ephy_search_entry_set_find_result (self, g_value_get_enum (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -178,8 +176,6 @@ ephy_search_entry_get_property (GObject    *object,
     case PROP_FIND_RESULT:
       g_value_set_enum (value, ephy_search_entry_get_find_result (self));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

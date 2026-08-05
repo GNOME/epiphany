@@ -173,8 +173,8 @@ ephy_data_view_set_property (GObject      *object,
     case PROP_CAN_CLEAR:
       ephy_data_view_set_can_clear (self, g_value_get_boolean (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_SEARCH_TEXT:
+      g_assert_not_reached ();
       break;
   }
 }
@@ -224,9 +224,6 @@ ephy_data_view_get_property (GObject    *object,
       break;
     case PROP_CAN_CLEAR:
       g_value_set_boolean (value, ephy_data_view_get_can_clear (self));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

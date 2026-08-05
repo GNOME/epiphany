@@ -111,9 +111,6 @@ ephy_download_get_property (GObject    *object,
     case PROP_CONTENT_TYPE:
       g_value_set_string (value, ephy_download_get_content_type (download));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
   }
 }
 
@@ -134,8 +131,8 @@ ephy_download_set_property (GObject      *object,
       ephy_download_set_action (download, g_value_get_enum (value));
       break;
     case PROP_DOWNLOAD:
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    case PROP_CONTENT_TYPE:
+      g_assert_not_reached ();
       break;
   }
 }

@@ -348,8 +348,6 @@ ephy_web_view_get_property (GObject    *object,
     case PROP_ENTERING_READER_MODE:
       g_value_set_boolean (value, view->entering_reader_mode);
       break;
-    default:
-      break;
   }
 }
 
@@ -375,8 +373,6 @@ ephy_web_view_set_property (GObject      *object,
     case PROP_DISPLAY_ADDRESS:
     case PROP_ENTERING_READER_MODE:
       /* read only */
-      break;
-    default:
       break;
   }
 }

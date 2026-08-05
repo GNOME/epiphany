@@ -56,9 +56,6 @@ ephy_sqlite_statement_set_property (GObject      *object,
     case PROP_CONNECTION:
       self->connection = EPHY_SQLITE_CONNECTION (g_object_ref (g_value_get_object (value)));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
-      break;
   }
 }
 

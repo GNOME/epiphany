@@ -87,9 +87,6 @@ ephy_notification_set_property (GObject      *object,
     case PROP_BODY:
       self->body_msg = g_value_dup_string (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -107,9 +104,6 @@ ephy_notification_get_property (GObject    *object,
       break;
     case PROP_BODY:
       g_value_set_string (value, self->body_msg);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

@@ -107,9 +107,6 @@ ephy_tab_view_get_property (GObject    *object,
     case PROP_SELECTED_INDEX:
       g_value_set_int (value, ephy_tab_view_get_selected_index (self));
       break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

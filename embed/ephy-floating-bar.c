@@ -64,9 +64,6 @@ ephy_floating_bar_get_property (GObject    *object,
     case PROP_PRIMARY_LABEL:
       g_value_set_string (value, self->primary_label);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
   }
 }
 
@@ -81,9 +78,6 @@ ephy_floating_bar_set_property (GObject      *object,
   switch ((EphyFloatingBarProps)property_id) {
     case PROP_PRIMARY_LABEL:
       ephy_floating_bar_set_primary_label (self, g_value_get_string (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
   }
 }

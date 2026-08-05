@@ -512,8 +512,6 @@ ephy_action_bar_set_property (GObject      *object,
       action_bar->window = EPHY_WINDOW (g_value_get_object (value));
       g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
 }
 
@@ -529,8 +527,6 @@ ephy_action_bar_get_property (GObject    *object,
     case PROP_WINDOW:
       g_value_set_object (value, action_bar->window);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
 }
 

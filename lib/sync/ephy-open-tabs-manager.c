@@ -60,8 +60,6 @@ ephy_open_tabs_manager_set_property (GObject      *object,
     case PROP_TABS_CATALOG:
       self->catalog = g_value_get_object (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -77,8 +75,6 @@ ephy_open_tabs_manager_get_property (GObject    *object,
     case PROP_TABS_CATALOG:
       g_value_set_object (value, self->catalog);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

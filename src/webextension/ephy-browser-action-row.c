@@ -55,8 +55,6 @@ ephy_browser_action_row_set_property (GObject      *object,
     case PROP_BROWSER_ACTION:
       self->browser_action = g_value_dup_object (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -72,8 +70,6 @@ ephy_browser_action_row_get_property (GObject    *object,
     case PROP_BROWSER_ACTION:
       g_value_set_object (value, ephy_browser_action_row_get_browser_action (self));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

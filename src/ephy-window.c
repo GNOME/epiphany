@@ -3865,9 +3865,6 @@ ephy_window_set_property (GObject      *object,
     case PROP_ADAPTIVE_MODE:
       ephy_window_set_adaptive_mode (window, g_value_get_enum (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -3891,9 +3888,6 @@ ephy_window_get_property (GObject    *object,
       break;
     case PROP_ADAPTIVE_MODE:
       g_value_set_enum (value, window->adaptive_mode);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

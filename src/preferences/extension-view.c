@@ -178,8 +178,6 @@ ephy_extension_view_set_property (GObject      *object,
       g_set_object (&self->web_extension, g_value_get_object (value));
       update (self);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -195,8 +193,6 @@ ephy_extension_view_get_property (GObject    *object,
     case PROP_WEB_EXTENSION:
       g_value_set_object (value, self->web_extension);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

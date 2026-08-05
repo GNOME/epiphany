@@ -278,8 +278,6 @@ prefs_search_engine_page_set_property (GObject      *object,
     case PROP_ENGINE_IS_NEW:
       self->engine_is_new = g_value_get_boolean (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

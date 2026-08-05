@@ -1213,8 +1213,6 @@ ephy_filters_manager_set_property (GObject      *object,
     case PROP_IS_INITIALIZED:
       manager->is_initialized = g_value_get_boolean (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -1233,8 +1231,6 @@ ephy_filters_manager_get_property (GObject    *object,
     case PROP_IS_INITIALIZED:
       g_value_set_boolean (value, manager->is_initialized);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

@@ -73,9 +73,6 @@ ephy_sqlite_connection_set_property (GObject      *object,
     case PROP_DATABASE_PATH:
       self->database_path = g_value_dup_string (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
-      break;
   }
 }
 

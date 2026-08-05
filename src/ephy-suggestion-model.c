@@ -97,8 +97,6 @@ ephy_suggestion_model_get_property (GObject    *object,
     case PROP_BOOKMARKS_MANAGER:
       g_value_set_object (value, self->bookmarks_manager);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -117,8 +115,6 @@ ephy_suggestion_model_set_property (GObject      *object,
     case PROP_BOOKMARKS_MANAGER:
       self->bookmarks_manager = g_value_dup_object (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

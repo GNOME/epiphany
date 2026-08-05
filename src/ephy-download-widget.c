@@ -297,9 +297,6 @@ ephy_download_widget_get_property (GObject    *object,
     case PROP_DOWNLOAD:
       g_value_set_object (value, ephy_download_widget_get_download (widget));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
   }
 }
 
@@ -315,9 +312,6 @@ ephy_download_widget_set_property (GObject      *object,
   switch ((EphyDownloadWidgetProps)property_id) {
     case PROP_DOWNLOAD:
       widget->download = g_value_dup_object (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
   }
 }

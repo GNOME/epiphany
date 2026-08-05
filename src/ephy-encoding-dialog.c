@@ -448,9 +448,6 @@ ephy_encoding_dialog_set_property (GObject      *object,
       ephy_encoding_dialog_set_parent_window (EPHY_ENCODING_DIALOG (object),
                                               g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -463,9 +460,6 @@ ephy_encoding_dialog_get_property (GObject    *object,
   switch ((EphyEncodingDialogProps)prop_id) {
     case PROP_PARENT_WINDOW:
       g_value_set_object (value, EPHY_ENCODING_DIALOG (object)->window);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

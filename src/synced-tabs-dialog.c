@@ -204,8 +204,6 @@ synced_tabs_dialog_set_property (GObject      *object,
         g_object_unref (dialog->manager);
       dialog->manager = g_object_ref (g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -221,8 +219,6 @@ synced_tabs_dialog_get_property (GObject    *object,
     case PROP_OPEN_TABS_MANAGER:
       g_value_set_object (value, dialog->manager);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

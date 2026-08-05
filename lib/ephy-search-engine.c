@@ -197,8 +197,6 @@ ephy_search_engine_get_property (GObject    *object,
     case PROP_OPENSEARCH_URL:
       g_value_set_string (value, ephy_search_engine_get_opensearch_url (self));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -226,8 +224,6 @@ ephy_search_engine_set_property (GObject      *object,
     case PROP_OPENSEARCH_URL:
       ephy_search_engine_set_opensearch_url (self, g_value_get_string (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

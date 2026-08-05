@@ -70,9 +70,6 @@ prefs_feature_page_set_property (GObject      *object,
     case PROP_ADAPTIVE_MODE:
       prefs_feature_page_set_adaptive_mode (self, g_value_get_enum (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -90,9 +87,6 @@ prefs_feature_page_get_property (GObject    *object,
       break;
     case PROP_ADAPTIVE_MODE:
       g_value_set_enum (value, self->adaptive_mode);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

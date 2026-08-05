@@ -353,8 +353,6 @@ ephy_sync_service_set_property (GObject      *object,
     case PROP_SYNC_PERIODICALLY:
       self->sync_periodically = g_value_get_boolean (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -370,8 +368,6 @@ ephy_sync_service_get_property (GObject    *object,
     case PROP_SYNC_PERIODICALLY:
       g_value_set_boolean (value, self->sync_periodically);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

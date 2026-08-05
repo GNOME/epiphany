@@ -802,9 +802,6 @@ ephy_history_dialog_set_property (GObject      *object,
     case PROP_HISTORY_SERVICE:
       set_history_service (self, g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -819,9 +816,6 @@ ephy_history_dialog_get_property (GObject    *object,
   switch ((EphyHistoryDialogProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       g_value_set_object (value, self->history_service);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

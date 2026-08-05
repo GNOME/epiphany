@@ -88,9 +88,6 @@ ephy_encoding_row_set_property (GObject      *object,
       ephy_encoding_row_set_encoding (EPHY_ENCODING_ROW (object),
                                       g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
   }
 }
 
@@ -103,9 +100,6 @@ ephy_encoding_row_get_property (GObject    *object,
   switch ((EphyEncodingRowProps)prop_id) {
     case PROP_ENCODING:
       g_value_set_object (value, EPHY_ENCODING_ROW (object)->encoding);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

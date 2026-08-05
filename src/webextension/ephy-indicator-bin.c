@@ -233,9 +233,6 @@ ephy_indicator_bin_get_property (GObject    *object,
     case PROP_BADGE:
       g_value_set_string (value, ephy_indicator_bin_get_badge (self));
       break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -255,9 +252,6 @@ ephy_indicator_bin_set_property (GObject      *object,
     case PROP_BADGE:
       ephy_indicator_bin_set_badge (self, g_value_get_string (value));
       break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

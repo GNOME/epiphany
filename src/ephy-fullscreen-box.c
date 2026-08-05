@@ -276,9 +276,6 @@ ephy_fullscreen_box_get_property (GObject    *object,
     case PROP_REVEALED:
       g_value_set_boolean (value, adw_toolbar_view_get_reveal_top_bars (self->toolbar_view));
       break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -302,9 +299,9 @@ ephy_fullscreen_box_set_property (GObject      *object,
     case PROP_CONTENT:
       ephy_fullscreen_box_set_content (self, g_value_get_object (value));
       break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_REVEALED:
+      g_assert_not_reached ();
+      break;
   }
 }
 

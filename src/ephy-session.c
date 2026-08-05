@@ -472,8 +472,6 @@ ephy_session_get_property (GObject    *object,
       g_value_set_boolean (value,
                            ephy_session_get_can_undo_tab_closed (session));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
 }
 

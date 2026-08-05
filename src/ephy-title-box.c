@@ -150,8 +150,6 @@ ephy_title_box_set_property (GObject      *object,
     case PROP_SECURITY_LEVEL:
       ephy_title_widget_set_security_level (widget, g_value_get_enum (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -170,8 +168,6 @@ ephy_title_box_get_property (GObject    *object,
     case PROP_SECURITY_LEVEL:
       g_value_set_enum (value, ephy_title_widget_get_security_level (widget));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

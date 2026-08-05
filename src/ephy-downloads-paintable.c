@@ -109,8 +109,6 @@ ephy_downloads_paintable_get_property (GObject    *object,
     case PROP_PROGRESS:
       g_value_set_double (value, self->progress);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -130,8 +128,6 @@ ephy_downloads_paintable_set_property (GObject      *object,
       self->progress = g_value_get_double (value);
       gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

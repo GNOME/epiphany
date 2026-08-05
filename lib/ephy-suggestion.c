@@ -57,8 +57,6 @@ ephy_suggestion_set_property (GObject      *object,
     case PROP_IS_COMPLETION:
       self->is_completion = g_value_get_boolean (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -77,8 +75,6 @@ ephy_suggestion_get_property (GObject    *object,
     case PROP_IS_COMPLETION:
       g_value_set_boolean (value, self->is_completion);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

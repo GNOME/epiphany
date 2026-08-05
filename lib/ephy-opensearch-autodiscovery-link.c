@@ -99,8 +99,6 @@ ephy_opensearch_autodiscovery_link_get_property (GObject    *object,
       break;
     case PROP_URL: g_value_set_string (value, self->url);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -122,8 +120,6 @@ ephy_opensearch_autodiscovery_link_set_property (GObject      *object,
       g_clear_pointer (&self->url, g_free);
       self->url = g_value_dup_string (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

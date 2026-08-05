@@ -216,8 +216,6 @@ ephy_bookmark_row_set_property (GObject      *object,
     case PROP_BOOKMARK:
       self->bookmark = g_value_dup_object (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -233,8 +231,6 @@ ephy_bookmark_row_get_property (GObject    *object,
     case PROP_BOOKMARK:
       g_value_set_object (value, ephy_bookmark_row_get_bookmark (self));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

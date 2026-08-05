@@ -78,8 +78,6 @@ ephy_open_tabs_record_set_property (GObject      *object,
       g_list_free_full (self->tabs, (GDestroyNotify)json_object_unref);
       self->tabs = g_value_get_pointer (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -101,8 +99,6 @@ ephy_open_tabs_record_get_property (GObject    *object,
     case PROP_TABS:
       g_value_set_pointer (value, self->tabs);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

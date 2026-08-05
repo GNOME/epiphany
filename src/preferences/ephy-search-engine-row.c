@@ -102,8 +102,6 @@ ephy_search_engine_row_set_property (GObject      *object,
     case PROP_SEARCH_ENGINE:
       self->engine = g_value_get_object (value);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 

@@ -209,8 +209,6 @@ ephy_search_engine_manager_get_property (GObject    *object,
     case PROP_INCOGNITO_ENGINE:
       g_value_take_object (value, ephy_search_engine_manager_get_incognito_engine (self));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -229,8 +227,6 @@ ephy_search_engine_manager_set_property (GObject      *object,
     case PROP_INCOGNITO_ENGINE:
       ephy_search_engine_manager_set_incognito_engine (self, g_value_get_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
