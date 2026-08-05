@@ -340,7 +340,7 @@ serializable_deserialize_property (JsonSerializable *serializable,
                                    JsonNode         *node)
 {
   if (G_VALUE_HOLDS_STRING (value) && JSON_NODE_HOLDS_NULL (node)) {
-    g_value_set_string (value, "");
+    g_value_set_static_string (value, "");
     return TRUE;
   }
 
