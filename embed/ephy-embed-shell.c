@@ -487,7 +487,7 @@ history_service_url_deleted_cb (EphyHistoryService *service,
 
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("History.DeleteURL",
-                                                                              g_variant_new ("s", url->url)));
+                                                                              g_variant_new_string (url->url)));
 }
 
 static void
@@ -501,7 +501,7 @@ history_service_host_deleted_cb (EphyHistoryService *service,
   deleted_uri = g_uri_parse (deleted_url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("History.DeleteHost",
-                                                                              g_variant_new ("s", g_uri_get_host (deleted_uri))));
+                                                                              g_variant_new_string (g_uri_get_host (deleted_uri))));
 }
 
 static void
@@ -831,7 +831,7 @@ remember_passwords_setting_changed_cb (GSettings      *settings,
 
   webkit_web_context_send_message_to_all_extensions (priv->web_context,
                                                      webkit_user_message_new ("PasswordManager.SetShouldRememberPasswords",
-                                                                              g_variant_new ("b", ephy_embed_shell_should_remember_passwords (shell))));
+                                                                              g_variant_new_boolean (ephy_embed_shell_should_remember_passwords (shell))));
 }
 
 static void

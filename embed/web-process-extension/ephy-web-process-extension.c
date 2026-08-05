@@ -743,7 +743,7 @@ js_query_usernames (const char              *origin,
   data->promise_id = promise_id;
   data->frame_id = frame_id;
   message = webkit_user_message_new ("PasswordManager.QueryUsernames",
-                                     g_variant_new ("s", origin));
+                                     g_variant_new_string (origin));
   webkit_web_page_send_message_to_view (web_page, message,
                                         extension->cancellable,
                                         (GAsyncReadyCallback)web_view_query_usernames_ready_cb,
