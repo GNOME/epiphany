@@ -88,7 +88,7 @@ ephy_embed_utils_link_message_parse (const char *message)
   g_free (status_message);
   g_strfreev (splitted_message);
 
-  return g_string_free (tmp, FALSE);
+  return g_string_free_and_steal (tmp);
 }
 
 static gpointer

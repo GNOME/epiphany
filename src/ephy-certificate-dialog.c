@@ -90,7 +90,7 @@ bytes_to_display (GBytes *bytes)
     g_string_append_c (result, hexc[j]);
   }
 
-  return g_string_free (result, FALSE);
+  return g_string_free_and_steal (result);
 }
 
 static GtkWidget *
@@ -284,7 +284,7 @@ get_error_messages_from_tls_errors (GTlsCertificateFlags tls_errors)
         g_string_append_c (message, '\n');
     }
 
-    retval = g_string_free (message, FALSE);
+    retval = g_string_free_and_steal (message);
   }
 
   g_ptr_array_free (errors, TRUE);

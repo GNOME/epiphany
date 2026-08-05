@@ -312,7 +312,7 @@ replace_placeholder (const char *url,
    */
   g_string_replace (s, "%s", encoded_query + strlen ("q="), 0);
 
-  return g_string_free (s, FALSE);
+  return g_string_free_and_steal (s);
 }
 
 /**

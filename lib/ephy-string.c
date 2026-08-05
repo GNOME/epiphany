@@ -154,7 +154,7 @@ ephy_string_collate_key_for_domain (const char *str,
   if (len > 0)
     g_string_append_len (result, str, len);
 
-  return g_string_free (result, FALSE);
+  return g_string_free_and_steal (result);
 }
 
 /* FIXME: delete this, or move it to ephy-uri-helpers */
@@ -239,7 +239,7 @@ ephy_string_find_and_replace (const char *haystack,
 
   str = g_string_new (haystack);
   g_string_replace (str, to_find, to_repl, 0);
-  return g_string_free (str, FALSE);
+  return g_string_free_and_steal (str);
 }
 
 /*

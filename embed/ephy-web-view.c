@@ -1824,7 +1824,7 @@ detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
     }
 
     g_string_append (message, "</ul>");
-    retval = g_string_free (message, FALSE);
+    retval = g_string_free_and_steal (message);
   } else {
     g_assert_not_reached ();
   }

@@ -471,7 +471,7 @@ ephy_smaps_to_html (EphySMaps *smaps)
 
   g_string_append (str, "</body>");
 
-  return g_string_free (str, FALSE);
+  return g_string_free_and_steal (str);
 }
 
 static void

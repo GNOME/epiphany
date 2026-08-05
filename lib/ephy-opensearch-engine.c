@@ -264,7 +264,7 @@ url_template_param_substitution (const char  *url_template,
     return NULL;
   }
 
-  return g_string_free (g_steal_pointer (&builder), FALSE);
+  return g_string_free_and_steal (g_steal_pointer (&builder));
 }
 
 static void

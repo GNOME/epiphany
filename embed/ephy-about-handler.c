@@ -125,7 +125,7 @@ handle_memory_finished_cb (EphyAboutHandler       *handler,
   g_string_append (data_str, "</html>");
 
   data_length = data_str->len;
-  ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+  ephy_about_handler_finish_request (request, g_string_free_and_steal (data_str), data_length);
   g_object_unref (request);
 }
 
@@ -373,7 +373,7 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
   ephy_web_application_free_application_list (applications);
 
   data_length = data_str->len;
-  ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+  ephy_about_handler_finish_request (request, g_string_free_and_steal (data_str), data_length);
   g_object_unref (request);
 }
 
@@ -521,7 +521,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
 
 out:
   data_length = data_str->len;
-  ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
+  ephy_about_handler_finish_request (request, g_string_free_and_steal (data_str), data_length);
   g_object_unref (request);
 }
 

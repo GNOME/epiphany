@@ -35,7 +35,7 @@ ephy_encode_for_html_entity (const char *input)
   g_string_replace (str, "'", "&#x27;", 0);
   g_string_replace (str, "/", "&#x2F;", 0);
 
-  return g_string_free (str, FALSE);
+  return g_string_free_and_steal (str);
 }
 
 char *
@@ -57,5 +57,5 @@ ephy_encode_for_html_attribute (const char *input)
     c = g_utf8_next_char (c);
   } while (*c);
 
-  return g_string_free (str, FALSE);
+  return g_string_free_and_steal (str);
 }

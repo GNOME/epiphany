@@ -409,7 +409,7 @@ format_label (const char *label,
   /* FIXME: Handle & character. */
   /* Documented here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/menus/create */
   g_string_replace (str, "%s", selected_text, 1);
-  return g_string_free (str, FALSE);
+  return g_string_free_and_steal (str);
 }
 
 static char *

@@ -1437,7 +1437,7 @@ mnemonic_escape_string (const char *string)
     ptr = gstring->str + pos + 2;
   }
 
-  return g_string_free (gstring, FALSE);
+  return g_string_free_and_steal (gstring);
 }
 
 static char *
