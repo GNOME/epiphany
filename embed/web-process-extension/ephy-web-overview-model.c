@@ -239,8 +239,7 @@ ephy_web_overview_model_set_url_title (EphyWebOverviewModel *model,
     if (g_strcmp0 (item->title, title) != 0) {
       changed = TRUE;
 
-      g_free (item->title);
-      item->title = g_strdup (title);
+      g_set_str (&item->title, title);
     }
   }
 

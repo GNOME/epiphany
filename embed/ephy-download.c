@@ -271,8 +271,7 @@ set_destination_for_suggested_filename (EphyDownload *download,
       g_free (serial);
     } while (g_file_test (tmp_filename->str, G_FILE_TEST_EXISTS));
 
-    g_free (destination_filename);
-    destination_filename = g_strdup (tmp_filename->str);
+    g_set_str (&destination_filename, tmp_filename->str);
     g_string_free (tmp_filename, TRUE);
   }
 
@@ -1196,11 +1195,9 @@ ephy_download_set_suggested_destination (EphyDownload *download,
 {
   g_assert (EPHY_IS_DOWNLOAD (download));
 
-  g_free (download->suggested_directory);
-  download->suggested_directory = g_strdup (suggested_directory);
+  g_set_str (&download->suggested_directory, suggested_directory);
 
-  g_free (download->suggested_filename);
-  download->suggested_filename = g_strdup (suggested_filename);
+  g_set_str (&download->suggested_filename, suggested_filename);
 }
 
 /**
@@ -1300,11 +1297,9 @@ ephy_download_set_initiating_web_extension_info (EphyDownload *download,
 {
   g_assert (EPHY_IS_DOWNLOAD (download));
 
-  g_free (download->initiated_by_extension_name);
-  download->initiated_by_extension_name = g_strdup (extension_name);
+  g_set_str (&download->initiated_by_extension_name, extension_name);
 
-  g_free (download->initiated_by_extension_id);
-  download->initiated_by_extension_id = g_strdup (extension_id);
+  g_set_str (&download->initiated_by_extension_id, extension_id);
 }
 
 static void

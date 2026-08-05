@@ -374,8 +374,7 @@ ephy_location_entry_update_url_button_style (EphyLocationEntry *self)
     PangoAttribute *color_not_secure = pango_attr_foreground_alpha_new (65535);
     g_autofree char *new_text = g_strconcat (_("Not Secure — "), text, NULL);
 
-    g_clear_pointer (&text, g_free);
-    text = g_strdup (new_text);
+    g_set_str (&text, new_text);
     offset = strlen ("Not Secure — ");
 
     color_not_secure->start_index = 0;
@@ -1441,8 +1440,7 @@ ephy_location_entry_reset (EphyLocationEntry *self)
     gtk_widget_grab_focus (GTK_WIDGET (web_view));
   }
 
-  g_free (self->saved_text);
-  self->saved_text = g_strdup (old_text);
+  g_set_str (&self->saved_text, old_text);
   self->can_redo = TRUE;
 
   offset = strlen (text) - strlen (old_text);

@@ -648,12 +648,10 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
     /* Confirm a relink and capture the email/uid. */
     if (data) {
       if (json_object_has_member (data, "email")) {
-        g_free (sync_dialog->sign_in_email);
-        sync_dialog->sign_in_email = g_strdup (json_object_get_string_member (data, "email"));
+        g_set_str (&sync_dialog->sign_in_email, json_object_get_string_member (data, "email"));
       }
       if (json_object_has_member (data, "uid")) {
-        g_free (sync_dialog->sign_in_uid);
-        sync_dialog->sign_in_uid = g_strdup (json_object_get_string_member (data, "uid"));
+        g_set_str (&sync_dialog->sign_in_uid, json_object_get_string_member (data, "uid"));
       }
     }
     {
@@ -701,12 +699,10 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
 
     /* Capture email/uid from oauth_login data if available. */
     if (json_object_has_member (data, "email")) {
-      g_free (sync_dialog->sign_in_email);
-      sync_dialog->sign_in_email = g_strdup (json_object_get_string_member (data, "email"));
+      g_set_str (&sync_dialog->sign_in_email, json_object_get_string_member (data, "email"));
     }
     if (json_object_has_member (data, "uid")) {
-      g_free (sync_dialog->sign_in_uid);
-      sync_dialog->sign_in_uid = g_strdup (json_object_get_string_member (data, "uid"));
+      g_set_str (&sync_dialog->sign_in_uid, json_object_get_string_member (data, "uid"));
     }
 
     if (!sync_dialog->sign_in_email || !sync_dialog->sign_in_uid) {
@@ -746,12 +742,10 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
      * Just capture email/uid and wait for the OAuth message.
      */
     if (json_object_has_member (data, "email")) {
-      g_free (sync_dialog->sign_in_email);
-      sync_dialog->sign_in_email = g_strdup (json_object_get_string_member (data, "email"));
+      g_set_str (&sync_dialog->sign_in_email, json_object_get_string_member (data, "email"));
     }
     if (json_object_has_member (data, "uid")) {
-      g_free (sync_dialog->sign_in_uid);
-      sync_dialog->sign_in_uid = g_strdup (json_object_get_string_member (data, "uid"));
+      g_set_str (&sync_dialog->sign_in_uid, json_object_get_string_member (data, "uid"));
     }
     LOG ("fxaccounts:login received, waiting for fxaccounts:oauth_login");
   }

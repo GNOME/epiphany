@@ -4163,8 +4163,7 @@ on_username_entry_changed (GtkEditable             *entry,
                            EphyPasswordRequestData *request_data)
 {
   const char *text = gtk_editable_get_text (entry);
-  g_free (request_data->username);
-  request_data->username = g_strdup (text);
+  g_set_str (&request_data->username, text);
 }
 
 static void
@@ -4172,8 +4171,7 @@ on_password_entry_changed (GtkEditable             *entry,
                            EphyPasswordRequestData *request_data)
 {
   const char *text = gtk_editable_get_text (entry);
-  g_free (request_data->password);
-  request_data->password = g_strdup (text);
+  g_set_str (&request_data->password, text);
 }
 
 static void

@@ -229,8 +229,7 @@ ephy_history_record_set_id (EphyHistoryRecord *self,
   g_assert (EPHY_IS_HISTORY_RECORD (self));
   g_assert (id);
 
-  g_free (self->id);
-  self->id = g_strdup (id);
+  g_set_str (&self->id, id);
 }
 
 const char *

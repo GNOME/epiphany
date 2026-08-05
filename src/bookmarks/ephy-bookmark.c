@@ -322,8 +322,7 @@ ephy_bookmark_set_url (EphyBookmark *self,
 {
   g_assert (EPHY_IS_BOOKMARK (self));
 
-  g_free (self->url);
-  self->url = g_strdup (url);
+  g_set_str (&self->url, url);
 }
 
 const char *
@@ -340,8 +339,7 @@ ephy_bookmark_set_title (EphyBookmark *self,
 {
   g_assert (EPHY_IS_BOOKMARK (self));
 
-  g_free (self->title);
-  self->title = g_strdup (title);
+  g_set_str (&self->title, title);
   g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_TITLE]);
 }
 
@@ -360,8 +358,7 @@ ephy_bookmark_set_id (EphyBookmark *self,
   g_assert (EPHY_IS_BOOKMARK (self));
   g_assert (id);
 
-  g_free (self->id);
-  self->id = g_strdup (id);
+  g_set_str (&self->id, id);
 }
 
 const char *

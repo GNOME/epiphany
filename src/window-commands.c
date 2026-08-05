@@ -1948,13 +1948,11 @@ set_default_application_title (EphyApplicationDialogData *data,
   }
 
   if (!title || title[0] == '\0') {
-    g_clear_pointer (&title, g_free);
-    title = g_strdup (webkit_web_view_get_title (WEBKIT_WEB_VIEW (data->view)));
+    g_set_str (&title, webkit_web_view_get_title (WEBKIT_WEB_VIEW (data->view)));
   }
 
   if (!title || title[0] == '\0') {
-    g_clear_pointer (&title, g_free);
-    title = g_strdup (_("New Web App"));
+    g_set_str (&title, _("New Web App"));
   }
 
   data->title = g_strdup (title);

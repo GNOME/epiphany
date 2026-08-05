@@ -250,8 +250,7 @@ ephy_site_menu_button_append_description (EphySiteMenuButton *self,
   else
     new_description = g_strdup (section);
 
-  g_clear_pointer (&self->description, g_free);
-  self->description = g_strdup (new_description);
+  g_set_str (&self->description, new_description);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (self),
                                   GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,

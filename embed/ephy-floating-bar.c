@@ -126,8 +126,7 @@ ephy_floating_bar_set_primary_label (EphyFloatingBar *self,
                                      const gchar     *label)
 {
   if (g_strcmp0 (self->primary_label, label) != 0) {
-    g_free (self->primary_label);
-    self->primary_label = g_strdup (label);
+    g_set_str (&self->primary_label, label);
 
     gtk_label_set_label (GTK_LABEL (self->primary_label_widget), label);
 

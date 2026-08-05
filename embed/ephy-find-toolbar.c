@@ -188,8 +188,7 @@ failed_to_find_text_cb (WebKitFindController *controller,
 static void
 update_find_string (EphyFindToolbar *toolbar)
 {
-  g_free (toolbar->find_string);
-  toolbar->find_string = g_strdup (gtk_editable_get_text (GTK_EDITABLE (toolbar->entry)));
+  g_set_str (&toolbar->find_string, gtk_editable_get_text (GTK_EDITABLE (toolbar->entry)));
 
   g_clear_handle_id (&toolbar->find_source_id, g_source_remove);
 

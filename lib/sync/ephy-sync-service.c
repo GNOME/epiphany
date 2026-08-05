@@ -2387,8 +2387,7 @@ ephy_sync_service_sign_in (EphySyncService *self,
    * disk because the secrets are not yet stored at this point, thus it
    * will be unable to operate.
    */
-  g_clear_pointer (&self->user, g_free);
-  self->user = g_strdup (email);
+  g_set_str (&self->user, email);
   ephy_sync_service_set_secret (self, secrets[UID], uid);
   ephy_sync_service_set_secret (self, secrets[ACCESS_TOKEN], access_token);
   ephy_sync_service_set_secret (self, secrets[REFRESH_TOKEN], refresh_token);

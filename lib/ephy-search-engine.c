@@ -74,8 +74,7 @@ ephy_search_engine_set_name (EphySearchEngine *self,
   if (g_strcmp0 (name, self->name) == 0)
     return;
 
-  g_free (self->name);
-  self->name = g_strdup (name);
+  g_set_str (&self->name, name);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_NAME]);
 }
 
@@ -94,8 +93,7 @@ ephy_search_engine_set_url (EphySearchEngine *self,
   if (g_strcmp0 (url, self->url) == 0)
     return;
 
-  g_free (self->url);
-  self->url = g_strdup (url);
+  g_set_str (&self->url, url);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_URL]);
 }
 
@@ -114,8 +112,7 @@ ephy_search_engine_set_bang (EphySearchEngine *self,
   if (g_strcmp0 (bang, self->bang) == 0)
     return;
 
-  g_free (self->bang);
-  self->bang = g_strdup (bang);
+  g_set_str (&self->bang, bang);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BANG]);
 }
 
@@ -138,8 +135,7 @@ ephy_search_engine_set_suggestions_url (EphySearchEngine *self,
   if (g_strcmp0 (suggestions_url, self->suggestions_url) == 0 || *suggestions_url == '\0')
     return;
 
-  g_free (self->suggestions_url);
-  self->suggestions_url = g_strdup (suggestions_url);
+  g_set_str (&self->suggestions_url, suggestions_url);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUGGESTIONS_URL]);
 }
 
@@ -162,8 +158,7 @@ ephy_search_engine_set_opensearch_url (EphySearchEngine *self,
   if (g_strcmp0 (opensearch_url, self->opensearch_url) == 0 || *opensearch_url == '\0')
     return;
 
-  g_free (self->opensearch_url);
-  self->opensearch_url = g_strdup (opensearch_url);
+  g_set_str (&self->opensearch_url, opensearch_url);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OPENSEARCH_URL]);
 }
 

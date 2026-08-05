@@ -381,8 +381,7 @@ on_radio_button_toggled (GtkWidget *button,
     GtkWidget *row = gtk_widget_get_ancestor (GTK_WIDGET (button), ADW_TYPE_ACTION_ROW);
     const char *label = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
 
-    g_clear_pointer (&self->current_label, g_free);
-    self->current_label = g_strdup (label);
+    g_set_str (&self->current_label, label);
   }
 }
 

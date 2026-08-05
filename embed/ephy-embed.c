@@ -273,8 +273,7 @@ ephy_embed_set_title (EphyEmbed  *embed,
       new_title = ephy_embed_utils_get_title_from_address (address);
 
     if (!new_title || new_title[0] == '\0') {
-      g_free (new_title);
-      new_title = g_strdup (_(BLANK_PAGE_TITLE));
+      g_set_str (&new_title, _(BLANK_PAGE_TITLE));
     }
   }
 
@@ -302,8 +301,7 @@ void
 ephy_embed_set_typed_input (EphyEmbed  *embed,
                             const char *input)
 {
-  g_free (embed->typed_input);
-  embed->typed_input = g_strdup (input);
+  g_set_str (&embed->typed_input, input);
 }
 
 gboolean

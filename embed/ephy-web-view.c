@@ -752,8 +752,7 @@ ephy_web_view_set_address (EphyWebView *view,
     return;
 
   was_empty = !view->address;
-  g_free (view->address);
-  view->address = g_strdup (address);
+  g_set_str (&view->address, address);
 
   ephy_web_view_set_display_address (view);
 
@@ -1155,8 +1154,7 @@ ephy_web_view_set_committed_location (EphyWebView *view,
     ephy_web_view_set_loading_message (view, location);
   }
 
-  g_clear_pointer (&view->last_committed_address, g_free);
-  view->last_committed_address = g_strdup (view->address);
+  g_set_str (&view->last_committed_address, view->address);
 
   ephy_web_view_set_link_message (view, NULL);
 
@@ -1701,8 +1699,7 @@ load_changed_cb (WebKitWebView   *web_view,
           view->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
                                                                   (GSourceFunc)maybe_take_snapshot,
                                                                   web_view, NULL);
-          g_free (view->pending_snapshot_uri);
-          view->pending_snapshot_uri = g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+          g_set_str (&view->pending_snapshot_uri, webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
         }
       }
 
@@ -3268,8 +3265,7 @@ ephy_web_view_set_typed_address (EphyWebView *view,
 {
   g_assert (EPHY_IS_WEB_VIEW (view));
 
-  g_free (view->typed_address);
-  view->typed_address = g_strdup (address);
+  g_set_str (&view->typed_address, address);
 
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_TYPED_ADDRESS]);
 }

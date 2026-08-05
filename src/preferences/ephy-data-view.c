@@ -120,8 +120,7 @@ on_search_entry_changed (GtkSearchEntry *entry,
   const char *text;
 
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
-  g_free (priv->search_text);
-  priv->search_text = g_strdup (text);
+  g_set_str (&priv->search_text, text);
 
   g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_SEARCH_TEXT]);
 }

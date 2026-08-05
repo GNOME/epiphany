@@ -237,8 +237,7 @@ commands_handler_update (EphyWebExtensionSender *sender,
 
   description = ephy_json_object_get_string (details, "description");
   if (description) {
-    g_free (command->description);
-    command->description = g_strdup (description);
+    g_set_str (&command->description, description);
   }
 
   shortcut = ephy_json_object_get_string (details, "shortcut");

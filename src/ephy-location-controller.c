@@ -509,8 +509,7 @@ ephy_location_controller_set_address (EphyLocationController *controller,
 
   LOG ("set_address %s", address);
 
-  g_free (controller->address);
-  controller->address = g_strdup (address);
+  g_set_str (&controller->address, address);
 
   g_object_notify_by_pspec (G_OBJECT (controller), obj_properties[PROP_ADDRESS]);
 }

@@ -652,22 +652,19 @@ save_web_application (PrefsGeneralPage *general_page)
 
   text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_url_row));
   if (g_strcmp0 (webapp->url, text) != 0) {
-    g_free (webapp->url);
-    webapp->url = g_strdup (text);
+    g_set_str (&webapp->url, text);
     changed = TRUE;
   }
 
   text = gtk_editable_get_text (GTK_EDITABLE (general_page->webapp_title_row));
   if (g_strcmp0 (webapp->name, text) != 0) {
-    g_free (webapp->name);
-    webapp->name = g_strdup (text);
+    g_set_str (&webapp->name, text);
     changed = TRUE;
   }
 
   text = (const char *)g_object_get_data (G_OBJECT (general_page->webapp_icon), "ephy-webapp-icon-path");
   if (g_strcmp0 (webapp->icon_path, text) != 0) {
-    g_free (webapp->icon_path);
-    webapp->icon_path = g_strdup (text);
+    g_set_str (&webapp->icon_path, text);
     changed = TRUE;
   }
 

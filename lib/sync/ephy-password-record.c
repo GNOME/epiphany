@@ -333,8 +333,7 @@ ephy_password_record_set_password (EphyPasswordRecord *self,
 {
   g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
-  g_free (self->password);
-  self->password = g_strdup (password);
+  g_set_str (&self->password, password);
 }
 
 const char *
@@ -434,6 +433,5 @@ ephy_password_record_set_username (EphyPasswordRecord *self,
 {
   g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
-  g_free (self->username);
-  self->username = g_strdup (username);
+  g_set_str (&self->username, username);
 }
