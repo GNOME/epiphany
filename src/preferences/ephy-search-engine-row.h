@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "ephy-search-engine.h"
-
 #include <adwaita.h>
+
+#include "ephy-search-engine.h"
 
 G_BEGIN_DECLS
 

@@ -20,11 +20,11 @@
 
 #pragma once
 
-#include "ephy-password-record.h"
-
 #include <glib-object.h>
 #include <jsc/jsc.h>
 #include <libsecret/secret.h>
+
+#include "ephy-password-record.h"
 
 G_BEGIN_DECLS
 

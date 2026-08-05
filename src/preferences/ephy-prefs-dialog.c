@@ -22,20 +22,21 @@
 
 #include "config.h"
 
+#include "ephy-prefs-dialog.h"
+
 #include "autofill-view.h"
 #include "clear-data-view.h"
 #include "ephy-data-view.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-prefs.h"
-#include "ephy-prefs-dialog.h"
 #include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-web-extension.h"
 #include "extension-view.h"
+#include "prefs-extensions-page.h"
 #include "prefs-features-page.h"
 #include "prefs-general-page.h"
-#include "prefs-extensions-page.h"
 #include "prefs-search-engine-page.h"
 #include "webapp-additional-urls-dialog.h"
 

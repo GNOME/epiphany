@@ -20,11 +20,11 @@
 
 #pragma once
 
-#include "ephy-bookmark.h"
-#include "ephy-window.h"
-
 #include <adwaita.h>
 #include <gtk/gtk.h>
+
+#include "ephy-bookmark.h"
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 

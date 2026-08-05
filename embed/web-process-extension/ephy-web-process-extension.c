@@ -19,7 +19,19 @@
  */
 
 #include "config.h"
+
 #include "ephy-web-process-extension.h"
+
+#include <string.h>
+
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <glib/gprintf.h>
+#include <gtk/gtk.h>
+#include <jsc/jsc.h>
+#include <libsoup/soup.h>
+#include <pwquality.h>
+#include <webkit/webkit-web-process-extension.h>
 
 #include "ephy-autofill-field.h"
 #include "ephy-debug.h"
@@ -30,16 +42,6 @@
 #include "ephy-uri-helpers.h"
 #include "ephy-web-overview-model.h"
 #include "ephy-webextension-common.h"
-
-#include <gio/gio.h>
-#include <glib/gi18n.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
-#include <jsc/jsc.h>
-#include <libsoup/soup.h>
-#include <pwquality.h>
-#include <string.h>
-#include <webkit/webkit-web-process-extension.h>
 
 struct _EphyWebProcessExtension {
   GObject parent_instance;

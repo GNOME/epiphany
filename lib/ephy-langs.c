@@ -19,11 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-langs.h"
 
-#include "gnome-languages.h"
-
 #include <string.h>
+
+#include "gnome-languages.h"
 
 /* sanitise the languages list according to the rules for HTTP accept-language
  * in RFC 2616, Sect. 14.4

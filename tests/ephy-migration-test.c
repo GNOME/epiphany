@@ -20,13 +20,14 @@
 
 #include "config.h"
 
+#include <errno.h>
+
+#include <gtk/gtk.h>
+
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-profile-utils.h"
-
-#include <errno.h>
-#include <gtk/gtk.h>
 
 static char *
 create_test_profile_dir (void)

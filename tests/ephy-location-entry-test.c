@@ -19,12 +19,14 @@
  */
 
 #include "config.h"
+
+#include <glib.h>
+#include <gtk/gtk.h>
+
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-location-entry.h"
 #include "ephy-title-widget.h"
-#include <glib.h>
-#include <gtk/gtk.h>
 
 static void
 test_entry_new (void)

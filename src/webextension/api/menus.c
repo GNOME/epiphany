@@ -20,12 +20,12 @@
 
 #include "config.h"
 
-#include "ephy-json-utils.h"
-#include "ephy-web-view.h"
-#include "ephy-shell.h"
-
-#include "tabs.h"
 #include "menus.h"
+
+#include "ephy-json-utils.h"
+#include "ephy-shell.h"
+#include "ephy-web-view.h"
+#include "tabs.h"
 
 typedef enum {
   MENU_CONTEXT_AUDIO = 1 << 0,

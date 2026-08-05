@@ -25,20 +25,20 @@
 
 #include "config.h"
 
-#include "ephy-embed-shell.h"
-#include "ephy-file-helpers.h"
-#include "ephy-json-utils.h"
-#include "ephy-shell.h"
-#include "ephy-string.h"
 #include "ephy-web-extension.h"
-#include "ephy-window.h"
-
-#include "tabs.h"
 
 #include <archive.h>
 #include <archive_entry.h>
 #include <glib/gstdio.h>
 #include <json-glib/json-glib.h>
+
+#include "ephy-embed-shell.h"
+#include "ephy-file-helpers.h"
+#include "ephy-json-utils.h"
+#include "ephy-shell.h"
+#include "ephy-string.h"
+#include "ephy-window.h"
+#include "tabs.h"
 
 typedef struct  {
   GPtrArray *allow_list;

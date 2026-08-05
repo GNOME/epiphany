@@ -19,14 +19,15 @@
  */
 
 #include "config.h"
+
 #include "ephy-bookmark.h"
+
+#include <string.h>
 
 #include "ephy-bookmarks-manager.h"
 #include "ephy-shell.h"
-#include "ephy-synchronizable.h"
 #include "ephy-sync-utils.h"
-
-#include <string.h>
+#include "ephy-synchronizable.h"
 
 #define BOOKMARK_TYPE_VAL            "bookmark"
 #define BOOKMARK_PARENT_ID_VAL       "toolbar"

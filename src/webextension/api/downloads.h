@@ -21,10 +21,11 @@
 
 #pragma once
 
-#include "ephy-download.h"
-#include "ephy-web-extension.h"
-
 #include <webkit/webkit.h>
+
+#include "ephy-download.h"
+#include "ephy-web-extension-manager.h"
+#include "ephy-web-extension.h"
 
 G_BEGIN_DECLS
 

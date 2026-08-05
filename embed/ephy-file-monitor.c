@@ -19,11 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-file-monitor.h"
 
-#include "ephy-debug.h"
-
 #include <string.h>
+
+#include "ephy-debug.h"
 
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */

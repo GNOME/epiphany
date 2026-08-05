@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include "ephy-webapp-provider-generated.h"
-
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+
+#include "ephy-webapp-provider-generated.h"
 
 G_BEGIN_DECLS
 

@@ -20,16 +20,18 @@
  */
 
 #include "config.h"
+
 #include "ephy-permissions-manager.h"
 
-#include "ephy-file-helpers.h"
-#include "ephy-string.h"
+#include <stdlib.h>
+#include <string.h>
 
 #define G_SETTINGS_ENABLE_BACKEND 1
 #include <gio/gsettingsbackend.h>
-#include <stdlib.h>
-#include <string.h>
 #include <webkit/webkit.h>
+
+#include "ephy-file-helpers.h"
+#include "ephy-string.h"
 
 struct _EphyPermissionsManager {
   GObject parent_instance;

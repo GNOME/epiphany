@@ -19,20 +19,21 @@
  */
 
 #include "config.h"
+
 #include "ephy-filters-manager.h"
+
+#include <inttypes.h>
+
+#include <gio/gio.h>
 
 #include "ephy-debug.h"
 #include "ephy-download.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-langs.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
-#include "ephy-embed-shell.h"
-
-#include <gio/gio.h>
-
-#include <inttypes.h>
 
 #define ADBLOCK_FILTER_UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
 #define ADBLOCK_FILTER_UPDATE_FREQUENCY_METERED 28 * 24 * 60 * 60 /* In seconds */

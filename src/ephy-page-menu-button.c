@@ -20,11 +20,11 @@
 
 #include "ephy-page-menu-button.h"
 
+#include <libportal/portal-helpers.h>
+
 #include "ephy-desktop-utils.h"
 #include "ephy-embed-shell.h"
 #include "ephy-flatpak-utils.h"
-
-#include <libportal/portal-helpers.h>
 
 struct _EphyPageMenuButton {
   AdwBin parent_instance;

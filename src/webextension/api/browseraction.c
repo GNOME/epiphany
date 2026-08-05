@@ -20,14 +20,14 @@
 
 #include "config.h"
 
+#include "browseraction.h"
+
 #include <time.h>
 
 #include "ephy-embed-utils.h"
-#include "ephy-shell.h"
 #include "ephy-json-utils.h"
+#include "ephy-shell.h"
 #include "ephy-window.h"
-
-#include "browseraction.h"
 
 static void
 browseraction_handler_set_badge_text (EphyWebExtensionSender *sender,

@@ -19,17 +19,19 @@
  */
 
 #include "config.h"
-#include "ephy-debug.h"
-#include "ephy-download.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-file-helpers.h"
-#include "ephy-shell.h"
+
+#include <string.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
-#include <string.h>
+
+#include "ephy-debug.h"
+#include "ephy-download.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-file-helpers.h"
+#include "ephy-shell.h"
 
 #define HTML_STRING "testing-ephy-download"
 SoupURI *base_uri;

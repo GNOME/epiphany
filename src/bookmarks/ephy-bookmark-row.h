@@ -20,10 +20,10 @@
 
 #pragma once
 
+#include <gtk/gtk.h>
+
 #include "ephy-bookmark.h"
 #include "ephy-link.h"
-
-#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

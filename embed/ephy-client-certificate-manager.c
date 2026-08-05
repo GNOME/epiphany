@@ -20,13 +20,13 @@
 
 #include "ephy-client-certificate-manager.h"
 
+#include <adwaita.h>
 #define GCK_API_SUBJECT_TO_CHANGE
 #include <gck/gck.h>
 #define GCR_API_SUBJECT_TO_CHANGE
 #include <gcr/gcr.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <adwaita.h>
 
 #include "ephy-web-view.h"
 

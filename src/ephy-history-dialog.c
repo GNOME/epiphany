@@ -23,7 +23,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-history-dialog.h"
+
+#include <ctype.h>
+#include <string.h>
+#include <time.h>
+
+#include <adwaita.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
@@ -33,16 +42,9 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-snapshot-service.h"
-#include "ephy-uri-helpers.h"
 #include "ephy-time-helpers.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-window.h"
-
-#include <adwaita.h>
-#include <ctype.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <string.h>
-#include <time.h>
 
 #define NUM_FETCH_LIMIT 15
 

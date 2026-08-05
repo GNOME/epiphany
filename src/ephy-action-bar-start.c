@@ -22,10 +22,10 @@
 #include "ephy-action-bar-start.h"
 
 #include "ephy-desktop-utils.h"
-#include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
+#include "ephy-embed.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"

@@ -20,11 +20,11 @@
 
 #include "config.h"
 
-#include "ephy-embed-utils.h"
-#include "ephy-web-extension-manager.h"
-#include "ephy-shell.h"
-
 #include "runtime.h"
+
+#include "ephy-embed-utils.h"
+#include "ephy-shell.h"
+#include "ephy-web-extension-manager.h"
 
 static void
 runtime_handler_get_browser_info (EphyWebExtensionSender *sender,

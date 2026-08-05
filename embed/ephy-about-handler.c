@@ -19,10 +19,15 @@
  */
 
 #include "config.h"
+
 #include "ephy-about-handler.h"
 
-#include "ephy-embed-shell.h"
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
@@ -32,10 +37,6 @@
 #include "ephy-smaps.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-web-app-utils.h"
-
-#include <gio/gio.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 
 struct _EphyAboutHandler {
   GObject parent_instance;

@@ -22,9 +22,9 @@
 
 #include "ephy-search-engine-listbox.h"
 
-#include "ephy-search-engine-row.h"
 #include "embed/ephy-embed-shell.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-search-engine-row.h"
 
 enum {
   ADD_SEARCH_ENGINE_ROW_ACTIVATED,

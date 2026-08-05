@@ -20,11 +20,11 @@
 
 #include "config.h"
 
-#include "ephy-shell.h"
-#include "ephy-web-extension.h"
+#include "notifications.h"
 
 #include "api-utils.h"
-#include "notifications.h"
+#include "ephy-shell.h"
+#include "ephy-web-extension.h"
 
 static char *
 create_extension_notification_id (EphyWebExtension *web_extension,

@@ -20,12 +20,11 @@
 
 #pragma once
 
-#include "ephy-shell-search-provider-generated.h"
+#include <gio/gio.h>
+#include <glib-object.h>
 
 #include "ephy-embed-shell.h"
-
-#include <glib-object.h>
-#include <gio/gio.h>
+#include "ephy-shell-search-provider-generated.h"
 
 G_BEGIN_DECLS
 

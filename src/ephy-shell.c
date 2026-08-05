@@ -21,7 +21,11 @@
  */
 
 #include "config.h"
+
 #include "ephy-shell.h"
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "ephy-debug.h"
 #include "ephy-desktop-utils.h"
@@ -34,8 +38,8 @@
 #include "ephy-link.h"
 #include "ephy-lockdown.h"
 #include "ephy-notification.h"
-#include "ephy-prefs.h"
 #include "ephy-prefs-dialog.h"
+#include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
@@ -46,9 +50,6 @@
 #include "ephy-web-view.h"
 #include "ephy-window.h"
 #include "window-commands.h"
-
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 
 #ifdef USE_GRANITE
 #include <granite-7.h>

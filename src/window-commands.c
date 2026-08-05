@@ -25,6 +25,17 @@
 
 #include "window-commands.h"
 
+#include <string.h>
+
+#include <adwaita.h>
+#include <gio/gio.h>
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gst/gst.h>
+#include <gtk/gtk.h>
+#include <libportal-gtk4/portal-gtk4.h>
+#include <webkit/webkit.h>
+
 #include "clear-data-view.h"
 #include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-export.h"
@@ -66,16 +77,6 @@
 #include "ephy-zoom.h"
 #include "prefs-general-page.h"
 #include "prefs-search-engine-page.h"
-
-#include <gio/gio.h>
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <gst/gst.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <webkit/webkit.h>
-#include <libportal-gtk4/portal-gtk4.h>
-#include <adwaita.h>
 
 #define DEFAULT_ICON_SIZE 192
 #define FAVICON_SIZE 16

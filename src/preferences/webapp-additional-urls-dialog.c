@@ -19,14 +19,15 @@
  */
 
 #include "config.h"
+
 #include "webapp-additional-urls-dialog.h"
+
+#include <glib/gi18n.h>
+#include <libsoup/soup.h>
 
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-uri-helpers.h"
-
-#include <glib/gi18n.h>
-#include <libsoup/soup.h>
 
 struct _EphyWebappAdditionalURLsDialog {
   AdwNavigationPage parent_instance;

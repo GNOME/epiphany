@@ -19,10 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-sqlite-statement.h"
 
-#include "ephy-sqlite-connection.h"
 #include <sqlite3.h>
+
+#include "ephy-sqlite-connection.h"
 
 enum {
   PROP_0,

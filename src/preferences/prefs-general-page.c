@@ -21,7 +21,10 @@
  */
 
 #include "config.h"
+
 #include "prefs-general-page.h"
+
+#include <glib/gi18n.h>
 
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
@@ -29,13 +32,11 @@
 #include "ephy-lang-row.h"
 #include "ephy-langs.h"
 #include "ephy-location-entry.h"
-#include "ephy-settings.h"
 #include "ephy-search-engine-listbox.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-web-app-utils.h"
-
 #include "gnome-languages.h"
-#include <glib/gi18n.h>
 
 enum {
   WEBAPP_ADDITIONAL_URLS_ROW_ACTIVATED,

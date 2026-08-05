@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <gdk/gdk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdk.h>
 
 GdkTexture *ephy_texture_new_for_pixbuf (GdkPixbuf *pixbuf);
 

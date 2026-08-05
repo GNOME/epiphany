@@ -19,18 +19,19 @@
  */
 
 #include "config.h"
+
+#include <glib.h>
+#include <gtk/gtk.h>
+
 #include "ephy-debug.h"
-#include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
+#include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
 #include "ephy-test-utils.h"
 #include "ephy-window.h"
-
-#include <glib.h>
-#include <gtk/gtk.h>
 
 static void
 test_ephy_shell_basic_embeds (void)

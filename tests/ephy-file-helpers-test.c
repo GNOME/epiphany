@@ -19,12 +19,13 @@
  */
 
 #include "config.h"
-#include "ephy-debug.h"
-#include "ephy-file-helpers.h"
-#include "ephy-settings.h"
 
 #include <glib.h>
 #include <gtk/gtk.h>
+
+#include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-settings.h"
 
 static void
 test_ephy_file_helpers_init (void)

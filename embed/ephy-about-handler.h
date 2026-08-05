@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-history-service.h"
-
 #include <webkit/webkit.h>
+
+#include "ephy-history-service.h"
 
 G_BEGIN_DECLS
 

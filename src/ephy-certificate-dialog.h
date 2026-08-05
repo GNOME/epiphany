@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include "ephy-security-levels.h"
-
-#include <gio/gio.h>
 #include <adwaita.h>
+#include <gio/gio.h>
+
+#include "ephy-security-levels.h"
 
 G_BEGIN_DECLS
 

@@ -19,14 +19,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-string.h"
 
 #include <errno.h>
-#include <gio/gio.h>
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+
+#include <gio/gio.h>
 
 gboolean
 ephy_string_to_int (const char *string,

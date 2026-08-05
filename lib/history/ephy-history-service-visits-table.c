@@ -20,8 +20,8 @@
 
 #include "config.h"
 
-#include "ephy-history-service.h"
 #include "ephy-history-service-private.h"
+#include "ephy-history-service.h"
 
 gboolean
 ephy_history_service_initialize_visits_table (EphyHistoryService *self)

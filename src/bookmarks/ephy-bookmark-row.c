@@ -20,8 +20,11 @@
 
 #include "config.h"
 
-#include "ephy-bookmark-properties.h"
 #include "ephy-bookmark-row.h"
+
+#include <adwaita.h>
+
+#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-container.h"
@@ -30,8 +33,6 @@
 #include "ephy-favicon-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-
-#include <adwaita.h>
 
 struct _EphyBookmarkRow {
   AdwActionRow parent_instance;

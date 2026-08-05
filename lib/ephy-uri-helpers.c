@@ -20,10 +20,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-uri-helpers.h"
 
-#include <glib.h>
 #include <string.h>
+
+#include <glib.h>
 #include <webkit/webkit.h>
 
 /* Use this function to format a URI for display. The URIs used

@@ -21,9 +21,9 @@
 #pragma once
 
 #include <glib-object.h>
-#include "ephy-sqlite-statement.h"
-
 #include <sqlite3.h>
+
+#include "ephy-sqlite-statement.h"
 
 G_BEGIN_DECLS
 

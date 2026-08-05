@@ -19,19 +19,21 @@
  */
 
 #include "config.h"
-#include "ephy-history-service.h"
 
 #include "ephy-history-service-private.h"
+#include "ephy-history-service.h"
+
+#include <errno.h>
+
+#include <glib.h>
+#include <glib/gstdio.h>
+
 #include "ephy-history-types.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
 #include "ephy-sync-utils.h"
-
-#include <errno.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 
 typedef gboolean (*EphyHistoryServiceMethod)      (EphyHistoryService *self,
                                                    gpointer            data,

@@ -22,6 +22,13 @@
 
 #include "ephy-search-provider.h"
 
+#include <string.h>
+
+#include <gio/gdesktopappinfo.h>
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <libsoup/soup.h>
+
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -30,12 +37,6 @@
 #include "ephy-shell.h"
 #include "ephy-suggestion-model.h"
 #include "ephy-uri-helpers.h"
-
-#include <gio/gio.h>
-#include <gio/gdesktopappinfo.h>
-#include <glib/gi18n.h>
-#include <libsoup/soup.h>
-#include <string.h>
 
 struct _EphySearchProvider {
   GApplication parent_instance;

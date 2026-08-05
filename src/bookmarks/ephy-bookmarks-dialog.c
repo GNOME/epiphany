@@ -22,16 +22,16 @@
 
 #include "ephy-bookmarks-dialog.h"
 
-#include "ephy-bookmark.h"
+#include <adwaita.h>
+#include <glib/gi18n.h>
+
 #include "ephy-bookmark-row.h"
+#include "ephy-bookmark.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-link.h"
 #include "ephy-shell.h"
-
-#include <adwaita.h>
-#include <glib/gi18n.h>
 
 struct _EphyBookmarksDialog {
   AdwBin parent_instance;

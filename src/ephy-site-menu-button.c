@@ -19,7 +19,10 @@
  */
 
 #include "config.h"
+
 #include "ephy-site-menu-button.h"
+
+#include <webkit/webkit.h>
 
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
@@ -27,8 +30,6 @@
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
-
-#include <webkit/webkit.h>
 
 struct _EphySiteMenuButton {
   GtkButton parent_instance;

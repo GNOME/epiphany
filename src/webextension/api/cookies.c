@@ -19,11 +19,11 @@
 
 #include "config.h"
 
-#include "ephy-json-utils.h"
-#include "ephy-shell.h"
+#include "cookies.h"
 
 #include "api-utils.h"
-#include "cookies.h"
+#include "ephy-json-utils.h"
+#include "ephy-shell.h"
 
 static WebKitCookieManager *
 get_cookie_manager (void)

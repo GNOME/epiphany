@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "ephy-embed.h"
-
 #include <webkit/webkit.h>
+
+#include "ephy-embed.h"
 
 #define USER_STYLESHEET_FILENAME	"user-stylesheet.css"
 #define USER_JAVASCRIPT_FILENAME	"user-javascript.js"

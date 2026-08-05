@@ -22,6 +22,10 @@
 
 #pragma once
 
+#include <glib-object.h>
+#include <glib.h>
+#include <webkit/webkit.h>
+
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
@@ -30,13 +34,9 @@
 #include "ephy-password-manager.h"
 #include "ephy-session.h"
 #include "ephy-sync-service.h"
-#include "ephy-web-extension-manager.h"
 #include "ephy-web-app-utils.h"
+#include "ephy-web-extension-manager.h"
 #include "ephy-window.h"
-
-#include <webkit/webkit.h>
-#include <glib-object.h>
-#include <glib.h>
 
 G_BEGIN_DECLS
 

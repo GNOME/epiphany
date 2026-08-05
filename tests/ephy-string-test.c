@@ -19,10 +19,11 @@
  */
 
 #include "config.h"
-#include "ephy-string.h"
 
 #include <glib.h>
 #include <gtk/gtk.h>
+
+#include "ephy-string.h"
 
 typedef struct {
   const char *uri;

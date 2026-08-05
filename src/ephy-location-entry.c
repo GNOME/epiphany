@@ -24,7 +24,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-location-entry.h"
+
+#include <string.h>
+
+#include <adwaita.h>
+#include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <webkit/webkit.h>
 
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
@@ -42,13 +51,6 @@
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-web-view.h"
-
-#include <adwaita.h>
-#include <gdk/gdkkeysyms.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <webkit/webkit.h>
 
 #define PAGE_STEP 20
 

@@ -24,10 +24,9 @@
 #include "ephy-search-engine-manager.h"
 
 #include "ephy-file-helpers.h"
-#include "ephy-string.h"
-
-#include "ephy-settings.h"
 #include "ephy-prefs.h"
+#include "ephy-settings.h"
+#include "ephy-string.h"
 
 struct _EphySearchEngineManager {
   GObject parent_instance;

@@ -20,10 +20,10 @@
 
 #pragma once
 
+#include <glib-object.h>
+
 #include "ephy-open-tabs-record.h"
 #include "ephy-tabs-catalog.h"
-
-#include <glib-object.h>
 
 G_BEGIN_DECLS
 

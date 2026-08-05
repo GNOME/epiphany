@@ -20,11 +20,12 @@
 
 #include "config.h"
 
+#include "ephy-zoom.h"
+
 #include <glib.h>
 
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-zoom.h"
 
 #define NUM_ZOOM_STEPS 14
 

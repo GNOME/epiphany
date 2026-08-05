@@ -19,13 +19,15 @@
  */
 
 #include "config.h"
+
 #include "ephy-sqlite-connection.h"
 
-#include "ephy-lib-type-builtins.h"
-
 #include <errno.h>
+
 #include <glib/gstdio.h>
 #include <sqlite3.h>
+
+#include "ephy-lib-type-builtins.h"
 
 struct _EphySQLiteConnection {
   GObject parent_instance;

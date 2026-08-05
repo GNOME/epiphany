@@ -19,15 +19,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-download-widget.h"
+
+#include <glib/gi18n.h>
+#include <webkit/webkit.h>
 
 #include "ephy-debug.h"
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-uri-helpers.h"
-
-#include <glib/gi18n.h>
-#include <webkit/webkit.h>
 
 struct _EphyDownloadWidget {
   AdwBin parent_instance;

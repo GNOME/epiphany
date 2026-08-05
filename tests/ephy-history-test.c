@@ -19,12 +19,13 @@
  */
 
 #include "config.h"
-#include "ephy-debug.h"
-#include "ephy-file-helpers.h"
-#include "ephy-history-service.h"
 
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+
+#include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-history-service.h"
 
 static const char *
 test_db_filename (void)

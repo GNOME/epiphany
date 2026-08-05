@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-synchronizable-manager.h"
-
 #include <glib-object.h>
+
+#include "ephy-synchronizable-manager.h"
 
 G_BEGIN_DECLS
 

@@ -23,8 +23,9 @@
 
 #pragma once
 
-#include "ephy-web-view.h"
 #include <webkit/webkit.h>
+
+#include "ephy-web-view.h"
 
 G_BEGIN_DECLS
 

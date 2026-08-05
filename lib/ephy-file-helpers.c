@@ -22,17 +22,15 @@
  */
 
 #include "config.h"
+
 #include "ephy-file-helpers.h"
 
-#include "ephy-debug.h"
-#include "ephy-flatpak-utils.h"
-#include "ephy-prefs.h"
-#include "ephy-profile-utils.h"
-#include "ephy-settings.h"
-#include "ephy-string.h"
-#include "ephy-web-app-utils.h"
-
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <gdk/gdk.h>
 #include <gio/gdesktopappinfo.h>
 #include <gio/gio.h>
@@ -42,10 +40,14 @@
 #include <gtk/gtk.h>
 #include <libportal/portal-helpers.h>
 #include <libxml/xmlreader.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
+
+#include "ephy-debug.h"
+#include "ephy-flatpak-utils.h"
+#include "ephy-prefs.h"
+#include "ephy-profile-utils.h"
+#include "ephy-settings.h"
+#include "ephy-string.h"
+#include "ephy-web-app-utils.h"
 
 /**
  * SECTION:ephy-file-helpers

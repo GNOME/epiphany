@@ -20,10 +20,11 @@
 
 #include "config.h"
 
-#include "ephy-sqlite-connection.h"
-#include "ephy-sqlite-statement.h"
 #include <glib.h>
 #include <gtk/gtk.h>
+
+#include "ephy-sqlite-connection.h"
+#include "ephy-sqlite-statement.h"
 
 static void
 test_create_connection (void)

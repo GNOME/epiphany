@@ -25,10 +25,10 @@
 #ifndef EPHY_TEST_UTILS_H
 #define EPHY_TEST_UTILS_H
 
+#include <glib.h>
+
 #include "ephy-embed.h"
 #include "ephy-web-view.h"
-
-#include <glib.h>
 
 G_BEGIN_DECLS
 

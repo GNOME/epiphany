@@ -19,11 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-test-utils.h"
 
-#include "ephy-embed-shell.h"
-
 #include <glib.h>
+
+#include "ephy-embed-shell.h"
 
 static guint web_view_ready_counter = 0;
 

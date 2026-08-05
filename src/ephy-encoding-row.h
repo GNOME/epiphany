@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include "ephy-encoding.h"
 #include <gtk/gtk.h>
+
+#include "ephy-encoding.h"
 
 G_BEGIN_DECLS
 

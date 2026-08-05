@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-window.h"
-
 #include <gtk/gtk.h>
+
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 

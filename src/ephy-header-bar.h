@@ -24,8 +24,8 @@
 
 #include "ephy-action-bar-end.h"
 #include "ephy-action-bar-start.h"
-#include "ephy-title-widget.h"
 #include "ephy-adaptive-mode.h"
+#include "ephy-title-widget.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS

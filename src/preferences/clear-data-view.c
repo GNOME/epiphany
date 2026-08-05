@@ -19,15 +19,17 @@
  */
 
 #include "config.h"
+
 #include "clear-data-view.h"
+
+#include <string.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <string.h>
 #include <webkit/webkit.h>
 
-#include "ephy-history-service.h"
 #include "ephy-embed-shell.h"
+#include "ephy-history-service.h"
 #include "ephy-settings.h"
 
 struct _ClearDataView {

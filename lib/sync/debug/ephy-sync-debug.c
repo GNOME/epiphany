@@ -19,15 +19,17 @@
  */
 
 #include "config.h"
+
 #include "ephy-sync-debug.h"
+
+#include <string.h>
+
+#include <libsoup/soup.h>
 
 #include "ephy-debug.h"
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
-
-#include <libsoup/soup.h>
-#include <string.h>
 
 static JsonObject *
 ephy_sync_debug_load_secrets (void)

@@ -23,22 +23,23 @@
  */
 
 #include "config.h"
+
 #include "ephy-embed.h"
+
+#include <glib/gi18n.h>
+#include <webkit/webkit.h>
 
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-floating-bar.h"
 #include "ephy-notification-container.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-web-view.h"
-#include "ephy-floating-bar.h"
-
-#include <glib/gi18n.h>
-#include <webkit/webkit.h>
 
 static void     ephy_embed_constructed (GObject *object);
 static void     ephy_embed_restored_window_cb (EphyEmbedShell *shell,

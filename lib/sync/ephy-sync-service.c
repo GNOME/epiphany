@@ -19,7 +19,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-sync-service.h"
+
+#include <inttypes.h>
+#include <math.h>
+#include <string.h>
+
+#include <glib/gi18n.h>
+#include <json-glib/json-glib.h>
+#include <libsoup/soup.h>
 
 #include "ephy-debug.h"
 #include "ephy-notification.h"
@@ -27,13 +36,6 @@
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
 #include "ephy-user-agent.h"
-
-#include <glib/gi18n.h>
-#include <json-glib/json-glib.h>
-#include <inttypes.h>
-#include <libsoup/soup.h>
-#include <math.h>
-#include <string.h>
 
 struct _EphySyncService {
   GObject parent_instance;

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <time.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 

@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <glib.h>
 #include <gio/gio.h>
+#include <glib.h>
 
 #include "ephy-prefs.h"
 

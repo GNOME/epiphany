@@ -20,17 +20,18 @@
 
 #include "config.h"
 
+#include <locale.h>
+
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
+#include "ephy-sqlite-connection.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-sqlite-connection.h"
-
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <locale.h>
 
 static int do_step_n = -1;
 static int migration_version = -1;

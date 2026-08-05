@@ -22,6 +22,18 @@
 
 #include "config.h"
 
+#include <errno.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/resource.h>
+
+#include <glib-unix.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <libxml/xmlreader.h>
+#include <libxml/xmlversion.h>
+
 #include "ephy-debug.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -31,17 +43,6 @@
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
-
-#include <errno.h>
-#include <glib/gi18n.h>
-#include <glib-unix.h>
-#include <gtk/gtk.h>
-#include <libxml/xmlreader.h>
-#include <libxml/xmlversion.h>
-#include <signal.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/resource.h>
 
 static gboolean open_in_new_window = FALSE;
 

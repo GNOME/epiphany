@@ -22,14 +22,14 @@
 
 #include "prefs-appearance-page.h"
 
+#include <math.h>
+
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-zoom.h"
-
-#include <math.h>
 
 struct _PrefsAppearancePage {
   AdwPreferencesPage parent_instance;

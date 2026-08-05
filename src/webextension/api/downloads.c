@@ -20,11 +20,11 @@
 
 #include "config.h"
 
-#include "ephy-file-helpers.h"
-#include "ephy-web-extension-manager.h"
+#include "downloads.h"
 
 #include "api-utils.h"
-#include "downloads.h"
+#include "ephy-file-helpers.h"
+#include "ephy-web-extension-manager.h"
 
 static EphyDownloadsManager *
 get_downloads_manager (void)

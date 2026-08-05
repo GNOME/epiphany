@@ -20,7 +20,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-location-controller.h"
+
+#include <string.h>
+
+#include <gtk/gtk.h>
 
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
@@ -31,10 +36,6 @@
 #include "ephy-suggestion-model.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
-
-#include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
-#include <string.h>
 
 /**
  * SECTION:ephy-location-controller

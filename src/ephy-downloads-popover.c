@@ -19,13 +19,14 @@
  */
 
 #include "config.h"
+
 #include "ephy-downloads-popover.h"
 
-#include "ephy-downloads-manager.h"
-#include "ephy-download-widget.h"
-#include "ephy-embed-shell.h"
-
 #include <glib/gi18n.h>
+
+#include "ephy-download-widget.h"
+#include "ephy-downloads-manager.h"
+#include "ephy-embed-shell.h"
 
 struct _EphyDownloadsPopover {
   GtkPopover parent_instance;

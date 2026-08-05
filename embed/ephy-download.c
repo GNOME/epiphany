@@ -20,19 +20,21 @@
 
 #include "config.h"
 
-#include "ephy-debug.h"
 #include "ephy-download.h"
-#include "ephy-embed.h"
+
+#include <errno.h>
+#include <string.h>
+
+#include <glib/gi18n.h>
+
+#include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
+#include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
-
-#include <errno.h>
-#include <glib/gi18n.h>
-#include <string.h>
 
 struct _EphyDownload {
   GObject parent_instance;

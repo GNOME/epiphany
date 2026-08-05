@@ -19,12 +19,13 @@
  */
 
 #include "config.h"
-#include "ephy-favicon-helpers.h"
 
-#include "ephy-pixbuf-utils.h"
+#include "ephy-favicon-helpers.h"
 
 #include <gdk/gdk.h>
 #include <glib.h>
+
+#include "ephy-pixbuf-utils.h"
 
 GIcon *
 ephy_favicon_get_from_texture_scaled (GdkTexture *texture,

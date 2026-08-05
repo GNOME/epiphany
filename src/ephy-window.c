@@ -22,7 +22,17 @@
  */
 
 #include "config.h"
+
 #include "ephy-window.h"
+
+#include <stdlib.h>
+
+#include <gdk/gdkkeysyms.h>
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <libportal-gtk4/portal-gtk4.h>
+#include <webkit/webkit.h>
 
 #include "context-menu-commands.h"
 #include "ephy-action-bar.h"
@@ -63,15 +73,6 @@
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
 #include "window-commands.h"
-
-#include <gdk/gdkkeysyms.h>
-#include <gio/gio.h>
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <libportal-gtk4/portal-gtk4.h>
-#include <stdlib.h>
-
-#include <webkit/webkit.h>
 
 /**
  * SECTION:ephy-window

@@ -21,9 +21,9 @@
 
 #include <config.h>
 
-#include <string.h>
-
 #include "ephy-floating-bar.h"
+
+#include <string.h>
 
 #define HOVER_HIDE_TIMEOUT_INTERVAL 100
 

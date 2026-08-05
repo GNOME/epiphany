@@ -19,10 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-data-view.h"
 
-#include <adwaita.h>
 #include <ctype.h>
+
+#include <adwaita.h>
 
 typedef struct {
   GtkWidget *toast_overlay;

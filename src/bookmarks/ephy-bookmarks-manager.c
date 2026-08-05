@@ -19,7 +19,10 @@
  */
 
 #include "config.h"
+
 #include "ephy-bookmarks-manager.h"
+
+#include <string.h>
 
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
@@ -28,8 +31,6 @@
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
-
-#include <string.h>
 
 #define EPHY_BOOKMARKS_FILE "bookmarks.gvdb"
 

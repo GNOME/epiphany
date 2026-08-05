@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include "ephy-bookmark.h"
-
-#include <glib/gi18n.h>
 #include <gio/gio.h>
+#include <glib/gi18n.h>
+
+#include "ephy-bookmark.h"
 
 G_BEGIN_DECLS
 

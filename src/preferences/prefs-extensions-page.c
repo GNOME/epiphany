@@ -24,8 +24,8 @@
 #include "prefs-extensions-page.h"
 
 #include "ephy-pixbuf-utils.h"
-#include "ephy-web-extension.h"
 #include "ephy-web-extension-manager.h"
+#include "ephy-web-extension.h"
 
 enum {
   EXTENSION_ROW_ACTIVATED,

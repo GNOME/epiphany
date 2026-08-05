@@ -19,7 +19,14 @@
  */
 
 #include "config.h"
+
 #include "ephy-reader-handler.h"
+
+#include <string.h>
+
+#include <adwaita.h>
+#include <gio/gio.h>
+#include <glib/gi18n.h>
 
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
@@ -27,11 +34,6 @@
 #include "ephy-output-encoding.h"
 #include "ephy-settings.h"
 #include "ephy-web-view.h"
-
-#include <adwaita.h>
-#include <gio/gio.h>
-#include <glib/gi18n.h>
-#include <string.h>
 
 struct _EphyReaderHandler {
   GObject parent_instance;

@@ -22,17 +22,20 @@
 #define _GNU_SOURCE
 
 #include <config.h>
-#include "ephy-file-helpers.h"
+
 #include "ephy-flatpak-utils.h"
 
 #include <errno.h>
 #include <fcntl.h>
-#include <gio/gio.h>
-#include <gio/gunixfdlist.h>
-#include <libportal-gtk4/portal-gtk4.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#include <gio/gio.h>
+#include <gio/gunixfdlist.h>
+#include <libportal-gtk4/portal-gtk4.h>
+
+#include "ephy-file-helpers.h"
 
 static void
 opened_uri (GObject      *object,

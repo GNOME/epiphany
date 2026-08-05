@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <glib-object.h>
 #include <adwaita.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

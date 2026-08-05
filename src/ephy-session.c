@@ -22,7 +22,13 @@
  */
 
 #include "config.h"
+
 #include "ephy-session.h"
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <libxml/tree.h>
+#include <libxml/xmlwriter.h>
 
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
@@ -31,18 +37,13 @@
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-link.h"
-#include "ephy-tab-view.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-tab-view.h"
+#include "ephy-tab-view.h"
 #include "ephy-window.h"
-
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <libxml/tree.h>
-#include <libxml/xmlwriter.h>
 
 typedef struct {
   EphyTabView *tab_view; /* nullable, weak ref */

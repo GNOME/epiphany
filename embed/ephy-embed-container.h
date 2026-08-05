@@ -20,11 +20,11 @@
 
 #pragma once
 
-#include "ephy-embed.h"
-#include "ephy-web-view.h"
-
 #include <glib-object.h>
 #include <glib.h>
+
+#include "ephy-embed.h"
+#include "ephy-web-view.h"
 
 G_BEGIN_DECLS
 

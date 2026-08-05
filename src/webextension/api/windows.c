@@ -19,11 +19,11 @@
 
 #include "config.h"
 
+#include "windows.h"
+
 #include "ephy-link.h"
 #include "ephy-shell.h"
-
 #include "tabs.h"
-#include "windows.h"
 
 EphyWindow *
 ephy_web_extension_api_windows_get_window_for_id (gint64 window_id)

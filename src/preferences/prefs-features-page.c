@@ -20,12 +20,13 @@
 
 #include "prefs-features-page.h"
 
+#include <webkit/webkit.h>
+
 #include "ephy-adaptive-mode.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-prefs-dialog.h"
 #include "ephy-settings.h"
-#include <webkit/webkit.h>
 
 struct _PrefsFeaturesPage {
   AdwPreferencesPage parent_instance;

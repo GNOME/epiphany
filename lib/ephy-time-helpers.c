@@ -26,14 +26,16 @@
 
 #include <config.h>
 
+#include "ephy-time-helpers.h"
+
 #include <string.h>
+
 #include <gdesktop-enums.h>
 #include <gio/gio.h>
-#include <glib/gi18n.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "ephy-settings.h"
-#include "ephy-time-helpers.h"
 
 /* Legal conversion specifiers, as specified in the C standard. */
 #define C_STANDARD_STRFTIME_CHARACTERS "aAbBcdHIjmMpSUwWxXyYZ"

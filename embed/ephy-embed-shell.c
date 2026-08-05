@@ -20,7 +20,13 @@
  */
 
 #include <config.h>
+
 #include "ephy-embed-shell.h"
+
+#include <stdlib.h>
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "ephy-about-handler.h"
 #include "ephy-autofill-field.h"
@@ -44,10 +50,6 @@
 #include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
-
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <stdlib.h>
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"

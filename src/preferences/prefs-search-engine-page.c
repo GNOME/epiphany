@@ -19,10 +19,11 @@
  */
 
 #include "config.h"
+
 #include "prefs-search-engine-page.h"
 
-#include "ephy-search-engine.h"
 #include "ephy-search-engine-manager.h"
+#include "ephy-search-engine.h"
 
 struct _PrefsSearchEnginePage {
   AdwNavigationPage parent_instance;

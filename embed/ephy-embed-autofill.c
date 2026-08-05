@@ -21,14 +21,15 @@
  */
 
 #include "config.h"
+
 #include "ephy-embed-autofill.h"
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "ephy-autofill-fill-choice.h"
 #include "ephy-autofill-storage.h"
 #include "ephy-settings.h"
-
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 
 static void
 autofill_fill_button_clicked_cb (GAction     *action,

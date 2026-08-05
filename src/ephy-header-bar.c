@@ -21,7 +21,11 @@
  */
 
 #include "config.h"
+
 #include "ephy-header-bar.h"
+
+#include <adwaita.h>
+#include <glib/gi18n.h>
 
 #include "ephy-desktop-utils.h"
 #include "ephy-embed-utils.h"
@@ -34,9 +38,6 @@
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
-
-#include <adwaita.h>
-#include <glib/gi18n.h>
 
 #define POPOVER_HIDE_DELAY 300
 

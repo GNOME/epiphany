@@ -19,9 +19,10 @@
  */
 
 #include "config.h"
-#include "ephy-uri-helpers.h"
 
 #include <glib.h>
+
+#include "ephy-uri-helpers.h"
 
 static void
 test_ephy_uri_decode (void)

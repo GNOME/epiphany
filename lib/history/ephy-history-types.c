@@ -18,9 +18,9 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
-
 #include "ephy-history-types.h"
+
+#include <glib.h>
 
 EphyHistoryPageVisit *
 ephy_history_page_visit_new_with_url (EphyHistoryURL           *url,

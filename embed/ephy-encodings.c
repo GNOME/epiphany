@@ -21,13 +21,14 @@
  */
 
 #include "config.h"
+
 #include "ephy-encodings.h"
+
+#include <glib/gi18n.h>
 
 #include "ephy-debug.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-
-#include <glib/gi18n.h>
 
 struct _EphyEncodings {
   GObject parent_instance;

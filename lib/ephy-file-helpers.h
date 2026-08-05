@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include <glib.h>
 #include <gio/gio.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 #include <libportal/portal-helpers.h>
 

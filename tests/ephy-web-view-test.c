@@ -19,6 +19,14 @@
  */
 
 #include "config.h"
+
+#include <string.h>
+
+#include <glib.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <libsoup/soup.h>
+
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
@@ -28,12 +36,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
-
-#include <glib.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <libsoup/soup.h>
-#include <string.h>
 
 #define HTML_STRING "testing-ephy-web-view"
 #define SERVER_PORT 12321

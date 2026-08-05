@@ -20,15 +20,16 @@
 
 #include "config.h"
 
+#include <locale.h>
+
+#include <gtk/gtk.h>
+
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-
-#include <gtk/gtk.h>
-#include <locale.h>
 
 /* TODO: don't hardcode the number of encodings in ephy-encodings.c here! */
 #define NUM_ENCODINGS 78

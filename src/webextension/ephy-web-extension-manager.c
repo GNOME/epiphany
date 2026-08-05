@@ -20,21 +20,12 @@
 
 #include "config.h"
 
-#include "ephy-browser-action.h"
-#include "ephy-debug.h"
-#include "ephy-embed-shell.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-embed-utils.h"
-#include "ephy-file-helpers.h"
-#include "ephy-header-bar.h"
-#include "ephy-location-entry.h"
-#include "ephy-notification.h"
-#include "ephy-settings.h"
-#include "ephy-shell.h"
-#include "ephy-string.h"
-#include "ephy-web-extension.h"
 #include "ephy-web-extension-manager.h"
-#include "ephy-web-view.h"
+
+#include <adwaita.h>
+#include <archive.h>
+#include <archive_entry.h>
+#include <json-glib/json-glib.h>
 
 #include "api/alarms.h"
 #include "api/browseraction.h"
@@ -48,11 +39,20 @@
 #include "api/storage.h"
 #include "api/tabs.h"
 #include "api/windows.h"
-
-#include <adwaita.h>
-#include <archive.h>
-#include <archive_entry.h>
-#include <json-glib/json-glib.h>
+#include "ephy-browser-action.h"
+#include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-embed-utils.h"
+#include "ephy-file-helpers.h"
+#include "ephy-header-bar.h"
+#include "ephy-location-entry.h"
+#include "ephy-notification.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
+#include "ephy-string.h"
+#include "ephy-web-extension.h"
+#include "ephy-web-view.h"
 
 static void handle_message_reply (EphyWebExtension *web_extension,
                                   JsonArray        *args);

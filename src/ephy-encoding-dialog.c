@@ -21,20 +21,21 @@
  */
 
 #include "config.h"
+
 #include "ephy-encoding-dialog.h"
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <webkit/webkit.h>
 
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
-#include "ephy-encodings.h"
 #include "ephy-encoding-row.h"
+#include "ephy-encodings.h"
 #include "ephy-shell.h"
-
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <webkit/webkit.h>
 
 struct _EphyEncodingDialog {
   AdwDialog parent_instance;

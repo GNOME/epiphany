@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "ephy-history-service.h"
 #include "ephy-sqlite-connection.h"
 
 G_BEGIN_DECLS

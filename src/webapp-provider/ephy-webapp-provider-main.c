@@ -20,11 +20,12 @@
 
 #include "config.h"
 
-#include "ephy-webapp-provider.h"
-#include "ephy-file-helpers.h"
+#include <locale.h>
 
 #include <glib/gi18n.h>
-#include <locale.h>
+
+#include "ephy-file-helpers.h"
+#include "ephy-webapp-provider.h"
 
 int
 main (int    argc,

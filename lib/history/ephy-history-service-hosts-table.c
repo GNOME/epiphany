@@ -20,10 +20,11 @@
 
 #include "config.h"
 
-#include "ephy-history-service.h"
-#include "ephy-history-service-private.h"
-#include "ephy-string.h"
 #include <glib/gi18n.h>
+
+#include "ephy-history-service-private.h"
+#include "ephy-history-service.h"
+#include "ephy-string.h"
 
 gboolean
 ephy_history_service_initialize_hosts_table (EphyHistoryService *self)

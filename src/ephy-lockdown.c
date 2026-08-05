@@ -21,7 +21,10 @@
  */
 
 #include "config.h"
+
 #include "ephy-lockdown.h"
+
+#include <gtk/gtk.h>
 
 #include "ephy-action-helper.h"
 #include "ephy-debug.h"
@@ -33,8 +36,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
-
-#include <gtk/gtk.h>
 
 #define LOCKDOWN_FLAG 1 << 8
 

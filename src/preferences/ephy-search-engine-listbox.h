@@ -20,10 +20,10 @@
 
 #pragma once
 
+#include <adwaita.h>
+
 #include "ephy-search-engine-row.h"
 #include "ephy-search-engine.h"
-
-#include <adwaita.h>
 
 G_BEGIN_DECLS
 

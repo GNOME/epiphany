@@ -20,10 +20,10 @@
 
 #pragma once
 
+#include <glib-object.h>
+
 #include "ephy-history-record.h"
 #include "ephy-history-service.h"
-
-#include <glib-object.h>
 
 G_BEGIN_DECLS
 

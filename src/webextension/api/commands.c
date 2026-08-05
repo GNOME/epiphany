@@ -19,10 +19,10 @@
 
 #include "config.h"
 
-#include "ephy-shell.h"
+#include "commands.h"
 
 #include "api-utils.h"
-#include "commands.h"
+#include "ephy-shell.h"
 
 static void
 on_command_activated (GAction  *action,

@@ -18,11 +18,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-suggestion.h"
 
-#include "ephy-uri-helpers.h"
-
 #include <glib.h>
+
+#include "ephy-uri-helpers.h"
 
 struct _EphySuggestion {
   DzlSuggestion parent;

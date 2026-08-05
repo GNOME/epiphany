@@ -19,16 +19,18 @@
  */
 
 #include "config.h"
+
 #include "ephy-view-source-handler.h"
+
+#include <string.h>
+
+#include <gio/gio.h>
+#include <glib/gi18n.h>
 
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-output-encoding.h"
 #include "ephy-web-view.h"
-
-#include <gio/gio.h>
-#include <glib/gi18n.h>
-#include <string.h>
 
 struct _EphyViewSourceHandler {
   GObject parent_instance;

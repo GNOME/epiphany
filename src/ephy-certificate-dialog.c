@@ -21,16 +21,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-certificate-dialog.h"
 
-#include "ephy-uri-helpers.h"
-#include "ephy-lib-type-builtins.h"
-
 #include <adwaita.h>
-#define GCK_API_SUBJECT_TO_CHANGE
 #define GCR_API_SUBJECT_TO_CHANGE
 #include <gcr-4/gcr/gcr.h>
 #include <glib/gi18n.h>
+
+#include "ephy-lib-type-builtins.h"
+#include "ephy-uri-helpers.h"
 
 /**
  * SECTION:ephy-certificate-dialog

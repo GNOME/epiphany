@@ -20,7 +20,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-web-view.h"
+
+#include <adwaita.h>
+#include <gio/gio.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <jsc/jsc.h>
+#include <webkit/webkit.h>
 
 #include "ephy-about-handler.h"
 #include "ephy-autofill-field.h"
@@ -52,14 +61,6 @@
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
-
-#include <adwaita.h>
-#include <gio/gio.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <jsc/jsc.h>
-#include <webkit/webkit.h>
 
 /**
  * SECTION:ephy-web-view

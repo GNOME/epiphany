@@ -19,8 +19,10 @@
  */
 
 #include "config.h"
-#include "ephy-lib-type-builtins.h"
+
 #include "ephy-title-widget.h"
+
+#include "ephy-lib-type-builtins.h"
 
 G_DEFINE_INTERFACE (EphyTitleWidget, ephy_title_widget, GTK_TYPE_WIDGET);
 

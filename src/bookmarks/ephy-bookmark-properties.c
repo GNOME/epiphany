@@ -22,17 +22,18 @@
 
 #include "ephy-bookmark-properties.h"
 
+#include <string.h>
+
+#include <adwaita.h>
+#include <glib/gi18n.h>
+#include <libsoup/soup.h>
+
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-shell.h"
 #include "ephy-type-builtins.h"
 #include "ephy-uri-helpers.h"
-
-#include <adwaita.h>
-#include <glib/gi18n.h>
-#include <libsoup/soup.h>
-#include <string.h>
 
 struct _EphyBookmarkProperties {
   AdwDialog parent_instance;

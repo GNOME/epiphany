@@ -7,10 +7,11 @@
  */
 
 #include "config.h"
+
 #include "ephy-indicator-bin-private.h"
 
-#include "ephy-gizmo-private.h"
 #include "adw-widget-utils-private.h"
+#include "ephy-gizmo-private.h"
 
 /**
  * EphyIndicatorBin:

@@ -19,15 +19,16 @@
  */
 
 #include "config.h"
+
 #include "ephy-bookmarks-import.h"
+
+#include <glib/gi18n.h>
 
 #include "ephy-shell.h"
 #include "ephy-sqlite-connection.h"
 #include "ephy-sync-utils.h"
 #include "gvdb-builder.h"
 #include "gvdb-reader.h"
-
-#include <glib/gi18n.h>
 
 GQuark bookmarks_import_error_quark (void);
 G_DEFINE_QUARK (BookmarksImportErrorQuark, bookmarks_import_error)

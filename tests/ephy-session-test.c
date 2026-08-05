@@ -19,20 +19,22 @@
  */
 
 #include "config.h"
+
+#include <string.h>
+
+#include <gdk/gdkx.h>
+#include <glib.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
+#include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-session.h"
 #include "ephy-test-utils.h"
-
-#include <glib.h>
-#include <glib/gstdio.h>
-#include <gdk/gdkx.h>
-#include <gtk/gtk.h>
-#include <string.h>
 
 const char *session_data =
   "<?xml version=\"1.0\"?>"

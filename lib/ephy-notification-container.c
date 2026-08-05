@@ -19,8 +19,10 @@
  */
 
 #include "config.h"
-#include "ephy-notification.h"
+
 #include "ephy-notification-container.h"
+
+#include "ephy-notification.h"
 
 struct _EphyNotificationContainer {
   AdwBin parent_instance;

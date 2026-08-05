@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include "ephy-sync-crypto.h"
-
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
+
+#include "ephy-sync-crypto.h"
 
 G_BEGIN_DECLS
 

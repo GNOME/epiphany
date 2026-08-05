@@ -19,12 +19,13 @@
  */
 
 #include "config.h"
+
 #include "ephy-user-agent.h"
+
+#include <webkit/webkit.h>
 
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
-
-#include <webkit/webkit.h>
 
 const char *
 ephy_user_agent_get (void)

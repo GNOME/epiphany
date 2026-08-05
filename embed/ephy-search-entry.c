@@ -19,10 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-search-entry.h"
-#include "ephy-embed-type-builtins.h"
 
 #include <glib/gi18n.h>
+
+#include "ephy-embed-type-builtins.h"
 
 struct _EphySearchEntry {
   GtkWidget parent_instance;

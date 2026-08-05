@@ -19,16 +19,18 @@
  */
 
 #include "config.h"
+
 #include "ephy-password-manager.h"
+
+#include <inttypes.h>
+#include <stdio.h>
+
+#include <glib/gi18n.h>
 
 #include "ephy-debug.h"
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
-
-#include <glib/gi18n.h>
-#include <inttypes.h>
-#include <stdio.h>
 
 void
 ephy_password_request_data_free (EphyPasswordRequestData *request_data)

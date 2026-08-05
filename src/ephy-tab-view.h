@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-embed.h"
-
 #include <adwaita.h>
+
+#include "ephy-embed.h"
 
 G_BEGIN_DECLS
 

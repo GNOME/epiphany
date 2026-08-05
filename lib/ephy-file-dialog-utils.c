@@ -24,8 +24,8 @@
 
 #include "ephy-file-dialog-utils.h"
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 static const char *webpage_types[] = {
   "text/html",

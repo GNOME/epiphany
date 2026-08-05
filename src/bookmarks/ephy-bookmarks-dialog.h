@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-bookmark.h"
-
 #include <adwaita.h>
+
+#include "ephy-bookmark.h"
 
 G_BEGIN_DECLS
 

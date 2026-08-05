@@ -22,7 +22,14 @@
  */
 
 #include "config.h"
+
 #include "ephy-embed-utils.h"
+
+#include <string.h>
+
+#include <glib/gi18n.h>
+#include <jsc/jsc.h>
+#include <libsoup/soup.h>
 
 #include "ephy-about-handler.h"
 #include "ephy-embed-shell.h"
@@ -33,11 +40,6 @@
 #include "ephy-string.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
-
-#include <glib/gi18n.h>
-#include <jsc/jsc.h>
-#include <libsoup/soup.h>
-#include <string.h>
 
 static GRegex *non_search_regex;
 static GRegex *domain_regex;

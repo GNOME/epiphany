@@ -21,10 +21,10 @@
 
 #pragma once
 
+#include <gtk/gtk.h>
+
 #include "ephy-find-toolbar.h"
 #include "ephy-web-view.h"
-
-#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

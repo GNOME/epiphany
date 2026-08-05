@@ -21,11 +21,11 @@
 
 #include "config.h"
 
+#include "storage.h"
+
 #include "ephy-embed-utils.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
-
-#include "storage.h"
 
 static void
 storage_handler_local_set (EphyWebExtensionSender *sender,

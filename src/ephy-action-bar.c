@@ -23,10 +23,10 @@
 
 #include "ephy-downloads-paintable.h"
 #include "ephy-downloads-popover.h"
-#include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
+#include "ephy-embed.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-page-menu-button.h"
 #include "ephy-settings.h"

@@ -19,12 +19,13 @@
  */
 
 #include "config.h"
+
 #include "ephy-profile-utils.h"
+
+#include <string.h>
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-
-#include <string.h>
 
 #define PROFILE_MIGRATION_FILE ".migrated"
 

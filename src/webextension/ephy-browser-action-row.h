@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-browser-action.h"
-
 #include <gtk/gtk.h>
+
+#include "ephy-browser-action.h"
 
 G_BEGIN_DECLS
 

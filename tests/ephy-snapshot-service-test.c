@@ -19,11 +19,13 @@
  */
 
 #include "config.h"
-#include "ephy-debug.h"
-#include "ephy-snapshot-service.h"
+
+#include <string.h>
 
 #include <libsoup/soup.h>
-#include <string.h>
+
+#include "ephy-debug.h"
+#include "ephy-snapshot-service.h"
 
 #define TEST_SERVER_URI "http://127.0.0.1:45716"
 static time_t mtime;

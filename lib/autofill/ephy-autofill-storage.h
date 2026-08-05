@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "ephy-autofill-field.h"
-
 #include <gio/gio.h>
+
+#include "ephy-autofill-field.h"
 
 G_BEGIN_DECLS
 

@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
 
 #include "ephy-history-types.h"
 #include "ephy-sqlite-connection.h"

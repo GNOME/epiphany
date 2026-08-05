@@ -19,10 +19,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-desktop-utils.h"
-#include "ephy-embed-utils.h"
 
 #include <gtk/gtk.h>
+
+#include "ephy-embed-utils.h"
 
 gboolean
 is_desktop_pantheon (void)

@@ -21,14 +21,15 @@
 
 #pragma once
 
-#include "ephy-debug.h"
-#include "ephy-json-utils.h"
-#include "ephy-window.h"
+#include <string.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gio/gio.h>
-#include <string.h>
 #include <webkit/webkit.h>
+
+#include "ephy-debug.h"
+#include "ephy-json-utils.h"
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 

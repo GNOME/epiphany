@@ -19,17 +19,19 @@
  */
 
 #include "config.h"
+
 #include "ephy-sync-utils.h"
 
-#include "ephy-settings.h"
-
 #include <errno.h>
-#include <glib/gi18n.h>
 #include <inttypes.h>
-#include <json-glib/json-glib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <glib/gi18n.h>
+#include <json-glib/json-glib.h>
 #include <webkit/webkit.h>
+
+#include "ephy-settings.h"
 #if defined(__linux__)
 #include <sys/random.h>
 #elif defined(__FreeBSD__) || defined(__OpenBSD__)

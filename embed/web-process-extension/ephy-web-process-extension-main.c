@@ -20,10 +20,10 @@
 
 #include "config.h"
 
-#include "ephy-web-process-extension.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
+#include "ephy-web-process-extension.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-prototypes"

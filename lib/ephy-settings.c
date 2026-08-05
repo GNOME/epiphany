@@ -19,14 +19,15 @@
  */
 
 #include "config.h"
+
 #include "ephy-settings.h"
+
+#include <gio/gio.h>
+#include <glib.h>
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-web-app-utils.h"
-
-#include <glib.h>
-#include <gio/gio.h>
 
 static GHashTable *settings = NULL;
 

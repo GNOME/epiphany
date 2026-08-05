@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "ephy-web-extension.h"
-
 #include <webkit/webkit.h>
+
+#include "ephy-web-extension.h"
 
 G_BEGIN_DECLS
 

@@ -20,11 +20,13 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
+#include "autofill-view.h"
+
 #include <string.h>
 
-#include "autofill-view.h"
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 #include "ephy-autofill-field.h"
 #include "ephy-autofill-storage.h"
 #include "ephy-shell.h"

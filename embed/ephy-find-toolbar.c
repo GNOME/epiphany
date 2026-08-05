@@ -20,18 +20,19 @@
  */
 
 #include "config.h"
+
 #include "ephy-find-toolbar.h"
 
-#include "ephy-debug.h"
-#include "ephy-search-entry.h"
-
 #include <math.h>
+#include <string.h>
 
 #include <adwaita.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <string.h>
 #include <webkit/webkit.h>
+
+#include "ephy-debug.h"
+#include "ephy-search-entry.h"
 
 struct _EphyFindToolbar {
   AdwBin parent_instance;

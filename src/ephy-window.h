@@ -20,14 +20,14 @@
 
 #pragma once
 
+#include <adwaita.h>
+
 #include "ephy-bookmarks-dialog.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed.h"
 #include "ephy-location-controller.h"
 #include "ephy-tab-view.h"
 #include "ephy-web-view.h"
-
-#include <adwaita.h>
 
 G_BEGIN_DECLS
 

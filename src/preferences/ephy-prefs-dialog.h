@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "ephy-window.h"
-
 #include <adwaita.h>
+
+#include "ephy-window.h"
 
 G_BEGIN_DECLS
 

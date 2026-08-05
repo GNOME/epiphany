@@ -20,10 +20,11 @@
  */
 
 #include "ephy-action-bar-end.h"
-#include "ephy-bookmarks-dialog.h"
+
 #include "ephy-bookmark-properties.h"
-#include "ephy-browser-action.h"
+#include "ephy-bookmarks-dialog.h"
 #include "ephy-browser-action-row.h"
+#include "ephy-browser-action.h"
 #include "ephy-desktop-utils.h"
 #include "ephy-downloads-paintable.h"
 #include "ephy-downloads-popover.h"

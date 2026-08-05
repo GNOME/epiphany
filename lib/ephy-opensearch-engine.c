@@ -21,12 +21,12 @@
 
 #include "ephy-opensearch-engine.h"
 
-#include "ephy-user-agent.h"
-
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <libsoup/soup.h>
 #include <pango/pango.h>
-#include <gtk/gtk.h>
+
+#include "ephy-user-agent.h"
 
 /* This code handles all the parsing of the OpenSearch description file, and
  * creates a new EphySearchEngine from it.

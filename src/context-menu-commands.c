@@ -20,7 +20,15 @@
  */
 
 #include "config.h"
+
 #include "context-menu-commands.h"
+
+#include <string.h>
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <libportal-gtk4/portal-gtk4.h>
+#include <webkit/webkit.h>
 
 #include "ephy-bookmark-properties.h"
 #include "ephy-downloads-manager.h"
@@ -33,12 +41,6 @@
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
 #include "window-commands.h"
-
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
-#include <libportal-gtk4/portal-gtk4.h>
-#include <string.h>
-#include <webkit/webkit.h>
 
 typedef enum {
   NEW_WINDOW,

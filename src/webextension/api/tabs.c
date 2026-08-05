@@ -20,13 +20,13 @@
 
 #include "config.h"
 
+#include "tabs.h"
+
+#include "api-utils.h"
 #include "ephy-embed-utils.h"
 #include "ephy-reader-handler.h"
 #include "ephy-shell.h"
 #include "ephy-window.h"
-
-#include "api-utils.h"
-#include "tabs.h"
 
 /* Matches Firefox. */
 static const int WINDOW_ID_CURRENT = -2;

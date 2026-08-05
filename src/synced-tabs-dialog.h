@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ephy-open-tabs-manager.h"
-
 #include <adwaita.h>
+
+#include "ephy-open-tabs-manager.h"
 
 G_BEGIN_DECLS
 

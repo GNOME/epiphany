@@ -17,8 +17,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-suggestion-model.h"
 
+#include <glib/gi18n.h>
+
+#include "dzl-fuzzy-mutable-index.h"
 #include "ephy-about-handler.h"
 #include "ephy-embed-shell.h"
 #include "ephy-prefs.h"
@@ -27,9 +31,6 @@
 #include "ephy-suggestion.h"
 #include "ephy-user-agent.h"
 #include "ephy-window.h"
-
-#include "dzl-fuzzy-mutable-index.h"
-#include <glib/gi18n.h>
 
 #define MAX_SEARCH_ENGINES_SUGGESTIONS 5
 #define MAX_URL_ENTRIES             25

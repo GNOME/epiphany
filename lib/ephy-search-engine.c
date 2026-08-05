@@ -19,14 +19,15 @@
  */
 
 #include "config.h"
-#include "ephy-search-engine.h"
 
-#include "ephy-suggestion.h"
-#include "ephy-user-agent.h"
+#include "ephy-search-engine.h"
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
+
+#include "ephy-suggestion.h"
+#include "ephy-user-agent.h"
 
 struct _EphySearchEngine {
   GObject parent_instance;

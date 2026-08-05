@@ -22,11 +22,11 @@
 
 #include "ephy-webapp-provider.h"
 
-#include "ephy-web-app-utils.h"
-#include "ephy-flatpak-utils.h"
-
 #include <gio/gio.h>
 #include <glib/gi18n.h>
+
+#include "ephy-flatpak-utils.h"
+#include "ephy-web-app-utils.h"
 
 struct _EphyWebAppProviderService {
   GApplication parent_instance;

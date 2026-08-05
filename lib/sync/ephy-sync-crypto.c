@@ -19,26 +19,28 @@
  */
 
 #include "config.h"
+
 #include "ephy-sync-crypto.h"
+
+#include <inttypes.h>
+#include <string.h>
+
+#include <glib/gstdio.h>
+#include <json-glib/json-glib.h>
+#include <nettle/aes.h>
+#include <nettle/bignum.h>
+#include <nettle/cbc.h>
+#include <nettle/ecc-curve.h>
+#include <nettle/ecc.h>
+#include <nettle/gcm.h>
+#include <nettle/hkdf.h>
+#include <nettle/hmac.h>
+#include <nettle/sha2.h>
+#include <nettle/version.h>
 
 #include "ephy-debug.h"
 #include "ephy-string.h"
 #include "ephy-sync-utils.h"
-
-#include <glib/gstdio.h>
-#include <inttypes.h>
-#include <json-glib/json-glib.h>
-#include <nettle/aes.h>
-#include <nettle/cbc.h>
-#include <nettle/ecc.h>
-#include <nettle/ecc-curve.h>
-#include <nettle/gcm.h>
-#include <nettle/hkdf.h>
-#include <nettle/hmac.h>
-#include <nettle/bignum.h>
-#include <nettle/sha2.h>
-#include <nettle/version.h>
-#include <string.h>
 
 #if !NETTLE_USE_MINI_GMP
 #include <gmp.h>

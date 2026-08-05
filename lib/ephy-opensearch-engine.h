@@ -20,10 +20,11 @@
 
 #pragma once
 
-#include <glib.h>
 #include <gio/gio.h>
-#include "ephy-search-engine.h"
+#include <glib.h>
+
 #include "ephy-opensearch-autodiscovery-link.h"
+#include "ephy-search-engine.h"
 
 EphySearchEngine *ephy_opensearch_engine_load_from_data        (EphyOpensearchAutodiscoveryLink  *autodiscovery_link,
                                                                 const char                       *description_file,

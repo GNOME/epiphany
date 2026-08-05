@@ -20,12 +20,13 @@
 
 #include "config.h"
 
-#include "ephy-search-provider.h"
-#include "ephy-shell.h"
-#include "ephy-file-helpers.h"
+#include <locale.h>
 
 #include <glib/gi18n.h>
-#include <locale.h>
+
+#include "ephy-file-helpers.h"
+#include "ephy-search-provider.h"
+#include "ephy-shell.h"
 
 gint
 main (gint    argc,

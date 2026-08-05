@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2019-2022 Jan-Michael Brummer <jan.brummer@tabos.org>
+ *  Copyright © 2019-2026 Jan-Michael Brummer <jan.brummer@tabos.org>
  *
  *  This file is part of Epiphany.
  *
@@ -21,11 +21,11 @@
 
 #pragma once
 
-G_BEGIN_DECLS
-
 #include <glib.h>
 
 #include "ephy-web-extension.h"
+
+G_BEGIN_DECLS
 
 #define EPHY_TYPE_WEB_EXTENSION_MANAGER (ephy_web_extension_manager_get_type ())
 

@@ -19,12 +19,13 @@
  */
 
 #include "config.h"
-#include "ephy-encoding-row.h"
 
-#include "ephy-encoding.h"
+#include "ephy-encoding-row.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+
+#include "ephy-encoding.h"
 
 struct _EphyEncodingRow {
   GtkBox parent_instance;

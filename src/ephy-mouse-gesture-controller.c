@@ -20,14 +20,16 @@
 
 #include "config.h"
 
-#include "ephy-embed.h"
 #include "ephy-mouse-gesture-controller.h"
+
+#include <math.h>
+
+#include <gtk/gtk.h>
+
+#include "ephy-embed.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-window.h"
-
-#include <math.h>
-#include <gtk/gtk.h>
 
 #define NUM_SEQUENCES 2
 

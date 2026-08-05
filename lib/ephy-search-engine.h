@@ -21,10 +21,10 @@
 
 #pragma once
 
-#include "ephy-opensearch-autodiscovery-link.h"
-
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+
+#include "ephy-opensearch-autodiscovery-link.h"
 
 G_BEGIN_DECLS
 

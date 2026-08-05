@@ -19,12 +19,14 @@
  */
 
 #include "config.h"
+
 #include "ephy-smaps.h"
 
 #include <errno.h>
-#include <gio/gio.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <gio/gio.h>
 
 struct _EphySMaps {
   GObject parent_instance;

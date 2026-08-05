@@ -22,15 +22,16 @@
 
 #include "ephy-debug.h"
 
-#include <string.h>
-#ifdef HAVE_EXECINFO_H
-#include <execinfo.h>
-#endif
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include <glib.h>
 
+#ifdef HAVE_EXECINFO_H
+#include <execinfo.h>
+#endif
 /**
  * SECTION:ephy-debug
  * @short_description: Epiphany debugging and profiling facilities

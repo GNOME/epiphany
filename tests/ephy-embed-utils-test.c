@@ -20,12 +20,12 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <gtk/gtk.h>
+
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
-
-#include <glib.h>
-#include <gtk/gtk.h>
 
 typedef struct {
   const char *name;

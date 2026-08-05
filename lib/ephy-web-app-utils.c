@@ -20,7 +20,20 @@
  */
 
 #include "config.h"
+
 #include "ephy-web-app-utils.h"
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <gio/gio.h>
+#include <gio/gunixoutputstream.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <libportal-gtk4/portal-gtk4.h>
+#include <libsoup/soup.h>
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
@@ -28,17 +41,6 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-uri-helpers.h"
-
-#include <errno.h>
-#include <gio/gio.h>
-#include <glib/gstdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <libportal-gtk4/portal-gtk4.h>
-#include <libsoup/soup.h>
-#include <glib/gi18n.h>
-#include <gio/gunixoutputstream.h>
 
 /* Web apps are installed in the default data dir of the user. Every
  * app has its own profile directory. To create a web app, an ID needs

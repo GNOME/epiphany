@@ -19,15 +19,16 @@
  */
 
 #include "config.h"
+
 #include "synced-tabs-dialog.h"
+
+#include <json-glib/json-glib.h>
 
 #include "ephy-desktop-utils.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-shell.h"
-
-#include <json-glib/json-glib.h>
 
 struct _SyncedTabsDialog {
   AdwWindow parent_instance;

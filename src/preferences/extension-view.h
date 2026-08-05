@@ -21,8 +21,9 @@
 #pragma once
 
 #include <adwaita.h>
-#include "ephy-web-extension.h"
+
 #include "ephy-web-extension-manager.h"
+#include "ephy-web-extension.h"
 
 G_BEGIN_DECLS
 

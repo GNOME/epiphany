@@ -19,18 +19,20 @@
  */
 
 #include "config.h"
+
 #include "ephy-snapshot-service.h"
 
-#include "ephy-file-helpers.h"
-#include "ephy-pixbuf-utils.h"
-
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <webkit/webkit.h>
+
+#include "ephy-file-helpers.h"
+#include "ephy-pixbuf-utils.h"
 
 struct _EphySnapshotService {
   GObject parent_instance;
