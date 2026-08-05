@@ -112,7 +112,8 @@ ephy_browser_action_row_constructed (GObject *object)
                        ephy_browser_action_get_title (self->browser_action));
 
   pixbuf = ephy_browser_action_get_pixbuf (self->browser_action, 16);
-  texture = ephy_texture_new_for_pixbuf (pixbuf);
+  if (pixbuf)
+    texture = ephy_texture_new_for_pixbuf (pixbuf);
   gtk_image_set_from_paintable (GTK_IMAGE (self->browser_action_image), GDK_PAINTABLE (texture));
 
   ephy_indicator_bin_set_badge (EPHY_INDICATOR_BIN (self->badge), ephy_browser_action_get_badge_text (EPHY_BROWSER_ACTION (self->browser_action)));
