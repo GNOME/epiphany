@@ -4,7 +4,7 @@
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.llvm21"
+        "org.freedesktop.Sdk.Extension.llvm22"
     ],
     "command" : "ephy-wrapper",
     "tags" : [
@@ -40,14 +40,14 @@
         },
         {
             "name" : "webkitgtk",
-            "append-path": "/usr/lib/sdk/llvm21/bin",
-            "prepend-ld-library-path": "/usr/lib/sdk/llvm21/lib",
+            "append-path": "/usr/lib/sdk/llvm22/bin",
+            "prepend-ld-library-path": "/usr/lib/sdk/llvm22/lib",
             "buildsystem" : "cmake-ninja",
             "config-opts": [
                 "-DPORT=GTK",
                 "-DUSE_GTK4=ON",
-                "-DCMAKE_C_COMPILER=/usr/lib/sdk/llvm21/bin/clang",
-                "-DCMAKE_CXX_COMPILER=/usr/lib/sdk/llvm21/bin/clang++",
+                "-DCMAKE_C_COMPILER=/usr/lib/sdk/llvm22/bin/clang",
+                "-DCMAKE_CXX_COMPILER=/usr/lib/sdk/llvm22/bin/clang++",
                 "-DENABLE_SPEECH_SYNTHESIS=OFF",
                 "-DENABLE_WEBXR=OFF",
                 "-DENABLE_THUNDER=OFF",
