@@ -751,6 +751,8 @@ ephy_embed_constructed (GObject *object)
   WebKitWebInspector *inspector;
   GtkEventController *controller;
 
+  G_OBJECT_CLASS (ephy_embed_parent_class)->constructed (object);
+
   g_signal_connect_object (shell, "window-restored",
                            G_CALLBACK (ephy_embed_restored_window_cb), embed, G_CONNECT_DEFAULT);
 

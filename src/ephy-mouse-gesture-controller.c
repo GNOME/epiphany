@@ -263,6 +263,8 @@ ephy_mouse_gesture_controller_constructed (GObject *object)
 {
   EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (object);
 
+  G_OBJECT_CLASS (ephy_mouse_gesture_controller_parent_class)->constructed (object);
+
   ephy_mouse_gesture_controller_reset (self);
 
   self->gesture = gtk_gesture_drag_new ();
