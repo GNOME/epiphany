@@ -107,8 +107,12 @@ ephy_browser_action_get_property (GObject    *object,
     case PROP_WEB_EXTENSION:
       g_value_set_object (value, self->web_extension);
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_BADGE_TEXT:
+      g_value_set_string (value, self->badge_text);
+      break;
+    case PROP_BADGE_COLOR:
+      g_value_set_boxed (value, &self->badge_color);
+      break;
   }
 }
 
@@ -124,8 +128,12 @@ ephy_browser_action_set_property (GObject      *object,
     case PROP_WEB_EXTENSION:
       g_set_object (&self->web_extension, g_value_dup_object (value));
       break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_BADGE_TEXT:
+      g_set_str (&self->badge_text, g_value_get_string (value));
+      break;
+    case PROP_BADGE_COLOR:
+      self->badge_color = g_value_get_boxed (value);
+      break;
   }
 }
 
@@ -149,10 +157,10 @@ ephy_browser_action_class_init (EphyBrowserActionClass *klass)
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_BADGE_COLOR] =
-    g_param_spec_string ("badge-color",
-                         NULL, NULL,
-                         "",
-                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+    g_param_spec_boxed ("badge-color",
+                        NULL, NULL,
+                        GDK_TYPE_RGBA,
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
