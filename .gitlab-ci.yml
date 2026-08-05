@@ -84,7 +84,6 @@ check-potfiles:
 
 gobject-linter:
   stage: lint
-  allow_failure: true
   image:
     name: "ghcr.io/bilelmoussaoui/gobject-linter:latest"
     entrypoint: [""]
