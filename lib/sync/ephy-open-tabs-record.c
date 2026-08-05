@@ -49,15 +49,13 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyOpenTabsRecord, ephy_open_tabs_record, G_TYPE
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
                                                       ephy_synchronizable_iface_init))
 
-enum {
-  PROP_0,
-  PROP_ID,
+typedef enum {
+  PROP_ID = 1,
   PROP_CLIENT_NAME,
   PROP_TABS,
-  LAST_PROP
-};
+} EphyOpenTabsRecordProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_TABS + 1];
 
 static void
 ephy_open_tabs_record_set_property (GObject      *object,
@@ -67,7 +65,7 @@ ephy_open_tabs_record_set_property (GObject      *object,
 {
   EphyOpenTabsRecord *self = EPHY_OPEN_TABS_RECORD (object);
 
-  switch (prop_id) {
+  switch ((EphyOpenTabsRecordProps)prop_id) {
     case PROP_ID:
       g_free (self->id);
       self->id = g_value_dup_string (value);
@@ -93,7 +91,7 @@ ephy_open_tabs_record_get_property (GObject    *object,
 {
   EphyOpenTabsRecord *self = EPHY_OPEN_TABS_RECORD (object);
 
-  switch (prop_id) {
+  switch ((EphyOpenTabsRecordProps)prop_id) {
     case PROP_ID:
       g_value_set_string (value, self->id);
       break;
@@ -144,7 +142,7 @@ ephy_open_tabs_record_class_init (EphyOpenTabsRecordClass *klass)
                           NULL, NULL,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

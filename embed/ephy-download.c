@@ -69,16 +69,14 @@ struct _EphyDownload {
 
 G_DEFINE_FINAL_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_DOWNLOAD,
+typedef enum {
+  PROP_DOWNLOAD = 1,
   PROP_DESTINATION,
   PROP_ACTION,
   PROP_CONTENT_TYPE,
-  LAST_PROP
-};
+} EphyDownloadProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_CONTENT_TYPE + 1];
 
 enum {
   FILENAME_SUGGESTED,
@@ -100,7 +98,7 @@ ephy_download_get_property (GObject    *object,
 {
   EphyDownload *download = EPHY_DOWNLOAD (object);
 
-  switch (property_id) {
+  switch ((EphyDownloadProps)property_id) {
     case PROP_DOWNLOAD:
       g_value_set_object (value, ephy_download_get_webkit_download (download));
       break;
@@ -128,7 +126,7 @@ ephy_download_set_property (GObject      *object,
   EphyDownload *download;
   download = EPHY_DOWNLOAD (object);
 
-  switch (property_id) {
+  switch ((EphyDownloadProps)property_id) {
     case PROP_DESTINATION:
       ephy_download_set_destination (download, g_value_get_string (value));
       break;
@@ -544,7 +542,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   /**
    * EphyDownload::filename-suggested:

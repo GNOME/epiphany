@@ -48,17 +48,15 @@ struct _EphySearchEngine {
 
 G_DEFINE_FINAL_TYPE (EphySearchEngine, ephy_search_engine, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_NAME,
+typedef enum {
+  PROP_NAME = 1,
   PROP_URL,
   PROP_BANG,
   PROP_SUGGESTIONS_URL,
   PROP_OPENSEARCH_URL,
-  N_PROPS
-};
+} EphySearchEngineProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_OPENSEARCH_URL + 1];
 
 const char *
 ephy_search_engine_get_name (EphySearchEngine *self)
@@ -183,7 +181,7 @@ ephy_search_engine_get_property (GObject    *object,
 {
   EphySearchEngine *self = EPHY_SEARCH_ENGINE (object);
 
-  switch (prop_id) {
+  switch ((EphySearchEngineProps)prop_id) {
     case PROP_NAME:
       g_value_set_string (value, ephy_search_engine_get_name (self));
       break;
@@ -212,7 +210,7 @@ ephy_search_engine_set_property (GObject      *object,
 {
   EphySearchEngine *self = EPHY_SEARCH_ENGINE (object);
 
-  switch (prop_id) {
+  switch ((EphySearchEngineProps)prop_id) {
     case PROP_NAME:
       ephy_search_engine_set_name (self, g_value_get_string (value));
       break;
@@ -274,7 +272,7 @@ ephy_search_engine_class_init (EphySearchEngineClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static void

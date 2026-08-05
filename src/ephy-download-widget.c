@@ -44,13 +44,11 @@ struct _EphyDownloadWidget {
 
 G_DEFINE_FINAL_TYPE (EphyDownloadWidget, ephy_download_widget, ADW_TYPE_BIN)
 
-enum {
-  PROP_0,
-  PROP_DOWNLOAD,
-  LAST_PROP
-};
+typedef enum {
+  PROP_DOWNLOAD = 1,
+} EphyDownloadWidgetProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_DOWNLOAD + 1];
 
 static char *
 get_destination_basename_from_download (EphyDownload *ephy_download)
@@ -295,7 +293,7 @@ ephy_download_widget_get_property (GObject    *object,
 
   widget = EPHY_DOWNLOAD_WIDGET (object);
 
-  switch (property_id) {
+  switch ((EphyDownloadWidgetProps)property_id) {
     case PROP_DOWNLOAD:
       g_value_set_object (value, ephy_download_widget_get_download (widget));
       break;
@@ -314,7 +312,7 @@ ephy_download_widget_set_property (GObject      *object,
   EphyDownloadWidget *widget;
   widget = EPHY_DOWNLOAD_WIDGET (object);
 
-  switch (property_id) {
+  switch ((EphyDownloadWidgetProps)property_id) {
     case PROP_DOWNLOAD:
       widget->download = g_value_dup_object (value);
       break;
@@ -467,7 +465,7 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
                          G_TYPE_OBJECT,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

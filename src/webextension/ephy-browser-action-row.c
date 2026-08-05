@@ -37,13 +37,11 @@ struct _EphyBrowserActionRow {
 
 G_DEFINE_FINAL_TYPE (EphyBrowserActionRow, ephy_browser_action_row, GTK_TYPE_LIST_BOX_ROW)
 
-enum {
-  PROP_0,
-  PROP_BROWSER_ACTION,
-  LAST_PROP
-};
+typedef enum {
+  PROP_BROWSER_ACTION = 1,
+} EphyBrowserActionRowProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_BROWSER_ACTION + 1];
 
 static void
 ephy_browser_action_row_set_property (GObject      *object,
@@ -53,7 +51,7 @@ ephy_browser_action_row_set_property (GObject      *object,
 {
   EphyBrowserActionRow *self = EPHY_BROWSER_ACTION_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphyBrowserActionRowProps)prop_id) {
     case PROP_BROWSER_ACTION:
       self->browser_action = g_value_dup_object (value);
       break;
@@ -70,7 +68,7 @@ ephy_browser_action_row_get_property (GObject    *object,
 {
   EphyBrowserActionRow *self = EPHY_BROWSER_ACTION_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphyBrowserActionRowProps)prop_id) {
     case PROP_BROWSER_ACTION:
       g_value_set_object (value, ephy_browser_action_row_get_browser_action (self));
       break;
@@ -150,7 +148,7 @@ ephy_browser_action_row_class_init (EphyBrowserActionRowClass *klass)
                          EPHY_TYPE_BROWSER_ACTION,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/browser-action-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBrowserActionRow, browser_action_image);

@@ -97,13 +97,11 @@ struct _EphyHistoryDialog {
 
 G_DEFINE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, ADW_TYPE_DIALOG)
 
-enum {
-  PROP_0,
-  PROP_HISTORY_SERVICE,
-  LAST_PROP
-};
+typedef enum {
+  PROP_HISTORY_SERVICE = 1,
+} EphyHistoryDialogProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_HISTORY_SERVICE + 1];
 
 static gboolean add_urls_source (EphyHistoryDialog *self);
 static void set_is_selection_empty (EphyHistoryDialog *self,
@@ -800,7 +798,7 @@ ephy_history_dialog_set_property (GObject      *object,
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryDialogProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       set_history_service (self, g_value_get_object (value));
       break;
@@ -818,7 +816,7 @@ ephy_history_dialog_get_property (GObject    *object,
 {
   EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryDialogProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       g_value_set_object (value, self->history_service);
       break;
@@ -983,7 +981,7 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
                          EPHY_TYPE_HISTORY_SERVICE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/history-dialog.ui");

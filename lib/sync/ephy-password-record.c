@@ -47,9 +47,8 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyPasswordRecord, ephy_password_record, G_TYPE_
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
                                                       ephy_synchronizable_iface_init))
 
-enum {
-  PROP_0,
-  PROP_ID,                    /* Firefox Sync */
+typedef enum {
+  PROP_ID = 1,                    /* Firefox Sync */
   PROP_ORIGIN,                /* Epiphany && Firefox Sync */
   PROP_TARGET_ORIGIN,         /* Epiphany && Firefox Sync */
   PROP_USERNAME,              /* Epiphany && Firefox Sync */
@@ -58,10 +57,9 @@ enum {
   PROP_PASSWORD_FIELD,        /* Epiphany && Firefox Sync */
   PROP_TIME_CREATED,          /* Firefox Sync */
   PROP_TIME_PASSWORD_CHANGED, /* Firefox Sync */
-  LAST_PROP
-};
+} EphyPasswordRecordProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_TIME_PASSWORD_CHANGED + 1];
 
 static void
 ephy_password_record_set_property (GObject      *object,
@@ -71,7 +69,7 @@ ephy_password_record_set_property (GObject      *object,
 {
   EphyPasswordRecord *self = EPHY_PASSWORD_RECORD (object);
 
-  switch (prop_id) {
+  switch ((EphyPasswordRecordProps)prop_id) {
     case PROP_ID:
       g_free (self->id);
       self->id = g_value_dup_string (value);
@@ -119,7 +117,7 @@ ephy_password_record_get_property (GObject    *object,
 {
   EphyPasswordRecord *self = EPHY_PASSWORD_RECORD (object);
 
-  switch (prop_id) {
+  switch ((EphyPasswordRecordProps)prop_id) {
     case PROP_ID:
       g_value_set_string (value, self->id);
       break;
@@ -239,7 +237,7 @@ ephy_password_record_class_init (EphyPasswordRecordClass *klass)
                          0,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

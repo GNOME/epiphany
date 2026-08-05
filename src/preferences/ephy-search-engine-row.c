@@ -38,13 +38,11 @@ struct _EphySearchEngineRow {
 
 G_DEFINE_FINAL_TYPE (EphySearchEngineRow, ephy_search_engine_row, ADW_TYPE_ACTION_ROW)
 
-enum {
-  PROP_0,
-  PROP_SEARCH_ENGINE,
-  N_PROPS
-};
+typedef enum {
+  PROP_SEARCH_ENGINE = 1,
+} EphySearchEngineRowProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_SEARCH_ENGINE + 1];
 
 /***** Mostly public functions *****/
 
@@ -100,7 +98,7 @@ ephy_search_engine_row_set_property (GObject      *object,
 {
   EphySearchEngineRow *self = EPHY_SEARCH_ENGINE_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphySearchEngineRowProps)prop_id) {
     case PROP_SEARCH_ENGINE:
       self->engine = g_value_get_object (value);
       break;
@@ -146,7 +144,7 @@ ephy_search_engine_row_class_init (EphySearchEngineRowClass *klass)
                                                         EPHY_TYPE_SEARCH_ENGINE,
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/search-engine-row.ui");
 

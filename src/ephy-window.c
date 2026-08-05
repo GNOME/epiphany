@@ -210,13 +210,12 @@ struct _EphyWindow {
   GHashTable *action_groups;
 };
 
-enum {
-  PROP_0,
-  PROP_ACTIVE_CHILD,
+typedef enum {
+  PROP_ACTIVE_CHILD = 1,
   PROP_CHROME,
   PROP_SINGLE_TAB_MODE,
   PROP_ADAPTIVE_MODE,
-};
+} EphyWindowProps;
 
 /* Make sure not to overlap with those in ephy-lockdown.c */
 enum {
@@ -3852,7 +3851,7 @@ ephy_window_set_property (GObject      *object,
 {
   EphyWindow *window = EPHY_WINDOW (object);
 
-  switch (prop_id) {
+  switch ((EphyWindowProps)prop_id) {
     case PROP_ACTIVE_CHILD:
       impl_set_active_child (EPHY_EMBED_CONTAINER (window),
                              g_value_get_object (value));
@@ -3880,7 +3879,7 @@ ephy_window_get_property (GObject    *object,
 {
   EphyWindow *window = EPHY_WINDOW (object);
 
-  switch (prop_id) {
+  switch ((EphyWindowProps)prop_id) {
     case PROP_ACTIVE_CHILD:
       g_value_set_object (value, window->active_embed);
       break;

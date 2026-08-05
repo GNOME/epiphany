@@ -143,9 +143,8 @@ struct _EphyWebView {
   gboolean autofill_popup_enabled;
 };
 
-enum {
-  PROP_0,
-  PROP_ADDRESS,
+typedef enum {
+  PROP_ADDRESS = 1,
   PROP_DOCUMENT_TYPE,
   PROP_ICON,
   PROP_LINK_MESSAGE,
@@ -157,10 +156,9 @@ enum {
   PROP_READER_MODE,
   PROP_DISPLAY_ADDRESS,
   PROP_ENTERING_READER_MODE,
-  LAST_PROP
-};
+} EphyWebViewProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_ENTERING_READER_MODE + 1];
 
 enum {
   DOWNLOAD_ONLY_LOAD,
@@ -313,7 +311,7 @@ ephy_web_view_get_property (GObject    *object,
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
 
-  switch (prop_id) {
+  switch ((EphyWebViewProps)prop_id) {
     case PROP_ADDRESS:
       g_value_set_string (value, view->address);
       break;
@@ -361,7 +359,7 @@ ephy_web_view_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-  switch (prop_id) {
+  switch ((EphyWebViewProps)prop_id) {
     case PROP_TYPED_ADDRESS:
       ephy_web_view_set_typed_address (EPHY_WEB_VIEW (object), g_value_get_string (value));
       break;
@@ -4257,7 +4255,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (gobject_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
 /**
  * EphyWebView::new-window:

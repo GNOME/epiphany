@@ -32,15 +32,13 @@ struct _EphyBrowserAction {
 
 G_DEFINE_FINAL_TYPE (EphyBrowserAction, ephy_browser_action, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_WEB_EXTENSION,
+typedef enum {
+  PROP_WEB_EXTENSION = 1,
   PROP_BADGE_TEXT,
   PROP_BADGE_COLOR,
-  N_PROPS
-};
+} EphyBrowserActionProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_BADGE_COLOR + 1];
 
 EphyBrowserAction *
 ephy_browser_action_new (EphyWebExtension *web_extension)
@@ -105,7 +103,7 @@ ephy_browser_action_get_property (GObject    *object,
 {
   EphyBrowserAction *self = EPHY_BROWSER_ACTION (object);
 
-  switch (prop_id) {
+  switch ((EphyBrowserActionProps)prop_id) {
     case PROP_WEB_EXTENSION:
       g_value_set_object (value, self->web_extension);
       break;
@@ -122,7 +120,7 @@ ephy_browser_action_set_property (GObject      *object,
 {
   EphyBrowserAction *self = EPHY_BROWSER_ACTION (object);
 
-  switch (prop_id) {
+  switch ((EphyBrowserActionProps)prop_id) {
     case PROP_WEB_EXTENSION:
       g_set_object (&self->web_extension, g_value_dup_object (value));
       break;
@@ -156,7 +154,7 @@ ephy_browser_action_class_init (EphyBrowserActionClass *klass)
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static void

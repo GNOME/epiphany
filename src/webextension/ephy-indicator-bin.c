@@ -45,14 +45,12 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyIndicatorBin, ephy_indicator_bin, GTK_TYPE_WI
 
 static GtkBuildableIface *parent_buildable_iface;
 
-enum {
-  PROP_0,
-  PROP_CHILD,
+typedef enum {
+  PROP_CHILD = 1,
   PROP_BADGE,
-  LAST_PROP
-};
+} EphyIndicatorBinProps;
 
-static GParamSpec *props[LAST_PROP];
+static GParamSpec *props[PROP_BADGE + 1];
 
 
 static void
@@ -227,7 +225,7 @@ ephy_indicator_bin_get_property (GObject    *object,
 {
   EphyIndicatorBin *self = EPHY_INDICATOR_BIN (object);
 
-  switch (prop_id) {
+  switch ((EphyIndicatorBinProps)prop_id) {
     case PROP_CHILD:
       g_value_set_object (value, ephy_indicator_bin_get_child (self));
       break;
@@ -249,7 +247,7 @@ ephy_indicator_bin_set_property (GObject      *object,
 {
   EphyIndicatorBin *self = EPHY_INDICATOR_BIN (object);
 
-  switch (prop_id) {
+  switch ((EphyIndicatorBinProps)prop_id) {
     case PROP_CHILD:
       ephy_indicator_bin_set_child (self, g_value_get_object (value));
       break;
@@ -312,7 +310,7 @@ ephy_indicator_bin_class_init (EphyIndicatorBinClass *klass)
                          "",
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
 
   gtk_widget_class_set_css_name (widget_class, "indicatorbin");
 }

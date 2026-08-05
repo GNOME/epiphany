@@ -35,14 +35,12 @@ struct _EphySuggestion {
 
 G_DEFINE_FINAL_TYPE (EphySuggestion, ephy_suggestion, DZL_TYPE_SUGGESTION)
 
-enum {
-  PROP_0,
-  PROP_UNESCAPED_TITLE,
+typedef enum {
+  PROP_UNESCAPED_TITLE = 1,
   PROP_IS_COMPLETION,
-  LAST_PROP
-};
+} EphySuggestionProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_IS_COMPLETION + 1];
 
 static void
 ephy_suggestion_set_property (GObject      *object,
@@ -52,7 +50,7 @@ ephy_suggestion_set_property (GObject      *object,
 {
   EphySuggestion *self = EPHY_SUGGESTION (object);
 
-  switch (prop_id) {
+  switch ((EphySuggestionProps)prop_id) {
     case PROP_UNESCAPED_TITLE:
       self->unescaped_title = g_strdup (g_value_get_string (value));
       break;
@@ -72,7 +70,7 @@ ephy_suggestion_get_property (GObject    *object,
 {
   EphySuggestion *self = EPHY_SUGGESTION (object);
 
-  switch (prop_id) {
+  switch ((EphySuggestionProps)prop_id) {
     case PROP_UNESCAPED_TITLE:
       g_value_set_string (value, self->unescaped_title);
       break;
@@ -142,7 +140,7 @@ ephy_suggestion_class_init (EphySuggestionClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

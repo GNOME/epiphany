@@ -69,13 +69,11 @@ struct _EphySession {
 
 #define SESSION_STATE           "type:session_state"
 
-enum {
-  PROP_0,
-  PROP_CAN_UNDO_TAB_CLOSED,
-  LAST_PROP
-};
+typedef enum {
+  PROP_CAN_UNDO_TAB_CLOSED = 1,
+} EphySessionProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_CAN_UNDO_TAB_CLOSED + 1];
 
 static void ephy_session_save_now (EphySession *session);
 
@@ -469,7 +467,7 @@ ephy_session_get_property (GObject    *object,
 {
   EphySession *session = EPHY_SESSION (object);
 
-  switch (property_id) {
+  switch ((EphySessionProps)property_id) {
     case PROP_CAN_UNDO_TAB_CLOSED:
       g_value_set_boolean (value,
                            ephy_session_get_can_undo_tab_closed (session));
@@ -493,7 +491,7 @@ ephy_session_class_init (EphySessionClass *class)
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 /* Implementation */

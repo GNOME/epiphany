@@ -96,14 +96,12 @@ static void ephy_history_service_quit (EphyHistoryService    *self,
                                        EphyHistoryJobCallback callback,
                                        gpointer               user_data);
 
-enum {
-  PROP_0,
-  PROP_HISTORY_FILENAME,
+typedef enum {
+  PROP_HISTORY_FILENAME = 1,
   PROP_MEMORY,
-  LAST_PROP
-};
+} EphyHistoryServiceProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_MEMORY + 1];
 
 G_DEFINE_FINAL_TYPE (EphyHistoryService, ephy_history_service, G_TYPE_OBJECT);
 
@@ -115,7 +113,7 @@ ephy_history_service_set_property (GObject      *object,
 {
   EphyHistoryService *self = EPHY_HISTORY_SERVICE (object);
 
-  switch (property_id) {
+  switch ((EphyHistoryServiceProps)property_id) {
     case PROP_HISTORY_FILENAME:
       g_free (self->history_filename);
       self->history_filename = g_value_dup_string (value);
@@ -136,7 +134,7 @@ ephy_history_service_get_property (GObject    *object,
                                    GParamSpec *pspec)
 {
   EphyHistoryService *self = EPHY_HISTORY_SERVICE (object);
-  switch (property_id) {
+  switch ((EphyHistoryServiceProps)property_id) {
     case PROP_HISTORY_FILENAME:
       g_value_set_string (value, self->history_filename);
       break;
@@ -312,7 +310,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                           FALSE,
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (gobject_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

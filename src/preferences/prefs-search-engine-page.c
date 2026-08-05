@@ -41,15 +41,13 @@ struct _PrefsSearchEnginePage {
 
 G_DEFINE_FINAL_TYPE (PrefsSearchEnginePage, prefs_search_engine_page, ADW_TYPE_NAVIGATION_PAGE)
 
-enum {
-  PROP_0,
-  PROP_SEARCH_ENGINE,
+typedef enum {
+  PROP_SEARCH_ENGINE = 1,
   PROP_MANAGER,
   PROP_ENGINE_IS_NEW,
-  N_PROPS
-};
+} PrefsSearchEnginePageProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_ENGINE_IS_NEW + 1];
 
 static void
 set_row_as_invalid (AdwEntryRow *row,
@@ -270,7 +268,7 @@ prefs_search_engine_page_set_property (GObject      *object,
 {
   PrefsSearchEnginePage *self = EPHY_PREFS_SEARCH_ENGINE_PAGE (object);
 
-  switch (prop_id) {
+  switch ((PrefsSearchEnginePageProps)prop_id) {
     case PROP_SEARCH_ENGINE:
       self->engine = g_value_dup_object (value);
       break;
@@ -361,7 +359,7 @@ prefs_search_engine_page_class_init (PrefsSearchEnginePageClass *klass)
     g_param_spec_boolean ("engine-is-new", NULL, NULL, FALSE,
                           G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-search-engine-page.ui");

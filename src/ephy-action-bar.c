@@ -36,13 +36,11 @@
 
 #define NEEDS_ATTENTION_ANIMATION_TIMEOUT 2000 /*ms */
 
-enum {
-  PROP_0,
-  PROP_WINDOW,
-  N_PROPERTIES
-};
+typedef enum {
+  PROP_WINDOW = 1,
+} EphyActionBarProps;
 
-static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *object_properties[PROP_WINDOW + 1] = { NULL, };
 
 struct _EphyActionBar {
   AdwBin parent_instance;
@@ -509,7 +507,7 @@ ephy_action_bar_set_property (GObject      *object,
 {
   EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
 
-  switch (property_id) {
+  switch ((EphyActionBarProps)property_id) {
     case PROP_WINDOW:
       action_bar->window = EPHY_WINDOW (g_value_get_object (value));
       g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
@@ -527,7 +525,7 @@ ephy_action_bar_get_property (GObject    *object,
 {
   EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
 
-  switch (property_id) {
+  switch ((EphyActionBarProps)property_id) {
     case PROP_WINDOW:
       g_value_set_object (value, action_bar->window);
       break;
@@ -583,7 +581,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class,
-                                     N_PROPERTIES,
+                                     G_N_ELEMENTS (object_properties),
                                      object_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,

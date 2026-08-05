@@ -30,14 +30,12 @@ struct _EphyOpensearchAutodiscoveryLink {
 
 G_DEFINE_FINAL_TYPE (EphyOpensearchAutodiscoveryLink, ephy_opensearch_autodiscovery_link, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_NAME,
+typedef enum {
+  PROP_NAME = 1,
   PROP_URL,
-  N_PROPS
-};
+} EphyOpensearchAutodiscoveryLinkProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_URL + 1];
 
 EphyOpensearchAutodiscoveryLink *
 ephy_opensearch_autodiscovery_link_new (const char *name,
@@ -96,7 +94,7 @@ ephy_opensearch_autodiscovery_link_get_property (GObject    *object,
 {
   EphyOpensearchAutodiscoveryLink *self = EPHY_OPENSEARCH_AUTODISCOVERY_LINK (object);
 
-  switch (prop_id) {
+  switch ((EphyOpensearchAutodiscoveryLinkProps)prop_id) {
     case PROP_NAME: g_value_set_string (value, self->name);
       break;
     case PROP_URL: g_value_set_string (value, self->url);
@@ -114,7 +112,7 @@ ephy_opensearch_autodiscovery_link_set_property (GObject      *object,
 {
   EphyOpensearchAutodiscoveryLink *self = EPHY_OPENSEARCH_AUTODISCOVERY_LINK (object);
 
-  switch (prop_id) {
+  switch ((EphyOpensearchAutodiscoveryLinkProps)prop_id) {
     /* Only set at construction time, so no need to make separate setter functions. */
     case PROP_NAME:
       g_clear_pointer (&self->name, g_free);
@@ -148,7 +146,7 @@ ephy_opensearch_autodiscovery_link_class_init (EphyOpensearchAutodiscoveryLinkCl
                                               "",
                                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static void

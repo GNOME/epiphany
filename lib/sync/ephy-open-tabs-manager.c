@@ -42,13 +42,11 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyOpenTabsManager, ephy_open_tabs_manager, G_TY
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
                                                       ephy_synchronizable_manager_iface_init))
 
-enum {
-  PROP_0,
-  PROP_TABS_CATALOG,
-  LAST_PROP
-};
+typedef enum {
+  PROP_TABS_CATALOG = 1,
+} EphyOpenTabsManagerProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_TABS_CATALOG + 1];
 
 static void
 ephy_open_tabs_manager_set_property (GObject      *object,
@@ -58,7 +56,7 @@ ephy_open_tabs_manager_set_property (GObject      *object,
 {
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphyOpenTabsManagerProps)prop_id) {
     case PROP_TABS_CATALOG:
       self->catalog = g_value_get_object (value);
       break;
@@ -75,7 +73,7 @@ ephy_open_tabs_manager_get_property (GObject    *object,
 {
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphyOpenTabsManagerProps)prop_id) {
     case PROP_TABS_CATALOG:
       g_value_set_object (value, self->catalog);
       break;
@@ -109,7 +107,7 @@ ephy_open_tabs_manager_class_init (EphyOpenTabsManagerClass *klass)
                          EPHY_TYPE_TABS_CATALOG,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

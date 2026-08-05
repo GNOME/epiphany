@@ -36,11 +36,10 @@ struct _EphyNotification {
   char *body_msg;
 };
 
-enum {
-  PROP_0,
-  PROP_HEAD,
+typedef enum {
+  PROP_HEAD = 1,
   PROP_BODY
-};
+} EphyNotificationProps;
 
 enum {
   CLOSE,
@@ -81,7 +80,7 @@ ephy_notification_set_property (GObject      *object,
 {
   EphyNotification *self = EPHY_NOTIFICATION (object);
 
-  switch (prop_id) {
+  switch ((EphyNotificationProps)prop_id) {
     case PROP_HEAD:
       self->head_msg = g_value_dup_string (value);
       break;
@@ -102,7 +101,7 @@ ephy_notification_get_property (GObject    *object,
 {
   EphyNotification *self = EPHY_NOTIFICATION (object);
 
-  switch (prop_id) {
+  switch ((EphyNotificationProps)prop_id) {
     case PROP_HEAD:
       g_value_set_string (value, self->head_msg);
       break;

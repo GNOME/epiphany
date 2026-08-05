@@ -44,13 +44,11 @@ struct _EphyExtensionView {
 
 G_DEFINE_FINAL_TYPE (EphyExtensionView, ephy_extension_view, ADW_TYPE_NAVIGATION_PAGE)
 
-enum {
-  PROP_0,
-  PROP_WEB_EXTENSION,
-  LAST_PROP,
-};
+typedef enum {
+  PROP_WEB_EXTENSION = 1,
+} EphyExtensionViewProps;
 
-static GParamSpec *properties[LAST_PROP];
+static GParamSpec *properties[PROP_WEB_EXTENSION + 1];
 
 static void
 open_inspector (GSimpleAction *action,
@@ -175,7 +173,7 @@ ephy_extension_view_set_property (GObject      *object,
 {
   EphyExtensionView *self = EPHY_EXTENSION_VIEW (object);
 
-  switch (prop_id) {
+  switch ((EphyExtensionViewProps)prop_id) {
     case PROP_WEB_EXTENSION:
       g_set_object (&self->web_extension, g_value_get_object (value));
       update (self);
@@ -193,7 +191,7 @@ ephy_extension_view_get_property (GObject    *object,
 {
   EphyExtensionView *self = EPHY_EXTENSION_VIEW (object);
 
-  switch (prop_id) {
+  switch ((EphyExtensionViewProps)prop_id) {
     case PROP_WEB_EXTENSION:
       g_value_set_object (value, self->web_extension);
       break;
@@ -228,7 +226,7 @@ ephy_extension_view_class_init (EphyExtensionViewClass *klass)
                          EPHY_TYPE_WEB_EXTENSION,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/extension-view.ui");

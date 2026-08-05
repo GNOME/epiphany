@@ -26,14 +26,12 @@
 
 #include "ephy-sqlite-connection.h"
 
-enum {
-  PROP_0,
-  PROP_PREPARED_STATEMENT,
+typedef enum {
+  PROP_PREPARED_STATEMENT = 1,
   PROP_CONNECTION,
-  LAST_PROP
-};
+} EphySQLiteStatementProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_CONNECTION + 1];
 
 struct _EphySQLiteStatement {
   GObject parent_instance;
@@ -51,7 +49,7 @@ ephy_sqlite_statement_set_property (GObject      *object,
 {
   EphySQLiteStatement *self = EPHY_SQLITE_STATEMENT (object);
 
-  switch (property_id) {
+  switch ((EphySQLiteStatementProps)property_id) {
     case PROP_PREPARED_STATEMENT:
       self->prepared_statement = g_value_get_pointer (value);
       break;
@@ -94,7 +92,7 @@ ephy_sqlite_statement_class_init (EphySQLiteStatementClass *klass)
                          EPHY_TYPE_SQLITE_CONNECTION,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (gobject_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

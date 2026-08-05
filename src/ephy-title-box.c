@@ -25,12 +25,10 @@
 #include "ephy-lib-type-builtins.h"
 #include "ephy-title-widget.h"
 
-enum {
-  PROP_0,
-  PROP_ADDRESS,
+typedef enum {
+  PROP_ADDRESS = 1,
   PROP_SECURITY_LEVEL,
-  LAST_PROP
-};
+} EphyTitleBoxProps;
 
 struct _EphyTitleBox {
   AdwBin parent_instance;
@@ -145,7 +143,7 @@ ephy_title_box_set_property (GObject      *object,
 {
   EphyTitleWidget *widget = EPHY_TITLE_WIDGET (object);
 
-  switch (prop_id) {
+  switch ((EphyTitleBoxProps)prop_id) {
     case PROP_ADDRESS:
       ephy_title_widget_set_address (widget, g_value_get_string (value));
       break;
@@ -165,7 +163,7 @@ ephy_title_box_get_property (GObject    *object,
 {
   EphyTitleWidget *widget = EPHY_TITLE_WIDGET (object);
 
-  switch (prop_id) {
+  switch ((EphyTitleBoxProps)prop_id) {
     case PROP_ADDRESS:
       g_value_set_string (value, ephy_title_widget_get_address (widget));
       break;

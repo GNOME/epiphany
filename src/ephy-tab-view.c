@@ -40,14 +40,12 @@ struct _EphyTabView {
 
 G_DEFINE_FINAL_TYPE (EphyTabView, ephy_tab_view, ADW_TYPE_BIN)
 
-enum {
-  PROP_0,
-  PROP_N_PAGES,
+typedef enum {
+  PROP_N_PAGES = 1,
   PROP_SELECTED_INDEX,
-  N_PROPS
-};
+} EphyTabViewProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_SELECTED_INDEX + 1];
 
 static void
 notify_n_pages_cb (EphyTabView *self)
@@ -101,7 +99,7 @@ ephy_tab_view_get_property (GObject    *object,
 {
   EphyTabView *self = EPHY_TAB_VIEW (object);
 
-  switch (prop_id) {
+  switch ((EphyTabViewProps)prop_id) {
     case PROP_N_PAGES:
       g_value_set_int (value, ephy_tab_view_get_n_pages (self));
       break;
@@ -142,7 +140,7 @@ ephy_tab_view_class_init (EphyTabViewClass *klass)
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_EXPLICIT_NOTIFY));
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static void

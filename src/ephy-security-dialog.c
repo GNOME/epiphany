@@ -39,16 +39,14 @@
  * can also be used to show that a connection does not use TLS at all.
  */
 
-enum {
-  PROP_0,
-  PROP_ADDRESS,
+typedef enum {
+  PROP_ADDRESS = 1,
   PROP_CERTIFICATE,
   PROP_SECURITY_LEVEL,
   PROP_TLS_ERRORS,
-  LAST_PROP
-};
+} EphySecurityDialogProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_TLS_ERRORS + 1];
 
 struct _EphySecurityDialog {
   AdwDialog parent_instance;
@@ -271,7 +269,7 @@ ephy_security_dialog_set_property (GObject      *object,
 {
   EphySecurityDialog *dialog = EPHY_SECURITY_DIALOG (object);
 
-  switch (prop_id) {
+  switch ((EphySecurityDialogProps)prop_id) {
     case PROP_ADDRESS:
       ephy_security_dialog_set_address (dialog, g_value_get_string (value));
       break;
@@ -355,7 +353,7 @@ ephy_security_dialog_class_init (EphySecurityDialogClass *klass)
                        EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

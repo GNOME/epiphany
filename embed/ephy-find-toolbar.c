@@ -56,13 +56,11 @@ struct _EphyFindToolbar {
 
 G_DEFINE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, ADW_TYPE_BIN)
 
-enum {
-  PROP_0,
-  PROP_WEB_VIEW,
-  LAST_PROP
-};
+typedef enum {
+  PROP_WEB_VIEW = 1,
+} EphyFindToolbarProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_WEB_VIEW + 1];
 
 enum {
   CLOSE,
@@ -388,7 +386,7 @@ ephy_find_toolbar_set_property (GObject      *object,
 {
   EphyFindToolbar *toolbar = EPHY_FIND_TOOLBAR (object);
 
-  switch (prop_id) {
+  switch ((EphyFindToolbarProps)prop_id) {
     case PROP_WEB_VIEW:
       ephy_find_toolbar_set_web_view (toolbar, (WebKitWebView *)g_value_get_object (value));
       break;
@@ -430,7 +428,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
                          WEBKIT_TYPE_WEB_VIEW,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 /* public functions */

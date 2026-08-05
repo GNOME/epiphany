@@ -39,16 +39,14 @@
  * #EphyCertificateDialog shows information about SSL certificates.
  */
 
-enum {
-  PROP_0,
-  PROP_ADDRESS,
+typedef enum {
+  PROP_ADDRESS = 1,
   PROP_CERTIFICATE,
   PROP_SECURITY_LEVEL,
   PROP_TLS_ERRORS,
-  LAST_PROP
-};
+} EphyCertificateDialogProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_TLS_ERRORS + 1];
 
 struct _EphyCertificateDialog {
   AdwDialog parent_object;
@@ -348,7 +346,7 @@ ephy_certificate_dialog_set_property (GObject      *object,
 {
   EphyCertificateDialog *dialog = EPHY_CERTIFICATE_DIALOG (object);
 
-  switch (prop_id) {
+  switch ((EphyCertificateDialogProps)prop_id) {
     case PROP_ADDRESS:
       ephy_certificate_dialog_set_address (dialog, g_value_get_string (value));
       break;
@@ -420,7 +418,7 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
                         0,
                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

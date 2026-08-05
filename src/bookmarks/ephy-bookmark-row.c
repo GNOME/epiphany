@@ -49,13 +49,11 @@ struct _EphyBookmarkRow {
 
 G_DEFINE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, ADW_TYPE_ACTION_ROW)
 
-enum {
-  PROP_0,
-  PROP_BOOKMARK,
-  LAST_PROP
-};
+typedef enum {
+  PROP_BOOKMARK = 1,
+} EphyBookmarkRowProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_BOOKMARK + 1];
 
 enum {
   MOVE_ROW,
@@ -214,7 +212,7 @@ ephy_bookmark_row_set_property (GObject      *object,
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphyBookmarkRowProps)prop_id) {
     case PROP_BOOKMARK:
       self->bookmark = g_value_dup_object (value);
       break;
@@ -231,7 +229,7 @@ ephy_bookmark_row_get_property (GObject    *object,
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphyBookmarkRowProps)prop_id) {
     case PROP_BOOKMARK:
       g_value_set_object (value, ephy_bookmark_row_get_bookmark (self));
       break;
@@ -356,7 +354,7 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
                          EPHY_TYPE_BOOKMARK,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   gtk_widget_class_install_action (widget_class, "row.move-up", NULL, move_up_cb);
   gtk_widget_class_install_action (widget_class, "row.move-down", NULL, move_down_cb);

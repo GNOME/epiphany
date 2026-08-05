@@ -40,14 +40,12 @@ struct _PrefsFeaturesPage {
 
 G_DEFINE_FINAL_TYPE (PrefsFeaturesPage, prefs_features_page, ADW_TYPE_PREFERENCES_PAGE)
 
-enum {
-  PROP_0,
-  PROP_DIALOG,
+typedef enum {
+  PROP_DIALOG = 1,
   PROP_ADAPTIVE_MODE,
-  PROP_LAST
-};
+} PrefsFeaturesPageProps;
 
-static GParamSpec *properties[PROP_LAST];
+static GParamSpec *properties[PROP_ADAPTIVE_MODE + 1];
 
 static void
 prefs_feature_page_set_adaptive_mode (PrefsFeaturesPage *self,
@@ -65,7 +63,7 @@ prefs_feature_page_set_property (GObject      *object,
 {
   PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (object);
 
-  switch (prop_id) {
+  switch ((PrefsFeaturesPageProps)prop_id) {
     case PROP_DIALOG:
       self->dialog = g_value_get_object (value);
       break;
@@ -86,7 +84,7 @@ prefs_feature_page_get_property (GObject    *object,
 {
   PrefsFeaturesPage *self = EPHY_PREFS_FEATURES_PAGE (object);
 
-  switch (prop_id) {
+  switch ((PrefsFeaturesPageProps)prop_id) {
     case PROP_DIALOG:
       g_value_set_object (value, self->dialog);
       break;
@@ -412,7 +410,7 @@ prefs_features_page_class_init (PrefsFeaturesPageClass *klass)
                                                       G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class,
-                                     PROP_LAST,
+                                     G_N_ELEMENTS (properties),
                                      properties);
 }
 

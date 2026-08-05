@@ -45,16 +45,14 @@ struct _EphyFullscreenBox {
 
 G_DEFINE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, GTK_TYPE_WIDGET)
 
-enum {
-  PROP_0,
-  PROP_FULLSCREEN,
+typedef enum {
+  PROP_FULLSCREEN = 1,
   PROP_AUTOHIDE,
   PROP_CONTENT,
   PROP_REVEALED,
-  LAST_PROP
-};
+} EphyFullscreenBoxProps;
 
-static GParamSpec *props[LAST_PROP];
+static GParamSpec *props[PROP_REVEALED + 1];
 
 static void
 show_ui (EphyFullscreenBox *self)
@@ -262,7 +260,7 @@ ephy_fullscreen_box_get_property (GObject    *object,
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (object);
 
-  switch (prop_id) {
+  switch ((EphyFullscreenBoxProps)prop_id) {
     case PROP_FULLSCREEN:
       g_value_set_boolean (value, ephy_fullscreen_box_get_fullscreen (self));
       break;
@@ -292,7 +290,7 @@ ephy_fullscreen_box_set_property (GObject      *object,
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (object);
 
-  switch (prop_id) {
+  switch ((EphyFullscreenBoxProps)prop_id) {
     case PROP_FULLSCREEN:
       ephy_fullscreen_box_set_fullscreen (self, g_value_get_boolean (value));
       break;
@@ -362,7 +360,7 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
 
   gtk_widget_class_set_css_name (widget_class, "fullscreenbox");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

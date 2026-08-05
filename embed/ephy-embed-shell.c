@@ -87,13 +87,11 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-enum {
-  PROP_0,
-  PROP_MODE,
-  N_PROPERTIES
-};
+typedef enum {
+  PROP_MODE = 1,
+} EphyEmbedShellProps;
 
-static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *object_properties[PROP_MODE + 1] = { NULL, };
 
 static EphyEmbedShell *embed_shell = NULL;
 
@@ -958,7 +956,7 @@ ephy_embed_shell_set_property (GObject      *object,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
 
-  switch (prop_id) {
+  switch ((EphyEmbedShellProps)prop_id) {
     case PROP_MODE:
       priv->mode = g_value_get_enum (value);
       break;
@@ -975,7 +973,7 @@ ephy_embed_shell_get_property (GObject    *object,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
 
-  switch (prop_id) {
+  switch ((EphyEmbedShellProps)prop_id) {
     case PROP_MODE:
       g_value_set_enum (value, priv->mode);
       break;
@@ -1035,7 +1033,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class,
-                                     N_PROPERTIES,
+                                     G_N_ELEMENTS (object_properties),
                                      object_properties);
 
 /**

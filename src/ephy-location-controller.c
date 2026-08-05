@@ -62,15 +62,13 @@ static void sync_address (EphyLocationController *controller,
                           GParamSpec             *pspec,
                           GtkWidget              *widget);
 
-enum {
-  PROP_0,
-  PROP_ADDRESS,
+typedef enum {
+  PROP_ADDRESS = 1,
   PROP_EDITABLE,
   PROP_WINDOW,
   PROP_TITLE_WIDGET,
-  LAST_PROP
-};
-static GParamSpec *obj_properties[LAST_PROP];
+} EphyLocationControllerProps;
+static GParamSpec *obj_properties[PROP_TITLE_WIDGET + 1];
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
@@ -335,7 +333,7 @@ ephy_location_controller_set_property (GObject      *object,
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 
-  switch (prop_id) {
+  switch ((EphyLocationControllerProps)prop_id) {
     case PROP_ADDRESS:
       ephy_location_controller_set_address (controller, g_value_get_string (value));
       break;
@@ -361,7 +359,7 @@ ephy_location_controller_get_property (GObject    *object,
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 
-  switch (prop_id) {
+  switch ((EphyLocationControllerProps)prop_id) {
     case PROP_ADDRESS:
       g_value_set_string (value, ephy_location_controller_get_address (controller));
       break;
@@ -451,7 +449,7 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
                          G_TYPE_OBJECT,
                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

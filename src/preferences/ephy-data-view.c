@@ -56,9 +56,8 @@ G_DEFINE_TYPE_WITH_CODE (EphyDataView, ephy_data_view, ADW_TYPE_NAVIGATION_PAGE,
 
 static GtkBuildableIface *parent_buildable_iface;
 
-enum {
-  PROP_0,
-  PROP_CLEAR_ACTION_NAME,
+typedef enum {
+  PROP_CLEAR_ACTION_NAME = 1,
   PROP_CLEAR_ACTION_TARGET,
   PROP_CLEAR_BUTTON_LABEL,
   PROP_CLEAR_BUTTON_TOOLTIP,
@@ -70,10 +69,9 @@ enum {
   PROP_HAS_DATA,
   PROP_HAS_SEARCH_RESULTS,
   PROP_CAN_CLEAR,
-  LAST_PROP,
-};
+} EphyDataViewProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_CAN_CLEAR + 1];
 
 enum {
   CLEAR_BUTTON_CLICKED,
@@ -136,7 +134,7 @@ ephy_data_view_set_property (GObject      *object,
   EphyDataView *self = EPHY_DATA_VIEW (object);
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
 
-  switch (prop_id) {
+  switch ((EphyDataViewProps)prop_id) {
     case PROP_CLEAR_ACTION_NAME:
       gtk_actionable_set_action_name (GTK_ACTIONABLE (priv->clear_button), g_value_get_string (value));
       break;
@@ -190,7 +188,7 @@ ephy_data_view_get_property (GObject    *object,
   EphyDataView *self = EPHY_DATA_VIEW (object);
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
 
-  switch (prop_id) {
+  switch ((EphyDataViewProps)prop_id) {
     case PROP_CLEAR_ACTION_NAME:
       g_value_set_string (value, gtk_actionable_get_action_name (GTK_ACTIONABLE (priv->clear_button)));
       break;
@@ -340,7 +338,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   signals[CLEAR_BUTTON_CLICKED] =
     g_signal_new ("clear-button-clicked",

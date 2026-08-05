@@ -60,14 +60,12 @@ struct _EphyFiltersManager {
 
 G_DEFINE_FINAL_TYPE (EphyFiltersManager, ephy_filters_manager, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_FILTERS_DIR,
+typedef enum {
+  PROP_FILTERS_DIR = 1,
   PROP_IS_INITIALIZED,
-  N_PROPERTIES
-};
+} EphyFiltersManagerProps;
 
-static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *object_properties[PROP_IS_INITIALIZED + 1] = { NULL, };
 
 struct _FilterInfo {
   grefcount ref_count;
@@ -1208,7 +1206,7 @@ ephy_filters_manager_set_property (GObject      *object,
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphyFiltersManagerProps)prop_id) {
     case PROP_FILTERS_DIR:
       manager->filters_dir = g_value_dup_string (value);
       break;
@@ -1228,7 +1226,7 @@ ephy_filters_manager_get_property (GObject    *object,
 {
   EphyFiltersManager *manager = EPHY_FILTERS_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphyFiltersManagerProps)prop_id) {
     case PROP_FILTERS_DIR:
       g_value_set_string (value, manager->filters_dir);
       break;
@@ -1264,7 +1262,7 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class,
-                                     N_PROPERTIES,
+                                     G_N_ELEMENTS (object_properties),
                                      object_properties);
 }
 

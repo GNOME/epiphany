@@ -37,13 +37,11 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyHistoryManager, ephy_history_manager, G_TYPE_
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
                                                       ephy_synchronizable_manager_iface_init))
 
-enum {
-  PROP_0,
-  PROP_HISTORY_SERVICE,
-  LAST_PROP
-};
+typedef enum {
+  PROP_HISTORY_SERVICE = 1,
+} EphyHistoryManagerProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_HISTORY_SERVICE + 1];
 
 enum {
   SYNCHRONIZABLE_DELETED,
@@ -130,7 +128,7 @@ ephy_history_manager_set_property (GObject      *object,
 {
   EphyHistoryManager *self = EPHY_HISTORY_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryManagerProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       if (self->service)
         g_object_unref (self->service);
@@ -149,7 +147,7 @@ ephy_history_manager_get_property (GObject    *object,
 {
   EphyHistoryManager *self = EPHY_HISTORY_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryManagerProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       g_value_set_object (value, self->service);
       break;
@@ -206,7 +204,7 @@ ephy_history_manager_class_init (EphyHistoryManagerClass *klass)
   signals[SYNCHRONIZABLE_MODIFIED] = g_signal_lookup ("synchronizable-modified",
                                                       EPHY_TYPE_SYNCHRONIZABLE_MANAGER);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

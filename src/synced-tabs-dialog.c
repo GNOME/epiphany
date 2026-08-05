@@ -41,13 +41,11 @@ struct _SyncedTabsDialog {
 
 G_DEFINE_FINAL_TYPE (SyncedTabsDialog, synced_tabs_dialog, ADW_TYPE_WINDOW)
 
-enum {
-  PROP_0,
-  PROP_OPEN_TABS_MANAGER,
-  LAST_PROP
-};
+typedef enum {
+  PROP_OPEN_TABS_MANAGER = 1,
+} SyncedTabsDialogProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_OPEN_TABS_MANAGER + 1];
 
 typedef struct {
   GtkWidget *row;
@@ -200,7 +198,7 @@ synced_tabs_dialog_set_property (GObject      *object,
 {
   SyncedTabsDialog *dialog = EPHY_SYNCED_TABS_DIALOG (object);
 
-  switch (prop_id) {
+  switch ((SyncedTabsDialogProps)prop_id) {
     case PROP_OPEN_TABS_MANAGER:
       if (dialog->manager)
         g_object_unref (dialog->manager);
@@ -219,7 +217,7 @@ synced_tabs_dialog_get_property (GObject    *object,
 {
   SyncedTabsDialog *dialog = EPHY_SYNCED_TABS_DIALOG (object);
 
-  switch (prop_id) {
+  switch ((SyncedTabsDialogProps)prop_id) {
     case PROP_OPEN_TABS_MANAGER:
       g_value_set_object (value, dialog->manager);
       break;
@@ -268,7 +266,7 @@ synced_tabs_dialog_class_init (SyncedTabsDialogClass *klass)
                          EPHY_TYPE_OPEN_TABS_MANAGER,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/synced-tabs-dialog.ui");

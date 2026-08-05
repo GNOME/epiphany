@@ -37,13 +37,11 @@ struct _EphyEncodingRow {
   GtkImage *selected_image;
 };
 
-enum {
-  PROP_0,
-  PROP_ENCODING,
-  LAST_PROP
-};
+typedef enum {
+  PROP_ENCODING = 1,
+} EphyEncodingRowProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_ENCODING + 1];
 
 G_DEFINE_FINAL_TYPE (EphyEncodingRow, ephy_encoding_row, GTK_TYPE_BOX)
 
@@ -85,7 +83,7 @@ ephy_encoding_row_set_property (GObject      *object,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  switch (prop_id) {
+  switch ((EphyEncodingRowProps)prop_id) {
     case PROP_ENCODING:
       ephy_encoding_row_set_encoding (EPHY_ENCODING_ROW (object),
                                       g_value_get_object (value));
@@ -102,7 +100,7 @@ ephy_encoding_row_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  switch (prop_id) {
+  switch ((EphyEncodingRowProps)prop_id) {
     case PROP_ENCODING:
       g_value_set_object (value, EPHY_ENCODING_ROW (object)->encoding);
       break;
@@ -128,7 +126,7 @@ ephy_encoding_row_class_init (EphyEncodingRowClass *klass)
                          EPHY_TYPE_ENCODING,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   /* load from UI file */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/encoding-row.ui");

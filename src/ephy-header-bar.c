@@ -41,13 +41,11 @@
 
 #define POPOVER_HIDE_DELAY 300
 
-enum {
-  PROP_0,
-  PROP_WINDOW,
-  N_PROPERTIES
-};
+typedef enum {
+  PROP_WINDOW = 1,
+} EphyHeaderBarProps;
 
-static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *object_properties[PROP_WINDOW + 1] = { NULL, };
 
 struct _EphyHeaderBar {
   AdwBin parent_instance;
@@ -76,7 +74,7 @@ ephy_header_bar_set_property (GObject      *object,
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
 
-  switch (property_id) {
+  switch ((EphyHeaderBarProps)property_id) {
     case PROP_WINDOW:
       header_bar->window = EPHY_WINDOW (g_value_get_object (value));
       g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
@@ -94,7 +92,7 @@ ephy_header_bar_get_property (GObject    *object,
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
 
-  switch (property_id) {
+  switch ((EphyHeaderBarProps)property_id) {
     case PROP_WINDOW:
       g_value_set_object (value, header_bar->window);
       break;
@@ -266,7 +264,7 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class,
-                                     N_PROPERTIES,
+                                     G_N_ELEMENTS (object_properties),
                                      object_properties);
 }
 

@@ -49,14 +49,12 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyDownloadsPaintable, ephy_downloads_paintable,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
                                                       ephy_downloads_paintable_symbolic_paintable_init))
 
-enum {
-  PROP_0,
-  PROP_WIDGET,
+typedef enum {
+  PROP_WIDGET = 1,
   PROP_PROGRESS,
-  LAST_PROP
-};
+} EphyDownloadsPaintableProps;
 
-static GParamSpec *properties[LAST_PROP];
+static GParamSpec *properties[PROP_PROGRESS + 1];
 
 static void
 cache_icons (EphyDownloadsPaintable *self)
@@ -104,7 +102,7 @@ ephy_downloads_paintable_get_property (GObject    *object,
 {
   EphyDownloadsPaintable *self = EPHY_DOWNLOADS_PAINTABLE (object);
 
-  switch (prop_id) {
+  switch ((EphyDownloadsPaintableProps)prop_id) {
     case PROP_WIDGET:
       g_value_set_object (value, self->widget);
       break;
@@ -124,7 +122,7 @@ ephy_downloads_paintable_set_property (GObject      *object,
 {
   EphyDownloadsPaintable *self = EPHY_DOWNLOADS_PAINTABLE (object);
 
-  switch (prop_id) {
+  switch ((EphyDownloadsPaintableProps)prop_id) {
     case PROP_WIDGET:
       g_set_object (&self->widget, g_value_get_object (value));
       break;
@@ -173,7 +171,7 @@ ephy_downloads_paintable_class_init (EphyDownloadsPaintableClass *klass)
                          0, 1, 0,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static void

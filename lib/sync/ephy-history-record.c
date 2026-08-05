@@ -42,16 +42,14 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyHistoryRecord, ephy_history_record, G_TYPE_OB
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
                                                       ephy_synchronizable_iface_init))
 
-enum {
-  PROP_0,
-  PROP_ID,
+typedef enum {
+  PROP_ID = 1,
   PROP_TITLE,
   PROP_URI,
   PROP_VISITS,
-  LAST_PROP
-};
+} EphyHistoryRecordProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_VISITS + 1];
 
 typedef struct {
   gint64 timestamp; /* UNIX time in microseconds. */
@@ -99,7 +97,7 @@ ephy_history_record_set_property (GObject      *object,
 {
   EphyHistoryRecord *self = EPHY_HISTORY_RECORD (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryRecordProps)prop_id) {
     case PROP_ID:
       g_free (self->id);
       self->id = g_value_dup_string (value);
@@ -130,7 +128,7 @@ ephy_history_record_get_property (GObject    *object,
 {
   EphyHistoryRecord *self = EPHY_HISTORY_RECORD (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryRecordProps)prop_id) {
     case PROP_ID:
       g_value_set_string (value, self->id);
       break;
@@ -192,7 +190,7 @@ ephy_history_record_class_init (EphyHistoryRecordClass *klass)
                           NULL, NULL,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

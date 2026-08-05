@@ -53,19 +53,17 @@ struct _EphySuggestionModel {
 #define QUERY_SCOPE_HISTORY     '^'
 #define MAX_QUERY_SCOPES        4
 
-enum {
-  PROP_0,
-  PROP_BOOKMARKS_MANAGER,
+typedef enum {
+  PROP_BOOKMARKS_MANAGER = 1,
   PROP_HISTORY_SERVICE,
-  N_PROPS
-};
+} EphySuggestionModelProps;
 
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (EphySuggestionModel, ephy_suggestion_model, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_HISTORY_SERVICE + 1];
 
 static void
 ephy_suggestion_model_finalize (GObject *object)
@@ -92,7 +90,7 @@ ephy_suggestion_model_get_property (GObject    *object,
 {
   EphySuggestionModel *self = EPHY_SUGGESTION_MODEL (object);
 
-  switch (prop_id) {
+  switch ((EphySuggestionModelProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       g_value_set_object (value, self->history_service);
       break;
@@ -112,7 +110,7 @@ ephy_suggestion_model_set_property (GObject      *object,
 {
   EphySuggestionModel *self = EPHY_SUGGESTION_MODEL (object);
 
-  switch (prop_id) {
+  switch ((EphySuggestionModelProps)prop_id) {
     case PROP_HISTORY_SERVICE:
       self->history_service = g_value_dup_object (value);
       break;
@@ -145,7 +143,7 @@ ephy_suggestion_model_class_init (EphySuggestionModelClass *klass)
                          EPHY_TYPE_HISTORY_SERVICE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static void

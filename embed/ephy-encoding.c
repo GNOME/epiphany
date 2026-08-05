@@ -35,19 +35,15 @@ struct _EphyEncoding {
 
 G_DEFINE_FINAL_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-
-  PROP_TITLE,
+typedef enum {
+  PROP_TITLE = 1,
   PROP_TITLE_ELIDED,
   PROP_COLLATION_KEY,
   PROP_ENCODING,
   PROP_LANGUAGE_GROUPS,
+} EphyEncodingProps;
 
-  LAST_PROP
-};
-
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_LANGUAGE_GROUPS + 1];
 
 static void
 ephy_encoding_finalize (GObject *object)
@@ -70,7 +66,7 @@ ephy_encoding_get_property (GObject    *object,
 {
   EphyEncoding *encoding = EPHY_ENCODING (object);
 
-  switch (prop_id) {
+  switch ((EphyEncodingProps)prop_id) {
     case PROP_TITLE:
       g_value_set_string (value, encoding->title);
       break;
@@ -125,7 +121,7 @@ ephy_encoding_set_property (GObject      *object,
 {
   EphyEncoding *encoding = EPHY_ENCODING (object);
 
-  switch (prop_id) {
+  switch ((EphyEncodingProps)prop_id) {
     case PROP_TITLE: {
       char *elided, *collate_key, *normalised;
 
@@ -208,7 +204,7 @@ ephy_encoding_class_init (EphyEncodingClass *klass)
                       LG_NONE,
                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (gobject_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

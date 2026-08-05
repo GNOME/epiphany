@@ -58,14 +58,12 @@ struct _EphyBookmarkProperties {
 
 G_DEFINE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, ADW_TYPE_DIALOG)
 
-enum {
-  PROP_0,
-  PROP_BOOKMARK,
+typedef enum {
+  PROP_BOOKMARK = 1,
   PROP_BOOKMARK_IS_NEW,
-  LAST_PROP
-};
+} EphyBookmarkPropertiesProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_BOOKMARK_IS_NEW + 1];
 
 static int
 tag_sort_func (GtkListBoxRow *child1,
@@ -382,7 +380,7 @@ ephy_bookmark_properties_set_property (GObject      *object,
 {
   EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (object);
 
-  switch (prop_id) {
+  switch ((EphyBookmarkPropertiesProps)prop_id) {
     case PROP_BOOKMARK:
       self->bookmark = g_value_dup_object (value);
       break;
@@ -493,7 +491,7 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
                           NULL, NULL, FALSE,
                           G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-properties.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, navigation_view);

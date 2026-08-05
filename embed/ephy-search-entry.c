@@ -40,17 +40,15 @@ struct _EphySearchEntry {
   EphyFindResult find_result;
 };
 
-enum {
-  PROP_0,
-  PROP_PLACEHOLDER_TEXT,
+typedef enum {
+  PROP_PLACEHOLDER_TEXT = 1,
   PROP_SHOW_MATCHES,
   PROP_N_MATCHES,
   PROP_CURRENT_MATCH,
   PROP_FIND_RESULT,
-  LAST_PROP
-};
+} EphySearchEntryProps;
 
-static GParamSpec *props[LAST_PROP] = {};
+static GParamSpec *props[PROP_FIND_RESULT + 1] = {};
 
 enum {
   NEXT_MATCH,
@@ -124,7 +122,7 @@ ephy_search_entry_set_property (GObject      *object,
   EphySearchEntry *self = EPHY_SEARCH_ENTRY (object);
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec)) {
-    if (prop_id == LAST_PROP + GTK_EDITABLE_PROP_EDITABLE) {
+    if (prop_id == PROP_FIND_RESULT + 1 + GTK_EDITABLE_PROP_EDITABLE) {
       gtk_accessible_update_property (GTK_ACCESSIBLE (self),
                                       GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !g_value_get_boolean (value),
                                       -1);
@@ -132,7 +130,7 @@ ephy_search_entry_set_property (GObject      *object,
     return;
   }
 
-  switch (prop_id) {
+  switch ((EphySearchEntryProps)prop_id) {
     case PROP_PLACEHOLDER_TEXT:
       ephy_search_entry_set_placeholder_text (self, g_value_get_string (value));
       break;
@@ -164,7 +162,7 @@ ephy_search_entry_get_property (GObject    *object,
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
-  switch (prop_id) {
+  switch ((EphySearchEntryProps)prop_id) {
     case PROP_PLACEHOLDER_TEXT:
       g_value_set_string (value, ephy_search_entry_get_placeholder_text (self));
       break;
@@ -244,8 +242,8 @@ ephy_search_entry_class_init (EphySearchEntryClass *klass)
                        EPHY_FIND_RESULT_FOUND,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
-  gtk_editable_install_properties (object_class, LAST_PROP);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
+  gtk_editable_install_properties (object_class, PROP_FIND_RESULT + 1);
 
   signals[NEXT_MATCH] =
     g_signal_new ("next-match",

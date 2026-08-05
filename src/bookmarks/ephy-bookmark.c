@@ -60,9 +60,8 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
                                                       ephy_synchronizable_iface_init))
 
-enum {
-  PROP_0,
-  PROP_TIME_ADDED,      /* Epiphany */
+typedef enum {
+  PROP_TIME_ADDED = 1,      /* Epiphany */
   PROP_ID,              /* Firefox Sync */
   PROP_TITLE,           /* Epiphany && Firefox Sync */
   PROP_BMK_URI,         /* Epiphany && Firefox Sync */
@@ -71,8 +70,7 @@ enum {
   PROP_PARENT_ID,       /* Firefox Sync */
   PROP_PARENT_NAME,     /* Firefox Sync */
   PROP_LOAD_IN_SIDEBAR, /* Firefox Sync */
-  LAST_PROP
-};
+} EphyBookmarkProps;
 
 enum {
   TAG_ADDED,
@@ -80,7 +78,7 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_LOAD_IN_SIDEBAR + 1];
 static guint signals[LAST_SIGNAL];
 
 static void
@@ -91,7 +89,7 @@ ephy_bookmark_set_property (GObject      *object,
 {
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
-  switch (prop_id) {
+  switch ((EphyBookmarkProps)prop_id) {
     case PROP_TIME_ADDED:
       ephy_bookmark_set_time_added (self, g_value_get_int64 (value));
       break;
@@ -138,7 +136,7 @@ ephy_bookmark_get_property (GObject    *object,
 {
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
-  switch (prop_id) {
+  switch ((EphyBookmarkProps)prop_id) {
     case PROP_TIME_ADDED:
       g_value_set_int64 (value, ephy_bookmark_get_time_added (self));
       break;
@@ -253,7 +251,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   signals[TAG_ADDED] =
     g_signal_new ("tag-added",

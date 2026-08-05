@@ -82,13 +82,11 @@ static const char * const secrets[LAST_SECRET] = {
   "crypto_keys"
 };
 
-enum {
-  PROP_0,
-  PROP_SYNC_PERIODICALLY,
-  LAST_PROP
-};
+typedef enum {
+  PROP_SYNC_PERIODICALLY = 1,
+} EphySyncServiceProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_SYNC_PERIODICALLY + 1];
 
 enum {
   STORE_FINISHED,
@@ -351,7 +349,7 @@ ephy_sync_service_set_property (GObject      *object,
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
-  switch (prop_id) {
+  switch ((EphySyncServiceProps)prop_id) {
     case PROP_SYNC_PERIODICALLY:
       self->sync_periodically = g_value_get_boolean (value);
       break;
@@ -368,7 +366,7 @@ ephy_sync_service_get_property (GObject    *object,
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
-  switch (prop_id) {
+  switch ((EphySyncServiceProps)prop_id) {
     case PROP_SYNC_PERIODICALLY:
       g_value_set_boolean (value, self->sync_periodically);
       break;
@@ -1870,7 +1868,7 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 
   signals[STORE_FINISHED] =
     g_signal_new ("sync-secrets-store-finished",

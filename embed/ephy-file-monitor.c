@@ -42,13 +42,11 @@ struct _EphyFileMonitor {
 
 G_DEFINE_FINAL_TYPE (EphyFileMonitor, ephy_file_monitor, G_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  PROP_VIEW,
-  LAST_PROP
-};
+typedef enum {
+  PROP_VIEW = 1,
+} EphyFileMonitorProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_VIEW + 1];
 
 static void
 ephy_file_monitor_cancel (EphyFileMonitor *monitor)
@@ -235,7 +233,7 @@ ephy_file_monitor_get_property (GObject    *object,
 {
   EphyFileMonitor *monitor = EPHY_FILE_MONITOR (object);
 
-  switch (prop_id) {
+  switch ((EphyFileMonitorProps)prop_id) {
     case PROP_VIEW:
       g_value_set_object (value, monitor->view);
       break;
@@ -253,7 +251,7 @@ ephy_file_monitor_set_property (GObject      *object,
 {
   EphyFileMonitor *monitor = EPHY_FILE_MONITOR (object);
 
-  switch (prop_id) {
+  switch ((EphyFileMonitorProps)prop_id) {
     case PROP_VIEW:
       monitor->view = g_value_get_object (value);
       break;
@@ -278,7 +276,7 @@ ephy_file_monitor_class_init (EphyFileMonitorClass *klass)
                          EPHY_TYPE_WEB_VIEW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (gobject_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

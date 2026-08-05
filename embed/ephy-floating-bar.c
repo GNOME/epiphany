@@ -34,12 +34,11 @@ struct _EphyFloatingBar {
   GtkWidget *primary_label_widget;
 };
 
-enum {
+typedef enum {
   PROP_PRIMARY_LABEL = 1,
-  NUM_PROPERTIES
-};
+} EphyFloatingBarProps;
 
-static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
+static GParamSpec *properties[PROP_PRIMARY_LABEL + 1] = { NULL, };
 
 G_DEFINE_FINAL_TYPE (EphyFloatingBar, ephy_floating_bar, GTK_TYPE_BOX);
 
@@ -61,7 +60,7 @@ ephy_floating_bar_get_property (GObject    *object,
 {
   EphyFloatingBar *self = EPHY_FLOATING_BAR (object);
 
-  switch (property_id) {
+  switch ((EphyFloatingBarProps)property_id) {
     case PROP_PRIMARY_LABEL:
       g_value_set_string (value, self->primary_label);
       break;
@@ -79,7 +78,7 @@ ephy_floating_bar_set_property (GObject      *object,
 {
   EphyFloatingBar *self = EPHY_FLOATING_BAR (object);
 
-  switch (property_id) {
+  switch ((EphyFloatingBarProps)property_id) {
     case PROP_PRIMARY_LABEL:
       ephy_floating_bar_set_primary_label (self, g_value_get_string (value));
       break;
@@ -118,7 +117,7 @@ ephy_floating_bar_class_init (EphyFloatingBarClass *klass)
                          NULL,
                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
+  g_object_class_install_properties (oclass, G_N_ELEMENTS (properties), properties);
 }
 
 void

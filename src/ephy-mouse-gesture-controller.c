@@ -56,13 +56,11 @@ struct _EphyMouseGestureController {
   gboolean gesture_active;
 };
 
-enum {
-  PROP_0,
-  PROP_WINDOW,
-  LAST_PROP
-};
+typedef enum {
+  PROP_WINDOW = 1,
+} EphyMouseGestureControllerProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_WINDOW + 1];
 
 G_DEFINE_FINAL_TYPE (EphyMouseGestureController, ephy_mouse_gesture_controller, G_TYPE_OBJECT)
 
@@ -211,7 +209,7 @@ ephy_mouse_gesture_controller_set_property (GObject      *object,
 {
   EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (object);
 
-  switch (prop_id) {
+  switch ((EphyMouseGestureControllerProps)prop_id) {
     case PROP_WINDOW:
       self->window = g_value_get_object (value);
       break;
@@ -229,7 +227,7 @@ ephy_mouse_gesture_controller_get_property (GObject    *object,
 {
   EphyMouseGestureController *self = EPHY_MOUSE_GESTURE_CONTROLLER (object);
 
-  switch (prop_id) {
+  switch ((EphyMouseGestureControllerProps)prop_id) {
     case PROP_WINDOW:
       g_value_set_object (value, self->window);
       break;
@@ -307,7 +305,7 @@ ephy_mouse_gesture_controller_class_init (EphyMouseGestureControllerClass *klass
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 EphyMouseGestureController *

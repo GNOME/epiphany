@@ -51,14 +51,12 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphySearchEngineManager, ephy_search_engine_manag
                                G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
-enum {
-  PROP_0,
-  PROP_DEFAULT_ENGINE,
+typedef enum {
+  PROP_DEFAULT_ENGINE = 1,
   PROP_INCOGNITO_ENGINE,
-  N_PROPS
-};
+} EphySearchEngineManagerProps;
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *properties[PROP_INCOGNITO_ENGINE + 1];
 
 static int
 search_engine_compare_func (EphySearchEngine **a,
@@ -204,7 +202,7 @@ ephy_search_engine_manager_get_property (GObject    *object,
 {
   EphySearchEngineManager *self = EPHY_SEARCH_ENGINE_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphySearchEngineManagerProps)prop_id) {
     case PROP_DEFAULT_ENGINE:
       g_value_take_object (value, ephy_search_engine_manager_get_default_engine (self));
       break;
@@ -224,7 +222,7 @@ ephy_search_engine_manager_set_property (GObject      *object,
 {
   EphySearchEngineManager *self = EPHY_SEARCH_ENGINE_MANAGER (object);
 
-  switch (prop_id) {
+  switch ((EphySearchEngineManagerProps)prop_id) {
     case PROP_DEFAULT_ENGINE:
       ephy_search_engine_manager_set_default_engine (self, g_value_get_object (value));
       break;
@@ -270,7 +268,7 @@ ephy_search_engine_manager_class_init (EphySearchEngineManagerClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 static GType

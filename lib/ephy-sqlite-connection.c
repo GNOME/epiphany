@@ -41,14 +41,12 @@ struct _EphySQLiteConnection {
 
 G_DEFINE_FINAL_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
 
-enum {
-  PROP_0,
-  PROP_MODE,
+typedef enum {
+  PROP_MODE = 1,
   PROP_DATABASE_PATH,
-  LAST_PROP
-};
+} EphySQLiteConnectionProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_DATABASE_PATH + 1];
 
 static void
 ephy_sqlite_connection_finalize (GObject *object)
@@ -68,7 +66,7 @@ ephy_sqlite_connection_set_property (GObject      *object,
 {
   EphySQLiteConnection *self = EPHY_SQLITE_CONNECTION (object);
 
-  switch (property_id) {
+  switch ((EphySQLiteConnectionProps)property_id) {
     case PROP_MODE:
       self->mode = g_value_get_enum (value);
       break;
@@ -102,7 +100,7 @@ ephy_sqlite_connection_class_init (EphySQLiteConnectionClass *klass)
                          NULL,
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (gobject_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static void

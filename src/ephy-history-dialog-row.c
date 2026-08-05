@@ -32,14 +32,12 @@ struct _EphyHistoryDialogRow {
 
 G_DEFINE_FINAL_TYPE (EphyHistoryDialogRow, ephy_history_dialog_row, ADW_TYPE_ACTION_ROW)
 
-enum {
-  PROP_0,
-  PROP_URL,
+typedef enum {
+  PROP_URL = 1,
   PROP_TITLE,
-  LAST_PROP,
-};
+} EphyHistoryDialogRowProps;
 
-static GParamSpec *props[LAST_PROP];
+static GParamSpec *props[PROP_TITLE + 1];
 
 static void
 ephy_history_dialog_row_get_property (GObject    *object,
@@ -49,7 +47,7 @@ ephy_history_dialog_row_get_property (GObject    *object,
 {
   EphyHistoryDialogRow *self = EPHY_HISTORY_DIALOG_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryDialogRowProps)prop_id) {
     case PROP_URL:
       g_value_set_string (value, self->url);
       break;
@@ -69,7 +67,7 @@ ephy_history_dialog_row_set_property (GObject      *object,
 {
   EphyHistoryDialogRow *self = EPHY_HISTORY_DIALOG_ROW (object);
 
-  switch (prop_id) {
+  switch ((EphyHistoryDialogRowProps)prop_id) {
     case PROP_URL:
       g_set_str (&self->url, g_value_dup_string (value));
       break;
@@ -132,7 +130,7 @@ ephy_history_dialog_row_class_init (EphyHistoryDialogRowClass *klass)
     g_param_spec_string ("title", NULL, NULL, NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
 }
 
 static void

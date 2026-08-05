@@ -96,15 +96,13 @@ struct _EphyEmbed {
 
 G_DEFINE_FINAL_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
 
-enum {
-  PROP_0,
-  PROP_WEB_VIEW,
+typedef enum {
+  PROP_WEB_VIEW = 1,
   PROP_TITLE,
   PROP_PROGRESS_BAR_ENABLED,
-  LAST_PROP
-};
+} EphyEmbedProps;
 
-static GParamSpec *obj_properties[LAST_PROP];
+static GParamSpec *obj_properties[PROP_PROGRESS_BAR_ENABLED + 1];
 
 /* Portions of the following code based on GTK+.
  * License block as follows:
@@ -451,7 +449,7 @@ ephy_embed_set_property (GObject      *object,
 {
   EphyEmbed *embed = EPHY_EMBED (object);
 
-  switch (prop_id) {
+  switch ((EphyEmbedProps)prop_id) {
     case PROP_WEB_VIEW:
       embed->web_view = g_value_get_object (value);
       break;
@@ -475,7 +473,7 @@ ephy_embed_get_property (GObject    *object,
 {
   EphyEmbed *embed = EPHY_EMBED (object);
 
-  switch (prop_id) {
+  switch ((EphyEmbedProps)prop_id) {
     case PROP_WEB_VIEW:
       g_value_set_object (value, ephy_embed_get_web_view (embed));
       break;
@@ -531,7 +529,7 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (obj_properties), obj_properties);
 }
 
 static gboolean
