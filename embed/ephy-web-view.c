@@ -517,7 +517,7 @@ maybe_take_snapshot (EphyWebView *view)
   view->snapshot_timeout_id = 0;
 
   if (view->error_page != EPHY_WEB_VIEW_ERROR_PAGE_NONE)
-    return FALSE;
+    return G_SOURCE_REMOVE;
 
   shell = ephy_embed_shell_get_default ();
   service = ephy_embed_shell_get_global_history_service (shell);
@@ -533,7 +533,7 @@ maybe_take_snapshot (EphyWebView *view)
                                    g_object_ref (view));
   ephy_history_query_free (query);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

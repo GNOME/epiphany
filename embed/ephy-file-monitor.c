@@ -77,7 +77,7 @@ ephy_file_monitor_reload_cb (EphyFileMonitor *monitor)
     monitor->reload_delay_ticks--;
 
     /* Run again. */
-    return TRUE;
+    return G_SOURCE_CONTINUE;
   }
 
   if (ephy_web_view_is_loading (monitor->view)) {
@@ -85,7 +85,7 @@ ephy_file_monitor_reload_cb (EphyFileMonitor *monitor)
     monitor->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
 
     /* Run again. */
-    return TRUE;
+    return G_SOURCE_CONTINUE;
   }
 
   monitor->reload_scheduled_id = 0;
@@ -94,7 +94,7 @@ ephy_file_monitor_reload_cb (EphyFileMonitor *monitor)
   webkit_web_view_reload (WEBKIT_WEB_VIEW (monitor->view));
 
   /* Don't run again. */
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

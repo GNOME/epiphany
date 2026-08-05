@@ -380,7 +380,7 @@ fullscreen_message_label_hide (EphyEmbed *embed)
     g_clear_handle_id (&embed->fullscreen_message_id, g_source_remove);
   }
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 void

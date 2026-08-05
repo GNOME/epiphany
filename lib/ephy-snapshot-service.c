@@ -406,7 +406,7 @@ retrieve_snapshot_from_web_view (GTask *task)
                              EPHY_SNAPSHOT_SERVICE_ERROR_WEB_VIEW,
                              "%s", "Error getting snapshot, web view was destroyed");
     g_object_unref (task);
-    return FALSE;
+    return G_SOURCE_REMOVE;
   }
 
   webkit_web_view_get_snapshot (data->web_view,
@@ -415,7 +415,7 @@ retrieve_snapshot_from_web_view (GTask *task)
                                 g_task_get_cancellable (task),
                                 (GAsyncReadyCallback)on_snapshot_ready,
                                 task);
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
