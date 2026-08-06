@@ -457,7 +457,7 @@ ephy_window_set_chrome (EphyWindow       *window,
   if (window->closing)
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (window), props[PROP_CHROME]);
+  g_object_notify (G_OBJECT (window), "chrome");
   sync_chromes_visibility (window);
 }
 
@@ -1989,7 +1989,7 @@ ephy_window_set_is_popup (EphyWindow *window,
 {
   window->is_popup = is_popup;
 
-  g_object_notify_by_pspec (G_OBJECT (window), props[PROP_SINGLE_TAB_MODE]);
+  g_object_notify (G_OBJECT (window), "is-popup");
 }
 
 static void
@@ -2834,7 +2834,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
 
   ephy_mouse_gesture_controller_set_web_view (window->mouse_gesture_controller, web_view);
 
-  g_object_notify_by_pspec (G_OBJECT (window), props[PROP_ACTIVE_CHILD]);
+  g_object_notify (G_OBJECT (window), "active-child");
 }
 
 static void
