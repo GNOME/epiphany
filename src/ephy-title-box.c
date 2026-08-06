@@ -30,8 +30,6 @@ typedef enum {
   PROP_SECURITY_LEVEL,
 } EphyTitleBoxProps;
 
-static GParamSpec *props[PROP_SECURITY_LEVEL + 1] = { NULL, };
-
 struct _EphyTitleBox {
   AdwBin parent_instance;
 
@@ -191,12 +189,8 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   object_class->get_property = ephy_title_box_get_property;
   object_class->set_property = ephy_title_box_set_property;
 
-  props[PROP_ADDRESS] = g_param_spec_override ("address",
-                                               g_object_interface_find_property (g_type_default_interface_ref (EPHY_TYPE_TITLE_WIDGET), "address"));
-  props[PROP_SECURITY_LEVEL] = g_param_spec_override ("security-level",
-                                                      g_object_interface_find_property (g_type_default_interface_ref (EPHY_TYPE_TITLE_WIDGET), "security-level"));
-
-  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
+  g_object_class_override_property (object_class, PROP_ADDRESS, "address");
+  g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
 }
 
 static void

@@ -38,10 +38,8 @@ struct _EphyNotification {
 
 typedef enum {
   PROP_HEAD = 1,
-  PROP_BODY,
+  PROP_BODY
 } EphyNotificationProps;
-
-static GParamSpec *props[PROP_BODY + 1] = { NULL, };
 
 enum {
   CLOSE,
@@ -162,16 +160,18 @@ ephy_notification_class_init (EphyNotificationClass *klass)
   object_class->set_property = ephy_notification_set_property;
   object_class->get_property = ephy_notification_get_property;
 
-  props[PROP_HEAD] = g_param_spec_string ("head",
-                                          NULL, NULL,
-                                          "",
-                                          G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
-  props[PROP_BODY] = g_param_spec_string ("body",
-                                          NULL, NULL,
-                                          "",
-                                          G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
-
-  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
+  g_object_class_install_property (object_class,
+                                   PROP_HEAD,
+                                   g_param_spec_string ("head",
+                                                        NULL, NULL,
+                                                        "",
+                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   PROP_BODY,
+                                   g_param_spec_string ("body",
+                                                        NULL, NULL,
+                                                        "",
+                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 
   signals[CLOSE] =
     g_signal_new ("close",
