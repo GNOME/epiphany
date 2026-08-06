@@ -217,6 +217,8 @@ typedef enum {
   PROP_ADAPTIVE_MODE,
 } EphyWindowProps;
 
+static GParamSpec *props[PROP_ADAPTIVE_MODE + 1] = { NULL, };
+
 /* Make sure not to overlap with those in ephy-lockdown.c */
 enum {
   SENS_FLAG_CHROME        = 1 << 0,
@@ -4702,33 +4704,27 @@ ephy_window_class_init (EphyWindowClass *klass)
 
   window_class->close_request = ephy_window_close_request;
 
-  g_object_class_override_property (object_class,
-                                    PROP_ACTIVE_CHILD,
-                                    "active-child");
+  props[PROP_ACTIVE_CHILD] = g_param_spec_override ("active-child",
+                                                    g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "active-child"));
 
-  g_object_class_override_property (object_class,
-                                    PROP_SINGLE_TAB_MODE,
-                                    "is-popup");
+  props[PROP_SINGLE_TAB_MODE] = g_param_spec_override ("is-popup",
+                                                       g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "is-popup"));
 
-  g_object_class_install_property (object_class,
-                                   PROP_CHROME,
-                                   g_param_spec_flags ("chrome",
-                                                       NULL,
-                                                       NULL,
-                                                       EPHY_TYPE_WINDOW_CHROME,
-                                                       EPHY_WINDOW_CHROME_DEFAULT,
-                                                       G_PARAM_READWRITE |
-                                                       G_PARAM_STATIC_STRINGS));
+  props[PROP_CHROME] = g_param_spec_flags ("chrome",
+                                           NULL,
+                                           NULL,
+                                           EPHY_TYPE_WINDOW_CHROME,
+                                           EPHY_WINDOW_CHROME_DEFAULT,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class,
-                                   PROP_ADAPTIVE_MODE,
-                                   g_param_spec_enum ("adaptive-mode",
-                                                      NULL,
-                                                      NULL,
-                                                      EPHY_TYPE_ADAPTIVE_MODE,
-                                                      EPHY_ADAPTIVE_MODE_NORMAL,
-                                                      G_PARAM_READWRITE |
-                                                      G_PARAM_STATIC_STRINGS));
+  props[PROP_ADAPTIVE_MODE] = g_param_spec_enum ("adaptive-mode",
+                                                 NULL,
+                                                 NULL,
+                                                 EPHY_TYPE_ADAPTIVE_MODE,
+                                                 EPHY_ADAPTIVE_MODE_NORMAL,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
 
   shell = ephy_shell_get_default ();
   manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
