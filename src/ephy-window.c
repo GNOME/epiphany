@@ -213,7 +213,7 @@ struct _EphyWindow {
 typedef enum {
   PROP_ACTIVE_CHILD = 1,
   PROP_CHROME,
-  PROP_SINGLE_TAB_MODE,
+  PROP_IS_POPUP,
   PROP_ADAPTIVE_MODE,
 } EphyWindowProps;
 
@@ -1991,7 +1991,7 @@ ephy_window_set_is_popup (EphyWindow *window,
 {
   window->is_popup = is_popup;
 
-  g_object_notify_by_pspec (G_OBJECT (window), props[PROP_SINGLE_TAB_MODE]);
+  g_object_notify_by_pspec (G_OBJECT (window), props[PROP_IS_POPUP]);
 }
 
 static void
@@ -3861,7 +3861,7 @@ ephy_window_set_property (GObject      *object,
     case PROP_CHROME:
       ephy_window_set_chrome (window, g_value_get_flags (value));
       break;
-    case PROP_SINGLE_TAB_MODE:
+    case PROP_IS_POPUP:
       ephy_window_set_is_popup (window, g_value_get_boolean (value));
       break;
     case PROP_ADAPTIVE_MODE:
@@ -3885,7 +3885,7 @@ ephy_window_get_property (GObject    *object,
     case PROP_CHROME:
       g_value_set_flags (value, window->chrome);
       break;
-    case PROP_SINGLE_TAB_MODE:
+    case PROP_IS_POPUP:
       g_value_set_boolean (value, window->is_popup);
       break;
     case PROP_ADAPTIVE_MODE:
@@ -4707,8 +4707,8 @@ ephy_window_class_init (EphyWindowClass *klass)
   props[PROP_ACTIVE_CHILD] = g_param_spec_override ("active-child",
                                                     g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "active-child"));
 
-  props[PROP_SINGLE_TAB_MODE] = g_param_spec_override ("is-popup",
-                                                       g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "is-popup"));
+  props[PROP_IS_POPUP] = g_param_spec_override ("is-popup",
+                                                g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "is-popup"));
 
   props[PROP_CHROME] = g_param_spec_flags ("chrome",
                                            NULL,
