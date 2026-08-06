@@ -241,17 +241,29 @@ out:
 static void
 ephy_view_source_request_start (EphyViewSourceRequest *request)
 {
+  g_autoptr (GUri) uri = NULL;
   const char *converted_uri;
   const char *original_uri;
   WebKitWebView *web_view;
-
-  request->source_handler->outstanding_requests =
-    g_list_prepend (request->source_handler->outstanding_requests, request);
 
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
 
   /* Convert e.g. view-source:https://gnome.org to https://gnome.org */
   converted_uri = original_uri + strlen (EPHY_VIEW_SOURCE_SCHEME) + 1;
+
+  uri = g_uri_parse (converted_uri, G_URI_FLAGS_PARSE_RELAXED, NULL);
+
+  if (!uri || !g_uri_get_scheme (uri)) {
+    GError *error = g_error_new (WEBKIT_NETWORK_ERROR,
+                                 WEBKIT_NETWORK_ERROR_FAILED,
+                                 _("%s is not a valid URI"),
+                                 original_uri);
+    finish_uri_scheme_request (request, NULL, error);
+    return;
+  }
+
+  request->source_handler->outstanding_requests =
+    g_list_prepend (request->source_handler->outstanding_requests, request);
 
   web_view = get_web_view_matching_uri (converted_uri);
   if (web_view)
