@@ -75,7 +75,7 @@ check-potfiles:
   extends:
     - '.fdo.distribution-image@fedora'
     - '.fedora.container.common'
-  stage: 'test'
+  stage: 'lint'
   needs: [ 'build.container.fedora@x86_64' ]
   interruptible: true
   script:
