@@ -18,6 +18,13 @@ then
     exit 1
 fi
 
+BLUEPRINT_COMPILER=$(command -v blueprint-compiler)
+if [ -z "$BLUEPRINT_COMPILER" ];
+then
+    echo "blueprint-compiler is not installed on your system."
+    exit 1
+fi
+
 # create a filename to store our generated patch
 prefix="epiphany-ccs"
 suffix="$(date +%C%y-%m-%d_%Hh%Mm%Ss)"
@@ -41,7 +48,7 @@ do
   find "$DIR" -name "*.blp" ! -path "*/contrib/*" -type f -print0 | while IFS= read -r -d '' FILE;
   do
     cp "$FILE" "$FILE.temp"
-    blueprint-compiler format -f "$FILE.temp" > /dev/null || true
+    "$BLUEPRINT_COMPILER" format -f "$FILE.temp" > /dev/null || true
     diff -urN "$FILE" "$FILE.temp" | \
         sed -e "1s|--- |--- a/|" -e "2s|+++ |+++ b/|" >> "$patch"
     rm "$FILE.temp"
