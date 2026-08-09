@@ -4,7 +4,7 @@
 # Lode Vermeiren <lode@linu.cx>, 2004.
 # Wouter Bolsterlee <wbolster@gnome.org>, 2007–2012.
 # Rachid BM <rachidbm@ubuntu.com>, 2012.
-# Nathan Follens <nfollens@gnome.org>, 2015-2017, 2019-2025.
+# Nathan Follens <nfollens@gnome.org>, 2015-2017, 2019-2026.
 # Justin van Steijn <jvs@fsfe.org>, 2016, 2017, 2018, 2019.
 # Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2016, 2017, 2018, 2019, 2020, 2021.
 # Joeke de Graaf <mappack@null.net>, 2019.
@@ -16,16 +16,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-04-06 13:25+0000\n"
-"PO-Revision-Date: 2026-03-17 09:00+0100\n"
-"Last-Translator: Reinout van Schouwen <reinout+gnome@vanschouwen.info>\n"
+"POT-Creation-Date: 2026-08-06 21:37+0000\n"
+"PO-Revision-Date: 2026-08-09 15:59+0200\n"
+"Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
 "Language-Team: GNOME-NL https://matrix.to/#/#nl:gnome.org\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 49.0\n"
+"X-Generator: Poedit 3.9\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Project-Style: gnome\n"
 "X-DL-VCS-Web: https://gitlab.gnome.org/GNOME/epiphany/\n"
@@ -36,9 +36,9 @@ msgstr ""
 "X-DL-State: Translating\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:205
-#: embed/ephy-about-handler.c:237 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:429 src/window-commands.c:1230
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:206
+#: embed/ephy-about-handler.c:238 src/ephy-main.c:104 src/ephy-main.c:268
+#: src/ephy-main.c:429 src/window-commands.c:1231
 msgid "Web"
 msgstr "Web"
 
@@ -1141,7 +1141,8 @@ msgstr "Een browservenster"
 
 # src/menubar.c:396
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1240
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:36
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:38 src/window-commands.c:1241
 msgid "The GNOME Project"
 msgstr "Het GNOME-project"
 
@@ -1149,52 +1150,52 @@ msgstr "Het GNOME-project"
 msgid "Memory usage"
 msgstr "Geheugengebruik"
 
-#: embed/ephy-about-handler.c:171
+#: embed/ephy-about-handler.c:172
 #, c-format
 msgid "Version %s"
 msgstr "Versie %s"
 
 # src/menubar.c:43
-#: embed/ephy-about-handler.c:202
+#: embed/ephy-about-handler.c:203
 msgid "About Web"
 msgstr "Info over Web"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1232
+#: embed/ephy-about-handler.c:208 src/window-commands.c:1233
 msgid "Epiphany Technology Preview"
 msgstr "Epiphany Technology Preview"
 
-#: embed/ephy-about-handler.c:210
+#: embed/ephy-about-handler.c:211
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Een eenvoudige, heldere en mooie weergave van het web"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:274 embed/ephy-about-handler.c:277
-#: embed/ephy-about-handler.c:345 embed/ephy-about-handler.c:371
+#: embed/ephy-about-handler.c:275 embed/ephy-about-handler.c:278
+#: embed/ephy-about-handler.c:346 embed/ephy-about-handler.c:372
 msgid "Apps"
 msgstr "Toepassingen"
 
-#: embed/ephy-about-handler.c:278
+#: embed/ephy-about-handler.c:279
 msgid "List of installed web apps"
 msgstr "Lijst van geïnstalleerde webtoepassingen"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2024
+#: embed/ephy-about-handler.c:331 src/window-commands.c:2026
 msgid "Launch"
 msgstr "Starten"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: embed/ephy-about-handler.c:330
+#: embed/ephy-about-handler.c:331
 msgid "Delete"
 msgstr "Verwijderen"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:332
+#: embed/ephy-about-handler.c:333
 msgid "Installed on:"
 msgstr "Geïnstalleerd op:"
 
-#: embed/ephy-about-handler.c:371
+#: embed/ephy-about-handler.c:372
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
@@ -1203,25 +1204,39 @@ msgstr ""
 "webtoepassing…</b> binnen het paginamenu."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:476
+#: embed/ephy-about-handler.c:478
 msgid "Welcome to Web"
 msgstr "Welkom bij Web"
 
-#: embed/ephy-about-handler.c:476
+#: embed/ephy-about-handler.c:478
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Begin met browsen en uw meest bezochte pagina’s verschijnen hier."
 
 # src/menubar.c:150
-#: embed/ephy-about-handler.c:510
-#: embed/web-process-extension/resources/js/overview.js:151
+#: embed/ephy-about-handler.c:514
+#: embed/web-process-extension/resources/js/overview.js:165
 msgid "Remove from overview"
 msgstr "Verwijderen uit overzicht"
 
-#: embed/ephy-about-handler.c:599 embed/ephy-about-handler.c:600
+# src/menubar.c:150
+#: embed/ephy-about-handler.c:515
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:313
+msgid "Unpin from overview"
+msgstr "Losmaken van overzicht"
+
+# src/menubar.c:150
+#: embed/ephy-about-handler.c:515
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:317
+msgid "Pin to overview"
+msgstr "Vastmaken aan overzicht"
+
+#: embed/ephy-about-handler.c:604 embed/ephy-about-handler.c:605
 msgid "Private Browsing"
 msgstr "Privénavigatie"
 
-#: embed/ephy-about-handler.c:601
+#: embed/ephy-about-handler.c:606
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1232,14 +1247,14 @@ msgstr ""
 "wordt gewist wanneer u het venster sluit. Bestanden die u downloadt blijven "
 "behouden."
 
-#: embed/ephy-about-handler.c:605
+#: embed/ephy-about-handler.c:610
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Incognito-modus verbergt uw activiteit alleen voor personen die deze "
 "computer gebruiken."
 
-#: embed/ephy-about-handler.c:607
+#: embed/ephy-about-handler.c:612
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1259,18 +1274,18 @@ msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Voer de pincode voor %s in om u aan te melden op %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:321
-#: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:771
-#: embed/ephy-web-view.c:1356 src/ephy-history-dialog.c:867
-#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:272
-#: src/ephy-window.c:2317 src/preferences/autofill-view.c:363
-#: src/preferences/extension-view.c:117
-#: src/resources/gtk/bookmark-properties.blp:20
+#: embed/ephy-client-certificate-manager.c:445 embed/ephy-download.c:765
+#: embed/ephy-web-view.c:1349 src/ephy-history-dialog.c:860
+#: src/ephy-passwords-view.c:156 src/ephy-shell.c:418 src/ephy-window.c:275
+#: src/ephy-window.c:2338 src/preferences/autofill-view.c:365
+#: src/preferences/extension-view.c:115
+#: src/resources/gtk/bookmark-properties.blp:29
 #: src/resources/gtk/firefox-sync-dialog.blp:100
 #: src/resources/gtk/history-dialog.blp:55
-#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:363
-#: src/window-commands.c:568 src/window-commands.c:934
-#: src/window-commands.c:1410 src/window-commands.c:2117
-#: src/window-commands.c:3176
+#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:364
+#: src/window-commands.c:569 src/window-commands.c:935
+#: src/window-commands.c:1411 src/window-commands.c:2119
+#: src/window-commands.c:3229
 msgid "_Cancel"
 msgstr "_Annuleren"
 
@@ -1278,102 +1293,107 @@ msgstr "_Annuleren"
 msgid "_Login"
 msgstr "Aanme_lden"
 
-#: embed/ephy-client-certificate-manager.c:431
+# ? - Nathan
+#: embed/ephy-client-certificate-manager.c:334
+msgid "PIN"
+msgstr "PIN"
+
+#: embed/ephy-client-certificate-manager.c:430
 msgid "Select certificate"
 msgstr "Certificaat selecteren"
 
-#: embed/ephy-client-certificate-manager.c:435
+#: embed/ephy-client-certificate-manager.c:434
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
 "for %s."
 msgstr "De website %s:%d vereist een certificaat om aan te melden met %s."
 
-#: embed/ephy-client-certificate-manager.c:440
+#: embed/ephy-client-certificate-manager.c:439
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "De website %s:%d vereist een certificaat om aan te melden."
 
-#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:367
+#: embed/ephy-client-certificate-manager.c:446 src/window-commands.c:368
 msgid "_Select"
 msgstr "_Selecteren"
 
-#: embed/ephy-client-certificate-manager.c:489
+#: embed/ephy-client-certificate-manager.c:488
 msgid "Remember Decision"
 msgstr "Keuze onthouden"
 
 # ui/preferences.glade.h:118
-#: embed/ephy-client-certificate-manager.c:492
+#: embed/ephy-client-certificate-manager.c:491
 msgid "Never"
 msgstr "Nooit"
 
-#: embed/ephy-client-certificate-manager.c:493
+#: embed/ephy-client-certificate-manager.c:492
 msgid "For Session"
 msgstr "Voor deze sessie"
 
-#: embed/ephy-client-certificate-manager.c:494
+#: embed/ephy-client-certificate-manager.c:493
 msgid "Permanently"
 msgstr "Voorgoed"
 
-#: embed/ephy-download.c:719 src/preferences/prefs-general-page.c:589
+#: embed/ephy-download.c:713 src/preferences/prefs-general-page.c:589
 msgid "Select a Directory"
 msgstr "Kies een map"
 
-#: embed/ephy-download.c:727
+#: embed/ephy-download.c:721
 msgid "Select the Destination"
 msgstr "Kies de bestemming"
 
-#: embed/ephy-download.c:769
+#: embed/ephy-download.c:763
 msgid "Download Requested"
 msgstr "Download aangevraagd"
 
-#: embed/ephy-download.c:772
+#: embed/ephy-download.c:766
 msgid "_Download"
 msgstr "_Downloaden"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
 #. Type
-#: embed/ephy-download.c:800
+#: embed/ephy-download.c:794
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Type: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:806
+#: embed/ephy-download.c:800
 #, c-format
 msgid "Source: %s"
 msgstr "Bron: %s"
 
 #. Question
-#: embed/ephy-download.c:812
+#: embed/ephy-download.c:806
 msgid "Where do you want to save the file?"
 msgstr "Waar wilt u het bestand opslaan?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:971
+#: embed/ephy-download.c:965
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Download van %s voltooid"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:973 src/ephy-window.c:4123
+#: embed/ephy-download.c:967 src/ephy-window.c:4131
 msgid "Download finished"
 msgstr "Download is voltooid"
 
 # src/main.c:111
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:566
+#: embed/ephy-embed.c:554
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Druk op %s om de schermvullende modus te verlaten"
 
-#: embed/ephy-embed.c:566
+#: embed/ephy-embed.c:554
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:566
+#: embed/ephy-embed.c:554
 msgid "F11"
 msgstr "F11"
 
@@ -1382,32 +1402,32 @@ msgstr "F11"
 # Het woord automatie vind ik onduidelijk.
 # wordt automatisch bestuurd beter? - Hannie
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:843
+#: embed/ephy-embed.c:828
 msgid "Web is being controlled by automation"
 msgstr "Web wordt geautomatiseerd bestuurd"
 
-#: embed/ephy-embed-autofill.c:115
+#: embed/ephy-embed-autofill.c:116
 msgid "Autofill All Fields"
 msgstr "Alle velden automatisch invullen"
 
-#: embed/ephy-embed-autofill.c:124
+#: embed/ephy-embed-autofill.c:125
 msgid "Autofill Personal Fields"
 msgstr "Persoonlijke velden automatisch invullen"
 
-#: embed/ephy-embed-autofill.c:132
+#: embed/ephy-embed-autofill.c:133
 msgid "Fill This Field"
 msgstr "Dit veld invullen"
 
-#: embed/ephy-embed-autofill.c:140
+#: embed/ephy-embed-autofill.c:141
 msgid "Do Not Autofill"
 msgstr "Niet automatisch invullen"
 
-#: embed/ephy-embed-shell.c:671
+#: embed/ephy-embed-shell.c:708
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI %s is niet geautoriseerd voor toegang tot Epiphany-bron %s"
 
-#: embed/ephy-embed-utils.c:72
+#: embed/ephy-embed-utils.c:74
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "E-mailbericht sturen naar ‘%s’"
@@ -1421,384 +1441,384 @@ msgstr "E-mailbericht sturen naar ‘%s’"
 #. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
 #.
-#: embed/ephy-embed-utils.c:84
+#: embed/ephy-embed-utils.c:86
 #, c-format
 msgid ", “%s”"
 msgstr ", “%s”"
 
 # ui/preferences.glade.h:170
-#: embed/ephy-embed-utils.h:31
+#: embed/ephy-embed-utils.h:32
 msgid "Blank page"
 msgstr "Blanco pagina"
 
 # src/menubar.c:54
 #. Title for the blank page
-#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.blp:104
+#: embed/ephy-embed-utils.h:33 src/resources/gtk/action-bar-start.blp:104
 msgid "New Tab"
 msgstr "Nieuw tabblad"
 
 # src/mozilla_i18n.c:44
-#: embed/ephy-encodings.c:58
+#: embed/ephy-encodings.c:59
 msgid "Arabic (_IBM-864)"
 msgstr "Arabisch (_IBM-864)"
 
 # src/mozilla_i18n.c:46
-#: embed/ephy-encodings.c:59
+#: embed/ephy-encodings.c:60
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Arabisch (ISO-_8859-6)"
 
 # src/mozilla_i18n.c:49
-#: embed/ephy-encodings.c:60
+#: embed/ephy-encodings.c:61
 msgid "Arabic (_MacArabic)"
 msgstr "Arabisch (_MacArabic)"
 
 # src/mozilla_i18n.c:50
-#: embed/ephy-encodings.c:61
+#: embed/ephy-encodings.c:62
 msgid "Arabic (_Windows-1256)"
 msgstr "Arabisch (_Windows-1256)"
 
 # src/mozilla_i18n.c:52
-#: embed/ephy-encodings.c:62
+#: embed/ephy-encodings.c:63
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Baltisch (_ISO-8859-13)"
 
 # src/mozilla_i18n.c:53
-#: embed/ephy-encodings.c:63
+#: embed/ephy-encodings.c:64
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Baltisch (I_SO-8859-4)"
 
 # src/mozilla_i18n.c:54
-#: embed/ephy-encodings.c:64
+#: embed/ephy-encodings.c:65
 msgid "Baltic (_Windows-1257)"
 msgstr "Baltisch (_Windows-1257)"
 
 # src/mozilla_i18n.c:51
 # ui/preferences.glade.h:22
-#: embed/ephy-encodings.c:65
+#: embed/ephy-encodings.c:66
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Armeens (ARMSCII-8)"
 
-#: embed/ephy-encodings.c:66
+#: embed/ephy-encodings.c:67
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Georgisch (GEOSTD8)"
 
 # src/mozilla_i18n.c:56
-#: embed/ephy-encodings.c:67
+#: embed/ephy-encodings.c:68
 msgid "Central European (_IBM-852)"
 msgstr "Centraal Europees (_IBM-852)"
 
 # src/mozilla_i18n.c:57
-#: embed/ephy-encodings.c:68
+#: embed/ephy-encodings.c:69
 msgid "Central European (I_SO-8859-2)"
 msgstr "Centraal Europees (I_SO-8859-2)"
 
 # src/mozilla_i18n.c:58
-#: embed/ephy-encodings.c:69
+#: embed/ephy-encodings.c:70
 msgid "Central European (_MacCE)"
 msgstr "Centraal Europees (_MacCE)"
 
 # src/mozilla_i18n.c:59
-#: embed/ephy-encodings.c:70
+#: embed/ephy-encodings.c:71
 msgid "Central European (_Windows-1250)"
 msgstr "Centraal Europees (_Windows-1250)"
 
 # src/mozilla_i18n.c:60
-#: embed/ephy-encodings.c:71
+#: embed/ephy-encodings.c:72
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Vereenvoudigd Chinees (_GB18030)"
 
 # src/mozilla_i18n.c:61
-#: embed/ephy-encodings.c:72
+#: embed/ephy-encodings.c:73
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Vereenvoudigd Chinees (G_B2312)"
 
 # src/mozilla_i18n.c:62
-#: embed/ephy-encodings.c:73
+#: embed/ephy-encodings.c:74
 msgid "Chinese Simplified (GB_K)"
 msgstr "Vereenvoudigd Chinees (GB_K)"
 
 # src/mozilla_i18n.c:63
-#: embed/ephy-encodings.c:74
+#: embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_HZ)"
 msgstr "Vereenvoudigd Chinees (_HZ)"
 
 # src/mozilla_i18n.c:61
-#: embed/ephy-encodings.c:75
+#: embed/ephy-encodings.c:76
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Vereenvoudigd Chinees (_ISO-2022-CN)"
 
 # src/mozilla_i18n.c:65
-#: embed/ephy-encodings.c:76
+#: embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big_5)"
 msgstr "Traditioneel Chinees (Big_5)"
 
 # src/mozilla_i18n.c:66
-#: embed/ephy-encodings.c:77
+#: embed/ephy-encodings.c:78
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Traditioneel Chinees (Big5-HK_SCS)"
 
 # src/mozilla_i18n.c:67
-#: embed/ephy-encodings.c:78
+#: embed/ephy-encodings.c:79
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Traditioneel Chinees (_EUC-TW)"
 
 # src/mozilla_i18n.c:69
-#: embed/ephy-encodings.c:79
+#: embed/ephy-encodings.c:80
 msgid "Cyrillic (_IBM-855)"
 msgstr "Cyrillisch (_IBM-855)"
 
 # src/mozilla_i18n.c:70
-#: embed/ephy-encodings.c:80
+#: embed/ephy-encodings.c:81
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Cyrillisch (I_SO-8859-5)"
 
 # src/mozilla_i18n.c:71
-#: embed/ephy-encodings.c:81
+#: embed/ephy-encodings.c:82
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Cyrillisch (IS_O-IR-111)"
 
 # src/mozilla_i18n.c:72
-#: embed/ephy-encodings.c:82
+#: embed/ephy-encodings.c:83
 msgid "Cyrillic (_KOI8-R)"
 msgstr "Cyrillisch (_KOI8-R)"
 
 # src/mozilla_i18n.c:73
-#: embed/ephy-encodings.c:83
+#: embed/ephy-encodings.c:84
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Cyrillisch (_MacCyrillic)"
 
 # src/mozilla_i18n.c:74
-#: embed/ephy-encodings.c:84
+#: embed/ephy-encodings.c:85
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Cyrillisch (_Windows-1251)"
 
 # src/mozilla_i18n.c:75
-#: embed/ephy-encodings.c:85
+#: embed/ephy-encodings.c:86
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Cyrillisch/_Russisch (IBM-866)"
 
 # src/mozilla_i18n.c:80
-#: embed/ephy-encodings.c:86
+#: embed/ephy-encodings.c:87
 msgid "Greek (_ISO-8859-7)"
 msgstr "Grieks (_ISO-8859-7)"
 
 # src/mozilla_i18n.c:81
-#: embed/ephy-encodings.c:87
+#: embed/ephy-encodings.c:88
 msgid "Greek (_MacGreek)"
 msgstr "Grieks (_MacGreek)"
 
 # src/mozilla_i18n.c:82
-#: embed/ephy-encodings.c:88
+#: embed/ephy-encodings.c:89
 msgid "Greek (_Windows-1253)"
 msgstr "Grieks (_Windows-1253)"
 
 # src/mozilla_i18n.c:83
-#: embed/ephy-encodings.c:89
+#: embed/ephy-encodings.c:90
 msgid "Gujarati (_MacGujarati)"
 msgstr "Gujarati (_MacGujarati)"
 
 # src/mozilla_i18n.c:84
-#: embed/ephy-encodings.c:90
+#: embed/ephy-encodings.c:91
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Gurmukhi (Mac_Gurmukhi)"
 
 # src/mozilla_i18n.c:90
-#: embed/ephy-encodings.c:91
+#: embed/ephy-encodings.c:92
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Hindi (Mac_Devanagari)"
 
 # src/mozilla_i18n.c:85
-#: embed/ephy-encodings.c:92
+#: embed/ephy-encodings.c:93
 msgid "Hebrew (_IBM-862)"
 msgstr "Hebreeuws (_IBM-862)"
 
 # src/mozilla_i18n.c:87
-#: embed/ephy-encodings.c:93
+#: embed/ephy-encodings.c:94
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Hebreeuws (IS_O-8859-8-I)"
 
 # src/mozilla_i18n.c:88
-#: embed/ephy-encodings.c:94
+#: embed/ephy-encodings.c:95
 msgid "Hebrew (_MacHebrew)"
 msgstr "Hebreeuws (_MacHebrew)"
 
 # src/mozilla_i18n.c:89
-#: embed/ephy-encodings.c:95
+#: embed/ephy-encodings.c:96
 msgid "Hebrew (_Windows-1255)"
 msgstr "Hebreeuws (_Windows-1255)"
 
 # src/mozilla_i18n.c:119
-#: embed/ephy-encodings.c:96
+#: embed/ephy-encodings.c:97
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_Visueel Hebreeuws (ISO-8859-8)"
 
 # src/mozilla_i18n.c:92
-#: embed/ephy-encodings.c:97
+#: embed/ephy-encodings.c:98
 msgid "Japanese (_EUC-JP)"
 msgstr "Japans (_EUC-JP)"
 
 # src/mozilla_i18n.c:93
-#: embed/ephy-encodings.c:98
+#: embed/ephy-encodings.c:99
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Japans (_ISO-2022-JP)"
 
 # src/mozilla_i18n.c:94
-#: embed/ephy-encodings.c:99
+#: embed/ephy-encodings.c:100
 msgid "Japanese (_Shift-JIS)"
 msgstr "Japans (_Shift-JIS)"
 
 # src/mozilla_i18n.c:95
-#: embed/ephy-encodings.c:100
+#: embed/ephy-encodings.c:101
 msgid "Korean (_EUC-KR)"
 msgstr "Koreaans (_EUC-KR)"
 
 # src/mozilla_i18n.c:96
-#: embed/ephy-encodings.c:101
+#: embed/ephy-encodings.c:102
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Koreaans (_ISO-2022-KR)"
 
 # src/mozilla_i18n.c:97
-#: embed/ephy-encodings.c:102
+#: embed/ephy-encodings.c:103
 msgid "Korean (_JOHAB)"
 msgstr "Koreaans (_JOHAB)"
 
 # src/mozilla_i18n.c:98
-#: embed/ephy-encodings.c:103
+#: embed/ephy-encodings.c:104
 msgid "Korean (_UHC)"
 msgstr "Koreaans (_UHC)"
 
 # src/mozilla_i18n.c:55
-#: embed/ephy-encodings.c:104
+#: embed/ephy-encodings.c:105
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Celtisch (ISO-8859-14)"
 
 # src/mozilla_i18n.c:91
-#: embed/ephy-encodings.c:105
+#: embed/ephy-encodings.c:106
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_IJslands (MacIcelandic)"
 
 # src/mozilla_i18n.c:99
-#: embed/ephy-encodings.c:106
+#: embed/ephy-encodings.c:107
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_Noors (ISO-8859-10)"
 
 # src/mozilla_i18n.c:79
-#: embed/ephy-encodings.c:107
+#: embed/ephy-encodings.c:108
 msgid "_Persian (MacFarsi)"
 msgstr "_Perzisch (MacFarsi)"
 
 # src/mozilla_i18n.c:68
-#: embed/ephy-encodings.c:108
+#: embed/ephy-encodings.c:109
 msgid "Croatian (Mac_Croatian)"
 msgstr "Kroatisch (Mac_Croatian)"
 
 # src/mozilla_i18n.c:100
-#: embed/ephy-encodings.c:109
+#: embed/ephy-encodings.c:110
 msgid "_Romanian (MacRomanian)"
 msgstr "_Roemeens (MacRomanian)"
 
 # src/mozilla_i18n.c:101
-#: embed/ephy-encodings.c:110
+#: embed/ephy-encodings.c:111
 msgid "R_omanian (ISO-8859-16)"
 msgstr "R_oemeens (ISO-8859-16)"
 
 # src/mozilla_i18n.c:102
-#: embed/ephy-encodings.c:111
+#: embed/ephy-encodings.c:112
 msgid "South _European (ISO-8859-3)"
 msgstr "Zuid_Europees (ISO-8859-3)"
 
 # src/mozilla_i18n.c:103
-#: embed/ephy-encodings.c:112
+#: embed/ephy-encodings.c:113
 msgid "Thai (TIS-_620)"
 msgstr "Thais (TIS-_620)"
 
 # src/mozilla_i18n.c:52
-#: embed/ephy-encodings.c:113
+#: embed/ephy-encodings.c:114
 msgid "Thai (IS_O-8859-11)"
 msgstr "Thais (IS_O-8859-11)"
 
 # src/mozilla_i18n.c:54
-#: embed/ephy-encodings.c:114
+#: embed/ephy-encodings.c:115
 msgid "_Thai (Windows-874)"
 msgstr "_Thais (Windows-874)"
 
 # src/mozilla_i18n.c:104
-#: embed/ephy-encodings.c:115
+#: embed/ephy-encodings.c:116
 msgid "Turkish (_IBM-857)"
 msgstr "Turks (_IBM-857)"
 
 # src/mozilla_i18n.c:105
-#: embed/ephy-encodings.c:116
+#: embed/ephy-encodings.c:117
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Turks (I_SO-8859-9)"
 
 # src/mozilla_i18n.c:106
-#: embed/ephy-encodings.c:117
+#: embed/ephy-encodings.c:118
 msgid "Turkish (_MacTurkish)"
 msgstr "Turks (_MacTurkish)"
 
 # src/mozilla_i18n.c:107
-#: embed/ephy-encodings.c:118
+#: embed/ephy-encodings.c:119
 msgid "Turkish (_Windows-1254)"
 msgstr "Turks (_Windows-1254)"
 
 # src/mozilla_i18n.c:109
-#: embed/ephy-encodings.c:119
+#: embed/ephy-encodings.c:120
 msgid "Unicode (UTF-_8)"
 msgstr "Unicode (UTF-_8)"
 
 # src/mozilla_i18n.c:76
-#: embed/ephy-encodings.c:120
+#: embed/ephy-encodings.c:121
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Cyrillisch/Oekraïens (_KOI8-U)"
 
 # src/mozilla_i18n.c:77
-#: embed/ephy-encodings.c:121
+#: embed/ephy-encodings.c:122
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Cyrillisch/Oekraïens (Mac_Ukrainian)"
 
 # src/mozilla_i18n.c:115
-#: embed/ephy-encodings.c:122
+#: embed/ephy-encodings.c:123
 msgid "Vietnamese (_TCVN)"
 msgstr "Vietnamees (_TCVN)"
 
 # src/mozilla_i18n.c:116
-#: embed/ephy-encodings.c:123
+#: embed/ephy-encodings.c:124
 msgid "Vietnamese (_VISCII)"
 msgstr "Vietnamees (_VISCII)"
 
 # src/mozilla_i18n.c:117
-#: embed/ephy-encodings.c:124
+#: embed/ephy-encodings.c:125
 msgid "Vietnamese (V_PS)"
 msgstr "Vietnamees (V_PS)"
 
 # src/mozilla_i18n.c:118
-#: embed/ephy-encodings.c:125
+#: embed/ephy-encodings.c:126
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Vietnamees (_Windows-1258)"
 
 # src/mozilla_i18n.c:120
-#: embed/ephy-encodings.c:126
+#: embed/ephy-encodings.c:127
 msgid "Western (_IBM-850)"
 msgstr "Westers (_IBM-850)"
 
 # src/mozilla_i18n.c:121
-#: embed/ephy-encodings.c:127
+#: embed/ephy-encodings.c:128
 msgid "Western (_ISO-8859-1)"
 msgstr "Westers (_ISO-8859-1)"
 
 # src/mozilla_i18n.c:122
-#: embed/ephy-encodings.c:128
+#: embed/ephy-encodings.c:129
 msgid "Western (IS_O-8859-15)"
 msgstr "Westers (IS_O-8859-15)"
 
 # src/mozilla_i18n.c:123
-#: embed/ephy-encodings.c:129
+#: embed/ephy-encodings.c:130
 msgid "Western (_MacRoman)"
 msgstr "Westers (_MacRoman)"
 
 # src/mozilla_i18n.c:124
-#: embed/ephy-encodings.c:130
+#: embed/ephy-encodings.c:131
 msgid "Western (_Windows-1252)"
 msgstr "Westers (_Windows-1252)"
 
@@ -1806,27 +1826,27 @@ msgstr "Westers (_Windows-1252)"
 #. * pollute the "related" part of the encodings menu with them, so we
 #. * set the language group to 0 here.
 #.
-#: embed/ephy-encodings.c:136
+#: embed/ephy-encodings.c:137
 msgid "English (_US-ASCII)"
 msgstr "Engels (_US-ASCII)"
 
 # src/mozilla_i18n.c:109
-#: embed/ephy-encodings.c:137
+#: embed/ephy-encodings.c:138
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Unicode (UTF-_16 BE)"
 
 # src/mozilla_i18n.c:109
-#: embed/ephy-encodings.c:138
+#: embed/ephy-encodings.c:139
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Unicode (UTF-1_6 LE)"
 
 # src/mozilla_i18n.c:109
-#: embed/ephy-encodings.c:139
+#: embed/ephy-encodings.c:140
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Unicode (UTF-_32 BE)"
 
 # src/mozilla_i18n.c:109
-#: embed/ephy-encodings.c:140
+#: embed/ephy-encodings.c:141
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
 
@@ -1837,114 +1857,114 @@ msgstr "Unicode (UTF-3_2 LE)"
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: embed/ephy-encodings.c:219
+#: embed/ephy-encodings.c:220
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Onbekend (%s)"
 
-#: embed/ephy-find-toolbar.c:290
+#: embed/ephy-find-toolbar.c:286
 msgid "Type to search…"
 msgstr "Typ om te zoeken…"
 
-#: embed/ephy-find-toolbar.c:296
+#: embed/ephy-find-toolbar.c:292
 msgid "Find previous occurrence of the search string"
 msgstr "Zoeken naar vorige positie waar de zoektekst voorkomt"
 
-#: embed/ephy-find-toolbar.c:303
+#: embed/ephy-find-toolbar.c:299
 msgid "Find next occurrence of the search string"
 msgstr "Zoeken naar volgende positie waar de zoektekst voorkomt"
 
-#: embed/ephy-find-toolbar.c:323
+#: embed/ephy-find-toolbar.c:319
 msgid "_Case Sensitive"
 msgstr "_Hoofdlettergevoelig"
 
-#: embed/ephy-find-toolbar.c:324
+#: embed/ephy-find-toolbar.c:320
 msgid "Match Whole _Word Only"
 msgstr "Alleen met hele _woord overeenkomen"
 
-#: embed/ephy-find-toolbar.c:327
+#: embed/ephy-find-toolbar.c:323
 msgid "Search Options"
 msgstr "Zoekopties"
 
-#: embed/ephy-reader-handler.c:315
+#: embed/ephy-reader-handler.c:316 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s is geen geldige URI"
 
-#: embed/ephy-search-entry.c:495
+#: embed/ephy-search-entry.c:491
 msgid "Text not found"
 msgstr "Tekst niet gevonden"
 
-#: embed/ephy-search-entry.c:499
+#: embed/ephy-search-entry.c:495
 msgid "Search wrapped back to the top"
 msgstr "Zoekactie terug naar het begin"
 
 # src/history.c:845
-#: embed/ephy-web-view.c:248 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:247 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: embed/ephy-web-view.c:257 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:256 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr "Alle ondersteunde types"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:628
+#: embed/ephy-web-view.c:623
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Dit formulier is niet veilig ‒ wachtwoorden worden niet privé gehouden"
 
-#: embed/ephy-web-view.c:629 embed/ephy-web-view.c:3623
+#: embed/ephy-web-view.c:624 embed/ephy-web-view.c:3614
 msgid "_Dismiss"
 msgstr "A_fwijzen"
 
 # evt. vastgelopen - Hannie
-#: embed/ephy-web-view.c:805
+#: embed/ephy-web-view.c:799
 msgid "Web process crashed"
 msgstr "Webproces gecrasht"
 
-#: embed/ephy-web-view.c:808
+#: embed/ephy-web-view.c:802
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Het webproces is beëindigd omdat de geheugengrens wordt overschreden"
 
-#: embed/ephy-web-view.c:811
+#: embed/ephy-web-view.c:805
 msgid "Web process terminated by API request"
 msgstr "Het webproces is beëindigd door een API-verzoek"
 
-#: embed/ephy-web-view.c:856
+#: embed/ephy-web-view.c:850
 msgid "Page Unresponsive"
 msgstr "Pagina reageert niet"
 
-#: embed/ephy-web-view.c:859
+#: embed/ephy-web-view.c:853
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "De huidige pagina ‘%s’ reageert niet"
 
-#: embed/ephy-web-view.c:863
+#: embed/ephy-web-view.c:857
 msgid "_Wait"
 msgstr "_Wachten"
 
 # src/menubar.c:477
-#: embed/ephy-web-view.c:864
+#: embed/ephy-web-view.c:858
 msgid "Force _Stop"
 msgstr "_Stoppen forceren"
 
 # src/mozcallbacks.c:424
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1110
+#: embed/ephy-web-view.c:1104
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laden van ‘%s’…"
 
 # src/mozcallbacks.c:424
-#: embed/ephy-web-view.c:1112 embed/ephy-web-view.c:1118
+#: embed/ephy-web-view.c:1106 embed/ephy-web-view.c:1112
 msgid "Loading…"
 msgstr "Laden…"
 
-#: embed/ephy-web-view.c:1349
+#: embed/ephy-web-view.c:1342
 msgid "Delete Web App?"
 msgstr "Webtoepassing verwijderen?"
 
-#: embed/ephy-web-view.c:1352
+#: embed/ephy-web-view.c:1345
 #, c-format
 msgid ""
 "“%s” will be removed. You will have to re-install the website as an app from "
@@ -1956,20 +1976,20 @@ msgstr ""
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: embed/ephy-web-view.c:1357 src/ephy-passwords-view.c:159
-#: src/preferences/autofill-view.c:364 src/resources/gtk/history-dialog.blp:144
+#: embed/ephy-web-view.c:1350 src/ephy-passwords-view.c:157
+#: src/preferences/autofill-view.c:366 src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "_Verwijderen"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1786
+#: embed/ephy-web-view.c:1778
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Deze website presenteerde identificatie die bij een andere website hoort."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1783
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1978,14 +1998,14 @@ msgstr ""
 "datum op de kalender van uw computer."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1796
+#: embed/ephy-web-view.c:1788
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "De identificatie van deze website is niet uitgegeven door een vertrouwde "
 "organisatie."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1793
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1993,7 +2013,7 @@ msgstr ""
 "beschadigd."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1806
+#: embed/ephy-web-view.c:1798
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -2002,7 +2022,7 @@ msgstr ""
 "organisatie die haar heeft verstrekt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1811
+#: embed/ephy-web-view.c:1803
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -2011,7 +2031,7 @@ msgstr ""
 "zwakke versleuteling gebruikt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1816
+#: embed/ephy-web-view.c:1808
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -2022,24 +2042,24 @@ msgstr ""
 # src/mozcallbacks.c:424
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1881 embed/ephy-web-view.c:1937
+#: embed/ephy-web-view.c:1873 embed/ephy-web-view.c:1929
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Probleem bij het laden van pagina"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1876
 msgid "Unable to display this website"
 msgstr "Deze website kan niet worden weergegeven"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1889
+#: embed/ephy-web-view.c:1881
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "De website %s lijkt niet beschikbaar te zijn."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1893
+#: embed/ephy-web-view.c:1885
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -2049,7 +2069,7 @@ msgstr ""
 "functioneert."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1903
+#: embed/ephy-web-view.c:1895
 #, c-format
 msgid "The precise error was: %s"
 msgstr "De exacte foutmelding was: %s"
@@ -2061,33 +2081,33 @@ msgstr "De exacte foutmelding was: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1908 embed/ephy-web-view.c:1961
-#: embed/ephy-web-view.c:1997 embed/ephy-web-view.c:2033
-#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1583
+#: embed/ephy-web-view.c:1900 embed/ephy-web-view.c:1953
+#: embed/ephy-web-view.c:1989 embed/ephy-web-view.c:2025
+#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1597
 msgid "Reload"
 msgstr "Herladen"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1912 embed/ephy-web-view.c:1965
-#: embed/ephy-web-view.c:2001 embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:1904 embed/ephy-web-view.c:1957
+#: embed/ephy-web-view.c:1993 embed/ephy-web-view.c:2029
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "H"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1932
 msgid "Oops! There may be a problem"
 msgstr "Oeps! Er zou een probleem kunnen zijn"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1945
+#: embed/ephy-web-view.c:1937
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Mogelijk heeft de pagina %s ervoor gezorgd dat Web onverwacht is afgesloten."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1944
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -2095,18 +2115,18 @@ msgstr ""
 
 # src/menubar.c:63
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1986
+#: embed/ephy-web-view.c:1978
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Probleem bij het weergeven van pagina"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1989
+#: embed/ephy-web-view.c:1981
 msgid "Oops!"
 msgstr "Oeps!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1992
+#: embed/ephy-web-view.c:1984
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -2115,18 +2135,18 @@ msgstr ""
 "een andere pagina om verder te gaan."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2022
+#: embed/ephy-web-view.c:2014
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Pagina reageert niet"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2025
+#: embed/ephy-web-view.c:2017
 msgid "Uh-oh!"
 msgstr "Oeps!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2028
+#: embed/ephy-web-view.c:2020
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -2135,18 +2155,18 @@ msgstr ""
 "pagina om verder te gaan."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2064
+#: embed/ephy-web-view.c:2056
 #, c-format
 msgid "Security Violation"
 msgstr "Overtreding van de veiligheidsvoorschriften"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2059
 msgid "This Connection is Not Secure"
 msgstr "Deze verbinding is niet veilig"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2072
+#: embed/ephy-web-view.c:2064
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -2157,41 +2177,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2082 embed/ephy-web-view.c:2132
+#: embed/ephy-web-view.c:2074 embed/ephy-web-view.c:2124
 msgid "Go Back"
 msgstr "Terug"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2085 embed/ephy-web-view.c:2135
+#: embed/ephy-web-view.c:2077 embed/ephy-web-view.c:2127
 msgctxt "back-access-key"
 msgid "B"
 msgstr "T"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2088
+#: embed/ephy-web-view.c:2080
 msgid "Accept Risk and Proceed"
 msgstr "Risico accepteren en doorgaan"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2092
+#: embed/ephy-web-view.c:2084
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "D"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2115 embed/ephy-web-view.c:2118
+#: embed/ephy-web-view.c:2107 embed/ephy-web-view.c:2110
 #, c-format
 msgid "File not found"
 msgstr "Bestand niet gevonden"
 
-#: embed/ephy-web-view.c:2123
+#: embed/ephy-web-view.c:2115
 #, c-format
 msgid "%s could not be found."
 msgstr "%s kon niet worden gevonden."
 
-#: embed/ephy-web-view.c:2125
+#: embed/ephy-web-view.c:2117
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -2200,13 +2220,21 @@ msgstr ""
 "Controleer de bestandsnaam op hoofdletters/kleine letters of andere "
 "typefouten. Ga ook na of het is verplaatst, hernoemd of gewist."
 
-#: embed/ephy-web-view.c:2188
+#: embed/ephy-web-view.c:2180
 msgid "None specified"
 msgstr "Niet opgegeven"
 
-#: embed/ephy-web-view.c:2302
+#: embed/ephy-web-view.c:2294
 msgid "Technical information"
 msgstr "Technische informatie"
+
+#: embed/web-process-extension/resources/js/ephy.js:182
+msgid "Use and Save Suggested Password"
+msgstr "Voorgesteld wachtwoord gebruiken en opslaan"
+
+#: embed/web-process-extension/resources/js/ephy.js:196
+msgid "Generate new password"
+msgstr "Nieuw wachtwoord genereren"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
@@ -2222,42 +2250,42 @@ msgid "Images"
 msgstr "Afbeeldingen"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:119 lib/ephy-file-helpers.c:195
+#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:197
 #: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:83
 #: src/resources/gtk/prefs-general-page.blp:112
 msgid "Downloads"
 msgstr "Downloads"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:176 lib/ephy-file-helpers.c:192
+#: lib/ephy-file-helpers.c:178 lib/ephy-file-helpers.c:194
 msgid "Desktop"
 msgstr "Bureaublad"
 
-#: lib/ephy-file-helpers.c:189
+#: lib/ephy-file-helpers.c:191
 msgid "Home"
 msgstr "Start"
 
-#: lib/ephy-file-helpers.c:426
+#: lib/ephy-file-helpers.c:428
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Kan geen tijdelijke map aanmaken in ‘%s’."
 
-#: lib/ephy-file-helpers.c:546
+#: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Het bestand ‘%s’ bestaat. Gelieve het hier weg te halen."
 
-#: lib/ephy-file-helpers.c:565
+#: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Aanmaken van de map ‘%s’ is mislukt."
 
-#: lib/ephy-file-helpers.c:721
+#: lib/ephy-file-helpers.c:722
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Fout bij het verwijderen van bestand %s: %s"
 
-#: lib/ephy-file-helpers.c:739
+#: lib/ephy-file-helpers.c:740
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Fout bij het verwijderen van map %s: %s"
@@ -2304,7 +2332,7 @@ msgstr ""
 #: lib/ephy-opensearch-engine.c:447
 #, c-format
 msgid "Couldn't parse search engine description file for %s: "
-msgstr "Kon beschrijvingsbestand voor zoekmachine %s niet verwerken:"
+msgstr "Kon beschrijvingsbestand voor zoekmachine %s niet verwerken: "
 
 #: lib/ephy-opensearch-engine.c:459
 #, c-format
@@ -2319,17 +2347,17 @@ msgid "Couldn't download search engine description file for %s: "
 msgstr "Kon beschrijvingsbestand voor zoekmachine %s niet downloaden: "
 
 #. TRANSLATORS: The %s is the URL for the search suggestions.
-#: lib/ephy-search-engine.c:508
+#: lib/ephy-search-engine.c:492
 #, c-format
 msgid "Couldn't load search engine suggestions from %s: "
 msgstr "Kon geen zoekmachinesuggesties laden van %s: "
 
-#: lib/ephy-search-engine.c:517
+#: lib/ephy-search-engine.c:501
 #, c-format
 msgid "No content provided, length %ld"
 msgstr "Geen inhoud ingevoerd, lengte %ld"
 
-#: lib/ephy-search-engine.c:536
+#: lib/ephy-search-engine.c:520
 #, c-format
 msgid ""
 "Got empty JSON response or non-array root node or smaller than 2 elements "
@@ -2339,7 +2367,7 @@ msgstr ""
 "van 2 elementen, ontvangen"
 
 #. TRANSLATORS: The first %s is the URL for the search suggestions and the second one is raw JSON content.
-#: lib/ephy-search-engine.c:541 lib/ephy-search-engine.c:556
+#: lib/ephy-search-engine.c:525 lib/ephy-search-engine.c:540
 #, c-format
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr "Kon JSON-suggesties van %s niet verwerken met JSON %s: "
@@ -2347,7 +2375,7 @@ msgstr "Kon JSON-suggesties van %s niet verwerken met JSON %s: "
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:322
+#: lib/ephy-sync-utils.c:324
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "GNOME Web van %s op %s"
@@ -2355,61 +2383,61 @@ msgstr "GNOME Web van %s op %s"
 # %H:%M geeft bv. 16:45 - Hannie
 # Wij gebruiken de 24-uurs klok, zie 336
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
-#: lib/ephy-time-helpers.c:236
+#: lib/ephy-time-helpers.c:238
 msgid "Today %I∶%M %p"
 msgstr "Vandaag, %I∶%M %p"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
-#: lib/ephy-time-helpers.c:239
+#: lib/ephy-time-helpers.c:241
 msgid "Today %H∶%M"
 msgstr "Vandaag, %H∶%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:254
+#: lib/ephy-time-helpers.c:256
 msgid "Yesterday %I∶%M %p"
 msgstr "Gisteren, %I∶%M %p"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 15∶34"
 #.
-#: lib/ephy-time-helpers.c:259
+#: lib/ephy-time-helpers.c:261
 msgid "Yesterday %H∶%M"
 msgstr "Gisteren, %H∶%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:277
+#: lib/ephy-time-helpers.c:279
 msgid "%a %I∶%M %p"
 msgstr "%a %I∶%M %p"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 15∶34"
 #.
-#: lib/ephy-time-helpers.c:282
+#: lib/ephy-time-helpers.c:284
 msgid "%a %H∶%M"
 msgstr "%a %H∶%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:296
+#: lib/ephy-time-helpers.c:298
 msgid "%b %d %I∶%M %p"
 msgstr "%d %b %I∶%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
 #.
-#: lib/ephy-time-helpers.c:301
+#: lib/ephy-time-helpers.c:303
 msgid "%b %d %H∶%M"
 msgstr "%d %b, %H∶%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
 #.
-#: lib/ephy-time-helpers.c:307
+#: lib/ephy-time-helpers.c:309
 msgid "%b %d %Y"
 msgstr "%d %b %Y"
 
@@ -2418,32 +2446,32 @@ msgstr "%d %b %Y"
 # src/prefs_callbacks.c:237
 # src/prefs_callbacks.c:407
 #. impossible time or broken locale settings
-#: lib/ephy-time-helpers.c:316
+#: lib/ephy-time-helpers.c:318
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: lib/ephy-web-app-utils.c:327
+#: lib/ephy-web-app-utils.c:372
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
 "Ophalen van bureaubladbestandsnaam voor webtoepassing met ID %s is mislukt"
 
-#: lib/ephy-web-app-utils.c:350
+#: lib/ephy-web-app-utils.c:396
 #, c-format
 msgid "Failed to install desktop file %s: "
 msgstr "Installeren van bureaubladbestand %s is mislukt: "
 
-#: lib/ephy-web-app-utils.c:389
+#: lib/ephy-web-app-utils.c:435
 #, c-format
 msgid "Profile directory %s already exists"
 msgstr "Profielmap %s bestaat al"
 
-#: lib/ephy-web-app-utils.c:396
+#: lib/ephy-web-app-utils.c:442
 #, c-format
 msgid "Failed to create directory %s"
 msgstr "Aanmaken van map ‘%s’ is mislukt"
 
-#: lib/ephy-web-app-utils.c:408
+#: lib/ephy-web-app-utils.c:454
 #, c-format
 msgid "Failed to create .app file: %s"
 msgstr "Aanmaken van .app-bestand is mislukt: %s"
@@ -2473,76 +2501,59 @@ msgstr "Fout bij het lezen van CSV-bestand"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:468
+#: lib/sync/ephy-password-manager.c:472
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Wachtwoord voor %s in een formulier op %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:472
+#: lib/sync/ephy-password-manager.c:476
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Wachtwoord in een formulier op %s"
 
-#: lib/sync/ephy-sync-service.c:932
+#: lib/sync/ephy-sync-service.c:724
 msgid "Response body is empty, do you need to install glib-networking?"
 msgstr "Antwoord is leeg, misschien moet u glib-networking installeren?"
 
-#: lib/sync/ephy-sync-service.c:990
+#: lib/sync/ephy-sync-service.c:782
 msgid "Failed to obtain storage credentials."
 msgstr "Verkrijgen van aanmeldgegevens voor opslag is mislukt."
 
-#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
-#: lib/sync/ephy-sync-service.c:1901
+#: lib/sync/ephy-sync-service.c:783 lib/sync/ephy-sync-service.c:1543
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr ""
 "Gelieve naar Firefox Sync te gaan en u opnieuw aan te melden om door te gaan "
 "met synchroniseren."
 
-#: lib/sync/ephy-sync-service.c:1127
-msgid "The password of your Mozilla account seems to have been changed."
-msgstr "Het lijkt erop dat het wachtwoord van uw Mozilla-account is gewijzigd."
-
-#: lib/sync/ephy-sync-service.c:1128
-msgid ""
-"Please visit Firefox Sync and sign in with the new password to continue "
-"syncing."
-msgstr ""
-"Gelieve naar Firefox Sync te gaan en u aan te melden met het nieuwe "
-"wachtwoord om door te gaan met synchroniseren."
-
-#: lib/sync/ephy-sync-service.c:1136
-msgid "Failed to obtain signed certificate."
-msgstr "Verkrijgen van ondertekend certificaat is mislukt."
-
-#: lib/sync/ephy-sync-service.c:1926
+#: lib/sync/ephy-sync-service.c:1568
 #, c-format
 msgid "The sync secrets for the current sync user are invalid: %s"
 msgstr ""
 "De synchronisatietokens voor de huidige sync-gebruiker zijn ongeldig: %s"
 
-#: lib/sync/ephy-sync-service.c:1933
+#: lib/sync/ephy-sync-service.c:1575
 #, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
 msgstr ""
 "De synchronisatietokens voor de huidige sync-gebruiker zijn geen geldige "
 "JSON: %s"
 
-#: lib/sync/ephy-sync-service.c:1960
+#: lib/sync/ephy-sync-service.c:1602
 #, c-format
 msgid "Could not find the sync secrets for the current sync user: %s"
 msgstr ""
 "De synchronisatietokens voor de huidige sync-gebruiker werden niet gevonden: "
 "%s"
 
-#: lib/sync/ephy-sync-service.c:1966
+#: lib/sync/ephy-sync-service.c:1608
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "De synchronisatietokens voor de huidige sync-gebruiker werden niet gevonden."
 
 # Kan beter vertaald worden - Nathan
-#: lib/sync/ephy-sync-service.c:2010
+#: lib/sync/ephy-sync-service.c:1652
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2551,29 +2562,29 @@ msgstr ""
 "wachtwoordportaal niet actief?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2052
+#: lib/sync/ephy-sync-service.c:1694
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "De synchronisatietokens van %s"
 
-#: lib/sync/ephy-sync-service.c:2082
+#: lib/sync/ephy-sync-service.c:1724
 msgid "Failed to upload client record."
 msgstr "Client record uploaden mislukt."
 
-#: lib/sync/ephy-sync-service.c:2285
+#: lib/sync/ephy-sync-service.c:1924
 msgid "Failed to upload crypto/keys record."
 msgstr "Uploaden crypto/keys record mislukt."
 
-#: lib/sync/ephy-sync-service.c:2397
+#: lib/sync/ephy-sync-service.c:2064
 msgid "Failed to retrieve crypto keys."
 msgstr "Ophalen van crypto-sleutels is mislukt."
 
-#: lib/sync/ephy-sync-service.c:2451
+#: lib/sync/ephy-sync-service.c:2118
 msgid "Failed to upload meta/global record."
 msgstr "Uploaden meta/global record mislukt."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2573
+#: lib/sync/ephy-sync-service.c:2240
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2581,43 +2592,35 @@ msgstr ""
 "Uw Mozilla-account gebruikt opslagversie %d. Web ondersteunt alleen versie "
 "%d."
 
-#: lib/sync/ephy-sync-service.c:2584
+#: lib/sync/ephy-sync-service.c:2251
 msgid "Failed to verify storage version."
 msgstr "Verifiëren van opslagversie is mislukt."
 
-#: lib/sync/ephy-sync-service.c:2642
-msgid "Failed to upload device info"
-msgstr "Apparaatinformatie uploaden mislukt"
-
-#: lib/sync/ephy-sync-service.c:2718 lib/sync/ephy-sync-service.c:2801
-msgid "Failed to retrieve the Sync Key"
-msgstr "Ophalen van sync-sleutel is mislukt"
-
-#: src/bookmarks/ephy-bookmark-properties.c:149
+#: src/bookmarks/ephy-bookmark-properties.c:148
 msgid "Select current tag"
 msgstr "Huidig label selecteren"
 
-#: src/bookmarks/ephy-bookmark-properties.c:163
+#: src/bookmarks/ephy-bookmark-properties.c:164
 msgid "Remove current tag"
 msgstr "Huidig label verwijderen"
 
 # src/menubar.c:571
-#: src/bookmarks/ephy-bookmark-properties.c:289
+#: src/bookmarks/ephy-bookmark-properties.c:314
 msgid "Add Bookmark"
 msgstr "Bladwijzer toevoegen"
 
 #: src/bookmarks/ephy-bookmark-properties.c:354
-#: src/preferences/prefs-search-engine-page.c:92
+#: src/preferences/prefs-search-engine-page.c:91
 msgid "This field is required"
 msgstr "Dit veld is vereist"
 
 #: src/bookmarks/ephy-bookmark-properties.c:356
-#: src/preferences/prefs-search-engine-page.c:97
+#: src/preferences/prefs-search-engine-page.c:96
 msgid "Address must start with either http:// or https://"
 msgstr "Adres moet beginnen met http:// of https://"
 
 #: src/bookmarks/ephy-bookmark-properties.c:358
-#: src/preferences/prefs-search-engine-page.c:118
+#: src/preferences/prefs-search-engine-page.c:117
 msgid "Address is not a valid URL"
 msgstr "Adres is geen geldige URL"
 
@@ -2643,26 +2646,26 @@ msgstr "Bladwijzer verwijderd"
 # src/mozilla_i18n.c:37
 # ui/preferences.glade.h:202
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1007
-#: src/preferences/prefs-features-page.c:284
+#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1014
+#: src/preferences/prefs-features-page.c:277
 msgid "_Undo"
 msgstr "_Ongedaan maken"
 
-#: src/bookmarks/ephy-bookmarks-import.c:127
+#: src/bookmarks/ephy-bookmarks-import.c:128
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr ""
 "Bestand is geen geldig bladwijzerbestand voor Epiphany: labels-tabel "
 "ontbreekt"
 
-#: src/bookmarks/ephy-bookmarks-import.c:161
+#: src/bookmarks/ephy-bookmarks-import.c:162
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "Bestand is geen geldig bladwijzerbestand voor Epiphany: bladwijzertabel "
 "ontbreekt"
 
-#: src/bookmarks/ephy-bookmarks-import.c:321
+#: src/bookmarks/ephy-bookmarks-import.c:322
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2670,27 +2673,27 @@ msgstr ""
 "Bladwijzerdatabase van Firefox kon niet worden geopend. Sluit Firefox en "
 "probeer het opnieuw."
 
-#: src/bookmarks/ephy-bookmarks-import.c:335
-#: src/bookmarks/ephy-bookmarks-import.c:371
+#: src/bookmarks/ephy-bookmarks-import.c:336
+#: src/bookmarks/ephy-bookmarks-import.c:372
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Firefoxbladwijzers konden niet worden opgehaald!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:538
+#: src/bookmarks/ephy-bookmarks-import.c:539
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "De HTML-bladwijzerdatabase kon niet geopend worden: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:549
+#: src/bookmarks/ephy-bookmarks-import.c:550
 msgid "HTML bookmarks database could not be read."
 msgstr "De HTML-bladwijzerdatabase kon niet gelezen worden."
 
-#: src/bookmarks/ephy-bookmarks-import.c:571
+#: src/bookmarks/ephy-bookmarks-import.c:572
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "De HTML-bladwijzerdatabase kon niet verwerkt worden: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:743
+#: src/bookmarks/ephy-bookmarks-import.c:744
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Bladwijzerbestand kon niet worden verwerkt:"
@@ -2704,73 +2707,73 @@ msgid "Mobile"
 msgstr "Mobiel"
 
 # src/menubar.c:63
-#: src/context-menu-commands.c:300
+#: src/context-menu-commands.c:302
 msgid "Save Link As"
 msgstr "Verwijzing opslaan als"
 
 # src/context.c:67
-#: src/context-menu-commands.c:308
+#: src/context-menu-commands.c:310
 msgid "Save Image As"
 msgstr "Afbeelding opslaan als"
 
 # src/menubar.c:63
-#: src/context-menu-commands.c:316
+#: src/context-menu-commands.c:318
 msgid "Save Media As"
 msgstr "Media opslaan als"
 
 # src/menubar.c:477
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1592
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1606
 msgid "Stop"
 msgstr "Afbreken"
 
-#: src/ephy-certificate-dialog.c:180
+#: src/ephy-certificate-dialog.c:178
 msgid "Show More"
 msgstr "Meer tonen"
 
-#: src/ephy-certificate-dialog.c:254
+#: src/ephy-certificate-dialog.c:252
 msgid "The certificate does not match this website"
 msgstr "Het certificaat komt niet overeen met deze website"
 
-#: src/ephy-certificate-dialog.c:257
+#: src/ephy-certificate-dialog.c:255
 msgid "The certificate has expired"
 msgstr "Het certificaat is verlopen"
 
-#: src/ephy-certificate-dialog.c:260
+#: src/ephy-certificate-dialog.c:258
 msgid "The signing certificate authority is not known"
 msgstr "De autoriteit voor het ondertekenen van het certificaat is onbekend"
 
-#: src/ephy-certificate-dialog.c:263
+#: src/ephy-certificate-dialog.c:261
 msgid "The certificate contains errors"
 msgstr "Het certificaat bevat fouten"
 
-#: src/ephy-certificate-dialog.c:266
+#: src/ephy-certificate-dialog.c:264
 msgid "The certificate has been revoked"
 msgstr "Het certificaat is ingetrokken"
 
-#: src/ephy-certificate-dialog.c:269
+#: src/ephy-certificate-dialog.c:267
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr ""
 "Het certificaat is ondertekend met gebruikmaking van een zwak algoritme"
 
-#: src/ephy-certificate-dialog.c:272
+#: src/ephy-certificate-dialog.c:270
 msgid "The certificate activation time is still in the future"
 msgstr "De activeringsdatum van het certificaat ligt in de toekomst"
 
-#: src/ephy-certificate-dialog.c:314
+#: src/ephy-certificate-dialog.c:312
 msgid "The identity of this website has been verified."
 msgstr "De identiteit van deze website is geverifieerd."
 
-#: src/ephy-certificate-dialog.c:315
+#: src/ephy-certificate-dialog.c:313
 msgid "The identity of this website has not been verified."
 msgstr "De identiteit van deze website is niet geverifieerd."
 
 #. Message on certificate dialog
-#: src/ephy-certificate-dialog.c:327
+#: src/ephy-certificate-dialog.c:325
 msgid "No problems have been detected with your connection."
 msgstr "Er zijn geen problemen gevonden met uw verbinding."
 
-#: src/ephy-certificate-dialog.c:330
+#: src/ephy-certificate-dialog.c:328
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
@@ -2778,47 +2781,47 @@ msgstr ""
 "Dit certificaat is geldig. Maar enkele bronnen op deze pagina zijn onveilig "
 "verzonden."
 
-#: src/ephy-downloads-popover.c:213 src/resources/gtk/autofill-view.blp:13
+#: src/ephy-downloads-popover.c:214 src/resources/gtk/autofill-view.blp:13
 #: src/resources/gtk/passwords-view.blp:11
 msgid "_Clear All"
 msgstr "_Alles wissen"
 
-#: src/ephy-download-widget.c:73
+#: src/ephy-download-widget.c:72
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "%d seconde te gaan"
 msgstr[1] "%d seconden te gaan"
 
-#: src/ephy-download-widget.c:77
+#: src/ephy-download-widget.c:76
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "%d minuut te gaan"
 msgstr[1] "%d minuten te gaan"
 
-#: src/ephy-download-widget.c:81
+#: src/ephy-download-widget.c:80
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "%d uur te gaan"
 msgstr[1] "%d uur te gaan"
 
-#: src/ephy-download-widget.c:85
+#: src/ephy-download-widget.c:84
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "%d dag te gaan"
 msgstr[1] "%d dagen te gaan"
 
-#: src/ephy-download-widget.c:89
+#: src/ephy-download-widget.c:88
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "%d week te gaan"
 msgstr[1] "%d weken te gaan"
 
-#: src/ephy-download-widget.c:93
+#: src/ephy-download-widget.c:92
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
@@ -2826,40 +2829,40 @@ msgstr[0] "%d maand te gaan"
 msgstr[1] "%d maanden te gaan"
 
 # src/toolbar.c:351
-#: src/ephy-download-widget.c:208 src/ephy-download-widget.c:401
+#: src/ephy-download-widget.c:207 src/ephy-download-widget.c:393
 msgid "Finished"
 msgstr "Klaar"
 
-#: src/ephy-download-widget.c:217
+#: src/ephy-download-widget.c:216
 msgid "Moved or deleted"
 msgstr "Verplaatst of verwijderd"
 
-#: src/ephy-download-widget.c:232 src/ephy-download-widget.c:398
+#: src/ephy-download-widget.c:231 src/ephy-download-widget.c:390
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Fout bij het downloaden: %s"
 
-#: src/ephy-download-widget.c:257
+#: src/ephy-download-widget.c:256
 msgid "Cancelling…"
 msgstr "Annuleren…"
 
-#: src/ephy-download-widget.c:403
+#: src/ephy-download-widget.c:395
 msgid "Starting…"
 msgstr "Starten…"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/ephy-firefox-sync-dialog.c:140
+#: src/ephy-firefox-sync-dialog.c:152
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Laatste synchronisatie: %s"
 
-#: src/ephy-firefox-sync-dialog.c:429
+#: src/ephy-firefox-sync-dialog.c:586 src/ephy-firefox-sync-dialog.c:763
 msgid "Something went wrong, please try again later."
 msgstr "Er ging iets mis, probeer het later opnieuw."
 
-#: src/ephy-firefox-sync-dialog.c:624
+#: src/ephy-firefox-sync-dialog.c:1019
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
@@ -2867,7 +2870,7 @@ msgstr[0] "%u min"
 msgstr[1] "%u min"
 
 # src/menubar.c:165
-#: src/ephy-header-bar.c:205
+#: src/ephy-header-bar.c:200
 msgid "Exit Fullscreen"
 msgstr "Schermvullende modus verlaten"
 
@@ -2875,41 +2878,41 @@ msgstr "Schermvullende modus verlaten"
 msgid "Select _None"
 msgstr "_Niets selecteren"
 
-#: src/ephy-history-dialog.c:268 src/ephy-window.c:1015
+#: src/ephy-history-dialog.c:268 src/ephy-window.c:1022
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
-#: src/ephy-history-dialog.c:443
+#: src/ephy-history-dialog.c:442
 msgid "Link copied"
 msgstr "Verwijzing gekopieerd"
 
-#: src/ephy-history-dialog.c:532
+#: src/ephy-history-dialog.c:531
 msgid "Remove the selected pages from history"
 msgstr "De geselecteerde pagina’s verwijderen uit de geschiedenis"
 
 # src/bookmarks_editor.c:948
 # src/bookmarks_editor.c:1167
 # src/menubar.c:38
-#: src/ephy-history-dialog.c:539
+#: src/ephy-history-dialog.c:538
 msgid "Copy URL"
 msgstr "URL kopiëren"
 
-#: src/ephy-history-dialog.c:863
+#: src/ephy-history-dialog.c:856
 msgid "Clear Browsing History?"
 msgstr "Geschiedenis wissen?"
 
-#: src/ephy-history-dialog.c:864
+#: src/ephy-history-dialog.c:857
 msgid "All visible links will be permanently deleted"
 msgstr "Alle zichtbare verwijzingen zullen definitief verwijderd worden"
 
 # ui/preferences.glade.h:48
-#: src/ephy-history-dialog.c:868
+#: src/ephy-history-dialog.c:861
 msgid "Cl_ear"
 msgstr "_Wissen"
 
 # Ik denk dat 'De browser' hier voldoet i.p.v. "Een browserinstantie". De Engelse brontekst is immers ook vrij kort.
-#: src/ephy-history-dialog.c:1083
+#: src/ephy-history-dialog.c:1076
 msgid "Unavailable in Incognito Mode"
 msgstr "Niet beschikbaar in incognitomodus"
 
@@ -2917,24 +2920,24 @@ msgstr "Niet beschikbaar in incognitomodus"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: src/ephy-history-dialog.c:1086
+#: src/ephy-history-dialog.c:1079
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: src/ephy-location-entry.c:337 src/resources/gtk/location-entry.blp:77
+#: src/ephy-location-entry.c:352 src/resources/gtk/location-entry.blp:77
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Zoek naar websites, bladwijzers en open tabbladen"
 
-#: src/ephy-location-entry.c:362
+#: src/ephy-location-entry.c:377
 msgid "Not Secure — "
 msgstr "Onveilig — "
 
 # ui/epiphany.glade.h:83
-#: src/ephy-location-entry.c:1316
+#: src/ephy-location-entry.c:1331
 msgid "Secure Site"
 msgstr "Beveiligde site"
 
-#: src/ephy-location-entry.c:1318
+#: src/ephy-location-entry.c:1333
 msgid "Insecure Site"
 msgstr "Onveilige site"
 
@@ -2990,15 +2993,15 @@ msgstr "Web-opties"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: src/ephy-passwords-view.c:106
+#: src/ephy-passwords-view.c:105
 msgid "Password copied"
 msgstr "Wachtwoord gekopieerd"
 
-#: src/ephy-passwords-view.c:154
+#: src/ephy-passwords-view.c:152
 msgid "Delete All Passwords?"
 msgstr "Alle wachtwoorden verwijderen?"
 
-#: src/ephy-passwords-view.c:155
+#: src/ephy-passwords-view.c:153
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr ""
 "Dit zal alle lokaal opgeslagen wachtwoorden wissen, en kan niet ongedaan "
@@ -3006,29 +3009,29 @@ msgstr ""
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: src/ephy-passwords-view.c:255
+#: src/ephy-passwords-view.c:253
 msgid "Copy password"
 msgstr "Wachtwoord kopiëren"
 
 # ui/epiphany.glade.h:126
 # ui/prompts.glade.h:3
-#: src/ephy-passwords-view.c:262 src/ephy-window.c:4220
+#: src/ephy-passwords-view.c:260 src/ephy-window.c:4226
 msgid "Username"
 msgstr "Gebruikersnaam"
 
 # ui/epiphany.glade.h:126
 # ui/prompts.glade.h:3
-#: src/ephy-passwords-view.c:273
+#: src/ephy-passwords-view.c:271
 msgid "Copy username"
 msgstr "Gebruikersnaam kopiëren"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: src/ephy-passwords-view.c:280 src/ephy-window.c:4227
+#: src/ephy-passwords-view.c:278 src/ephy-window.c:4233
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: src/ephy-passwords-view.c:293
+#: src/ephy-passwords-view.c:291
 msgid "Remove Password"
 msgstr "Wachtwoord verwijderen"
 
@@ -3053,7 +3056,7 @@ msgstr[1] ""
 "tegengehouden"
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
-#: src/ephy-security-dialog.c:187
+#: src/ephy-security-dialog.c:185
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -3063,7 +3066,7 @@ msgstr ""
 "bent u verbonden met een aanvaller die doet alsof hij %s is"
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
-#: src/ephy-security-dialog.c:194
+#: src/ephy-security-dialog.c:192
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
@@ -3073,110 +3076,110 @@ msgstr ""
 "verzendt zien, en wijzigen wat u op deze website ziet"
 
 #. Label in certificate dialog when site sends mixed content.
-#: src/ephy-security-dialog.c:201
+#: src/ephy-security-dialog.c:199
 msgid "This web site did not properly secure your connection"
 msgstr "Deze website heeft uw verbinding niet fatsoenlijk beveiligd"
 
 #. Label in certificate dialog on secure sites.
-#: src/ephy-security-dialog.c:206
+#: src/ephy-security-dialog.c:204
 msgid "Your connection seems to be secure"
 msgstr "Uw verbinding lijkt beveiligd te zijn"
 
-#: src/ephy-security-dialog.c:493
+#: src/ephy-security-dialog.c:489
 msgid "Allow"
 msgstr "Toestaan"
 
-#: src/ephy-security-dialog.c:494
+#: src/ephy-security-dialog.c:490
 msgid "Deny"
 msgstr "Weigeren"
 
-#: src/ephy-security-dialog.c:496
+#: src/ephy-security-dialog.c:492
 msgid "Ask"
 msgstr "Vragen"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:519
+#: src/ephy-security-dialog.c:515
 msgid "Advertisements"
 msgstr "Advertenties"
 
 # ui/epiphany.glade.h:85
 # Misschien is Meldingen mooier, maar we gebruiken tot nu toe Notificaties
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:521
+#: src/ephy-security-dialog.c:517
 msgid "Notifications"
 msgstr "Notificaties"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:523
+#: src/ephy-security-dialog.c:519
 msgid "Password Saving"
 msgstr "Opslaan van wachtwoorden"
 
 # ui/epiphany.glade.h:85
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:525
+#: src/ephy-security-dialog.c:521
 msgid "Location Access"
 msgstr "Toegang tot locatie"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:527
+#: src/ephy-security-dialog.c:523
 msgid "Microphone Access"
 msgstr "Toegang tot microfoon"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:529
+#: src/ephy-security-dialog.c:525
 msgid "Webcam Access"
 msgstr "Toegang tot webcam"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:531
+#: src/ephy-security-dialog.c:527
 msgid "Display Access"
 msgstr "Toegang tot beeldscherm"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:533
+#: src/ephy-security-dialog.c:529
 msgid "Media Autoplay"
 msgstr "Automatisch afspelen van media"
 
-#: src/ephy-security-dialog.c:533
+#: src/ephy-security-dialog.c:529
 msgid "Without Sound"
 msgstr "Zonder geluid"
 
-#: src/ephy-shell.c:414
+#: src/ephy-shell.c:415
 msgid "Uninstall Web App?"
 msgstr "Webtoepassing verwijderen?"
 
-#: src/ephy-shell.c:414
+#: src/ephy-shell.c:415
 msgid "This web appʼs data will be permanently deleted"
 msgstr "De gegevens van deze webtoepassing zullen definitief verwijderd worden"
 
-#: src/ephy-shell.c:418
+#: src/ephy-shell.c:419
 msgid "_Uninstall"
 msgstr "Verwij_deren"
 
 # src/menubar.c:571
-#: src/ephy-site-menu-button.c:284 src/resources/gtk/site-menu-button.blp:36
+#: src/ephy-site-menu-button.c:279 src/resources/gtk/site-menu-button.blp:36
 msgid "Edit _Bookmark…"
 msgstr "Bladwijzer _bewerken…"
 
 # src/menubar.c:571
-#: src/ephy-site-menu-button.c:286
+#: src/ephy-site-menu-button.c:281
 msgid "Add _Bookmark…"
 msgstr "_Bladwijzer toevoegen…"
 
-#: src/ephy-suggestion-model.c:668
+#: src/ephy-suggestion-model.c:663
 #, c-format
 msgid "Could not load search engines suggestions: %s"
 msgstr "Kon suggesties voor zoekmachines niet laden: %s"
 
 # src/context.c:66
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:663
+#: src/ephy-tab-view.c:658
 msgid "Open a new tab"
 msgstr "Een nieuw tabblad openen"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1015
 msgid "Re_do"
 msgstr "Op_nieuw"
 
@@ -3184,185 +3187,191 @@ msgstr "Op_nieuw"
 # src/window_callbacks.c:1145
 # src/window_callbacks.c:2880
 #. Edit.
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1018
 msgid "Cu_t"
 msgstr "K_nippen"
 
 # src/bookmarks_editor.c:948
 # src/bookmarks_editor.c:1167
 # src/menubar.c:38
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1019
 msgid "_Copy"
 msgstr "_Kopiëren"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1020
 msgid "_Paste"
 msgstr "_Plakken"
 
-#: src/ephy-window.c:1014
+#: src/ephy-window.c:1021
 msgid "_Paste Text Only"
 msgstr "Alleen tekst _plakken"
 
+# src/menubar.c:502
+# ui/epiphany.glade.h:163
+#: src/ephy-window.c:1023
+msgid "Generate _Password"
+msgstr "_Wachtwoord genereren"
+
 # src/menubar.c:68
-#: src/ephy-window.c:1017
+#: src/ephy-window.c:1025
 msgid "S_end Link by Email…"
 msgstr "Verwijzing ve_rsturen per e-mail…"
 
 # src/menubar.c:571
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1026
 msgid "Add _Link to Bookmarks"
 msgstr "Verwijzing toevoegen aan b_ladwijzers"
 
 # src/menubar.c:468
 # ui/preferences.glade.h:262
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1028
 msgid "_Reload"
 msgstr "_Herladen"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1029
 msgid "_Back"
 msgstr "_Terug"
 
 # src/menubar.c:458
-#: src/ephy-window.c:1022
+#: src/ephy-window.c:1030
 msgid "_Forward"
 msgstr "_Vooruit"
 
 # src/menubar.c:571
 #. Bookmarks
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1033
 msgid "Add Boo_kmark…"
 msgstr "_Bladwijzer toevoegen…"
 
 # src/context.c:60
 #. Links.
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1037
 msgid "Open Link in New _Window"
 msgstr "Verwijzing openen in _nieuw venster"
 
 # src/context.c:61
-#: src/ephy-window.c:1030
+#: src/ephy-window.c:1038
 msgid "Open Link in New _Tab"
 msgstr "Verwijzing openen in een nieuw _tabblad"
 
 # src/context.c:60
-#: src/ephy-window.c:1031
+#: src/ephy-window.c:1039
 msgid "Open Link in I_ncognito Window"
 msgstr "Verwijzing openen in In_cognito-venster"
 
 # src/menubar.c:63
-#: src/ephy-window.c:1032
+#: src/ephy-window.c:1040
 msgid "_Save Link As…"
 msgstr "Verwijzing opslaan _als…"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1041
 msgid "_Copy Link Address"
 msgstr "Verwijzingsadres _kopiëren"
 
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1042
 msgid "_Copy E-mail Address"
 msgstr "E-_mailadres kopiëren"
 
 # src/context.c:1075
 #. Images.
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1046
 msgid "View _Image in New Tab"
 msgstr "_Afbeelding bekijken in nieuw tabblad"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1047
 msgid "Copy I_mage Address"
 msgstr "Afbeeldingsadres _kopiëren"
 
 # src/context.c:67
-#: src/ephy-window.c:1040
+#: src/ephy-window.c:1048
 msgid "_Save Image As…"
 msgstr "Afbeelding op_slaan als…"
 
-#: src/ephy-window.c:1041
+#: src/ephy-window.c:1049
 msgid "Set as _Wallpaper"
 msgstr "Als _achtergrond instellen"
 
 # src/context.c:60
 #. Video.
-#: src/ephy-window.c:1045
+#: src/ephy-window.c:1053
 msgid "Open Video in New _Window"
 msgstr "Video in nieuw _venster openen"
 
 # src/context.c:66
-#: src/ephy-window.c:1046
+#: src/ephy-window.c:1054
 msgid "Open Video in New _Tab"
 msgstr "Video in nieuw _tabblad openen"
 
 # src/menubar.c:63
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1055
 msgid "_Save Video As…"
 msgstr "Video opslaan _als…"
 
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1056
 msgid "_Copy Video Address"
 msgstr "Video-adres _kopiëren"
 
 # src/context.c:60
 #. Audio.
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:1060
 msgid "Open Audio in New _Window"
 msgstr "Audio in nieuw _venster openen"
 
 # src/context.c:66
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1061
 msgid "Open Audio in New _Tab"
 msgstr "Audio in nieuw _tabblad openen"
 
 # src/menubar.c:63
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1062
 msgid "_Save Audio As…"
 msgstr "Audio opslaan _als…"
 
-#: src/ephy-window.c:1055
+#: src/ephy-window.c:1063
 msgid "_Copy Audio Address"
 msgstr "Audio-adres _kopiëren"
 
 # src/context.c:67
-#: src/ephy-window.c:1061
+#: src/ephy-window.c:1069
 msgid "Save Pa_ge As…"
 msgstr "Pa_gina opslaan als…"
 
-#: src/ephy-window.c:1062
+#: src/ephy-window.c:1070
 msgid "_Take Screenshot…"
 msgstr "Schermafdruk _maken…"
 
 # src/menubar.c:187
-#: src/ephy-window.c:1063
+#: src/ephy-window.c:1071
 msgid "_Page Source"
 msgstr "Paginab_ron"
 
 # src/window_callbacks.c:2194
-#: src/ephy-window.c:1444
+#: src/ephy-window.c:1451
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Op het internet zoeken naar ‘%s’"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: src/ephy-window.c:1473
+#: src/ephy-window.c:1480
 msgid "Open Link"
 msgstr "Verwijzing openen"
 
 # src/context.c:61
-#: src/ephy-window.c:1475
+#: src/ephy-window.c:1482
 msgid "Open Link In New Tab"
 msgstr "Verwijzing openen in nieuw tabblad"
 
 # src/context.c:60
-#: src/ephy-window.c:1477
+#: src/ephy-window.c:1484
 msgid "Open Link In New Window"
 msgstr "Verwijzing openen in nieuw venster"
 
 # src/context.c:60
-#: src/ephy-window.c:1479
+#: src/ephy-window.c:1486
 msgid "Open Link In Incognito Window"
 msgstr "Verwijzing openen in incognitovenster"
 
@@ -3372,23 +3381,23 @@ msgstr "Verwijzing openen in incognitovenster"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2315
+#: src/ephy-window.c:2336
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr ""
 "Sta ‘%s’ toe om de verwijzing naar ‘%s’ te openen in een externe toepassing"
 
-#: src/ephy-window.c:2316
+#: src/ephy-window.c:2337
 msgid "Open in External App?"
 msgstr "Openen in externe toepassing?"
 
 # src/bookmarks_editor.c:942
 # src/menubar.c:34
-#: src/ephy-window.c:2318
+#: src/ephy-window.c:2339
 msgid "_Open Link"
 msgstr "Verwijzing _openen"
 
-#: src/ephy-window.c:2324
+#: src/ephy-window.c:2345
 msgid "Always Allow"
 msgstr "Altijd toestaan"
 
@@ -3396,92 +3405,92 @@ msgstr "Altijd toestaan"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: src/ephy-window.c:2609
+#: src/ephy-window.c:2627
 msgid "Search Engine Available"
 msgstr "Zoekmachine beschikbaar"
 
 # src/mozcallbacks.c:424
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
-#: src/ephy-window.c:2615
+#: src/ephy-window.c:2633
 #, c-format
 msgid "Add “%s”"
 msgstr "“%s” toevoegen"
 
-#: src/ephy-window.c:2619 src/ephy-window.c:2627
-#: src/preferences/prefs-search-engine-page.c:310
-#: src/preferences/prefs-search-engine-page.c:312
+#: src/ephy-window.c:2637 src/ephy-window.c:2645
+#: src/preferences/prefs-search-engine-page.c:307
+#: src/preferences/prefs-search-engine-page.c:309
 msgid "Add Search Engine"
 msgstr "Zoekmachine toevoegen"
 
-#: src/ephy-window.c:3072
+#: src/ephy-window.c:3086
 msgid "Reader Mode Available"
 msgstr "Leesmodus beschikbaar"
 
 # ui/epiphany.glade.h:85
 # Misschien is Meldingen mooier, maar we gebruiken tot nu toe Notificaties
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3171
+#: src/ephy-window.c:3185
 msgid "Notification Request"
 msgstr "Notificatieverzoek"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3173
+#: src/ephy-window.c:3187
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "‘%s’ wil u notificaties sturen"
 
 # ui/epiphany.glade.h:85
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3178
+#: src/ephy-window.c:3192
 msgid "Location Access Request"
 msgstr "Toegangsverzoek voor locatie"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3180
+#: src/ephy-window.c:3194
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "‘%s’ wil uw locatie weten"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3185
+#: src/ephy-window.c:3199
 msgid "Microphone Access Request"
 msgstr "Toegangsverzoek voor microfoon"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3187
+#: src/ephy-window.c:3201
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "‘%s’ wil uw microfoon gebruiken"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3192
+#: src/ephy-window.c:3206
 msgid "Webcam Access Request"
 msgstr "Toegangsverzoek voor webcam"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3194
+#: src/ephy-window.c:3208
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "‘%s’ wil uw webcam gebruiken"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3199
+#: src/ephy-window.c:3213
 msgid "Webcam and Microphone Access Request"
 msgstr "Toegangsverzoek voor webcam en microfoon"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3201
+#: src/ephy-window.c:3215
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "‘%s’ wil uw webcam en microfoon gebruiken"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3215
+#: src/ephy-window.c:3229
 msgid "Website Data Access Request"
 msgstr "Toegangsverzoek voor websitegegevens"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3217
+#: src/ephy-window.c:3231
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
@@ -3491,70 +3500,70 @@ msgstr ""
 "bezoekt. Hierdoor kan ‘%s’ uw activiteit op ‘%s’ volgen."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3222
+#: src/ephy-window.c:3236
 msgid "Clipboard Access Request"
 msgstr "Toegangsverzoek voor klembord"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3224
+#: src/ephy-window.c:3238
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "‘%s’ wil toegang tot uw klembord"
 
-#: src/ephy-window.c:3252
+#: src/ephy-window.c:3266
 msgid "_Ask Later"
 msgstr "L_ater vragen"
 
-#: src/ephy-window.c:3253
+#: src/ephy-window.c:3267
 msgid "_Deny"
 msgstr "_Weigeren"
 
-#: src/ephy-window.c:3254
+#: src/ephy-window.c:3268
 msgid "_Allow"
 msgstr "Toest_aan"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: src/ephy-window.c:3460 src/ephy-window.c:5119
+#: src/ephy-window.c:3474 src/ephy-window.c:5150
 msgid "Leave Website?"
 msgstr "Website verlaten?"
 
-#: src/ephy-window.c:3461 src/ephy-window.c:5120 src/window-commands.c:1407
+#: src/ephy-window.c:3475 src/ephy-window.c:5151 src/window-commands.c:1408
 msgid "A form was modified and has not been submitted"
 msgstr "Een formulier dat aangepast werd is nog niet ingediend"
 
-#: src/ephy-window.c:3462 src/ephy-window.c:5121 src/window-commands.c:1411
+#: src/ephy-window.c:3476 src/ephy-window.c:5152 src/window-commands.c:1412
 msgid "_Discard Form"
 msgstr "Formulier ve_rwerpen"
 
 # src/context.c:62
 # src/history_callbacks.c:159
 # src/misc_callbacks.c:408
-#: src/ephy-window.c:3483
+#: src/ephy-window.c:3497
 msgid "Download operation"
 msgstr "Download-actie"
 
-#: src/ephy-window.c:3485
+#: src/ephy-window.c:3499
 msgid "Show details"
 msgstr "Details tonen"
 
-#: src/ephy-window.c:3487
+#: src/ephy-window.c:3501
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d download-actie actief"
 msgstr[1] "%d download-acties actief"
 
-#: src/ephy-window.c:3765
+#: src/ephy-window.c:3779
 msgid "Set as Default Browser?"
 msgstr "Instellen als uw standaardbrowser?"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3781
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Gebruik Web als uw standaardwebbrowser en om externe verwijzingen te openen"
 
-#: src/ephy-window.c:3769
+#: src/ephy-window.c:3783
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3562,90 +3571,92 @@ msgstr ""
 "Gebruik Epiphany Technology Preview als uw standaardbrowser en om externe "
 "verwijzingen te openen"
 
-#: src/ephy-window.c:3773
+#: src/ephy-window.c:3787
 msgid "_Ask Again Later"
 msgstr "L_ater opnieuw vragen"
 
-#: src/ephy-window.c:3774
+#: src/ephy-window.c:3788
 msgid "_No"
 msgstr "_Nee"
 
-#: src/ephy-window.c:3775
+#: src/ephy-window.c:3789
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:4111
+#: src/ephy-window.c:4119
 msgid "Download started"
 msgstr "Download begonnen"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: src/ephy-window.c:4201
+#: src/ephy-window.c:4207
 msgid "Save Password?"
 msgstr "Wachtwoord opslaan?"
 
-#: src/ephy-window.c:4202
-msgid ""
-"Passwords are saved only on your device and can be removed at any time in "
-"Preferences"
+#: src/ephy-window.c:4208
+msgid "Passwords are saved only on your device and can be removed at any time."
 msgstr ""
 "Wachtwoorden worden enkel op uw apparaat opgeslagen en kunnen altijd "
-"verwijderd worden via de Voorkeuren"
+"verwijderd worden."
 
-#: src/ephy-window.c:4204
+#: src/ephy-window.c:4210
 msgid "Not Now"
 msgstr "Niet nu"
 
 # ui/preferences.glade.h:118
-#: src/ephy-window.c:4205
+#: src/ephy-window.c:4211
 msgid "Never Save"
 msgstr "Nooit opslaan"
 
 # src/menubar.c:63
-#: src/ephy-window.c:4206
+#: src/ephy-window.c:4212
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/ephy-window.c:4407
+#: src/ephy-window.c:4413
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Webtoepassing"
 
-#: src/ephy-window.c:4410
+#: src/ephy-window.c:4416
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Website installeren als webtoepassing"
 
+#: src/ephy-window.c:4942
+msgid "Page URL copied"
+msgstr "URL van pagina gekopieerd"
+
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: src/ephy-window.c:5234
+#: src/ephy-window.c:5265
 msgid "Close Multiple Tabs?"
 msgstr "Meerdere tabbladen sluiten?"
 
-#: src/ephy-window.c:5235
+#: src/ephy-window.c:5266
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Door dit venster te sluiten worden alle geopende tabbladen gesloten"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: src/ephy-window.c:5236
+#: src/ephy-window.c:5267
 msgid "C_lose Tabs"
 msgstr "Tabb_laden sluiten"
 
 # src/menubar.c:54
-#: src/ephy-window.c:5352
+#: src/ephy-window.c:5383
 msgid "New tab opened"
 msgstr "Nieuw tabblad geopend"
 
-#: src/ephy-window.c:5356
+#: src/ephy-window.c:5387
 msgid "Switch"
 msgstr "Wisselen"
 
-#: src/preferences/autofill-view.c:359
+#: src/preferences/autofill-view.c:361
 msgid "Delete All Entries?"
 msgstr "Alle ingangen wissen?"
 
-#: src/preferences/autofill-view.c:360
+#: src/preferences/autofill-view.c:362
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr ""
 "Dit zal alle lokaal opgeslagen ingangen wissen, en kan niet ongedaan gemaakt "
@@ -3653,51 +3664,51 @@ msgstr ""
 
 # src/menubar.c:494
 # ui/epiphany.glade.h:143
-#: src/preferences/clear-data-view.c:79
+#: src/preferences/clear-data-view.c:81
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/preferences/clear-data-view.c:80
+#: src/preferences/clear-data-view.c:82
 msgid "HTTP disk cache"
 msgstr "HTTP-schijfcache"
 
-#: src/preferences/clear-data-view.c:81
+#: src/preferences/clear-data-view.c:83
 msgid "Local storage data"
 msgstr "Lokale opslaggegevens"
 
-#: src/preferences/clear-data-view.c:82
+#: src/preferences/clear-data-view.c:84
 msgid "Offline web application cache"
 msgstr "Cache offline webtoepassing"
 
-#: src/preferences/clear-data-view.c:83
+#: src/preferences/clear-data-view.c:85
 msgid "IndexedDB databases"
 msgstr "IndexedDB-databases"
 
-#: src/preferences/clear-data-view.c:84
+#: src/preferences/clear-data-view.c:86
 msgid "HSTS policies cache"
 msgstr "HSTS-beleidscache"
 
-#: src/preferences/clear-data-view.c:85
+#: src/preferences/clear-data-view.c:87
 msgid "Intelligent Tracking Prevention data"
 msgstr "Intelligent Tracking Prevention-gegevens"
 
-#: src/preferences/clear-data-view.c:86
+#: src/preferences/clear-data-view.c:88
 msgid "MediaDevices device IDs"
 msgstr "Device-ID's van MediaDevices"
 
-#: src/preferences/clear-data-view.c:87
+#: src/preferences/clear-data-view.c:89
 msgid "ServiceWorker registrations"
 msgstr "ServiceWorker-registraties"
 
-#: src/preferences/clear-data-view.c:88
+#: src/preferences/clear-data-view.c:90
 msgid "CacheStorage data"
 msgstr "CacheStorage-gegevens"
 
-#: src/preferences/clear-data-view.c:238
+#: src/preferences/clear-data-view.c:240
 msgid "Data cleared"
 msgstr "Gegevens gewist"
 
-#: src/preferences/ephy-prefs-dialog.c:99
+#: src/preferences/ephy-prefs-dialog.c:100
 msgid "New search engine"
 msgstr "Nieuwe zoekmachine"
 
@@ -3709,21 +3720,21 @@ msgstr "Zoekmachine _toevoegen"
 # src/toolbar.c:273
 # ui/epiphany.glade.h:78
 # ui/preferences.glade.h:88
-#: src/preferences/ephy-search-engine-row.c:130
+#: src/preferences/ephy-search-engine-row.c:126
 msgid "No search suggestions"
 msgstr "Geen zoeksuggesties"
 
 # src/persistent_data_manager.c:138
 # ui/epiphany.glade.h:94
-#: src/preferences/extension-view.c:113
+#: src/preferences/extension-view.c:111
 msgid "Remove Extension"
 msgstr "Extensie verwijderen"
 
-#: src/preferences/extension-view.c:114
+#: src/preferences/extension-view.c:112
 msgid "Do you really want to remove this extension?"
 msgstr "Wilt u deze extensie echt verwijderen?"
 
-#: src/preferences/extension-view.c:118
+#: src/preferences/extension-view.c:116
 msgid "_Remove"
 msgstr "_Verwijderen"
 
@@ -3761,15 +3772,15 @@ msgid "Install"
 msgstr "Installeren"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/preferences/prefs-extensions-page.c:149
+#: src/preferences/prefs-extensions-page.c:147
 msgid "Open File (manifest.json/xpi)"
 msgstr "Bestand (manifest.json/xpi) openen"
 
-#: src/preferences/prefs-features-page.c:283
+#: src/preferences/prefs-features-page.c:276
 msgid "All values reset"
 msgstr "Alle waarden hersteld naar standaard"
 
-#: src/preferences/prefs-features-page.c:337
+#: src/preferences/prefs-features-page.c:330
 msgid "Reset to default"
 msgstr "Herstellen naar standaardwaarden"
 
@@ -3790,20 +3801,20 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Systeemtaal (%s)"
 msgstr[1] "Systeemtalen (%s)"
 
-#: src/preferences/prefs-general-page.c:770
+#: src/preferences/prefs-general-page.c:766
 msgid "Supported Image Files"
 msgstr "Ondersteunde afbeeldingsbestanden"
 
-#: src/preferences/prefs-search-engine-page.c:109
+#: src/preferences/prefs-search-engine-page.c:108
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Het adres moet de zoekterm bevatten die wordt vertegenwoordigd door %s"
 
-#: src/preferences/prefs-search-engine-page.c:112
+#: src/preferences/prefs-search-engine-page.c:111
 msgid "Address should not contain the search term several times"
 msgstr "De zoekterm mag niet meerdere keren voorkomen in het adres"
 
-#: src/preferences/prefs-search-engine-page.c:123
+#: src/preferences/prefs-search-engine-page.c:122
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://"
@@ -3812,78 +3823,78 @@ msgstr ""
 "Adres is geen geldige URL. Het adres moet er uitzien als https://"
 "www.example.com/search?q=%s"
 
-#: src/preferences/prefs-search-engine-page.c:148
+#: src/preferences/prefs-search-engine-page.c:147
 msgid "A name is required"
 msgstr "Een naam is vereist"
 
-#: src/preferences/prefs-search-engine-page.c:150
+#: src/preferences/prefs-search-engine-page.c:149
 msgid "This search engine already exists"
 msgstr "Deze zoekmachine bestaat al"
 
-#: src/preferences/prefs-search-engine-page.c:194
+#: src/preferences/prefs-search-engine-page.c:193
 #, c-format
 msgid "Address (with search term as %s)"
 msgstr "Adres (met zoekterm als %s)"
 
-#: src/preferences/prefs-search-engine-page.c:194
+#: src/preferences/prefs-search-engine-page.c:193
 #: src/resources/gtk/autofill-view.blp:56
-#: src/resources/gtk/bookmark-properties.blp:45
+#: src/resources/gtk/bookmark-properties.blp:54
 #: src/resources/gtk/prefs-search-engine-page.blp:16
 msgid "Address"
 msgstr "Adres"
 
-#: src/preferences/prefs-search-engine-page.c:207
+#: src/preferences/prefs-search-engine-page.c:206
 msgid "This shortcut is already used."
 msgstr "Deze snelkoppeling wordt al gebruikt."
 
-#: src/preferences/prefs-search-engine-page.c:209
+#: src/preferences/prefs-search-engine-page.c:208
 msgid "Search shortcuts must not contain any space."
 msgstr "Snelzoekwoorden mogen geen spaties bevatten."
 
-#: src/preferences/prefs-search-engine-page.c:217
+#: src/preferences/prefs-search-engine-page.c:216
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr "Snelzoekwoorden moeten beginnen met een teken zoals !, # of @."
 
-#: src/preferences/prefs-search-engine-page.c:227
+#: src/preferences/prefs-search-engine-page.c:226
 msgid "Shortcut (for example !ddg)"
 msgstr "Sneltoets (bijvoorbeeld !ddg)"
 
-#: src/preferences/prefs-search-engine-page.c:227
+#: src/preferences/prefs-search-engine-page.c:226
 #: src/resources/gtk/prefs-search-engine-page.blp:49
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: src/preferences/prefs-search-engine-page.c:315
+#: src/preferences/prefs-search-engine-page.c:312
 msgid "Edit Search Engine"
 msgstr "Zoekmachine bewerken"
 
-#: src/preferences/prefs-search-engine-page.c:317
+#: src/preferences/prefs-search-engine-page.c:314
 msgid "Remove Search Engine"
 msgstr "Zoekmachine verwijderen"
 
-#: src/preferences/webapp-additional-urls-dialog.c:71
+#: src/preferences/webapp-additional-urls-dialog.c:72
 msgid "Remove URL"
 msgstr "URL verwijderen"
 
-#: src/profile-migrator/ephy-profile-migrator.c:339
+#: src/profile-migrator/ephy-profile-migrator.c:366
 msgid "Executes only the n-th migration step"
 msgstr "Voert alleen de n-de migratiestap uit"
 
-#: src/profile-migrator/ephy-profile-migrator.c:343
+#: src/profile-migrator/ephy-profile-migrator.c:370
 msgid "Specifies the required version for the migrator"
 msgstr "Bepaalt de vereiste versie van de migratie"
 
-#: src/profile-migrator/ephy-profile-migrator.c:347
+#: src/profile-migrator/ephy-profile-migrator.c:374
 msgid "Specifies the profile where the migrator should run"
 msgstr "Bepaalt het profiel voor de migratie"
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: src/profile-migrator/ephy-profile-migrator.c:369
+#: src/profile-migrator/ephy-profile-migrator.c:396
 msgid "Web profile migrator"
 msgstr "Web-profielmigrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:370
+#: src/profile-migrator/ephy-profile-migrator.c:397
 msgid "Web profile migrator options"
 msgstr "Opties voor de Web-profielmigrator"
 
@@ -4002,37 +4013,37 @@ msgid "Number"
 msgstr "Nummer"
 
 # src/menubar.c:571
-#: src/resources/gtk/bookmark-properties.blp:9
+#: src/resources/gtk/bookmark-properties.blp:18
 msgid "Bookmark"
 msgstr "Bladwijzer"
 
-#: src/resources/gtk/bookmark-properties.blp:28
+#: src/resources/gtk/bookmark-properties.blp:37
 #: src/resources/gtk/prefs-lang-dialog.blp:24
 msgid "_Add"
 msgstr "_Toevoegen"
 
 # ui/bookmarks.glade.h:27
-#: src/resources/gtk/bookmark-properties.blp:41
+#: src/resources/gtk/bookmark-properties.blp:50
 #: src/resources/gtk/prefs-search-engine-page.blp:12
 msgid "Name"
 msgstr "Naam"
 
-#: src/resources/gtk/bookmark-properties.blp:51
-#: src/resources/gtk/bookmark-properties.blp:77
+#: src/resources/gtk/bookmark-properties.blp:60
+#: src/resources/gtk/bookmark-properties.blp:86
 msgid "Tags"
 msgstr "Labels"
 
-#: src/resources/gtk/bookmark-properties.blp:64
+#: src/resources/gtk/bookmark-properties.blp:73
 #: src/resources/gtk/bookmark-row.blp:43
 msgid "Remove"
 msgstr "Verwijderen"
 
 # src/menubar.c:571
-#: src/resources/gtk/bookmark-properties.blp:100
+#: src/resources/gtk/bookmark-properties.blp:109
 msgid "Add Tag"
 msgstr "Label toevoegen"
 
-#: src/resources/gtk/bookmark-properties.blp:112
+#: src/resources/gtk/bookmark-properties.blp:121
 msgid "Add new tag"
 msgstr "Voeg een nieuw label toe"
 
@@ -4310,7 +4321,7 @@ msgstr "_Openen"
 msgid "Delete Language"
 msgstr "Taal verwijderen"
 
-#: src/resources/gtk/location-entry.blp:201
+#: src/resources/gtk/location-entry.blp:202
 msgid "Paste and _Go"
 msgstr "Plakken en _Gaan"
 
@@ -4360,7 +4371,7 @@ msgstr "_Andere tabbladen sluiten"
 
 # src/bookmarks_editor.c:945
 # src/menubar.c:91
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:294
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:295
 msgid "_Close"
 msgstr "Sl_uiten"
 
@@ -5169,25 +5180,33 @@ msgctxt "shortcuts dialog"
 msgid "Select Page URL"
 msgstr "De URL van de pagina selecteren"
 
+# src/bookmarks_editor.c:948
+# src/bookmarks_editor.c:1167
+# src/menubar.c:38
+#: src/resources/gtk/shortcuts-dialog.blp:283
+msgctxt "shortcuts dialog"
+msgid "Copy Page URL"
+msgstr "URL van pagina kopiëren"
+
 # src/prefs.c:385
 # ui/epiphany.glade.h:36
-#: src/resources/gtk/shortcuts-dialog.blp:283
+#: src/resources/gtk/shortcuts-dialog.blp:288
 msgctxt "shortcuts dialog"
 msgid "Search With Default Search Engine"
 msgstr "Zoeken met standaardzoekmachine"
 
 # src/toolbar.c:351
-#: src/resources/gtk/shortcuts-dialog.blp:288
+#: src/resources/gtk/shortcuts-dialog.blp:293
 msgctxt "shortcuts dialog"
 msgid "Find"
 msgstr "Zoeken"
 
-#: src/resources/gtk/shortcuts-dialog.blp:293
+#: src/resources/gtk/shortcuts-dialog.blp:298
 msgctxt "shortcuts dialog"
 msgid "Next Find Result"
 msgstr "Volgend zoekresultaat"
 
-#: src/resources/gtk/shortcuts-dialog.blp:298
+#: src/resources/gtk/shortcuts-dialog.blp:303
 msgctxt "shortcuts dialog"
 msgid "Previous Find Result"
 msgstr "Vorig zoekresultaat"
@@ -5240,11 +5259,11 @@ msgstr "Inzoomen"
 msgid "Site Menu"
 msgstr "Websitemenu"
 
-#: src/resources/gtk/synced-tabs-dialog.blp:8
+#: src/resources/gtk/synced-tabs-dialog.blp:9
 msgid "Synced Tabs"
 msgstr "Gesynchroniseerde tabbladen"
 
-#: src/resources/gtk/synced-tabs-dialog.blp:26
+#: src/resources/gtk/synced-tabs-dialog.blp:27
 msgid ""
 "Below are the synced open tabs of your other devices that use Firefox Sync "
 "with this account. Open a tab by double clicking its name (tabs under Local "
@@ -5281,19 +5300,19 @@ msgid "Add URL"
 msgstr "URL toevoegen"
 
 # src/window_callbacks.c:2194
-#: src/search-provider/ephy-search-provider.c:215
+#: src/search-provider/ephy-search-provider.c:217
 #, c-format
 msgid "Search the web for “%s”"
 msgstr "Op het internet zoeken naar ‘%s’"
 
 # src/mozcallbacks.c:424
-#: src/search-provider/ephy-search-provider.c:225
+#: src/search-provider/ephy-search-provider.c:227
 #, c-format
 msgid "Load “%s”"
 msgstr "Laden van ‘%s’"
 
 # src/history.c:845
-#: src/synced-tabs-dialog.c:194
+#: src/synced-tabs-dialog.c:136
 msgid "Local Tabs"
 msgstr "Lokale tabbladen"
 
@@ -5335,76 +5354,67 @@ msgstr "Kon de webtoepassing ‘%s’ niet verwijderen"
 msgid "Options for %s"
 msgstr "Opties voor %s"
 
-#: src/webextension/ephy-web-extension.c:1028
-#, c-format
-msgid "manifest.json not found"
-msgstr "manifest.json niet gevonden"
-
-#: src/webextension/ephy-web-extension.c:1034
+#: src/webextension/ephy-web-extension.c:888
+#: src/webextension/ephy-web-extension.c:900
 #, c-format
 msgid "Failed to parse manifest.json: %s"
 msgstr "Verwerken van manifest.json is mislukt: %s"
 
-#: src/webextension/ephy-web-extension.c:1040
-#: src/webextension/ephy-web-extension.c:1046
+#: src/webextension/ephy-web-extension.c:894
+#, c-format
+msgid "manifest.json not found"
+msgstr "manifest.json niet gevonden"
+
+#: src/webextension/ephy-web-extension.c:906
+#: src/webextension/ephy-web-extension.c:912
 #, c-format
 msgid "manifest.json invalid"
 msgstr "manifest.json ongeldig"
-
-#: src/webextension/ephy-web-extension.c:1053
-#, c-format
-msgid "Only manifest_version 2 is supported"
-msgstr "Enkel manifest_version 2 wordt ondersteund"
-
-#: src/webextension/ephy-web-extension.c:1070
-#, c-format
-msgid "Missing name or version"
-msgstr "Naam of versie ontbreekt"
 
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
 msgstr "Kon initiërende URI niet bepalen"
 
-#: src/window-commands.c:131
+#: src/window-commands.c:132
 msgid "HTML File"
 msgstr "HTML-bestand"
 
-#: src/window-commands.c:132
+#: src/window-commands.c:133
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:133 src/window-commands.c:735
+#: src/window-commands.c:134 src/window-commands.c:736
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:134 src/window-commands.c:736
+#: src/window-commands.c:135 src/window-commands.c:737
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:176 src/window-commands.c:572
-#: src/window-commands.c:898 src/window-commands.c:938
+#: src/window-commands.c:177 src/window-commands.c:573
+#: src/window-commands.c:899 src/window-commands.c:939
 msgid "_Select File"
 msgstr "Bestand _selecteren"
 
-#: src/window-commands.c:178 src/window-commands.c:900
+#: src/window-commands.c:179 src/window-commands.c:901
 msgid "I_mport"
 msgstr "I_mporteren"
 
-#: src/window-commands.c:331 src/window-commands.c:420
-#: src/window-commands.c:464 src/window-commands.c:487
-#: src/window-commands.c:503
+#: src/window-commands.c:332 src/window-commands.c:421
+#: src/window-commands.c:465 src/window-commands.c:488
+#: src/window-commands.c:504
 msgid "Bookmarks successfully imported!"
 msgstr "Bladwijzers met succes geïmporteerd!"
 
-#: src/window-commands.c:350
+#: src/window-commands.c:351
 msgid "Select Profile"
 msgstr "Profiel selecteren"
 
 # src/prefs.c:397
 # ui/preferences.glade.h:103
-#: src/window-commands.c:431 src/window-commands.c:693
-#: src/window-commands.c:819 src/window-commands.c:1041
+#: src/window-commands.c:432 src/window-commands.c:694
+#: src/window-commands.c:820 src/window-commands.c:1042
 msgid "Choose File"
 msgstr "Bestand kiezen"
 
@@ -5412,57 +5422,57 @@ msgstr "Bestand kiezen"
 # src/prefs.c:365
 # src/toolbar.c:260
 # ui/bookmarks.glade.h:3
-#: src/window-commands.c:558
+#: src/window-commands.c:559
 msgid "Import Bookmarks"
 msgstr "Bladwijzers importeren"
 
-#: src/window-commands.c:586 src/window-commands.c:952
+#: src/window-commands.c:587 src/window-commands.c:953
 msgid "File Type"
 msgstr "Bestandstype"
 
-#: src/window-commands.c:650
+#: src/window-commands.c:651
 msgid "Bookmarks successfully exported!"
 msgstr "Bladwijzers met succes geëxporteerd!"
 
 # src/menubar.c:571
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:704
+#: src/window-commands.c:705
 msgid "bookmarks.html"
 msgstr "bookmarks.html"
 
 # src/bookmarks_editor.c:941
 # src/bookmarks_editor.c:1148
 # src/menubar.c:565
-#: src/window-commands.c:734
+#: src/window-commands.c:735
 msgid "CSV File"
 msgstr "CSV-bestand"
 
-#: src/window-commands.c:782 src/window-commands.c:808
+#: src/window-commands.c:783 src/window-commands.c:809
 msgid "Passwords successfully imported!"
 msgstr "Wachtwoorden met succes geïmporteerd!"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
-#: src/window-commands.c:924
+#: src/window-commands.c:925
 msgid "Import Passwords"
 msgstr "Wachtwoorden importeren"
 
-#: src/window-commands.c:1000
+#: src/window-commands.c:1001
 msgid "Passwords successfully exported!"
 msgstr "Wachtwoorden geëxporteerd!"
 
 # src/menubar.c:502
 # ui/epiphany.glade.h:163
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1051
+#: src/window-commands.c:1052
 msgid "passwords.csv"
 msgstr "wachtwoorden.csv"
 
-#: src/window-commands.c:1227
+#: src/window-commands.c:1228
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1250
+#: src/window-commands.c:1251
 msgid "translator-credits"
 msgstr ""
 "Reinout van Schouwen \n"
@@ -5479,29 +5489,29 @@ msgstr ""
 
 # GNOME_epiphany_Automation.oaf.in.h:1
 # epiphany.desktop.in.h:2
-#: src/window-commands.c:1406
+#: src/window-commands.c:1407
 msgid "Reload Website?"
 msgstr "Website herladen?"
 
-#: src/window-commands.c:1957
+#: src/window-commands.c:1955
 msgid "New Web App"
 msgstr "Nieuwe webtoepassing"
 
-#: src/window-commands.c:2009
+#: src/window-commands.c:2008
 #, c-format
-msgid "The application “%s” is ready to be used"
+msgid "The app “%s” is ready to be used"
 msgstr "De toepassing ‘%s’ is klaar voor gebruik"
 
-#: src/window-commands.c:2012
+#: src/window-commands.c:2011
 #, c-format
-msgid "The application “%s” could not be created: %s"
-msgstr "Kon de toepassing ‘%s’ niet aanmaken: %s"
+msgid "The app “%s” could not be created"
+msgstr "Kon de toepassing ‘%s’ niet aanmaken"
 
-#: src/window-commands.c:2110
+#: src/window-commands.c:2112
 msgid "Replace Existing Web App?"
 msgstr "Huidige webtoepassing vervangen?"
 
-#: src/window-commands.c:2113
+#: src/window-commands.c:2115
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -5511,47 +5521,53 @@ msgstr ""
 
 # src/menubar.c:468
 # ui/preferences.glade.h:262
-#: src/window-commands.c:2118
+#: src/window-commands.c:2120
 msgid "_Replace"
 msgstr "Ve_rvangen"
 
-#: src/window-commands.c:2424
+#: src/window-commands.c:2426
 msgid "Screenshot finished"
 msgstr "Schermafdruk is voltooid"
 
-#: src/window-commands.c:2546
+#: src/window-commands.c:2548
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2550
+#: src/window-commands.c:2552
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2596
+#: src/window-commands.c:2598
 msgid "PNG"
 msgstr "PNG"
 
+# src/menubar.c:150
+#: src/window-commands.c:2646
+msgid "Item removed from overview"
+msgstr "Item verwijderd uit overzicht"
+
+# src/mozilla_i18n.c:37
+# ui/preferences.glade.h:202
+#: src/window-commands.c:2648
+msgid "Undo"
+msgstr "Ongedaan maken"
+
 # src/window_callbacks.c:2194
-#: src/window-commands.c:2920
+#: src/window-commands.c:2961
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "Zoekmachine ‘%s’ toegevoegd"
 
-#. Now all web views will get notified for this newly added engine, and remove
-#. * their corresponding autodiscovery link in the models. We do not do it
-#. * manually here for self->model because that would not remove the link for
-#. * all the other tabs, so that's why we let the EphyWebViews take care of it.
-#.
-#: src/window-commands.c:2939
+#: src/window-commands.c:2987
 msgid "Show"
 msgstr "Tonen"
 
 # Cursorbladermodus??
-#: src/window-commands.c:3171
+#: src/window-commands.c:3224
 msgid "Enable Caret Browsing Mode?"
 msgstr "Cursornavigatie inschakelen?"
 
-#: src/window-commands.c:3172
+#: src/window-commands.c:3225
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -5561,9 +5577,37 @@ msgstr ""
 "een verplaatsbare cursor op webpagina’s, zodat u met het toetsenbord door de "
 "pagina kunt bewegen. Wilt u cursornavigatie inschakelen?"
 
-#: src/window-commands.c:3177
+#: src/window-commands.c:3230
 msgid "_Enable"
 msgstr "_Inschakelen"
+
+#~ msgid "The password of your Mozilla account seems to have been changed."
+#~ msgstr ""
+#~ "Het lijkt erop dat het wachtwoord van uw Mozilla-account is gewijzigd."
+
+#~ msgid ""
+#~ "Please visit Firefox Sync and sign in with the new password to continue "
+#~ "syncing."
+#~ msgstr ""
+#~ "Gelieve naar Firefox Sync te gaan en u aan te melden met het nieuwe "
+#~ "wachtwoord om door te gaan met synchroniseren."
+
+#~ msgid "Failed to obtain signed certificate."
+#~ msgstr "Verkrijgen van ondertekend certificaat is mislukt."
+
+#~ msgid "Failed to upload device info"
+#~ msgstr "Apparaatinformatie uploaden mislukt"
+
+#~ msgid "Failed to retrieve the Sync Key"
+#~ msgstr "Ophalen van sync-sleutel is mislukt"
+
+#, c-format
+#~ msgid "Only manifest_version 2 is supported"
+#~ msgstr "Enkel manifest_version 2 wordt ondersteund"
+
+#, c-format
+#~ msgid "Missing name or version"
+#~ msgstr "Naam of versie ontbreekt"
 
 #, c-format
 #~ msgid "Add “%s” as Search Engine"
@@ -6005,9 +6049,6 @@ msgstr "_Inschakelen"
 #~ msgid "Plugins data"
 #~ msgstr "Gegevensplug-ins"
 
-#~ msgid "Reveal password"
-#~ msgstr "Wachtwoord tonen"
-
 # src/menubar.c:54
 #~ msgid "Web Application Icon"
 #~ msgstr "Webtoepassingspictogram"
@@ -6404,11 +6445,6 @@ msgstr "_Inschakelen"
 
 #~ msgid "Manage _Cookies"
 #~ msgstr "_Cookies beheren"
-
-# src/menubar.c:502
-# ui/epiphany.glade.h:163
-#~ msgid "Manage _Passwords"
-#~ msgstr "_Wachtwoorden beheren"
 
 # src/persistent_data_manager.c:138
 # ui/epiphany.glade.h:94
