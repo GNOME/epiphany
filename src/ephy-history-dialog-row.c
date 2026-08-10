@@ -27,17 +27,15 @@ struct _EphyHistoryDialogRow {
   AdwActionRow parent_instance;
 
   char *url;
-  char *title;
 };
 
 G_DEFINE_FINAL_TYPE (EphyHistoryDialogRow, ephy_history_dialog_row, ADW_TYPE_ACTION_ROW)
 
 typedef enum {
   PROP_URL = 1,
-  PROP_TITLE,
 } EphyHistoryDialogRowProps;
 
-static GParamSpec *props[PROP_TITLE + 1];
+static GParamSpec *props[PROP_URL + 1];
 
 static void
 ephy_history_dialog_row_get_property (GObject    *object,
@@ -50,9 +48,6 @@ ephy_history_dialog_row_get_property (GObject    *object,
   switch ((EphyHistoryDialogRowProps)prop_id) {
     case PROP_URL:
       g_value_set_string (value, self->url);
-      break;
-    case PROP_TITLE:
-      g_value_set_string (value, self->title);
       break;
   }
 }
@@ -69,9 +64,6 @@ ephy_history_dialog_row_set_property (GObject      *object,
     case PROP_URL:
       g_set_str (&self->url, g_value_dup_string (value));
       break;
-    case PROP_TITLE:
-      g_set_str (&self->title, g_value_dup_string (value));
-      break;
   }
 }
 
@@ -80,7 +72,6 @@ ephy_history_dialog_row_constructed (GObject *object)
 {
   EphyHistoryDialogRow *self = EPHY_HISTORY_DIALOG_ROW (object);
 
-  g_autofree char *title_escaped = g_markup_escape_text (self->title, -1);
   g_autofree char *subtitle_escaped = NULL;
   g_autofree char *decoded_url = ephy_uri_decode (self->url);
 
@@ -90,7 +81,6 @@ ephy_history_dialog_row_constructed (GObject *object)
 
   adw_action_row_set_title_lines (ADW_ACTION_ROW (self), 1);
   adw_action_row_set_subtitle_lines (ADW_ACTION_ROW (self), 1);
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self), title_escaped);
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self), subtitle_escaped);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (self), TRUE);
   gtk_widget_set_tooltip_text (GTK_WIDGET (self), decoded_url);
@@ -104,7 +94,6 @@ ephy_history_dialog_row_finalize (GObject *object)
   EphyHistoryDialogRow *self = EPHY_HISTORY_DIALOG_ROW (object);
 
   g_free (self->url);
-  g_free (self->title);
 
   G_OBJECT_CLASS (ephy_history_dialog_row_parent_class)->finalize (object);
 }
@@ -121,9 +110,6 @@ ephy_history_dialog_row_class_init (EphyHistoryDialogRowClass *klass)
 
   props[PROP_URL] =
     g_param_spec_string ("url", NULL, NULL, NULL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
-  props[PROP_TITLE] =
-    g_param_spec_string ("title", NULL, NULL, NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
@@ -152,7 +138,7 @@ ephy_history_dialog_row_create_history_url (EphyHistoryDialogRow *self)
   g_assert (EPHY_IS_HISTORY_DIALOG_ROW (self));
 
   return ephy_history_url_new (self->url,
-                               self->title,
+                               adw_preferences_row_get_title (ADW_PREFERENCES_ROW (self)),
                                0,
                                0,
                                0);
