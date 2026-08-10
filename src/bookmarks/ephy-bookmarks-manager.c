@@ -27,6 +27,7 @@
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
@@ -227,8 +228,28 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
 }
 
 static void
+favicon_changed_cb (WebKitFaviconDatabase *database,
+                    const char            *page_uri,
+                    const char            *favicon_uri,
+                    EphyBookmarksManager  *self)
+{
+  GSequenceIter *iter;
+
+  for (iter = g_sequence_get_begin_iter (self->bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+    const char *url = ephy_bookmark_get_url (bookmark);
+
+    if (url && (g_strcmp0 (url, page_uri) == 0 || g_str_has_prefix (page_uri, url)))
+      ephy_bookmark_start_loading_icon (bookmark);
+  }
+}
+
+static void
 ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   g_autoptr (GError) error = NULL;
 
   self->cancellable = g_cancellable_new ();
@@ -260,6 +281,14 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   ephy_bookmarks_manager_save (self, TRUE, TRUE, self->cancellable,
                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_warn_on_error_cb,
                                NULL);
+
+  if (shell) {
+    WebKitFaviconDatabase *database = ephy_embed_shell_get_favicon_database (shell);
+
+    if (database)
+      g_signal_connect_object (database, "favicon-changed",
+                               G_CALLBACK (favicon_changed_cb), self, G_CONNECT_DEFAULT);
+  }
 }
 
 static void

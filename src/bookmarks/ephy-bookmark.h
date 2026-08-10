@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <gio/gio.h>
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
 
@@ -55,6 +56,8 @@ void                 ephy_bookmark_remove_tag             (EphyBookmark *self,
 gboolean             ephy_bookmark_has_tag                (EphyBookmark *self,
                                                            const char   *tag);
 GSequence           *ephy_bookmark_get_tags               (EphyBookmark *self);
+void                 ephy_bookmark_start_loading_icon     (EphyBookmark *self);
+GIcon               *ephy_bookmark_get_icon               (EphyBookmark *self);
 int                  ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmark1,
                                                            EphyBookmark *bookmark2);
 int                  ephy_bookmark_tags_compare           (const char *tag1,
