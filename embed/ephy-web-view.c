@@ -568,45 +568,16 @@ password_form_banner_response_cb (AdwBanner *self,
   adw_banner_set_revealed (self, FALSE);
 }
 
-static void
-autofill_cb (GObject      *source_object,
-             GAsyncResult *res,
-             gpointer      user_data)
-{
-  g_autoptr (GError) error = NULL;
-  g_autoptr (JSCValue) value = NULL;
-
-  value = webkit_web_view_evaluate_javascript_finish (WEBKIT_WEB_VIEW (source_object), res, &error);
-  if (error || !value)
-    g_warning ("autofill returned error: %s", error ? error->message : "");
-}
-
 void
 ephy_web_view_autofill (EphyWebView            *view,
                         const char             *selector,
                         EphyAutofillFillChoice  fill_choice)
 {
-  guint64 page_id;
-  const char *world_name;
-  g_autofree char *script = NULL;
-
   g_assert (EPHY_IS_WEB_VIEW (view));
 
-  page_id = webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view));
-  world_name = ephy_embed_shell_get_guid (ephy_embed_shell_get_default ());
-  script = g_strdup_printf ("EphyAutofill.fill(%lu, '%s', %i);",
-                            page_id,
-                            selector,
-                            fill_choice);
-
-  webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (view),
-                                       script,
-                                       -1,
-                                       world_name,
-                                       NULL,
-                                       view->cancellable,
-                                       autofill_cb,
-                                       NULL);
+  webkit_web_view_send_message_to_page (WEBKIT_WEB_VIEW (view),
+                                        webkit_user_message_new ("EphyAutofill.Fill", g_variant_new ("(si)", selector, (gint32)fill_choice)),
+                                        view->cancellable, NULL, NULL);
 }
 
 static void
