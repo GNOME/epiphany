@@ -400,15 +400,40 @@ replace_str (char **src,
 }
 
 typedef struct {
+  GPtrArray *tags;
+  GString *title;
+  char *add_date;
+} BookmarkData;
+
+static BookmarkData *
+bookmark_data_new (void)
+{
+  BookmarkData *data;
+
+  data = g_new0 (BookmarkData, 1);
+  data->tags = g_ptr_array_new_with_free_func (g_free);
+
+  return data;
+}
+
+static void
+bookmark_data_free (BookmarkData *data)
+{
+  g_ptr_array_unref (data->tags);
+  if (data->title)
+    g_string_free (data->title, TRUE);
+  g_free (data->add_date);
+  g_free (data);
+}
+
+typedef struct {
   GQueue *tags_stack;
   GHashTable *urls_table;
   GPtrArray *tags;
   GPtrArray *urls;
-  GPtrArray *add_dates;
-  GPtrArray *titles;
+  BookmarkData *current_bookmark;
   gboolean read_title;
   gboolean read_tag;
-  gboolean skip_bookmark;
 } ParserData;
 
 static ParserData *
@@ -418,14 +443,12 @@ parser_data_new ()
 
   data = g_new (ParserData, 1);
   data->tags_stack = g_queue_new ();
-  data->urls_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_ptr_array_unref);
+  data->urls_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)bookmark_data_free);
   data->tags = g_ptr_array_new_with_free_func (g_free);
   data->urls = g_ptr_array_new_with_free_func (g_free);
-  data->add_dates = g_ptr_array_new_with_free_func (g_free);
-  data->titles = g_ptr_array_new_with_free_func (g_free);
+  data->current_bookmark = NULL;
   data->read_title = FALSE;
   data->read_tag = FALSE;
-  data->skip_bookmark = FALSE;
 
   return data;
 }
@@ -437,8 +460,6 @@ parser_data_free (ParserData *data)
   g_hash_table_destroy (data->urls_table);
   g_ptr_array_free (data->tags, TRUE);
   g_ptr_array_free (data->urls, TRUE);
-  g_ptr_array_free (data->titles, TRUE);
-  g_ptr_array_free (data->add_dates, TRUE);
   g_free (data);
 }
 
@@ -451,33 +472,38 @@ xml_start_element (GMarkupParseContext  *context,
                    GError              **error)
 {
   ParserData *data = user_data;
-  const gchar **names = attribute_names;
-  const gchar **values = attribute_values;
 
   if (strcmp (element_name, "H3") == 0) {
     data->read_tag = TRUE;
   } else if (strcmp (element_name, "A") == 0) {
+    const char *href = NULL;
+    const char *add_date = NULL;
+    const char *tag = g_queue_peek_head (data->tags_stack);
+    BookmarkData *bookmark;
+
+    for (guint i = 0; attribute_names[i]; i++) {
+      if (strcmp (attribute_names[i], "HREF") == 0)
+        href = attribute_values[i];
+      else if (strcmp (attribute_names[i], "ADD_DATE") == 0)
+        add_date = attribute_values[i];
+    }
+
+    if (!href)
+      return;
+
     data->read_title = TRUE;
 
-    while (*names) {
-      if (strcmp (*names, "HREF") == 0) {
-        GPtrArray *tags;
-        const char *tag = g_queue_peek_head (data->tags_stack);
-
-        if (g_hash_table_lookup_extended (data->urls_table, *values, NULL, (gpointer *)&tags)) {
-          g_ptr_array_add (tags, g_strdup (tag));
-          data->skip_bookmark = TRUE;
-        } else {
-          tags = g_ptr_array_new_with_free_func (g_free);
-          g_ptr_array_add (tags, g_strdup (tag));
-          g_hash_table_insert (data->urls_table, g_strdup (*values), tags);
-          g_ptr_array_add (data->urls, g_strdup (*values));
-          data->skip_bookmark = FALSE;
-        }
-      } else if (strcmp (*names, "ADD_DATE") == 0 && !data->skip_bookmark)
-        g_ptr_array_add (data->add_dates, g_strdup (*values));
-      names++;
-      values++;
+    if (g_hash_table_lookup_extended (data->urls_table, href, NULL, (gpointer *)&bookmark)) {
+      /* Duplicate URL: merge the tag, keep the first title and date. */
+      g_ptr_array_add (bookmark->tags, g_strdup (tag));
+      data->current_bookmark = NULL;
+    } else {
+      bookmark = bookmark_data_new ();
+      g_ptr_array_add (bookmark->tags, g_strdup (tag));
+      bookmark->add_date = g_strdup (add_date);
+      g_hash_table_insert (data->urls_table, g_strdup (href), bookmark);
+      g_ptr_array_add (data->urls, g_strdup (href));
+      data->current_bookmark = bookmark;
     }
   }
 }
@@ -490,12 +516,14 @@ xml_end_element (GMarkupParseContext  *context,
 {
   ParserData *data = user_data;
 
-  if (strcmp (element_name, "H3") == 0)
+  if (strcmp (element_name, "H3") == 0) {
     data->read_tag = FALSE;
-  else if (strcmp (element_name, "A") == 0)
+  } else if (strcmp (element_name, "A") == 0) {
     data->read_title = FALSE;
-  else if (strcmp (element_name, "DL") == 0)
+    data->current_bookmark = NULL;
+  } else if (strcmp (element_name, "DL") == 0) {
     g_free (g_queue_pop_head (data->tags_stack));
+  }
 }
 
 static void
@@ -512,8 +540,15 @@ xml_text (GMarkupParseContext  *context,
     g_ptr_array_add (data->tags, g_strdup (text));
   }
 
-  if (data->read_title && !data->skip_bookmark)
-    g_ptr_array_add (data->titles, g_strdup (text));
+  /* The text of a bookmark may arrive in multiple chunks (e.g. around
+   * entities), so append to the title instead of overwriting it.
+   */
+  if (data->read_title && data->current_bookmark) {
+    if (data->current_bookmark->title)
+      g_string_append_len (data->current_bookmark->title, text, text_len);
+    else
+      data->current_bookmark->title = g_string_new_len (text, text_len);
+  }
 }
 
 gboolean
@@ -581,16 +616,15 @@ ephy_bookmarks_import_from_html (EphyBookmarksManager  *manager,
   for (guint i = 0; i < data->urls->len; i++) {
     g_autofree const char *guid = ephy_bookmark_generate_random_id ();
     const char *url = g_ptr_array_index (data->urls, i);
-    const char *title = g_ptr_array_index (data->titles, i);
-    gint64 time_added = (gint64)g_ptr_array_index (data->add_dates, i);
+    BookmarkData *bookmark_data = g_hash_table_lookup (data->urls_table, url);
+    const char *title = bookmark_data->title ? bookmark_data->title->str : url;
+    gint64 time_added = bookmark_data->add_date ? g_ascii_strtoll (bookmark_data->add_date, NULL, 10) : 0;
     EphyBookmark *bookmark;
     GSequence *tags;
-    GPtrArray *val;
 
     tags = g_sequence_new (g_free);
-    g_hash_table_lookup_extended (data->urls_table, url, NULL, (gpointer *)&val);
-    for (guint j = 0; j < val->len; j++) {
-      char *tag = g_ptr_array_index (val, j);
+    for (guint j = 0; j < bookmark_data->tags->len; j++) {
+      char *tag = g_ptr_array_index (bookmark_data->tags, j);
       if (tag)
         g_sequence_append (tags, g_strdup (tag));
     }
