@@ -1865,6 +1865,7 @@ format_network_error_page (EphyWebView  *view,
 {
   g_autofree char *encoded_origin = NULL;
   g_autofree char *formatted_origin = NULL;
+  g_autofree char *encoded_reason = NULL;
   g_autofree char *formatted_reason = NULL;
   g_autofree char *first_paragraph = NULL;
   const char *second_paragraph;
@@ -1889,7 +1890,8 @@ format_network_error_page (EphyWebView  *view,
                                    first_paragraph,
                                    second_paragraph);
 
-  formatted_reason = g_strdup_printf ("<i>%s</i>", reason);
+  encoded_reason = ephy_encode_for_html_entity (reason);
+  formatted_reason = g_strdup_printf ("<i>%s</i>", encoded_reason);
   g_free (first_paragraph);
   /* Technical details when a site cannot be loaded due to a network error. */
   first_paragraph = g_strdup_printf (_("The precise error was: %s"),
