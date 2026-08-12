@@ -1,5 +1,5 @@
 /*!
-  Highlight.js v11.11.2 (git: f273f007f8)
+  Highlight.js v11.12.0 (git: f7f7d3803b)
   (c) 2006-2026 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
@@ -474,14 +474,17 @@ var hljs = (function () {
     return match && match.index === 0;
   }
 
-  // BACKREF_RE matches an open parenthesis or backreference. To avoid
-  // an incorrect parse, it additionally matches the following:
-  // - [...] elements, where the meaning of parentheses and escapes change
-  // - other escape sequences, so we do not misparse escape sequences as
-  //   interesting elements
-  // - non-matching or lookahead parentheses, which do not capture. These
-  //   follow the '(' with a '?'.
-  const BACKREF_RE = /\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./;
+  // BACKREF_RE matches an open parenthesis or backreference. To avoid an
+  // incorrect parse, it also matches the constructs where the meaning of
+  // parentheses, escapes, or capture counting changes.
+  const BACKREF_RE = new RegExp(either(
+    /\[(?:[^\\\]]|\\.)*\]/, // a character class, inside which ( and \ lose their meaning
+    /\(\?<(?![=!])[^>]+>/, // a named capture group `(?<name>` (not a lookbehind `(?<=` / `(?<!`)
+    /\(\?'[^']+'/, // a named capture group `(?'name'`
+    /\(\??/, // an opening parenthesis, capturing or non-capturing / lookahead
+    /\\([1-9][0-9]*)/, // a backreference like `\1`
+    /\\./ // any other escape sequence
+  ));
 
   // **INTERNAL** Not intended for outside usage
   // join logically computes regexps.join(separator), but fixes the
@@ -516,7 +519,7 @@ var hljs = (function () {
           out += '\\' + String(Number(match[1]) + offset);
         } else {
           out += match[0];
-          if (match[0] === '(') {
+          if (match[0] === '(' || /^\(\?[<']/.test(match[0])) {
             numCaptures++;
           }
         }
@@ -1558,7 +1561,7 @@ var hljs = (function () {
     return mode;
   }
 
-  var version = "11.11.2";
+  var version = "11.12.0";
 
   class HTMLInjectionError extends Error {
     constructor(reason, html) {
@@ -2616,7 +2619,7 @@ var hljs = (function () {
       },
       UNICODE_RANGE: {
         scope: 'number',
-        begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,4}(-[0-9A-Fa-f][0-9A-Fa-f]{0,4})?/
+        begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,5}(-[0-9A-Fa-f][0-9A-Fa-f]{0,5})?/
       },
       FUNCTION_DISPATCH: {
         className: "built_in",
@@ -3051,6 +3054,11 @@ var hljs = (function () {
     'container-type',
     'content',
     'content-visibility',
+    'corner-bottom-left-shape',
+    'corner-bottom-right-shape',
+    'corner-shape',
+    'corner-top-left-shape',
+    'corner-top-right-shape',
     'counter-increment',
     'counter-reset',
     'counter-set',
@@ -3709,6 +3717,7 @@ var hljs = (function () {
     "localStorage",
     "sessionStorage",
     "module",
+    "self",
     "global" // Node.js
   ];
 
@@ -4490,10 +4499,7 @@ var hljs = (function () {
           starts: {
             end: /<\/style>/,
             returnEnd: true,
-            subLanguage: [
-              'css',
-              'xml'
-            ]
+            subLanguage: 'css'
           }
         },
         {
@@ -4506,11 +4512,7 @@ var hljs = (function () {
           starts: {
             end: /<\/script>/,
             returnEnd: true,
-            subLanguage: [
-              'javascript',
-              'handlebars',
-              'xml'
-            ]
+            subLanguage: 'javascript'
           }
         },
         // we need this for now for jSX
