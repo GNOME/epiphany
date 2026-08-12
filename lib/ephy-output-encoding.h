@@ -32,7 +32,7 @@ G_BEGIN_DECLS
  *
  * If tempted to inject untrusted content into JavaScript, then also review:
  * https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html
- * and consider not doing that.
+ * especially rule 3. Then stop, and do not attempt to do so. Seriously.
  */
 
 char *ephy_encode_for_html_entity    (const char *input);
