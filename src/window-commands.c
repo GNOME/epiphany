@@ -3622,12 +3622,19 @@ window_cmd_generate_password (GSimpleAction *action,
   EphyEmbed *embed;
   WebKitWebView *web_view;
   g_autoptr (WebKitUserMessage) message = NULL;
+  guint64 frame_id;
+
+  if (!parameter)
+    return;
+
+  frame_id = g_variant_get_uint64 (parameter);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   if (!embed)
     return;
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  message = webkit_user_message_new ("PasswordManager.GeneratePassword", NULL);
+  message = webkit_user_message_new ("PasswordManager.GeneratePassword",
+                                     g_variant_new_uint64 (frame_id));
   webkit_web_view_send_message_to_page (web_view, g_steal_pointer (&message), NULL, NULL, NULL);
 }

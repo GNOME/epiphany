@@ -919,7 +919,7 @@ static const GActionEntry window_entries [] = {
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
   { "security-permissions", window_cmd_security_and_permissions },
-  { "generate-password", window_cmd_generate_password },
+  { "generate-password", window_cmd_generate_password, "t" },
 
   { "select-all", window_cmd_select_all },
 
@@ -1458,9 +1458,9 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
                             EphyWindow        *window)
 {
   GAction *action;
-  char *name;
+  g_autofree char *name = NULL;
   const char *label;
-  GVariant *target;
+  g_autoptr (GVariant) target = NULL;
 
   g_action_parse_detailed_name (action_name, &name, &target, NULL);
 
@@ -1486,7 +1486,7 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
     webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _("Open Link In Incognito Window"), target));
   } else {
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
-    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label), NULL));
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label), target));
   }
 }
 
@@ -1557,7 +1557,8 @@ should_show_copy_outside_editable (WebKitWebView *view)
 static void
 parse_context_menu_user_data (WebKitContextMenu  *context_menu,
                               const char        **selected_text,
-                              gboolean           *is_password)
+                              gboolean           *is_password,
+                              guint64            *frame_id)
 {
   GVariantDict dict;
 
@@ -1567,6 +1568,11 @@ parse_context_menu_user_data (WebKitContextMenu  *context_menu,
   if (is_password) {
     *is_password = FALSE;
     g_variant_dict_lookup (&dict, "IsPassword", "b", is_password);
+  }
+
+  if (frame_id) {
+    *frame_id = 0;
+    g_variant_dict_lookup (&dict, "FrameID", "t", frame_id);
   }
 }
 
@@ -1608,6 +1614,7 @@ populate_context_menu (WebKitWebView       *web_view,
   GdkModifierType state = 0;
   gboolean fullscreen_lockdown;
   gboolean is_password = FALSE;
+  guint64 frame_id = 0;
 
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
                         ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
@@ -1657,7 +1664,7 @@ populate_context_menu (WebKitWebView       *web_view,
     }
   }
 
-  parse_context_menu_user_data (context_menu, &selected_text, &is_password);
+  parse_context_menu_user_data (context_menu, &selected_text, &is_password, &frame_id);
   if (selected_text && *selected_text) {
     is_selected_text = TRUE;
 
@@ -1778,10 +1785,13 @@ populate_context_menu (WebKitWebView       *web_view,
                                 "select-all", window);
 
     if (is_password && ephy_embed_shell_should_remember_passwords (ephy_embed_shell_get_default ())) {
+      g_autoptr (GVariant) target = g_variant_new_uint64 (frame_id);
+      g_autofree char *generate_password_action_name = g_action_print_detailed_name ("generate-password", target);
+
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
       add_action_to_context_menu (context_menu, window_action_group,
-                                  "generate-password", window);
+                                  generate_password_action_name, window);
     }
 
     if (can_search_selection)
