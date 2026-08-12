@@ -71,9 +71,10 @@ static void
 ephy_history_dialog_row_constructed (GObject *object)
 {
   EphyHistoryDialogRow *self = EPHY_HISTORY_DIALOG_ROW (object);
-
   g_autofree char *subtitle_escaped = NULL;
   g_autofree char *decoded_url = ephy_uri_decode (self->url);
+
+  G_OBJECT_CLASS (ephy_history_dialog_row_parent_class)->constructed (object);
 
   if (!decoded_url)
     decoded_url = g_strdup (self->url);
@@ -84,8 +85,6 @@ ephy_history_dialog_row_constructed (GObject *object)
   adw_action_row_set_subtitle (ADW_ACTION_ROW (self), subtitle_escaped);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (self), TRUE);
   gtk_widget_set_tooltip_text (GTK_WIDGET (self), decoded_url);
-
-  G_OBJECT_CLASS (ephy_history_dialog_row_parent_class)->constructed (object);
 }
 
 static void
