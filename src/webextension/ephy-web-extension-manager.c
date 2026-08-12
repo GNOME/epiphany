@@ -541,6 +541,8 @@ decompress_xpi_thread (GTask        *task,
   flags |= ARCHIVE_EXTRACT_PERM;
   flags |= ARCHIVE_EXTRACT_ACL;
   flags |= ARCHIVE_EXTRACT_FFLAGS;
+  flags |= ARCHIVE_EXTRACT_SECURE_NODOTDOT;
+  flags |= ARCHIVE_EXTRACT_SECURE_SYMLINKS;
 
   archive = archive_read_new ();
   archive_read_support_format_all (archive);
