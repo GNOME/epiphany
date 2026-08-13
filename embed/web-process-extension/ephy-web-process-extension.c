@@ -1182,6 +1182,7 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
                                         G_TYPE_NONE, 1,
                                         G_TYPE_STRING);
   jsc_value_object_set_property (js_ephy, "log", js_function);
+  jsc_value_object_set_property (js_ephy_autofill, "log", js_function);
   g_clear_object (&js_function);
 
   js_function = jsc_value_new_function (js_context,
