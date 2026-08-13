@@ -30,7 +30,8 @@ G_BEGIN_DECLS
 
 void
 ephy_embed_autofill_signal_received_cb (EphyEmbedShell *shell,
-                                        unsigned long   page_id,
+                                        guint64         page_id,
+                                        guint64         frame_id,
                                         const char     *css_selector,
                                         gboolean        is_fillable_element,
                                         gboolean        has_personal_fields,

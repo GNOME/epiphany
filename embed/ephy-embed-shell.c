@@ -338,6 +338,7 @@ web_process_extension_autofill_askuser_received_cb (WebKitUserContentManager *ma
                                                     EphyEmbedShell           *shell)
 {
   guint64 page_id = property_to_uint64 (value, "pageId");
+  guint64 frame_id = property_to_uint64 (value, "frameId");
   char *selector = property_to_string_or_null (value, "selector");
   gboolean is_fillable_element = property_to_boolean (value, "isFillableElement");
   gboolean has_personal_fields = property_to_boolean (value, "hasPersonalFields");
@@ -348,7 +349,7 @@ web_process_extension_autofill_askuser_received_cb (WebKitUserContentManager *ma
   guint64 element_height = property_to_uint64 (value, "height");
 
   g_signal_emit (shell, signals[AUTOFILL_SIGNAL], 0,
-                 page_id, selector, is_fillable_element, has_personal_fields, has_card_fields, x, y, element_width, element_height);
+                 page_id, frame_id, selector, is_fillable_element, has_personal_fields, has_card_fields, x, y, element_width, element_height);
 }
 
 static void
@@ -1101,6 +1102,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
    * EphyEmbedShell::autofill:
    * @shell: the #EphyEmbedShell
    * @page_id: the identifier of the web page created
+   * @frame_id: the identifier of the web frame
    * @css_selector: css selector of input element
    * @is_fillable_element: is input element fillable
    * @has_personal_fields: does input element's form has personal fields
@@ -1119,7 +1121,8 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   EPHY_TYPE_EMBED_SHELL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 9,
+                  G_TYPE_NONE, 10,
+                  G_TYPE_UINT64,
                   G_TYPE_UINT64,
                   G_TYPE_STRING,
                   G_TYPE_BOOLEAN,

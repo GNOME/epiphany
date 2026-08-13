@@ -173,8 +173,6 @@ web_page_context_menu (WebKitWebPage          *web_page,
   extension = ephy_web_process_extension_get ();
   /* FIXME: this is wrong, see https://gitlab.gnome.org/GNOME/epiphany/issues/442
    * We need a way to get the right frame to use here.
-   *
-   * Warning: another copy of this comment exists in web_page_autofill().
    */
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     frame = webkit_web_page_get_main_frame (web_page);
@@ -483,7 +481,7 @@ generate_password_in_frame (EphyWebProcessExtension *extension,
 
 static void
 web_page_autofill (EphyWebProcessExtension *extension,
-                   WebKitWebPage           *web_page,
+                   guint64                  frame_id,
                    const char              *selector,
                    gint32                   fill_choice)
 {
@@ -492,27 +490,23 @@ web_page_autofill (EphyWebProcessExtension *extension,
   g_autoptr (JSCValue) js_result = NULL;
   WebKitFrame *frame;
 
-  /* FIXME: this is wrong, see https://gitlab.gnome.org/GNOME/epiphany/issues/442
-   * We need a way to get the right frame to use here.
-   *
-   * Warning: another copy of this comment exists in web_page_context_menu().
-   */
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    frame = webkit_web_page_get_main_frame (web_page);
-  G_GNUC_END_IGNORE_DEPRECATIONS
-    js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
-  if (!js_context)
-    return;
+  g_assert (extension->frames_map);
+
+  frame = g_hash_table_lookup (extension->frames_map, &frame_id);
+  g_assert (frame);
+
+  js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
+  g_assert (js_context);
 
   js_ephy_autofill = jsc_context_get_value (js_context, "EphyAutofill");
-  if (js_ephy_autofill && !jsc_value_is_undefined (js_ephy_autofill)) {
-    js_result = jsc_value_object_invoke_method (js_ephy_autofill, "fill",
-                                                G_TYPE_UINT64, webkit_web_page_get_id (web_page),
-                                                G_TYPE_STRING, selector,
-                                                G_TYPE_INT, fill_choice,
-                                                G_TYPE_NONE);
-    (void)js_result;
-  }
+  g_assert (js_ephy_autofill);
+  g_assert (!jsc_value_is_undefined (js_ephy_autofill));
+
+  js_result = jsc_value_object_invoke_method (js_ephy_autofill, "fill",
+                                              G_TYPE_STRING, selector,
+                                              G_TYPE_INT, fill_choice,
+                                              G_TYPE_NONE);
+  (void)js_result;
 }
 
 static gboolean
@@ -548,6 +542,7 @@ web_page_received_message (WebKitWebPage     *web_page,
     generate_password_in_frame (extension, frame_id);
   } else if (g_strcmp0 (name, "EphyAutofill.Fill") == 0) {
     GVariant *parameters;
+    guint64 frame_id;
     const char *selector;
     gint32 fill_choice;
 
@@ -555,8 +550,8 @@ web_page_received_message (WebKitWebPage     *web_page,
     if (!parameters)
       return FALSE;
 
-    g_variant_get (parameters, "(&si)", &selector, &fill_choice);
-    web_page_autofill (extension, web_page, selector, fill_choice);
+    g_variant_get (parameters, "(t&si)", &frame_id, &selector, &fill_choice);
+    web_page_autofill (extension, frame_id, selector, fill_choice);
   } else {
     g_warning ("Unhandled page message: %s", name);
     return FALSE;
@@ -1172,8 +1167,15 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   g_clear_object (&result);
   js_ephy = jsc_context_get_value (js_context, "Ephy");
 
+  js_value = jsc_value_new_number (js_context,
+                                   (double)webkit_web_page_get_id (page));
+  jsc_value_object_set_property (js_ephy, "pageId", js_value);
+  jsc_value_object_set_property (js_ephy_autofill, "pageId", js_value);
+  g_clear_object (&js_value);
+
   js_value = jsc_value_new_number (js_context, (double)frame_id);
   jsc_value_object_set_property (js_ephy, "frameId", js_value);
+  jsc_value_object_set_property (js_ephy_autofill, "frameId", js_value);
   g_clear_object (&js_value);
 
   js_function = jsc_value_new_function (js_context,
@@ -1256,11 +1258,6 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
     jsc_value_object_set_property (js_ephy, "queryPassword", js_function);
     g_clear_object (&js_function);
   }
-
-  js_value = jsc_value_new_number (js_context,
-                                   (double)webkit_web_page_get_id (page));
-  jsc_value_object_set_property (js_ephy_autofill, "pageId", js_value);
-  g_clear_object (&js_value);
 
   js_function = jsc_value_new_function (js_context,
                                         "isWebApplication",

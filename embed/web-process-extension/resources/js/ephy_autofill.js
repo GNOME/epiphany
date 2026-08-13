@@ -744,17 +744,15 @@ var EphyAutofill = {
     const { x, y, width, height } = element.getBoundingClientRect();
 
     const pageId = EphyAutofill.pageId;
+    const frameId = EphyAutofill.frameId;
 
     window.webkit.messageHandlers.autofillAskUser.postMessage({
-            pageId, formField, selector, isFillableElement, hasPersonalFields, hasCardFields, x, y, width, height});
+            pageId, frameId, formField, selector, isFillableElement, hasPersonalFields, hasCardFields, x, y, width, height});
 
     return false;
   },
 
-  fill(pageId, selector, fillChoice) {
-    if (pageId !== EphyAutofill.pageId) {
-      return;
-    }
+  fill(selector, fillChoice) {
 
     const isValidFillChoice = fillChoice >= 0 && fillChoice <= EphyAutofill.FillChoice.Element;
     const isValidSelector = !!selector;
