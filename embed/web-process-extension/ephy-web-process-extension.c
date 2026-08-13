@@ -1163,14 +1163,13 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy_autofill.js", 1);
   g_clear_pointer (&bytes, g_bytes_unref);
   g_clear_object (&result);
-
   js_ephy_autofill = jsc_context_get_value (js_context, "EphyAutofill");
+
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-process-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
   result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-process-extension/js/ephy.js", 1);
   g_clear_pointer (&bytes, g_bytes_unref);
   g_clear_object (&result);
-
   js_ephy = jsc_context_get_value (js_context, "Ephy");
 
   js_value = jsc_value_new_number (js_context, (double)frame_id);
