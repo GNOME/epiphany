@@ -573,13 +573,14 @@ password_form_banner_response_cb (AdwBanner *self,
 
 void
 ephy_web_view_autofill (EphyWebView            *view,
+                        guint64                 frame_id,
                         const char             *selector,
                         EphyAutofillFillChoice  fill_choice)
 {
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   webkit_web_view_send_message_to_page (WEBKIT_WEB_VIEW (view),
-                                        webkit_user_message_new ("EphyAutofill.Fill", g_variant_new ("(si)", selector, (gint32)fill_choice)),
+                                        webkit_user_message_new ("EphyAutofill.Fill", g_variant_new ("(tsi)", frame_id, selector, (gint32)fill_choice)),
                                         view->cancellable, NULL, NULL);
 }
 

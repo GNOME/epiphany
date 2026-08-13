@@ -192,6 +192,7 @@ void                       ephy_web_view_register_message_handler (EphyWebView  
                                                                    EphyWebViewMessageHandlerScope  scope);
 
 void ephy_web_view_autofill                                       (EphyWebView               *view,
+                                                                   guint64                    frame_id,
                                                                    const char                *selector,
                                                                    EphyAutofillFillChoice     fill_choice);
 

@@ -36,11 +36,12 @@ autofill_fill_button_clicked_cb (GAction     *action,
                                  GVariant    *parameter,
                                  EphyWebView *view)
 {
+  guint64 frame_id;
   const char *selector;
   int choice;
 
-  g_variant_get (parameter, "(us)", &choice, &selector);
-  ephy_web_view_autofill (view, selector, choice);
+  g_variant_get (parameter, "(tus)", &frame_id, &choice, &selector);
+  ephy_web_view_autofill (view, frame_id, selector, choice);
 }
 
 static void
@@ -48,6 +49,7 @@ add_menu_item (const char             *label,
                GSimpleActionGroup     *action_group,
                GMenu                  *menu,
                EphyWebView            *view,
+               guint64                 frame_id,
                const char             *selector,
                EphyAutofillFillChoice  fill_choice)
 {
@@ -57,10 +59,10 @@ add_menu_item (const char             *label,
   g_autofree char *full_action_name = g_strconcat ("autofill.", action_name, NULL);
 
   menu_item = g_menu_item_new (label, full_action_name);
-  g_menu_item_set_action_and_target_value (menu_item, full_action_name, g_variant_new ("(us)", fill_choice, selector));
+  g_menu_item_set_action_and_target_value (menu_item, full_action_name, g_variant_new ("(tus)", frame_id, fill_choice, selector));
   g_menu_append_item (menu, menu_item);
 
-  action = g_simple_action_new (action_name, g_variant_type_new ("(us)"));
+  action = g_simple_action_new (action_name, g_variant_type_new ("(tus)"));
   g_signal_connect (action, "activate", G_CALLBACK (autofill_fill_button_clicked_cb), view);
   g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (action));
 }
@@ -82,7 +84,8 @@ popover_close (GtkWidget *webview,
 
 void
 ephy_embed_autofill_signal_received_cb (EphyEmbedShell *shell,
-                                        unsigned long   page_id,
+                                        guint64         page_id,
+                                        guint64         frame_id,
                                         const char     *css_selector,
                                         gboolean        is_fillable_element,
                                         gboolean        has_personal_fields,
@@ -117,6 +120,7 @@ ephy_embed_autofill_signal_received_cb (EphyEmbedShell *shell,
                    action_group,
                    menu,
                    view,
+                   frame_id,
                    css_selector,
                    EPHY_AUTOFILL_FILL_CHOICE_FORM_ALL);
   }
@@ -126,6 +130,7 @@ ephy_embed_autofill_signal_received_cb (EphyEmbedShell *shell,
                    action_group,
                    menu,
                    view,
+                   frame_id,
                    css_selector,
                    EPHY_AUTOFILL_FILL_CHOICE_FORM_PERSONAL);
   }
@@ -134,6 +139,7 @@ ephy_embed_autofill_signal_received_cb (EphyEmbedShell *shell,
                    action_group,
                    menu,
                    view,
+                   frame_id,
                    css_selector,
                    EPHY_AUTOFILL_FILL_CHOICE_ELEMENT);
   }
