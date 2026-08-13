@@ -461,22 +461,20 @@ generate_password_in_frame (EphyWebProcessExtension *extension,
   g_autoptr (JSCValue) js_ephy = NULL;
   g_autoptr (JSCValue) js_result = NULL;
 
-  if (!extension->frames_map)
-    return;
+  g_assert (extension->frames_map);
 
   frame = g_hash_table_lookup (extension->frames_map, &frame_id);
-  if (!frame)
-    return;
+  g_assert (frame);
 
   js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
-  if (!js_context)
-    return;
+  g_assert (js_context);
 
   js_ephy = jsc_context_get_value (js_context, "Ephy");
-  if (js_ephy && !jsc_value_is_undefined (js_ephy)) {
-    js_result = jsc_value_object_invoke_method (js_ephy, "generateAndFillPassword", G_TYPE_NONE);
-    (void)js_result;
-  }
+  g_assert (js_ephy);
+  g_assert (!jsc_value_is_undefined (js_ephy));
+
+  js_result = jsc_value_object_invoke_method (js_ephy, "generateAndFillPassword", G_TYPE_NONE);
+  (void)js_result;
 }
 
 static void
