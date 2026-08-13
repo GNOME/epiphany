@@ -325,7 +325,7 @@ property_to_string_or_null (JSCValue   *value,
   return jsc_value_to_string (prop);
 }
 
-static int
+static guint64
 property_to_uint64 (JSCValue   *value,
                     const char *name)
 {
