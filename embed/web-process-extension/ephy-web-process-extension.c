@@ -1254,41 +1254,12 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
                                           G_TYPE_UINT64, G_TYPE_UINT64);
     jsc_value_object_set_property (js_ephy, "queryPassword", js_function);
     g_clear_object (&js_function);
-
-    js_function = jsc_value_new_function (js_context,
-                                          "getFieldValue",
-                                          G_CALLBACK (ephy_autofill_js_get_field_value),
-                                          extension,
-                                          NULL,
-                                          G_TYPE_NONE,
-                                          3,
-                                          G_TYPE_INT,
-                                          G_TYPE_UINT64,
-                                          JSC_TYPE_VALUE);
-    jsc_value_object_set_property (js_ephy_autofill,
-                                   "getFieldValue",
-                                   js_function);
-    g_clear_object (&js_function);
-
-    js_function = jsc_value_new_function (js_context,
-                                          "changeValue",
-                                          G_CALLBACK (ephy_autofill_js_change_value),
-                                          NULL,
-                                          NULL,
-                                          G_TYPE_NONE,
-                                          2,
-                                          JSC_TYPE_VALUE,
-                                          G_TYPE_STRING);
-    jsc_value_object_set_property (js_ephy_autofill, "changeValue", js_function);
-    g_clear_object (&js_function);
-
-    js_value = jsc_value_new_number (js_context,
-                                     (double)webkit_web_page_get_id (page));
-    jsc_value_object_set_property (js_ephy_autofill, "pageId", js_value);
-    g_clear_object (&js_value);
-
-    g_clear_object (&js_ephy_autofill);
   }
+
+  js_value = jsc_value_new_number (js_context,
+                                   (double)webkit_web_page_get_id (page));
+  jsc_value_object_set_property (js_ephy_autofill, "pageId", js_value);
+  g_clear_object (&js_value);
 
   js_function = jsc_value_new_function (js_context,
                                         "isWebApplication",
@@ -1318,6 +1289,33 @@ private_script_world_window_object_cleared_cb (WebKitScriptWorld       *world,
                                         G_CALLBACK (js_generate_secure_password), NULL, NULL,
                                         G_TYPE_STRING, 0);
   jsc_value_object_set_property (js_ephy, "generateSecurePassword", js_function);
+  g_clear_object (&js_function);
+
+  js_function = jsc_value_new_function (js_context,
+                                        "getFieldValue",
+                                        G_CALLBACK (ephy_autofill_js_get_field_value),
+                                        extension,
+                                        NULL,
+                                        G_TYPE_NONE,
+                                        3,
+                                        G_TYPE_INT,
+                                        G_TYPE_UINT64,
+                                        JSC_TYPE_VALUE);
+  jsc_value_object_set_property (js_ephy_autofill,
+                                 "getFieldValue",
+                                 js_function);
+  g_clear_object (&js_function);
+
+  js_function = jsc_value_new_function (js_context,
+                                        "changeValue",
+                                        G_CALLBACK (ephy_autofill_js_change_value),
+                                        NULL,
+                                        NULL,
+                                        G_TYPE_NONE,
+                                        2,
+                                        JSC_TYPE_VALUE,
+                                        G_TYPE_STRING);
+  jsc_value_object_set_property (js_ephy_autofill, "changeValue", js_function);
   g_clear_object (&js_function);
 }
 
