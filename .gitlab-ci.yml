@@ -97,16 +97,19 @@ flatpak:
     - '.flatpak'
     - '.flatpak rules'
   needs: []
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-49'
 
 flatpak aarch64:
   extends:
     - '.flatpak@aarch64'
     - '.flatpak rules'
   needs: []
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-49'
 
 scanbuild:
   extends: '.flatpak'
   needs: []
+  image: 'quay.io/gnome_infrastructure/gnome-runtime-images:gnome-49'
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
