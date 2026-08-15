@@ -1222,34 +1222,25 @@ window_cmd_show_about (GSimpleAction *action,
     authors[author_index++] = g_strdup (contributors[index]);
   }
 
-  dialog = ADW_ABOUT_DIALOG (adw_about_dialog_new ());
+  dialog = ADW_ABOUT_DIALOG (adw_about_dialog_new_from_appdata ("/org/gnome/Epiphany/org.gnome.Epiphany.metainfo.xml", NULL));
 
   if (g_str_equal (PROFILE, "Canary"))
     adw_about_dialog_set_application_name (dialog, _("Epiphany Canary"));
-  else {
-#if !TECH_PREVIEW
-    adw_about_dialog_set_application_name (dialog, _("Web"));
-#else
+#if TECH_PREVIEW
+  else
     adw_about_dialog_set_application_name (dialog, _("Epiphany Technology Preview"));
 #endif
-  }
 
   adw_about_dialog_set_version (dialog, VERSION);
   adw_about_dialog_set_copyright (dialog,
                                   "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                                  "Copyright © 2003–2023 The GNOME Web Developers");
-  adw_about_dialog_set_developer_name (dialog, _("The GNOME Project"));
+                                  "Copyright © 2003–2026 The GNOME Web Developers");
 
   adw_about_dialog_set_debug_info (dialog, debug_info);
-  adw_about_dialog_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
-  adw_about_dialog_set_website (dialog, "https://apps.gnome.org/Epiphany");
-  adw_about_dialog_set_application_icon (dialog, APPLICATION_ID);
-
   adw_about_dialog_set_developers (dialog, (const char **)authors);
   adw_about_dialog_set_designers (dialog, (const char **)artists);
   adw_about_dialog_set_documenters (dialog, (const char **)documenters);
   adw_about_dialog_set_translator_credits (dialog, _("translator-credits"));
-  adw_about_dialog_set_issue_url (dialog, "https://gitlab.gnome.org/GNOME/epiphany/-/issues/");
 
   adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (window));
 
