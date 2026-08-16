@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-06-03 21:05+0000\n"
-"PO-Revision-Date: 2026-07-05 21:20+0200\n"
+"POT-Creation-Date: 2026-08-13 15:12+0000\n"
+"PO-Revision-Date: 2026-08-16 09:52+0200\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -31,9 +31,9 @@ msgstr ""
 "X-Generator: Gtranslator 50.0\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:205
-#: embed/ephy-about-handler.c:237 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:429 src/window-commands.c:1230
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:206
+#: embed/ephy-about-handler.c:238 src/ephy-main.c:104 src/ephy-main.c:268
+#: src/ephy-main.c:429 src/window-commands.c:1231
 msgid "Web"
 msgstr "Уеб"
 
@@ -650,7 +650,7 @@ msgstr "Автоматично отваряне на адреси"
 
 #: data/org.gnome.epiphany.gschema.xml:303
 msgid "This is a permission map of security origins to URL schemes."
-msgstr "Права̀ за източника на сигурност спроред схеми на адреси."
+msgstr "Права̀ за източника на сигурност според схеми на адреси."
 
 #: data/org.gnome.epiphany.gschema.xml:309
 msgid "Web application additional URLs"
@@ -1054,7 +1054,8 @@ msgid "A browser window"
 msgstr "Прозорец на браузъра"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:36 src/window-commands.c:1240
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:36
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:38 src/window-commands.c:1241
 msgid "The GNOME Project"
 msgstr "Проектът GNOME"
 
@@ -1062,48 +1063,48 @@ msgstr "Проектът GNOME"
 msgid "Memory usage"
 msgstr "Използвана памет"
 
-#: embed/ephy-about-handler.c:171
+#: embed/ephy-about-handler.c:172
 #, c-format
 msgid "Version %s"
 msgstr "Версия „%s“"
 
-#: embed/ephy-about-handler.c:202
+#: embed/ephy-about-handler.c:203
 msgid "About Web"
 msgstr "Относно Интернет браузър"
 
-#: embed/ephy-about-handler.c:207 src/window-commands.c:1232
+#: embed/ephy-about-handler.c:208 src/window-commands.c:1233
 msgid "Epiphany Technology Preview"
 msgstr "Предварителна версия на Epiphany за тестване"
 
-#: embed/ephy-about-handler.c:210
+#: embed/ephy-about-handler.c:211
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Опростено, изчистено и красиво разглеждане на уеб страници"
 
 #. Displayed when opening applications without any installed web apps.
-#: embed/ephy-about-handler.c:274 embed/ephy-about-handler.c:277
-#: embed/ephy-about-handler.c:345 embed/ephy-about-handler.c:371
+#: embed/ephy-about-handler.c:275 embed/ephy-about-handler.c:278
+#: embed/ephy-about-handler.c:346 embed/ephy-about-handler.c:372
 msgid "Apps"
 msgstr "Програми"
 
-#: embed/ephy-about-handler.c:278
+#: embed/ephy-about-handler.c:279
 msgid "List of installed web apps"
 msgstr "Списък на инсталираните уеб приложения"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:330 src/window-commands.c:2024
+#: embed/ephy-about-handler.c:331 src/window-commands.c:2026
 msgid "Launch"
 msgstr "Стартиране"
 
-#: embed/ephy-about-handler.c:330
+#: embed/ephy-about-handler.c:331
 msgid "Delete"
 msgstr "Изтриване"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:332
+#: embed/ephy-about-handler.c:333
 msgid "Installed on:"
 msgstr "Инсталирано на:"
 
-#: embed/ephy-about-handler.c:371
+#: embed/ephy-about-handler.c:372
 msgid ""
 "You can add your favorite website by clicking <b>Install as Web App…</b> "
 "within the page menu."
@@ -1112,27 +1113,43 @@ msgstr ""
 "като уеб приложение…</b> в менюто за страницата."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:476
+#: embed/ephy-about-handler.c:478
 msgid "Welcome to Web"
 msgstr "Добре дошли в уеб"
 
-#: embed/ephy-about-handler.c:476
+#: embed/ephy-about-handler.c:478
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Започнете работа. Сайтовете, които посещавате най-често, ще се появят тук."
 
 # От кода може да се заключи, че става въпрос за обектите с историята за
 # най-посещавани страници при неотворена/празна страница.
-#: embed/ephy-about-handler.c:510
-#: embed/web-process-extension/resources/js/overview.js:151
+#: embed/ephy-about-handler.c:514
+#: embed/web-process-extension/resources/js/overview.js:165
 msgid "Remove from overview"
 msgstr "Премахване от обобщения преглед"
 
-#: embed/ephy-about-handler.c:599 embed/ephy-about-handler.c:600
+# От кода може да се заключи, че става въпрос за обектите с историята за
+# най-посещавани страници при неотворена/празна страница.
+#: embed/ephy-about-handler.c:515
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:313
+msgid "Unpin from overview"
+msgstr "Премахване от обобщения преглед"
+
+# От кода може да се заключи, че става въпрос за обектите с историята за
+# най-посещавани страници при неотворена/празна страница.
+#: embed/ephy-about-handler.c:515
+#: embed/web-process-extension/resources/js/overview.js:174
+#: embed/web-process-extension/resources/js/overview.js:317
+msgid "Pin to overview"
+msgstr "Добавяне към обобщения преглед"
+
+#: embed/ephy-about-handler.c:604 embed/ephy-about-handler.c:605
 msgid "Private Browsing"
 msgstr "Поверително сърфиране"
 
-#: embed/ephy-about-handler.c:601
+#: embed/ephy-about-handler.c:606
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1142,14 +1159,14 @@ msgstr ""
 "няма да се запазват в историята. Информацията относно сърфирането ще бъде "
 "изтрита при затваряне на прозореца. Изтеглените файлове ще бъдат запазени."
 
-#: embed/ephy-about-handler.c:605
+#: embed/ephy-about-handler.c:610
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Поверителният режим крие действията ви единствено от другите потребители на "
 "компютъра."
 
-#: embed/ephy-about-handler.c:607
+#: embed/ephy-about-handler.c:612
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1172,18 +1189,18 @@ msgstr "Въведете ПИН код за %s, за да се удостове�
 # Умишлена разлика с утвърдения ускорител за „Отказване“ – в един
 # прозорец с „Отваряне“ и „Запазване“.
 #: embed/ephy-client-certificate-manager.c:321
-#: embed/ephy-client-certificate-manager.c:446 embed/ephy-download.c:771
-#: embed/ephy-web-view.c:1356 src/ephy-history-dialog.c:867
-#: src/ephy-passwords-view.c:158 src/ephy-shell.c:417 src/ephy-window.c:272
-#: src/ephy-window.c:2317 src/preferences/autofill-view.c:363
-#: src/preferences/extension-view.c:117
-#: src/resources/gtk/bookmark-properties.blp:20
+#: embed/ephy-client-certificate-manager.c:445 embed/ephy-download.c:765
+#: embed/ephy-web-view.c:1320 src/ephy-history-dialog.c:860
+#: src/ephy-passwords-view.c:156 src/ephy-shell.c:418 src/ephy-window.c:275
+#: src/ephy-window.c:2348 src/preferences/autofill-view.c:365
+#: src/preferences/extension-view.c:115
+#: src/resources/gtk/bookmark-properties.blp:29
 #: src/resources/gtk/firefox-sync-dialog.blp:100
 #: src/resources/gtk/history-dialog.blp:55
-#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:363
-#: src/window-commands.c:568 src/window-commands.c:934
-#: src/window-commands.c:1410 src/window-commands.c:2117
-#: src/window-commands.c:3179
+#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:364
+#: src/window-commands.c:569 src/window-commands.c:935
+#: src/window-commands.c:1411 src/window-commands.c:2119
+#: src/window-commands.c:3229
 msgid "_Cancel"
 msgstr "О_тказване"
 
@@ -1191,11 +1208,15 @@ msgstr "О_тказване"
 msgid "_Login"
 msgstr "_Вписване"
 
-#: embed/ephy-client-certificate-manager.c:431
+#: embed/ephy-client-certificate-manager.c:334
+msgid "PIN"
+msgstr "ПИН"
+
+#: embed/ephy-client-certificate-manager.c:430
 msgid "Select certificate"
 msgstr "Избиране на сертификат"
 
-#: embed/ephy-client-certificate-manager.c:435
+#: embed/ephy-client-certificate-manager.c:434
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication "
@@ -1203,117 +1224,117 @@ msgid ""
 msgstr ""
 "Сайтът %s:%d изисква да предоставите сертификат за удостоверяване за %s."
 
-#: embed/ephy-client-certificate-manager.c:440
+#: embed/ephy-client-certificate-manager.c:439
 #, c-format
 msgid ""
 "The website %s:%d requests that you provide a certificate for authentication."
 msgstr "Сайтът %s:%d изисква да предоставите сертификат за удостоверяване."
 
-#: embed/ephy-client-certificate-manager.c:447 src/window-commands.c:367
+#: embed/ephy-client-certificate-manager.c:446 src/window-commands.c:368
 msgid "_Select"
 msgstr "_Избор"
 
-#: embed/ephy-client-certificate-manager.c:489
+#: embed/ephy-client-certificate-manager.c:488
 msgid "Remember Decision"
 msgstr "Запомняне на избора"
 
-#: embed/ephy-client-certificate-manager.c:492
+#: embed/ephy-client-certificate-manager.c:491
 msgid "Never"
 msgstr "Никога"
 
-#: embed/ephy-client-certificate-manager.c:493
+#: embed/ephy-client-certificate-manager.c:492
 msgid "For Session"
 msgstr "За сесия"
 
-#: embed/ephy-client-certificate-manager.c:494
+#: embed/ephy-client-certificate-manager.c:493
 msgid "Permanently"
 msgstr "Винаги"
 
-#: embed/ephy-download.c:719 src/preferences/prefs-general-page.c:589
+#: embed/ephy-download.c:713 src/preferences/prefs-general-page.c:589
 msgid "Select a Directory"
 msgstr "Избор на папка"
 
-#: embed/ephy-download.c:727
+#: embed/ephy-download.c:721
 msgid "Select the Destination"
 msgstr "Избор на целта"
 
-#: embed/ephy-download.c:769
+#: embed/ephy-download.c:763
 msgid "Download Requested"
 msgstr "Започнати изтегляния"
 
-#: embed/ephy-download.c:772
+#: embed/ephy-download.c:766
 msgid "_Download"
 msgstr "_Свалени"
 
 #. Type
-#: embed/ephy-download.c:800
+#: embed/ephy-download.c:794
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Вид: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:806
+#: embed/ephy-download.c:800
 #, c-format
 msgid "Source: %s"
 msgstr "Източник: %s"
 
 #. Question
-#: embed/ephy-download.c:812
+#: embed/ephy-download.c:806
 msgid "Where do you want to save the file?"
 msgstr "Къде да се запази файлът?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:971
+#: embed/ephy-download.c:965
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Завършване на изтеглянето на „%s“"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:973 src/ephy-window.c:4123
+#: embed/ephy-download.c:967 src/ephy-window.c:4141
 msgid "Download finished"
 msgstr "Завършени изтегляния"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:566
+#: embed/ephy-embed.c:554
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Натиснете „%s“ за изход от цял екран"
 
-#: embed/ephy-embed.c:566
+#: embed/ephy-embed.c:554
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:566
+#: embed/ephy-embed.c:554
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:843
+#: embed/ephy-embed.c:828
 msgid "Web is being controlled by automation"
 msgstr "Поведението се контролира чрез автоматизация"
 
-#: embed/ephy-embed-autofill.c:115
+#: embed/ephy-embed-autofill.c:116
 msgid "Autofill All Fields"
 msgstr "Автоматично попълване на всички полета"
 
-#: embed/ephy-embed-autofill.c:124
+#: embed/ephy-embed-autofill.c:125
 msgid "Autofill Personal Fields"
 msgstr "Автоматично попълване на полетата за лични данни"
 
-#: embed/ephy-embed-autofill.c:132
+#: embed/ephy-embed-autofill.c:133
 msgid "Fill This Field"
 msgstr "Попълване на това поле"
 
-#: embed/ephy-embed-autofill.c:140
+#: embed/ephy-embed-autofill.c:141
 msgid "Do Not Autofill"
 msgstr "Без автоматично попълване"
 
-#: embed/ephy-embed-shell.c:671
+#: embed/ephy-embed-shell.c:708
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "Адрес „%s“ няма достъп до ресурса на Epiphany: %s"
 
-#: embed/ephy-embed-utils.c:72
+#: embed/ephy-embed-utils.c:74
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Изпращане на е-писмо до „%s“"
@@ -1326,309 +1347,309 @@ msgstr "Изпращане на е-писмо до „%s“"
 #. * when you hover such link, at the same place as regular URLs when you hover
 #. * a link in a web page.
 #.
-#: embed/ephy-embed-utils.c:84
+#: embed/ephy-embed-utils.c:86
 #, c-format
 msgid ", “%s”"
 msgstr ", „%s“"
 
-#: embed/ephy-embed-utils.h:31
+#: embed/ephy-embed-utils.h:32
 msgid "Blank page"
 msgstr "Празна страница"
 
 #. Title for the blank page
-#: embed/ephy-embed-utils.h:32 src/resources/gtk/action-bar-start.blp:104
+#: embed/ephy-embed-utils.h:33 src/resources/gtk/action-bar-start.blp:104
 msgid "New Tab"
 msgstr "Нов подпрозорец"
 
-#: embed/ephy-encodings.c:58
+#: embed/ephy-encodings.c:59
 msgid "Arabic (_IBM-864)"
 msgstr "Арабско (_IBM-864)"
 
-#: embed/ephy-encodings.c:59
+#: embed/ephy-encodings.c:60
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Арабско (ISO-_8859-6)"
 
-#: embed/ephy-encodings.c:60
+#: embed/ephy-encodings.c:61
 msgid "Arabic (_MacArabic)"
 msgstr "Арабско (_MacArabic)"
 
-#: embed/ephy-encodings.c:61
+#: embed/ephy-encodings.c:62
 msgid "Arabic (_Windows-1256)"
 msgstr "Арабско (_Windows-1256)"
 
-#: embed/ephy-encodings.c:62
+#: embed/ephy-encodings.c:63
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Балтийско (_ISO-8859-13)"
 
-#: embed/ephy-encodings.c:63
+#: embed/ephy-encodings.c:64
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Балтийско (I_SO-8859-4)"
 
-#: embed/ephy-encodings.c:64
+#: embed/ephy-encodings.c:65
 msgid "Baltic (_Windows-1257)"
 msgstr "Балтийско (_Windows-1257)"
 
-#: embed/ephy-encodings.c:65
+#: embed/ephy-encodings.c:66
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Арменско (ARMSCII-8)"
 
-#: embed/ephy-encodings.c:66
+#: embed/ephy-encodings.c:67
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Грузинско (GEOSTD8)"
 
-#: embed/ephy-encodings.c:67
+#: embed/ephy-encodings.c:68
 msgid "Central European (_IBM-852)"
 msgstr "Централноевропейско (_IBM-852)"
 
-#: embed/ephy-encodings.c:68
+#: embed/ephy-encodings.c:69
 msgid "Central European (I_SO-8859-2)"
 msgstr "Централноевропейско (I_SO-8859-2)"
 
-#: embed/ephy-encodings.c:69
+#: embed/ephy-encodings.c:70
 msgid "Central European (_MacCE)"
 msgstr "Централноевропейско (_MacCE)"
 
-#: embed/ephy-encodings.c:70
+#: embed/ephy-encodings.c:71
 msgid "Central European (_Windows-1250)"
 msgstr "Централноевропейско (_Windows-1250)"
 
-#: embed/ephy-encodings.c:71
+#: embed/ephy-encodings.c:72
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Китайско, опростено (_GB18030)"
 
-#: embed/ephy-encodings.c:72
+#: embed/ephy-encodings.c:73
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Китайско, опростено (G_B2312)"
 
-#: embed/ephy-encodings.c:73
+#: embed/ephy-encodings.c:74
 msgid "Chinese Simplified (GB_K)"
 msgstr "Китайско, опростено (GB_K)"
 
-#: embed/ephy-encodings.c:74
+#: embed/ephy-encodings.c:75
 msgid "Chinese Simplified (_HZ)"
 msgstr "Китайско, опростено (_HZ)"
 
-#: embed/ephy-encodings.c:75
+#: embed/ephy-encodings.c:76
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Китайско, опростено (_ISO-2022-CN)"
 
-#: embed/ephy-encodings.c:76
+#: embed/ephy-encodings.c:77
 msgid "Chinese Traditional (Big_5)"
 msgstr "Китайско, традиционно (Big_5)"
 
-#: embed/ephy-encodings.c:77
+#: embed/ephy-encodings.c:78
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Китайско, традиционно (Big5-HK_SCS)"
 
-#: embed/ephy-encodings.c:78
+#: embed/ephy-encodings.c:79
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Китайско, традиционно (_EUC-TW)"
 
-#: embed/ephy-encodings.c:79
+#: embed/ephy-encodings.c:80
 msgid "Cyrillic (_IBM-855)"
 msgstr "Кирилица (_IBM-855)"
 
-#: embed/ephy-encodings.c:80
+#: embed/ephy-encodings.c:81
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Кир_илица (ISO-8859-5)"
 
-#: embed/ephy-encodings.c:81
+#: embed/ephy-encodings.c:82
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Кирили_ца (ISO-IR-111)"
 
-#: embed/ephy-encodings.c:82
+#: embed/ephy-encodings.c:83
 msgid "Cyrillic (_KOI8-R)"
 msgstr "_Кирилица (KOI8-R)"
 
-#: embed/ephy-encodings.c:83
+#: embed/ephy-encodings.c:84
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Кирилиц_а (MacCyrillic)"
 
-#: embed/ephy-encodings.c:84
+#: embed/ephy-encodings.c:85
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Кирилица/_българско (Windows-1251)"
 
-#: embed/ephy-encodings.c:85
+#: embed/ephy-encodings.c:86
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Кирилица/_руско (IBM-866)"
 
-#: embed/ephy-encodings.c:86
+#: embed/ephy-encodings.c:87
 msgid "Greek (_ISO-8859-7)"
 msgstr "Гръцко (_ISO-8859-7)"
 
-#: embed/ephy-encodings.c:87
+#: embed/ephy-encodings.c:88
 msgid "Greek (_MacGreek)"
 msgstr "Гръцко (_MacGreek)"
 
-#: embed/ephy-encodings.c:88
+#: embed/ephy-encodings.c:89
 msgid "Greek (_Windows-1253)"
 msgstr "Гръцко (_Windows-1253)"
 
-#: embed/ephy-encodings.c:89
+#: embed/ephy-encodings.c:90
 msgid "Gujarati (_MacGujarati)"
 msgstr "Гужарати (_MacGujarati)"
 
-#: embed/ephy-encodings.c:90
+#: embed/ephy-encodings.c:91
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Гурмуки (Mac_Gurmukhi)"
 
-#: embed/ephy-encodings.c:91
+#: embed/ephy-encodings.c:92
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Хинди (Mac_Devanagari)"
 
-#: embed/ephy-encodings.c:92
+#: embed/ephy-encodings.c:93
 msgid "Hebrew (_IBM-862)"
 msgstr "Иврит (_IBM-862)"
 
-#: embed/ephy-encodings.c:93
+#: embed/ephy-encodings.c:94
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Иврит (IS_O-8859-8-I)"
 
-#: embed/ephy-encodings.c:94
+#: embed/ephy-encodings.c:95
 msgid "Hebrew (_MacHebrew)"
 msgstr "Иврит (_MacHebrew)"
 
-#: embed/ephy-encodings.c:95
+#: embed/ephy-encodings.c:96
 msgid "Hebrew (_Windows-1255)"
 msgstr "Иврит (_Windows-1255)"
 
-#: embed/ephy-encodings.c:96
+#: embed/ephy-encodings.c:97
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_Иврит, визуален (ISO-8859-8)"
 
-#: embed/ephy-encodings.c:97
+#: embed/ephy-encodings.c:98
 msgid "Japanese (_EUC-JP)"
 msgstr "Японско (_EUC-JP)"
 
-#: embed/ephy-encodings.c:98
+#: embed/ephy-encodings.c:99
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Японско (_ISO-2022-JP)"
 
-#: embed/ephy-encodings.c:99
+#: embed/ephy-encodings.c:100
 msgid "Japanese (_Shift-JIS)"
 msgstr "Японско (_Shift-JIS)"
 
-#: embed/ephy-encodings.c:100
+#: embed/ephy-encodings.c:101
 msgid "Korean (_EUC-KR)"
 msgstr "Корейско (_EUC-KR)"
 
-#: embed/ephy-encodings.c:101
+#: embed/ephy-encodings.c:102
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Корейско (_ISO-2022-KR)"
 
-#: embed/ephy-encodings.c:102
+#: embed/ephy-encodings.c:103
 msgid "Korean (_JOHAB)"
 msgstr "Корейско (_JOHAB)"
 
-#: embed/ephy-encodings.c:103
+#: embed/ephy-encodings.c:104
 msgid "Korean (_UHC)"
 msgstr "Корейско (_UHC)"
 
-#: embed/ephy-encodings.c:104
+#: embed/ephy-encodings.c:105
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Келтско (ISO-8859-14)"
 
-#: embed/ephy-encodings.c:105
+#: embed/ephy-encodings.c:106
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_Исландско (MacIcelandic)"
 
-#: embed/ephy-encodings.c:106
+#: embed/ephy-encodings.c:107
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_Скандинавско (ISO-8859-10)"
 
-#: embed/ephy-encodings.c:107
+#: embed/ephy-encodings.c:108
 msgid "_Persian (MacFarsi)"
 msgstr "_Персийско (MacFarsi)"
 
-#: embed/ephy-encodings.c:108
+#: embed/ephy-encodings.c:109
 msgid "Croatian (Mac_Croatian)"
 msgstr "Хърватско (Mac_Croatian)"
 
-#: embed/ephy-encodings.c:109
+#: embed/ephy-encodings.c:110
 msgid "_Romanian (MacRomanian)"
 msgstr "_Румънско (MacRomanian)"
 
-#: embed/ephy-encodings.c:110
+#: embed/ephy-encodings.c:111
 msgid "R_omanian (ISO-8859-16)"
 msgstr "Р_умънско (ISO-8859-16)"
 
-#: embed/ephy-encodings.c:111
+#: embed/ephy-encodings.c:112
 msgid "South _European (ISO-8859-3)"
 msgstr "_Южноевропейско (ISO-8859-3)"
 
-#: embed/ephy-encodings.c:112
+#: embed/ephy-encodings.c:113
 msgid "Thai (TIS-_620)"
 msgstr "Тайско (TIS-_620)"
 
-#: embed/ephy-encodings.c:113
+#: embed/ephy-encodings.c:114
 msgid "Thai (IS_O-8859-11)"
 msgstr "Тайско (IS_O-8859-11)"
 
-#: embed/ephy-encodings.c:114
+#: embed/ephy-encodings.c:115
 msgid "_Thai (Windows-874)"
 msgstr "_Тайско (Windows-874)"
 
-#: embed/ephy-encodings.c:115
+#: embed/ephy-encodings.c:116
 msgid "Turkish (_IBM-857)"
 msgstr "Турско (_IBM-857)"
 
-#: embed/ephy-encodings.c:116
+#: embed/ephy-encodings.c:117
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Турско (I_SO-8859-9)"
 
-#: embed/ephy-encodings.c:117
+#: embed/ephy-encodings.c:118
 msgid "Turkish (_MacTurkish)"
 msgstr "Турско (_MacTurkish)"
 
-#: embed/ephy-encodings.c:118
+#: embed/ephy-encodings.c:119
 msgid "Turkish (_Windows-1254)"
 msgstr "Турско (_Windows-1254)"
 
-#: embed/ephy-encodings.c:119
+#: embed/ephy-encodings.c:120
 msgid "Unicode (UTF-_8)"
 msgstr "Уникод (UTF-_8)"
 
-#: embed/ephy-encodings.c:120
+#: embed/ephy-encodings.c:121
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Кирилица/украинско (_KOI8-U)"
 
-#: embed/ephy-encodings.c:121
+#: embed/ephy-encodings.c:122
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Кирилица/украинско (Mac_Ukrainian)"
 
-#: embed/ephy-encodings.c:122
+#: embed/ephy-encodings.c:123
 msgid "Vietnamese (_TCVN)"
 msgstr "Виетнамско (_TCVN)"
 
-#: embed/ephy-encodings.c:123
+#: embed/ephy-encodings.c:124
 msgid "Vietnamese (_VISCII)"
 msgstr "Виетнамско (_VISCII)"
 
-#: embed/ephy-encodings.c:124
+#: embed/ephy-encodings.c:125
 msgid "Vietnamese (V_PS)"
 msgstr "Виетнамско (V_PS)"
 
-#: embed/ephy-encodings.c:125
+#: embed/ephy-encodings.c:126
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Виетнамско (_Windows-1258)"
 
-#: embed/ephy-encodings.c:126
+#: embed/ephy-encodings.c:127
 msgid "Western (_IBM-850)"
 msgstr "Западно (_IBM-850)"
 
-#: embed/ephy-encodings.c:127
+#: embed/ephy-encodings.c:128
 msgid "Western (_ISO-8859-1)"
 msgstr "Западно (_ISO-8859-1)"
 
-#: embed/ephy-encodings.c:128
+#: embed/ephy-encodings.c:129
 msgid "Western (IS_O-8859-15)"
 msgstr "Западно (IS_O-8859-15)"
 
-#: embed/ephy-encodings.c:129
+#: embed/ephy-encodings.c:130
 msgid "Western (_MacRoman)"
 msgstr "Западно (_MacRoman)"
 
-#: embed/ephy-encodings.c:130
+#: embed/ephy-encodings.c:131
 msgid "Western (_Windows-1252)"
 msgstr "Западно (_Windows-1252)"
 
@@ -1636,135 +1657,135 @@ msgstr "Западно (_Windows-1252)"
 #. * pollute the "related" part of the encodings menu with them, so we
 #. * set the language group to 0 here.
 #.
-#: embed/ephy-encodings.c:136
+#: embed/ephy-encodings.c:137
 msgid "English (_US-ASCII)"
 msgstr "Английско (_US-ASCII)"
 
-#: embed/ephy-encodings.c:137
+#: embed/ephy-encodings.c:138
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Уникод (UTF-_16 BE)"
 
-#: embed/ephy-encodings.c:138
+#: embed/ephy-encodings.c:139
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Уникод (UTF-1_6 LE)"
 
-#: embed/ephy-encodings.c:139
+#: embed/ephy-encodings.c:140
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Уникод (UTF-_32 BE)"
 
-#: embed/ephy-encodings.c:140
+#: embed/ephy-encodings.c:141
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Уникод (UTF-3_2 LE)"
 
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: embed/ephy-encodings.c:219
+#: embed/ephy-encodings.c:220
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Непознато (%s)"
 
-#: embed/ephy-find-toolbar.c:290
+#: embed/ephy-find-toolbar.c:286
 msgid "Type to search…"
 msgstr "Въведете текст, за да търсите…"
 
-#: embed/ephy-find-toolbar.c:296
+#: embed/ephy-find-toolbar.c:292
 msgid "Find previous occurrence of the search string"
 msgstr "Търсене на предишното място на търсен низ"
 
-#: embed/ephy-find-toolbar.c:303
+#: embed/ephy-find-toolbar.c:299
 msgid "Find next occurrence of the search string"
 msgstr "Търсене на следващото споменаване на низ"
 
-#: embed/ephy-find-toolbar.c:323
+#: embed/ephy-find-toolbar.c:319
 msgid "_Case Sensitive"
 msgstr "_Разлика главни/малки"
 
-#: embed/ephy-find-toolbar.c:324
+#: embed/ephy-find-toolbar.c:320
 msgid "Match Whole _Word Only"
 msgstr "Съвпадане само на цели _думи"
 
-#: embed/ephy-find-toolbar.c:327
+#: embed/ephy-find-toolbar.c:323
 msgid "Search Options"
 msgstr "Настройки на търсенето"
 
-#: embed/ephy-reader-handler.c:315
+#: embed/ephy-reader-handler.c:316 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "„%s“ е неправилен адрес"
 
-#: embed/ephy-search-entry.c:495
+#: embed/ephy-search-entry.c:491
 msgid "Text not found"
 msgstr "Текстът не е открит"
 
-#: embed/ephy-search-entry.c:499
+#: embed/ephy-search-entry.c:495
 msgid "Search wrapped back to the top"
 msgstr "След края — търсене от началото"
 
-#: embed/ephy-web-view.c:248 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:247 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "Всички файлове"
 
-#: embed/ephy-web-view.c:257 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:256 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr "Всички поддържани видове"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:628
+#: embed/ephy-web-view.c:594
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr ""
 "Този формуляр не е защитен. Ако въведете парола, тя ще бъде видима за "
 "препредаващите машини"
 
-#: embed/ephy-web-view.c:629 embed/ephy-web-view.c:3623
+#: embed/ephy-web-view.c:595 embed/ephy-web-view.c:3587
 msgid "_Dismiss"
 msgstr "_Отмяна"
 
-#: embed/ephy-web-view.c:805
+#: embed/ephy-web-view.c:770
 msgid "Web process crashed"
 msgstr "Уеб процесът заби"
 
-#: embed/ephy-web-view.c:808
+#: embed/ephy-web-view.c:773
 msgid "Web process terminated due to exceeding memory limit"
 msgstr ""
 "Уеб процесът бе преустановен, защото прехвърли ограничението на паметта"
 
-#: embed/ephy-web-view.c:811
+#: embed/ephy-web-view.c:776
 msgid "Web process terminated by API request"
 msgstr "Уеб процесът бе преустановен чрез заявка по API"
 
-#: embed/ephy-web-view.c:856
+#: embed/ephy-web-view.c:821
 msgid "Page Unresponsive"
 msgstr "Страницата не отговаря"
 
-#: embed/ephy-web-view.c:859
+#: embed/ephy-web-view.c:824
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "Текущата страница „%s“ не отговаря"
 
-#: embed/ephy-web-view.c:863
+#: embed/ephy-web-view.c:828
 msgid "_Wait"
 msgstr "Из_чакване"
 
-#: embed/ephy-web-view.c:864
+#: embed/ephy-web-view.c:829
 msgid "Force _Stop"
 msgstr "_Принудително спиране"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1110
+#: embed/ephy-web-view.c:1075
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Зареждане на „%s“…"
 
-#: embed/ephy-web-view.c:1112 embed/ephy-web-view.c:1118
+#: embed/ephy-web-view.c:1077 embed/ephy-web-view.c:1083
 msgid "Loading…"
 msgstr "Зареждане…"
 
-#: embed/ephy-web-view.c:1349
+#: embed/ephy-web-view.c:1313
 msgid "Delete Web App?"
 msgstr "Да се изтрие ли уеб приложението?"
 
-#: embed/ephy-web-view.c:1352
+#: embed/ephy-web-view.c:1316
 #, c-format
 msgid ""
 "“%s” will be removed. You will have to re-install the website as an app from "
@@ -1773,20 +1794,20 @@ msgstr ""
 "„%s“ ще бъде изтрит. За да ползвате уеб сайта като приложение, ще трябва да "
 "го инсталирате наново от менюто."
 
-#: embed/ephy-web-view.c:1357 src/ephy-passwords-view.c:159
-#: src/preferences/autofill-view.c:364 src/resources/gtk/history-dialog.blp:144
+#: embed/ephy-web-view.c:1321 src/ephy-passwords-view.c:157
+#: src/preferences/autofill-view.c:366 src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "_Изтриване"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1786
+#: embed/ephy-web-view.c:1749
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Този сайт се идентифицира със сертификат предназначен за друга страница."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1791
+#: embed/ephy-web-view.c:1754
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1795,19 +1816,19 @@ msgstr ""
 "се има доверие. Проверете датата в календара на компютъра си."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1796
+#: embed/ephy-web-view.c:1759
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Сертификатът на този сайт не е издаден от доверен удостоверител."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1801
+#: embed/ephy-web-view.c:1764
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Сертификатът на този сайт не може да се обработи. Възможно е да е повреден."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1806
+#: embed/ephy-web-view.c:1769
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1816,7 +1837,7 @@ msgstr ""
 "издал."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1811
+#: embed/ephy-web-view.c:1774
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1825,7 +1846,7 @@ msgstr ""
 "ненадеждно шифриране."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1816
+#: embed/ephy-web-view.c:1779
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1835,24 +1856,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1881 embed/ephy-web-view.c:1937
+#: embed/ephy-web-view.c:1845 embed/ephy-web-view.c:1902
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Проблем при зареждане на страницата"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1884
+#: embed/ephy-web-view.c:1848
 msgid "Unable to display this website"
 msgstr "Тази уеб страница не може да се покаже"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1889
+#: embed/ephy-web-view.c:1853
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Изглежда, че уеб страницата на адрес „%s“ е недостъпна."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1893
+#: embed/ephy-web-view.c:1857
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1861,7 +1882,7 @@ msgstr ""
 "Проверете дали имате връзка към Интернет."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1903
+#: embed/ephy-web-view.c:1868
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Точната грешка е: %s"
@@ -1871,50 +1892,50 @@ msgstr "Точната грешка е: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1908 embed/ephy-web-view.c:1961
-#: embed/ephy-web-view.c:1997 embed/ephy-web-view.c:2033
-#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1583
+#: embed/ephy-web-view.c:1873 embed/ephy-web-view.c:1926
+#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1998
+#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1597
 msgid "Reload"
 msgstr "Презареждане"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1912 embed/ephy-web-view.c:1965
-#: embed/ephy-web-view.c:2001 embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:1877 embed/ephy-web-view.c:1930
+#: embed/ephy-web-view.c:1966 embed/ephy-web-view.c:2002
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "Р"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1905
 msgid "Oops! There may be a problem"
 msgstr "Възможно е да е възникнал проблем"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1945
+#: embed/ephy-web-view.c:1910
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Страницата „%s“ може да е причинила забиване в програмата."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1917
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Ако това се случи пак, молим да го докладвате на разработчиците на „%s“."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1986
+#: embed/ephy-web-view.c:1951
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Проблем при показване на страницата"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1989
+#: embed/ephy-web-view.c:1954
 msgid "Oops!"
 msgstr "ПРОБЛЕМ!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1992
+#: embed/ephy-web-view.c:1957
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1923,18 +1944,18 @@ msgstr ""
 "отидете на друга, за да продължите."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2022
+#: embed/ephy-web-view.c:1987
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Страницата не отговаря"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2025
+#: embed/ephy-web-view.c:1990
 msgid "Uh-oh!"
 msgstr "ПРОБЛЕМ!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2028
+#: embed/ephy-web-view.c:1993
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -1943,18 +1964,18 @@ msgstr ""
 "друга, за да продължите."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2064
+#: embed/ephy-web-view.c:2029
 #, c-format
 msgid "Security Violation"
 msgstr "Нарушение на сигурността"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2032
 msgid "This Connection is Not Secure"
 msgstr "Връзката ви не е шифрирана надлежно"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2072
+#: embed/ephy-web-view.c:2037
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1965,41 +1986,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2082 embed/ephy-web-view.c:2132
+#: embed/ephy-web-view.c:2047 embed/ephy-web-view.c:2097
 msgid "Go Back"
 msgstr "Назад"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2085 embed/ephy-web-view.c:2135
+#: embed/ephy-web-view.c:2050 embed/ephy-web-view.c:2100
 msgctxt "back-access-key"
 msgid "B"
 msgstr "З"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2088
+#: embed/ephy-web-view.c:2053
 msgid "Accept Risk and Proceed"
 msgstr "Приемане на риска и продължаване"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2092
+#: embed/ephy-web-view.c:2057
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "П"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2115 embed/ephy-web-view.c:2118
+#: embed/ephy-web-view.c:2080 embed/ephy-web-view.c:2083
 #, c-format
 msgid "File not found"
 msgstr "Файлът не е открит"
 
-#: embed/ephy-web-view.c:2123
+#: embed/ephy-web-view.c:2088
 #, c-format
 msgid "%s could not be found."
 msgstr "„%s“ не може да се открие."
 
-#: embed/ephy-web-view.c:2125
+#: embed/ephy-web-view.c:2090
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -2008,13 +2029,21 @@ msgstr ""
 "Проверете името на файла за грешки като замяна на малки с главни букви и "
 "обратно. Проверете и дали файлът е бил преместен, преименуван или изтрит."
 
-#: embed/ephy-web-view.c:2188
+#: embed/ephy-web-view.c:2153
 msgid "None specified"
 msgstr "Не беше върнато съобщение за грешка"
 
-#: embed/ephy-web-view.c:2302
+#: embed/ephy-web-view.c:2267
 msgid "Technical information"
 msgstr "Техническа информация"
+
+#: embed/web-process-extension/resources/js/ephy.js:182
+msgid "Use and Save Suggested Password"
+msgstr "Използване и запазване на предложената парола"
+
+#: embed/web-process-extension/resources/js/ephy.js:196
+msgid "Generate new password"
+msgstr "Генериране на нова парола"
 
 #: lib/contrib/gnome-languages.c:719
 msgid "Unspecified"
@@ -2029,42 +2058,42 @@ msgid "Images"
 msgstr "Изображения"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:119 lib/ephy-file-helpers.c:195
+#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:197
 #: src/resources/gtk/action-bar-end.blp:10 src/resources/gtk/action-bar.blp:83
 #: src/resources/gtk/prefs-general-page.blp:112
 msgid "Downloads"
 msgstr "Свалени"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:176 lib/ephy-file-helpers.c:192
+#: lib/ephy-file-helpers.c:178 lib/ephy-file-helpers.c:194
 msgid "Desktop"
 msgstr "Плот"
 
-#: lib/ephy-file-helpers.c:189
+#: lib/ephy-file-helpers.c:191
 msgid "Home"
 msgstr "Начална страница"
 
-#: lib/ephy-file-helpers.c:426
+#: lib/ephy-file-helpers.c:428
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Неуспешно създаване на временна папка в „%s“."
 
-#: lib/ephy-file-helpers.c:546
+#: lib/ephy-file-helpers.c:547
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Файлът „%s“ съществува. Махнете го."
 
-#: lib/ephy-file-helpers.c:565
+#: lib/ephy-file-helpers.c:566
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Папката „%s“ не може да бъде създадена."
 
-#: lib/ephy-file-helpers.c:721
+#: lib/ephy-file-helpers.c:722
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Грешка при изтриването на файла „%s“: %s"
 
-#: lib/ephy-file-helpers.c:739
+#: lib/ephy-file-helpers.c:740
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Грешка при изтриването на папката „%s“: %s<"
@@ -2129,17 +2158,17 @@ msgid "Couldn't download search engine description file for %s: "
 msgstr "Файлът с описанието на търсачката за %s не може да бъде изтеглен: "
 
 #. TRANSLATORS: The %s is the URL for the search suggestions.
-#: lib/ephy-search-engine.c:508
+#: lib/ephy-search-engine.c:492
 #, c-format
 msgid "Couldn't load search engine suggestions from %s: "
 msgstr "Предложенията на търсачката не може да бъдат заредени от %s: "
 
-#: lib/ephy-search-engine.c:517
+#: lib/ephy-search-engine.c:501
 #, c-format
 msgid "No content provided, length %ld"
 msgstr "Няма предоставено съдържание, дължина %ld"
 
-#: lib/ephy-search-engine.c:536
+#: lib/ephy-search-engine.c:520
 #, c-format
 msgid ""
 "Got empty JSON response or non-array root node or smaller than 2 elements "
@@ -2149,7 +2178,7 @@ msgstr ""
 "начален възел-масив с 0 или 1 възела"
 
 #. TRANSLATORS: The first %s is the URL for the search suggestions and the second one is raw JSON content.
-#: lib/ephy-search-engine.c:541 lib/ephy-search-engine.c:556
+#: lib/ephy-search-engine.c:525 lib/ephy-search-engine.c:540
 #, c-format
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr "Предложенията в JSON от %s не могат да бъдат разчетени с JSON %s: "
@@ -2157,98 +2186,98 @@ msgstr "Предложенията в JSON от %s не могат да бъда
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:322
+#: lib/ephy-sync-utils.c:324
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "Уеб на GNOME за %s на „%s“"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
-#: lib/ephy-time-helpers.c:236
+#: lib/ephy-time-helpers.c:238
 msgid "Today %I∶%M %p"
 msgstr "Днес, %I∶%M %p"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
-#: lib/ephy-time-helpers.c:239
+#: lib/ephy-time-helpers.c:241
 msgid "Today %H∶%M"
 msgstr "Днес, %H:%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:254
+#: lib/ephy-time-helpers.c:256
 msgid "Yesterday %I∶%M %p"
 msgstr "Вчера, %I∶%M %p"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 15∶34"
 #.
-#: lib/ephy-time-helpers.c:259
+#: lib/ephy-time-helpers.c:261
 msgid "Yesterday %H∶%M"
 msgstr "Вчера, %H:%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:277
+#: lib/ephy-time-helpers.c:279
 msgid "%a %I∶%M %p"
 msgstr "%a, %I∶%M %p"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 15∶34"
 #.
-#: lib/ephy-time-helpers.c:282
+#: lib/ephy-time-helpers.c:284
 msgid "%a %H∶%M"
 msgstr "%a, %H∶%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12∶34 am"
 #.
-#: lib/ephy-time-helpers.c:296
+#: lib/ephy-time-helpers.c:298
 msgid "%b %d %I∶%M %p"
 msgstr "%d %b %I∶%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
 #.
-#: lib/ephy-time-helpers.c:301
+#: lib/ephy-time-helpers.c:303
 msgid "%b %d %H∶%M"
 msgstr "%d %b %H:%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
 #.
-#: lib/ephy-time-helpers.c:307
+#: lib/ephy-time-helpers.c:309
 msgid "%b %d %Y"
 msgstr "%d %b %Y"
 
 #. impossible time or broken locale settings
-#: lib/ephy-time-helpers.c:316
+#: lib/ephy-time-helpers.c:318
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: lib/ephy-web-app-utils.c:327
+#: lib/ephy-web-app-utils.c:372
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr ""
 "Неуспешно получаване на файловото име за работния плот за уеб приложението с "
 "идентификатор %s"
 
-#: lib/ephy-web-app-utils.c:350
+#: lib/ephy-web-app-utils.c:396
 #, c-format
 msgid "Failed to install desktop file %s: "
 msgstr "Неуспешно инсталиране на файла във формат desktop „%s“: "
 
-#: lib/ephy-web-app-utils.c:389
+#: lib/ephy-web-app-utils.c:435
 #, c-format
 msgid "Profile directory %s already exists"
 msgstr "Папката с профил „%s“ вече съществува"
 
-#: lib/ephy-web-app-utils.c:396
+#: lib/ephy-web-app-utils.c:442
 #, c-format
 msgid "Failed to create directory %s"
 msgstr "Папката „%s“ не може да бъде създадена"
 
-#: lib/ephy-web-app-utils.c:408
+#: lib/ephy-web-app-utils.c:454
 #, c-format
 msgid "Failed to create .app file: %s"
 msgstr "Неуспешно създаване на файл във формат .app: %s"
@@ -2279,69 +2308,53 @@ msgstr "Грешка при прочитането на файл във форм
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:468
+#: lib/sync/ephy-password-manager.c:472
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Парола за потребител „%s“ във формуляр на страница „%s“"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:472
+#: lib/sync/ephy-password-manager.c:476
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Парола във формуляр на страница „%s“"
 
 # От кода и обикновенно гледане на програмата не намирам как да вида този текст и точно дали предлага да се инсталира glib-networking или уведомяват че е нужна зависимост и трябва да се провери и инсталира ръчно от потребителя, затова го превеждам като „трябва“ на този етап.
-#: lib/sync/ephy-sync-service.c:932
+#: lib/sync/ephy-sync-service.c:724
 msgid "Response body is empty, do you need to install glib-networking?"
 msgstr "Тялото на заявката е празно, трябва ли да инсталирате glib-networking?"
 
-#: lib/sync/ephy-sync-service.c:990
+#: lib/sync/ephy-sync-service.c:782
 msgid "Failed to obtain storage credentials."
 msgstr "Неуспешна идентификация за съхранените данни."
 
-#: lib/sync/ephy-sync-service.c:991 lib/sync/ephy-sync-service.c:1137
-#: lib/sync/ephy-sync-service.c:1901
+#: lib/sync/ephy-sync-service.c:783 lib/sync/ephy-sync-service.c:1543
 msgid "Please visit Firefox Sync and sign in again to continue syncing."
 msgstr "Отворете синхронизирането на Firefox и се впишете наново."
 
-#: lib/sync/ephy-sync-service.c:1127
-msgid "The password of your Mozilla account seems to have been changed."
-msgstr "Изглежда паролата на регистрацията ви за Mozilla е сменена."
-
-#: lib/sync/ephy-sync-service.c:1128
-msgid ""
-"Please visit Firefox Sync and sign in with the new password to continue "
-"syncing."
-msgstr ""
-"Отворете синхронизирането на Firefox и се впишете наново с новата парола."
-
-#: lib/sync/ephy-sync-service.c:1136
-msgid "Failed to obtain signed certificate."
-msgstr "Неуспешно получаване на подписан сертификат."
-
-#: lib/sync/ephy-sync-service.c:1926
+#: lib/sync/ephy-sync-service.c:1568
 #, c-format
 msgid "The sync secrets for the current sync user are invalid: %s"
 msgstr ""
 "Тайните данни за синхронизиране на текущия потребител са неправилни: %s"
 
-#: lib/sync/ephy-sync-service.c:1933
+#: lib/sync/ephy-sync-service.c:1575
 #, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
 msgstr "Тайните данни за синхронизиране на текущия потребител не са в JSON: %s"
 
-#: lib/sync/ephy-sync-service.c:1960
+#: lib/sync/ephy-sync-service.c:1602
 #, c-format
 msgid "Could not find the sync secrets for the current sync user: %s"
 msgstr ""
 "Тайните данни за синхронизиране на текущия потребител не са открити: %s"
 
-#: lib/sync/ephy-sync-service.c:1966
+#: lib/sync/ephy-sync-service.c:1608
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "Тайните данни за синхронизиране на текущия потребител не са открити."
 
-#: lib/sync/ephy-sync-service.c:2010
+#: lib/sync/ephy-sync-service.c:1652
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
@@ -2350,29 +2363,29 @@ msgstr ""
 "повредена услугата или порталът за тайни?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:2052
+#: lib/sync/ephy-sync-service.c:1694
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Синхронизиране на тайните данни на „%s“"
 
-#: lib/sync/ephy-sync-service.c:2082
+#: lib/sync/ephy-sync-service.c:1724
 msgid "Failed to upload client record."
 msgstr "Неуспешно качване на потребителския запис."
 
-#: lib/sync/ephy-sync-service.c:2285
+#: lib/sync/ephy-sync-service.c:1924
 msgid "Failed to upload crypto/keys record."
 msgstr "Неуспешно качване на шифрираните записи."
 
-#: lib/sync/ephy-sync-service.c:2397
+#: lib/sync/ephy-sync-service.c:2064
 msgid "Failed to retrieve crypto keys."
 msgstr "Криптографските ключове не бяха получени."
 
-#: lib/sync/ephy-sync-service.c:2451
+#: lib/sync/ephy-sync-service.c:2118
 msgid "Failed to upload meta/global record."
 msgstr "Неуспешно обновяване на основния/глобалния запис."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2573
+#: lib/sync/ephy-sync-service.c:2240
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
@@ -2380,42 +2393,34 @@ msgstr ""
 "Регистрацията ви за Mozilla използва формат за съхраняване версия %d. "
 "Текущият браузър поддържа версия %d."
 
-#: lib/sync/ephy-sync-service.c:2584
+#: lib/sync/ephy-sync-service.c:2251
 msgid "Failed to verify storage version."
 msgstr "Неуспешна проверка на версията на форма̀та за съхраняване."
 
-#: lib/sync/ephy-sync-service.c:2642
-msgid "Failed to upload device info"
-msgstr "Неуспешно качване на информация за устройството"
-
-#: lib/sync/ephy-sync-service.c:2718 lib/sync/ephy-sync-service.c:2801
-msgid "Failed to retrieve the Sync Key"
-msgstr "Неуспешно получаване на синхронизиращия ключ"
-
-#: src/bookmarks/ephy-bookmark-properties.c:149
+#: src/bookmarks/ephy-bookmark-properties.c:148
 msgid "Select current tag"
 msgstr "Избиране на текущия етикет"
 
-#: src/bookmarks/ephy-bookmark-properties.c:163
+#: src/bookmarks/ephy-bookmark-properties.c:164
 msgid "Remove current tag"
 msgstr "Изтриване на текущия етикет"
 
-#: src/bookmarks/ephy-bookmark-properties.c:289
+#: src/bookmarks/ephy-bookmark-properties.c:314
 msgid "Add Bookmark"
 msgstr "Добавяне на отметка"
 
 #: src/bookmarks/ephy-bookmark-properties.c:354
-#: src/preferences/prefs-search-engine-page.c:92
+#: src/preferences/prefs-search-engine-page.c:91
 msgid "This field is required"
 msgstr "Задължително поле"
 
 #: src/bookmarks/ephy-bookmark-properties.c:356
-#: src/preferences/prefs-search-engine-page.c:97
+#: src/preferences/prefs-search-engine-page.c:96
 msgid "Address must start with either http:// or https://"
 msgstr "Адресът трябва да почва или с „http://“, или с „https://“"
 
 #: src/bookmarks/ephy-bookmark-properties.c:358
-#: src/preferences/prefs-search-engine-page.c:118
+#: src/preferences/prefs-search-engine-page.c:117
 msgid "Address is not a valid URL"
 msgstr "Неправилен адрес"
 
@@ -2439,24 +2444,24 @@ msgid "Bookmark removed"
 msgstr "Отметката е премахната"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1007
-#: src/preferences/prefs-features-page.c:284
+#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1014
+#: src/preferences/prefs-features-page.c:277
 msgid "_Undo"
 msgstr "_Възстановяване"
 
-#: src/bookmarks/ephy-bookmarks-import.c:127
+#: src/bookmarks/ephy-bookmarks-import.c:128
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr ""
 "Файл с неправилен формат за отметки на Epiphany: липсва таблицата с етикети"
 
-#: src/bookmarks/ephy-bookmarks-import.c:161
+#: src/bookmarks/ephy-bookmarks-import.c:162
 #, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "Файл с неправилен формат за отметки на Epiphany: липсва таблицата с отметки"
 
-#: src/bookmarks/ephy-bookmarks-import.c:321
+#: src/bookmarks/ephy-bookmarks-import.c:322
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
@@ -2464,27 +2469,27 @@ msgstr ""
 "Базата от данни с отметки на Firefox не може да се отвори. Затворете Firefox "
 "и пробвайте отново."
 
-#: src/bookmarks/ephy-bookmarks-import.c:335
-#: src/bookmarks/ephy-bookmarks-import.c:371
+#: src/bookmarks/ephy-bookmarks-import.c:336
+#: src/bookmarks/ephy-bookmarks-import.c:372
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Отметките на Firefox не може да се получат!"
 
-#: src/bookmarks/ephy-bookmarks-import.c:538
+#: src/bookmarks/ephy-bookmarks-import.c:574
 #, c-format
 msgid "HTML bookmarks database could not be opened: %s"
 msgstr "Базата от данни с отметки за HTML не може да се отвори: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:549
+#: src/bookmarks/ephy-bookmarks-import.c:585
 msgid "HTML bookmarks database could not be read."
 msgstr "Базата от данни с отметки за HTML не може да се прочете."
 
-#: src/bookmarks/ephy-bookmarks-import.c:571
+#: src/bookmarks/ephy-bookmarks-import.c:607
 #, c-format
 msgid "HTML bookmarks database could not be parsed: %s"
 msgstr "Базата от данни с отметки за HTML не може да се анализира: %s"
 
-#: src/bookmarks/ephy-bookmarks-import.c:743
+#: src/bookmarks/ephy-bookmarks-import.c:778
 #, c-format
 msgid "Bookmarks file could not be parsed:"
 msgstr "Файлът с отметки не може да се анализира:"
@@ -2497,69 +2502,69 @@ msgstr "Любими"
 msgid "Mobile"
 msgstr "Мобилни"
 
-#: src/context-menu-commands.c:300
+#: src/context-menu-commands.c:302
 msgid "Save Link As"
 msgstr "Запазване на връзката като"
 
-#: src/context-menu-commands.c:308
+#: src/context-menu-commands.c:310
 msgid "Save Image As"
 msgstr "Запазване на изображението като"
 
-#: src/context-menu-commands.c:316
+#: src/context-menu-commands.c:318
 msgid "Save Media As"
 msgstr "Запазване на мултимедията като"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1592
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1606
 msgid "Stop"
 msgstr "Спиране"
 
-#: src/ephy-certificate-dialog.c:180
+#: src/ephy-certificate-dialog.c:178
 msgid "Show More"
 msgstr "Още информация"
 
-#: src/ephy-certificate-dialog.c:254
+#: src/ephy-certificate-dialog.c:252
 msgid "The certificate does not match this website"
 msgstr "Сертификатът не съвпада с тази уеб страница"
 
-#: src/ephy-certificate-dialog.c:257
+#: src/ephy-certificate-dialog.c:255
 msgid "The certificate has expired"
 msgstr "Сертификатът е изтекъл"
 
-#: src/ephy-certificate-dialog.c:260
+#: src/ephy-certificate-dialog.c:258
 msgid "The signing certificate authority is not known"
 msgstr "Удостоверителят, подписал сертификата, е непознат"
 
-#: src/ephy-certificate-dialog.c:263
+#: src/ephy-certificate-dialog.c:261
 msgid "The certificate contains errors"
 msgstr "Сертификатът съдържа грешки"
 
-#: src/ephy-certificate-dialog.c:266
+#: src/ephy-certificate-dialog.c:264
 msgid "The certificate has been revoked"
 msgstr "Сертификатът е анулиран"
 
-#: src/ephy-certificate-dialog.c:269
+#: src/ephy-certificate-dialog.c:267
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "Сертификатът е подписан със слаб алгоритъм за подписване"
 
-#: src/ephy-certificate-dialog.c:272
+#: src/ephy-certificate-dialog.c:270
 msgid "The certificate activation time is still in the future"
 msgstr "Времето, от което сертификата влиза в сила е в бъдещето"
 
-#: src/ephy-certificate-dialog.c:314
+#: src/ephy-certificate-dialog.c:312
 msgid "The identity of this website has been verified."
 msgstr "Самоличността на тази уеб страница е удостоверена."
 
-#: src/ephy-certificate-dialog.c:315
+#: src/ephy-certificate-dialog.c:313
 msgid "The identity of this website has not been verified."
 msgstr "Самоличността на тази уеб страница не е удостоверена."
 
 #. Message on certificate dialog
-#: src/ephy-certificate-dialog.c:327
+#: src/ephy-certificate-dialog.c:325
 msgid "No problems have been detected with your connection."
 msgstr "Не са установени проблеми с връзката."
 
-#: src/ephy-certificate-dialog.c:330
+#: src/ephy-certificate-dialog.c:328
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
@@ -2567,94 +2572,94 @@ msgstr ""
 "Сертификатът е правилен, но някои ресурси от страницата са изпратени по "
 "незащитен начин."
 
-#: src/ephy-downloads-popover.c:213 src/resources/gtk/autofill-view.blp:13
+#: src/ephy-downloads-popover.c:214 src/resources/gtk/autofill-view.blp:13
 #: src/resources/gtk/passwords-view.blp:11
 msgid "_Clear All"
 msgstr "Изчистване на _всичко"
 
-#: src/ephy-download-widget.c:73
+#: src/ephy-download-widget.c:72
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "Остава %d секунда"
 msgstr[1] "Остават %d секунди"
 
-#: src/ephy-download-widget.c:77
+#: src/ephy-download-widget.c:76
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "Остава %d минута"
 msgstr[1] "Остават %d минути"
 
-#: src/ephy-download-widget.c:81
+#: src/ephy-download-widget.c:80
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "Остава %d час"
 msgstr[1] "Остават %d часа"
 
-#: src/ephy-download-widget.c:85
+#: src/ephy-download-widget.c:84
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "Остава %d ден"
 msgstr[1] "Остават %d дни"
 
-#: src/ephy-download-widget.c:89
+#: src/ephy-download-widget.c:88
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "Остава %d седмица"
 msgstr[1] "Остават %d седмици"
 
-#: src/ephy-download-widget.c:93
+#: src/ephy-download-widget.c:92
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "Остава %d месец"
 msgstr[1] "Остават %d месеца"
 
-#: src/ephy-download-widget.c:208 src/ephy-download-widget.c:401
+#: src/ephy-download-widget.c:207 src/ephy-download-widget.c:393
 msgid "Finished"
 msgstr "Завърши"
 
-#: src/ephy-download-widget.c:217
+#: src/ephy-download-widget.c:216
 msgid "Moved or deleted"
 msgstr "Преместен или изтрит"
 
-#: src/ephy-download-widget.c:232 src/ephy-download-widget.c:398
+#: src/ephy-download-widget.c:231 src/ephy-download-widget.c:390
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Грешка при изтегляне: %s"
 
-#: src/ephy-download-widget.c:257
+#: src/ephy-download-widget.c:256
 msgid "Cancelling…"
 msgstr "Отказване…"
 
-#: src/ephy-download-widget.c:403
+#: src/ephy-download-widget.c:395
 msgid "Starting…"
 msgstr "Стартиране…"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/ephy-firefox-sync-dialog.c:140
+#: src/ephy-firefox-sync-dialog.c:152
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Последно синхронизиране: %s"
 
-#: src/ephy-firefox-sync-dialog.c:429
+#: src/ephy-firefox-sync-dialog.c:586 src/ephy-firefox-sync-dialog.c:763
 msgid "Something went wrong, please try again later."
 msgstr "Възникна грешка, пробвайте по-късно."
 
-#: src/ephy-firefox-sync-dialog.c:624
+#: src/ephy-firefox-sync-dialog.c:1019
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
 msgstr[0] "%u мин."
 msgstr[1] "%u мин."
 
-#: src/ephy-header-bar.c:205
+#: src/ephy-header-bar.c:200
 msgid "Exit Fullscreen"
 msgstr "Изход от цял екран"
 
@@ -2662,56 +2667,56 @@ msgstr "Изход от цял екран"
 msgid "Select _None"
 msgstr "_Изчистване на избора"
 
-#: src/ephy-history-dialog.c:268 src/ephy-window.c:1015
+#: src/ephy-history-dialog.c:268 src/ephy-window.c:1022
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: src/ephy-history-dialog.c:443
+#: src/ephy-history-dialog.c:442
 msgid "Link copied"
 msgstr "Връзката е копирана"
 
-#: src/ephy-history-dialog.c:532
+#: src/ephy-history-dialog.c:531
 msgid "Remove the selected pages from history"
 msgstr "Изтриване на избраните страници от историята"
 
-#: src/ephy-history-dialog.c:539
+#: src/ephy-history-dialog.c:538
 msgid "Copy URL"
 msgstr "Копиране на адрес"
 
-#: src/ephy-history-dialog.c:863
+#: src/ephy-history-dialog.c:856
 msgid "Clear Browsing History?"
 msgstr "Изчистване на историята?"
 
-#: src/ephy-history-dialog.c:864
+#: src/ephy-history-dialog.c:857
 msgid "All visible links will be permanently deleted"
 msgstr "Всички видими връзки ще бъдат окончателно изтрити"
 
-#: src/ephy-history-dialog.c:868
+#: src/ephy-history-dialog.c:861
 msgid "Cl_ear"
 msgstr "Из_чистване"
 
-#: src/ephy-history-dialog.c:1083
+#: src/ephy-history-dialog.c:1076
 msgid "Unavailable in Incognito Mode"
 msgstr "Липсва в поверителен режим"
 
-#: src/ephy-history-dialog.c:1086
+#: src/ephy-history-dialog.c:1079
 msgid "Clear History"
 msgstr "Изчистване на историята"
 
-#: src/ephy-location-entry.c:337 src/resources/gtk/location-entry.blp:77
+#: src/ephy-location-entry.c:352 src/resources/gtk/location-entry.blp:77
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Търсене на уеб сайтове, отметки и отворени подпрозорци"
 
-#: src/ephy-location-entry.c:362
+#: src/ephy-location-entry.c:377
 msgid "Not Secure — "
 msgstr "Нешифрирана връзка — "
 
-#: src/ephy-location-entry.c:1316
+#: src/ephy-location-entry.c:1331
 msgid "Secure Site"
 msgstr "Сайт с шифрирана връзка"
 
-#: src/ephy-location-entry.c:1318
+#: src/ephy-location-entry.c:1333
 msgid "Insecure Site"
 msgstr "Сайт с нешифрирана връзка"
 
@@ -2759,35 +2764,35 @@ msgstr "АДРЕС…"
 msgid "Web options"
 msgstr "Настройки за Интернет"
 
-#: src/ephy-passwords-view.c:106
+#: src/ephy-passwords-view.c:105
 msgid "Password copied"
 msgstr "Парола е копирана"
 
-#: src/ephy-passwords-view.c:154
+#: src/ephy-passwords-view.c:152
 msgid "Delete All Passwords?"
 msgstr "Да се изтрият ли всички пароли?"
 
-#: src/ephy-passwords-view.c:155
+#: src/ephy-passwords-view.c:153
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "Всички пароли запазени локално ще се изтрият необратимо."
 
-#: src/ephy-passwords-view.c:255
+#: src/ephy-passwords-view.c:253
 msgid "Copy password"
 msgstr "Копиране на парола"
 
-#: src/ephy-passwords-view.c:262 src/ephy-window.c:4220
+#: src/ephy-passwords-view.c:260 src/ephy-window.c:4236
 msgid "Username"
 msgstr "Потребителско име"
 
-#: src/ephy-passwords-view.c:273
+#: src/ephy-passwords-view.c:271
 msgid "Copy username"
 msgstr "Копиране на потребителско име"
 
-#: src/ephy-passwords-view.c:280 src/ephy-window.c:4227
+#: src/ephy-passwords-view.c:278 src/ephy-window.c:4243
 msgid "Password"
 msgstr "Парола"
 
-#: src/ephy-passwords-view.c:293
+#: src/ephy-passwords-view.c:291
 msgid "Remove Password"
 msgstr "Изтриване на парола"
 
@@ -2808,7 +2813,7 @@ msgstr[0] "Уеб за GNOME предотврати следенето ви от
 msgstr[1] "Уеб за GNOME предотврати следенето ви от %u следящи сайтове"
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
-#: src/ephy-security-dialog.c:187
+#: src/ephy-security-dialog.c:185
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -2818,7 +2823,7 @@ msgstr ""
 "свързвате с атакуващ, преструващ се на „%s“"
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
-#: src/ephy-security-dialog.c:194
+#: src/ephy-security-dialog.c:192
 #, c-format
 msgid ""
 "This site has no security. An attacker could see any information you send, "
@@ -2828,253 +2833,257 @@ msgstr ""
 "която подавате, и ще може да контролира всичко, което виждате"
 
 #. Label in certificate dialog when site sends mixed content.
-#: src/ephy-security-dialog.c:201
+#: src/ephy-security-dialog.c:199
 msgid "This web site did not properly secure your connection"
 msgstr "Уеб сайтът не шифрира цялото съдържание"
 
 #. Label in certificate dialog on secure sites.
-#: src/ephy-security-dialog.c:206
+#: src/ephy-security-dialog.c:204
 msgid "Your connection seems to be secure"
 msgstr "Връзката ви изглежда защитена"
 
-#: src/ephy-security-dialog.c:493
+#: src/ephy-security-dialog.c:489
 msgid "Allow"
 msgstr "Разрешаване"
 
-#: src/ephy-security-dialog.c:494
+#: src/ephy-security-dialog.c:490
 msgid "Deny"
 msgstr "Забраняване"
 
-#: src/ephy-security-dialog.c:496
+#: src/ephy-security-dialog.c:492
 msgid "Ask"
 msgstr "Питане"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:519
+#: src/ephy-security-dialog.c:515
 msgid "Advertisements"
 msgstr "Реклами"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:521
+#: src/ephy-security-dialog.c:517
 msgid "Notifications"
 msgstr "Известия"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:523
+#: src/ephy-security-dialog.c:519
 msgid "Password Saving"
 msgstr "Запазване на пароли"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:525
+#: src/ephy-security-dialog.c:521
 msgid "Location Access"
 msgstr "Местоположение"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:527
+#: src/ephy-security-dialog.c:523
 msgid "Microphone Access"
 msgstr "Достъп до микрофона"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:529
+#: src/ephy-security-dialog.c:525
 msgid "Webcam Access"
 msgstr "Достъп до камерата"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:531
+#: src/ephy-security-dialog.c:527
 msgid "Display Access"
 msgstr "Достъп до екран"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:533
+#: src/ephy-security-dialog.c:529
 msgid "Media Autoplay"
 msgstr "Автоматично изпълнение на медия"
 
-#: src/ephy-security-dialog.c:533
+#: src/ephy-security-dialog.c:529
 msgid "Without Sound"
 msgstr "Без звук"
 
-#: src/ephy-shell.c:414
+#: src/ephy-shell.c:415
 msgid "Uninstall Web App?"
 msgstr "Деинсталиране на уеб приложението?"
 
-#: src/ephy-shell.c:414
+#: src/ephy-shell.c:415
 msgid "This web appʼs data will be permanently deleted"
 msgstr "Данните на това уеб приложение ще бъдат окончателно изтрити"
 
-#: src/ephy-shell.c:418
+#: src/ephy-shell.c:419
 msgid "_Uninstall"
 msgstr "_Деинсталиране"
 
-#: src/ephy-site-menu-button.c:284 src/resources/gtk/site-menu-button.blp:36
+#: src/ephy-site-menu-button.c:279 src/resources/gtk/site-menu-button.blp:36
 msgid "Edit _Bookmark…"
 msgstr "Редактиране на _отметка…"
 
-#: src/ephy-site-menu-button.c:286
+#: src/ephy-site-menu-button.c:281
 msgid "Add _Bookmark…"
 msgstr "Добавяне на _отметка…"
 
-#: src/ephy-suggestion-model.c:668
+#: src/ephy-suggestion-model.c:663
 #, c-format
 msgid "Could not load search engines suggestions: %s"
 msgstr "Подсказките на търсачките не може да бъдат заредени: %s"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:663
+#: src/ephy-tab-view.c:658
 msgid "Open a new tab"
 msgstr "Отваряне на нов подпрозорец"
 
-#: src/ephy-window.c:1008
+#: src/ephy-window.c:1015
 msgid "Re_do"
 msgstr "Повта_ряне"
 
 #. Edit.
-#: src/ephy-window.c:1011
+#: src/ephy-window.c:1018
 msgid "Cu_t"
 msgstr "Из_рязване"
 
-#: src/ephy-window.c:1012
+#: src/ephy-window.c:1019
 msgid "_Copy"
 msgstr "_Копиране"
 
-#: src/ephy-window.c:1013
+#: src/ephy-window.c:1020
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: src/ephy-window.c:1014
+#: src/ephy-window.c:1021
 msgid "_Paste Text Only"
 msgstr "_Поставяне само на текста"
 
-#: src/ephy-window.c:1017
+#: src/ephy-window.c:1023
+msgid "Generate _Password"
+msgstr "Генерирана на _парола"
+
+#: src/ephy-window.c:1025
 msgid "S_end Link by Email…"
 msgstr "Изпращан_е на връзката чрез е-поща…"
 
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1026
 msgid "Add _Link to Bookmarks"
 msgstr "Добавяне на _връзката към отметките"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1028
 msgid "_Reload"
 msgstr "_Презареждане"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1029
 msgid "_Back"
 msgstr "На_зад"
 
-#: src/ephy-window.c:1022
+#: src/ephy-window.c:1030
 msgid "_Forward"
 msgstr "На_пред"
 
 #. Bookmarks
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1033
 msgid "Add Boo_kmark…"
 msgstr "_Добавяне на отметка…"
 
 #. Links.
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1037
 msgid "Open Link in New _Window"
 msgstr "Отваряне на връзката в нов _прозорец"
 
-#: src/ephy-window.c:1030
+#: src/ephy-window.c:1038
 msgid "Open Link in New _Tab"
 msgstr "Отваряне на връзката в нов _подпрозорец"
 
-#: src/ephy-window.c:1031
+#: src/ephy-window.c:1039
 msgid "Open Link in I_ncognito Window"
 msgstr "Отваряне на връзката в прозорец за „по_верително сърфиране“"
 
-#: src/ephy-window.c:1032
+#: src/ephy-window.c:1040
 msgid "_Save Link As…"
 msgstr "_Запазване на връзката като…"
 
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1041
 msgid "_Copy Link Address"
 msgstr "_Копиране на адреса на връзката"
 
-#: src/ephy-window.c:1034
+#: src/ephy-window.c:1042
 msgid "_Copy E-mail Address"
 msgstr "_Копиране на адреса на е-пощата"
 
 #. Images.
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1046
 msgid "View _Image in New Tab"
 msgstr "Отваряне на _изображението в нов подпрозорец"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1047
 msgid "Copy I_mage Address"
 msgstr "Копиране на адреса на из_ображението"
 
-#: src/ephy-window.c:1040
+#: src/ephy-window.c:1048
 msgid "_Save Image As…"
 msgstr "_Запазване на изображението като…"
 
-#: src/ephy-window.c:1041
+#: src/ephy-window.c:1049
 msgid "Set as _Wallpaper"
 msgstr "Задаване като _фон"
 
 #. Video.
-#: src/ephy-window.c:1045
+#: src/ephy-window.c:1053
 msgid "Open Video in New _Window"
 msgstr "Отваряне на видео файла в _нов прозорец"
 
-#: src/ephy-window.c:1046
+#: src/ephy-window.c:1054
 msgid "Open Video in New _Tab"
 msgstr "Отваряне на видео файла в нов _подпрозорец"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1055
 msgid "_Save Video As…"
 msgstr "_Запазване на видео файла като…"
 
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1056
 msgid "_Copy Video Address"
 msgstr "_Копиране на адреса на видео файла"
 
 #. Audio.
-#: src/ephy-window.c:1052
+#: src/ephy-window.c:1060
 msgid "Open Audio in New _Window"
 msgstr "Отваряне на звуковия файл в _нов прозорец"
 
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1061
 msgid "Open Audio in New _Tab"
 msgstr "Отваряне на звуковия файл в нов _подпрозорец"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1062
 msgid "_Save Audio As…"
 msgstr "_Запазване на звуковия файл като…"
 
-#: src/ephy-window.c:1055
+#: src/ephy-window.c:1063
 msgid "_Copy Audio Address"
 msgstr "_Копиране на адреса на звуковия файл"
 
-#: src/ephy-window.c:1061
+#: src/ephy-window.c:1069
 msgid "Save Pa_ge As…"
 msgstr "_Запазване на страницата като…"
 
-#: src/ephy-window.c:1062
+#: src/ephy-window.c:1070
 msgid "_Take Screenshot…"
 msgstr "Снимка на _екрана…"
 
-#: src/ephy-window.c:1063
+#: src/ephy-window.c:1071
 msgid "_Page Source"
 msgstr "Изходен _код на страницата"
 
-#: src/ephy-window.c:1444
+#: src/ephy-window.c:1451
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Търсене в Интернет за „%s“"
 
-#: src/ephy-window.c:1473
+#: src/ephy-window.c:1480
 msgid "Open Link"
 msgstr "Отваряне на връзка"
 
-#: src/ephy-window.c:1475
+#: src/ephy-window.c:1482
 msgid "Open Link In New Tab"
 msgstr "Отваряне на връзката в нов подпрозорец"
 
-#: src/ephy-window.c:1477
+#: src/ephy-window.c:1484
 msgid "Open Link In New Window"
 msgstr "Отваряне на връзката в нов прозорец"
 
-#: src/ephy-window.c:1479
+#: src/ephy-window.c:1486
 msgid "Open Link In Incognito Window"
 msgstr "Отваряне на връзката в поверителен режим"
 
@@ -3084,105 +3093,105 @@ msgstr "Отваряне на връзката в поверителен реж�
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2315
+#: src/ephy-window.c:2346
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr "Позволяване на „%s“ да отвори връзката „%s“ във външна програма"
 
-#: src/ephy-window.c:2316
+#: src/ephy-window.c:2347
 msgid "Open in External App?"
 msgstr "Отваряне във външна програма?"
 
-#: src/ephy-window.c:2318
+#: src/ephy-window.c:2349
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
-#: src/ephy-window.c:2324
+#: src/ephy-window.c:2355
 msgid "Always Allow"
 msgstr "Винаги позволяване"
 
-#: src/ephy-window.c:2609
+#: src/ephy-window.c:2637
 msgid "Search Engine Available"
 msgstr "Налична е търсачка"
 
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
-#: src/ephy-window.c:2615
+#: src/ephy-window.c:2643
 #, c-format
 msgid "Add “%s”"
 msgstr "Добавяне на „%s“"
 
-#: src/ephy-window.c:2619 src/ephy-window.c:2627
-#: src/preferences/prefs-search-engine-page.c:310
-#: src/preferences/prefs-search-engine-page.c:312
+#: src/ephy-window.c:2647 src/ephy-window.c:2655
+#: src/preferences/prefs-search-engine-page.c:307
+#: src/preferences/prefs-search-engine-page.c:309
 msgid "Add Search Engine"
 msgstr "Добавяне на търсачка"
 
-#: src/ephy-window.c:3072
+#: src/ephy-window.c:3096
 msgid "Reader Mode Available"
 msgstr "Наличен е режим за четене"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3171
+#: src/ephy-window.c:3195
 msgid "Notification Request"
 msgstr "Заявка за известия"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3173
+#: src/ephy-window.c:3197
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "Страницата на адрес „%s“ иска да покаже известия към работния ви плот"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3178
+#: src/ephy-window.c:3202
 msgid "Location Access Request"
 msgstr "Заявка за местоположение"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3180
+#: src/ephy-window.c:3204
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "Страницата на адрес „%s“ иска да знае местоположението ви"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3185
+#: src/ephy-window.c:3209
 msgid "Microphone Access Request"
 msgstr "Заявка за достъп до микрофона"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3187
+#: src/ephy-window.c:3211
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "Страницата на адрес „%s“ иска да използва микрофона"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3192
+#: src/ephy-window.c:3216
 msgid "Webcam Access Request"
 msgstr "Заявка за достъп до камерата"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3194
+#: src/ephy-window.c:3218
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "Страницата на адрес „%s“ иска да ползва камерата"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3199
+#: src/ephy-window.c:3223
 msgid "Webcam and Microphone Access Request"
 msgstr "Заявка за достъп до микрофона и камерата"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3201
+#: src/ephy-window.c:3225
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "Страницата на адрес „%s“ иска да ползва камерата и микрофона"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3215
+#: src/ephy-window.c:3239
 msgid "Website Data Access Request"
 msgstr "Заявка за достъп за съхраняване на данни"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3217
+#: src/ephy-window.c:3241
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
@@ -3193,66 +3202,66 @@ msgstr ""
 "дейността ви в „%s“."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3222
+#: src/ephy-window.c:3246
 msgid "Clipboard Access Request"
 msgstr "Заявка за достъп до буфера за обмен"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3224
+#: src/ephy-window.c:3248
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "Страницата на адрес „%s“ иска да ползва буфера за обмен"
 
-#: src/ephy-window.c:3252
+#: src/ephy-window.c:3276
 msgid "_Ask Later"
 msgstr "_Питане по-късно"
 
-#: src/ephy-window.c:3253
+#: src/ephy-window.c:3277
 msgid "_Deny"
 msgstr "_Забраняване"
 
-#: src/ephy-window.c:3254
+#: src/ephy-window.c:3278
 msgid "_Allow"
 msgstr "_Разрешаване"
 
-#: src/ephy-window.c:3460 src/ephy-window.c:5119
+#: src/ephy-window.c:3484 src/ephy-window.c:5160
 msgid "Leave Website?"
 msgstr "Изход от уеб сайта?"
 
-#: src/ephy-window.c:3461 src/ephy-window.c:5120 src/window-commands.c:1407
+#: src/ephy-window.c:3485 src/ephy-window.c:5161 src/window-commands.c:1408
 msgid "A form was modified and has not been submitted"
 msgstr "Има променен, но неподаден формуляр"
 
-#: src/ephy-window.c:3462 src/ephy-window.c:5121 src/window-commands.c:1411
+#: src/ephy-window.c:3486 src/ephy-window.c:5162 src/window-commands.c:1412
 msgid "_Discard Form"
 msgstr "_Изчистване на формуляр"
 
-#: src/ephy-window.c:3483
+#: src/ephy-window.c:3507
 msgid "Download operation"
 msgstr "Изтегляне"
 
-#: src/ephy-window.c:3485
+#: src/ephy-window.c:3509
 msgid "Show details"
 msgstr "Подробности"
 
-#: src/ephy-window.c:3487
+#: src/ephy-window.c:3511
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d текущо изтегляне"
 msgstr[1] "%d текущи изтегляния"
 
-#: src/ephy-window.c:3765
+#: src/ephy-window.c:3789
 msgid "Set as Default Browser?"
 msgstr "Искате ли да ползвате „Уеб“ като стандартен браузър?"
 
-#: src/ephy-window.c:3767
+#: src/ephy-window.c:3791
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Използване на браузъра на GNOME като стандартен и при отварянето на външни "
 "връзки"
 
-#: src/ephy-window.c:3769
+#: src/ephy-window.c:3793
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3260,130 +3269,131 @@ msgstr ""
 "Да се зададе ли предварителната версия на Epiphany за тестване като "
 "стандартен браузър и браузър за външни връзки?"
 
-#: src/ephy-window.c:3773
+#: src/ephy-window.c:3797
 msgid "_Ask Again Later"
 msgstr "_Питане отново по-късно"
 
-#: src/ephy-window.c:3774
+#: src/ephy-window.c:3798
 msgid "_No"
 msgstr "_Не"
 
-#: src/ephy-window.c:3775
+#: src/ephy-window.c:3799
 msgid "_Yes"
 msgstr "_Да"
 
-#: src/ephy-window.c:4111
+#: src/ephy-window.c:4129
 msgid "Download started"
 msgstr "Изтеглянето започна"
 
-#: src/ephy-window.c:4201
+#: src/ephy-window.c:4217
 msgid "Save Password?"
 msgstr "Запазване на паролата?"
 
-#: src/ephy-window.c:4202
-msgid ""
-"Passwords are saved only on your device and can be removed at any time in "
-"Preferences"
+#: src/ephy-window.c:4218
+msgid "Passwords are saved only on your device and can be removed at any time."
 msgstr ""
-"Паролите се запазват само на това устройство и винаги може да бъдат изтрити "
-"през настройките"
+"Паролите се запазват само на това устройство и винаги може да ги изтриете."
 
-#: src/ephy-window.c:4204
+#: src/ephy-window.c:4220
 msgid "Not Now"
 msgstr "Не сега"
 
-#: src/ephy-window.c:4205
+#: src/ephy-window.c:4221
 msgid "Never Save"
 msgstr "Никога да не се запазват"
 
-#: src/ephy-window.c:4206
+#: src/ephy-window.c:4222
 msgid "Save"
 msgstr "Запазване"
 
-#: src/ephy-window.c:4407
+#: src/ephy-window.c:4423
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Уеб приложение"
 
-#: src/ephy-window.c:4410
+#: src/ephy-window.c:4426
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Инсталиране на сайта като уеб приложение"
 
-#: src/ephy-window.c:5234
+#: src/ephy-window.c:4952
+msgid "Page URL copied"
+msgstr "Адресът на страницата е копирана"
+
+#: src/ephy-window.c:5275
 msgid "Close Multiple Tabs?"
 msgstr "Да се затворят ли множество подпрозорци?"
 
-#: src/ephy-window.c:5235
+#: src/ephy-window.c:5276
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "При затварянето на прозореца ще се затворят и всички подпрозорци"
 
-#: src/ephy-window.c:5236
+#: src/ephy-window.c:5277
 msgid "C_lose Tabs"
 msgstr "_Затваряне на подпрозорци"
 
-#: src/ephy-window.c:5352
+#: src/ephy-window.c:5393
 msgid "New tab opened"
 msgstr "Отворен е нов подпрозорец"
 
-#: src/ephy-window.c:5356
+#: src/ephy-window.c:5397
 msgid "Switch"
 msgstr "Превключване"
 
-#: src/preferences/autofill-view.c:359
+#: src/preferences/autofill-view.c:361
 msgid "Delete All Entries?"
 msgstr "Да се изтрият ли всички записи?"
 
-#: src/preferences/autofill-view.c:360
+#: src/preferences/autofill-view.c:362
 msgid "This will clear all locally stored entries, and can not be undone."
 msgstr "Всички записи и пароли запазени локално ще се изтрият необратимо."
 
-#: src/preferences/clear-data-view.c:79
+#: src/preferences/clear-data-view.c:81
 msgid "Cookies"
 msgstr "Бисквитки"
 
-#: src/preferences/clear-data-view.c:80
+#: src/preferences/clear-data-view.c:82
 msgid "HTTP disk cache"
 msgstr "Кеш за HTTP"
 
-#: src/preferences/clear-data-view.c:81
+#: src/preferences/clear-data-view.c:83
 msgid "Local storage data"
 msgstr "Данни, запазени локално"
 
-#: src/preferences/clear-data-view.c:82
+#: src/preferences/clear-data-view.c:84
 msgid "Offline web application cache"
 msgstr "Кеш за работа на уеб приложенията без връзка към Интернет"
 
-#: src/preferences/clear-data-view.c:83
+#: src/preferences/clear-data-view.c:85
 msgid "IndexedDB databases"
 msgstr "Бази от данни IndexedDB"
 
-#: src/preferences/clear-data-view.c:84
+#: src/preferences/clear-data-view.c:86
 msgid "HSTS policies cache"
 msgstr "Кеш с политики на HSTS"
 
-#: src/preferences/clear-data-view.c:85
+#: src/preferences/clear-data-view.c:87
 msgid "Intelligent Tracking Prevention data"
 msgstr ""
 "Данни за интелигентно предотвратяване на проследяването от сайтовете (ITP)"
 
-#: src/preferences/clear-data-view.c:86
+#: src/preferences/clear-data-view.c:88
 msgid "MediaDevices device IDs"
 msgstr "Идентификатори на устройства MediaDevices"
 
-#: src/preferences/clear-data-view.c:87
+#: src/preferences/clear-data-view.c:89
 msgid "ServiceWorker registrations"
 msgstr "Регистрации ServiceWorker"
 
-#: src/preferences/clear-data-view.c:88
+#: src/preferences/clear-data-view.c:90
 msgid "CacheStorage data"
 msgstr "Данни на CacheStorage"
 
-#: src/preferences/clear-data-view.c:238
+#: src/preferences/clear-data-view.c:240
 msgid "Data cleared"
 msgstr "Данните са изчистени"
 
-#: src/preferences/ephy-prefs-dialog.c:99
+#: src/preferences/ephy-prefs-dialog.c:100
 msgid "New search engine"
 msgstr "Нова търсачка"
 
@@ -3391,19 +3401,19 @@ msgstr "Нова търсачка"
 msgid "A_dd Search Engine"
 msgstr "_Добавяне на търсачка"
 
-#: src/preferences/ephy-search-engine-row.c:130
+#: src/preferences/ephy-search-engine-row.c:126
 msgid "No search suggestions"
 msgstr "Няма подсказки за търсене"
 
-#: src/preferences/extension-view.c:113
+#: src/preferences/extension-view.c:111
 msgid "Remove Extension"
 msgstr "Изтриване на разширение"
 
-#: src/preferences/extension-view.c:114
+#: src/preferences/extension-view.c:112
 msgid "Do you really want to remove this extension?"
 msgstr "Наистина ли да се изтрие това разширение?"
 
-#: src/preferences/extension-view.c:118
+#: src/preferences/extension-view.c:116
 msgid "_Remove"
 msgstr "_Премахване"
 
@@ -3441,15 +3451,15 @@ msgid "Install"
 msgstr "Инсталиране"
 
 #. Translators: this is the title of a file chooser dialog.
-#: src/preferences/prefs-extensions-page.c:149
+#: src/preferences/prefs-extensions-page.c:147
 msgid "Open File (manifest.json/xpi)"
 msgstr "Отваряне на файл (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:283
+#: src/preferences/prefs-features-page.c:276
 msgid "All values reset"
 msgstr "Всички стойности са върнати"
 
-#: src/preferences/prefs-features-page.c:337
+#: src/preferences/prefs-features-page.c:330
 msgid "Reset to default"
 msgstr "Връщане на стандартните настройки"
 
@@ -3466,20 +3476,20 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Системен език (%s)"
 msgstr[1] "Системни езици (%s)"
 
-#: src/preferences/prefs-general-page.c:770
+#: src/preferences/prefs-general-page.c:766
 msgid "Supported Image Files"
 msgstr "Поддържани формати за изображения"
 
-#: src/preferences/prefs-search-engine-page.c:109
+#: src/preferences/prefs-search-engine-page.c:108
 #, c-format
 msgid "Address must contain the search term represented by %s"
 msgstr "Адресът трябва да съдържа търсения израз, който е представен с „%s“"
 
-#: src/preferences/prefs-search-engine-page.c:112
+#: src/preferences/prefs-search-engine-page.c:111
 msgid "Address should not contain the search term several times"
 msgstr "Адресът не може да съдържа търсената фраза повече от един път"
 
-#: src/preferences/prefs-search-engine-page.c:123
+#: src/preferences/prefs-search-engine-page.c:122
 #, c-format
 msgid ""
 "Address is not a valid URL. The address should look like https://"
@@ -3488,79 +3498,79 @@ msgstr ""
 "Неправилен адрес. Трябва да изглежда подобно на „https://www.example.com/"
 "search?q=%s“"
 
-#: src/preferences/prefs-search-engine-page.c:148
+#: src/preferences/prefs-search-engine-page.c:147
 msgid "A name is required"
 msgstr "Необходимо е име"
 
-#: src/preferences/prefs-search-engine-page.c:150
+#: src/preferences/prefs-search-engine-page.c:149
 msgid "This search engine already exists"
 msgstr "Тази търсачка вече я има"
 
-#: src/preferences/prefs-search-engine-page.c:194
+#: src/preferences/prefs-search-engine-page.c:193
 #, c-format
 msgid "Address (with search term as %s)"
 msgstr "Адресът (търсения израз трябва да бъде представен с „%s“)"
 
-#: src/preferences/prefs-search-engine-page.c:194
+#: src/preferences/prefs-search-engine-page.c:193
 #: src/resources/gtk/autofill-view.blp:56
-#: src/resources/gtk/bookmark-properties.blp:45
+#: src/resources/gtk/bookmark-properties.blp:54
 #: src/resources/gtk/prefs-search-engine-page.blp:16
 msgid "Address"
 msgstr "Адреси"
 
-#: src/preferences/prefs-search-engine-page.c:207
+#: src/preferences/prefs-search-engine-page.c:206
 msgid "This shortcut is already used."
 msgstr "Това съкращение вече е заето."
 
-#: src/preferences/prefs-search-engine-page.c:209
+#: src/preferences/prefs-search-engine-page.c:208
 msgid "Search shortcuts must not contain any space."
 msgstr ""
 "Съкращенията за търсачки не може да съдържат празни знаци като интервали."
 
-#: src/preferences/prefs-search-engine-page.c:217
+#: src/preferences/prefs-search-engine-page.c:216
 msgid "Search shortcuts should start with a symbol such as !, # or @."
 msgstr ""
 "Съкращенията за търсачки трябва да започват с един от знаците „!“, „#“ или "
 "„@“."
 
-#: src/preferences/prefs-search-engine-page.c:227
+#: src/preferences/prefs-search-engine-page.c:226
 msgid "Shortcut (for example !ddg)"
 msgstr "Ключова дума (например !ddg)"
 
-#: src/preferences/prefs-search-engine-page.c:227
+#: src/preferences/prefs-search-engine-page.c:226
 #: src/resources/gtk/prefs-search-engine-page.blp:49
 msgid "Shortcut"
 msgstr "Клавишна комбинация"
 
-#: src/preferences/prefs-search-engine-page.c:315
+#: src/preferences/prefs-search-engine-page.c:312
 msgid "Edit Search Engine"
 msgstr "Редактиране на търсачката"
 
-#: src/preferences/prefs-search-engine-page.c:317
+#: src/preferences/prefs-search-engine-page.c:314
 msgid "Remove Search Engine"
 msgstr "Премахване на търсачката"
 
-#: src/preferences/webapp-additional-urls-dialog.c:71
+#: src/preferences/webapp-additional-urls-dialog.c:72
 msgid "Remove URL"
 msgstr "Премахване на адреса"
 
-#: src/profile-migrator/ephy-profile-migrator.c:339
+#: src/profile-migrator/ephy-profile-migrator.c:366
 msgid "Executes only the n-th migration step"
 msgstr "Изпълняване само на n-тата стъпка от мигрирането"
 
-#: src/profile-migrator/ephy-profile-migrator.c:343
+#: src/profile-migrator/ephy-profile-migrator.c:370
 msgid "Specifies the required version for the migrator"
 msgstr "Определя необходимата версия за извършване на мигрирането"
 
-#: src/profile-migrator/ephy-profile-migrator.c:347
+#: src/profile-migrator/ephy-profile-migrator.c:374
 msgid "Specifies the profile where the migrator should run"
 msgstr "Определя профила, за който да се извърши мигрирането"
 
-#: src/profile-migrator/ephy-profile-migrator.c:369
+#: src/profile-migrator/ephy-profile-migrator.c:396
 msgid "Web profile migrator"
 msgstr "Мигриране на профили на Интернет браузъра"
 
-#: src/profile-migrator/ephy-profile-migrator.c:370
+#: src/profile-migrator/ephy-profile-migrator.c:397
 msgid "Web profile migrator options"
 msgstr "Настройки на мигрирането на профили на Интернет браузъра"
 
@@ -3670,35 +3680,35 @@ msgstr "Собственик"
 msgid "Number"
 msgstr "Номер"
 
-#: src/resources/gtk/bookmark-properties.blp:9
+#: src/resources/gtk/bookmark-properties.blp:18
 msgid "Bookmark"
 msgstr "Отметка"
 
-#: src/resources/gtk/bookmark-properties.blp:28
+#: src/resources/gtk/bookmark-properties.blp:37
 #: src/resources/gtk/prefs-lang-dialog.blp:24
 msgid "_Add"
 msgstr "_Добавяне"
 
-#: src/resources/gtk/bookmark-properties.blp:41
+#: src/resources/gtk/bookmark-properties.blp:50
 #: src/resources/gtk/prefs-search-engine-page.blp:12
 msgid "Name"
 msgstr "Име"
 
-#: src/resources/gtk/bookmark-properties.blp:51
-#: src/resources/gtk/bookmark-properties.blp:77
+#: src/resources/gtk/bookmark-properties.blp:60
+#: src/resources/gtk/bookmark-properties.blp:86
 msgid "Tags"
 msgstr "Етикети"
 
-#: src/resources/gtk/bookmark-properties.blp:64
+#: src/resources/gtk/bookmark-properties.blp:73
 #: src/resources/gtk/bookmark-row.blp:43
 msgid "Remove"
 msgstr "Премахване"
 
-#: src/resources/gtk/bookmark-properties.blp:100
+#: src/resources/gtk/bookmark-properties.blp:109
 msgid "Add Tag"
 msgstr "Добавяне на етикет"
 
-#: src/resources/gtk/bookmark-properties.blp:112
+#: src/resources/gtk/bookmark-properties.blp:121
 msgid "Add new tag"
 msgstr "Добавяне на нов eтикет"
 
@@ -3931,7 +3941,7 @@ msgstr "_Отваряне"
 msgid "Delete Language"
 msgstr "Изтриване на език"
 
-#: src/resources/gtk/location-entry.blp:201
+#: src/resources/gtk/location-entry.blp:202
 msgid "Paste and _Go"
 msgstr "Поставяне и _навигация"
 
@@ -3972,7 +3982,7 @@ msgstr "Затваряне на подпрозорците в_дясно"
 msgid "Close _Other Tabs"
 msgstr "Затваряне на _другите подпрозорци"
 
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:294
+#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:295
 msgid "_Close"
 msgstr "_Затваряне"
 
@@ -4669,20 +4679,25 @@ msgstr "Избор на адреса"
 
 #: src/resources/gtk/shortcuts-dialog.blp:283
 msgctxt "shortcuts dialog"
+msgid "Copy Page URL"
+msgstr "Копиране на адреса на страницата"
+
+#: src/resources/gtk/shortcuts-dialog.blp:288
+msgctxt "shortcuts dialog"
 msgid "Search With Default Search Engine"
 msgstr "Търсене със стандартната търсачка"
 
-#: src/resources/gtk/shortcuts-dialog.blp:288
+#: src/resources/gtk/shortcuts-dialog.blp:293
 msgctxt "shortcuts dialog"
 msgid "Find"
 msgstr "Търсене"
 
-#: src/resources/gtk/shortcuts-dialog.blp:293
+#: src/resources/gtk/shortcuts-dialog.blp:298
 msgctxt "shortcuts dialog"
 msgid "Next Find Result"
 msgstr "Следващ резултат"
 
-#: src/resources/gtk/shortcuts-dialog.blp:298
+#: src/resources/gtk/shortcuts-dialog.blp:303
 msgctxt "shortcuts dialog"
 msgid "Previous Find Result"
 msgstr "Предишен резултат"
@@ -4729,11 +4744,11 @@ msgstr "Увеличаване"
 msgid "Site Menu"
 msgstr "Меню на сайта"
 
-#: src/resources/gtk/synced-tabs-dialog.blp:8
+#: src/resources/gtk/synced-tabs-dialog.blp:9
 msgid "Synced Tabs"
 msgstr "Синхронизирани подпрозорци"
 
-#: src/resources/gtk/synced-tabs-dialog.blp:26
+#: src/resources/gtk/synced-tabs-dialog.blp:27
 msgid ""
 "Below are the synced open tabs of your other devices that use Firefox Sync "
 "with this account. Open a tab by double clicking its name (tabs under Local "
@@ -4767,17 +4782,17 @@ msgstr "Основен домейн"
 msgid "Add URL"
 msgstr "Добавяне на адрес"
 
-#: src/search-provider/ephy-search-provider.c:215
+#: src/search-provider/ephy-search-provider.c:217
 #, c-format
 msgid "Search the web for “%s”"
 msgstr "Търсене в Интернет за „%s“"
 
-#: src/search-provider/ephy-search-provider.c:225
+#: src/search-provider/ephy-search-provider.c:227
 #, c-format
 msgid "Load “%s”"
 msgstr "Зареждане на „%s“"
 
-#: src/synced-tabs-dialog.c:194
+#: src/synced-tabs-dialog.c:136
 msgid "Local Tabs"
 msgstr "Локални подпрозорци"
 
@@ -4819,120 +4834,111 @@ msgstr "Уеб приложението „%s“ не може да се бъд�
 msgid "Options for %s"
 msgstr "Настройки на „%s“"
 
-#: src/webextension/ephy-web-extension.c:1028
-#, c-format
-msgid "manifest.json not found"
-msgstr "Файлът „manifest.json“ липсва"
-
-#: src/webextension/ephy-web-extension.c:1034
+#: src/webextension/ephy-web-extension.c:888
+#: src/webextension/ephy-web-extension.c:900
 #, c-format
 msgid "Failed to parse manifest.json: %s"
 msgstr "Файлът „manifest.json“ не може да се анализира: %s"
 
-#: src/webextension/ephy-web-extension.c:1040
-#: src/webextension/ephy-web-extension.c:1046
+#: src/webextension/ephy-web-extension.c:894
+#, c-format
+msgid "manifest.json not found"
+msgstr "Файлът „manifest.json“ липсва"
+
+#: src/webextension/ephy-web-extension.c:906
+#: src/webextension/ephy-web-extension.c:912
 #, c-format
 msgid "manifest.json invalid"
 msgstr "Файлът „manifest.json“ е повреден"
-
-#: src/webextension/ephy-web-extension.c:1053
-#, c-format
-msgid "Only manifest_version 2 is supported"
-msgstr "Поддържа се само версия 2 на манифеста"
-
-#: src/webextension/ephy-web-extension.c:1070
-#, c-format
-msgid "Missing name or version"
-msgstr "Липсва име или версия"
 
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
 msgstr "Не може да се определи адресът, който задейства това"
 
-#: src/window-commands.c:131
+#: src/window-commands.c:132
 msgid "HTML File"
 msgstr "Файл с HTML"
 
-#: src/window-commands.c:132
+#: src/window-commands.c:133
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:133 src/window-commands.c:735
+#: src/window-commands.c:134 src/window-commands.c:736
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/window-commands.c:134 src/window-commands.c:736
+#: src/window-commands.c:135 src/window-commands.c:737
 msgid "Chromium"
 msgstr "Chromium"
 
-#: src/window-commands.c:176 src/window-commands.c:572
-#: src/window-commands.c:898 src/window-commands.c:938
+#: src/window-commands.c:177 src/window-commands.c:573
+#: src/window-commands.c:899 src/window-commands.c:939
 msgid "_Select File"
 msgstr "_Избиране на файл"
 
-#: src/window-commands.c:178 src/window-commands.c:900
+#: src/window-commands.c:179 src/window-commands.c:901
 msgid "I_mport"
 msgstr "В_насяне"
 
-#: src/window-commands.c:331 src/window-commands.c:420
-#: src/window-commands.c:464 src/window-commands.c:487
-#: src/window-commands.c:503
+#: src/window-commands.c:332 src/window-commands.c:421
+#: src/window-commands.c:465 src/window-commands.c:488
+#: src/window-commands.c:504
 msgid "Bookmarks successfully imported!"
 msgstr "Успешно внесени отметки!"
 
-#: src/window-commands.c:350
+#: src/window-commands.c:351
 msgid "Select Profile"
 msgstr "Избиране на профил"
 
-#: src/window-commands.c:431 src/window-commands.c:693
-#: src/window-commands.c:819 src/window-commands.c:1041
+#: src/window-commands.c:432 src/window-commands.c:694
+#: src/window-commands.c:820 src/window-commands.c:1042
 msgid "Choose File"
 msgstr "Избор на файл"
 
-#: src/window-commands.c:558
+#: src/window-commands.c:559
 msgid "Import Bookmarks"
 msgstr "Внасяне на отметки"
 
-#: src/window-commands.c:586 src/window-commands.c:952
+#: src/window-commands.c:587 src/window-commands.c:953
 msgid "File Type"
 msgstr "Вид на файл"
 
-#: src/window-commands.c:650
+#: src/window-commands.c:651
 msgid "Bookmarks successfully exported!"
 msgstr "Успешно изнесени отметки!"
 
 #. Translators: Only translate the part before ".html" (e.g. "bookmarks")
-#: src/window-commands.c:704
+#: src/window-commands.c:705
 msgid "bookmarks.html"
 msgstr "отметки.html"
 
-#: src/window-commands.c:734
+#: src/window-commands.c:735
 msgid "CSV File"
 msgstr "Файл във формат CSV"
 
-#: src/window-commands.c:782 src/window-commands.c:808
+#: src/window-commands.c:783 src/window-commands.c:809
 msgid "Passwords successfully imported!"
 msgstr "Успешно внесени пароли!"
 
-#: src/window-commands.c:924
+#: src/window-commands.c:925
 msgid "Import Passwords"
 msgstr "Внасяне на пароли"
 
-#: src/window-commands.c:1000
+#: src/window-commands.c:1001
 msgid "Passwords successfully exported!"
 msgstr "Успешно изнесени пароли!"
 
 #. Translators: Only translate the part before ".csv" (e.g. "passwords")
-#: src/window-commands.c:1051
+#: src/window-commands.c:1052
 msgid "passwords.csv"
 msgstr "пароли.csv"
 
-#: src/window-commands.c:1227
+#: src/window-commands.c:1228
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1250
+#: src/window-commands.c:1251
 msgid "translator-credits"
 msgstr ""
 "Владимир „Kaladan“ Петков &lt;<a "
@@ -4951,29 +4957,29 @@ msgstr ""
 "Докладвайте за грешки в превода в <a href='https://fsa-bg.org/project/gtp/"
 "newticket'>съответния раздел</a>."
 
-#: src/window-commands.c:1406
+#: src/window-commands.c:1407
 msgid "Reload Website?"
 msgstr "Да се презареди ли уеб сайта?"
 
-#: src/window-commands.c:1957
+#: src/window-commands.c:1955
 msgid "New Web App"
 msgstr "Ново уеб приложение"
 
-#: src/window-commands.c:2009
+#: src/window-commands.c:2008
 #, c-format
-msgid "The application “%s” is ready to be used"
+msgid "The app “%s” is ready to be used"
 msgstr "Приложението „%s“ е готово за използване"
 
-#: src/window-commands.c:2012
+#: src/window-commands.c:2011
 #, c-format
-msgid "The application “%s” could not be created: %s"
-msgstr "Неуспешно създаване на приложението „%s“: %s"
+msgid "The app “%s” could not be created"
+msgstr "Неуспешно създаване на приложението „%s“"
 
-#: src/window-commands.c:2110
+#: src/window-commands.c:2112
 msgid "Replace Existing Web App?"
 msgstr "Да се замени ли съществуващото уеб приложение?"
 
-#: src/window-commands.c:2113
+#: src/window-commands.c:2115
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
@@ -4981,40 +4987,50 @@ msgstr ""
 "Вече съществува приложение с име „%s“, презаписването му води до замяна на "
 "съществуващото приложение"
 
-#: src/window-commands.c:2118
+#: src/window-commands.c:2120
 msgid "_Replace"
 msgstr "_Замяна"
 
-#: src/window-commands.c:2424
+#: src/window-commands.c:2426
 msgid "Screenshot finished"
 msgstr "Снимката на екрана е готова"
 
-#: src/window-commands.c:2546
+#: src/window-commands.c:2548
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2550
+#: src/window-commands.c:2552
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2596
+#: src/window-commands.c:2598
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2919
+# От кода може да се заключи, че става въпрос за обектите с историята за
+# най-посещавани страници при неотворена/празна страница.
+#: src/window-commands.c:2646
+msgid "Item removed from overview"
+msgstr "Елементът е премахнат от обобщения преглед"
+
+#: src/window-commands.c:2648
+msgid "Undo"
+msgstr "Отмяна"
+
+#: src/window-commands.c:2961
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "Търсачката „%s“ е добавена"
 
-#: src/window-commands.c:2945
+#: src/window-commands.c:2987
 msgid "Show"
 msgstr "Показване"
 
-#: src/window-commands.c:3174
+#: src/window-commands.c:3224
 msgid "Enable Caret Browsing Mode?"
 msgstr "Да се включи ли навигацията с курсор?"
 
-#: src/window-commands.c:3175
+#: src/window-commands.c:3225
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -5025,6 +5041,6 @@ msgstr ""
 "придвижвате чрез клавиатурата в тях. Желаете ли да включена навигацията с "
 "курсор?"
 
-#: src/window-commands.c:3180
+#: src/window-commands.c:3230
 msgid "_Enable"
 msgstr "_Включване"
