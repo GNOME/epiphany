@@ -29,6 +29,7 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
+#include "ephy-extension-storage-manager.h"
 #include "ephy-history-manager.h"
 #include "ephy-open-tabs-manager.h"
 #include "ephy-password-manager.h"
@@ -99,6 +100,7 @@ GNetworkMonitor         *ephy_shell_get_net_monitor         (EphyShell        *s
 EphyBookmarksManager    *ephy_shell_get_bookmarks_manager   (EphyShell        *shell);
 EphyHistoryManager      *ephy_shell_get_history_manager     (EphyShell        *shell);
 EphyOpenTabsManager     *ephy_shell_get_open_tabs_manager   (EphyShell        *shell);
+EphyExtensionStorageManager *ephy_shell_get_extension_storage_manager (EphyShell *shell);
 EphySyncService         *ephy_shell_get_sync_service        (EphyShell        *shell);
 
 GtkWidget               *ephy_shell_get_history_dialog      (EphyShell        *shell);

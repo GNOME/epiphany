@@ -93,6 +93,12 @@ gint64    ephy_sync_utils_get_history_sync_time         (void);
 void      ephy_sync_utils_set_history_sync_is_initial   (gboolean is_initial);
 gboolean  ephy_sync_utils_get_history_sync_is_initial   (void);
 
+gboolean  ephy_sync_utils_extensions_sync_is_enabled     (void);
+void      ephy_sync_utils_set_extensions_sync_time       (gint64 time);
+gint64    ephy_sync_utils_get_extensions_sync_time       (void);
+void      ephy_sync_utils_set_extensions_sync_is_initial (gboolean is_initial);
+gboolean  ephy_sync_utils_get_extensions_sync_is_initial (void);
+
 gboolean  ephy_sync_utils_open_tabs_sync_is_enabled     (void);
 void      ephy_sync_utils_set_open_tabs_sync_time       (gint64 time);
 gint64    ephy_sync_utils_get_open_tabs_sync_time       (void);

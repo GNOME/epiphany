@@ -64,6 +64,7 @@ struct _EphyShell {
   EphyBookmarksManager *bookmarks_manager;
   EphyHistoryManager *history_manager;
   EphyOpenTabsManager *open_tabs_manager;
+  EphyExtensionStorageManager *extension_storage_manager;
   EphyWebExtensionManager *web_extension_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
@@ -272,9 +273,9 @@ show_firefox_sync (GSimpleAction *action,
 {
   GtkWindow *window;
 
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
 
-  window_cmd_show_firefox_sync (NULL, NULL, EPHY_WINDOW (window));
+  window_cmd_show_firefox_sync (NULL, NULL, window);
 }
 
 static void
@@ -489,6 +490,11 @@ register_synchronizable_managers (EphyShell       *shell,
 
   if (ephy_sync_utils_open_tabs_sync_is_enabled ()) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_extensions_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_extension_storage_manager (shell));
     ephy_sync_service_register_manager (service, manager);
   }
 }
@@ -1028,6 +1034,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->history_manager);
   g_clear_object (&shell->open_tabs_manager);
+  g_clear_object (&shell->extension_storage_manager);
   g_clear_object (&shell->web_extension_manager);
   g_clear_pointer (&shell->webapp, ephy_web_application_free);
 
@@ -1326,6 +1333,17 @@ ephy_shell_get_open_tabs_manager (EphyShell *shell)
     shell->open_tabs_manager = ephy_open_tabs_manager_new (EPHY_TABS_CATALOG (shell));
 
   return shell->open_tabs_manager;
+}
+
+EphyExtensionStorageManager *
+ephy_shell_get_extension_storage_manager (EphyShell *shell)
+{
+  g_assert (EPHY_IS_SHELL (shell));
+
+  if (!shell->extension_storage_manager)
+    shell->extension_storage_manager = ephy_extension_storage_manager_new ();
+
+  return shell->extension_storage_manager;
 }
 
 /**

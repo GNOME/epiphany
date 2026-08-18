@@ -1,5 +1,7 @@
 libephysync_sources = [
   'debug/ephy-sync-debug.c',
+  'ephy-extension-storage-manager.c',
+  'ephy-extension-storage-record.c',
   'ephy-history-manager.c',
   'ephy-history-record.c',
   'ephy-open-tabs-manager.c',

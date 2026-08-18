@@ -81,6 +81,7 @@ struct _EphyFirefoxSyncDialog {
   GtkWidget *sync_bookmarks_row;
   GtkWidget *sync_passwords_row;
   GtkWidget *sync_history_row;
+  GtkWidget *sync_extensions_row;
   GtkWidget *sync_open_tabs_row;
   GtkWidget *sync_frequency_row;
   GtkWidget *sync_now_button;
@@ -124,6 +125,8 @@ sync_collection_toggled_cb (GtkWidget             *sw,
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
   } else if (GTK_WIDGET (sw) == sync_dialog->sync_history_row) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+  } else if (GTK_WIDGET (sw) == sync_dialog->sync_extensions_row) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_extension_storage_manager (shell));
   } else if (GTK_WIDGET (sw) == sync_dialog->sync_open_tabs_row) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
     ephy_open_tabs_manager_clear_cache (EPHY_OPEN_TABS_MANAGER (manager));
@@ -1066,6 +1069,7 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_bookmarks_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_passwords_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_history_row);
+  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_extensions_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_open_tabs_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_frequency_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_now_button);
@@ -1172,6 +1176,11 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_EXTENSIONS_ENABLED,
+                   sync_dialog->sync_extensions_row,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
                    sync_dialog->sync_open_tabs_row,
                    "active",
@@ -1208,6 +1217,9 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (sync_dialog->sync_history_row, "notify::active",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           sync_dialog, G_CONNECT_DEFAULT);
+  g_signal_connect_object (sync_dialog->sync_extensions_row, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_dialog, G_CONNECT_DEFAULT);
   g_signal_connect_object (sync_dialog->sync_open_tabs_row, "notify::active",

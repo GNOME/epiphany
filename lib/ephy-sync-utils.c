@@ -477,6 +477,36 @@ ephy_sync_utils_get_history_sync_is_initial (void)
 }
 
 gboolean
+ephy_sync_utils_extensions_sync_is_enabled (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_EXTENSIONS_ENABLED);
+}
+
+void
+ephy_sync_utils_set_extensions_sync_time (gint64 time)
+{
+  g_settings_set_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_EXTENSIONS_TIME, time);
+}
+
+gint64
+ephy_sync_utils_get_extensions_sync_time (void)
+{
+  return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_EXTENSIONS_TIME);
+}
+
+void
+ephy_sync_utils_set_extensions_sync_is_initial (gboolean is_initial)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_EXTENSIONS_INITIAL, is_initial);
+}
+
+gboolean
+ephy_sync_utils_get_extensions_sync_is_initial (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_EXTENSIONS_INITIAL);
+}
+
+gboolean
 ephy_sync_utils_open_tabs_sync_is_enabled (void)
 {
   return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_ENABLED);
