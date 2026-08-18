@@ -95,6 +95,8 @@ struct _EphyWebExtension {
   GCancellable *cancellable;
   char *local_storage_path;
   JsonNode *local_storage;
+  char *sync_storage_path;
+  JsonNode *sync_storage;
   GHashTable *web_accessible_resources;
   GHashTable *commands;
 };
@@ -824,6 +826,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->author, g_free);
   g_clear_pointer (&self->homepage_url, g_free);
   g_clear_pointer (&self->local_storage_path, g_free);
+  g_clear_pointer (&self->sync_storage_path, g_free);
   g_clear_pointer (&self->content_security_policy, g_free);
 
   g_clear_list (&self->content_scripts, (GDestroyNotify)web_extension_content_script_free);
@@ -833,6 +836,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->permissions, g_hash_table_unref);
   g_clear_pointer (&self->host_permissions, g_ptr_array_unref);
   g_clear_pointer (&self->local_storage, json_node_unref);
+  g_clear_pointer (&self->sync_storage, json_node_unref);
   g_clear_pointer (&self->web_accessible_resources, g_hash_table_unref);
   g_clear_pointer (&self->commands, g_hash_table_unref);
 
@@ -937,6 +941,23 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
 
   if (!self->local_storage)
     self->local_storage = json_node_init_object (json_node_alloc (), json_object_new ());
+
+  self->sync_storage_path = g_build_filename (ephy_config_dir (), "web_extensions",
+                                              extension_basename, "sync_storage.json", NULL);
+
+  {
+    g_autofree char *sync_storage_contents = NULL;
+    g_autoptr (GError) sync_error = NULL;
+
+    if (g_file_get_contents (self->sync_storage_path, &sync_storage_contents, NULL, NULL)) {
+      self->sync_storage = json_from_string (sync_storage_contents, &sync_error);
+      if (sync_error)
+        g_warning ("Failed to parse %s: %s", self->sync_storage_path, sync_error->message);
+    }
+  }
+
+  if (!self->sync_storage)
+    self->sync_storage = json_node_init_object (json_node_alloc (), json_object_new ());
 
   if ((child_array = ephy_json_object_get_array (root_object, "content_scripts")))
     json_array_foreach_element (child_array, web_extension_add_content_script, self);
@@ -1469,6 +1490,33 @@ void
 ephy_web_extension_clear_local_storage (EphyWebExtension *self)
 {
   self->local_storage = json_node_init_object (self->local_storage, json_object_new ());
+}
+
+JsonNode *
+ephy_web_extension_get_sync_storage (EphyWebExtension *self)
+{
+  return self->sync_storage;
+}
+
+void
+ephy_web_extension_save_sync_storage (EphyWebExtension *self)
+{
+  g_autoptr (GError) error = NULL;
+  g_autofree char *json = NULL;
+  g_autofree char *parent_dir = NULL;
+
+  parent_dir = g_path_get_dirname (self->sync_storage_path);
+  g_mkdir_with_parents (parent_dir, 0700);
+
+  json = json_to_string (self->sync_storage, TRUE);
+  if (!g_file_set_contents (self->sync_storage_path, json, -1, &error))
+    g_warning ("Failed to write %s: %s", self->sync_storage_path, error->message);
+}
+
+void
+ephy_web_extension_clear_sync_storage (EphyWebExtension *self)
+{
+  self->sync_storage = json_node_init_object (self->sync_storage, json_object_new ());
 }
 
 char *

@@ -178,6 +178,12 @@ void                   ephy_web_extension_save_local_storage              (EphyW
 
 void                   ephy_web_extension_clear_local_storage             (EphyWebExtension *self);
 
+JsonNode              *ephy_web_extension_get_sync_storage                (EphyWebExtension *self);
+
+void                   ephy_web_extension_save_sync_storage               (EphyWebExtension *self);
+
+void                   ephy_web_extension_clear_sync_storage              (EphyWebExtension *self);
+
 char                  *ephy_web_extension_create_sender_object            (EphyWebExtensionSender *sender);
 
 gboolean               ephy_web_extension_rule_matches_uri                (const char       *rule,
