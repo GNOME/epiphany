@@ -74,7 +74,7 @@ glib_requirement = '>= 2.84.0'
 gtk_requirement = '>= 4.21.0'
 libadwaita_requirement = '>= 1.8.alpha'
 nettle_requirement = '>= 3.4'
-webkitgtk_requirement = '>= 2.43.4'
+webkitgtk_requirement = '>= 2.53.90'
 
 conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_2_84')
 conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_2_84')

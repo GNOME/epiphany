@@ -25,6 +25,7 @@
 
 #include "ephy-window.h"
 
+#include <math.h>
 #include <stdlib.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -1301,6 +1302,7 @@ sync_tab_zoom (WebKitWebView *web_view,
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   g_autofree char *zoom_str = NULL;
   double zoom;
+  double magnification = 1.0;
 
   if (window->closing)
     return;
@@ -1324,7 +1326,10 @@ sync_tab_zoom (WebKitWebView *web_view,
   if (zoom <= ZOOM_MINIMAL)
     can_zoom_out = FALSE;
 
-  if (zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL))
+  magnification = webkit_web_view_get_magnification (web_view);
+
+  if (zoom != g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL) ||
+      (fabs (magnification - 1.0) > 0.001))
     can_zoom_normal = TRUE;
 
   action_group = ephy_window_get_action_group (window, "win");
@@ -2892,6 +2897,10 @@ ephy_window_connect_active_embed (EphyWindow *window)
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (web_view, "notify::zoom-level",
+                           G_CALLBACK (sync_tab_zoom),
+                           window, G_CONNECT_DEFAULT);
+
+  g_signal_connect_object (web_view, "notify::magnification",
                            G_CALLBACK (sync_tab_zoom),
                            window, G_CONNECT_DEFAULT);
 
@@ -5012,8 +5021,10 @@ ephy_window_set_zoom (EphyWindow *window,
     zoom = ephy_zoom_get_changed_zoom_level (current_zoom, -1);
 
   /* Use default zoom value if zoom is not set */
-  if (!zoom)
+  if (!zoom) {
+    webkit_web_view_set_magnification (web_view, 1.0);
     zoom = g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL);
+  }
 
   if (zoom != current_zoom)
     webkit_web_view_set_zoom_level (web_view, zoom);
