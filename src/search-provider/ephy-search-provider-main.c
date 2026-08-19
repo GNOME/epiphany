@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-search-provider.h"
 #include "ephy-shell.h"
@@ -48,6 +49,8 @@ main (gint    argc,
 
     return 1;
   }
+
+  ephy_debug_set_fatal_criticals ();
 
   search_provider = ephy_search_provider_new ();
   status = g_application_run (G_APPLICATION (search_provider), argc, argv);
