@@ -197,4 +197,14 @@ if get_option('unit_tests').enabled()
         web_extension_test,
         env: envs
   )
+
+  password_manager_test = executable('test-ephy-password-manager',
+    'ephy-password-manager-test.c',
+    dependencies: [ephymain_dep, ephysync_dep],
+    c_args: test_cargs,
+  )
+  test('Password manager test',
+       password_manager_test,
+       env: envs
+  )
 endif

@@ -95,5 +95,14 @@ gboolean             ephy_password_manager_forget_finish             (EphyPasswo
                                                                       GAsyncResult         *result,
                                                                       GError              **error);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
+GList               *ephy_password_manager_deduplicate_records      (EphyPasswordManager *self,
+                                                                     GList               *records);
+GPtrArray           *ephy_password_manager_handle_initial_merge     (EphyPasswordManager *self,
+                                                                     GList               *local_records,
+                                                                     GList               *remote_records);
+GPtrArray           *ephy_password_manager_handle_regular_merge     (EphyPasswordManager  *self,
+                                                                     GList               **local_records,
+                                                                     GList                *deleted_records,
+                                                                     GList                *updated_records);
 
 G_END_DECLS

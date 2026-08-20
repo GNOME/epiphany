@@ -512,9 +512,9 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   g_hash_table_unref (attributes);
 }
 
-static GList *
-deduplicate_records (EphyPasswordManager *manager,
-                     GList               *records)
+GList *
+ephy_password_manager_deduplicate_records (EphyPasswordManager *manager,
+                                           GList               *records)
 {
   GList *newest = records;
   guint64 newest_modified = ephy_password_record_get_time_password_changed (newest->data);
@@ -548,7 +548,7 @@ update_credentials_cb (GList    **records,
    * returned. We only want to have one saved at a time, so delete the rest.
    */
   if (g_list_length (*records) > 1)
-    *records = deduplicate_records (data->manager, *records);
+    *records = ephy_password_manager_deduplicate_records (data->manager, *records);
 
   if (*records) {
     /* If only password has changed, we can update the existing record directly
@@ -908,7 +908,7 @@ forget_cb (GList    **records,
    */
   if (g_list_length (*records) > 1) {
     g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
-    *records = deduplicate_records (self, *records);
+    *records = ephy_password_manager_deduplicate_records (self, *records);
   }
 
   record = EPHY_PASSWORD_RECORD ((*records)->data);
@@ -1053,7 +1053,7 @@ replace_existing_cb (GList    **records,
    */
   if (g_list_length (*records) > 1) {
     g_warning ("Deleting unexpected duplicate password records (this likely indicates a bug in EphyPasswordManager)");
-    *records = deduplicate_records (data->manager, *records);
+    *records = ephy_password_manager_deduplicate_records (data->manager, *records);
   }
 
   ephy_password_manager_forget_record (data->manager, (*records)->data, data->record, NULL);
@@ -1133,7 +1133,7 @@ delete_record_by_id (GList      *records,
   return records;
 }
 
-static GPtrArray *
+GPtrArray *
 ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
                                             GList               *local_records,
                                             GList               *remote_records)
@@ -1250,7 +1250,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
   return to_upload;
 }
 
-static GPtrArray *
+GPtrArray *
 ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
                                             GList               **local_records,
                                             GList                *deleted_records,
