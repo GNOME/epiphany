@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-08-13 15:12+0000\n"
-"PO-Revision-Date: 2026-08-15 18:49+0200\n"
+"POT-Creation-Date: 2026-08-19 23:00+0000\n"
+"PO-Revision-Date: 2026-08-21 14:50+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -32,7 +32,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.desktop.in.in:2
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:206
 #: embed/ephy-about-handler.c:238 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:429 src/window-commands.c:1231
+#: src/ephy-main.c:429
 msgid "Web"
 msgstr "Web"
 
@@ -842,6 +842,7 @@ msgstr "Data la care a fost făcută ultima sincronizare a preferatelor."
 #: data/org.gnome.epiphany.gschema.xml:434
 #: data/org.gnome.epiphany.gschema.xml:449
 #: data/org.gnome.epiphany.gschema.xml:464
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid "Initial sync or normal sync"
 msgstr "Sincronizare inițială sau sincronizare normală"
 
@@ -906,30 +907,58 @@ msgstr ""
 "prima dată, FALSE (FALS) în caz contrar."
 
 #: data/org.gnome.epiphany.gschema.xml:469
+msgid "Enable extension storage sync"
+msgstr "Activează sincronizarea informațiilor extensiilor"
+
+#: data/org.gnome.epiphany.gschema.xml:470
+msgid "TRUE if extension storage collection should be synced, FALSE otherwise."
+msgstr ""
+"TRUE (ADEVĂRAT) dacă informațiile extensiilor trebuie sincronizate, FALSE "
+"(FALS) în caz contrar."
+
+#: data/org.gnome.epiphany.gschema.xml:474
+msgid "Extension storage sync timestamp"
+msgstr "Data sincronizării informațiilor extensiilor"
+
+#: data/org.gnome.epiphany.gschema.xml:475
+msgid "The timestamp at which last extension storage sync was made."
+msgstr ""
+"Data la care a fost efectuată ultima sincronizare a informațiilor "
+"extensiilor."
+
+#: data/org.gnome.epiphany.gschema.xml:480
+msgid ""
+"TRUE if extension storage collection needs to be synced for the first time, "
+"FALSE otherwise."
+msgstr ""
+"TRUE (ADEVĂRAT) dacă informațiile extensiilor trebuie sincronizate pentru "
+"prima dată, FALSE (FALS) în caz contrar."
+
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid "Enable open tabs sync"
 msgstr "Activează sincronizarea filelor deschise"
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:485
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (ADEVĂRAT) dacă datele filelor deschise trebuie sincronizate, FALSE "
 "(FALS) în caz contrar."
 
-#: data/org.gnome.epiphany.gschema.xml:474
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid "Open tabs sync timestamp"
 msgstr "Data sincronizării filelor deschise"
 
-#: data/org.gnome.epiphany.gschema.xml:475
+#: data/org.gnome.epiphany.gschema.xml:490
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Data la care a fost făcută ultima sincronizare a filelor deschise."
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:501
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Decizia care se aplică atunci când se solicită permisiunea de acces la "
 "microfon pentru acest sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:487
+#: data/org.gnome.epiphany.gschema.xml:502
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -942,14 +971,14 @@ msgstr ""
 "permisiune, în timp ce „allow” și „deny” îi comunică să ia decizia automat "
 "la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:491
+#: data/org.gnome.epiphany.gschema.xml:506
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru localizarea geografică este "
 "cerută pentru acest sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:492
+#: data/org.gnome.epiphany.gschema.xml:507
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -962,14 +991,14 @@ msgstr ""
 "utilizatorului, în timp ce „allow” și „deny” îi comunică să ia decizia "
 "automat la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:496
+#: data/org.gnome.epiphany.gschema.xml:511
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de notificare este cerută pentru acest "
 "sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:497
+#: data/org.gnome.epiphany.gschema.xml:512
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -981,14 +1010,14 @@ msgstr ""
 "înseamnă că navigatorul trebuie să ceară utilizatorului permisiunea, în timp "
 "ce „allow” și „deny” îi comunică să ia decizia automat la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:501
+#: data/org.gnome.epiphany.gschema.xml:516
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de a salva parola este cerută pentru "
 "acest sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:502
+#: data/org.gnome.epiphany.gschema.xml:517
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -1000,13 +1029,13 @@ msgstr ""
 "navigatorul trebuie să ceară utilizatorului permisiunea, în timp ce „allow” "
 "și „deny” îi comunică să ia decizia automat la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:506
+#: data/org.gnome.epiphany.gschema.xml:521
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de a accesa camera web este cerută "
 "pentru acest sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:507
+#: data/org.gnome.epiphany.gschema.xml:522
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -1019,12 +1048,12 @@ msgstr ""
 "permisiunea, în timp ce „allow” și „deny” îi comunică să ia decizia automat "
 "la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:511
+#: data/org.gnome.epiphany.gschema.xml:526
 msgid "Decision to apply when display permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de afișare este cerută de acest sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:512
+#: data/org.gnome.epiphany.gschema.xml:527
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s display. The “undecided” default means the browser "
@@ -1037,14 +1066,14 @@ msgstr ""
 "utilizatorului, în timp ce „allow” (permite) și „deny” (respinge) îi "
 "comunică să ia decizia automat la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:516
+#: data/org.gnome.epiphany.gschema.xml:531
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea pentru reclame este cerută pentru acest "
 "sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:517
+#: data/org.gnome.epiphany.gschema.xml:532
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to allow advertisements. The “undecided” default means the browser global "
@@ -1056,13 +1085,13 @@ msgstr ""
 "că este utilizată configurarea globală a navigatorului, în timp ce „allow” "
 "și „deny” îi comunică să ia decizia automat la fiecare cerere."
 
-#: data/org.gnome.epiphany.gschema.xml:521
+#: data/org.gnome.epiphany.gschema.xml:536
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
 "Decizia de aplicat când permisiunea de redare automată este cerută pentru "
 "acest sit web"
 
-#: data/org.gnome.epiphany.gschema.xml:522
+#: data/org.gnome.epiphany.gschema.xml:537
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to autoplay. The “undecided” default means to allow autoplay of muted media, "
@@ -1098,7 +1127,7 @@ msgstr "O fereastră a navigatorului"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:36
-#: data/org.gnome.Epiphany.metainfo.xml.in.in:38 src/window-commands.c:1241
+#: data/org.gnome.Epiphany.metainfo.xml.in.in:38
 msgid "The GNOME Project"
 msgstr "Proiectul GNOME"
 
@@ -1115,7 +1144,7 @@ msgstr "Versiunea %s"
 msgid "About Web"
 msgstr "Despre Web"
 
-#: embed/ephy-about-handler.c:208 src/window-commands.c:1233
+#: embed/ephy-about-handler.c:208 src/window-commands.c:1231
 msgid "Epiphany Technology Preview"
 msgstr "Prezentare generală a tehnologiei Epiphany"
 
@@ -1134,7 +1163,7 @@ msgid "List of installed web apps"
 msgstr "Lista de aplicații web instalate"
 
 #. Translators: Desktop notification when a new web app is created.
-#: embed/ephy-about-handler.c:331 src/window-commands.c:2026
+#: embed/ephy-about-handler.c:331 src/window-commands.c:2017
 msgid "Launch"
 msgstr "Lansează"
 
@@ -1156,36 +1185,36 @@ msgstr ""
 "web…</b> din opțiunile paginii."
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:478
+#: embed/ephy-about-handler.c:487
 msgid "Welcome to Web"
 msgstr "Bun venit în Web"
 
-#: embed/ephy-about-handler.c:478
+#: embed/ephy-about-handler.c:487
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Începe navigarea și cele mai vizitate situri vor apărea aici."
 
-#: embed/ephy-about-handler.c:514
+#: embed/ephy-about-handler.c:523
 #: embed/web-process-extension/resources/js/overview.js:165
 msgid "Remove from overview"
 msgstr "Elimină din prezentare"
 
-#: embed/ephy-about-handler.c:515
+#: embed/ephy-about-handler.c:524
 #: embed/web-process-extension/resources/js/overview.js:174
 #: embed/web-process-extension/resources/js/overview.js:313
 msgid "Unpin from overview"
 msgstr "Desprinde din prezentare"
 
-#: embed/ephy-about-handler.c:515
+#: embed/ephy-about-handler.c:524
 #: embed/web-process-extension/resources/js/overview.js:174
 #: embed/web-process-extension/resources/js/overview.js:317
 msgid "Pin to overview"
 msgstr "Fixează în prezentare"
 
-#: embed/ephy-about-handler.c:604 embed/ephy-about-handler.c:605
+#: embed/ephy-about-handler.c:612 embed/ephy-about-handler.c:613
 msgid "Private Browsing"
 msgstr "Navigare privată"
 
-#: embed/ephy-about-handler.c:606
+#: embed/ephy-about-handler.c:614
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1196,14 +1225,14 @@ msgstr ""
 "șterse atunci când fereastra va fi închisă. Fișierele descărcate vor fi "
 "păstrate."
 
-#: embed/ephy-about-handler.c:610
+#: embed/ephy-about-handler.c:618
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Modul incognito ascunde activitatea doar de oamenii care folosesc acest "
 "calculator."
 
-#: embed/ephy-about-handler.c:612
+#: embed/ephy-about-handler.c:620
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1224,17 +1253,17 @@ msgstr "Introdu PIN-ul pentru %s, pentru autentificarea la %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:321
 #: embed/ephy-client-certificate-manager.c:445 embed/ephy-download.c:765
-#: embed/ephy-web-view.c:1320 src/ephy-history-dialog.c:860
-#: src/ephy-passwords-view.c:156 src/ephy-shell.c:418 src/ephy-window.c:275
+#: embed/ephy-web-view.c:1330 src/ephy-history-dialog.c:873
+#: src/ephy-passwords-view.c:156 src/ephy-shell.c:419 src/ephy-window.c:275
 #: src/ephy-window.c:2348 src/preferences/autofill-view.c:365
 #: src/preferences/extension-view.c:115
 #: src/resources/gtk/bookmark-properties.blp:29
-#: src/resources/gtk/firefox-sync-dialog.blp:100
+#: src/resources/gtk/firefox-sync-dialog.blp:105
 #: src/resources/gtk/history-dialog.blp:55
 #: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:364
 #: src/window-commands.c:569 src/window-commands.c:935
-#: src/window-commands.c:1411 src/window-commands.c:2119
-#: src/window-commands.c:3229
+#: src/window-commands.c:1402 src/window-commands.c:2110
+#: src/window-commands.c:3226
 msgid "_Cancel"
 msgstr "_Anulează"
 
@@ -1364,7 +1393,7 @@ msgstr "Completează acest spațiu gol"
 msgid "Do Not Autofill"
 msgstr "Nu completa automat"
 
-#: embed/ephy-embed-shell.c:708
+#: embed/ephy-embed-shell.c:721
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI-ul %s nu este autorizat pentru accesarea resursei Epiphany %s"
@@ -1766,58 +1795,58 @@ msgid "All supported types"
 msgstr "Toate tipurile acceptate"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:594
+#: embed/ephy-web-view.c:600
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Acest formular este nesigur ‒ parola nu va fi ținută privată"
 
-#: embed/ephy-web-view.c:595 embed/ephy-web-view.c:3587
+#: embed/ephy-web-view.c:601 embed/ephy-web-view.c:3597
 msgid "_Dismiss"
 msgstr "Î_nlătură"
 
-#: embed/ephy-web-view.c:770
+#: embed/ephy-web-view.c:776
 msgid "Web process crashed"
 msgstr "Procesul web s-a oprit"
 
-#: embed/ephy-web-view.c:773
+#: embed/ephy-web-view.c:779
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Procesul web a fost terminat din cauza depășirii limitei de memorie"
 
-#: embed/ephy-web-view.c:776
+#: embed/ephy-web-view.c:782
 msgid "Web process terminated by API request"
 msgstr "Proces web terminat prin cerere API"
 
-#: embed/ephy-web-view.c:821
+#: embed/ephy-web-view.c:827
 msgid "Page Unresponsive"
 msgstr "Pagina nu răspunde"
 
-#: embed/ephy-web-view.c:824
+#: embed/ephy-web-view.c:830
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "Pagina actuală „%s” nu răspunde"
 
-#: embed/ephy-web-view.c:828
+#: embed/ephy-web-view.c:834
 msgid "_Wait"
 msgstr "_Așteaptă"
 
-#: embed/ephy-web-view.c:829
+#: embed/ephy-web-view.c:835
 msgid "Force _Stop"
 msgstr "_Oprire forțată"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1075
+#: embed/ephy-web-view.c:1085
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Se încarcă „%s”…"
 
-#: embed/ephy-web-view.c:1077 embed/ephy-web-view.c:1083
+#: embed/ephy-web-view.c:1087 embed/ephy-web-view.c:1093
 msgid "Loading…"
 msgstr "Se încarcă…"
 
-#: embed/ephy-web-view.c:1313
+#: embed/ephy-web-view.c:1323
 msgid "Delete Web App?"
 msgstr "Se șterge aplicația web?"
 
-#: embed/ephy-web-view.c:1316
+#: embed/ephy-web-view.c:1326
 #, c-format
 msgid ""
 "“%s” will be removed. You will have to re-install the website as an app from "
@@ -1826,13 +1855,13 @@ msgstr ""
 "„%s” va fi eliminată. Pentru a-l utiliza din nou, situl web va trebui "
 "reinstalat ca aplicație."
 
-#: embed/ephy-web-view.c:1321 src/ephy-passwords-view.c:157
+#: embed/ephy-web-view.c:1331 src/ephy-passwords-view.c:157
 #: src/preferences/autofill-view.c:366 src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "Șt_erge"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1749
+#: embed/ephy-web-view.c:1759
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1840,7 +1869,7 @@ msgstr ""
 "web."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1754
+#: embed/ephy-web-view.c:1764
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1849,20 +1878,20 @@ msgstr ""
 "data în calendarul calculatorului."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1759
+#: embed/ephy-web-view.c:1769
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identificarea sitului web nu a fost emisă de o organizație de încredere."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1764
+#: embed/ephy-web-view.c:1774
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Identificarea sitului web nu a putut fi procesată. Poate fi deteriorată."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1769
+#: embed/ephy-web-view.c:1779
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1871,7 +1900,7 @@ msgstr ""
 "emis-o."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1774
+#: embed/ephy-web-view.c:1784
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1880,7 +1909,7 @@ msgstr ""
 "cifrare foarte slabă."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1779
+#: embed/ephy-web-view.c:1789
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1890,24 +1919,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1845 embed/ephy-web-view.c:1902
+#: embed/ephy-web-view.c:1855 embed/ephy-web-view.c:1912
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problemă la încărcarea paginii"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1848
+#: embed/ephy-web-view.c:1858
 msgid "Unable to display this website"
 msgstr "Nu s-a putut afișa acest sit web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1853
+#: embed/ephy-web-view.c:1863
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Situl de la %s nu pare a fi disponibil."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1857
+#: embed/ephy-web-view.c:1867
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1916,7 +1945,7 @@ msgstr ""
 "verificat dacă conexiunea la internet funcționează corespunzător."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1868
+#: embed/ephy-web-view.c:1878
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Eroarea precisă a fost: %s"
@@ -1926,33 +1955,33 @@ msgstr "Eroarea precisă a fost: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1873 embed/ephy-web-view.c:1926
-#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:1998
+#: embed/ephy-web-view.c:1883 embed/ephy-web-view.c:1936
+#: embed/ephy-web-view.c:1972 embed/ephy-web-view.c:2008
 #: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1597
 msgid "Reload"
 msgstr "Reîncarcă"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1877 embed/ephy-web-view.c:1930
-#: embed/ephy-web-view.c:1966 embed/ephy-web-view.c:2002
+#: embed/ephy-web-view.c:1887 embed/ephy-web-view.c:1940
+#: embed/ephy-web-view.c:1976 embed/ephy-web-view.c:2012
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1905
+#: embed/ephy-web-view.c:1915
 msgid "Oops! There may be a problem"
 msgstr "Oh, nu! A apărut o problemă"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1910
+#: embed/ephy-web-view.c:1920
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Este posibil ca pagina %s să fi cauzat închiderea neașteptată a aplicației."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1917
+#: embed/ephy-web-view.c:1927
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1960,18 +1989,18 @@ msgstr ""
 "programează %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1951
+#: embed/ephy-web-view.c:1961
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problemă la afișarea paginii"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1954
+#: embed/ephy-web-view.c:1964
 msgid "Oops!"
 msgstr "Eroare!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1957
+#: embed/ephy-web-view.c:1967
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1980,18 +2009,18 @@ msgstr ""
 "accesează altă pagină pentru a continua."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1987
+#: embed/ephy-web-view.c:1997
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Pagină care nu răspunde"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1990
+#: embed/ephy-web-view.c:2000
 msgid "Uh-oh!"
 msgstr "Probleme!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:1993
+#: embed/ephy-web-view.c:2003
 msgid ""
 "This page has been unresponsive for too long. Please reload or visit a "
 "different page to continue."
@@ -2000,18 +2029,18 @@ msgstr ""
 "pagină pentru a continua."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2029
+#: embed/ephy-web-view.c:2039
 #, c-format
 msgid "Security Violation"
 msgstr "Încălcare a securității"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2032
+#: embed/ephy-web-view.c:2042
 msgid "This Connection is Not Secure"
 msgstr "Această conexiune nu este sigură"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2037
+#: embed/ephy-web-view.c:2047
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -2022,41 +2051,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2047 embed/ephy-web-view.c:2097
+#: embed/ephy-web-view.c:2057 embed/ephy-web-view.c:2107
 msgid "Go Back"
 msgstr "Înapoi"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2050 embed/ephy-web-view.c:2100
+#: embed/ephy-web-view.c:2060 embed/ephy-web-view.c:2110
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2053
+#: embed/ephy-web-view.c:2063
 msgid "Accept Risk and Proceed"
 msgstr "Acceptă riscul și continuă"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2057
+#: embed/ephy-web-view.c:2067
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2080 embed/ephy-web-view.c:2083
+#: embed/ephy-web-view.c:2090 embed/ephy-web-view.c:2093
 #, c-format
 msgid "File not found"
 msgstr "Nu s-a găsit fișierul"
 
-#: embed/ephy-web-view.c:2088
+#: embed/ephy-web-view.c:2098
 #, c-format
 msgid "%s could not be found."
 msgstr "%s nu s-a găsit."
 
-#: embed/ephy-web-view.c:2090
+#: embed/ephy-web-view.c:2100
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also "
@@ -2065,11 +2094,11 @@ msgstr ""
 "Trebuie verificat dacă numele fișierului conține erori de majuscule sau alte "
 "greșeli de tastare și dacă fișierul a fost mutat, redenumit sau șters."
 
-#: embed/ephy-web-view.c:2153
+#: embed/ephy-web-view.c:2163
 msgid "None specified"
 msgstr "Nespecificat"
 
-#: embed/ephy-web-view.c:2267
+#: embed/ephy-web-view.c:2277
 msgid "Technical information"
 msgstr "Informații tehnice"
 
@@ -2690,16 +2719,16 @@ msgstr "Se pornește…"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/ephy-firefox-sync-dialog.c:152
+#: src/ephy-firefox-sync-dialog.c:155
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Ultima sincronizare: %s"
 
-#: src/ephy-firefox-sync-dialog.c:586 src/ephy-firefox-sync-dialog.c:763
+#: src/ephy-firefox-sync-dialog.c:589 src/ephy-firefox-sync-dialog.c:766
 msgid "Something went wrong, please try again later."
 msgstr "Ceva nu a funcționat, încearcă mai târziu."
 
-#: src/ephy-firefox-sync-dialog.c:1019
+#: src/ephy-firefox-sync-dialog.c:1022
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
@@ -2720,35 +2749,35 @@ msgstr "_Nu selecționa nimic"
 msgid "Select _All"
 msgstr "Selecțione_ază tot"
 
-#: src/ephy-history-dialog.c:442
+#: src/ephy-history-dialog.c:455
 msgid "Link copied"
 msgstr "Legătură copiată"
 
-#: src/ephy-history-dialog.c:531
+#: src/ephy-history-dialog.c:544
 msgid "Remove the selected pages from history"
 msgstr "Elimină paginile alese din cronologie"
 
-#: src/ephy-history-dialog.c:538
+#: src/ephy-history-dialog.c:551
 msgid "Copy URL"
 msgstr "Copiază URL-ul"
 
-#: src/ephy-history-dialog.c:856
+#: src/ephy-history-dialog.c:869
 msgid "Clear Browsing History?"
 msgstr "Se șterge cronologia de navigare?"
 
-#: src/ephy-history-dialog.c:857
+#: src/ephy-history-dialog.c:870
 msgid "All visible links will be permanently deleted"
 msgstr "Toate legăturile vizibile vor fi șterse definitiv"
 
-#: src/ephy-history-dialog.c:861
+#: src/ephy-history-dialog.c:874
 msgid "Cl_ear"
 msgstr "Șt_erge"
 
-#: src/ephy-history-dialog.c:1076
+#: src/ephy-history-dialog.c:1089
 msgid "Unavailable in Incognito Mode"
 msgstr "Indisponibil în modul incognito"
 
-#: src/ephy-history-dialog.c:1079
+#: src/ephy-history-dialog.c:1092
 msgid "Clear History"
 msgstr "Șterge cronologia"
 
@@ -2951,15 +2980,15 @@ msgstr "Autoredare multimedia"
 msgid "Without Sound"
 msgstr "Fără sunet"
 
-#: src/ephy-shell.c:415
+#: src/ephy-shell.c:416
 msgid "Uninstall Web App?"
 msgstr "Se dezinstalează aplicația web?"
 
-#: src/ephy-shell.c:415
+#: src/ephy-shell.c:416
 msgid "This web appʼs data will be permanently deleted"
 msgstr "Datele acestei aplicații web vor fi șterse definitiv"
 
-#: src/ephy-shell.c:419
+#: src/ephy-shell.c:420
 msgid "_Uninstall"
 msgstr "_Dezinstalează"
 
@@ -2971,7 +3000,7 @@ msgstr "Modifică _preferata…"
 msgid "Add _Bookmark…"
 msgstr "Adaugă în _Preferate…"
 
-#: src/ephy-suggestion-model.c:663
+#: src/ephy-suggestion-model.c:670
 #, c-format
 msgid "Could not load search engines suggestions: %s"
 msgstr "Nu s-au putut încărca sugestiile motorului de căutare: %s"
@@ -3281,11 +3310,11 @@ msgstr "_Permite"
 msgid "Leave Website?"
 msgstr "Se părăsește situl?"
 
-#: src/ephy-window.c:3485 src/ephy-window.c:5161 src/window-commands.c:1408
+#: src/ephy-window.c:3485 src/ephy-window.c:5161 src/window-commands.c:1399
 msgid "A form was modified and has not been submitted"
 msgstr "Un formular a fost modificat și nu a fost trimis"
 
-#: src/ephy-window.c:3486 src/ephy-window.c:5162 src/window-commands.c:1412
+#: src/ephy-window.c:3486 src/ephy-window.c:5162 src/window-commands.c:1403
 msgid "_Discard Form"
 msgstr "I_gnoră formularul"
 
@@ -3941,26 +3970,30 @@ msgid "Sync _History"
 msgstr "Sincronizează _cronologia"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:78
+msgid "Sync _Extensions"
+msgstr "Sincronizează _extensiile"
+
+#: src/resources/gtk/firefox-sync-dialog.blp:83
 msgid "Sync Open _Tabs"
 msgstr "Sincronizează _filele deschise"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:82
+#: src/resources/gtk/firefox-sync-dialog.blp:87
 msgid "S_ynced Tabs"
 msgstr "File _sincronizate"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:90
+#: src/resources/gtk/firefox-sync-dialog.blp:95
 msgid "Frequency"
 msgstr "Frecvența"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:96
+#: src/resources/gtk/firefox-sync-dialog.blp:101
 msgid "Device name"
 msgstr "Numele aparatului"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:108
+#: src/resources/gtk/firefox-sync-dialog.blp:113
 msgid "_Save"
 msgstr "_Salvează"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:116
+#: src/resources/gtk/firefox-sync-dialog.blp:121
 msgid "_Change"
 msgstr "S_chimbă"
 
@@ -4288,12 +4321,12 @@ msgid "_Custom"
 msgstr "_Personalizată"
 
 #: src/resources/gtk/prefs-general-page.blp:115
-msgid "Ask o_n Download"
-msgstr "Î_ntreabă la descărcare"
+msgid "Ask _Where to Save Files Before Downloading"
+msgstr "Întreabă înainte de descărcare _unde să fie salvate fișierele"
 
 #: src/resources/gtk/prefs-general-page.blp:121
-msgid "_Download Folder"
-msgstr "_Descarcă în dosarul"
+msgid "Default Download _Folder"
+msgstr "_Dosarul prestabilit"
 
 #: src/resources/gtk/prefs-general-page.blp:161
 msgid "Search Engine"
@@ -4309,7 +4342,7 @@ msgstr "Sesiune"
 
 #: src/resources/gtk/prefs-general-page.blp:177
 msgid "Start in _Incognito Mode"
-msgstr "Pornește în modul incognito"
+msgstr "Pornește în modul _incognito"
 
 #: src/resources/gtk/prefs-general-page.blp:182
 msgid "_Restore Tabs on Startup"
@@ -4324,7 +4357,7 @@ msgid "Mouse _Gestures"
 msgstr "_Gesturi maus"
 
 #: src/resources/gtk/prefs-general-page.blp:196
-msgid "S_witch Immediately to New Tabs"
+msgid "Switch Immediately to New _Tabs"
 msgstr "_Treci imediat la filele noi"
 
 #: src/resources/gtk/prefs-general-page.blp:201
@@ -4888,19 +4921,19 @@ msgstr "Aplicația web „%s” nu a putut fi ștearsă"
 msgid "Options for %s"
 msgstr "Opțiuni pentru %s"
 
-#: src/webextension/ephy-web-extension.c:888
-#: src/webextension/ephy-web-extension.c:900
+#: src/webextension/ephy-web-extension.c:892
+#: src/webextension/ephy-web-extension.c:904
 #, c-format
 msgid "Failed to parse manifest.json: %s"
 msgstr "Nu s-a putut analiza manifest.json: %s"
 
-#: src/webextension/ephy-web-extension.c:894
+#: src/webextension/ephy-web-extension.c:898
 #, c-format
 msgid "manifest.json not found"
 msgstr "manifest.json nu s-a găsit"
 
-#: src/webextension/ephy-web-extension.c:906
-#: src/webextension/ephy-web-extension.c:912
+#: src/webextension/ephy-web-extension.c:910
+#: src/webextension/ephy-web-extension.c:916
 #, c-format
 msgid "manifest.json invalid"
 msgstr "manifest.json incorect"
@@ -4992,7 +5025,7 @@ msgstr "parole.csv"
 msgid "Epiphany Canary"
 msgstr "Epiphany Canary"
 
-#: src/window-commands.c:1251
+#: src/window-commands.c:1243
 msgid "translator-credits"
 msgstr ""
 "Mișu Moldovan <dumol@gnome.ro>\n"
@@ -5002,77 +5035,77 @@ msgstr ""
 "Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>\n"
 "Antonio Marin <gnmer.6qxyg@slmail.me>"
 
-#: src/window-commands.c:1407
+#: src/window-commands.c:1398
 msgid "Reload Website?"
 msgstr "Se reîncarcă situl web?"
 
-#: src/window-commands.c:1955
+#: src/window-commands.c:1946
 msgid "New Web App"
 msgstr "Aplicație web nouă"
 
-#: src/window-commands.c:2008
+#: src/window-commands.c:1999
 #, c-format
 msgid "The app “%s” is ready to be used"
 msgstr "Aplicația „%s” este gata de utilizare"
 
-#: src/window-commands.c:2011
+#: src/window-commands.c:2002
 #, c-format
 msgid "The app “%s” could not be created"
 msgstr "Nu s-a putut crea aplicația „%s”"
 
-#: src/window-commands.c:2112
+#: src/window-commands.c:2103
 msgid "Replace Existing Web App?"
 msgstr "Se înlocuiește aplicația web existentă?"
 
-#: src/window-commands.c:2115
+#: src/window-commands.c:2106
 #, c-format
 msgid ""
 "An application named “%s” already exists, replacing it will overwrite it"
 msgstr ""
 "O aplicație cu numele „%s” există deja, înlocuirea acesteia o va suprascrie"
 
-#: src/window-commands.c:2120
+#: src/window-commands.c:2111
 msgid "_Replace"
 msgstr "Înlocui_ește"
 
-#: src/window-commands.c:2426
+#: src/window-commands.c:2417
 msgid "Screenshot finished"
 msgstr "Instantaneu terminat"
 
-#: src/window-commands.c:2548
+#: src/window-commands.c:2539
 msgid "HTML"
 msgstr "HTML"
 
-#: src/window-commands.c:2552
+#: src/window-commands.c:2543
 msgid "MHTML"
 msgstr "MHTML"
 
-#: src/window-commands.c:2598
+#: src/window-commands.c:2589
 msgid "PNG"
 msgstr "PNG"
 
-#: src/window-commands.c:2646
+#: src/window-commands.c:2637
 msgid "Item removed from overview"
 msgstr "Element eliminat din prezentare"
 
-#: src/window-commands.c:2648
+#: src/window-commands.c:2639
 msgid "Undo"
 msgstr "Anulează"
 
-#: src/window-commands.c:2961
+#: src/window-commands.c:2958
 #, c-format
 msgid "Search engine “%s” added"
 msgstr "Motorul de căutare „%s” a fost adăugat"
 
-#: src/window-commands.c:2987
+#: src/window-commands.c:2984
 msgid "Show"
 msgstr "Arată"
 
-#: src/window-commands.c:3224
+#: src/window-commands.c:3221
 msgid "Enable Caret Browsing Mode?"
 msgstr "Se activează navigarea cu cursorul?"
 
-#: src/window-commands.c:3225
+#: src/window-commands.c:3222
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -5082,6 +5115,6 @@ msgstr ""
 "Această caracteristică poziționează un cursor mobil în paginile web, "
 "permițând navigarea folosind tastatura. Se activează navigarea cu cursorul?"
 
-#: src/window-commands.c:3230
+#: src/window-commands.c:3227
 msgid "_Enable"
 msgstr "Activ_ează"
