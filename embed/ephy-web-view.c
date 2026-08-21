@@ -477,7 +477,7 @@ history_service_query_urls_cb (EphyHistoryService *service,
                                GAsyncResult       *result,
                                EphyWebView        *view)
 {
-  const char *url = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+  const char *url;
   g_autoptr (GError) error = NULL;
   g_autolist (EphyHistoryURL) urls = NULL;
 
@@ -489,6 +489,8 @@ history_service_query_urls_cb (EphyHistoryService *service,
     g_warning ("Failed to query overview URLs: %s", error->message);
     goto out;
   }
+
+  url = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
 
   /* Have we already started a new load? */
   if (g_strcmp0 (url, view->pending_snapshot_uri) != 0)
