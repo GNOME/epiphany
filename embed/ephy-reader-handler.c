@@ -180,8 +180,8 @@ readability_js_finish_cb (GObject      *object,
   reading_time = readability_get_property_string (value, "reading_time");
   title = webkit_web_view_get_title (web_view);
 
-  encoded_byline = byline ? ephy_encode_for_html_entity (byline) : g_strdup ("");
-  encoded_title = ephy_encode_for_html_entity (title);
+  encoded_byline = byline ? ephy_encode_for_html (byline) : g_strdup ("");
+  encoded_title = ephy_encode_for_html (title);
 
   html = g_string_new (NULL);
   style_css = g_resources_lookup_data ("/org/gnome/epiphany/readability/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);

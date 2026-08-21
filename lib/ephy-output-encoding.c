@@ -24,7 +24,7 @@
 #include <glib.h>
 
 char *
-ephy_encode_for_html_entity (const char *input)
+ephy_encode_for_html (const char *input)
 {
   GString *str = g_string_new (input);
 

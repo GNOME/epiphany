@@ -315,8 +315,8 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
        * fine because it's constructed by Epiphany.
        */
       encoded_icon_path = ephy_encode_for_html_attribute (icon_path);
-      encoded_name = ephy_encode_for_html_entity (app->name);
-      encoded_url = ephy_encode_for_html_entity (app->url);
+      encoded_name = ephy_encode_for_html (app->name);
+      encoded_url = ephy_encode_for_html (app->url);
       g_string_append_printf (data_str,
                               "<tbody><tr id =\"%s\">"
                               "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
@@ -509,7 +509,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
       ephy_embed_shell_schedule_thumbnail_update (shell, url);
 
     /* Title and URL are controlled by web content and could be malicious. */
-    entity_encoded_title = ephy_encode_for_html_entity (url->title);
+    entity_encoded_title = ephy_encode_for_html (url->title);
     attribute_encoded_title = ephy_encode_for_html_attribute (url->title);
     encoded_url = ephy_encode_for_html_attribute (url->url);
     g_string_append_printf (data_str,
