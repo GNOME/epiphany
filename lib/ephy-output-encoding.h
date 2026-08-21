@@ -36,7 +36,7 @@ G_BEGIN_DECLS
  * Do not attempt to do so anywhere except a quoted data value.
  */
 
-char *ephy_encode_for_html_entity    (const char *input);
+char *ephy_encode_for_html           (const char *input);
 char *ephy_encode_for_html_attribute (const char *input);
 
 G_END_DECLS

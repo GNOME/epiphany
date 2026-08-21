@@ -1861,7 +1861,7 @@ format_network_error_page (EphyWebView  *view,
   /* Message title when a site cannot be loaded due to a network error. */
   *message_title = g_strdup (_("Unable to display this website"));
 
-  encoded_origin = ephy_encode_for_html_entity (origin);
+  encoded_origin = ephy_encode_for_html (origin);
   formatted_origin = g_strdup_printf ("<strong>%s</strong>", encoded_origin);
   /* Error details when a site cannot be loaded due to a network error. */
   first_paragraph = g_strdup_printf (_("The site at %s seems to be "
@@ -1875,7 +1875,7 @@ format_network_error_page (EphyWebView  *view,
                                    first_paragraph,
                                    second_paragraph);
 
-  encoded_reason = ephy_encode_for_html_entity (reason);
+  encoded_reason = ephy_encode_for_html (reason);
   formatted_reason = g_strdup_printf ("<i>%s</i>", encoded_reason);
   g_free (first_paragraph);
   /* Technical details when a site cannot be loaded due to a network error. */
@@ -1918,7 +1918,7 @@ format_crash_error_page (EphyWebView  *view,
   /* Message title when a site cannot be loaded due to a page crash error. */
   *message_title = g_strdup (_("Oops! There may be a problem"));
 
-  encoded_uri = ephy_encode_for_html_entity (uri);
+  encoded_uri = ephy_encode_for_html (uri);
   formatted_uri = g_strdup_printf ("<strong>%s</strong>", encoded_uri);
   /* Error details when a site cannot be loaded due to a page crash error. */
   first_paragraph = g_strdup_printf (_("The page %s may have caused Web to "
@@ -2045,7 +2045,7 @@ format_tls_error_page (EphyWebView  *view,
   /* Message title when a site is not loaded due to an invalid TLS certificate. */
   *message_title = g_strdup (_("This Connection is Not Secure"));
 
-  encoded_origin = ephy_encode_for_html_entity (origin);
+  encoded_origin = ephy_encode_for_html (origin);
   formatted_origin = g_strdup_printf ("<strong>%s</strong>", encoded_origin);
   /* Error details when a site is not loaded due to an invalid TLS certificate. */
   first_paragraph = g_strdup_printf (_("This does not look like the real %s. "
@@ -2096,7 +2096,7 @@ format_no_such_file_error_page (EphyWebView  *view,
   /* Message title on the no such file error page. */
   *message_title = g_strdup (_("File not found"));
 
-  encoded_address = ephy_encode_for_html_entity (view->address);
+  encoded_address = ephy_encode_for_html (view->address);
   formatted_address = g_strdup_printf ("<strong>%s</strong>", encoded_address);
 
   first_paragraph = g_strdup_printf (_("%s could not be found."),

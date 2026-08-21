@@ -130,8 +130,8 @@ web_resource_data_cb (WebKitWebResource     *resource,
   memcpy (data_str, data, length);
   data_str[length] = '\0';
 
-  encoded_str = ephy_encode_for_html_entity (data_str);
-  encoded_uri = ephy_encode_for_html_entity (webkit_web_resource_get_uri (resource));
+  encoded_str = ephy_encode_for_html (data_str);
+  encoded_uri = ephy_encode_for_html (webkit_web_resource_get_uri (resource));
 
   html = g_strdup_printf ("<head>"
                           "  <link rel='stylesheet' href='ephy-resource:///org/gnome/epiphany/highlightjs/nnfx-light.css' media='(prefers-color-scheme: no-preference), (prefers-color-scheme: light)'>"
