@@ -291,7 +291,7 @@ on_find_urls_cb (EphyHistoryService *service,
                  GAsyncResult       *result,
                  gpointer            user_data)
 {
-  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
+  EphyHistoryDialog *self = user_data;
   g_autoptr (GError) error = NULL;
   GList *urls;
 
@@ -390,7 +390,7 @@ on_browse_history_deleted_cb (EphyHistoryService *service,
                               GAsyncResult       *result,
                               gpointer            user_data)
 {
-  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
+  EphyHistoryDialog *self = user_data;
   g_autoptr (GError) error = NULL;
   gboolean success;
 
