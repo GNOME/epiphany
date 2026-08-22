@@ -218,6 +218,58 @@ test_ephy_shell_tab_append (void)
 }
 
 static void
+test_ephy_shell_open_uris_tab_reuse (void)
+{
+  EphyShell *ephy_shell;
+  GtkWidget *window;
+  EphyTabView *tab_view;
+  EphyEmbed *embed;
+  EphyWebView *view;
+  GMainLoop *loop;
+  const char *uris1[] = { "about:epiphany", NULL };
+  const char *uris2[] = { "about:applications", NULL };
+
+  ephy_shell = ephy_shell_get_default ();
+  window = GTK_WIDGET (ephy_window_new ());
+  gtk_window_present (GTK_WINDOW (window));
+  tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
+
+  /* 1. Create a tab loading the homepage (overview). */
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
+  embed = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL,
+                              EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+  view = ephy_embed_get_web_view (embed);
+  ephy_web_view_load_homepage (view);
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
+
+  g_assert_cmpint (ephy_tab_view_get_n_pages (tab_view), ==, 1);
+  ephy_test_utils_check_ephy_web_view_address (view, "ephy-about:overview");
+
+  /* 2. Open an external URI when the active tab is empty/homepage.
+   * This should reuse the existing tab without creating an additional one.
+   */
+  loop = ephy_test_utils_setup_wait_until_load_is_committed (view);
+  ephy_shell_open_uris (ephy_shell, uris1, EPHY_STARTUP_NEW_TAB);
+  ephy_test_utils_wait_until_load_is_committed (loop);
+
+  g_assert_cmpint (ephy_tab_view_get_n_pages (tab_view), ==, 1);
+  ephy_test_utils_check_ephy_embed_address (embed, "ephy-about:epiphany");
+
+  /* 3. Open another external URI when the active tab is already loaded with content.
+   * This should open a new tab instead of overwriting the current page.
+   */
+  loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
+  ephy_shell_open_uris (ephy_shell, uris2, EPHY_STARTUP_NEW_TAB);
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, FALSE);
+  ephy_test_utils_ensure_web_views_are_loaded (loop);
+
+  g_assert_cmpint (ephy_tab_view_get_n_pages (tab_view), ==, 2);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
+static void
 test_ephy_shell_tab_no_history (void)
 {
   /* TODO: BackForwardList */
@@ -278,6 +330,9 @@ main (int   argc,
 
   g_test_add_func ("/src/ephy-shell/tab_append",
                    test_ephy_shell_tab_append);
+
+  g_test_add_func ("/src/ephy-shell/open_uris_tab_reuse",
+                   test_ephy_shell_open_uris_tab_reuse);
 
   g_test_add_func ("/src/ephy-shell/tab_no_history",
                    test_ephy_shell_tab_no_history);
