@@ -115,6 +115,12 @@ GdkPixbuf             *ephy_web_extension_load_pixbuf                     (EphyW
 
 gboolean               ephy_web_extension_has_page_action                 (EphyWebExtension *self);
 
+const char            *ephy_web_extension_get_page_action_title          (EphyWebExtension *self);
+
+const char            *ephy_web_extension_get_page_action_icon           (EphyWebExtension *self);
+
+const char            *ephy_web_extension_get_page_action_popup          (EphyWebExtension *self);
+
 gboolean               ephy_web_extension_has_browser_action              (EphyWebExtension *self);
 
 gboolean               ephy_web_extension_has_background_web_view         (EphyWebExtension *self);

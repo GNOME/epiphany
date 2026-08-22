@@ -48,6 +48,7 @@
 #include "ephy-header-bar.h"
 #include "ephy-location-entry.h"
 #include "ephy-notification.h"
+#include "ephy-pixbuf-utils.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
@@ -793,6 +794,10 @@ create_page_action_widget (EphyWebExtensionManager *self,
 {
   GtkWidget *image;
   GtkWidget *button;
+  const char *title;
+  const char *icon_path;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
+  g_autoptr (GdkTexture) texture = NULL;
 
   button = gtk_button_new ();
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -800,6 +805,20 @@ create_page_action_widget (EphyWebExtensionManager *self,
   image = gtk_image_new ();
   gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
   gtk_button_set_child (GTK_BUTTON (button), image);
+
+  title = ephy_web_extension_get_page_action_title (web_extension);
+  if (title)
+    gtk_widget_set_tooltip_text (button, title);
+
+  icon_path = ephy_web_extension_get_page_action_icon (web_extension);
+  if (icon_path)
+    pixbuf = ephy_web_extension_load_pixbuf (web_extension, icon_path, 16);
+  if (!pixbuf)
+    pixbuf = ephy_web_extension_get_icon (web_extension, 16);
+  if (pixbuf) {
+    texture = ephy_texture_new_for_pixbuf (pixbuf);
+    gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (texture));
+  }
 
   gtk_widget_add_css_class (button, "image-button");
   gtk_widget_add_css_class (button, "entry-icon");

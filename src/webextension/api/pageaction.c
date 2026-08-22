@@ -70,15 +70,39 @@ pageaction_handler_seticon (EphyWebExtensionSender *sender,
   }
 
   if (ephy_json_object_get_object (details, "path")) {
-    /* FIXME: Support object here. */
-    g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "pageAction.setIcon(): Currently only single path strings are supported.");
-    return;
+    JsonObject *path_obj = ephy_json_object_get_object (details, "path");
+
+    path = ephy_json_object_get_string (path_obj, "16");
+    if (!path)
+      path = ephy_json_object_get_string (path_obj, "32");
+    if (!path)
+      path = ephy_json_object_get_string (path_obj, "48");
+    if (!path)
+      path = ephy_json_object_get_string (path_obj, "128");
+    if (!path) {
+      GList *members = json_object_get_members (path_obj);
+
+      if (members)
+        path = json_object_get_string_member (path_obj, (const char *)members->data);
+      g_list_free (members);
+    }
+  } else {
+    path = ephy_json_object_get_string (details, "path");
   }
 
-  /* FIXME: path == ""  should reset to default icon and path == NULL should be set to the mainfest's page_action icon. */
-  path = ephy_json_object_get_string (details, "path");
-  if (path)
+  if (path && *path)
     pixbuf = ephy_web_extension_load_pixbuf (sender->extension, path, -1);
+
+  if (!pixbuf) {
+    const char *default_icon = ephy_web_extension_get_page_action_icon (sender->extension);
+
+    if (default_icon)
+      pixbuf = ephy_web_extension_load_pixbuf (sender->extension, default_icon, 16);
+  }
+
+  if (!pixbuf)
+    pixbuf = ephy_web_extension_get_icon (sender->extension, 16);
+
   if (pixbuf)
     texture = ephy_texture_new_for_pixbuf (pixbuf);
 
@@ -112,8 +136,10 @@ pageaction_handler_settitle (EphyWebExtensionSender *sender,
     return;
   }
 
-  /* FIXME: NULL title should set it to the default value in the manifest. */
   title = ephy_json_object_get_string (details, "title");
+  if (!title)
+    title = ephy_web_extension_get_page_action_title (sender->extension);
+
   gtk_widget_set_tooltip_text (action, title);
   g_task_return_pointer (task, NULL, NULL);
 }
@@ -135,6 +161,9 @@ pageaction_handler_gettitle (EphyWebExtensionSender *sender,
   }
 
   title = gtk_widget_get_tooltip_text (action);
+  if (!title)
+    title = ephy_web_extension_get_page_action_title (sender->extension);
+
   g_task_return_pointer (task, g_strdup_printf ("\"%s\"", title ? title : ""), g_free);
 }
 

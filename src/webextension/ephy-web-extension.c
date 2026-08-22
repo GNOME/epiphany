@@ -51,7 +51,9 @@ typedef struct  {
 } WebExtensionContentScript;
 
 typedef struct {
-  GtkWidget *widget;
+  char *title;
+  char *icon;
+  char *popup;
 } WebExtensionPageAction;
 
 typedef struct {
@@ -463,18 +465,6 @@ web_extension_parse_background (EphyWebExtension *self,
     LOG ("Invalid background object. Missing either scripts or page");
 }
 
-static void
-web_extension_parse_page_action (EphyWebExtension *self,
-                                 JsonObject       *object)
-{
-  self->page_action = g_new0 (WebExtensionPageAction, 1);
-}
-
-static void
-web_extension_page_action_free (WebExtensionPageAction *page_action)
-{
-  g_free (page_action);
-}
 
 /* TODO: Load translation for current locale during init */
 static char *
@@ -593,6 +583,52 @@ web_extension_browser_action_free (WebExtensionBrowserAction *browser_action)
   g_clear_pointer (&browser_action->title, g_free);
   g_clear_pointer (&browser_action->popup, g_free);
   g_free (browser_action);
+}
+
+static void
+web_extension_parse_page_action (EphyWebExtension *self,
+                                 JsonObject       *object)
+{
+  WebExtensionPageAction *page_action = g_new0 (WebExtensionPageAction, 1);
+  JsonNode *icon_node;
+
+  self->page_action = page_action;
+  self->page_action->title = ephy_web_extension_manifest_get_localized_string (self, object, "default_title");
+  self->page_action->popup = g_strdup (ephy_json_object_get_string (object, "default_popup"));
+
+  icon_node = json_object_get_member (object, "default_icon");
+  if (icon_node) {
+    if (JSON_NODE_HOLDS_VALUE (icon_node)) {
+      self->page_action->icon = g_strdup (json_node_get_string (icon_node));
+    } else if (JSON_NODE_HOLDS_OBJECT (icon_node)) {
+      JsonObject *icon_obj = json_node_get_object (icon_node);
+      const char *icon_path = ephy_json_object_get_string (icon_obj, "16");
+
+      if (!icon_path)
+        icon_path = ephy_json_object_get_string (icon_obj, "32");
+      if (!icon_path)
+        icon_path = ephy_json_object_get_string (icon_obj, "48");
+      if (!icon_path)
+        icon_path = ephy_json_object_get_string (icon_obj, "128");
+      if (!icon_path) {
+        GList *members = json_object_get_members (icon_obj);
+
+        if (members)
+          icon_path = json_object_get_string_member (icon_obj, (const char *)members->data);
+        g_list_free (members);
+      }
+      self->page_action->icon = g_strdup (icon_path);
+    }
+  }
+}
+
+static void
+web_extension_page_action_free (WebExtensionPageAction *page_action)
+{
+  g_clear_pointer (&page_action->title, g_free);
+  g_clear_pointer (&page_action->icon, g_free);
+  g_clear_pointer (&page_action->popup, g_free);
+  g_free (page_action);
 }
 
 static void
@@ -1254,6 +1290,24 @@ gboolean
 ephy_web_extension_has_page_action (EphyWebExtension *self)
 {
   return !!self->page_action;
+}
+
+const char *
+ephy_web_extension_get_page_action_title (EphyWebExtension *self)
+{
+  return self->page_action ? self->page_action->title : NULL;
+}
+
+const char *
+ephy_web_extension_get_page_action_icon (EphyWebExtension *self)
+{
+  return self->page_action ? self->page_action->icon : NULL;
+}
+
+const char *
+ephy_web_extension_get_page_action_popup (EphyWebExtension *self)
+{
+  return self->page_action ? self->page_action->popup : NULL;
 }
 
 gboolean
