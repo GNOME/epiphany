@@ -1071,9 +1071,8 @@ remove_custom_css (EphyWebExtension *self,
 static char *
 get_translation_contents (EphyWebExtension *web_extension)
 {
-  /* FIXME: Use current locale and fallback to default web_extension locale if necessary. */
-  g_autofree char *path = g_strdup_printf ("_locales/%s/messages.json", "en");
-  g_autofree char *data = ephy_web_extension_get_resource_as_string (web_extension, path);
+  g_autofree char *path = ephy_web_extension_get_locale_translation_resource (web_extension);
+  g_autofree char *data = path ? ephy_web_extension_get_resource_as_string (web_extension, path) : NULL;
 
   return data ? g_steal_pointer (&data) : g_strdup ("{}");
 }

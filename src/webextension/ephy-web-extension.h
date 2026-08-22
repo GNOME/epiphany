@@ -194,5 +194,9 @@ gboolean               ephy_web_extension_has_web_accessible_resource     (EphyW
 
 char                   *ephy_web_extension_parse_command_key              (const char       *suggested_key);
 
+const char            *ephy_web_extension_get_default_locale              (EphyWebExtension *self);
+
+char                  *ephy_web_extension_get_locale_translation_resource (EphyWebExtension *self);
+
 G_END_DECLS
 

@@ -78,6 +78,7 @@ struct _EphyWebExtension {
   char *manifest;
 
   char *guid;
+  char *default_locale;
   char *author;
   char *homepage_url;
 
@@ -526,6 +527,8 @@ ephy_web_extension_manifest_get_localized_string (EphyWebExtension *self,
                                                   char             *name)
 {
   g_autofree char *value = g_strdup (ephy_json_object_get_string (object, name));
+  const char * const *language_names;
+
   if (!value)
     return g_strdup ("");
 
@@ -534,8 +537,6 @@ ephy_web_extension_manifest_get_localized_string (EphyWebExtension *self,
    * Let's check for this prefix and suffix and extract the unique name
    */
   if (g_str_has_prefix (value, "__MSG_") && g_str_has_suffix (value, "__")) {
-    /* FIXME: Set current locale */
-    g_autofree char *locale = g_strdup ("en");
     g_autofree char *translated_string = NULL;
     char *message_name;
 
@@ -543,10 +544,29 @@ ephy_web_extension_manifest_get_localized_string (EphyWebExtension *self,
     message_name = value + strlen ("__MSG_");
     value[strlen (value) - 2] = '\0';
 
-    translated_string = web_extension_get_translation (self, locale, message_name);
+    language_names = g_get_language_names ();
+    for (guint i = 0; language_names && language_names[i] && !translated_string; i++) {
+      const char *lang = language_names[i];
+
+      if (g_strcmp0 (lang, "C") == 0)
+        continue;
+
+      translated_string = web_extension_get_translation (self, lang, message_name);
+      if (!translated_string && strchr (lang, '_')) {
+        g_autofree char *dash = g_strdelimit (g_strdup (lang), "_", '-');
+
+        translated_string = web_extension_get_translation (self, dash, message_name);
+      }
+    }
+
+    if (!translated_string && self->default_locale)
+      translated_string = web_extension_get_translation (self, self->default_locale, message_name);
+
+    if (!translated_string)
+      translated_string = web_extension_get_translation (self, "en", message_name);
 
     if (!translated_string) {
-      g_debug ("Failed to find '%s' translation for message '%s'", locale, message_name);
+      g_debug ("Failed to find translation for message '%s'", message_name);
       return g_strdup ("");
     }
 
@@ -823,6 +843,7 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_pointer (&self->base_location, g_free);
   g_clear_pointer (&self->manifest, g_free);
   g_clear_pointer (&self->guid, g_free);
+  g_clear_pointer (&self->default_locale, g_free);
   g_clear_pointer (&self->author, g_free);
   g_clear_pointer (&self->homepage_url, g_free);
   g_clear_pointer (&self->local_storage_path, g_free);
@@ -918,6 +939,7 @@ ephy_web_extension_parse_manifest (EphyWebExtension  *self,
   }
 
   self->manifest = g_strndup ((char *)manifest, length);
+  self->default_locale = g_strdup (ephy_json_object_get_string (root_object, "default_locale"));
 
   self->homepage_url = ephy_web_extension_manifest_get_localized_string (self, root_object, "homepage_url");
   self->author = ephy_web_extension_manifest_get_localized_string (self, root_object, "author");
@@ -1547,4 +1569,52 @@ ephy_web_extension_has_web_accessible_resource (EphyWebExtension *self,
     return FALSE;
 
   return g_hash_table_contains (self->web_accessible_resources, path);
+}
+
+const char *
+ephy_web_extension_get_default_locale (EphyWebExtension *self)
+{
+  return self->default_locale;
+}
+
+char *
+ephy_web_extension_get_locale_translation_resource (EphyWebExtension *self)
+{
+  const char * const *language_names = g_get_language_names ();
+  g_autofree char *path = NULL;
+
+  for (guint i = 0; language_names && language_names[i]; i++) {
+    const char *lang = language_names[i];
+
+    if (g_strcmp0 (lang, "C") == 0)
+      continue;
+
+    path = g_strdup_printf ("_locales/%s/messages.json", lang);
+    if (ephy_web_extension_has_resource (self, path))
+      return g_steal_pointer (&path);
+    g_clear_pointer (&path, g_free);
+
+    if (strchr (lang, '_')) {
+      g_autofree char *dash = g_strdelimit (g_strdup (lang), "_", '-');
+
+      path = g_strdup_printf ("_locales/%s/messages.json", dash);
+      if (ephy_web_extension_has_resource (self, path))
+        return g_steal_pointer (&path);
+      g_clear_pointer (&path, g_free);
+    }
+  }
+
+  if (self->default_locale) {
+    path = g_strdup_printf ("_locales/%s/messages.json", self->default_locale);
+    if (ephy_web_extension_has_resource (self, path))
+      return g_steal_pointer (&path);
+    g_clear_pointer (&path, g_free);
+  }
+
+  path = g_strdup_printf ("_locales/%s/messages.json", "en");
+  if (ephy_web_extension_has_resource (self, path))
+    return g_steal_pointer (&path);
+  g_clear_pointer (&path, g_free);
+
+  return NULL;
 }
