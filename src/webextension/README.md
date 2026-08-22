@@ -63,7 +63,6 @@ Limitations:
 
 - Unlike other browsers downloadIds are not persistent across sessions. Downloads are always "incognito" as they are always lost.
 - Pausing/Resuming downloads is not supported.
-- Returned download lists are not sorted by "orderBy" (TODO)
 
 APIs:
 

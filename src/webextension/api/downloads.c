@@ -431,15 +431,121 @@ error_to_interrupt_reason (GError *error)
 }
 
 static int
+compare_download_by_property (EphyDownload *d1,
+                              EphyDownload *d2,
+                              const char   *property)
+{
+  if (strcmp (property, "id") == 0) {
+    guint64 id1 = ephy_download_get_uid (d1);
+    guint64 id2 = ephy_download_get_uid (d2);
+
+    if (id1 < id2)
+      return -1;
+    if (id1 > id2)
+      return 1;
+    return 0;
+  }
+
+  if (strcmp (property, "startTime") == 0) {
+    GDateTime *t1 = ephy_download_get_start_time (d1);
+    GDateTime *t2 = ephy_download_get_start_time (d2);
+
+    if (!t1 && !t2)
+      return 0;
+    if (!t1)
+      return -1;
+    if (!t2)
+      return 1;
+
+    return g_date_time_compare (t1, t2);
+  }
+
+  if (strcmp (property, "endTime") == 0) {
+    GDateTime *t1 = ephy_download_get_end_time (d1);
+    GDateTime *t2 = ephy_download_get_end_time (d2);
+
+    if (!t1 && !t2)
+      return 0;
+    if (!t1)
+      return -1;
+    if (!t2)
+      return 1;
+
+    return g_date_time_compare (t1, t2);
+  }
+
+  if (strcmp (property, "url") == 0) {
+    const char *u1 = download_get_url (d1);
+    const char *u2 = download_get_url (d2);
+
+    return g_strcmp0 (u1, u2);
+  }
+
+  if (strcmp (property, "filename") == 0) {
+    g_autofree char *f1 = download_get_filename (d1);
+    g_autofree char *f2 = download_get_filename (d2);
+
+    return g_strcmp0 (f1, f2);
+  }
+
+  if (strcmp (property, "bytesReceived") == 0 ||
+      strcmp (property, "totalBytes") == 0 ||
+      strcmp (property, "fileSize") == 0) {
+    guint64 s1 = download_get_received_size (d1);
+    guint64 s2 = download_get_received_size (d2);
+
+    if (s1 < s2)
+      return -1;
+    if (s1 > s2)
+      return 1;
+    return 0;
+  }
+
+  if (strcmp (property, "exists") == 0) {
+    gboolean e1 = !ephy_download_get_was_moved (d1);
+    gboolean e2 = !ephy_download_get_was_moved (d2);
+
+    return (int)e1 - (int)e2;
+  }
+
+  if (strcmp (property, "state") == 0) {
+    const char *s1 = ephy_download_is_active (d1) ? "in_progress" : (ephy_download_failed (d1, NULL) ? "interrupted" : "complete");
+    const char *s2 = ephy_download_is_active (d2) ? "in_progress" : (ephy_download_failed (d2, NULL) ? "interrupted" : "complete");
+
+    return g_strcmp0 (s1, s2);
+  }
+
+  if (strcmp (property, "mime") == 0) {
+    const char *ct1 = ephy_download_get_content_type (d1);
+    const char *ct2 = ephy_download_get_content_type (d2);
+    g_autofree char *m1 = ct1 ? g_content_type_get_mime_type (ct1) : NULL;
+    g_autofree char *m2 = ct2 ? g_content_type_get_mime_type (ct2) : NULL;
+
+    return g_strcmp0 (m1, m2);
+  }
+
+  return 0;
+}
+
+static int
 order_downloads (EphyDownload *d1,
                  EphyDownload *d2,
                  GPtrArray    *order_by)
 {
-  /* TODO: Implement this...
-   * An array of strings representing DownloadItem properties the search results should be sorted by.
-   * For example, including startTime then totalBytes in the array would sort the DownloadItems by their start time, then total bytes — in ascending order.
-   * To specify sorting by a property in descending order, prefix it with a hyphen, for example -startTime.
-   */
+  for (guint i = 0; i < order_by->len; i++) {
+    const char *prop = g_ptr_array_index (order_by, i);
+    gboolean descending = FALSE;
+    int res;
+
+    if (*prop == '-') {
+      descending = TRUE;
+      prop++;
+    }
+
+    res = compare_download_by_property (d1, d2, prop);
+    if (res != 0)
+      return descending ? -res : res;
+  }
 
   return 0;
 }
@@ -487,6 +593,9 @@ filter_downloads (GList         *downloads,
     if (query->total_bytes != -1 && (guint64)query->total_bytes != received_size)
       continue;
 
+    if (query->file_size != -1 && (guint64)query->file_size != received_size)
+      continue;
+
     if (query->total_bytes_greater != -1 && (guint64)query->total_bytes_greater > received_size)
       continue;
 
@@ -507,8 +616,6 @@ filter_downloads (GList         *downloads,
       if (!match_error_to_interrupt_reason (error, query->interrupt_reason))
         continue;
     }
-
-    /* TODO: Handle file_size */
 
     matches = g_list_append (matches, dl);
   }
