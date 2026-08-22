@@ -912,6 +912,19 @@ decide_policy_cb (WebKitWebView            *web_view,
 
   /* ...otherwise, we'll start a download if it's the main resource. */
   if (is_main_resource) {
+    const char *uri = webkit_uri_response_get_uri (response);
+    guint status_code = webkit_uri_response_get_status_code (response);
+
+    /* Do not start a download if there is no valid MIME type, or if an HTTP
+     * response failed (status 0 / client error / server error).
+     */
+    if (!mime_type || *mime_type == '\0')
+      return FALSE;
+
+    if (uri && (g_str_has_prefix (uri, "http://") || g_str_has_prefix (uri, "https://")) &&
+        (status_code < 200 || status_code >= 400))
+      return FALSE;
+
     webkit_policy_decision_download (decision);
     return TRUE;
   }
