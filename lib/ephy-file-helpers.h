@@ -53,6 +53,7 @@ gboolean           ephy_file_helpers_init                   (const char         
 const char *       ephy_profile_dir                         (void);
 gboolean           ephy_profile_dir_is_default              (void);
 gboolean           ephy_profile_dir_is_web_application      (void);
+gboolean           ephy_profile_dir_is_test                 (void);
 const char *       ephy_cache_dir                           (void);
 const char *       ephy_config_dir                          (void);
 char       *       ephy_default_profile_dir                 (void);

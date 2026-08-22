@@ -18,12 +18,9 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
-#error "Only <epiphany/epiphany.h> can be included directly."
-#endif
 
-#ifndef EPHY_TEST_UTILS_H
-#define EPHY_TEST_UTILS_H
+
+#pragma once
 
 #include <glib.h>
 
@@ -49,5 +46,3 @@ GMainLoop* ephy_test_utils_setup_wait_until_load_is_committed (EphyWebView *view
 void ephy_test_utils_wait_until_load_is_committed (GMainLoop *loop);
 
 G_END_DECLS
-
-#endif

@@ -56,11 +56,10 @@ test_ephy_shell_basic_embeds (void)
              NULL,       /* related view */
              window,
              NULL,       /* embed */
-             EPHY_NEW_TAB_DONT_SHOW_WINDOW,       /* flags */
-             gtk_get_current_event_time ());
+             EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   g_assert_true (EPHY_IS_EMBED (embed1));
 
-  g_assert_true (gtk_widget_get_toplevel (GTK_WIDGET (embed1)) == GTK_WIDGET (window));
+  g_assert_true (gtk_widget_get_root (GTK_WIDGET (embed1)) == GTK_ROOT (window));
 
   children = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
   g_assert_cmpint (g_list_length (children), ==, 1);
@@ -73,16 +72,15 @@ test_ephy_shell_basic_embeds (void)
              NULL,       /* related view */
              window,       /* window */
              NULL,       /* embed */
-             EPHY_NEW_TAB_DONT_SHOW_WINDOW,       /* flags */
-             gtk_get_current_event_time ());
+             EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   g_assert_true (EPHY_IS_EMBED (embed2));
 
-  /* A second children should exist now. */
+  /* A second child should exist now. */
   children = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
   g_assert_cmpint (g_list_length (children), ==, 2);
   g_list_free (children);
 
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -102,7 +100,7 @@ test_ephy_shell_parent_windows (void)
             EPHY_NEW_TAB_DONT_SHOW_WINDOW);
 
   g_assert_true (EPHY_IS_EMBED (embed));
-  g_assert_true (gtk_widget_get_toplevel (GTK_WIDGET (embed)) == window);
+  g_assert_true (gtk_widget_get_root (GTK_WIDGET (embed)) == GTK_ROOT (window));
   g_object_ref_sink (embed);
   g_object_unref (embed);
 
@@ -114,11 +112,11 @@ test_ephy_shell_parent_windows (void)
 
   /* The parent window should be a completely new one. */
   g_assert_true (EPHY_IS_EMBED (embed));
-  g_assert_true (gtk_widget_get_toplevel (GTK_WIDGET (embed)) != window);
-  g_assert_true (gtk_widget_get_toplevel (GTK_WIDGET (embed)) == window2);
+  g_assert_true (gtk_widget_get_root (GTK_WIDGET (embed)) != GTK_ROOT (window));
+  g_assert_true (gtk_widget_get_root (GTK_WIDGET (embed)) == GTK_ROOT (window2));
 
-  gtk_widget_destroy (window);
-  gtk_widget_destroy (window2);
+  gtk_window_destroy (GTK_WINDOW (window));
+  gtk_window_destroy (GTK_WINDOW (window2));
 }
 
 static void
@@ -166,7 +164,7 @@ test_ephy_shell_tab_load (void)
 
   ephy_test_utils_check_ephy_embed_address (embed, "ephy-about:epiphany");
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -188,35 +186,96 @@ test_ephy_shell_tab_append (void)
 
   embed1 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed1)), ==, 0);
 
   embed2 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed1)), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed2)), ==, 1);
 
   embed3 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed3), ==, 1);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 2);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed1)), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed3)), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed2)), ==, 2);
 
   embed4 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed1,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_LAST);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed3), ==, 1);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 2);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed4), ==, 3);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed1)), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed3)), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed2)), ==, 2);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed4)), ==, 3);
 
   embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), embed3,
                                EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_APPEND_AFTER);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed1), ==, 0);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed3), ==, 1);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed5), ==, 2);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed2), ==, 3);
-  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, embed4), ==, 4);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed1)), ==, 0);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed3)), ==, 1);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed5)), ==, 2);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed2)), ==, 3);
+  g_assert_cmpint (ephy_tab_view_get_page_index (tab_view, GTK_WIDGET (embed4)), ==, 4);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
+static void
+test_ephy_shell_tab_no_history (void)
+{
+  /* TODO: BackForwardList */
+}
+
+static gboolean
+test_log_fatal_func (const gchar    *log_domain,
+                     GLogLevelFlags  log_level,
+                     const gchar    *message,
+                     gpointer        user_data)
+{
+  if (g_strcmp0 (log_domain, "Gdk") == 0)
+    return FALSE;
+
+  if (strstr (message, "secret storage") != NULL ||
+      strstr (message, "Settings portal") != NULL ||
+      strstr (message, "accessibility bus") != NULL ||
+      strstr (message, "a11y bus") != NULL ||
+      strstr (message, "Can't connect") != NULL ||
+      strstr (message, "gdk_frame_timings_submitted") != NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
+int
+main (int   argc,
+      char *argv[])
+{
+  int ret;
+
+  g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
+  g_setenv ("NO_AT_BRIDGE", "1", TRUE);
+  g_setenv ("GTK_A11Y", "none", TRUE);
+
+  gtk_test_init (&argc, &argv);
+
+  g_test_log_set_fatal_handler (test_log_fatal_func, NULL);
+
+  ephy_debug_init ();
+
+  if (!ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_TESTING_MODE | EPHY_FILE_HELPERS_ENSURE_EXISTS, NULL)) {
+    g_debug ("Something wrong happened with ephy_file_helpers_init()");
+    return -1;
+  }
+
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
+  g_application_register (G_APPLICATION (ephy_shell_get_default ()), NULL, NULL);
+
+  g_test_add_func ("/src/ephy-shell/basic_embeds",
+                   test_ephy_shell_basic_embeds);
+
+  g_test_add_func ("/src/ephy-shell/parent_windows",
+                   test_ephy_shell_parent_windows);
+
+  g_test_add_func ("/src/ephy-shell/tab_load",
+                   test_ephy_shell_tab_load);
+
   g_test_add_func ("/src/ephy-shell/tab_append",
                    test_ephy_shell_tab_append);
 

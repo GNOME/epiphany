@@ -326,6 +326,19 @@ ephy_profile_dir_is_web_application (void)
 }
 
 /**
+ * ephy_profile_dir_is_test:
+ *
+ * Returns whether the profile directory in use is a test one.
+ *
+ * Returns: %TRUE if it is a test profile dir, %FALSE for others
+ **/
+gboolean
+ephy_profile_dir_is_test (void)
+{
+  return profile_dir_type == EPHY_PROFILE_DIR_TEST;
+}
+
+/**
  * ephy_default_profile_dir:
  *
  * Get the path to the default profile directory found in ~/.local/share

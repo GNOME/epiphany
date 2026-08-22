@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 
 #include "ephy-debug.h"
+#include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
@@ -64,6 +65,24 @@ ephy_password_manager_get_password_schema (void)
     }
   };
   return &schema;
+}
+
+static gboolean
+should_warn_for_secret_error (GError *error)
+{
+  if (!error)
+    return FALSE;
+
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return FALSE;
+
+  if (ephy_profile_dir_is_test ()) {
+    if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN) ||
+        g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER))
+      return FALSE;
+  }
+
+  return TRUE;
 }
 
 struct _EphyPasswordManager {
@@ -418,7 +437,7 @@ secret_password_store_cb (GObject               *source_object,
 
   secret_password_store_finish (result, &error);
   if (error) {
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    if (should_warn_for_secret_error (error)) {
       g_warning ("Failed to store password record for (%s, %s, %s, %s, %s) (is the secret service or secrets portal broken?): %s",
                  origin,
                  ephy_password_record_get_target_origin (data->record),
@@ -626,7 +645,7 @@ retrieve_secret_cb (GObject        *source_object,
 
   value = secret_retrievable_retrieve_secret_finish (retrievable, result, &error);
   if (!value) {
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    if (should_warn_for_secret_error (error))
       g_warning ("Failed to retrieve password (is the secret service or secrets portal broken?): %s", error->message);
     g_error_free (error);
     goto out;
@@ -688,7 +707,7 @@ secret_password_search_cb (GObject        *source_object,
   matches = secret_password_search_finish (result, &error);
   if (!matches) {
     if (error) {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      if (should_warn_for_secret_error (error))
         g_warning ("Failed to search secret storage (is the secret service or secrets portal broken?): %s", error->message);
       g_error_free (error);
     }
@@ -789,7 +808,7 @@ secret_password_clear_cb (GObject      *source_object,
   if (error) {
     if (data && data->task)
       g_task_return_error (data->task, error);
-    else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    else if (should_warn_for_secret_error (error))
       g_warning ("Failed to clear secrets (is the secret service or secrets portal broken?): %s", error->message);
     g_clear_pointer (&data, manage_record_async_data_free);
     return;
