@@ -301,6 +301,15 @@ migrate_add_pinned_column (void)
   g_object_unref (db);
 }
 
+static void
+migrate_session_state_backup (void)
+{
+  g_autofree char *session_backup = g_build_filename (ephy_profile_dir (), "session_state.xml~", NULL);
+
+  if (g_unlink (session_backup) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", session_backup, g_strerror (errno));
+}
+
 /* If adding anything here, you need to edit EPHY_PROFILE_MIGRATION_VERSION
  * in ephy-profile-utils.h. */
 const int EPHY_MINIMUM_MIGRATION_VERSION = 37;
@@ -310,6 +319,7 @@ const EphyProfileMigrator migrators[] = {
   /* 38 */ migrate_gsb_db,
   /* 39 */ migrate_search_engines,
   /* 40 */ migrate_add_pinned_column,
+  /* 41 */ migrate_session_state_backup,
 };
 
 static gboolean

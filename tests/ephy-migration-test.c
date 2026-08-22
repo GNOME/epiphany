@@ -80,6 +80,30 @@ test_do_migration_invalid (void)
   g_free (tmpdir);
 }
 
+static void
+test_do_migration_session_state_backup (void)
+{
+  gboolean ret;
+  char *tmpdir;
+  g_autofree char *backup_file = NULL;
+
+  tmpdir = create_test_profile_dir ();
+  backup_file = g_build_filename (tmpdir, "session_state.xml~", NULL);
+  g_file_set_contents (backup_file, "dummy session backup", -1, NULL);
+  g_assert_true (g_file_test (backup_file, G_FILE_TEST_EXISTS));
+
+  ret = ephy_profile_utils_set_migration_version_for_profile_dir (40, tmpdir);
+  g_assert_true (ret);
+
+  ret = ephy_profile_utils_do_migration (tmpdir, -1, TRUE);
+  g_assert_true (ret);
+  g_assert_false (g_file_test (backup_file, G_FILE_TEST_EXISTS));
+  g_assert_cmpint (ephy_profile_utils_get_migration_version_for_profile_dir (tmpdir), ==, EPHY_PROFILE_MIGRATION_VERSION);
+
+  delete_test_profile_dir (tmpdir);
+  g_free (tmpdir);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -98,6 +122,8 @@ main (int   argc,
 
   g_test_add_func ("/lib/ephy-profile-utils/do_migration_simple",
                    test_do_migration_simple);
+  g_test_add_func ("/lib/ephy-profile-utils/do_migration_session_state_backup",
+                   test_do_migration_session_state_backup);
   g_test_add_func ("/lib/ephy-profile-utils/do_migration_invalid",
                    test_do_migration_invalid);
 

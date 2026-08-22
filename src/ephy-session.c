@@ -935,7 +935,7 @@ save_session_sync (GTask        *task,
     if (!g_file_replace_contents (session_file,
                                   (const char *)xmlBufContent (buffer->buffer),
                                   xmlBufUse (buffer->buffer),
-                                  NULL, TRUE, 0, NULL, NULL, &error)) {
+                                  NULL, FALSE, 0, NULL, NULL, &error)) {
       g_warning ("Error saving session: %s", error->message);
     }
   }
