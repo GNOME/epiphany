@@ -112,7 +112,7 @@ ephy_profile_utils_do_migration (const char *profile_directory,
   /* If we're not trying to run a migration step in a test and there
    *  is nothing to migrate, don't spawn the migrator at all. */
   if (test_to_run == -1 &&
-      EPHY_PROFILE_MIGRATION_VERSION == ephy_profile_utils_get_migration_version ()) {
+      EPHY_PROFILE_MIGRATION_VERSION == ephy_profile_utils_get_migration_version_for_profile_dir (profile_directory ? profile_directory : ephy_profile_dir ())) {
     return TRUE;
   }
 
