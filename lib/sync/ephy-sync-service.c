@@ -636,7 +636,7 @@ revoke_token_cb (SoupSession  *session,
 
   msg = soup_session_get_async_result_message (session, result);
   status_code = soup_message_get_status (msg);
-  if (status_code != 200) {
+  if (status_code != 200 && status_code != 404) {
     g_warning ("Failed to revoke OAuth token. Status code: %u", status_code);
   } else {
     LOG ("Successfully revoked OAuth token");
@@ -666,7 +666,7 @@ ephy_sync_service_revoke_token (EphySyncService *self,
   /* Revoke the OAuth token via the FxA OAuth server. */
   accounts_server = ephy_sync_utils_get_accounts_server ();
   url = g_strdup_printf ("%s/oauth/destroy", accounts_server);
-  request_body = g_strdup_printf ("{\"token\":\"%s\"}", token);
+  request_body = g_strdup_printf ("{\"client_id\":\"%s\",\"token\":\"%s\"}", FXA_CLIENT_ID, token);
 
   msg = soup_message_new (SOUP_METHOD_POST, url);
   bytes = g_bytes_new_take (request_body, strlen (request_body));
@@ -2490,7 +2490,7 @@ delete_open_tabs_record_cb (SoupSession *session,
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
-  if (status_code != 200) {
+  if (status_code != 200 && status_code != 404) {
     g_warning ("Failed to delete open tabs record. Status code: %u, response: %s",
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
   } else {
@@ -2515,13 +2515,14 @@ delete_client_record_cb (SoupSession *session,
   EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
   char *endpoint;
   char *device_bso_id;
+  const char *collection;
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
-  if (status_code != 200) {
+  if (status_code != 200 && status_code != 404) {
     g_warning ("Failed to delete client record. Status code: %u, response: %s",
                status_code, (const char *)g_bytes_get_data (response_body, NULL));
   } else {
@@ -2530,7 +2531,8 @@ delete_client_record_cb (SoupSession *session,
 
   device_bso_id = ephy_sync_utils_get_device_bso_id ();
   /* Delete the open tabs record associated to this device. */
-  endpoint = g_strdup_printf ("storage/tabs/%s", device_bso_id);
+  collection = ephy_sync_utils_sync_with_firefox () ? "tabs" : "ephy-tabs";
+  endpoint = g_strdup_printf ("storage/%s/%s", collection, device_bso_id);
   ephy_sync_service_queue_storage_request (self, endpoint,
                                            SOUP_METHOD_DELETE,
                                            NULL, -1, -1,

@@ -34,8 +34,6 @@
 #include "ephy-time-helpers.h"
 #include "synced-tabs-dialog.h"
 
-/* TODO: Register a proper Epiphany-specific client_id with Mozilla before shipping. */
-#define FXA_CLIENT_ID ""
 #define FXA_OLDSYNC_SCOPE "https://identity.mozilla.com/apps/oldsync"
 
 #define EPHY_TYPE_SYNC_FREQUENCY (ephy_sync_frequency_get_type ())
@@ -932,6 +930,10 @@ on_sync_sign_out_button_clicked (GtkWidget             *button,
   EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
   ephy_sync_service_sign_out (service);
+
+  g_clear_pointer (&sync_dialog->sign_in_email, g_free);
+  g_clear_pointer (&sync_dialog->sign_in_uid, g_free);
+  g_clear_pointer (&sync_dialog->oauth_state, g_free);
 
   /* Show Mozilla Accounts iframe. */
   sync_setup_firefox_iframe (sync_dialog);

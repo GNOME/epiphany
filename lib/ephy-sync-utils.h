@@ -30,6 +30,9 @@ const SecretSchema *ephy_sync_utils_get_secret_schema (void);
 #define EPHY_SYNC_SECRET_SCHEMA       (ephy_sync_utils_get_secret_schema ())
 #define EPHY_SYNC_SECRET_ACCOUNT_KEY  "firefox_account"
 
+/* TODO: Register a proper Epiphany-specific client_id with Mozilla before shipping. */
+#define FXA_CLIENT_ID ""
+
 #define EPHY_SYNC_STORAGE_VERSION 5
 #define EPHY_SYNC_DEVICE_ID_LEN   32
 #define EPHY_SYNC_BSO_ID_LEN      12
