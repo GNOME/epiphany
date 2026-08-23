@@ -33,6 +33,24 @@
 #include "ephy-test-utils.h"
 #include "ephy-window.h"
 
+static gboolean
+test_log_fatal_func (const gchar    *log_domain,
+                     GLogLevelFlags  log_level,
+                     const gchar    *message,
+                     gpointer        user_data)
+{
+  if (strstr (message, "secret storage") != NULL ||
+      strstr (message, "portal") != NULL ||
+      strstr (message, "Inhibit") != NULL ||
+      strstr (message, "accessibility bus") != NULL ||
+      strstr (message, "a11y bus") != NULL ||
+      strstr (message, "Can't connect") != NULL ||
+      strstr (message, "gdk_frame_timings_submitted") != NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 test_ephy_shell_basic_embeds (void)
 {
@@ -231,7 +249,6 @@ test_ephy_shell_open_uris_tab_reuse (void)
 
   ephy_shell = ephy_shell_get_default ();
   window = GTK_WIDGET (ephy_window_new ());
-  gtk_window_present (GTK_WINDOW (window));
   tab_view = ephy_window_get_tab_view (EPHY_WINDOW (window));
 
   /* 1. Create a tab loading the homepage (overview). */
@@ -260,8 +277,8 @@ test_ephy_shell_open_uris_tab_reuse (void)
    */
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
   ephy_shell_open_uris (ephy_shell, uris2, EPHY_STARTUP_NEW_TAB);
-  while (g_main_context_pending (NULL))
-    g_main_context_iteration (NULL, FALSE);
+  while (ephy_test_utils_get_web_view_ready_counter () == 0)
+    g_main_context_iteration (NULL, TRUE);
   ephy_test_utils_ensure_web_views_are_loaded (loop);
 
   g_assert_cmpint (ephy_tab_view_get_n_pages (tab_view), ==, 2);
@@ -275,31 +292,14 @@ test_ephy_shell_tab_no_history (void)
   /* TODO: BackForwardList */
 }
 
-static gboolean
-test_log_fatal_func (const gchar    *log_domain,
-                     GLogLevelFlags  log_level,
-                     const gchar    *message,
-                     gpointer        user_data)
-{
-  if (g_strcmp0 (log_domain, "Gdk") == 0)
-    return FALSE;
-
-  if (strstr (message, "secret storage") != NULL ||
-      strstr (message, "Settings portal") != NULL ||
-      strstr (message, "accessibility bus") != NULL ||
-      strstr (message, "a11y bus") != NULL ||
-      strstr (message, "Can't connect") != NULL ||
-      strstr (message, "gdk_frame_timings_submitted") != NULL)
-    return FALSE;
-
-  return TRUE;
-}
-
 int
 main (int   argc,
       char *argv[])
 {
   int ret;
+
+  /* Disable AC mode for tests because CI doesn't support it. */
+  g_setenv ("WEBKIT_DISABLE_COMPOSITING_MODE", "1", FALSE);
 
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
   g_setenv ("NO_AT_BRIDGE", "1", TRUE);
