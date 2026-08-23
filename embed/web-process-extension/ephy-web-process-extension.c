@@ -162,44 +162,49 @@ web_page_context_menu (WebKitWebPage          *web_page,
 {
   EphyWebProcessExtension *extension;
   g_autofree char *string = NULL;
+  g_autofree char *type_str = NULL;
   GVariantBuilder builder;
-  WebKitFrame *frame;
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_value = NULL;
   g_autoptr (JSCValue) js_node = NULL;
+  g_autoptr (JSCValue) js_ephy = NULL;
+  g_autoptr (JSCValue) js_frame_id = NULL;
+  g_autoptr (JSCValue) type_val = NULL;
   gboolean is_password = FALSE;
   guint64 frame_id = 0;
 
   extension = ephy_web_process_extension_get ();
-  /* FIXME: this is wrong, see https://gitlab.gnome.org/GNOME/epiphany/issues/442
-   * We need a way to get the right frame to use here.
-   */
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    frame = webkit_web_page_get_main_frame (web_page);
-  G_GNUC_END_IGNORE_DEPRECATIONS
-    js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
-
-  js_value = jsc_context_evaluate (js_context, "window.getSelection().toString();", -1);
-  if (!jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
-    string = jsc_value_to_string (js_value);
 
   js_node = webkit_web_hit_test_result_get_js_node (hit_test_result, extension->script_world);
   if (js_node && jsc_value_is_object (js_node)) {
-    g_autoptr (JSCValue) type_val = jsc_value_object_get_property (js_node, "type");
+    js_context = g_object_ref (jsc_value_get_context (js_node));
+  } else {
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    WebKitFrame *frame = webkit_web_page_get_main_frame (web_page);
+    G_GNUC_END_IGNORE_DEPRECATIONS
+    if (frame)
+      js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
+  }
+
+  if (js_context) {
+    js_value = jsc_context_evaluate (js_context, "window.getSelection().toString();", -1);
+    if (js_value && !jsc_value_is_null (js_value) && !jsc_value_is_undefined (js_value))
+      string = jsc_value_to_string (js_value);
+
+    js_ephy = jsc_context_get_value (js_context, "Ephy");
+    if (js_ephy && !jsc_value_is_undefined (js_ephy)) {
+      js_frame_id = jsc_value_object_get_property (js_ephy, "frameId");
+      if (js_frame_id && jsc_value_is_number (js_frame_id))
+        frame_id = (guint64)jsc_value_to_double (js_frame_id);
+    }
+  }
+
+  if (js_node && jsc_value_is_object (js_node)) {
+    type_val = jsc_value_object_get_property (js_node, "type");
     if (type_val && jsc_value_is_string (type_val)) {
-      g_autofree char *type_str = jsc_value_to_string (type_val);
-      if (g_strcmp0 (type_str, "password") == 0) {
-        JSCContext *js_context = jsc_value_get_context (js_node);
-        if (js_context) {
-          g_autoptr (JSCValue) js_ephy = jsc_context_get_value (js_context, "Ephy");
-          if (js_ephy && !jsc_value_is_undefined (js_ephy)) {
-            g_autoptr (JSCValue) js_frame_id = jsc_value_object_get_property (js_ephy, "frameId");
-            if (js_frame_id && jsc_value_is_number (js_frame_id))
-              frame_id = (guint64)jsc_value_to_double (js_frame_id);
-          }
-        }
+      type_str = jsc_value_to_string (type_val);
+      if (g_strcmp0 (type_str, "password") == 0)
         is_password = TRUE;
-      }
     }
   }
 
@@ -483,10 +488,10 @@ web_page_autofill (EphyWebProcessExtension *extension,
                    const char              *selector,
                    gint32                   fill_choice)
 {
+  WebKitFrame *frame;
   g_autoptr (JSCContext) js_context = NULL;
   g_autoptr (JSCValue) js_ephy_autofill = NULL;
   g_autoptr (JSCValue) js_result = NULL;
-  WebKitFrame *frame;
 
   g_assert (extension->frames_map);
 
