@@ -360,7 +360,9 @@ favicon_loaded_cb (GObject      *source,
   icon_texture = webkit_favicon_database_get_favicon_finish (database, result, &error);
   if (!icon_texture) {
     self->icon_loading_started = FALSE;
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+        !g_error_matches (error, WEBKIT_FAVICON_DATABASE_ERROR, WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_NOT_FOUND) &&
+        !g_error_matches (error, WEBKIT_FAVICON_DATABASE_ERROR, WEBKIT_FAVICON_DATABASE_ERROR_FAVICON_UNKNOWN))
       g_warning ("Failed to load favicon for %s: %s", self->url, error->message);
     return;
   }
