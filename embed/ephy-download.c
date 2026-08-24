@@ -661,7 +661,11 @@ filename_suggested_dialog_cb (AdwAlertDialog        *dialog,
     g_autofree gchar *directory = g_file_get_path (data->directory);
     WebKitDownload *webkit_download = ephy_download_get_webkit_download (data->download);
 
-    set_destination_for_suggested_filename (data->download, directory, data->suggested_filename);
+    if (!set_destination_for_suggested_filename (data->download, directory, data->suggested_filename)) {
+      ephy_download_cancel (data->download);
+      suggested_filename_data_free (data);
+      return;
+    }
 
     webkit_download_set_allow_overwrite (webkit_download, TRUE);
 
@@ -691,11 +695,22 @@ filename_suggested_file_dialog_cb (GtkFileDialog         *dialog,
     file = gtk_file_dialog_save_finish (dialog, result, &error);
 
   if (!file) {
-    g_warning ("Failed to select download destination: %s", error->message);
+    if (error && !g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+      g_warning ("Failed to select download destination: %s", error->message);
     return;
   }
 
-  g_set_object (&data->directory, file);
+  if (data->choose_filename) {
+    g_autoptr (GFile) parent = g_file_get_parent (file);
+    if (parent)
+      g_set_object (&data->directory, parent);
+    else
+      g_set_object (&data->directory, file);
+    g_free (data->suggested_filename);
+    data->suggested_filename = g_file_get_basename (file);
+  } else {
+    g_set_object (&data->directory, file);
+  }
 
   display_name = ephy_file_get_display_name (data->directory);
   gtk_label_set_label (data->directory_label, display_name);
@@ -826,12 +841,14 @@ open_download_confirmation_dialog (EphyDownload *download,
   gtk_box_append (GTK_BOX (button_box), button_label);
 
   directory_path = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_LAST_DOWNLOAD_DIRECTORY);
-  if (download->suggested_directory)
+  if (download->suggested_directory) {
     directory = g_file_new_for_path (download->suggested_directory);
-  else if (!directory_path || !directory_path[0])
-    directory = g_file_new_for_path (ephy_file_get_downloads_dir ());
-  else
+  } else if (!directory_path || !directory_path[0] || !g_file_test (directory_path, G_FILE_TEST_IS_DIR)) {
+    g_autofree char *downloads_dir = ephy_file_get_downloads_dir ();
+    directory = g_file_new_for_path (downloads_dir);
+  } else {
     directory = g_file_new_for_path (directory_path);
+  }
 
   display_name = ephy_file_get_display_name (directory);
   gtk_label_set_label (GTK_LABEL (button_label), display_name);
@@ -888,9 +905,8 @@ download_decide_destination_cb (WebKitDownload *wk_download,
   if (will_provide_destination)
     return TRUE;
 
-  if (!xdp_portal_running_under_sandbox () &&
-      (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD) ||
-       download->always_ask_destination)) {
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ASK_ON_DOWNLOAD) ||
+      download->always_ask_destination) {
     open_download_confirmation_dialog (download, suggested_filename);
     return TRUE;
   }

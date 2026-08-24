@@ -1243,9 +1243,9 @@ setup_general_page (PrefsGeneralPage *general_page)
   /* ======================================================================== */
   /* ========================== Downloads =================================== */
   /* ======================================================================== */
-  if (xdp_portal_running_under_sandbox ())
-    gtk_widget_set_visible (general_page->download_box, FALSE);
-  else
+  if (xdp_portal_running_under_sandbox ()) {
+    gtk_widget_set_visible (general_page->download_folder_row, FALSE);
+  } else {
     g_settings_bind_with_mapping (EPHY_SETTINGS_STATE,
                                   EPHY_PREFS_STATE_DOWNLOAD_DIR,
                                   general_page->download_folder_label,
@@ -1255,6 +1255,7 @@ setup_general_page (PrefsGeneralPage *general_page)
                                   NULL,
                                   general_page,
                                   NULL);
+  }
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ASK_ON_DOWNLOAD,
