@@ -857,6 +857,7 @@ enable_itp_setting_changed_cb (GSettings      *settings,
                                                                   EPHY_PREFS_WEB_ENABLE_ITP));
 }
 
+#if DEVELOPER_MODE
 static void
 add_path_to_sandbox_or_die (const char       *path,
                             WebKitWebContext *context)
@@ -869,6 +870,7 @@ add_path_to_sandbox_or_die (const char       *path,
 
   webkit_web_context_add_path_to_sandbox (context, path, TRUE);
 }
+#endif
 
 static void
 ephy_embed_shell_startup (GApplication *application)
@@ -880,10 +882,6 @@ ephy_embed_shell_startup (GApplication *application)
   g_autofree char *filename = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
-
-  add_path_to_sandbox_or_die (ephy_profile_dir (), priv->web_context);
-  add_path_to_sandbox_or_die (ephy_cache_dir (), priv->web_context);
-  add_path_to_sandbox_or_die (ephy_config_dir (), priv->web_context);
 
 #if DEVELOPER_MODE
   add_path_to_sandbox_or_die (BUILD_ROOT, priv->web_context);
