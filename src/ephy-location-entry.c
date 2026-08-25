@@ -374,10 +374,11 @@ ephy_location_entry_update_url_button_style (EphyLocationEntry *self)
       || self->security_level == EPHY_SECURITY_LEVEL_MIXED_CONTENT
       || self->security_level == EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE) {
     PangoAttribute *color_not_secure = pango_attr_foreground_alpha_new (65535);
-    g_autofree char *new_text = g_strconcat (_("Not Secure — "), text, NULL);
+    const char *prefix = _("Not Secure — ");
+    g_autofree char *new_text = g_strconcat (prefix, text, NULL);
 
     g_set_str (&text, new_text);
-    offset = strlen ("Not Secure — ");
+    offset = strlen (prefix);
 
     color_not_secure->start_index = 0;
     color_not_secure->end_index = offset;
