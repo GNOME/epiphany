@@ -447,7 +447,8 @@ on_focus_enter (GtkEventControllerFocus *controller,
     const char *typed_input = ephy_embed_get_typed_input (active_embed);
 
     if (typed_input) {
-      ephy_location_entry_title_widget_set_address (EPHY_TITLE_WIDGET (self), typed_input);
+      if (g_strcmp0 (typed_input, gtk_editable_get_text (GTK_EDITABLE (self->text))) != 0)
+        ephy_location_entry_title_widget_set_address (EPHY_TITLE_WIDGET (self), typed_input);
     } else {
       EphyWebView *web_view = ephy_embed_get_web_view (active_embed);
       const char *text = ephy_web_view_get_address (web_view);
