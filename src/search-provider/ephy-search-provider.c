@@ -339,19 +339,6 @@ handle_launch_search (EphyShellSearchProvider2  *skeleton,
 static void
 ephy_search_provider_init (EphySearchProvider *self)
 {
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-
-  g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
-
-  self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
-
-  self->bookmarks_manager = ephy_bookmarks_manager_new ();
-  self->model = ephy_suggestion_model_new (ephy_embed_shell_get_global_history_service (shell),
-                                           self->bookmarks_manager);
-
-  self->cancellable = g_cancellable_new ();
-
-  g_application_set_inactivity_timeout (G_APPLICATION (self), INACTIVITY_TIMEOUT);
 }
 
 static gboolean
@@ -407,6 +394,27 @@ ephy_search_provider_dbus_unregister (GApplication    *application,
 }
 
 static void
+ephy_search_provider_constructed (GObject *object)
+{
+  EphySearchProvider *self = EPHY_SEARCH_PROVIDER (object);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  G_OBJECT_CLASS (ephy_search_provider_parent_class)->constructed (object);
+
+  g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
+
+  self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
+
+  self->bookmarks_manager = ephy_bookmarks_manager_new ();
+  self->model = ephy_suggestion_model_new (ephy_embed_shell_get_global_history_service (shell),
+                                           self->bookmarks_manager);
+
+  self->cancellable = g_cancellable_new ();
+
+  g_application_set_inactivity_timeout (G_APPLICATION (self), INACTIVITY_TIMEOUT);
+}
+
+static void
 ephy_search_provider_dispose (GObject *object)
 {
   EphySearchProvider *self;
@@ -427,6 +435,7 @@ ephy_search_provider_class_init (EphySearchProviderClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
+  object_class->constructed = ephy_search_provider_constructed;
   object_class->dispose = ephy_search_provider_dispose;
 
   application_class->dbus_register = ephy_search_provider_dbus_register;
