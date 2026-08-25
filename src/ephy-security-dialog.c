@@ -193,11 +193,6 @@ ephy_security_dialog_set_security_level (EphySecurityDialog *dialog,
                                       "you send, or control the content that you see"));
       adw_status_page_set_description (ADW_STATUS_PAGE (dialog->status_page), label_text);
       break;
-    case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-      adw_status_page_set_description (ADW_STATUS_PAGE (dialog->status_page),
-                                       /* Label in certificate dialog when site sends mixed content. */
-                                       _("This web site did not properly secure your connection"));
-      break;
     case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
       adw_status_page_set_description (ADW_STATUS_PAGE (dialog->status_page),
                                        /* Label in certificate dialog on secure sites. */

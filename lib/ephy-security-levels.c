@@ -39,7 +39,6 @@ ephy_security_level_to_icon_name (EphySecurityLevel level)
       result = NULL;
       break;
     case EPHY_SECURITY_LEVEL_NO_SECURITY:
-    case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
     case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
       result = "channel-insecure-symbolic";
       break;

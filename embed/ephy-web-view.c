@@ -2386,17 +2386,6 @@ load_failed_with_tls_error_cb (WebKitWebView        *web_view,
 }
 
 static void
-mixed_content_detected_cb (WebKitWebView              *web_view,
-                           WebKitInsecureContentEvent  event,
-                           gpointer                    user_data)
-{
-  EphyWebView *view = EPHY_WEB_VIEW (web_view);
-
-  if (view->security_level != EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE)
-    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_MIXED_CONTENT);
-}
-
-static void
 close_web_view_cb (WebKitWebView *web_view,
                    gpointer       user_data)
 
@@ -4040,10 +4029,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "load-failed-with-tls-errors",
                     G_CALLBACK (load_failed_with_tls_error_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "insecure-content-detected",
-                    G_CALLBACK (mixed_content_detected_cb),
                     NULL);
 
   g_signal_connect (web_view, "notify::zoom-level",

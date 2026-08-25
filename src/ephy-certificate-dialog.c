@@ -324,10 +324,6 @@ ephy_certificate_dialog_constructed (GObject *object)
         /* Message on certificate dialog */
         gtk_label_set_text (GTK_LABEL (dialog->text), _("No problems have been detected with your connection."));
         break;
-      case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-        gtk_label_set_text (GTK_LABEL (dialog->text), _("This certificate is valid. However, "
-                                                        "resources on this page were sent insecurely."));
-        break;
       case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
       case EPHY_SECURITY_LEVEL_NO_SECURITY:
       case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:

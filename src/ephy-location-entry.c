@@ -371,7 +371,6 @@ ephy_location_entry_update_url_button_style (EphyLocationEntry *self)
   port = g_uri_get_port (uri);
 
   if (self->security_level == EPHY_SECURITY_LEVEL_NO_SECURITY
-      || self->security_level == EPHY_SECURITY_LEVEL_MIXED_CONTENT
       || self->security_level == EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE) {
     PangoAttribute *color_not_secure = pango_attr_foreground_alpha_new (65535);
     const char *prefix = _("Not Secure — ");
