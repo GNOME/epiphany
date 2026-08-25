@@ -1190,6 +1190,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   if (!guri ||
       strcmp (g_uri_get_scheme (guri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
       strcmp (g_uri_get_scheme (guri), EPHY_READER_SCHEME) == 0 ||
+      strcmp (g_uri_get_scheme (guri), "data") == 0 ||
       g_strcmp0 (tld, "127.0.0.1") == 0 ||
       g_strcmp0 (tld, "::1") == 0 ||
       g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
