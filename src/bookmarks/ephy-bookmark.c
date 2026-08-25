@@ -374,9 +374,16 @@ favicon_loaded_cb (GObject      *source,
 void
 ephy_bookmark_start_loading_icon (EphyBookmark *self)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
   g_assert (EPHY_IS_BOOKMARK (self));
 
-  if (!self->icon && !self->icon_loading_started && self->url) {
+  /* TODO: The search provider should ideally return favicons to GNOME Shell.
+   * Until then, no need to start lookups here. Ideally the search provider
+   * should look up only favicons that are actually needed for search results.
+   */
+  if (self->url && !self->icon && !self->icon_loading_started &&
+      ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
     EphyEmbedShell *shell = ephy_embed_shell_get_default ();
     WebKitFaviconDatabase *database = ephy_embed_shell_get_favicon_database (shell);
 
