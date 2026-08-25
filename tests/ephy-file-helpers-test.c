@@ -69,7 +69,7 @@ static const DownloadsDirTest downloads_tests[] = {
   { "Downloads", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
   { "invalid-keyword", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
 
-  { "/tmp/Downloads", "/tmp/Downloads", -1, FALSE },
+  { "/tmp/Downloads", "/tmp/Downloads", -1, TRUE },
 };
 
 static void

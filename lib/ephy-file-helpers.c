@@ -127,15 +127,13 @@ ephy_file_download_dir (void)
  * Returns a proper downloads destination by checking the
  * EPHY_PREFS_STATE_DOWNLOAD_DIR GSettings key and following this logic:
  *
- *  - Under sandbox, always use the XDG downloads directory
- *
  *  - An absolute path: considered user-set, use this value directly.
  *
  *  - "Desktop" keyword in GSettings: the directory returned by
  *    ephy_file_desktop_dir().
  *
  *  - "Downloads" keyword in GSettings, or any other value: the XDG
- *  downloads directory, or ~/Downloads.
+ *    downloads directory, or ~/Downloads.
  *
  * Returns: a newly-allocated string containing the path to the downloads dir.
  **/
@@ -144,9 +142,6 @@ ephy_file_get_downloads_dir (void)
 {
   g_autofree char *download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
                                                          EPHY_PREFS_STATE_DOWNLOAD_DIR);
-
-  if (xdp_portal_running_under_sandbox ())
-    return ephy_file_download_dir ();
 
   if (g_strcmp0 (download_dir, "Desktop") == 0)
     return ephy_file_desktop_dir ();
