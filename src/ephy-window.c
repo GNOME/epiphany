@@ -5345,6 +5345,13 @@ ephy_window_is_fullscreen (EphyWindow *window)
   return window->is_fullscreen;
 }
 
+gboolean
+ephy_window_is_fully_fullscreen (EphyWindow *window)
+{
+  /* Returns FALSE for fullscreen video, which is not the "full" fullscreen mode. */
+  return gtk_window_is_fullscreen (GTK_WINDOW (window)) && window->show_fullscreen_header_bar;
+}
+
 guint64
 ephy_window_get_uid (EphyWindow *window)
 {

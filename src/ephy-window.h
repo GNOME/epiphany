@@ -96,6 +96,8 @@ gboolean          ephy_window_is_maximized               (EphyWindow *window);
 
 gboolean          ephy_window_is_fullscreen              (EphyWindow *window);
 
+gboolean          ephy_window_is_fully_fullscreen        (EphyWindow *window);
+
 GActionGroup     *ephy_window_get_action_group           (EphyWindow  *window,
                                                           const char  *prefix);
 
