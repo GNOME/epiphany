@@ -46,6 +46,7 @@ const char *ephy_synchronizable_get_id                    (EphySynchronizable  *
 gint64      ephy_synchronizable_get_server_time_modified  (EphySynchronizable  *synchronizable);
 void        ephy_synchronizable_set_server_time_modified  (EphySynchronizable  *synchronizable,
                                                            gint64               time_modified);
+char       *ephy_synchronizable_to_debug_string           (EphySynchronizable  *synchronizable);
 JsonNode   *ephy_synchronizable_to_bso                    (EphySynchronizable  *synchronizable,
                                                            SyncCryptoKeyBundle *bundle);
 /* This can't be an interface method because we lack the EphySynchronizable object. */

@@ -246,3 +246,30 @@ ephy_synchronizable_default_to_bso (EphySynchronizable  *synchronizable,
 
   return bso;
 }
+
+/**
+ * ephy_synchronizable_to_debug_string:
+ * @synchronizable: an #EphySynchronizable
+ *
+ * Converts an #EphySynchronizable into its JSON string representation
+ * for debugging purposes, stripping sensitive data like passwords.
+ *
+ * Return value: (transfer full): @synchronizable's debug string representation
+ **/
+char *
+ephy_synchronizable_to_debug_string (EphySynchronizable *synchronizable)
+{
+  g_autoptr (JsonNode) node = NULL;
+  JsonObject *object;
+
+  g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
+
+  node = json_gobject_serialize (G_OBJECT (synchronizable));
+  if (node && JSON_NODE_HOLDS_OBJECT (node)) {
+    object = json_node_get_object (node);
+    if (json_object_has_member (object, "password"))
+      json_object_remove_member (object, "password");
+  }
+
+  return json_to_string (node, FALSE);
+}
