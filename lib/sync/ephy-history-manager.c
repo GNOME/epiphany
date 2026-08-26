@@ -97,6 +97,9 @@ url_visited_cb (EphyHistoryService *service,
 {
   EphyHistoryRecord *record;
 
+  if (!ephy_sync_utils_history_sync_is_enabled ())
+    return;
+
   if (!url->sync_id)
     return;
 
@@ -111,6 +114,9 @@ url_deleted_cb (EphyHistoryService *service,
                 EphyHistoryManager *self)
 {
   EphyHistoryRecord *record;
+
+  if (!ephy_sync_utils_history_sync_is_enabled ())
+    return;
 
   if (!url->sync_id)
     return;

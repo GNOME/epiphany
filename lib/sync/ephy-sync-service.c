@@ -1438,6 +1438,29 @@ out_no_error:
     json_node_unref (node);
 }
 
+static gboolean
+ephy_sync_service_is_manager_enabled (EphySynchronizableManager *manager)
+{
+  const char *name;
+
+  if (!manager)
+    return FALSE;
+
+  name = ephy_synchronizable_manager_get_collection_name (manager);
+  if (g_str_equal (name, "history") || g_str_equal (name, "ephy-history"))
+    return ephy_sync_utils_history_sync_is_enabled ();
+  if (g_str_equal (name, "passwords") || g_str_equal (name, "ephy-passwords"))
+    return ephy_sync_utils_passwords_sync_is_enabled ();
+  if (g_str_equal (name, "bookmarks") || g_str_equal (name, "ephy-bookmarks"))
+    return ephy_sync_utils_bookmarks_sync_is_enabled ();
+  if (g_str_equal (name, "extension-storage") || g_str_equal (name, "ephy-extension-storage"))
+    return ephy_sync_utils_extensions_sync_is_enabled ();
+  if (g_str_equal (name, "tabs") || g_str_equal (name, "ephy-tabs"))
+    return ephy_sync_utils_open_tabs_sync_is_enabled ();
+
+  return TRUE;
+}
+
 static void
 ephy_sync_service_sync_collection (EphySyncService           *self,
                                    EphySynchronizableManager *manager,
@@ -1451,6 +1474,9 @@ ephy_sync_service_sync_collection (EphySyncService           *self,
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (ephy_sync_utils_user_is_signed_in ());
+
+  if (!ephy_sync_service_is_manager_enabled (manager))
+    return;
 
   collection = ephy_synchronizable_manager_get_collection_name (manager);
   is_initial = ephy_synchronizable_manager_is_initial_sync (manager);
@@ -2411,6 +2437,9 @@ synchronizable_deleted_cb (EphySynchronizableManager *manager,
   if (!ephy_sync_utils_user_is_signed_in ())
     return;
 
+  if (!ephy_sync_service_is_manager_enabled (manager))
+    return;
+
   ephy_sync_service_delete_synchronizable (self, manager, synchronizable);
 }
 
@@ -2431,6 +2460,9 @@ synchronizable_modified_cb (EphySynchronizableManager *manager,
     return;
 
   if (!ephy_sync_utils_user_is_signed_in ())
+    return;
+
+  if (!ephy_sync_service_is_manager_enabled (manager))
     return;
 
   ephy_sync_service_upload_synchronizable (self, manager, synchronizable, should_force);
