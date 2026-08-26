@@ -3417,13 +3417,15 @@ ephy_web_view_get_best_web_app_icon (EphyWebView         *view,
   WebKitWebView *wk_view;
   GTask *task;
   char *script;
+  g_autofree char *encoded_url = NULL;
 
   g_assert (EPHY_IS_WEB_VIEW (view));
   wk_view = WEBKIT_WEB_VIEW (view);
 
   task = g_task_new (view, cancellable, callback, user_data);
   g_task_set_source_tag (task, ephy_web_view_get_best_web_app_icon);
-  script = g_strdup_printf ("Ephy.getWebAppIcon(\"%s\");", webkit_web_view_get_uri (wk_view));
+  encoded_url = ephy_encode_for_js_quoted_data_value (webkit_web_view_get_uri (wk_view));
+  script = g_strdup_printf ("Ephy.getWebAppIcon(\"%s\");", encoded_url);
   webkit_web_view_evaluate_javascript (wk_view,
                                        script, -1,
                                        ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
