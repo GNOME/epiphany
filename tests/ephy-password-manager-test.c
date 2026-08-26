@@ -31,6 +31,7 @@
 #include "ephy-password-record.h"
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
+#include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
 #include "ephy-synchronizable.h"
 
@@ -498,12 +499,69 @@ test_password_manager_deduplicate_records (void)
   g_list_free_full (newest_list, g_object_unref);
 }
 
+static void
+test_sync_utils_log_sync_change (void)
+{
+  g_autofree char *log_path = NULL;
+  g_autofree char *contents = NULL;
+  g_autoptr (GError) error = NULL;
+
+  log_path = g_build_filename (ephy_profile_dir (), "sync-changes.log", NULL);
+  g_assert_nonnull (log_path);
+
+  /* By default, sync debug logging is disabled */
+  g_assert_false (ephy_sync_utils_debug_log_is_enabled ());
+  ephy_sync_utils_log_sync_change ("Disabled test entry");
+  g_assert_false (g_file_test (log_path, G_FILE_TEST_EXISTS));
+
+  /* Enable sync debug logging */
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEBUG_LOG_ENABLED, TRUE);
+  g_assert_true (ephy_sync_utils_debug_log_is_enabled ());
+
+  ephy_sync_utils_log_sync_change ("Unit test log entry for record %s", "{test-log-uuid}");
+
+  g_assert_true (g_file_test (log_path, G_FILE_TEST_EXISTS));
+
+  g_file_get_contents (log_path, &contents, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_nonnull (contents);
+  g_assert_nonnull (strstr (contents, "Unit test log entry for record {test-log-uuid}"));
+
+  /* Cleanup */
+  g_settings_reset (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEBUG_LOG_ENABLED);
+}
+
+static void
+test_synchronizable_to_debug_string (void)
+{
+  g_autoptr (EphyPasswordRecord) record = NULL;
+  g_autofree char *debug_str = NULL;
+
+  record = ephy_password_record_new ("{test-id}",
+                                     "https://example.com",
+                                     "https://example.com",
+                                     "testuser",
+                                     "supersecretpassword",
+                                     "user_field",
+                                     "pass_field",
+                                     1000,
+                                     2000);
+  debug_str = ephy_synchronizable_to_debug_string (EPHY_SYNCHRONIZABLE (record));
+  g_assert_nonnull (debug_str);
+  g_assert_nonnull (strstr (debug_str, "\"id\":\"{test-id}\""));
+  g_assert_nonnull (strstr (debug_str, "\"hostname\":\"https://example.com\""));
+  g_assert_nonnull (strstr (debug_str, "\"username\":\"testuser\""));
+  g_assert_null (strstr (debug_str, "supersecretpassword"));
+  g_assert_null (strstr (debug_str, "\"password\""));
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   int ret;
 
+  g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
   ephy_debug_init ();
 
   g_test_init (&argc, &argv, NULL);
@@ -528,6 +586,8 @@ main (int   argc,
   g_test_add_func ("/lib/sync/password-manager/initial-merge-new-records", test_password_manager_initial_merge_new_local_and_remote);
   g_test_add_func ("/lib/sync/password-manager/regular-merge-deleted", test_password_manager_regular_merge_deleted);
   g_test_add_func ("/lib/sync/password-manager/deduplicate-records", test_password_manager_deduplicate_records);
+  g_test_add_func ("/lib/sync/utils/log-sync-change", test_sync_utils_log_sync_change);
+  g_test_add_func ("/lib/sync/synchronizable/debug-string", test_synchronizable_to_debug_string);
 
   ret = g_test_run ();
 

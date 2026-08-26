@@ -199,6 +199,7 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_SYNC_OPEN_TABS_TIME    "sync-open-tabs-time"
 #define EPHY_PREFS_SYNC_TOKEN_SERVER      "sync-token-server"
 #define EPHY_PREFS_SYNC_ACCOUNTS_SERVER   "sync-accounts-server"
+#define EPHY_PREFS_SYNC_DEBUG_LOG_ENABLED "sync-debug-log-enabled"
 
 #define EPHY_PREFS_WEB_APP_SCHEMA                  "org.gnome.Epiphany.webapp"
 #define EPHY_PREFS_WEB_APP_ADDITIONAL_URLS         "additional-urls"

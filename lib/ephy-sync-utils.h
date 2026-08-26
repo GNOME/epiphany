@@ -109,4 +109,9 @@ gint64    ephy_sync_utils_get_open_tabs_sync_time       (void);
 char     *ephy_sync_utils_get_token_server              (void);
 char     *ephy_sync_utils_get_accounts_server           (void);
 
+gboolean  ephy_sync_utils_debug_log_is_enabled          (void);
+
+void      ephy_sync_utils_log_sync_change               (const char *format,
+                                                         ...) G_GNUC_PRINTF (1, 2);
+
 G_END_DECLS

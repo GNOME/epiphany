@@ -31,6 +31,7 @@
 #include <json-glib/json-glib.h>
 #include <webkit/webkit.h>
 
+#include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 #if defined(__linux__)
 #include <sys/random.h>
@@ -534,4 +535,46 @@ char *
 ephy_sync_utils_get_accounts_server (void)
 {
   return g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_ACCOUNTS_SERVER);
+}
+
+gboolean
+ephy_sync_utils_debug_log_is_enabled (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEBUG_LOG_ENABLED);
+}
+
+void
+ephy_sync_utils_log_sync_change (const char *format,
+                                 ...)
+{
+  va_list args;
+  g_autofree char *message = NULL;
+  g_autoptr (GDateTime) now = NULL;
+  g_autofree char *timestamp = NULL;
+  g_autofree char *log_path = NULL;
+  FILE *file = NULL;
+
+  if (!format || !ephy_sync_utils_debug_log_is_enabled ())
+    return;
+
+  va_start (args, format);
+  message = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  now = g_date_time_new_now_local ();
+  if (now)
+    timestamp = g_date_time_format (now, "%Y-%m-%d %H:%M:%S");
+
+  g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "[SYNC-CHANGE] %s", message);
+
+  if (ephy_profile_dir ()) {
+    log_path = g_build_filename (ephy_profile_dir (), "sync-changes.log", NULL);
+    file = fopen (log_path, "a");
+    if (file) {
+      fprintf (file, "[%s] %s\n", timestamp ? timestamp : "", message);
+      fclose (file);
+    } else {
+      g_warning ("Failed to open %s: %s", log_path, g_strerror (errno));
+    }
+  }
 }
