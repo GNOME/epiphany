@@ -284,12 +284,11 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
                              const char            *message_id,
                              JsonObject            *data)
 {
-  JsonNode *node;
-  JsonObject *detail;
-  JsonObject *message;
-  char *detail_str;
-  char *script;
-  const char *type;
+  g_autoptr (JsonNode) node = NULL;
+  g_autoptr (JsonObject) detail = NULL;
+  g_autoptr (JsonObject) message = NULL;
+  g_autofree char *detail_str = NULL;
+  g_autofree char *script = NULL;
 
   g_assert (EPHY_FIREFOX_SYNC_DIALOG (sync_dialog));
   g_assert (web_channel_id);
@@ -303,22 +302,16 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
   json_object_set_object_member (message, "data", json_object_ref (data));
   detail = json_object_new ();
   json_object_set_string_member (detail, "id", web_channel_id);
-  json_object_set_object_member (detail, "message", message);
+  json_object_set_object_member (detail, "message", g_steal_pointer (&message));
   node = json_node_new (JSON_NODE_OBJECT);
   json_node_set_object (node, detail);
 
-  type = "WebChannelMessageToContent";
   detail_str = json_to_string (node, FALSE);
-  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"%s\", {detail: %s}));",
-                            type, detail_str);
+  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"WebChannelMessageToContent\", {detail: %s}));",
+                            detail_str);
 
   /* We don't expect any response from the server. */
   webkit_web_view_evaluate_javascript (sync_dialog->fxa_web_view, script, -1, NULL, NULL, NULL, NULL, NULL);
-
-  g_free (script);
-  g_free (detail_str);
-  json_object_unref (detail);
-  json_node_unref (node);
 }
 
 /* Parse a WebChannelMessageToChrome event from the FxA page.
