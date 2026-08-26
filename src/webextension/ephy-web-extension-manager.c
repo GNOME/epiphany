@@ -48,6 +48,7 @@
 #include "ephy-header-bar.h"
 #include "ephy-location-entry.h"
 #include "ephy-notification.h"
+#include "ephy-output-encoding.h"
 #include "ephy-pixbuf-utils.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -763,6 +764,7 @@ page_action_clicked (GtkButton *button,
   g_autoptr (JsonBuilder) builder = json_builder_new ();
   g_autoptr (JsonNode) root = NULL;
   g_autofree char *json = NULL;
+  g_autofree char *encoded_json = NULL;
   g_autofree char *script = NULL;
   EphyWebExtensionManager *self = ephy_web_extension_manager_get_default ();
   WebKitWebView *web_view = ephy_web_extension_manager_get_background_web_view (self, web_extension);
@@ -777,8 +779,9 @@ page_action_clicked (GtkButton *button,
   root = json_builder_get_root (builder);
 
   json = json_to_string (root, FALSE);
+  encoded_json = ephy_encode_for_js_quoted_data_value (json);
 
-  script = g_strdup_printf ("window.browser.pageAction.onClicked._emit(%s);", json);
+  script = g_strdup_printf ("window.browser.pageAction.onClicked._emit('%s');", encoded_json);
   webkit_web_view_evaluate_javascript (web_view,
                                        script, -1,
                                        NULL,
