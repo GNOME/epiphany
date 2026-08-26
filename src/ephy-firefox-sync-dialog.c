@@ -25,6 +25,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
+#include "ephy-output-encoding.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -288,6 +289,7 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
   g_autoptr (JsonObject) detail = NULL;
   g_autoptr (JsonObject) message = NULL;
   g_autofree char *detail_str = NULL;
+  g_autofree char *encoded_detail_str = NULL;
   g_autofree char *script = NULL;
 
   g_assert (EPHY_FIREFOX_SYNC_DIALOG (sync_dialog));
@@ -307,8 +309,9 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
   json_node_set_object (node, detail);
 
   detail_str = json_to_string (node, FALSE);
-  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"WebChannelMessageToContent\", {detail: %s}));",
-                            detail_str);
+  encoded_detail_str = ephy_encode_for_js_quoted_data_value (detail_str);
+  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"WebChannelMessageToContent\", {detail: '%s'}));",
+                            encoded_detail_str);
 
   /* We don't expect any response from the server. */
   webkit_web_view_evaluate_javascript (sync_dialog->fxa_web_view, script, -1, NULL, NULL, NULL, NULL, NULL);
