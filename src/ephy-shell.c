@@ -1621,6 +1621,11 @@ open_uris_data_new (EphyShell        *shell,
     data->flags |= EPHY_NEW_TAB_JUMP;
     data->window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
     data->reuse_empty_tab = TRUE;
+
+    if (data->window && !fullscreen_lockdown &&
+        gtk_window_is_fullscreen (GTK_WINDOW (data->window)) &&
+        !ephy_window_is_fully_fullscreen (data->window))
+      gtk_window_unfullscreen (GTK_WINDOW (data->window));
   }
 
   g_application_hold (G_APPLICATION (shell));
