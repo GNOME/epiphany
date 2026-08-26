@@ -136,6 +136,11 @@ ephy_uri_get_decoded_host (const char *decoded_uri)
   if (!protocol_end)
     return NULL;
 
+  for (const char *c = copy; c != protocol_end; c++) {
+    if (!g_ascii_isalnum (c[0]) && c[0] != '+' && c[0] != '-' && c[0] != '.')
+      return NULL;
+  }
+
   authority_start = protocol_end + strlen ("://");
 
   first_colon = get_first_colon_after_host (authority_start);
