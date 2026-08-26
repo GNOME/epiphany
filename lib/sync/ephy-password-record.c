@@ -252,6 +252,8 @@ ephy_password_record_new (const char *id,
                           guint64     time_created,
                           guint64     time_password_changed)
 {
+  g_assert (id && *id);
+
   return EPHY_PASSWORD_RECORD (g_object_new (EPHY_TYPE_PASSWORD_RECORD,
                                              "id", id,
                                              "hostname", origin,

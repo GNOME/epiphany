@@ -115,7 +115,7 @@ typedef struct {
   gpointer user_data;
   GList *records;
   guint n_matches;
-  EphyPasswordRecord *query_record;
+  GHashTable *retry_attributes;
   gboolean retried_without_fields;
 } QueryAsyncData;
 
@@ -159,7 +159,7 @@ query_async_data_free (QueryAsyncData *data)
   g_assert (data);
 
   g_list_free_full (data->records, g_object_unref);
-  g_clear_object (&data->query_record);
+  g_clear_pointer (&data->retry_attributes, g_hash_table_unref);
   g_free (data);
 }
 
@@ -659,6 +659,8 @@ retrieve_secret_cb (GObject        *source_object,
   id = g_hash_table_lookup (attributes, ID_KEY);
   origin = g_hash_table_lookup (attributes, ORIGIN_KEY);
   target_origin = g_hash_table_lookup (attributes, TARGET_ORIGIN_KEY);
+  if (!target_origin)
+    target_origin = origin;
   username = g_hash_table_lookup (attributes, USERNAME_KEY);
   username_field = g_hash_table_lookup (attributes, USERNAME_FIELD_KEY);
   password_field = g_hash_table_lookup (attributes, PASSWORD_FIELD_KEY);
@@ -669,8 +671,8 @@ retrieve_secret_cb (GObject        *source_object,
   LOG ("Found password record (%s, %s, %s, %s, %s, %s)",
        id, origin, target_origin, username, username_field, password_field);
 
-  if (!id || !origin || !target_origin || !timestamp) {
-    LOG ("Password record is corrupted, skipping it...");
+  if (!id || !*id || !origin || !*origin) {
+    LOG ("Password record is corrupted (missing id or origin), skipping it...");
     goto out;
   }
 
@@ -681,7 +683,7 @@ retrieve_secret_cb (GObject        *source_object,
                                      username_field, password_field,
                                      created * 1000,
                                      modified * 1000);
-  server_time_modified = g_ascii_strtod (timestamp, NULL);
+  server_time_modified = timestamp ? g_ascii_strtod (timestamp, NULL) : 0;
   ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record),
                                                 server_time_modified);
   data->records = g_list_prepend (data->records, record);
@@ -714,22 +716,14 @@ secret_password_search_cb (GObject        *source_object,
       if (should_warn_for_secret_error (error))
         g_warning ("Failed to search secret storage (is the secret service or secrets portal broken?): %s", error->message);
       g_error_free (error);
-    } else if (data->query_record && !data->retried_without_fields) {
-      EphyPasswordRecord *record = data->query_record;
-      GHashTable *attributes = get_attributes_table (ephy_password_record_get_id (record),
-                                                     ephy_password_record_get_origin (record),
-                                                     ephy_password_record_get_target_origin (record),
-                                                     ephy_password_record_get_username (record),
-                                                     NULL, NULL, -1);
-
+    } else if (data->retry_attributes && !data->retried_without_fields) {
       data->retried_without_fields = TRUE;
       secret_password_searchv (EPHY_FORM_PASSWORD_SCHEMA,
-                               attributes,
+                               data->retry_attributes,
                                SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
                                NULL,
                                (GAsyncReadyCallback)secret_password_search_cb,
                                data);
-      g_hash_table_unref (attributes);
       return;
     }
     if (data->callback) {
@@ -779,10 +773,8 @@ ephy_password_manager_query (EphyPasswordManager              *self,
   data = query_async_data_new (callback, user_data);
 
   if (allow_retry_without_fields && (username_field || password_field))
-    data->query_record = ephy_password_record_new (id, origin, target_origin,
-                                                   username, NULL,
-                                                   username_field, password_field,
-                                                   0, 0);
+    data->retry_attributes = get_attributes_table (id, origin, target_origin, username,
+                                                   NULL, NULL, -1);
 
   secret_password_searchv (EPHY_FORM_PASSWORD_SCHEMA,
                            attributes,
@@ -860,11 +852,14 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
 {
   GHashTable *attributes;
   ManageRecordAsyncData *clear_cb_data = NULL;
+  const char *id;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
-  attributes = get_attributes_table (ephy_password_record_get_id (record),
+  id = ephy_password_record_get_id (record);
+
+  attributes = get_attributes_table (id,
                                      ephy_password_record_get_origin (record),
                                      ephy_password_record_get_target_origin (record),
                                      ephy_password_record_get_username (record),
@@ -875,7 +870,7 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
   clear_cb_data = manage_record_async_data_new (self, replacement, task);
 
   LOG ("Forgetting password record (%s, %s, %s, %s, %s, %s)",
-       ephy_password_record_get_id (record),
+       id,
        ephy_password_record_get_origin (record),
        ephy_password_record_get_target_origin (record),
        ephy_password_record_get_username (record),
@@ -1056,7 +1051,11 @@ replace_existing_cb (GList    **records,
     *records = ephy_password_manager_deduplicate_records (data->manager, *records);
   }
 
-  ephy_password_manager_forget_record (data->manager, (*records)->data, data->record, NULL);
+  if (*records)
+    ephy_password_manager_forget_record (data->manager, (*records)->data, data->record, NULL);
+  else
+    ephy_password_manager_store_record (data->manager, data->record);
+
   manage_record_async_data_free (data);
 }
 
@@ -1106,10 +1105,16 @@ get_record_by_parameters (GList      *records,
                           const char *username_field,
                           const char *password_field)
 {
+  const char *effective_target = (target_origin && *target_origin) ? target_origin : origin;
+
   for (GList *l = records; l && l->data; l = l->next) {
-    if (g_strcmp0 (ephy_password_record_get_username (l->data), username) == 0 &&
-        g_strcmp0 (ephy_password_record_get_origin (l->data), origin) == 0 &&
-        g_strcmp0 (ephy_password_record_get_target_origin (l->data), target_origin) == 0 &&
+    const char *local_origin = ephy_password_record_get_origin (l->data);
+    const char *local_target = ephy_password_record_get_target_origin (l->data);
+    const char *effective_local_target = (local_target && *local_target) ? local_target : local_origin;
+
+    if (g_strcmp0 (local_origin, origin) == 0 &&
+        g_strcmp0 (effective_local_target, effective_target) == 0 &&
+        g_strcmp0 (ephy_password_record_get_username (l->data), username) == 0 &&
         g_strcmp0 (ephy_password_record_get_username_field (l->data), username_field) == 0 &&
         g_strcmp0 (ephy_password_record_get_password_field (l->data), password_field) == 0)
       return l->data;

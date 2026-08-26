@@ -498,6 +498,42 @@ test_password_manager_deduplicate_records (void)
   g_list_free_full (newest_list, g_object_unref);
 }
 
+typedef struct {
+  gboolean called;
+} QueryTestContext;
+
+static void
+query_finished_cb (GList    **records,
+                   gpointer   user_data)
+{
+  QueryTestContext *ctx = user_data;
+
+  if (ctx)
+    ctx->called = TRUE;
+}
+
+static void
+test_password_manager_query_without_id (void)
+{
+  g_autoptr (EphyPasswordManager) manager = ephy_password_manager_new ();
+  QueryTestContext ctx = { FALSE };
+
+  /* Test querying with id == NULL and allow_retry_without_fields == TRUE,
+   * matching how ephy-web-view queries for form autofill.
+   * This previously triggered g_assert (id && *id) in ephy_password_record_new().
+   */
+  ephy_password_manager_query (manager,
+                               NULL,
+                               "https://example.com",
+                               "https://example.com/login",
+                               "user",
+                               "username_input",
+                               "password_input",
+                               TRUE,
+                               query_finished_cb,
+                               &ctx);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -528,6 +564,7 @@ main (int   argc,
   g_test_add_func ("/lib/sync/password-manager/initial-merge-new-records", test_password_manager_initial_merge_new_local_and_remote);
   g_test_add_func ("/lib/sync/password-manager/regular-merge-deleted", test_password_manager_regular_merge_deleted);
   g_test_add_func ("/lib/sync/password-manager/deduplicate-records", test_password_manager_deduplicate_records);
+  g_test_add_func ("/lib/sync/password-manager/query-without-id", test_password_manager_query_without_id);
 
   ret = g_test_run ();
 
