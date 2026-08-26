@@ -659,6 +659,8 @@ retrieve_secret_cb (GObject        *source_object,
   id = g_hash_table_lookup (attributes, ID_KEY);
   origin = g_hash_table_lookup (attributes, ORIGIN_KEY);
   target_origin = g_hash_table_lookup (attributes, TARGET_ORIGIN_KEY);
+  if (!target_origin)
+    target_origin = origin;
   username = g_hash_table_lookup (attributes, USERNAME_KEY);
   username_field = g_hash_table_lookup (attributes, USERNAME_FIELD_KEY);
   password_field = g_hash_table_lookup (attributes, PASSWORD_FIELD_KEY);
@@ -669,8 +671,8 @@ retrieve_secret_cb (GObject        *source_object,
   LOG ("Found password record (%s, %s, %s, %s, %s, %s)",
        id, origin, target_origin, username, username_field, password_field);
 
-  if (!id || !origin || !target_origin || !timestamp) {
-    LOG ("Password record is corrupted, skipping it...");
+  if (!id || !origin) {
+    LOG ("Password record is corrupted (missing id or origin), skipping it...");
     goto out;
   }
 
@@ -681,7 +683,7 @@ retrieve_secret_cb (GObject        *source_object,
                                      username_field, password_field,
                                      created * 1000,
                                      modified * 1000);
-  server_time_modified = g_ascii_strtod (timestamp, NULL);
+  server_time_modified = timestamp ? g_ascii_strtod (timestamp, NULL) : 0;
   ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record),
                                                 server_time_modified);
   data->records = g_list_prepend (data->records, record);
@@ -861,10 +863,14 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
   GHashTable *attributes;
   ManageRecordAsyncData *clear_cb_data = NULL;
 
+  const char *id;
+
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
-  attributes = get_attributes_table (ephy_password_record_get_id (record),
+  id = ephy_password_record_get_id (record);
+
+  attributes = get_attributes_table (id,
                                      ephy_password_record_get_origin (record),
                                      ephy_password_record_get_target_origin (record),
                                      ephy_password_record_get_username (record),
@@ -875,7 +881,7 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
   clear_cb_data = manage_record_async_data_new (self, replacement, task);
 
   LOG ("Forgetting password record (%s, %s, %s, %s, %s, %s)",
-       ephy_password_record_get_id (record),
+       id,
        ephy_password_record_get_origin (record),
        ephy_password_record_get_target_origin (record),
        ephy_password_record_get_username (record),
@@ -1056,7 +1062,11 @@ replace_existing_cb (GList    **records,
     *records = ephy_password_manager_deduplicate_records (data->manager, *records);
   }
 
-  ephy_password_manager_forget_record (data->manager, (*records)->data, data->record, NULL);
+  if (*records)
+    ephy_password_manager_forget_record (data->manager, (*records)->data, data->record, NULL);
+  else
+    ephy_password_manager_store_record (data->manager, data->record);
+
   manage_record_async_data_free (data);
 }
 
@@ -1106,10 +1116,16 @@ get_record_by_parameters (GList      *records,
                           const char *username_field,
                           const char *password_field)
 {
+  const char *effective_target = (target_origin && *target_origin) ? target_origin : origin;
+
   for (GList *l = records; l && l->data; l = l->next) {
-    if (g_strcmp0 (ephy_password_record_get_username (l->data), username) == 0 &&
-        g_strcmp0 (ephy_password_record_get_origin (l->data), origin) == 0 &&
-        g_strcmp0 (ephy_password_record_get_target_origin (l->data), target_origin) == 0 &&
+    const char *local_origin = ephy_password_record_get_origin (l->data);
+    const char *local_target = ephy_password_record_get_target_origin (l->data);
+    const char *effective_local_target = (local_target && *local_target) ? local_target : local_origin;
+
+    if (g_strcmp0 (local_origin, origin) == 0 &&
+        g_strcmp0 (effective_local_target, effective_target) == 0 &&
+        g_strcmp0 (ephy_password_record_get_username (l->data), username) == 0 &&
         g_strcmp0 (ephy_password_record_get_username_field (l->data), username_field) == 0 &&
         g_strcmp0 (ephy_password_record_get_password_field (l->data), password_field) == 0)
       return l->data;
