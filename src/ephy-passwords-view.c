@@ -316,6 +316,7 @@ populate_model (EphyPasswordsView *self)
   /* Ask for all password records. */
   ephy_password_manager_query (self->manager,
                                NULL, NULL, NULL, NULL, NULL, NULL,
+                               FALSE,
                                populate_model_cb, self);
 }
 

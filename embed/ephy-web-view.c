@@ -2648,6 +2648,7 @@ authenticate_cb (WebKitWebView               *web_view,
                                NULL,
                                "org.gnome.Epiphany.HTTPAuthCredentials.Username",
                                "org.gnome.Epiphany.HTTPAuthCredentials.Password",
+                               FALSE,
                                (EphyPasswordManagerQueryCallback)auth_password_query_finished_cb,
                                data);
   return TRUE;
@@ -2769,6 +2770,7 @@ password_manager_handle_query_password_message (WebKitWebView     *web_view,
                                username,
                                username_field,
                                password_field,
+                               TRUE,
                                (EphyPasswordManagerQueryCallback)password_manager_query_finished_cb,
                                data);
   return TRUE;
