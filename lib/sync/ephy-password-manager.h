@@ -77,6 +77,7 @@ void                 ephy_password_manager_query                    (EphyPasswor
                                                                      const char                       *username,
                                                                      const char                       *username_field,
                                                                      const char                       *password_field,
+                                                                     gboolean                          allow_retry_without_fields,
                                                                      EphyPasswordManagerQueryCallback  callback,
                                                                      gpointer                          user_data);
 gboolean             ephy_password_manager_find                     (EphyPasswordManager              *self,
