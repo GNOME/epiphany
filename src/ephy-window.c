@@ -4133,17 +4133,52 @@ download_added_cb (EphyWindow *window)
 }
 
 static void
-download_completed_cb (EphyDownload *download,
-                       gpointer      user_data)
+on_open_folder_ready (GObject      *source_object,
+                      GAsyncResult *res,
+                      gpointer      user_data)
+{
+  GtkFileLauncher *launcher = GTK_FILE_LAUNCHER (source_object);
+  g_autoptr (GError) error = NULL;
+
+  if (!gtk_file_launcher_open_containing_folder_finish (launcher, res, &error))
+    g_warning ("Failed to open containing folder: %s", error->message);
+}
+
+static void
+on_open_folder (AdwToast *toast,
+                gpointer  user_data)
+{
+  GFile *file = G_FILE (user_data);
+  g_autoptr (GtkFileLauncher) launcher = gtk_file_launcher_new (file);
+  GtkWindow *active_window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
+
+  gtk_file_launcher_open_containing_folder (launcher, active_window, NULL, on_open_folder_ready, NULL);
+}
+
+static void
+download_completed_cb (EphyDownloadsManager *downloads_manager,
+                       EphyDownload         *download,
+                       gpointer              user_data)
 {
   EphyShell *shell = ephy_shell_get_default ();
+  g_autoptr (GFile) file = NULL;
   EphyWindow *window;
   AdwToast *toast = adw_toast_new (_("Download finished"));
+  const char *path;
+
+  path = ephy_download_get_destination (download);
+  if (!path)
+    return;
 
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
   if (window->download_start_toast)
     adw_toast_dismiss (window->download_start_toast);
+  adw_toast_set_button_label (toast, _("_Open Folder"));
 
+
+  file = g_file_new_for_path (path);
+  g_signal_connect_data (toast, "button-clicked", G_CALLBACK (on_open_folder), g_object_ref (file), (GClosureNotify)g_object_unref, G_CONNECT_DEFAULT);
   adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (window->toast_overlay), toast);
 
   if (ephy_shell_get_n_windows (shell) != 1)
