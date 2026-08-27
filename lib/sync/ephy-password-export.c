@@ -203,7 +203,7 @@ ephy_password_export (EphyPasswordManager *manager,
 
   g_task_set_task_data (task, password_export_file, (GDestroyNotify)g_object_unref);
 
-  ephy_password_manager_query (manager, NULL, NULL, NULL, NULL, NULL, NULL,
+  ephy_password_manager_query (manager, NULL, NULL, NULL, NULL, NULL, NULL, FALSE,
                                ephy_password_manager_query_cb, g_steal_pointer (&task));
 }
 
