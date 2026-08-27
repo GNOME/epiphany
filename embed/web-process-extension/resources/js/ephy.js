@@ -967,21 +967,6 @@ Ephy.FormManager = class FormManager
             formAuth.passwordField).then(authInfo => {
                 if (!authInfo) {
                     Ephy.log('No passwords found for user ' + formAuth.username + ' at origin ' + formAuth.origin);
-                    Ephy.log('Retrying password search with username and password fields as null');
-                    Ephy.passwordManager.query(
-                        formAuth.origin,
-                        formAuth.targetOrigin,
-                        formAuth.username,
-                        null,
-                        null).then(authInfo => {
-                            if (!authInfo) {
-                                Ephy.log('No passwords found for user ' + formAuth.username + ' at origin ' + formAuth.origin);
-                                return;
-                            }
-
-                            this.#handlePasswordQuerySuccessResponse(formAuth, authInfo);
-                        }
-                    );
                     return;
                 }
 
