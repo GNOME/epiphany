@@ -217,8 +217,8 @@ resource_files = files('resources/epiphany.gresource.xml')
 resources = gnome.compile_resources('epiphany-resources',
     resource_files,
     c_name: 'epiphany',
-    dependencies: blueprints,
-    source_dir: 'resources'
+    dependencies: [blueprints, metainfo],
+    source_dir: ['resources']
 )
 
 epiphany_sources = [
