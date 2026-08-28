@@ -213,12 +213,22 @@ executable('epiphany-webapp-provider',
   install_rpath: pkglibdir
 )
 
-resource_files = files('resources/epiphany.gresource.xml')
+gresource_conf = configuration_data()
+gresource_conf.set('appid', application_id)
+resource_files = configure_file(
+  input: 'resources/epiphany.gresource.xml.in',
+  output: 'epiphany.gresource.xml',
+  configuration: gresource_conf
+)
 resources = gnome.compile_resources('epiphany-resources',
     resource_files,
     c_name: 'epiphany',
     dependencies: [blueprints, metainfo],
-    source_dir: ['resources']
+    source_dir: [
+      'resources',
+      meson.project_source_root() / 'src' / 'resources',
+      meson.project_build_root() / 'data'
+    ]
 )
 
 epiphany_sources = [
