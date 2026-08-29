@@ -23,7 +23,6 @@
 #include <glib-object.h>
 
 #include "ephy-embed.h"
-#include "ephy-window.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +38,8 @@ typedef enum
   EPHY_LINK_NEW_TAB_APPEND_AFTER   = 1 << 3,
   EPHY_LINK_HOME_PAGE              = 1 << 4,
   EPHY_LINK_TYPED                  = 1 << 5,
-  EPHY_LINK_BOOKMARK               = 1 << 6
+  EPHY_LINK_BOOKMARK               = 1 << 6,
+  EPHY_LINK_DONT_PROMPT            = 1 << 7
 } EphyLinkFlags;
 
 struct _EphyLinkInterface

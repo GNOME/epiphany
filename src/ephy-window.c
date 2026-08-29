@@ -284,6 +284,91 @@ construct_confirm_close_dialog (EphyWindow *window,
   return dialog;
 }
 
+typedef struct {
+  EphyWindow *window;
+  char *address;
+  EphyEmbed *embed;
+  EphyLinkFlags flags;
+} OpenLinkWithConfirmData;
+
+static OpenLinkWithConfirmData *
+open_link_with_confirm_data_new (EphyWindow    *window,
+                                 const char    *address,
+                                 EphyEmbed     *embed,
+                                 EphyLinkFlags  flags)
+{
+  OpenLinkWithConfirmData *data = g_new0 (OpenLinkWithConfirmData, 1);
+
+  data->window = window;
+  data->address = g_strdup (address);
+  data->embed = embed;
+  data->flags = flags;
+
+  if (window)
+    g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&data->window);
+  if (embed)
+    g_object_add_weak_pointer (G_OBJECT (embed), (gpointer *)&data->embed);
+
+  return data;
+}
+
+static void
+open_link_with_confirm_data_free (OpenLinkWithConfirmData *data)
+{
+  g_clear_weak_pointer (&data->window);
+  g_clear_weak_pointer (&data->embed);
+  g_free (data->address);
+  g_free (data);
+}
+
+static void
+open_link_dialog_cb (AdwAlertDialog          *dialog,
+                     const char              *response,
+                     OpenLinkWithConfirmData *data)
+{
+  if (g_strcmp0 (response, "accept") == 0) {
+    if (data->window && data->embed)
+      ephy_link_open (EPHY_LINK (data->window), data->address, data->embed, data->flags | EPHY_LINK_DONT_PROMPT);
+  } else if (data->window && (data->window->chrome & EPHY_WINDOW_CHROME_LOCATION)) {
+    EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (data->window->header_bar));
+
+    if (EPHY_IS_LOCATION_ENTRY (title_widget))
+      ephy_location_entry_reset (EPHY_LOCATION_ENTRY (title_widget));
+  }
+
+  open_link_with_confirm_data_free (data);
+}
+
+static void
+open_link_has_modified_forms_cb (EphyWebView             *view,
+                                 GAsyncResult            *result,
+                                 OpenLinkWithConfirmData *data)
+{
+  gboolean has_modified_forms;
+
+  has_modified_forms = ephy_web_view_has_modified_forms_finish (view, result, NULL);
+
+  if (data->window && data->embed) {
+    if (has_modified_forms) {
+      AdwDialog *dialog;
+
+      dialog = construct_confirm_close_dialog (data->window,
+                                               _("Leave Website?"),
+                                               _("A form was modified and has not been submitted"),
+                                               _("_Discard Form"));
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (open_link_dialog_cb),
+                        data);
+      adw_dialog_present (dialog, GTK_WIDGET (data->window));
+      return;
+    }
+
+    ephy_link_open (EPHY_LINK (data->window), data->address, data->embed, data->flags | EPHY_LINK_DONT_PROMPT);
+  }
+
+  open_link_with_confirm_data_free (data);
+}
+
 static void
 impl_remove_child (EphyEmbedContainer *container,
                    EphyEmbed          *child)
@@ -347,6 +432,20 @@ ephy_window_open_link (EphyLink      *link,
 
   if (!embed)
     embed = window->active_embed;
+
+  /* Only check if navigating within an existing embed in the current window */
+  if (embed &&
+      !(flags & (EPHY_LINK_JUMP_TO | EPHY_LINK_NEW_TAB | EPHY_LINK_NEW_WINDOW | EPHY_LINK_DONT_PROMPT)) &&
+      g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA)) {
+    OpenLinkWithConfirmData *data;
+
+    data = open_link_with_confirm_data_new (window, address, embed, flags);
+    ephy_web_view_has_modified_forms (ephy_embed_get_web_view (embed),
+                                      NULL,
+                                      (GAsyncReadyCallback)open_link_has_modified_forms_cb,
+                                      data);
+    return embed;
+  }
 
   if (flags & EPHY_LINK_BOOKMARK)
     ephy_web_view_set_visit_type (ephy_embed_get_web_view (embed),
