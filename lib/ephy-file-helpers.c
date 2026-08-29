@@ -796,12 +796,12 @@ ephy_open_incognito_window (const char *uri)
   g_autoptr (GError) error = NULL;
 
   quoted_profile_dir = g_shell_quote (ephy_profile_dir ());
-  command = g_strdup_printf ("epiphany --incognito-mode --profile %s -- ", quoted_profile_dir);
 
   if (uri) {
-    char *str = g_strconcat (command, uri, NULL);
-    g_free (command);
-    command = str;
+    g_autofree char *quoted_uri = g_shell_quote (uri);
+    command = g_strdup_printf ("epiphany --incognito-mode --profile %s -- %s", quoted_profile_dir, quoted_uri);
+  } else {
+    command = g_strdup_printf ("epiphany --incognito-mode --new-window --profile %s", quoted_profile_dir);
   }
 
   g_spawn_command_line_async (command, &error);

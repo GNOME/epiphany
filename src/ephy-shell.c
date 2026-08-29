@@ -949,7 +949,8 @@ static void
 ephy_shell_constructed (GObject *object)
 {
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_BROWSER &&
-      ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+      ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+      ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     GApplicationFlags flags;
 
     flags = g_application_get_flags (G_APPLICATION (object));

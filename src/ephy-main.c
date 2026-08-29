@@ -349,9 +349,8 @@ main (int   argc,
     g_error ("Fatal initialization error: %s", error->message);
   }
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_START_IN_INCOGNITO_MODE) && !application_mode && !open_in_new_window) {
+  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_START_IN_INCOGNITO_MODE) && !application_mode && !open_in_new_window)
     incognito_mode = TRUE;
-  }
 
   /* Run the migration in all cases, except when running a private
    *  instance without a given profile directory or running in
@@ -424,7 +423,9 @@ main (int   argc,
     mode = EPHY_EMBED_SHELL_MODE_KIOSK;
   } else {
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
+  }
 
+  if (mode == EPHY_EMBED_SHELL_MODE_BROWSER || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     g_set_prgname ("epiphany");
     g_set_application_name (_("Web"));
 
