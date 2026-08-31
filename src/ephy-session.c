@@ -243,15 +243,21 @@ ephy_session_undo_close_tab (EphySession *session)
   LOG ("UNDO CLOSE TAB: %s", tab->url);
   tab_view = closed_tab_get_tab_view (tab);
   if (tab_view) {
-    if (tab->position > 0) {
-      /* Append in the n-th position. */
+    int n_pages = ephy_tab_view_get_n_pages (tab_view);
+
+    if (tab->position <= 0) {
+      /* Just prepend in the first position. */
+      embed = NULL;
+      flags |= EPHY_NEW_TAB_FIRST;
+    } else if (tab->position < n_pages) {
+      /* Append after the preceding tab. */
       embed = EPHY_EMBED (ephy_tab_view_get_nth_page (tab_view,
                                                       tab->position - 1));
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
     } else {
-      /* Just prepend in the first position. */
+      /* Position is out of bounds; append in the last position. */
       embed = NULL;
-      flags |= EPHY_NEW_TAB_FIRST;
+      flags |= EPHY_NEW_TAB_APPEND_LAST;
     }
 
     window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (tab_view)));
