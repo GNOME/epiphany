@@ -567,6 +567,13 @@ ephy_opensearch_engine_load_from_link_async (EphyOpensearchAutodiscoveryLink *au
   soup_session_set_user_agent (soup_session, ephy_user_agent_get ());
   msg = soup_message_new (SOUP_METHOD_GET,
                           ephy_opensearch_autodiscovery_link_get_url (autodiscovery_link));
+  if (!msg) {
+    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT,
+                             _("Invalid OpenSearch URL"));
+    g_object_unref (task);
+    return;
+  }
+
   soup_session_send_and_read_async (g_steal_pointer (&soup_session),
                                     msg,
                                     G_PRIORITY_DEFAULT, cancellable,

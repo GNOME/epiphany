@@ -612,6 +612,13 @@ ephy_search_engine_load_suggestions_async (const char          *built_suggestion
   soup_session = soup_session_new ();
   soup_session_set_user_agent (soup_session, ephy_user_agent_get ());
   msg = soup_message_new (SOUP_METHOD_GET, built_suggestions_url);
+  if (!msg) {
+    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT,
+                             _("Invalid search suggestions URL: %s"), built_suggestions_url);
+    g_object_unref (task);
+    return;
+  }
+
   soup_session_send_and_read_async (g_steal_pointer (&soup_session),
                                     g_steal_pointer (&msg),
                                     G_PRIORITY_DEFAULT, cancellable,
