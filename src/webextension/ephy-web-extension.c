@@ -1457,17 +1457,34 @@ gboolean
 ephy_web_extension_rule_matches_uri (const char *rule,
                                      GUri       *uri)
 {
-  g_autoptr (GUri) rule_uri = NULL;
   g_autoptr (GError) error = NULL;
   g_autoptr (WebKitWebExtensionMatchPattern) match_pattern = NULL;
+  g_autofree char *uri_string = NULL;
+
+  if (!rule || !uri)
+    return FALSE;
+
+  uri_string = g_uri_to_string (uri);
+  if (!uri_string)
+    return FALSE;
+
+  if (g_str_has_prefix (rule, "ephy-webextension://")) {
+    g_autofree char *prefix = NULL;
+    if (g_str_has_suffix (rule, "/*"))
+      prefix = g_strndup (rule, strlen (rule) - 1);
+    else
+      prefix = g_strdup (rule);
+
+    return g_str_has_prefix (uri_string, prefix);
+  }
 
   match_pattern = webkit_web_extension_match_pattern_new_with_string (rule, &error);
   if (!match_pattern || error) {
-    g_warning ("Failed to parse rule '%s': %s", rule, error->message);
+    g_warning ("Failed to parse rule '%s': %s", rule, error ? error->message : "Invalid match pattern");
     return FALSE;
   }
 
-  return webkit_web_extension_match_pattern_matches_url (match_pattern, g_uri_to_string (uri), WEBKIT_WEB_EXTENSION_MATCH_PATTERN_OPTIONS_NONE);
+  return webkit_web_extension_match_pattern_matches_url (match_pattern, uri_string, WEBKIT_WEB_EXTENSION_MATCH_PATTERN_OPTIONS_NONE);
 }
 
 static gboolean
@@ -1476,9 +1493,16 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
                                             gboolean          is_user_interaction,
                                             gboolean          allow_tabs)
 {
-  EphyWebView *active_web_view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
-  gboolean is_active_tab = active_web_view == web_view;
-  GUri *host;
+  EphyWebView *active_web_view;
+  gboolean is_active_tab;
+  g_autoptr (GUri) host = NULL;
+  const char *address;
+
+  if (!web_view)
+    return FALSE;
+
+  active_web_view = ephy_shell_get_active_web_view (ephy_shell_get_default ());
+  is_active_tab = active_web_view == web_view;
 
   /* https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns */
 
@@ -1488,9 +1512,15 @@ ephy_web_extension_has_permission_internal (EphyWebExtension *self,
   if (allow_tabs && g_hash_table_contains (self->permissions, "tabs"))
     return TRUE;
 
+  address = ephy_web_view_get_address (web_view);
+  if (!address || address[0] == '\0')
+    return FALSE;
+
   /* Note this one is NULL terminated. */
-  host = g_uri_parse (ephy_web_view_get_address (web_view), G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
-  g_assert (host); /* WebKitGTK shouldn't ever expose an invalid URI. */
+  host = g_uri_parse (address, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  if (!host)
+    return FALSE;
+
   for (guint i = 0; i < self->host_permissions->len - 1; i++) {
     const char *permission = g_ptr_array_index (self->host_permissions, i);
     if (ephy_web_extension_rule_matches_uri (permission, host))
@@ -1520,7 +1550,12 @@ gboolean
 ephy_web_extension_has_host_permission (EphyWebExtension *self,
                                         const char       *host)
 {
-  GUri *uri = g_uri_parse (host, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
+  g_autoptr (GUri) uri = NULL;
+
+  if (!host || host[0] == '\0')
+    return FALSE;
+
+  uri = g_uri_parse (host, G_URI_FLAGS_PARSE_RELAXED | G_URI_FLAGS_ENCODED_PATH | G_URI_FLAGS_ENCODED_QUERY | G_URI_FLAGS_SCHEME_NORMALIZE, NULL);
   if (!uri)
     return FALSE;
 

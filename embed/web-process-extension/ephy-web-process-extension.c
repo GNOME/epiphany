@@ -372,7 +372,12 @@ static void
 on_document_loaded_cb (WebKitWebPage           *page,
                        EphyWebProcessExtension *extension)
 {
-  g_autoptr (WebKitUserMessage) msg = webkit_user_message_new ("DocumentLoaded", NULL);
+  g_autoptr (WebKitUserMessage) msg = NULL;
+
+  if (PAGE_IS_EXTENSION (page))
+    return;
+
+  msg = webkit_user_message_new ("DocumentLoaded", NULL);
 
   webkit_web_page_send_message_to_view (page,
                                         g_steal_pointer (&msg),

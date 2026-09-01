@@ -95,6 +95,7 @@ ephy_send_message (const char *function_name,
   EphySendMessageData *send_message_data = user_data;
   WebKitUserMessage *message;
   g_autofree char *args_json = NULL;
+  g_autofree char *message_name = NULL;
 
   if (!jsc_value_is_function (reject_callback))
     return; /* Can't reject in this case. */
@@ -106,7 +107,8 @@ ephy_send_message (const char *function_name,
   }
 
   args_json = jsc_value_to_json (function_args, 0);
-  message = webkit_user_message_new (function_name,
+  message_name = g_strconcat ("WebExtensions.", function_name, NULL);
+  message = webkit_user_message_new (message_name,
                                      g_variant_new ("(sts)", send_message_data->guid, webkit_frame_get_id (send_message_data->frame), args_json));
 
   webkit_web_page_send_message_to_view (send_message_data->page, message, NULL,

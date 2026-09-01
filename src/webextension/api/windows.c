@@ -83,9 +83,10 @@ add_window_to_json (EphyWebExtension *extension,
 {
   gboolean is_focused = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()))) == window;
   EphyTabView *tab_view = ephy_window_get_tab_view (window);
-  EphyEmbed *embed = EPHY_EMBED (ephy_tab_view_get_selected_page (tab_view));
-  EphyWebView *active_web_view = ephy_embed_get_web_view (embed);
-  gboolean has_tab_permission = ephy_web_extension_has_tab_or_host_permission (extension, active_web_view, TRUE);
+  GtkWidget *page = tab_view ? ephy_tab_view_get_selected_page (tab_view) : NULL;
+  EphyEmbed *embed = page ? EPHY_EMBED (page) : NULL;
+  EphyWebView *active_web_view = embed ? ephy_embed_get_web_view (embed) : NULL;
+  gboolean has_tab_permission = active_web_view ? ephy_web_extension_has_tab_or_host_permission (extension, active_web_view, TRUE) : FALSE;
 
   json_builder_begin_object (builder);
   json_builder_set_member_name (builder, "id");
@@ -101,7 +102,7 @@ add_window_to_json (EphyWebExtension *extension,
   json_builder_add_string_value (builder, get_window_state (window));
   json_builder_set_member_name (builder, "incognito");
   json_builder_add_boolean_value (builder, ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO);
-  if (has_tab_permission) {
+  if (has_tab_permission && embed) {
     json_builder_set_member_name (builder, "title");
     json_builder_add_string_value (builder, ephy_embed_get_title (embed));
   }
