@@ -42,6 +42,7 @@ typedef enum {
   EPHY_HISTORY_STATEMENT_UPDATE_URL_ROW,
   EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_ID,
   EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_URL,
+  EPHY_HISTORY_STATEMENT_HAS_URL_ROWS,
 
   /* visits table */
   EPHY_HISTORY_STATEMENT_ADD_VISIT_ROW,
@@ -71,6 +72,7 @@ void                     ephy_history_service_add_url_row             (EphyHisto
 void                     ephy_history_service_update_url_row          (EphyHistoryService *self, EphyHistoryURL *url);
 GList*                   ephy_history_service_find_url_rows           (EphyHistoryService *self, EphyHistoryQuery *query);
 void                     ephy_history_service_delete_url              (EphyHistoryService *self, EphyHistoryURL *url);
+gboolean                 ephy_history_service_has_url_rows            (EphyHistoryService *self);
 
 gboolean                 ephy_history_service_initialize_visits_table (EphyHistoryService *self);
 void                     ephy_history_service_add_visit_row           (EphyHistoryService *self, EphyHistoryPageVisit *visit);

@@ -146,8 +146,8 @@ update_ui_state (EphyHistoryDialog *self)
   }
 
   gtk_widget_set_sensitive (self->search_button, has_data);
-  gtk_widget_set_sensitive (self->selection_button, has_data);
-  gtk_widget_set_sensitive (self->clear_button, has_data && self->can_clear);
+  gtk_widget_set_sensitive (self->selection_button, has_data && self->has_search_results);
+  gtk_widget_set_sensitive (self->clear_button, has_data && self->has_search_results && self->can_clear);
   gtk_widget_set_sensitive (self->selection_open_button, !self->is_selection_empty);
   gtk_widget_set_sensitive (self->selection_delete_button, !self->is_selection_empty && !incognito_mode);
 }
@@ -173,16 +173,6 @@ set_can_clear (EphyHistoryDialog *self,
 }
 
 static void
-set_has_data (EphyHistoryDialog *self,
-              gboolean           has_data)
-{
-  if (self->has_data == has_data)
-    return;
-
-  self->has_data = has_data;
-}
-
-static void
 set_has_search_results (EphyHistoryDialog *self,
                         gboolean           has_search_results)
 {
@@ -190,6 +180,19 @@ set_has_search_results (EphyHistoryDialog *self,
     return;
 
   self->has_search_results = has_search_results;
+}
+
+static void
+set_has_data (EphyHistoryDialog *self,
+              gboolean           has_data)
+{
+  if (self->has_data == has_data)
+    return;
+
+  self->has_data = has_data;
+
+  if (!has_data)
+    set_has_search_results (self, FALSE);
 }
 
 static void
@@ -287,6 +290,28 @@ on_select_all_button_clicked (GtkButton         *button,
 }
 
 static void
+on_has_urls_cb (EphyHistoryService *service,
+                GAsyncResult       *result,
+                gpointer            user_data)
+{
+  EphyHistoryDialog *self = user_data;
+  g_autoptr (GError) error = NULL;
+  gboolean has_urls;
+  gboolean prev_has_data = self->has_data;
+
+  has_urls = ephy_history_service_has_urls_finish (service, result, &error);
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to search URLs: %s", error->message);
+    return;
+  }
+
+  set_has_data (self, has_urls);
+  if (prev_has_data != self->has_data)
+    update_ui_state (self);
+}
+
+static void
 on_find_urls_cb (EphyHistoryService *service,
                  GAsyncResult       *result,
                  gpointer            user_data)
@@ -307,6 +332,9 @@ on_find_urls_cb (EphyHistoryService *service,
   self->urls = urls;
 
   gtk_list_box_remove_all (GTK_LIST_BOX (self->listbox));
+
+  ephy_history_service_has_urls (self->history_service, self->cancellable,
+                                 (GAsyncReadyCallback)on_has_urls_cb, self);
 
   self->num_fetch = NUM_FETCH_LIMIT;
   self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
@@ -410,7 +438,8 @@ on_browse_history_deleted_cb (EphyHistoryService *service,
 
     if (!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0)) {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
-      set_has_data (self, FALSE);
+      set_has_search_results (self, FALSE);
+      filter_now (self);
     }
   }
 
@@ -571,29 +600,28 @@ add_urls_source (EphyHistoryDialog *self)
   EphyHistoryURL *url;
   GList *element;
   GtkWidget *row;
-  gboolean has_results;
   gboolean prev_is_loading = self->is_loading;
   gboolean prev_has_results = self->has_search_results;
   gboolean prev_has_data = self->has_data;
 
   set_is_loading (self, FALSE);
 
-  has_results = !!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0);
-  set_has_search_results (self, has_results);
-
-  if (!has_results)
-    set_has_data (self, FALSE);
-
   if (!self->urls || !self->num_fetch) {
     self->sorter_source = 0;
     gtk_widget_queue_draw (self->listbox);
 
+    if (!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), 0))
+      set_has_search_results (self, FALSE);
+
     if (prev_is_loading != self->is_loading ||
-        prev_has_data != self->has_data ||
-        prev_has_results != has_results)
+        prev_has_results != self->has_search_results)
       update_ui_state (self);
 
     return G_SOURCE_REMOVE;
+  } else {
+    set_has_data (self, TRUE);
+    set_has_search_results (self, TRUE);
+    set_is_all_selected (self, FALSE);
   }
 
   element = self->urls;
@@ -601,8 +629,6 @@ add_urls_source (EphyHistoryDialog *self)
 
   row = create_row (self, url);
   gtk_list_box_insert (GTK_LIST_BOX (self->listbox), row, -1);
-  set_has_data (self, TRUE);
-  set_is_all_selected (self, FALSE);
 
   self->urls = g_list_remove_link (self->urls, element);
   ephy_history_url_free (url);
@@ -612,7 +638,7 @@ add_urls_source (EphyHistoryDialog *self)
 
   if (prev_is_loading != self->is_loading ||
       prev_has_data != self->has_data ||
-      prev_has_results != has_results)
+      prev_has_results != self->has_search_results)
     update_ui_state (self);
 
   if (!self->num_fetch) {

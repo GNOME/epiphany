@@ -56,6 +56,7 @@ typedef enum {
   GET_URL,
   GET_HOST_FOR_URL,
   QUERY_URLS,
+  HAS_URLS,
   QUERY_VISITS,
   GET_HOSTS,
   QUERY_HOSTS
@@ -517,6 +518,7 @@ ephy_history_service_complete_task_in_idle_cb (EphyHistoryServiceMessage *messag
   is_pointer_method = (message->type == GET_URL ||
                        message->type == GET_HOST_FOR_URL ||
                        message->type == QUERY_URLS ||
+                       message->type == HAS_URLS ||
                        message->type == QUERY_VISITS ||
                        message->type == GET_HOSTS ||
                        message->type == QUERY_HOSTS);
@@ -689,6 +691,20 @@ ephy_history_service_execute_query_hosts (EphyHistoryService *self,
   return TRUE;
 }
 
+static gboolean
+ephy_history_service_execute_has_urls (EphyHistoryService *self,
+                                       gpointer            pointer,
+                                       gpointer           *results)
+{
+  gboolean has_urls;
+
+  has_urls = ephy_history_service_has_url_rows (self);
+
+  *results = GINT_TO_POINTER (has_urls);
+
+  return TRUE;
+}
+
 EphySQLiteStatement *
 ephy_history_service_get_cached_statement (EphyHistoryService           *self,
                                            EphyHistoryServiceStatement   stmt,
@@ -751,6 +767,9 @@ ephy_history_service_get_cached_statement (EphyHistoryService           *self,
       break;
     case EPHY_HISTORY_STATEMENT_DELETE_URL_FOR_URL:
       sql = "DELETE FROM urls WHERE url=?";
+      break;
+    case EPHY_HISTORY_STATEMENT_HAS_URL_ROWS:
+      sql = "SELECT EXISTS (SELECT 1 FROM urls)";
       break;
     case EPHY_HISTORY_STATEMENT_ADD_VISIT_ROW:
       sql = "INSERT INTO visits (url, visit_time, visit_type) "
@@ -1612,6 +1631,7 @@ static EphyHistoryServiceMethod methods[] = {
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_host_for_url,
   (EphyHistoryServiceMethod)ephy_history_service_execute_query_urls,
+  (EphyHistoryServiceMethod)ephy_history_service_execute_has_urls,
   (EphyHistoryServiceMethod)ephy_history_service_execute_find_visits,
   (EphyHistoryServiceMethod)ephy_history_service_execute_get_hosts,
   (EphyHistoryServiceMethod)ephy_history_service_execute_query_hosts
@@ -1748,4 +1768,38 @@ ephy_history_service_find_hosts_finish (EphyHistoryService  *self,
                                         GError             **error)
 {
   return ephy_history_service_query_hosts_finish (self, result, error);
+}
+
+void
+ephy_history_service_has_urls (EphyHistoryService  *self,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  GTask *task;
+  EphyHistoryServiceMessage *message;
+
+  g_assert (EPHY_IS_HISTORY_SERVICE (self));
+
+  task = callback ? g_task_new (self, cancellable, callback, user_data) : NULL;
+  if (task)
+    g_task_set_source_tag (task, ephy_history_service_has_urls);
+
+  message = ephy_history_service_message_new (self, HAS_URLS,
+                                              NULL, NULL, NULL,
+                                              task);
+  if (task)
+    g_object_unref (task);
+  ephy_history_service_send_message (self, message);
+}
+
+gboolean
+ephy_history_service_has_urls_finish (EphyHistoryService  *self,
+                                      GAsyncResult        *result,
+                                      GError             **error)
+{
+  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+
+  return GPOINTER_TO_INT (g_task_propagate_pointer (G_TASK (result), error));
 }

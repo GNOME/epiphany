@@ -429,3 +429,33 @@ ephy_history_service_delete_url (EphyHistoryService *self,
     g_error_free (error);
   }
 }
+
+gboolean
+ephy_history_service_has_url_rows (EphyHistoryService *self)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  gboolean has_url_rows;
+
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database);
+
+  statement = ephy_history_service_get_cached_statement (self, EPHY_HISTORY_STATEMENT_HAS_URL_ROWS, &error);
+
+  if (error) {
+    g_warning ("Could not build urls table query statement: %s", error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  has_url_rows = ephy_sqlite_statement_get_column_as_boolean (statement, 0);
+
+  if (error) {
+    g_warning ("Could not execute urls table has rows statement: %s", error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
+  return has_url_rows;
+}

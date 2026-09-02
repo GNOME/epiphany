@@ -212,4 +212,12 @@ GList *                  ephy_history_service_find_hosts_finish       (EphyHisto
                                                                        GAsyncResult         *result,
                                                                        GError              **error);
 
+void                     ephy_history_service_has_urls                (EphyHistoryService   *self,
+                                                                       GCancellable         *cancellable,
+                                                                       GAsyncReadyCallback   callback,
+                                                                       gpointer              user_data);
+gboolean                 ephy_history_service_has_urls_finish         (EphyHistoryService   *self,
+                                                                       GAsyncResult         *result,
+                                                                       GError              **error);
+
 G_END_DECLS
