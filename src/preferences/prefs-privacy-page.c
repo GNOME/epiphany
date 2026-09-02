@@ -44,6 +44,9 @@ struct _PrefsPrivacyPage {
   GtkWidget *search_suggestions_box;
   GtkWidget *enable_search_suggestions_row;
 
+  /* Passwords */
+  GtkWidget *remember_passwords_row;
+
   /* Autofill Data */
   GtkWidget *autofill_data_row;
 };
@@ -84,6 +87,15 @@ setup_privacy_page (PrefsPrivacyPage *privacy_page)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_WEBSITE_DATA_STORAGE,
                    privacy_page->enable_website_data_storage_row,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  /* ======================================================================== */
+  /* ========================== Passwords =================================== */
+  /* ======================================================================== */
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
+                   privacy_page->remember_passwords_row,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -135,6 +147,9 @@ prefs_privacy_page_class_init (PrefsPrivacyPageClass *klass)
   /* Search Suggestions */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, search_suggestions_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, enable_search_suggestions_row);
+
+  /* Passwords */
+  gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, remember_passwords_row);
 
   /* Forms and Autofill */
   gtk_widget_class_bind_template_child (widget_class, PrefsPrivacyPage, autofill_data_row);

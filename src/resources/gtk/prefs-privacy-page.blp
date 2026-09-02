@@ -48,7 +48,14 @@ template $PrefsPrivacyPage: Adw.PreferencesPage {
       }
     }
   }
+  Adw.PreferencesGroup {
+    title: _("Passwords");
 
+    Adw.SwitchRow remember_passwords_row {
+      title: _("_Remember Passwords");
+      use-underline: true;
+    }
+  }
   Adw.PreferencesGroup {
     title: _("Forms and Autofill");
 
