@@ -25,6 +25,7 @@
 #include <adwaita.h>
 #include <archive.h>
 #include <archive_entry.h>
+#include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 
 #include "api/alarms.h"
@@ -484,9 +485,9 @@ on_extension_decompressed (GObject      *source,
   GFileInfo *file_info;
   g_autofree char *path = decompress_xpi_finish (self, res, &error);
 
-  if (error) {
+  if (error || !path) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Could not decompress WebExtension: %s", error->message);
+      g_warning ("Could not decompress WebExtension: %s", error ? error->message : "Unknown error");
     return;
   }
 
@@ -531,13 +532,14 @@ decompress_xpi_thread (GTask        *task,
 {
   GFile *file = G_FILE (source_object);
   GFile *web_extensions_dir = task_data;
-  struct archive *archive;
-  struct archive *ext;
+  struct archive *archive = NULL;
+  struct archive *ext = NULL;
   int flags;
   int ret;
   const char *filename = g_file_get_path (file);
   g_autofree char *path = NULL;
   g_autofree char *basename = NULL;
+  gboolean success = FALSE;
 
   flags = ARCHIVE_EXTRACT_TIME;
   flags |= ARCHIVE_EXTRACT_PERM;
@@ -557,7 +559,9 @@ decompress_xpi_thread (GTask        *task,
   ret = archive_read_open_filename (archive, filename, 10240);
   if (ret) {
     g_warning ("Could not open archive: %s", filename);
-    return;
+    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                             _("Could not open archive: %s"), filename);
+    goto out;
   }
 
   basename = g_file_get_basename (file);
@@ -574,8 +578,11 @@ decompress_xpi_thread (GTask        *task,
     if (ret < ARCHIVE_OK)
       g_warning ("Error extracting archive: %s", archive_error_string (archive));
 
-    if (ret < ARCHIVE_WARN)
-      return;
+    if (ret < ARCHIVE_WARN) {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                               _("Error extracting archive: %s"), archive_error_string (archive));
+      goto out;
+    }
 
     full_path = g_build_filename (path, archive_entry_pathname (entry), NULL);
     archive_entry_set_pathname (entry, full_path);
@@ -586,23 +593,37 @@ decompress_xpi_thread (GTask        *task,
       ret = copy_data (archive, ext);
       if (ret < ARCHIVE_OK)
         g_warning ("Could not copy archive data: %s", archive_error_string (ext));
-      if (ret < ARCHIVE_WARN)
-        return;
+      if (ret < ARCHIVE_WARN) {
+        g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                                 _("Could not copy archive data: %s"), archive_error_string (ext));
+        goto out;
+      }
     }
 
     ret = archive_write_finish_entry (ext);
     if (ret < ARCHIVE_OK)
       g_warning ("Could not finish archive: %s", archive_error_string (ext));
-    if (ret < ARCHIVE_WARN)
-      return;
+    if (ret < ARCHIVE_WARN) {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                               _("Could not finish archive: %s"), archive_error_string (ext));
+      goto out;
+    }
   }
 
-  archive_read_close (archive);
-  archive_read_free (archive);
-  archive_write_close (ext);
-  archive_write_free (ext);
+  success = TRUE;
 
-  g_task_return_pointer (task, g_steal_pointer (&path), g_free);
+out:
+  if (archive) {
+    archive_read_close (archive);
+    archive_read_free (archive);
+  }
+  if (ext) {
+    archive_write_close (ext);
+    archive_write_free (ext);
+  }
+
+  if (success)
+    g_task_return_pointer (task, g_steal_pointer (&path), g_free);
 }
 
 static void
