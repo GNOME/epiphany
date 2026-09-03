@@ -225,12 +225,10 @@ transform_bookmark_title (GBinding     *binding,
 {
   EphyBookmarkRow *row = EPHY_BOOKMARK_ROW (user_data);
   const char *title;
-  g_autofree char *converted_title = NULL;
 
   title = g_value_get_string (from_value);
-  converted_title = g_markup_escape_text (title, -1);
 
-  if (strlen (converted_title) == 0) {
+  if (!title || strlen (title) == 0) {
     EphyBookmark *bookmark;
     const char *url;
 
@@ -240,8 +238,8 @@ transform_bookmark_title (GBinding     *binding,
     g_value_set_string (to_value, url);
     gtk_widget_set_tooltip_text (GTK_WIDGET (row), url);
   } else {
-    g_value_set_string (to_value, converted_title);
-    gtk_widget_set_tooltip_text (GTK_WIDGET (row), converted_title);
+    g_value_set_string (to_value, title);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (row), title);
   }
 
   return TRUE;

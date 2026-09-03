@@ -540,7 +540,7 @@ tabs_query (EphySuggestionModel *self,
       title_casefold = g_utf8_casefold (title, -1);
 
       if ((title_casefold && strstr (title_casefold, query_casefold)) || strstr (display_address_casefold, query_casefold)) {
-        char *escaped_address = g_markup_escape_text (display_address, -1);
+        g_autofree char *escaped_address = g_markup_escape_text (display_address, -1);
 
         if (g_str_has_prefix (escaped_address, EPHY_ABOUT_SCHEME)) {
           g_autofree char *pretty_address = g_strconcat ("about", escaped_address + EPHY_ABOUT_SCHEME_LEN, NULL);

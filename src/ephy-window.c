@@ -2638,9 +2638,9 @@ on_search_engine_model_items_changed (GListModel *model,
 
     if (g_list_model_get_n_items (model) == 1) {
       EphyOpensearchAutodiscoveryLink *autodiscovery_link = g_list_model_get_item (model, 0);
-      g_autofree char *escaped_name = g_markup_escape_text (ephy_opensearch_autodiscovery_link_get_name (autodiscovery_link), -1);
+      const char *name = ephy_opensearch_autodiscovery_link_get_name (autodiscovery_link);
       /* TRANSLATORS: %s is the name of the search engine for this row in the popover. */
-      g_autofree char *label_str = g_strdup_printf (_("Add “%s”"), escaped_name);
+      g_autofree char *label_str = g_strdup_printf (_("Add “%s”"), name);
 
       ephy_site_menu_button_update_search_engine_item (site_menu_button, label_str, FALSE);
     } else {

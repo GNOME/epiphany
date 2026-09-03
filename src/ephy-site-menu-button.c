@@ -285,7 +285,7 @@ GVariant *
 create_variant_from_autodiscovery_link (EphyOpensearchAutodiscoveryLink *link)
 {
   GVariantBuilder *builder = g_variant_builder_new (G_VARIANT_TYPE ("as"));
-  g_autofree char *name = g_markup_escape_text (ephy_opensearch_autodiscovery_link_get_name (link), -1);
+  const char *name = ephy_opensearch_autodiscovery_link_get_name (link);
   const char *url = ephy_opensearch_autodiscovery_link_get_url (link);
   GVariant *variant;
 
@@ -318,9 +318,9 @@ ephy_site_menu_button_update_search_engine_item (EphySiteMenuButton *self,
       EphyOpensearchAutodiscoveryLink *link = g_list_model_get_item (search_engine_model, i);
       GVariant *variant = create_variant_from_autodiscovery_link (link);
 
-      name = g_markup_escape_text (ephy_opensearch_autodiscovery_link_get_name (link), -1);
+      const char *link_name = ephy_opensearch_autodiscovery_link_get_name (link);
 
-      sub_menu_item = g_menu_item_new (name, "win.add-search-engine");
+      sub_menu_item = g_menu_item_new (link_name, "win.add-search-engine");
       g_menu_item_set_action_and_target_value (sub_menu_item,
                                                "win.add-search-engine", variant);
       g_menu_append_item (sub_menu, sub_menu_item);

@@ -266,9 +266,8 @@ set_selected_suggestion_as_url (EphyLocationEntry *self)
     } else {
       const char *uri = ephy_suggestion_get_uri (EPHY_SUGGESTION (suggestion));
       g_autofree char *decoded_uri = ephy_uri_decode (uri);
-      g_autofree char *escaped_uri = g_markup_escape_text (decoded_uri, -1);
 
-      ephy_location_entry_set_text (self, escaped_uri);
+      ephy_location_entry_set_text (self, decoded_uri);
     }
   }
   gtk_editable_set_position (GTK_EDITABLE (self), -1);
