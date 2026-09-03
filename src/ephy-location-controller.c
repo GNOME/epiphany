@@ -193,7 +193,7 @@ user_changed_cb (GtkWidget              *widget,
   ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model),
                                      address,
                                      TRUE,
-                                     mode != EPHY_EMBED_SHELL_MODE_PRIVATE && mode != EPHY_EMBED_SHELL_MODE_INCOGNITO,
+                                     mode != EPHY_EMBED_SHELL_MODE_PRIVATE && mode != EPHY_EMBED_SHELL_MODE_INCOGNITO && mode != EPHY_EMBED_SHELL_MODE_TEST,
                                      controller->suggestion_cancellable,
                                      NULL, NULL);
 }

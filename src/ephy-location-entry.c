@@ -451,11 +451,11 @@ on_focus_enter (GtkEventControllerFocus *controller,
     } else {
       EphyWebView *web_view = ephy_embed_get_web_view (active_embed);
       const char *text = ephy_web_view_get_address (web_view);
+      const char *display_address = !ephy_embed_utils_is_no_show_address (text) ?
+                                    ephy_web_view_get_display_address (web_view) : "";
 
-      if (!ephy_embed_utils_is_no_show_address (text))
-        gtk_editable_set_text (GTK_EDITABLE (self->text), ephy_web_view_get_display_address (web_view));
-      else
-        gtk_editable_set_text (GTK_EDITABLE (self->text), "");
+      if (g_strcmp0 (display_address, gtk_editable_get_text (GTK_EDITABLE (self->text))) != 0)
+        ephy_location_entry_set_text (self, display_address);
     }
   }
 }
