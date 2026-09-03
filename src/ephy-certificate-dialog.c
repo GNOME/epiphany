@@ -104,6 +104,7 @@ create_section_row (GcrCertificateField *field,
   row = adw_action_row_new ();
   gtk_widget_add_css_class (row, "property");
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), gcr_certificate_field_get_label (field));
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_action_row_set_subtitle_selectable (ADW_ACTION_ROW (row), true);
 
   value_type = gcr_certificate_field_get_value_type (field);
@@ -134,9 +135,12 @@ create_section (GcrCertificateSection *section)
 {
   GtkWidget *group, *listbox;
   GtkSizeGroup *size_group;
+  g_autofree char *escaped_title = NULL;
 
+  /* Sadly there is no way to disable markup processing for the title. */
   group = adw_preferences_group_new ();
-  g_object_bind_property (section, "label", group, "title", G_BINDING_SYNC_CREATE);
+  escaped_title = g_markup_escape_text (gcr_certificate_section_get_label (section), -1);
+  adw_preferences_group_set_title (ADW_PREFERENCES_GROUP (group), escaped_title);
 
   listbox = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (listbox), GTK_SELECTION_NONE);
