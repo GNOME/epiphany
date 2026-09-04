@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-08-28 00:11+0000\n"
-"PO-Revision-Date: 2026-08-28 09:12+0200\n"
+"POT-Creation-Date: 2026-09-03 22:18+0000\n"
+"PO-Revision-Date: 2026-09-04 17:13+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: data/org.gnome.Epiphany.desktop.in.in:2 data/org.gnome.Epiphany.metainfo.xml.in.in:6
 #: embed/ephy-about-handler.c:206 embed/ephy-about-handler.c:238 src/ephy-main.c:104
-#: src/ephy-main.c:268 src/ephy-main.c:429
+#: src/ephy-main.c:268 src/ephy-main.c:430
 msgid "Web"
 msgstr "Brskalnik Splet"
 
@@ -1918,7 +1918,7 @@ msgstr "Natančen opis napake je: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1900 embed/ephy-web-view.c:1953 embed/ephy-web-view.c:1989
 #: embed/ephy-web-view.c:2025 src/ephy-action-bar-start.c:37
-#: src/ephy-location-entry.c:1598
+#: src/ephy-location-entry.c:1597
 msgid "Reload"
 msgstr "Ponovno naloži"
 
@@ -2174,6 +2174,10 @@ msgstr "Ni možno ustvariti iskalnika, ker ni zagotovljenih dovolj informacij!"
 msgid "Couldn't download search engine description file for %s: "
 msgstr "Ni bilo mogoče prenesti datoteke z opisom iskalnika za %s: "
 
+#: lib/ephy-opensearch-engine.c:572
+msgid "Invalid OpenSearch URL"
+msgstr "Neveljaven URL naslov OpenSearch"
+
 #. TRANSLATORS: The %s is the URL for the search suggestions.
 #: lib/ephy-search-engine.c:492
 #, c-format
@@ -2199,6 +2203,11 @@ msgstr ""
 #, c-format
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr "Predlogov JSON iz %s ni bilo mogoče razčleniti z JSON %s: "
+
+#: lib/ephy-search-engine.c:617
+#, c-format
+msgid "Invalid search suggestions URL: %s"
+msgstr "Neveljaven URL predlogov za iskanje: %s"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2426,7 +2435,7 @@ msgstr "Naslov se mora začeti shttp:// ali https://."
 msgid "Address is not a valid URL"
 msgstr "Naslov ni veljaven naslov URL"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:658 src/resources/gtk/bookmark-row.blp:66
+#: src/bookmarks/ephy-bookmarks-dialog.c:658 src/resources/gtk/bookmark-row.blp:67
 #: src/resources/gtk/lang-row.blp:34
 msgid "Move Controls"
 msgstr "Kontrolniki premikanja"
@@ -2448,7 +2457,7 @@ msgstr "Zaznamek odstranjen"
 # G:5 K:1 O:2
 #. Undo, redo.
 #: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1014
-#: src/preferences/prefs-features-page.c:277
+#: src/preferences/prefs-features-page.c:275
 msgid "_Undo"
 msgstr "_Razveljavi"
 
@@ -2517,7 +2526,7 @@ msgid "Save Media As"
 msgstr "Shrani predstavno datoteko kot"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1607
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1606
 msgid "Stop"
 msgstr "Zaustavi"
 
@@ -2717,19 +2726,19 @@ msgstr "Ni na voljo v zasebnem načinu"
 msgid "Clear History"
 msgstr "Počisti zgodovino"
 
-#: src/ephy-location-entry.c:352 src/resources/gtk/location-entry.blp:77
+#: src/ephy-location-entry.c:351 src/resources/gtk/location-entry.blp:77
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Iskanje spletišč, zaznamkov in odprtih zavihkov"
 
-#: src/ephy-location-entry.c:376
+#: src/ephy-location-entry.c:375
 msgid "Not Secure — "
 msgstr "Ni varno — "
 
-#: src/ephy-location-entry.c:1332
+#: src/ephy-location-entry.c:1331
 msgid "Secure Site"
 msgstr "Varno spletno mesto"
 
-#: src/ephy-location-entry.c:1334
+#: src/ephy-location-entry.c:1333
 msgid "Insecure Site"
 msgstr "Spletno mesto ni varno"
 
@@ -3501,11 +3510,11 @@ msgstr "Namesti"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Odpri datoteko (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:276
+#: src/preferences/prefs-features-page.c:274
 msgid "All values reset"
 msgstr "Vse vrednosti so ponastavljene"
 
-#: src/preferences/prefs-features-page.c:330
+#: src/preferences/prefs-features-page.c:328
 msgid "Reset to default"
 msgstr "Ponastavi na privzeto"
 
@@ -3744,7 +3753,7 @@ msgstr "Ime"
 msgid "Tags"
 msgstr "Oznake"
 
-#: src/resources/gtk/bookmark-properties.blp:73 src/resources/gtk/bookmark-row.blp:43
+#: src/resources/gtk/bookmark-properties.blp:73 src/resources/gtk/bookmark-row.blp:44
 msgid "Remove"
 msgstr "Odstrani"
 
