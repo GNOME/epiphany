@@ -299,6 +299,12 @@ test_password_manager_secret_schema (void)
 }
 
 static void
+test_password_manager_secret_collection (void)
+{
+  g_assert_cmpstr (ephy_sync_utils_get_secret_collection (), ==, SECRET_COLLECTION_SESSION);
+}
+
+static void
 test_password_synchronizable_manager_interface (void)
 {
   g_autoptr (EphyPasswordManager) manager = ephy_password_manager_new ();
@@ -579,6 +585,7 @@ main (int   argc,
   g_test_add_func ("/lib/sync/password-record/bso-roundtrip", test_password_record_bso_roundtrip);
   g_test_add_func ("/lib/sync/password-record/bso-deleted", test_password_record_bso_deleted);
   g_test_add_func ("/lib/sync/password-manager/secret-schema", test_password_manager_secret_schema);
+  g_test_add_func ("/lib/sync/password-manager/secret-collection", test_password_manager_secret_collection);
   g_test_add_func ("/lib/sync/password-manager/synchronizable-interface", test_password_synchronizable_manager_interface);
   g_test_add_func ("/lib/sync/password-manager/initial-merge-identical", test_password_manager_initial_merge_identical);
   g_test_add_func ("/lib/sync/password-manager/initial-merge-local-newer", test_password_manager_initial_merge_local_newer);

@@ -55,6 +55,17 @@ ephy_sync_utils_get_secret_schema (void)
   return &schema;
 }
 
+const char *
+ephy_sync_utils_get_secret_collection (void)
+{
+  if (ephy_profile_dir_is_test ()) {
+    /* This is a non-persistent collection. */
+    return SECRET_COLLECTION_SESSION;
+  }
+
+  return NULL;
+}
+
 char *
 ephy_sync_utils_encode_hex (const guint8 *data,
                             gsize         data_len)
