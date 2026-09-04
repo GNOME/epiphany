@@ -25,7 +25,8 @@
 
 G_BEGIN_DECLS
 
-const SecretSchema *ephy_sync_utils_get_secret_schema (void);
+const SecretSchema *ephy_sync_utils_get_secret_schema     (void);
+const char         *ephy_sync_utils_get_secret_collection (void);
 
 #define EPHY_SYNC_SECRET_SCHEMA       (ephy_sync_utils_get_secret_schema ())
 #define EPHY_SYNC_SECRET_ACCOUNT_KEY  "firefox_account"

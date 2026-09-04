@@ -1721,7 +1721,7 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 
   LOG ("Storing sync secrets...");
   secret_password_storev (EPHY_SYNC_SECRET_SCHEMA,
-                          attributes, NULL, label, json_string, NULL,
+                          attributes, ephy_sync_utils_get_secret_collection (), label, json_string, NULL,
                           (GAsyncReadyCallback)store_secrets_cb, self);
 
   g_free (label);

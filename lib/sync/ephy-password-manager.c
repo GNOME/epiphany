@@ -508,7 +508,7 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
                                      modified);
 
   secret_password_storev (EPHY_FORM_PASSWORD_SCHEMA,
-                          attributes, NULL, label, password, NULL,
+                          attributes, ephy_sync_utils_get_secret_collection (), label, password, NULL,
                           (GAsyncReadyCallback)secret_password_store_cb,
                           manage_record_async_data_new (self, record, NULL));
 

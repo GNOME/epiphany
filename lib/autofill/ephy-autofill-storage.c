@@ -20,9 +20,12 @@
  */
 
 #include "config.h"
+
 #include "ephy-autofill-storage.h"
 
 #include <libsecret/secret.h>
+
+#include "ephy-sync-utils.h"
 
 #define FIELD_KEY "key"
 
@@ -274,7 +277,7 @@ ephy_autofill_storage_set (EphyAutofillField    field,
 
   if (label && key) {
     secret_password_store (EPHY_AUTOFILL_SCHEMA,
-                           SECRET_COLLECTION_DEFAULT,
+                           ephy_sync_utils_get_secret_collection (),
                            label,
                            storable_value,
                            cancellable,
