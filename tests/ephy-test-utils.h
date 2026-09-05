@@ -45,4 +45,9 @@ GMainLoop* ephy_test_utils_setup_wait_until_load_is_committed (EphyWebView *view
 
 void ephy_test_utils_wait_until_load_is_committed (GMainLoop *loop);
 
+gboolean ephy_test_utils_log_fatal_func (const gchar    *log_domain,
+                                         GLogLevelFlags  log_level,
+                                         const gchar    *message,
+                                         gpointer        user_data);
+
 G_END_DECLS

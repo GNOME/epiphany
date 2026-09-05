@@ -136,16 +136,15 @@ if get_option('unit_tests').enabled()
        env: envs
   )
 
-  # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=762753
-  # snapshot_service_test = executable('test-snapshot-service',
-  #   'ephy-snapshot-service-test.c',
-  #   dependencies: ephymain_dep,
-  #    c_args: test_cargs,
-  # )
-  # test('Snapshot service test',
-  #      snapshot_service_test,
-  #      env: envs
-  # )
+  snapshot_service_test = executable('test-ephy-snapshot-service',
+    'ephy-snapshot-service-test.c',
+    dependencies: [ephymain_dep, ephytestutils_dep],
+    c_args: test_cargs,
+  )
+  test('Snapshot service test',
+       snapshot_service_test,
+       env: envs
+  )
 
   sqlite_test = executable('test-ephy-sqlite',
     'ephy-sqlite-test.c',

@@ -33,24 +33,6 @@
 #include "ephy-test-utils.h"
 #include "ephy-window.h"
 
-static gboolean
-test_log_fatal_func (const gchar    *log_domain,
-                     GLogLevelFlags  log_level,
-                     const gchar    *message,
-                     gpointer        user_data)
-{
-  if (strstr (message, "secret storage") != NULL ||
-      strstr (message, "portal") != NULL ||
-      strstr (message, "Inhibit") != NULL ||
-      strstr (message, "accessibility bus") != NULL ||
-      strstr (message, "a11y bus") != NULL ||
-      strstr (message, "Can't connect") != NULL ||
-      strstr (message, "gdk_frame_timings_submitted") != NULL)
-    return FALSE;
-
-  return TRUE;
-}
-
 static void
 test_ephy_shell_basic_embeds (void)
 {
@@ -307,7 +289,7 @@ main (int   argc,
 
   gtk_test_init (&argc, &argv);
 
-  g_test_log_set_fatal_handler (test_log_fatal_func, NULL);
+  g_test_log_set_fatal_handler (ephy_test_utils_log_fatal_func, NULL);
 
   ephy_debug_init ();
 

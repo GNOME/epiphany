@@ -22,6 +22,8 @@
 
 #include "ephy-test-utils.h"
 
+#include <string.h>
+
 #include <glib.h>
 
 #include "ephy-embed-shell.h"
@@ -124,4 +126,25 @@ ephy_test_utils_wait_until_load_is_committed (GMainLoop *loop)
 
   g_assert_cmpint (web_view_ready_counter, ==, 0);
   g_main_loop_unref (loop);
+}
+
+gboolean
+ephy_test_utils_log_fatal_func (const gchar    *log_domain,
+                                GLogLevelFlags  log_level,
+                                const gchar    *message,
+                                gpointer        user_data)
+{
+  if (strstr (message, "secret storage") != NULL ||
+      strstr (message, "portal") != NULL ||
+      strstr (message, "Inhibit") != NULL ||
+      strstr (message, "accessibility bus") != NULL ||
+      strstr (message, "a11y bus") != NULL ||
+      strstr (message, "Can't connect") != NULL ||
+      strstr (message, "Fontconfig") != NULL ||
+      strstr (message, "font-dirs.xml") != NULL ||
+      strstr (message, "DRI3") != NULL ||
+      strstr (message, "EGL") != NULL)
+    return FALSE;
+
+  return TRUE;
 }
