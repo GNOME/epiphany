@@ -2440,17 +2440,6 @@ synchronizable_deleted_cb (EphySynchronizableManager *manager,
   if (!ephy_sync_service_is_manager_enabled (manager))
     return;
 
-  {
-    g_autofree char *record_str = ephy_synchronizable_to_debug_string (synchronizable);
-
-    LOG ("Sync deleted record in collection '%s': %s",
-         ephy_synchronizable_manager_get_collection_name (manager),
-         record_str);
-    ephy_sync_utils_log_sync_change ("Sync deleted record in collection '%s': %s",
-                                     ephy_synchronizable_manager_get_collection_name (manager),
-                                     record_str);
-  }
-
   ephy_sync_service_delete_synchronizable (self, manager, synchronizable);
 }
 
@@ -2475,19 +2464,6 @@ synchronizable_modified_cb (EphySynchronizableManager *manager,
 
   if (!ephy_sync_service_is_manager_enabled (manager))
     return;
-
-  {
-    g_autofree char *record_str = ephy_synchronizable_to_debug_string (synchronizable);
-
-    LOG ("Sync modified record in collection '%s' (force: %s): %s",
-         ephy_synchronizable_manager_get_collection_name (manager),
-         should_force ? "TRUE" : "FALSE",
-         record_str);
-    ephy_sync_utils_log_sync_change ("Sync modified record in collection '%s' (force: %s): %s",
-                                     ephy_synchronizable_manager_get_collection_name (manager),
-                                     should_force ? "TRUE" : "FALSE",
-                                     record_str);
-  }
 
   ephy_sync_service_upload_synchronizable (self, manager, synchronizable, should_force);
 }

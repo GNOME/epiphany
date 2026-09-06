@@ -471,7 +471,6 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   const char *password_field;
   char *label;
   gint64 modified;
-  g_autofree char *record_str = NULL;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
@@ -485,11 +484,8 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   password_field = ephy_password_record_get_password_field (record);
   modified = ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record));
 
-  record_str = ephy_synchronizable_to_debug_string (EPHY_SYNCHRONIZABLE (record));
-
   LOG ("Storing password record (%s, %s, %s, %s, %s, %s)",
        id, origin, target_origin, username, username_field, password_field);
-  ephy_sync_utils_log_sync_change ("Storing password record: %s", record_str);
 
   if (username) {
     /* Translators: The first %s is the username and the second one is the
@@ -884,18 +880,13 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
 
   clear_cb_data = manage_record_async_data_new (self, replacement, task);
 
-  {
-    g_autofree char *record_str = ephy_synchronizable_to_debug_string (EPHY_SYNCHRONIZABLE (record));
-
-    LOG ("Forgetting password record (%s, %s, %s, %s, %s, %s)",
-         id,
-         ephy_password_record_get_origin (record),
-         ephy_password_record_get_target_origin (record),
-         ephy_password_record_get_username (record),
-         ephy_password_record_get_username_field (record),
-         ephy_password_record_get_password_field (record));
-    ephy_sync_utils_log_sync_change ("Forgetting password record: %s", record_str);
-  }
+  LOG ("Forgetting password record (%s, %s, %s, %s, %s, %s)",
+       id,
+       ephy_password_record_get_origin (record),
+       ephy_password_record_get_target_origin (record),
+       ephy_password_record_get_username (record),
+       ephy_password_record_get_username_field (record),
+       ephy_password_record_get_password_field (record));
 
   secret_password_clearv (EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL,
                           (GAsyncReadyCallback)secret_password_clear_cb,
