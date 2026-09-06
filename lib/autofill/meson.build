@@ -4,7 +4,6 @@ libephyautofill_sources = [
 
 libephyautofill_deps = [
   config_h,
-  ephymisc_dep,
   gio_dep,
   glib_dep,
   gtk_dep,
@@ -15,7 +14,6 @@ libephyautofill_deps = [
 
 libephyautofill_includes = include_directories(
   '.',
-  '..',
   '../..'
 )
 
