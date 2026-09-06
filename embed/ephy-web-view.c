@@ -1209,7 +1209,7 @@ update_security_status_for_committed_load (EphyWebView *view,
       strcmp (g_uri_get_scheme (guri), "data") == 0 ||
       g_strcmp0 (tld, "127.0.0.1") == 0 ||
       g_strcmp0 (tld, "::1") == 0 ||
-      g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
+      (g_strcmp0 (tld, "localhost") == 0 && g_strcmp0 (g_uri_get_scheme (guri), "https") != 0) || /* We trust localhost to be local since glib!616. */
       webkit_security_manager_uri_scheme_is_local (security_manager, g_uri_get_scheme (guri)) ||
       webkit_security_manager_uri_scheme_is_empty_document (security_manager, g_uri_get_scheme (guri))) {
     security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;
