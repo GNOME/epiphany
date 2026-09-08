@@ -1009,8 +1009,10 @@ ephy_embed_shell_constructed (GObject *object)
   ephy_embed_shell_create_web_context (shell);
   ephy_embed_shell_create_network_session_if_needed (shell);
 
-  priv->permissions_manager = ephy_permissions_manager_new ();
-  priv->filters_manager = ephy_filters_manager_new (NULL);
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
+    priv->permissions_manager = ephy_permissions_manager_new ();
+    priv->filters_manager = ephy_filters_manager_new (NULL);
+  }
 
   ephy_embed_shell_set_web_extension_initialization_data (shell, g_variant_new ("a{sv}", NULL));
 }
