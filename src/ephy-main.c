@@ -426,7 +426,9 @@ main (int   argc,
     mode = EPHY_EMBED_SHELL_MODE_KIOSK;
   } else {
     mode = EPHY_EMBED_SHELL_MODE_BROWSER;
+  }
 
+  if (mode == EPHY_EMBED_SHELL_MODE_BROWSER || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     g_set_prgname ("epiphany");
     g_set_application_name (_("Web"));
 

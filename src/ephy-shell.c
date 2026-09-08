@@ -948,8 +948,20 @@ ephy_shell_shutdown (GApplication *app)
 static void
 ephy_shell_constructed (GObject *object)
 {
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_BROWSER &&
-      ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object));
+  gboolean start_in_incognito = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                                        EPHY_PREFS_START_IN_INCOGNITO_MODE);
+  gboolean is_unique = FALSE;
+
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    is_unique = TRUE;
+  } else if (start_in_incognito) {
+    is_unique = (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO);
+  } else {
+    is_unique = (mode == EPHY_EMBED_SHELL_MODE_BROWSER);
+  }
+
+  if (!is_unique) {
     GApplicationFlags flags;
 
     flags = g_application_get_flags (G_APPLICATION (object));
