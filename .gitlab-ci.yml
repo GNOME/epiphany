@@ -113,6 +113,7 @@ scanbuild:
   variables:
     CONFIG_OPTS: '-Dprofile=Devel -Dunit_tests=enabled'
   script:
+    - flatpak install -y --user org.freedesktop.Sdk.Extension.llvm22//26.08
     - flatpak-builder --user --disable-rofiles-fuse --stop-at=${FLATPAK_MODULE} flatpak_app ${MANIFEST_PATH}
     - flatpak build flatpak_app bash -c "source /usr/lib/sdk/llvm22/enable.sh; meson setup --prefix=/app ${CONFIG_OPTS} _build; SCANBUILD=$(pwd)/.run-scan-build ninja -C _build scan-build"
   artifacts:
