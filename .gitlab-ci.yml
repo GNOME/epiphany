@@ -147,6 +147,7 @@ canary:
   variables:
     BUNDLE: 'epiphany-canary.flatpak'
   script:
+    - flatpak install -y --user org.freedesktop.Sdk.Extension.llvm22//26.08
     - flatpak-builder --user --disable-rofiles-fuse --repo=repo canary_flatpak_app org.gnome.Epiphany.Canary.json
     - flatpak build-bundle repo --runtime-repo=${RUNTIME_REPO} ${BUNDLE} org.gnome.Epiphany.Canary
     - tar cf repo.tar repo/
