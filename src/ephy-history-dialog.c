@@ -121,6 +121,9 @@ update_ui_state (EphyHistoryDialog *self)
 
   set_is_selection_empty (self, n_rows == 0);
 
+  if (!has_data && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->search_button)))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
+
   if (self->is_loading) {
     gtk_stack_set_visible_child (history_presentation_stack, self->loading_spinner);
   } else {
@@ -680,7 +683,6 @@ confirmation_dialog_response_cb (EphyHistoryDialog *self)
       ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)iter->data)->url);
   }
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
   filter_now (self);
 }
 
