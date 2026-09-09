@@ -293,7 +293,10 @@ update_suggestions_popover (EphyLocationEntry *self)
       /* We are using the text entry width in narrow mode as otherwise the popover would be too wide
        * and therefore not drawn on mobile devices.
        */
-      gtk_widget_set_size_request (self->suggestions_popover, gtk_widget_get_width (GTK_WIDGET (self->text)), -1);
+      int width = gtk_widget_get_width (GTK_WIDGET (self->text));
+      if (width <= 0)
+        width = gtk_widget_get_width (GTK_WIDGET (self));
+      gtk_widget_set_size_request (self->suggestions_popover, width, -1);
     } else {
       gtk_widget_set_size_request (self->suggestions_popover, gtk_widget_get_width (GTK_WIDGET (self)), -1);
     }
@@ -458,6 +461,8 @@ on_focus_enter (GtkEventControllerFocus *controller,
         ephy_location_entry_set_text (self, display_address);
     }
   }
+
+  g_signal_emit (self, signals[USER_CHANGED], 0, gtk_editable_get_text (GTK_EDITABLE (self->text)));
 }
 
 static void
@@ -1464,8 +1469,8 @@ ephy_location_entry_reset (EphyLocationEntry *self)
 void
 ephy_location_entry_grab_focus (EphyLocationEntry *self)
 {
-  gtk_widget_grab_focus (self->text);
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "edit");
+  gtk_widget_grab_focus (self->text);
 }
 
 static void

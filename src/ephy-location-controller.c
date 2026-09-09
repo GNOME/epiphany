@@ -176,14 +176,14 @@ entry_activate_cb (EphyLocationEntry      *entry,
 
 
 static void
-user_changed_cb (GtkWidget              *widget,
-                 const char             *address,
-                 EphyLocationController *controller)
+query_suggestions (EphyLocationController *controller,
+                   const char             *address)
 {
   GListModel *model;
   EphyEmbedShellMode mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
-  LOG ("user_changed_cb, address %s", address);
+  if (!address)
+    return;
 
   model = ephy_location_entry_get_model (EPHY_LOCATION_ENTRY (controller->title_widget));
 
@@ -196,6 +196,16 @@ user_changed_cb (GtkWidget              *widget,
                                      mode != EPHY_EMBED_SHELL_MODE_PRIVATE && mode != EPHY_EMBED_SHELL_MODE_INCOGNITO && mode != EPHY_EMBED_SHELL_MODE_TEST,
                                      controller->suggestion_cancellable,
                                      NULL, NULL);
+}
+
+static void
+user_changed_cb (GtkWidget              *widget,
+                 const char             *address,
+                 EphyLocationController *controller)
+{
+  LOG ("user_changed_cb, address %s", address);
+
+  query_suggestions (controller, address);
 }
 
 static void
@@ -250,6 +260,8 @@ focus_enter_cb (EphyLocationController *controller)
     controller->sync_address_is_blocked = TRUE;
     g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), controller->title_widget);
   }
+
+  query_suggestions (controller, address);
 }
 
 static void
@@ -259,6 +271,9 @@ focus_leave_cb (EphyLocationController *controller)
     controller->sync_address_is_blocked = FALSE;
     g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), controller->title_widget);
   }
+
+  g_cancellable_cancel (controller->suggestion_cancellable);
+  g_clear_object (&controller->suggestion_cancellable);
 }
 
 static void
