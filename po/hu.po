@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-09-01 02:46+0000\n"
-"PO-Revision-Date: 2026-09-01 09:46+0200\n"
+"POT-Creation-Date: 2026-09-09 13:59+0000\n"
+"PO-Revision-Date: 2026-09-09 17:15+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.gnome.Epiphany.desktop.in.in:2
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:6 embed/ephy-about-handler.c:206
 #: embed/ephy-about-handler.c:238 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:430
+#: src/ephy-main.c:429
 msgid "Web"
 msgstr "Web"
 
@@ -883,37 +883,30 @@ msgstr ""
 "IGAZ, ha az előzménygyűjteményt először kell szinkronizálni, különben HAMIS."
 
 #: data/org.gnome.epiphany.gschema.xml:469
-#| msgid "Enable history sync"
 msgid "Enable extension storage sync"
 msgstr "Kiterjesztéstároló szinkronizációjának engedélyezése"
 
 #: data/org.gnome.epiphany.gschema.xml:470
-#| msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgid "TRUE if extension storage collection should be synced, FALSE otherwise."
 msgstr ""
 "IGAZ, ha a kiterjesztéstároló-gyűjtemény szinkronizálandó, különben HAMIS."
 
 #: data/org.gnome.epiphany.gschema.xml:474
-#| msgid "History sync timestamp"
 msgid "Extension storage sync timestamp"
 msgstr "Kiterjesztéstároló szinkronizálási időbélyege"
 
 #: data/org.gnome.epiphany.gschema.xml:475
-#| msgid "The timestamp at which last history sync was made."
 msgid "The timestamp at which last extension storage sync was made."
 msgstr ""
 "Az időbélyeg, amikor a kiterjesztéstároló legutóbb szinkronizálva volt."
 
 #: data/org.gnome.epiphany.gschema.xml:480
-#| msgid ""
-#| "TRUE if history collection needs to be synced for the first time, FALSE "
-#| "otherwise."
 msgid ""
 "TRUE if extension storage collection needs to be synced for the first time, "
 "FALSE otherwise."
 msgstr ""
-"IGAZ, ha a kiterjesztéstároló-gyűjteményt először kell szinkronizálni, különbe"
-"n HAMIS."
+"IGAZ, ha a kiterjesztéstároló-gyűjteményt először kell szinkronizálni, "
+"különben HAMIS."
 
 #: data/org.gnome.epiphany.gschema.xml:484
 msgid "Enable open tabs sync"
@@ -1172,14 +1165,12 @@ msgstr "Eltávolítás az áttekintésből"
 #: embed/ephy-about-handler.c:524
 #: embed/web-process-extension/resources/js/overview.js:174
 #: embed/web-process-extension/resources/js/overview.js:313
-#| msgid "Remove from overview"
 msgid "Unpin from overview"
 msgstr "Az áttekintésbe való kitűzés megszüntetése"
 
 #: embed/ephy-about-handler.c:524
 #: embed/web-process-extension/resources/js/overview.js:174
 #: embed/web-process-extension/resources/js/overview.js:317
-#| msgid "Remove from overview"
 msgid "Pin to overview"
 msgstr "Kitűzés az áttekintésbe"
 
@@ -1227,7 +1218,7 @@ msgstr "Adja meg a(z) %s PIN-kódját a(z) %s:%d hitelesítéséhez."
 #: embed/ephy-client-certificate-manager.c:445 embed/ephy-download.c:780
 #: embed/ephy-web-view.c:1347 src/ephy-history-dialog.c:873
 #: src/ephy-passwords-view.c:156 src/ephy-shell.c:419 src/ephy-window.c:275
-#: src/ephy-window.c:2348 src/preferences/autofill-view.c:365
+#: src/ephy-window.c:2447 src/preferences/autofill-view.c:365
 #: src/preferences/extension-view.c:115
 #: src/resources/gtk/bookmark-properties.blp:29
 #: src/resources/gtk/firefox-sync-dialog.blp:105
@@ -1244,7 +1235,6 @@ msgid "_Login"
 msgstr "_Bejelenkezés"
 
 #: embed/ephy-client-certificate-manager.c:334
-#| msgid "PNG"
 msgid "PIN"
 msgstr "PIN-kód"
 
@@ -1328,7 +1318,7 @@ msgid "Finished downloading %s"
 msgstr "A(z) %s letöltése befejeződött"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:983 src/ephy-window.c:4166
+#: embed/ephy-download.c:983 src/ephy-window.c:4265
 msgid "Download finished"
 msgstr "Letöltés befejezve"
 
@@ -1933,7 +1923,7 @@ msgstr "A pontos hiba ez volt: %s"
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1900 embed/ephy-web-view.c:1953
 #: embed/ephy-web-view.c:1989 embed/ephy-web-view.c:2025
-#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1598
+#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1597
 msgid "Reload"
 msgstr "Újratöltés"
 
@@ -2083,7 +2073,6 @@ msgid "Use and Save Suggested Password"
 msgstr "Ajánlott jelszó használata és mentése"
 
 #: embed/web-process-extension/resources/js/ephy.js:196
-#| msgid "Delete All Passwords?"
 msgid "Generate new password"
 msgstr "Új jelszó előállítása"
 
@@ -2200,6 +2189,10 @@ msgstr ""
 msgid "Couldn't download search engine description file for %s: "
 msgstr "Nem sikerült letölteni a(z) %s keresőmotor-leírásfájlját: "
 
+#: lib/ephy-opensearch-engine.c:572
+msgid "Invalid OpenSearch URL"
+msgstr "Érvénytelen OpenSearch URL"
+
 #. TRANSLATORS: The %s is the URL for the search suggestions.
 #: lib/ephy-search-engine.c:492
 #, c-format
@@ -2227,6 +2220,12 @@ msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr ""
 "Nem sikerült feldolgozni a(z) %s URL-ből származó JSON-javaslatokat a(z) %s "
 "JSON-tartalommal: "
+
+#: lib/ephy-search-engine.c:617
+#, c-format
+#| msgid "Enable search suggestions in the URL entry"
+msgid "Invalid search suggestions URL: %s"
+msgstr "Érvénytelen keresési javaslatok URL: %s"
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2341,8 +2340,8 @@ msgstr ""
 msgid ""
 "Browser password database could not be opened. Close browser and try again."
 msgstr ""
-"A böngésző jelszóadatbázisát nem sikerült megnyitni. Zárja be a böngészőt, és "
-"próbálja újra."
+"A böngésző jelszóadatbázisát nem sikerült megnyitni. Zárja be a böngészőt, "
+"és próbálja újra."
 
 #: lib/sync/ephy-password-import.c:361
 msgid "Error in reading CSV file"
@@ -2475,7 +2474,7 @@ msgid "Address is not a valid URL"
 msgstr "A cím nem érvényes URL"
 
 #: src/bookmarks/ephy-bookmarks-dialog.c:658
-#: src/resources/gtk/bookmark-row.blp:66 src/resources/gtk/lang-row.blp:34
+#: src/resources/gtk/bookmark-row.blp:67 src/resources/gtk/lang-row.blp:34
 msgid "Move Controls"
 msgstr "Vezérlők áthelyezése"
 
@@ -2494,8 +2493,8 @@ msgid "Bookmark removed"
 msgstr "Könyvjelző eltávolítva"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1014
-#: src/preferences/prefs-features-page.c:277
+#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1113
+#: src/preferences/prefs-features-page.c:275
 msgid "_Undo"
 msgstr "_Visszavonás"
 
@@ -2565,52 +2564,52 @@ msgid "Save Media As"
 msgstr "Média mentése másként"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1607
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1606
 msgid "Stop"
 msgstr "Leállítás"
 
-#: src/ephy-certificate-dialog.c:178
+#: src/ephy-certificate-dialog.c:182
 msgid "Show More"
 msgstr "Több megjelenítése"
 
-#: src/ephy-certificate-dialog.c:252
+#: src/ephy-certificate-dialog.c:256
 msgid "The certificate does not match this website"
 msgstr "A tanúsítvány nem egyezik ezzel a webhellyel"
 
-#: src/ephy-certificate-dialog.c:255
+#: src/ephy-certificate-dialog.c:259
 msgid "The certificate has expired"
 msgstr "A tanúsítvány lejárt"
 
-#: src/ephy-certificate-dialog.c:258
+#: src/ephy-certificate-dialog.c:262
 msgid "The signing certificate authority is not known"
 msgstr "Az aláíró hitelesítésszolgáltató ismeretlen"
 
-#: src/ephy-certificate-dialog.c:261
+#: src/ephy-certificate-dialog.c:265
 msgid "The certificate contains errors"
 msgstr "A tanúsítvány hibás"
 
-#: src/ephy-certificate-dialog.c:264
+#: src/ephy-certificate-dialog.c:268
 msgid "The certificate has been revoked"
 msgstr "A tanúsítvány vissza lett vonva"
 
-#: src/ephy-certificate-dialog.c:267
+#: src/ephy-certificate-dialog.c:271
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "A tanúsítványt gyenge aláírási algoritmussal írták alá"
 
-#: src/ephy-certificate-dialog.c:270
+#: src/ephy-certificate-dialog.c:274
 msgid "The certificate activation time is still in the future"
 msgstr "A tanúsítvány aktiválási ideje a jövőben van"
 
-#: src/ephy-certificate-dialog.c:312
+#: src/ephy-certificate-dialog.c:316
 msgid "The identity of this website has been verified."
 msgstr "A webhely azonossága ellenőrizve."
 
-#: src/ephy-certificate-dialog.c:313
+#: src/ephy-certificate-dialog.c:317
 msgid "The identity of this website has not been verified."
 msgstr "A webhely azonossága nincs ellenőrizve."
 
 #. Message on certificate dialog
-#: src/ephy-certificate-dialog.c:325
+#: src/ephy-certificate-dialog.c:329
 msgid "No problems have been detected with your connection."
 msgstr "Nincs észlelt probléma a kapcsolattal."
 
@@ -2709,7 +2708,7 @@ msgstr "Kilépés a teljes képernyőből"
 msgid "Select _None"
 msgstr "_Semmi kiválasztása"
 
-#: src/ephy-history-dialog.c:268 src/ephy-window.c:1022
+#: src/ephy-history-dialog.c:268 src/ephy-window.c:1121
 #: src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
@@ -2746,19 +2745,19 @@ msgstr "Nem érhető el inkognitó módban"
 msgid "Clear History"
 msgstr "Előzmények törlése"
 
-#: src/ephy-location-entry.c:352 src/resources/gtk/location-entry.blp:77
+#: src/ephy-location-entry.c:351 src/resources/gtk/location-entry.blp:77
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Webhelyek, könyvjelzők és nyitott lapok keresése"
 
-#: src/ephy-location-entry.c:376
+#: src/ephy-location-entry.c:375
 msgid "Not Secure — "
 msgstr "Nem biztonságos — "
 
-#: src/ephy-location-entry.c:1332
+#: src/ephy-location-entry.c:1331
 msgid "Secure Site"
 msgstr "Biztonságos oldal"
 
-#: src/ephy-location-entry.c:1334
+#: src/ephy-location-entry.c:1333
 msgid "Insecure Site"
 msgstr "Nem biztonságos oldal"
 
@@ -2823,7 +2822,7 @@ msgstr ""
 msgid "Copy password"
 msgstr "Jelszó másolása"
 
-#: src/ephy-passwords-view.c:260 src/ephy-window.c:4271
+#: src/ephy-passwords-view.c:260 src/ephy-window.c:4370
 msgid "Username"
 msgstr "Felhasználónév"
 
@@ -2831,7 +2830,7 @@ msgstr "Felhasználónév"
 msgid "Copy username"
 msgstr "Felhasználónév másolása"
 
-#: src/ephy-passwords-view.c:278 src/ephy-window.c:4278
+#: src/ephy-passwords-view.c:278 src/ephy-window.c:4377
 msgid "Password"
 msgstr "Jelszó"
 
@@ -2972,163 +2971,176 @@ msgstr "Nem sikerült betölteni a keresőmotorok javaslatait: %s"
 msgid "Open a new tab"
 msgstr "Új lap megnyitása"
 
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:356 src/ephy-window.c:3583 src/ephy-window.c:5294
+msgid "Leave Website?"
+msgstr "Elhagyja a webhelyet?"
+
+#: src/ephy-window.c:357 src/ephy-window.c:3584 src/ephy-window.c:5295
+#: src/window-commands.c:1399
+msgid "A form was modified and has not been submitted"
+msgstr "Egy űrlap módosítva lett és nem került elküldésre"
+
+#: src/ephy-window.c:358 src/ephy-window.c:3585 src/ephy-window.c:5296
+#: src/window-commands.c:1403
+msgid "_Discard Form"
+msgstr "Űrlap _elvetése"
+
+#: src/ephy-window.c:1114
 msgid "Re_do"
 msgstr "Mé_gis"
 
 #. Edit.
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1117
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1118
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1119
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1120
 msgid "_Paste Text Only"
 msgstr "_Csak szöveg beillesztése"
 
-#: src/ephy-window.c:1023
-#| msgid "Save Password?"
+#: src/ephy-window.c:1122
 msgid "Generate _Password"
 msgstr "_Jelszó előállítása"
 
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1124
 msgid "S_end Link by Email…"
 msgstr "Hivatkozás _küldése e-mailben…"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1125
 msgid "Add _Link to Bookmarks"
 msgstr "_Hivatkozás hozzáadása a könyvjelzőkhöz"
 
-#: src/ephy-window.c:1028
+#: src/ephy-window.c:1127
 msgid "_Reload"
 msgstr "_Frissítés"
 
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1128
 msgid "_Back"
 msgstr "_Vissza"
 
-#: src/ephy-window.c:1030
+#: src/ephy-window.c:1129
 msgid "_Forward"
 msgstr "_Előre"
 
 #. Bookmarks
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1132
 msgid "Add Boo_kmark…"
 msgstr "_Könyvjelző hozzáadása…"
 
 #. Links.
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1136
 msgid "Open Link in New _Window"
 msgstr "Hivatkozás megnyitása új _ablakban"
 
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1137
 msgid "Open Link in New _Tab"
 msgstr "Hivatkozás megnyitása új _lapon"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1138
 msgid "Open Link in I_ncognito Window"
 msgstr "Hivatkozás megnyitása i_nkognitó ablakban"
 
-#: src/ephy-window.c:1040
+#: src/ephy-window.c:1139
 msgid "_Save Link As…"
 msgstr "Hivatkozás _mentése másként…"
 
-#: src/ephy-window.c:1041
+#: src/ephy-window.c:1140
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
 
-#: src/ephy-window.c:1042
+#: src/ephy-window.c:1141
 msgid "_Copy E-mail Address"
 msgstr "E-_mail-cím másolása"
 
 #. Images.
-#: src/ephy-window.c:1046
+#: src/ephy-window.c:1145
 msgid "View _Image in New Tab"
 msgstr "_Kép megtekintése új lapon"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1146
 msgid "Copy I_mage Address"
 msgstr "Kép címé_nek másolása"
 
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1147
 msgid "_Save Image As…"
 msgstr "Ké_p mentése másként…"
 
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:1148
 msgid "Set as _Wallpaper"
 msgstr "Beállítás _háttérképként"
 
 #. Video.
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1152
 msgid "Open Video in New _Window"
 msgstr "Videó megnyitása új _ablakban"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1153
 msgid "Open Video in New _Tab"
 msgstr "Videó megnyitása új _lapon"
 
-#: src/ephy-window.c:1055
+#: src/ephy-window.c:1154
 msgid "_Save Video As…"
 msgstr "Videó _mentése másként…"
 
-#: src/ephy-window.c:1056
+#: src/ephy-window.c:1155
 msgid "_Copy Video Address"
 msgstr "Videó _címének másolása"
 
 #. Audio.
-#: src/ephy-window.c:1060
+#: src/ephy-window.c:1159
 msgid "Open Audio in New _Window"
 msgstr "Hang megnyitás új _ablakban"
 
-#: src/ephy-window.c:1061
+#: src/ephy-window.c:1160
 msgid "Open Audio in New _Tab"
 msgstr "Hang megnyitása új _lapon"
 
-#: src/ephy-window.c:1062
+#: src/ephy-window.c:1161
 msgid "_Save Audio As…"
 msgstr "Hang _mentése másként…"
 
-#: src/ephy-window.c:1063
+#: src/ephy-window.c:1162
 msgid "_Copy Audio Address"
 msgstr "Hang _címének másolása"
 
-#: src/ephy-window.c:1069
+#: src/ephy-window.c:1168
 msgid "Save Pa_ge As…"
 msgstr "_Oldal mentése másként…"
 
-#: src/ephy-window.c:1070
+#: src/ephy-window.c:1169
 msgid "_Take Screenshot…"
 msgstr "_Képernyőkép készítése…"
 
-#: src/ephy-window.c:1071
+#: src/ephy-window.c:1170
 msgid "_Page Source"
 msgstr "Oldal fo_rrása"
 
-#: src/ephy-window.c:1451
+#: src/ephy-window.c:1550
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "„%s” keresése a világhálón"
 
-#: src/ephy-window.c:1480
+#: src/ephy-window.c:1579
 msgid "Open Link"
 msgstr "Hivatkozás megnyitása"
 
-#: src/ephy-window.c:1482
+#: src/ephy-window.c:1581
 msgid "Open Link In New Tab"
 msgstr "Hivatkozás megnyitása új lapon"
 
-#: src/ephy-window.c:1484
+#: src/ephy-window.c:1583
 msgid "Open Link In New Window"
 msgstr "Hivatkozás megnyitása új ablakban"
 
-#: src/ephy-window.c:1486
+#: src/ephy-window.c:1585
 msgid "Open Link In Incognito Window"
 msgstr "Hivatkozás megnyitása inkognitó ablakban"
 
@@ -3138,96 +3150,96 @@ msgstr "Hivatkozás megnyitása inkognitó ablakban"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2346
+#: src/ephy-window.c:2445
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr ""
 "A(z) „%s” engedélyezése, hogy a(z) „%s” hivatkozást külső alkalmazásban "
 "nyissa meg"
 
-#: src/ephy-window.c:2347
+#: src/ephy-window.c:2446
 msgid "Open in External App?"
 msgstr "Megnyitja külső alkalmazásban?"
 
-#: src/ephy-window.c:2349
+#: src/ephy-window.c:2448
 msgid "_Open Link"
 msgstr "Hivatkozás _megnyitása"
 
-#: src/ephy-window.c:2355
+#: src/ephy-window.c:2454
 msgid "Always Allow"
 msgstr "Mindig engedélyezés"
 
-#: src/ephy-window.c:2637
+#: src/ephy-window.c:2736
 msgid "Search Engine Available"
 msgstr "Keresőmotor érhető el"
 
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
-#: src/ephy-window.c:2643
+#: src/ephy-window.c:2742
 #, c-format
 msgid "Add “%s”"
 msgstr "„%s” hozzáadása"
 
-#: src/ephy-window.c:2647 src/ephy-window.c:2655
+#: src/ephy-window.c:2746 src/ephy-window.c:2754
 #: src/preferences/prefs-search-engine-page.c:307
 #: src/preferences/prefs-search-engine-page.c:309
 msgid "Add Search Engine"
 msgstr "Keresőmotor hozzáadása"
 
-#: src/ephy-window.c:3096
+#: src/ephy-window.c:3195
 msgid "Reader Mode Available"
 msgstr "Olvasó mód érhető el"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3195
+#: src/ephy-window.c:3294
 msgid "Notification Request"
 msgstr "Értesítés kérelem"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3197
+#: src/ephy-window.c:3296
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "A(z) „%s” helyen lévő oldal értesítéseket szeretne küldeni"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3202
+#: src/ephy-window.c:3301
 msgid "Location Access Request"
 msgstr "Helyadat-hozzáférési kérelem"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3204
+#: src/ephy-window.c:3303
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "A(z) „%s” helyen lévő oldal tudni szeretné a tartózkodási helyét"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3209
+#: src/ephy-window.c:3308
 msgid "Microphone Access Request"
 msgstr "Mikrofon-hozzáférési kérelem"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3211
+#: src/ephy-window.c:3310
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "A(z) „%s” helyen lévő oldal használni szeretné a mikrofonját"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3216
+#: src/ephy-window.c:3315
 msgid "Webcam Access Request"
 msgstr "Webkamera-hozzáférési kérelem"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3218
+#: src/ephy-window.c:3317
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "A(z) „%s” helyen lévő oldal használni szeretné a webkameráját"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3223
+#: src/ephy-window.c:3322
 msgid "Webcam and Microphone Access Request"
 msgstr "Webkamera- és mikrofon-hozzáférési kérelem"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3225
+#: src/ephy-window.c:3324
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr ""
@@ -3235,12 +3247,12 @@ msgstr ""
 "mikrofonját"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3239
+#: src/ephy-window.c:3338
 msgid "Website Data Access Request"
 msgstr "Webhelyadat-hozzáférési kérelem"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3241
+#: src/ephy-window.c:3340
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while "
@@ -3251,68 +3263,56 @@ msgstr ""
 "a(z) „%s” számára a(z) „%s” oldalon végzett tevékenysége követését."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3246
+#: src/ephy-window.c:3345
 msgid "Clipboard Access Request"
 msgstr "Vágólap-hozzáférési kérelem"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3248
+#: src/ephy-window.c:3347
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "A(z) „%s” helyen lévő oldal hozzá szeretne férni a vágólapjához"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3375
 msgid "_Ask Later"
 msgstr "_Kérdezzen később"
 
 # FF-másolás :)
-#: src/ephy-window.c:3277
+#: src/ephy-window.c:3376
 msgid "_Deny"
 msgstr "_Elutasítás"
 
 # FF-másolás :)
-#: src/ephy-window.c:3278
+#: src/ephy-window.c:3377
 msgid "_Allow"
 msgstr "_Engedélyezés"
 
-#: src/ephy-window.c:3484 src/ephy-window.c:5195
-msgid "Leave Website?"
-msgstr "Elhagyja a webhelyet?"
-
-#: src/ephy-window.c:3485 src/ephy-window.c:5196 src/window-commands.c:1399
-msgid "A form was modified and has not been submitted"
-msgstr "Egy űrlap módosítva lett és nem került elküldésre"
-
-#: src/ephy-window.c:3486 src/ephy-window.c:5197 src/window-commands.c:1403
-msgid "_Discard Form"
-msgstr "Űrlap _elvetése"
-
-#: src/ephy-window.c:3507
+#: src/ephy-window.c:3606
 msgid "Download operation"
 msgstr "Letöltési művelet"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3608
 msgid "Show details"
 msgstr "Részletek megjelenítése"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3610
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d letöltési művelet aktív"
 msgstr[1] "%d letöltési művelet aktív"
 
-#: src/ephy-window.c:3789
+#: src/ephy-window.c:3888
 msgid "Set as Default Browser?"
 msgstr "Beállítja alapértelmezett böngészőként?"
 
-#: src/ephy-window.c:3791
+#: src/ephy-window.c:3890
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "A Web használata alapértelmezett webböngészőként és külső hivatkozások "
 "megnyitásához"
 
-#: src/ephy-window.c:3793
+#: src/ephy-window.c:3892
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3320,84 +3320,79 @@ msgstr ""
 "Az Epiphany technológiai előzetesének használata alapértelmezett "
 "webböngészőként és külső hivatkozások megnyitásához"
 
-#: src/ephy-window.c:3797
+#: src/ephy-window.c:3896
 msgid "_Ask Again Later"
 msgstr "_Kérdezzen később újra"
 
-#: src/ephy-window.c:3798
+#: src/ephy-window.c:3897
 msgid "_No"
 msgstr "_Nem"
 
-#: src/ephy-window.c:3799
+#: src/ephy-window.c:3898
 msgid "_Yes"
 msgstr "_Igen"
 
-#: src/ephy-window.c:4129
+#: src/ephy-window.c:4228
 msgid "Download started"
 msgstr "Letöltés elindítva"
 
-#: src/ephy-window.c:4177
-#| msgctxt "shortcuts dialog"
-#| msgid "Open File"
+#: src/ephy-window.c:4276
 msgid "_Open Folder"
 msgstr "Mappa _megnyitása"
 
-#: src/ephy-window.c:4252
+#: src/ephy-window.c:4351
 msgid "Save Password?"
 msgstr "Menti a jelszót?"
 
-#: src/ephy-window.c:4253
-#| msgid ""
-#| "Passwords are saved only on your device and can be removed at any time in "
-#| "Preferences"
+#: src/ephy-window.c:4352
 msgid "Passwords are saved only on your device and can be removed at any time."
 msgstr ""
-"A jelszavak csak az Ön eszközén kerülnek mentésre, és bármikor eltávolíthatók."
+"A jelszavak csak az Ön eszközén kerülnek mentésre, és bármikor "
+"eltávolíthatók."
 
-#: src/ephy-window.c:4255
+#: src/ephy-window.c:4354
 msgid "Not Now"
 msgstr "Most nem"
 
-#: src/ephy-window.c:4256
+#: src/ephy-window.c:4355
 msgid "Never Save"
 msgstr "Soha ne mentse"
 
-#: src/ephy-window.c:4257
+#: src/ephy-window.c:4356
 msgid "Save"
 msgstr "Mentés"
 
-#: src/ephy-window.c:4458
+#: src/ephy-window.c:4557
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Webalkalmazás"
 
-#: src/ephy-window.c:4461
+#: src/ephy-window.c:4560
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Oldal telepítése webalkalmazásként"
 
-#: src/ephy-window.c:4987
-#| msgid "Link copied"
+#: src/ephy-window.c:5086
 msgid "Page URL copied"
 msgstr "Oldal URL-e lemásolva"
 
-#: src/ephy-window.c:5310
+#: src/ephy-window.c:5409
 msgid "Close Multiple Tabs?"
 msgstr "Bezár több lapot?"
 
-#: src/ephy-window.c:5311
+#: src/ephy-window.c:5410
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Ha ez az ablak bezárásra kerül, akkor az összes nyitott lap elvész"
 
-#: src/ephy-window.c:5312
+#: src/ephy-window.c:5411
 msgid "C_lose Tabs"
 msgstr "Lapok _bezárása"
 
-#: src/ephy-window.c:5435
+#: src/ephy-window.c:5534
 msgid "New tab opened"
 msgstr "Új lap nyílt"
 
-#: src/ephy-window.c:5439
+#: src/ephy-window.c:5538
 msgid "Switch"
 msgstr "Átváltás"
 
@@ -3516,11 +3511,11 @@ msgstr "Telepítés"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Fájl megnyitása (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:276
+#: src/preferences/prefs-features-page.c:274
 msgid "All values reset"
 msgstr "Összes érték visszaállítva"
 
-#: src/preferences/prefs-features-page.c:330
+#: src/preferences/prefs-features-page.c:328
 msgid "Reset to default"
 msgstr "Visszaállítás az alapértelmezettre"
 
@@ -3759,7 +3754,7 @@ msgid "Tags"
 msgstr "Címkék"
 
 #: src/resources/gtk/bookmark-properties.blp:73
-#: src/resources/gtk/bookmark-row.blp:43
+#: src/resources/gtk/bookmark-row.blp:44
 msgid "Remove"
 msgstr "Eltávolítás"
 
@@ -3945,7 +3940,6 @@ msgid "Sync _History"
 msgstr "_Előzmények szinkronizálása"
 
 #: src/resources/gtk/firefox-sync-dialog.blp:78
-#| msgid "Extensions"
 msgid "Sync _Extensions"
 msgstr "_Kiterjesztések szinkronizálása"
 
@@ -4301,7 +4295,6 @@ msgid "Ask _Where to Save Files Before Downloading"
 msgstr "Kérdezzen rá, hogy _hova mentse a fájlokat a letöltés előtt"
 
 #: src/resources/gtk/prefs-general-page.blp:121
-#| msgid "_Download Folder"
 msgid "Default Download _Folder"
 msgstr "Alapértelmezett letöltési _mappa"
 
@@ -4334,7 +4327,6 @@ msgid "Mouse _Gestures"
 msgstr "Egér_gesztusok"
 
 #: src/resources/gtk/prefs-general-page.blp:196
-#| msgid "S_witch Immediately to New Tabs"
 msgid "Switch Immediately to New _Tabs"
 msgstr "Váltás azonnal az új _lapokra"
 
@@ -4744,7 +4736,6 @@ msgid "Select Page URL"
 msgstr "Oldal URL-jének kijelölése"
 
 #: src/resources/gtk/shortcuts-dialog.blp:283
-#| msgid "Copy URL"
 msgctxt "shortcuts dialog"
 msgid "Copy Page URL"
 msgstr "Oldal URL-ének másolása"
@@ -5025,13 +5016,11 @@ msgstr "Új webalkalmazás"
 
 #: src/window-commands.c:1999
 #, c-format
-#| msgid "The application “%s” is ready to be used"
 msgid "The app “%s” is ready to be used"
 msgstr "A(z) „%s” alkalmazás használatra kész"
 
 #: src/window-commands.c:2002
 #, c-format
-#| msgid "The application “%s” could not be created: %s"
 msgid "The app “%s” could not be created"
 msgstr "A(z) „%s” alkalmazást nem sikerült létrehozni"
 
@@ -5066,13 +5055,10 @@ msgid "PNG"
 msgstr "PNG"
 
 #: src/window-commands.c:2637
-#| msgid "Remove from overview"
 msgid "Item removed from overview"
 msgstr "Az elem eltávolítva az áttekintésből"
 
 #: src/window-commands.c:2639
-#| msgctxt "shortcuts dialog"
-#| msgid "Undo"
 msgid "Undo"
 msgstr "Visszavonás"
 
