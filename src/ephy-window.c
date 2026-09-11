@@ -2109,11 +2109,16 @@ window_properties_geometry_changed (WebKitWindowProperties *properties,
                                     EphyWindow             *window)
 {
   GdkRectangle geometry;
+  int width;
+  int height;
 
   webkit_window_properties_get_geometry (properties, &geometry);
 
-  if (geometry.width > 0 && geometry.height > 0)
-    gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
+  width = geometry.width > 0 ? geometry.width : -1;
+  height = geometry.height > 0 ? geometry.height : -1;
+
+  if (width > 0 || height > 0)
+    gtk_window_set_default_size (GTK_WINDOW (window), width, height);
 }
 
 static void
@@ -2123,6 +2128,8 @@ ephy_window_configure_for_view (EphyWindow    *window,
   WebKitWindowProperties *properties;
   GdkRectangle geometry;
   EphyWindowChrome chrome = 0;
+  int width;
+  int height;
 
   properties = webkit_web_view_get_window_properties (web_view);
 
@@ -2144,17 +2151,52 @@ ephy_window_configure_for_view (EphyWindow    *window,
   }
 
   webkit_window_properties_get_geometry (properties, &geometry);
-  if (geometry.width > 0 && geometry.height > 0)
-    gtk_window_set_default_size (GTK_WINDOW (window), geometry.width, geometry.height);
+  width = geometry.width > 0 ? geometry.width : -1;
+  height = geometry.height > 0 ? geometry.height : -1;
+  if (width > 0 || height > 0)
+    gtk_window_set_default_size (GTK_WINDOW (window), width, height);
 
   if (!webkit_window_properties_get_resizable (properties))
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-  window->is_popup = TRUE;
+  ephy_window_set_is_popup (window, TRUE);
   ephy_window_set_chrome (window, chrome);
-  g_signal_connect (properties, "notify::geometry",
-                    G_CALLBACK (window_properties_geometry_changed),
-                    window);
+  g_signal_connect_object (properties, "notify::geometry",
+                           G_CALLBACK (window_properties_geometry_changed),
+                           window, G_CONNECT_DEFAULT);
+}
+
+static gboolean
+should_open_as_popup (WebKitWebView *web_view)
+{
+  WebKitWindowProperties *properties;
+  GdkRectangle geometry;
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_FULLSCREEN))
+    return FALSE;
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK)
+    return FALSE;
+
+  properties = webkit_web_view_get_window_properties (web_view);
+  if (!properties)
+    return FALSE;
+
+  webkit_window_properties_get_geometry (properties, &geometry);
+  if (geometry.width > 0 || geometry.height > 0)
+    return TRUE;
+
+  if (!webkit_window_properties_get_toolbar_visible (properties) ||
+      !webkit_window_properties_get_locationbar_visible (properties) ||
+      !webkit_window_properties_get_menubar_visible (properties) ||
+      !webkit_window_properties_get_resizable (properties) ||
+      !webkit_window_properties_get_scrollbars_visible (properties) ||
+      !webkit_window_properties_get_statusbar_visible (properties) ||
+      webkit_window_properties_get_fullscreen (properties))
+    return TRUE;
+
+  return FALSE;
 }
 
 static gboolean
@@ -2162,19 +2204,51 @@ web_view_ready_cb (WebKitWebView *web_view,
                    WebKitWebView *parent_web_view)
 {
   EphyWindow *window, *parent_view_window;
+  GtkRoot *root, *parent_root;
   gboolean using_new_window;
 
-  window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view)));
-  parent_view_window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (parent_web_view)));
+  root = gtk_widget_get_root (GTK_WIDGET (web_view));
+  parent_root = gtk_widget_get_root (GTK_WIDGET (parent_web_view));
+
+  if (!root || !parent_root)
+    return FALSE;
+
+  window = EPHY_WINDOW (root);
+  parent_view_window = EPHY_WINDOW (parent_root);
 
   using_new_window = window != parent_view_window;
 
-  if (using_new_window) {
-    ephy_window_configure_for_view (window, web_view);
-    g_signal_emit_by_name (parent_web_view, "new-window", web_view);
+  if (!using_new_window && should_open_as_popup (web_view)) {
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+    AdwTabView *src_tab_view = ephy_tab_view_get_tab_view (parent_view_window->tab_view);
+    AdwTabPage *page = adw_tab_view_get_page (src_tab_view, GTK_WIDGET (embed));
+    AdwTabView *dst_tab_view;
+
+    if (page) {
+      window = ephy_window_new ();
+      dst_tab_view = ephy_tab_view_get_tab_view (window->tab_view);
+
+      adw_tab_view_transfer_page (src_tab_view, page, dst_tab_view, 0);
+      using_new_window = TRUE;
+    }
   }
 
-  gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
+  if (using_new_window) {
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+
+    if (should_open_as_popup (web_view))
+      ephy_window_configure_for_view (window, web_view);
+    g_signal_emit_by_name (parent_web_view, "new-window", web_view);
+    gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
+    gtk_window_present (GTK_WINDOW (window));
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
+  } else {
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+
+    ephy_tab_view_select_page (window->tab_view, GTK_WIDGET (embed));
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
+    gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
+  }
 
   return TRUE;
 }
@@ -2188,6 +2262,9 @@ create_web_view_cb (WebKitWebView          *web_view,
   WebKitWebView *new_web_view;
   EphyNewTabFlags flags;
   EphyWindow *target_window;
+  WebKitNavigationType nav_type;
+
+  nav_type = webkit_navigation_action_get_navigation_type (navigation_action);
 
   if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) &&
       (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
@@ -2195,8 +2272,9 @@ create_web_view_cb (WebKitWebView          *web_view,
        g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                EPHY_PREFS_LOCKDOWN_FULLSCREEN))) {
     target_window = window;
-    flags = EPHY_NEW_TAB_JUMP |
-            EPHY_NEW_TAB_APPEND_AFTER;
+    flags = EPHY_NEW_TAB_APPEND_AFTER;
+    if (nav_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
+      flags |= EPHY_NEW_TAB_JUMP;
   } else {
     target_window = ephy_window_new ();
     flags = EPHY_NEW_TAB_DONT_SHOW_WINDOW;
@@ -2208,7 +2286,7 @@ create_web_view_cb (WebKitWebView          *web_view,
                                    target_window,
                                    EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                                    flags);
-  if (target_window == window)
+  if (target_window == window && (flags & EPHY_NEW_TAB_JUMP))
     gtk_widget_grab_focus (GTK_WIDGET (embed));
 
   new_web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
