@@ -29,6 +29,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
+#include "ephy-header-bar.h"
 #include "ephy-shell.h"
 #include "ephy-test-utils.h"
 #include "ephy-window.h"
@@ -269,6 +270,52 @@ test_ephy_shell_open_uris_tab_reuse (void)
 }
 
 static void
+test_ephy_shell_open_uris_focus (void)
+{
+  EphyShell *ephy_shell;
+  GtkWidget *window;
+  EphyEmbed *embed;
+  EphyWebView *view;
+  GMainLoop *loop;
+  GtkWidget *focus;
+  GtkWidget *header_bar;
+  GtkWidget *title_widget;
+  const char *uris[] = { "about:epiphany", NULL };
+  const char *default_uris[] = { "", NULL };
+
+  ephy_shell = ephy_shell_get_default ();
+  window = GTK_WIDGET (ephy_window_new ());
+
+  /* 1. Open an external URI: focus should be on the web view, NOT the location entry. */
+  embed = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL,
+                              EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+  view = ephy_embed_get_web_view (embed);
+  loop = ephy_test_utils_setup_wait_until_load_is_committed (view);
+  ephy_shell_open_uris (ephy_shell, uris, EPHY_STARTUP_NEW_TAB);
+  ephy_test_utils_wait_until_load_is_committed (loop);
+
+  focus = gtk_root_get_focus (GTK_ROOT (window));
+  header_bar = ephy_window_get_header_bar (EPHY_WINDOW (window));
+  title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar)));
+  g_assert_false (gtk_widget_is_ancestor (focus, title_widget));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+
+  /* 2. Open a new window without URIs (--new-window): focus SHOULD be on the location entry. */
+  ephy_shell_open_uris (ephy_shell, default_uris, EPHY_STARTUP_NEW_WINDOW);
+  while (g_main_context_iteration (NULL, FALSE))
+    ;
+  window = GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell)));
+  g_assert_nonnull (window);
+  focus = gtk_root_get_focus (GTK_ROOT (window));
+  header_bar = ephy_window_get_header_bar (EPHY_WINDOW (window));
+  title_widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar)));
+  g_assert_true (focus == title_widget || gtk_widget_is_ancestor (focus, title_widget));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
+static void
 test_ephy_shell_tab_no_history (void)
 {
   /* TODO: BackForwardList */
@@ -315,6 +362,9 @@ main (int   argc,
 
   g_test_add_func ("/src/ephy-shell/open_uris_tab_reuse",
                    test_ephy_shell_open_uris_tab_reuse);
+
+  g_test_add_func ("/src/ephy-shell/open_uris_focus",
+                   test_ephy_shell_open_uris_focus);
 
   g_test_add_func ("/src/ephy-shell/tab_no_history",
                    test_ephy_shell_tab_no_history);
