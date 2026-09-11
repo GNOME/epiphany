@@ -86,14 +86,20 @@ find_path_start (const char  *url,
    *
    * We could do it "properly" and use g_uri_split() to get all URI components
    * and rebuild manually both parts of the URI, but that's really not needed
-   * as we know that it's a http(s)://foobar.example/foobar… URL, so we can
+   * since it's likely a http(s)://foobar.example/foobar… URL, so we can
    * just look for the first //, then from here go to the next / and we'll
    * have detected the path+query+fragment part.
    */
   const char *after_scheme = strstr (url, "//");
   const char *path_start;
 
-  g_assert (after_scheme);
+  if (!after_scheme) {
+    /* If we're here, the URI is invalid. */
+    *error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
+                          _("The %s search engine template URL can't be valid."),
+                          url);
+    return NULL;
+  }
 
   after_scheme += strlen ("//");
   /* Look for each URL component's prefix character in the right order, to
