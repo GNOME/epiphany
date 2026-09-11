@@ -1,0 +1,438 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2026 GNOME Web (Epiphany) Contributors
+#
+# This file is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 2.1 of the License, or
+# (at your option) any later version.
+#
+"""
+Automate AppStream release notes generation from the NEWS file.
+
+This script parses Epiphany's NEWS file (formatted according to GNOME conventions)
+and updates or generates the <releases> block in org.gnome.Epiphany.metainfo.xml.in.in
+(or outputs a configured org.gnome.Epiphany.metainfo.xml.in at build time).
+
+GNOME Software reads these <releases> entries to display patch notes in the
+"Version History" / "What's New" UI.
+"""
+
+import argparse
+import html
+import os
+import re
+import sys
+from datetime import datetime
+from pathlib import Path
+
+
+def parse_news_releases(news_text):
+    """
+    Parse the NEWS file into structured release records.
+    Each record contains:
+      - raw_version: e.g. "51.0" or "51.rc" or "44.4 (sorry, tetraphobiacs)"
+      - version: AppStream formatted version, e.g. "51.0", "51~rc", "51~beta"
+      - date: ISO formatted date "YYYY-MM-DD"
+      - body: raw release notes text
+    """
+    header_pattern = re.compile(
+        r'^([0-9][^\n]+?)\s+-\s+([A-Za-z]+ \d{1,2}, \d{4})\s*\n[=]+',
+        re.MULTILINE
+    )
+    matches = list(header_pattern.finditer(news_text))
+    releases = []
+
+    for i, match in enumerate(matches):
+        raw_version = match.group(1).strip()
+        raw_date = match.group(2).strip()
+
+        # Extract version number (strip parenthetical notes like '(sorry, tetraphobiacs)')
+        ver_match = re.match(r'^([0-9]+(?:\.[0-9]+|\.(?:alpha|beta|rc)[0-9]*)+)', raw_version)
+        if ver_match:
+            clean_ver = ver_match.group(1)
+        else:
+            clean_ver = raw_version.split()[0]
+
+        # AppStream requires tilde (~) for pre-release versions (e.g. 51~rc) so that
+        # version comparison correctly orders 51~rc < 51.0.
+        as_version = re.sub(r'\.(alpha|beta|rc)', r'~\1', clean_ver)
+
+        # Parse date to ISO 8601 YYYY-MM-DD
+        try:
+            dt = datetime.strptime(raw_date, '%B %d, %Y')
+            as_date = dt.strftime('%Y-%m-%d')
+        except ValueError:
+            as_date = raw_date
+
+        start = match.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(news_text)
+        body = news_text[start:end].strip()
+
+        releases.append({
+            'raw_version': raw_version,
+            'version': as_version,
+            'date': as_date,
+            'raw_date': raw_date,
+            'body': body,
+        })
+
+    return releases
+
+
+def extract_release_notes(releases, version=None):
+    """
+    Extract release notes for a specific version (or latest) in standard GNOME changelog format.
+    """
+    if not releases:
+        raise ValueError("No releases found in NEWS file.")
+
+    target = None
+    if version:
+        v_clean = version.lstrip("v").strip()
+        for r in releases:
+            if (r['raw_version'] == v_clean or
+                r['version'] == v_clean or
+                r['raw_version'].split()[0] == v_clean or
+                r['version'].replace('~', '.') == v_clean.replace('~', '.')):
+                target = r
+                break
+        if target is None:
+            raise ValueError(f"Release '{version}' not found in NEWS file")
+    else:
+        target = releases[0]
+
+    raw_date = target.get('raw_date') or target.get('date', '')
+    header = f"{target['raw_version']} - {raw_date}" if raw_date else target['raw_version']
+    underline = "=" * len(header)
+    body = target['body'].strip()
+    return f"{header}\n{underline}\n\n{body}\n"
+
+
+def parse_release_body(body, strip_authors=False, strip_issues=False):
+    """
+    Parse a single release's body into intro paragraphs, sections (like 'Bugs fixed'),
+    CVE identifiers, and translation updates.
+    """
+    lines = body.splitlines()
+    intro_paragraphs = []
+    current_para = []
+    sections = {}  # title -> list of item strings
+    current_section = None
+    current_item = []
+    cves = []
+
+    def flush_item():
+        nonlocal current_item
+        if current_item:
+            full_item = ' '.join(s.strip() for s in current_item if s.strip())
+            # Find any CVE references
+            for cve in re.findall(r'CVE-\d{4}-\d+', full_item):
+                if cve not in cves:
+                    cves.append(cve)
+
+            cleaned_item = full_item
+            if strip_authors:
+                # Remove trailing (Author Name)
+                cleaned_item = re.sub(r'\s*\([^()]+\)\s*$', '', cleaned_item).strip()
+            if strip_issues:
+                # Remove leading #1234 or !5678
+                cleaned_item = re.sub(r'^[#!]\d+\s*', '', cleaned_item).strip()
+
+            if current_section:
+                sections[current_section].append(cleaned_item)
+            else:
+                current_para.append(cleaned_item)
+            current_item = []
+
+    def flush_para():
+        nonlocal current_para
+        if current_para:
+            intro_paragraphs.append(' '.join(current_para))
+            current_para = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            if not current_section:
+                flush_item()
+                flush_para()
+            continue
+
+        # Check for section header (e.g. '* Bugs fixed:' or '* Translation updates:')
+        if stripped.startswith('* ') and stripped.endswith(':'):
+            flush_item()
+            flush_para()
+            current_section = stripped[2:-1].strip()
+            sections[current_section] = []
+            continue
+
+        # Check for bullet point (e.g. '  - ', '- ', '* ')
+        bullet_match = re.match(r'^(?:\s*[-*]|\s{2,}-)\s+(.*)', line)
+        if bullet_match:
+            flush_item()
+            current_item = [bullet_match.group(1)]
+        elif current_item:
+            # Multi-line bullet continuation
+            current_item.append(stripped)
+        elif not current_section:
+            current_para.append(stripped)
+
+    flush_item()
+    flush_para()
+
+    return {
+        'intros': intro_paragraphs,
+        'sections': sections,
+        'cves': cves,
+    }
+
+
+def format_releases_xml(releases, desc_limit=10, condense_translations=True,
+                        strip_authors=False, strip_issues=False, indent=2):
+    """
+    Format releases into an AppStream <releases> XML block.
+    """
+    base_indent = ' ' * indent
+    lines = [f'{base_indent}<releases>']
+
+    for idx, rel in enumerate(releases):
+        version = rel['version']
+        date = rel['date']
+        has_desc = (desc_limit <= 0) or (idx < desc_limit)
+        parsed = parse_release_body(rel['body'], strip_authors, strip_issues) if has_desc else None
+
+        has_content = False
+        if parsed and (parsed['intros'] or parsed['sections']):
+            has_content = True
+
+        if not has_desc or not has_content:
+            lines.append(f'{base_indent}  <release date="{date}" version="{version}"/>')
+            continue
+
+        lines.append(f'{base_indent}  <release date="{date}" version="{version}">')
+        lines.append(f'{base_indent}    <description>')
+
+        # Intro paragraphs
+        for intro in parsed['intros']:
+            lines.append(f'{base_indent}      <p>{html.escape(intro, quote=False)}</p>')
+
+        # Categorized sections
+        for sec_name, items in parsed['sections'].items():
+            if not items:
+                continue
+
+            if sec_name.lower() == 'translation updates':
+                if condense_translations:
+                    # Extract unique language names from lines like "Basque (Asier...)"
+                    langs = []
+                    for it in items:
+                        # Extract everything before the last parenthesized group
+                        m = re.match(r'^(.*?)\s*\([^()]+\)\s*$', it)
+                        lang = m.group(1).strip() if m else it.strip()
+                        if lang and lang not in langs:
+                            langs.append(lang)
+                    if langs:
+                        langs_str = ', '.join(langs)
+                        lines.append(f'{base_indent}      <p>Updated translations for: {html.escape(langs_str, quote=False)}.</p>')
+                else:
+                    lines.append(f'{base_indent}      <p>{html.escape(sec_name, quote=False)}:</p>')
+                    lines.append(f'{base_indent}      <ul>')
+                    for it in items:
+                        lines.append(f'{base_indent}        <li>{html.escape(it, quote=False)}</li>')
+                    lines.append(f'{base_indent}      </ul>')
+            else:
+                lines.append(f'{base_indent}      <p>{html.escape(sec_name, quote=False)}:</p>')
+                lines.append(f'{base_indent}      <ul>')
+                for it in items:
+                    lines.append(f'{base_indent}        <li>{html.escape(it, quote=False)}</li>')
+                lines.append(f'{base_indent}      </ul>')
+
+        lines.append(f'{base_indent}    </description>')
+
+        # AppStream issues tag for CVE tracking
+        if parsed['cves']:
+            lines.append(f'{base_indent}    <issues>')
+            for cve in parsed['cves']:
+                lines.append(f'{base_indent}      <issue type="cve">{html.escape(cve)}</issue>')
+            lines.append(f'{base_indent}    </issues>')
+
+        lines.append(f'{base_indent}  </release>')
+
+    lines.append(f'{base_indent}</releases>')
+    return '\n'.join(lines)
+
+
+def update_metainfo(metainfo_content, releases_xml, appid=None):
+    """
+    Replace the <releases> block in the metainfo content and optionally substitute @appid@.
+    """
+    releases_pattern = re.compile(r'([ \t]*)<releases(?:\s*/>|>.*?</releases>)', re.DOTALL)
+    if releases_pattern.search(metainfo_content):
+        updated = releases_pattern.sub(releases_xml, metainfo_content, count=1)
+    else:
+        # If <releases> is not present, inject before </component>
+        component_close = metainfo_content.rfind('</component>')
+        if component_close != -1:
+            updated = (metainfo_content[:component_close] +
+                       releases_xml + '\n' +
+                       metainfo_content[component_close:])
+        else:
+            raise ValueError("Invalid metainfo file: missing </component> tag")
+
+    if appid:
+        updated = updated.replace('@appid@', appid)
+
+    return updated
+
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_NEWS = SCRIPT_DIR.parent / 'NEWS'
+DEFAULT_METAINFO = SCRIPT_DIR / 'org.gnome.Epiphany.metainfo.xml.in.in'
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate AppStream metainfo release notes from NEWS for GNOME Software."
+    )
+    parser.add_argument(
+        '--news', '-n',
+        type=Path,
+        default=DEFAULT_NEWS,
+        help=f"Path to the NEWS file (default: {DEFAULT_NEWS.name} in project root)"
+    )
+    parser.add_argument(
+        '--metainfo', '-m',
+        type=Path,
+        default=DEFAULT_METAINFO,
+        help=f"Path to metainfo template (default: {DEFAULT_METAINFO.name} next to script)"
+    )
+    parser.add_argument(
+        '--output', '-o',
+        type=Path,
+        default=None,
+        help="Output file path (default: in-place update of metainfo file)"
+    )
+    parser.add_argument(
+        '--in-place', '-i',
+        action='store_true',
+        default=True,
+        help="Update the metainfo file in place (default behavior)"
+    )
+    parser.add_argument(
+        '--print', '--dry-run',
+        dest='print_stdout',
+        action='store_true',
+        help="Print the updated metainfo content to stdout without writing in-place"
+    )
+    parser.add_argument(
+        '--limit', '-l',
+        type=int,
+        default=10,
+        help="Number of recent releases with full descriptions (0 for unlimited, default: 10)"
+    )
+    parser.add_argument(
+        '--appid',
+        type=str,
+        default=None,
+        help="Substitute @appid@ placeholder (useful during build time)"
+    )
+    parser.add_argument(
+        '--keep-translations',
+        action='store_true',
+        help="Do not condense translations into a single paragraph; list each language"
+    )
+    parser.add_argument(
+        '--strip-authors',
+        action='store_true',
+        help="Strip contributor names from bullet points"
+    )
+    parser.add_argument(
+        '--strip-issue-numbers',
+        action='store_true',
+        help="Strip issue (#123) and MR (!456) numbers from bullet points"
+    )
+    parser.add_argument(
+        '--check',
+        action='store_true',
+        help="Check if metainfo file has the latest releases from NEWS (returns 1 if out-of-date)"
+    )
+    parser.add_argument(
+        '--extract',
+        nargs='?',
+        const='',
+        default=None,
+        help="Extract release notes for a version (defaults to latest) in GNOME changelog format for GitLab"
+    )
+
+    args = parser.parse_args()
+
+    news_path = args.news
+    if not news_path.is_file():
+        sys.exit(f"Error: NEWS file not found at {news_path}")
+
+    with open(news_path, 'r', encoding='utf-8') as f:
+        news_text = f.read()
+
+    releases = parse_news_releases(news_text)
+    if not releases:
+        sys.exit("Error: No releases could be parsed from NEWS file.")
+
+    if args.extract is not None:
+        target_version = args.extract if args.extract else None
+        try:
+            notes = extract_release_notes(releases, target_version)
+        except Exception as e:
+            sys.exit(f"Error: {e}")
+
+        if args.output:
+            with open(args.output, 'w', encoding='utf-8') as f:
+                f.write(notes)
+            print(f"Generated {args.output}")
+        else:
+            sys.stdout.write(notes)
+        sys.exit(0)
+
+    metainfo_path = args.metainfo
+    if not metainfo_path.is_file():
+        sys.exit(f"Error: metainfo file not found at {metainfo_path}")
+
+    with open(metainfo_path, 'r', encoding='utf-8') as f:
+        metainfo_text = f.read()
+
+    if args.check:
+        latest = releases[0]
+        ver = latest['version']
+        if f'version="{ver}"' not in metainfo_text:
+            print(f"OUT-OF-DATE: Metainfo file is missing latest release '{ver}' from NEWS.", file=sys.stderr)
+            sys.exit(1)
+        if f'<release date="{latest["date"]}" version="{ver}">' not in metainfo_text:
+            print(f"OUT-OF-DATE: Metainfo file missing release notes for '{ver}'.", file=sys.stderr)
+            sys.exit(1)
+        print(f"OK: Metainfo file contains up-to-date release notes for '{ver}'.")
+        sys.exit(0)
+
+    releases_xml = format_releases_xml(
+        releases,
+        desc_limit=args.limit,
+        condense_translations=not args.keep_translations,
+        strip_authors=args.strip_authors,
+        strip_issues=args.strip_issue_numbers,
+    )
+
+    updated_metainfo = update_metainfo(metainfo_text, releases_xml, appid=args.appid)
+
+    if args.output:
+        with open(args.output, 'w', encoding='utf-8') as f:
+            f.write(updated_metainfo)
+        print(f"Generated {args.output}")
+    elif args.print_stdout:
+        sys.stdout.write(updated_metainfo)
+    else:
+        with open(metainfo_path, 'w', encoding='utf-8') as f:
+            f.write(updated_metainfo)
+        print(f"Successfully updated {metainfo_path} with {len(releases)} releases ({min(args.limit, len(releases)) if args.limit > 0 else len(releases)} with detailed patch notes).")
+
+
+if __name__ == '__main__':
+    main()
