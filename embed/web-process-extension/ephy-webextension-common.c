@@ -73,7 +73,7 @@ on_send_message_finish (WebKitWebPage *page,
     if (strcmp (json, "") == 0) {
       value = jsc_value_new_undefined (context);
       ret = jsc_value_function_call (callback_data->resolve_callback, JSC_TYPE_VALUE, value, G_TYPE_NONE);
-    } else if (strcmp (webkit_user_message_get_name (response), "error") == 0) {
+    } else if (g_strcmp0 (webkit_user_message_get_name (response), "error") == 0) {
       ret = jsc_value_function_call (callback_data->reject_callback, G_TYPE_STRING, json, G_TYPE_NONE);
     } else {
       value = jsc_value_new_from_json (context, json);
