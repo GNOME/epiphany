@@ -521,6 +521,14 @@ on_opensearch_file_downloaded_cb (SoupSession  *session,
   }
 
   file_content = g_bytes_get_data (bytes, &length);
+  if (!file_content) {
+    /* TRANSLATORS: The %s is the name of the search engine. */
+    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                             _("Couldn't download search engine description file for %s: file is empty"),
+                             ephy_opensearch_autodiscovery_link_get_name (data->autodiscovery_link));
+    return;
+  }
+
   if (!parse_opensearch_xml (data, &error, file_content, length)) {
     g_task_return_error (task, g_steal_pointer (&error));
     return;
