@@ -3438,6 +3438,8 @@ tab_view_page_detached_cb (AdwTabView *tab_view,
     (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (download_only_load_cb), window);
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (permission_requested_cb), window);
+  g_signal_handlers_disconnect_by_func
+    (ephy_embed_get_web_view (EPHY_EMBED (content)), G_CALLBACK (reader_mode_cb), window);
 
   if (ephy_tab_view_get_n_pages (window->tab_view) == 0)
     window->active_embed = NULL;
