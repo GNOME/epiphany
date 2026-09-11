@@ -285,12 +285,10 @@ ephy_reader_request_begin_get_source_from_uri (EphyReaderRequest *request,
                                                const char        *uri)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
   WebKitNetworkSession *network_session = ephy_embed_shell_get_network_session (shell);
 
   g_assert (!request->web_view);
   request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (g_object_new (WEBKIT_TYPE_WEB_VIEW,
-                                                                        "web-context", context,
                                                                         "network-session", network_session,
                                                                         NULL)));
 
