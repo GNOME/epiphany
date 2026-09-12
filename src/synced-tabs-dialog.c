@@ -139,6 +139,7 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
 
   expander = adw_expander_row_new ();
   adw_expander_row_set_expanded (ADW_EXPANDER_ROW (expander), TRUE);
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (expander), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (expander), device_name);
   adw_expander_row_add_prefix (ADW_EXPANDER_ROW (expander),
                                gtk_image_new_from_icon_name ("computer-symbolic"));
@@ -151,6 +152,7 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
     GtkWidget *tab_row;
 
     tab_row = adw_action_row_new ();
+    adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (tab_row), FALSE);
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (tab_row), title);
     adw_action_row_set_subtitle (ADW_ACTION_ROW (tab_row), url);
     gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (tab_row), !is_local);

@@ -242,6 +242,7 @@ populate_model_cb (GList    **records,
 
     row = adw_expander_row_new ();
     g_object_set_data (G_OBJECT (row), "record", record);
+    adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
     adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), ephy_password_record_get_origin (record));
     username = ephy_password_record_get_username (record);
     if (username)

@@ -48,6 +48,7 @@ add_details_domain (gpointer data,
   GtkWidget *row;
 
   row = adw_action_row_new ();
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), data);
   gtk_list_box_append (GTK_LIST_BOX (self->details_listbox), row);
 }
@@ -150,6 +151,7 @@ add_domain_row (gpointer key,
   g_autofree char *text = g_strdup_printf ("%d", array->len);
 
   row = adw_action_row_new ();
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), key);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   count = gtk_label_new (text);

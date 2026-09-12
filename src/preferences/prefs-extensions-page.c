@@ -204,6 +204,7 @@ create_row (PrefsExtensionsPage *self,
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), image);
 
   /* Titles */
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), ephy_web_extension_get_name (web_extension));
   adw_action_row_set_subtitle (ADW_ACTION_ROW (row), ephy_web_extension_get_description (web_extension));
   adw_action_row_set_subtitle_lines (ADW_ACTION_ROW (row), 1);

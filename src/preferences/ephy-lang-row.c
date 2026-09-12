@@ -110,6 +110,7 @@ drag_begin_cb (EphyLangRow *self,
 
   drag_row = ephy_lang_row_new ();
   ephy_lang_row_set_code (EPHY_LANG_ROW (drag_row), self->code);
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (drag_row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (drag_row), title);
 
   gtk_list_box_append (GTK_LIST_BOX (drag_list), drag_row);

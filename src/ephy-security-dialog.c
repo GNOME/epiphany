@@ -478,6 +478,7 @@ add_permission_combo_row (EphySecurityDialog *dialog,
   GtkStringList *list;
 
   widget = adw_combo_row_new ();
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (widget), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (widget), name);
 
   list = gtk_string_list_new (NULL);

@@ -155,6 +155,7 @@ ephy_bookmark_properties_create_tag_widget (EphyBookmarkProperties *self,
 
   label_text = default_tag ? EPHY_BOOKMARKS_FAVORITES_TAG : tag;
 
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (widget), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (widget), label_text);
 
   if (!default_tag) {

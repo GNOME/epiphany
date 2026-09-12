@@ -64,6 +64,7 @@ add_row_internal (EphyWebappAdditionalURLsDialog *self,
   GtkWidget *row = adw_action_row_new ();
   GtkWidget *remove_button;
 
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), url);
   remove_button = gtk_button_new ();
   g_signal_connect (remove_button, "clicked", G_CALLBACK (on_remove_clicked), self);
