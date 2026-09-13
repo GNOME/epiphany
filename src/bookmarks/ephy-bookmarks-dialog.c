@@ -79,8 +79,8 @@ tag_detail_back (EphyBookmarksDialog *self)
 {
   g_assert (EPHY_IS_BOOKMARKS_DIALOG (self));
 
-  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
+  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
   gtk_list_box_remove_all (GTK_LIST_BOX (self->tag_detail_list_box));
 }
 
@@ -1351,6 +1351,9 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);
   gtk_list_box_set_filter_func (GTK_LIST_BOX (self->searching_bookmarks_list_box),
+                                (GtkListBoxFilterFunc)tags_list_box_filter_func,
+                                self, NULL);
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (self->tag_detail_list_box),
                                 (GtkListBoxFilterFunc)tags_list_box_filter_func,
                                 self, NULL);
 
