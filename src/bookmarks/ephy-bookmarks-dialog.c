@@ -1129,57 +1129,44 @@ on_search_entry_changed (GtkSearchEntry *entry,
                          gpointer        user_data)
 {
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
-  const char *entry_text = gtk_editable_get_text (GTK_EDITABLE (entry));
-  const char *visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
+  gboolean tag_detail_has_row = !!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0);
   GtkListBoxRow *row;
   int idx = 0;
-  int mapped = 0;
-
-  if (g_strcmp0 (entry_text, "") != 0) {
-    ephy_bookmarks_dialog_set_is_editing (self, FALSE);
-    gtk_widget_set_sensitive (self->edit_button, FALSE);
-  } else {
-    gtk_widget_set_sensitive (self->edit_button, TRUE);
-  }
-
-  if (g_strcmp0 (entry_text, "") != 0 && g_strcmp0 (visible_stack_child, "default") == 0) {
-    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "searching_bookmarks");
-  } else if (g_strcmp0 (entry_text, "") == 0 && g_strcmp0 (visible_stack_child, "searching_bookmarks") == 0) {
-    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
-  }
 
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->tag_detail_list_box));
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->searching_bookmarks_list_box));
 
-  if (g_strcmp0 (entry_text, "") != 0 &&
-      g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0) {
-    if ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
+  if (g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") != 0) {
+    ephy_bookmarks_dialog_set_is_editing (self, FALSE);
+    gtk_widget_set_sensitive (self->edit_button, FALSE);
+  } else {
+    gtk_widget_set_sensitive (self->edit_button, TRUE);
+
+    if (tag_detail_has_row)
       gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
     else
-      gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "searching_bookmarks");
+      gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
+
+    return;
   }
 
-  if ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0))) {
+  if (tag_detail_has_row) {
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
+
     while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), idx++))) {
       if (gtk_widget_get_mapped (GTK_WIDGET (row)))
-        mapped++;
+        return;
     }
   } else {
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "searching_bookmarks");
+
     while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), idx++))) {
       if (gtk_widget_get_mapped (GTK_WIDGET (row)))
-        mapped++;
+        return;
     }
   }
 
-  if (mapped != 0)
-    return;
-
-  if (g_strcmp0 (entry_text, "") != 0)
-    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
-  else if ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0)))
-    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
-  else
-    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
+  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
 }
 
 static gboolean
