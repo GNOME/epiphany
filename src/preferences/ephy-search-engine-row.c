@@ -112,6 +112,7 @@ on_ephy_search_engine_row_constructed (GObject *object)
 
   g_assert (self->engine);
 
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (self), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self),
                                  ephy_search_engine_get_name (self->engine));
 

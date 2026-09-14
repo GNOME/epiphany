@@ -533,6 +533,7 @@ tag_row_drag_begin_cb (AdwActionRow *self,
   else
     drag_image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic");
   adw_action_row_add_prefix (ADW_ACTION_ROW (drag_row), drag_image);
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (drag_row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (drag_row), tag);
 
   drag_image = gtk_image_new_from_icon_name ("go-next-symbolic");
@@ -645,6 +646,7 @@ create_tag_row (EphyBookmarksDialog *self,
 
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), image);
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), tag);
   gtk_widget_set_tooltip_text (row, tag);
 

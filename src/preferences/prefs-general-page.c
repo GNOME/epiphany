@@ -293,6 +293,7 @@ language_editor_add (PrefsGeneralPage *general_page,
   row = ephy_lang_row_new ();
 
   ephy_lang_row_set_code (EPHY_LANG_ROW (row), code);
+  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
   adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), desc);
 
   g_signal_connect (row, "delete-button-clicked", G_CALLBACK (language_editor_delete_button_clicked_cb), general_page);
