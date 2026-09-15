@@ -775,6 +775,7 @@ get_storage_credentials_cb (SoupSession *session,
   self->storage_credentials_key = g_strdup (key);
   self->storage_credentials_expiry_time = duration + g_get_real_time () / 1000000;
 
+  LOG ("Successfully obtained storage credentials from Token Server (endpoint: %s)", api_endpoint);
   ephy_sync_service_send_all_storage_requests (self);
   goto out;
 
@@ -2342,14 +2343,14 @@ ephy_sync_service_upload_fxa_device (EphySyncService *self)
 {
   JsonNode *node;
   JsonObject *object;
-  const char *access_token;
+  const char *refresh_token;
   char *body;
   char *device_name;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  access_token = ephy_sync_service_get_secret (self, secrets[ACCESS_TOKEN]);
-  if (!access_token)
+  refresh_token = ephy_sync_service_get_secret (self, secrets[REFRESH_TOKEN]);
+  if (!refresh_token)
     return;
 
   object = json_object_new ();
@@ -2371,7 +2372,7 @@ ephy_sync_service_upload_fxa_device (EphySyncService *self)
   body = json_to_string (node, FALSE);
 
   LOG ("Uploading device info on FxA Server...");
-  ephy_sync_service_fxa_bearer_post (self, "account/device", access_token,
+  ephy_sync_service_fxa_bearer_post (self, "account/device", refresh_token,
                                      body, upload_fxa_device_cb, self);
 
   g_free (body);
