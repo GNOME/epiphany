@@ -160,6 +160,9 @@ sync_set_last_sync_time (EphyFirefoxSyncDialog *sync_dialog)
   }
 }
 
+static void sync_teardown_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog);
+static void sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog);
+
 static void
 sync_finished_cb (EphySyncService       *service,
                   EphyFirefoxSyncDialog *sync_dialog)
@@ -225,7 +228,7 @@ sync_build_oauth_url (EphyFirefoxSyncDialog *sync_dialog)
     "&response_type=code"
     "&action=email"
     "&context=oauth_webchannel_v1",
-    FXA_CLIENT_ID,
+    ephy_sync_utils_get_client_id (),
     FXA_OLDSYNC_SCOPE,
     sync_dialog->oauth_state,
     sync_dialog->pkce_challenge->code_challenge,
@@ -244,10 +247,8 @@ sync_sign_in_error_cb (EphySyncService       *service,
 
   /* Display the error message and reload the iframe. */
   sync_sign_in_details_show (sync_dialog, error);
-  {
-    g_autofree char *url = sync_build_oauth_url (sync_dialog);
-    webkit_web_view_load_uri (sync_dialog->fxa_web_view, url);
-  }
+  sync_teardown_firefox_iframe (sync_dialog);
+  sync_setup_firefox_iframe (sync_dialog);
 }
 
 static void
@@ -265,13 +266,12 @@ sync_secrets_store_finished_cb (EphySyncService       *service,
     gtk_widget_set_visible (sync_dialog->sync_firefox_account_group, TRUE);
     gtk_widget_set_visible (sync_dialog->sync_options_group, TRUE);
     gtk_widget_set_visible (sync_dialog->sync_now_button, TRUE);
+    sync_teardown_firefox_iframe (sync_dialog);
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (sync_dialog, error->message);
-    {
-      g_autofree char *url = sync_build_oauth_url (sync_dialog);
-      webkit_web_view_load_uri (sync_dialog->fxa_web_view, url);
-    }
+    sync_teardown_firefox_iframe (sync_dialog);
+    sync_setup_firefox_iframe (sync_dialog);
   }
 }
 
@@ -310,8 +310,9 @@ sync_message_to_fxa_content (EphyFirefoxSyncDialog *sync_dialog,
 
   detail_str = json_to_string (node, FALSE);
   encoded_detail_str = ephy_encode_for_js_quoted_data_value (detail_str);
-  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"WebChannelMessageToContent\", {detail: '%s'}));",
+  script = g_strdup_printf ("window.dispatchEvent(new window.CustomEvent(\"WebChannelMessageToContent\", {detail: JSON.parse('%s')}));",
                             encoded_detail_str);
+  LOG ("Firefox Sync WebChannel: sending command '%s' response", command);
 
   /* We don't expect any response from the server. */
   webkit_web_view_evaluate_javascript (sync_dialog->fxa_web_view, script, -1, NULL, NULL, NULL, NULL, NULL);
@@ -623,7 +624,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
     goto out;
   }
 
-  LOG ("WebChannel: received command '%s'", command);
+  LOG ("Firefox Sync WebChannel: received command '%s'", command);
 
   if (g_strcmp0 (command, "fxaccounts:fxa_status") == 0) {
     /* Respond with our capabilities and sign-in status. */
@@ -716,7 +717,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
       "\"grant_type\":\"authorization_code\","
       "\"code\":\"%s\","
       "\"code_verifier\":\"%s\"}",
-      FXA_CLIENT_ID, code, sync_dialog->pkce_challenge->code_verifier);
+      ephy_sync_utils_get_client_id (), code, sync_dialog->pkce_challenge->code_verifier);
 
     msg = soup_message_new (SOUP_METHOD_POST, url);
     bytes = g_bytes_new_take (request_body, strlen (request_body));
@@ -758,11 +759,8 @@ out:
 
   if (is_error) {
     sync_sign_in_details_show (sync_dialog, _("Something went wrong, please try again later."));
-    {
-      char *url = sync_build_oauth_url (sync_dialog);
-      webkit_web_view_load_uri (sync_dialog->fxa_web_view, url);
-      g_free (url);
-    }
+    sync_teardown_firefox_iframe (sync_dialog);
+    sync_setup_firefox_iframe (sync_dialog);
   }
 }
 
@@ -818,6 +816,8 @@ fastly_challenge_resource_finished_cb (WebKitWebResource *resource,
     } else {
       LOG ("Fastly challenge failed again, not retrying");
     }
+  } else {
+    LOG ("Fastly challenge passed (status 200)");
   }
 }
 
@@ -836,6 +836,50 @@ fastly_resource_load_started_cb (WebKitWebView     *web_view,
 }
 
 static void
+fxa_web_view_load_changed_cb (WebKitWebView   *web_view,
+                              WebKitLoadEvent  load_event,
+                              gpointer         user_data)
+{
+  EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (user_data);
+
+  if (load_event == WEBKIT_LOAD_COMMITTED)
+    gtk_widget_set_visible (sync_dialog->sync_firefox_iframe_label, FALSE);
+}
+
+static gboolean
+fxa_web_view_load_failed_cb (WebKitWebView   *web_view,
+                             WebKitLoadEvent  load_event,
+                             char            *failing_uri,
+                             GError          *error,
+                             gpointer         user_data)
+{
+  g_warning ("Firefox Sync: web view load failed for %s: %s", failing_uri, error->message);
+  return FALSE;
+}
+
+static void
+sync_teardown_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
+{
+  if (sync_dialog->fxa_web_view) {
+    if (sync_dialog->fxa_manager) {
+      webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
+                                                                     "toChromeMessageHandler",
+                                                                     NULL);
+      webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
+                                                                     "openWebmailClickHandler",
+                                                                     NULL);
+      g_clear_object (&sync_dialog->fxa_manager);
+    }
+    g_clear_pointer (&sync_dialog->fxa_script, webkit_user_script_unref);
+
+    gtk_box_remove (GTK_BOX (sync_dialog->sync_firefox_iframe_box),
+                    GTK_WIDGET (sync_dialog->fxa_web_view));
+    sync_dialog->fxa_web_view = NULL;
+  }
+  sync_dialog->fastly_challenge_retried = FALSE;
+}
+
+static void
 /* Set up the WebKitWebView for FxA sign-in. Injects a user script to
  * relay WebChannelMessageToChrome events to our native handler.
  * Ref: FxAccountsWebChannel.sys.mjs _setupChannel().
@@ -843,11 +887,19 @@ static void
 sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
 {
   EphyEmbedShell *shell;
-  WebKitNetworkSession *network_session;
+  g_autoptr (WebKitNetworkSession) network_session = NULL;
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
+  const char *client_id;
   const char *script;
   g_autofree char *fxa_url = NULL;
+
+  client_id = ephy_sync_utils_get_client_id ();
+  if (!client_id || !*client_id) {
+    sync_sign_in_details_show (sync_dialog,
+                               _("Firefox Sync client ID is not configured."));
+    return;
+  }
 
   if (!sync_dialog->fxa_web_view) {
     script =
@@ -862,13 +914,11 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
       "  if (event.target.id == 'open-webmail' && event.target.hasAttribute('href'))"
       "    window.webkit.messageHandlers.openWebmailClickHandler.postMessage(event.target.getAttribute('href'));"
       "};"
-      "var stage = document.getElementById('stage');"
-      "if (stage)"
-      "  stage.addEventListener('click', handleOpenWebmailClick);";
+      "document.addEventListener('click', handleOpenWebmailClick);";
 
     sync_dialog->fxa_script = webkit_user_script_new (script,
                                                       WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
-                                                      WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                                      WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START,
                                                       NULL, NULL);
     sync_dialog->fxa_manager = webkit_user_content_manager_new ();
     webkit_user_content_manager_add_script (sync_dialog->fxa_manager, sync_dialog->fxa_script);
@@ -889,7 +939,7 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
 
     shell = ephy_embed_shell_get_default ();
     embed_context = ephy_embed_shell_get_web_context (shell);
-    network_session = ephy_embed_shell_get_network_session (shell);
+    network_session = webkit_network_session_new_ephemeral ();
     sync_context = webkit_web_context_new ();
     webkit_web_context_set_preferred_languages (sync_context,
                                                 g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
@@ -910,13 +960,19 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
     g_signal_connect (sync_dialog->fxa_web_view, "resource-load-started",
                       G_CALLBACK (fastly_resource_load_started_cb),
                       sync_dialog);
+    g_signal_connect (sync_dialog->fxa_web_view, "load-changed",
+                      G_CALLBACK (fxa_web_view_load_changed_cb),
+                      sync_dialog);
+    g_signal_connect (sync_dialog->fxa_web_view, "load-failed",
+                      G_CALLBACK (fxa_web_view_load_failed_cb),
+                      sync_dialog);
 
     g_object_unref (sync_context);
   }
 
+  sync_dialog->fastly_challenge_retried = FALSE;
   fxa_url = sync_build_oauth_url (sync_dialog);
   webkit_web_view_load_uri (sync_dialog->fxa_web_view, fxa_url);
-  gtk_widget_set_visible (sync_dialog->sync_firefox_iframe_label, FALSE);
 }
 
 static void
@@ -930,6 +986,9 @@ on_sync_sign_out_button_clicked (GtkWidget             *button,
   g_clear_pointer (&sync_dialog->sign_in_email, g_free);
   g_clear_pointer (&sync_dialog->sign_in_uid, g_free);
   g_clear_pointer (&sync_dialog->oauth_state, g_free);
+
+  /* Tear down previous web view and its ephemeral session. */
+  sync_teardown_firefox_iframe (sync_dialog);
 
   /* Show Mozilla Accounts iframe. */
   sync_setup_firefox_iframe (sync_dialog);
@@ -1027,16 +1086,7 @@ prefs_sync_page_finalize (GObject *object)
 {
   EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (object);
 
-  if (sync_dialog->fxa_web_view) {
-    webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
-                                                                   "toChromeMessageHandler",
-                                                                   NULL);
-    webkit_user_content_manager_unregister_script_message_handler (sync_dialog->fxa_manager,
-                                                                   "openWebmailClickHandler",
-                                                                   NULL);
-    webkit_user_script_unref (sync_dialog->fxa_script);
-    g_object_unref (sync_dialog->fxa_manager);
-  }
+  sync_teardown_firefox_iframe (sync_dialog);
 
   g_clear_pointer (&sync_dialog->pkce_challenge, ephy_sync_crypto_pkce_challenge_free);
   g_clear_pointer (&sync_dialog->ecdh_key_pair, ephy_sync_crypto_ecdh_key_pair_free);

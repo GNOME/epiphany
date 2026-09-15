@@ -20,9 +20,9 @@
 
 #include "config.h"
 
-#include "ephy-output-encoding.h"
-
 #include <glib.h>
+
+#include "ephy-output-encoding.h"
 
 static void
 test_encode_for_html (void)
