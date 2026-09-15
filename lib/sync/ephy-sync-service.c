@@ -666,7 +666,9 @@ ephy_sync_service_revoke_token (EphySyncService *self,
   /* Revoke the OAuth token via the FxA OAuth server. */
   accounts_server = ephy_sync_utils_get_accounts_server ();
   url = g_strdup_printf ("%s/oauth/destroy", accounts_server);
-  request_body = g_strdup_printf ("{\"client_id\":\"%s\",\"token\":\"%s\"}", FXA_CLIENT_ID, token);
+  request_body = g_strdup_printf ("{\"client_id\":\"%s\",\"token\":\"%s\"}",
+                                  ephy_sync_utils_get_client_id (),
+                                  token);
 
   msg = soup_message_new (SOUP_METHOD_POST, url);
   bytes = g_bytes_new_take (request_body, strlen (request_body));

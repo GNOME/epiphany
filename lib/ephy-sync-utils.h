@@ -41,6 +41,8 @@ const char         *ephy_sync_utils_get_secret_collection (void);
 #define EPHY_SYNC_BATCH_SIZE    80
 #define EPHY_SYNC_MAX_BATCHES   80
 
+const char         *ephy_sync_utils_get_client_id         (void);
+
 char     *ephy_sync_utils_encode_hex                    (const guint8 *data,
                                                          gsize         data_len);
 guint8   *ephy_sync_utils_decode_hex                    (const char   *hex);

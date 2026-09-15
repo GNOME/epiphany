@@ -548,6 +548,18 @@ ephy_sync_utils_get_accounts_server (void)
   return g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_ACCOUNTS_SERVER);
 }
 
+const char *
+ephy_sync_utils_get_client_id (void)
+{
+  const char *client_id;
+
+  client_id = g_getenv ("EPHY_FXA_CLIENT_ID");
+  if (client_id && *client_id)
+    return client_id;
+
+  return FXA_CLIENT_ID;
+}
+
 gboolean
 ephy_sync_utils_debug_log_is_enabled (void)
 {
