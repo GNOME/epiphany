@@ -33,6 +33,7 @@
 #include "ephy-debug.h"
 #include "ephy-notification.h"
 #include "ephy-settings.h"
+#include "ephy-string.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
 #include "ephy-user-agent.h"
@@ -720,11 +721,42 @@ static JsonNode *
 json_from_response_body (GBytes  *bytes,
                          GError **error)
 {
-  gconstpointer data = g_bytes_get_data (bytes, NULL);
-  if (data)
-    return json_from_string (data, error);
-  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, _("Response body is empty, do you need to install glib-networking?"));
-  return NULL;
+  gsize size = 0;
+  gconstpointer data;
+  g_autoptr (JsonParser) parser = NULL;
+
+  if (!bytes) {
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, _("Response body is empty, do you need to install glib-networking?"));
+    return NULL;
+  }
+
+  data = g_bytes_get_data (bytes, &size);
+  if (!data || size == 0) {
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, _("Response body is empty, do you need to install glib-networking?"));
+    return NULL;
+  }
+
+  parser = json_parser_new ();
+  if (!json_parser_load_from_data (parser, data, size, error)) {
+    g_assert (error);
+    return NULL;
+  }
+
+  return json_parser_steal_root (parser);
+}
+
+static char *
+response_body_to_string (GBytes *bytes)
+{
+  gsize size = 0;
+  gconstpointer data = bytes ? g_bytes_get_data (bytes, &size) : NULL;
+  g_autofree char *str = NULL;
+
+  if (!data || size == 0)
+    return g_strdup ("(empty)");
+
+  str = g_strndup ((const char *)data, size);
+  return ephy_string_shorten (str, 512);
 }
 
 static void
@@ -749,8 +781,9 @@ get_storage_credentials_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to obtain storage credentials. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     goto out_error;
   }
   node = json_from_response_body (response_body, &error);
@@ -913,8 +946,9 @@ delete_synchronizable_cb (SoupSession *session,
   if (status_code == 200) {
     LOG ("Successfully deleted from server");
   } else {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to delete object. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
   }
 }
 
@@ -997,8 +1031,9 @@ download_synchronizable_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to download object. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     goto out;
   }
   node = json_from_response_body (response_body, &error);
@@ -1092,13 +1127,22 @@ upload_synchronizable_cb (SoupSession *session,
     LOG ("Found a newer version of the object on the server, downloading it...");
     ephy_sync_service_download_synchronizable (data->service, data->manager, data->synchronizable);
   } else if (status_code == 200) {
+    gsize size = 0;
+    const char *data_str = g_bytes_get_data (response_body, &size);
+
     LOG ("Successfully uploaded to server");
-    time_modified = ceil (g_ascii_strtod (g_bytes_get_data (response_body, NULL), NULL));
-    ephy_synchronizable_set_server_time_modified (data->synchronizable, time_modified);
-    ephy_synchronizable_manager_save (data->manager, data->synchronizable);
+    if (data_str && size > 0) {
+      g_autofree char *str = g_strndup (data_str, size);
+      time_modified = ceil (g_ascii_strtod (str, NULL));
+      ephy_synchronizable_set_server_time_modified (data->synchronizable, time_modified);
+      ephy_synchronizable_manager_save (data->manager, data->synchronizable);
+    } else {
+      g_warning ("Empty response received when uploading object");
+    }
   } else {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to upload object. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
   }
 
   sync_async_data_free (data);
@@ -1214,13 +1258,17 @@ commit_batch_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to commit batch. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
   } else {
     LOG ("Successfully committed batches");
     /* Update sync time. */
     last_modified = soup_message_headers_get_one (response_headers, "X-Last-Modified");
-    ephy_synchronizable_manager_set_sync_time (data->manager, g_ascii_strtod (last_modified, NULL));
+    if (last_modified)
+      ephy_synchronizable_manager_set_sync_time (data->manager, g_ascii_strtod (last_modified, NULL));
+    else
+      g_warning ("Missing X-Last-Modified header in batch commit response");
   }
 
   if (data->sync_done)
@@ -1244,8 +1292,9 @@ upload_batch_cb (SoupSession *session,
 
   /* Note: "202 Accepted" status code. */
   if (status_code != 202) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to upload batch. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
   } else {
     LOG ("Successfully uploaded batch");
   }
@@ -1288,8 +1337,9 @@ start_batch_upload_cb (SoupSession *session,
 
   /* Note: "202 Accepted" status code. */
   if (status_code != 202) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to start batch upload. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     goto out;
   }
 
@@ -1386,8 +1436,9 @@ sync_collection_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to get records in collection %s. Status code: %u, response: %s",
-               collection, status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               collection, status_code, resp);
     goto out_error;
   }
   node = json_from_response_body (response_body, &error);
@@ -1747,8 +1798,9 @@ upload_client_record_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to upload client record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     if (self->is_signing_in)
       ephy_sync_service_report_sign_in_error (self, _("Failed to upload client record."), TRUE);
   } else {
@@ -1947,8 +1999,9 @@ upload_crypto_keys_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to upload crypto/keys record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     ephy_sync_service_report_sign_in_error (self,
                                             _("Failed to upload crypto/keys record."),
                                             TRUE);
@@ -2039,8 +2092,9 @@ get_crypto_keys_cb (SoupSession *session,
   }
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to get crypto/keys record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     goto out_error;
   }
 
@@ -2141,8 +2195,9 @@ upload_meta_global_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to upload meta/global record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     ephy_sync_service_report_sign_in_error (self,
                                             _("Failed to upload meta/global record."),
                                             TRUE);
@@ -2209,7 +2264,8 @@ verify_storage_version_cb (SoupSession *session,
                            gpointer     user_data)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
-  JsonParser *parser = NULL;
+  JsonNode *node = NULL;
+  JsonNode *payload_node = NULL;
   JsonObject *json = NULL;
   g_autoptr (GError) error = NULL;
   char *payload = NULL;
@@ -2228,18 +2284,18 @@ verify_storage_version_cb (SoupSession *session,
   }
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to get meta/global record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     goto out_error;
   }
 
-  parser = json_parser_new ();
-  json_parser_load_from_data (parser, g_bytes_get_data (response_body, NULL), -1, &error);
+  node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
     goto out_error;
   }
-  json = json_node_get_object (json_parser_get_root (parser));
+  json = json_node_get_object (node);
   if (!json) {
     g_warning ("JSON node does not hold a JSON object");
     goto out_error;
@@ -2249,12 +2305,12 @@ verify_storage_version_cb (SoupSession *session,
     goto out_error;
   }
   payload = g_strdup (json_object_get_string_member (json, "payload"));
-  json_parser_load_from_data (parser, payload, -1, &error);
+  payload_node = json_from_string (payload, &error);
   if (error) {
     g_warning ("Payload is not a valid JSON: %s", error->message);
     goto out_error;
   }
-  json = json_node_get_object (json_parser_get_root (parser));
+  json = json_node_get_object (payload_node);
   if (!json) {
     g_warning ("JSON node does not hold a JSON object");
     goto out_error;
@@ -2280,8 +2336,10 @@ out_error:
   message = message ? message : g_strdup (_("Failed to verify storage version."));
   ephy_sync_service_report_sign_in_error (self, message, TRUE);
 out_no_error:
-  if (parser)
-    g_object_unref (parser);
+  if (node)
+    json_node_unref (node);
+  if (payload_node)
+    json_node_unref (payload_node);
   g_free (payload);
   g_free (message);
 }
@@ -2313,8 +2371,9 @@ upload_fxa_device_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to upload device info on FxA Server. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
     goto out_error;
   }
 
@@ -2550,8 +2609,9 @@ delete_open_tabs_record_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200 && status_code != 404) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to delete open tabs record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
   } else {
     LOG ("Successfully deleted open tabs record");
   }
@@ -2582,8 +2642,9 @@ delete_client_record_cb (SoupSession *session,
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200 && status_code != 404) {
+    g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to delete client record. Status code: %u, response: %s",
-               status_code, (const char *)g_bytes_get_data (response_body, NULL));
+               status_code, resp);
   } else {
     LOG ("Successfully deleted client record");
   }

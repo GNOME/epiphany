@@ -31,6 +31,34 @@
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
 
+static JsonNode *
+json_from_response_body (GBytes  *bytes,
+                         GError **error)
+{
+  gsize size = 0;
+  gconstpointer data;
+  g_autoptr (JsonParser) parser = NULL;
+
+  if (!bytes) {
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "Response body is empty");
+    return NULL;
+  }
+
+  data = g_bytes_get_data (bytes, &size);
+  if (!data || size == 0) {
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "Response body is empty");
+    return NULL;
+  }
+
+  parser = json_parser_new ();
+  if (!json_parser_load_from_data (parser, data, size, error)) {
+    g_assert (error);
+    return NULL;
+  }
+
+  return json_parser_steal_root (parser);
+}
+
 static JsonObject *
 ephy_sync_debug_load_secrets (void)
 {
@@ -325,7 +353,7 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
     goto free_session;
   }
 
-  response = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  response = json_from_response_body (response_body, &error);
   if (error) {
     LOG ("Response is not a valid JSON: %s", error->message);
     goto free_session;
@@ -407,13 +435,12 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   }
 
   status_code = soup_message_get_status (msg);
-
   if (status_code != 200) {
     LOG ("Failed to get storage credentials: %s", (const char *)g_bytes_get_data (response_body, NULL));
     goto free_session;
   }
 
-  response = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  response = json_from_response_body (response_body, &error);
   if (error) {
     LOG ("Response is not a valid JSON: %s", error->message);
     goto free_session;
@@ -479,8 +506,11 @@ ephy_sync_debug_send_request (const char *endpoint,
   status_code = soup_message_get_status (msg);
 
   if (response_body) {
+    gsize size = 0;
+    const char *data = g_bytes_get_data (response_body, &size);
+
     if (status_code == 200)
-      response = g_strdup (g_bytes_get_data (response_body, NULL));
+      response = data && size > 0 ? g_strndup (data, size) : NULL;
     else
       LOG ("Failed to send storage request: %s", (const char *)g_bytes_get_data (response_body, NULL));
   }
@@ -1131,13 +1161,12 @@ ephy_sync_debug_get_current_device (void)
   }
 
   status_code = soup_message_get_status (msg);
-
   if (status_code != 200) {
     LOG ("Failed to GET account devices: %s", (const char *)g_bytes_get_data (response_body, NULL));
     goto free_session;
   }
 
-  response = json_from_string (g_bytes_get_data (response_body, NULL), &error);
+  response = json_from_response_body (response_body, &error);
   if (error) {
     LOG ("Response is not a valid JSON: %s", error->message);
     goto free_session;
