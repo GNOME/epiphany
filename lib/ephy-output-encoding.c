@@ -70,5 +70,5 @@ ephy_encode_for_html_attribute (const char *input)
 char *
 ephy_encode_for_js_quoted_data_value (const char *input)
 {
-  return encode_all_except_alnum (input, "\\u%04u;");
+  return encode_all_except_alnum (input, "\\u%04x");
 }

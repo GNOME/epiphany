@@ -156,6 +156,16 @@ if get_option('unit_tests').enabled()
        env: envs
   )
 
+  output_encoding_test = executable('test-ephy-output-encoding',
+    'ephy-output-encoding-test.c',
+    dependencies: ephymain_dep,
+    c_args: test_cargs,
+  )
+  test('Output encoding test',
+       output_encoding_test,
+       env: envs
+  )
+
   string_test = executable('test-ephy-string',
     'ephy-string-test.c',
     dependencies: ephymain_dep,
