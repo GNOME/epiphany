@@ -362,6 +362,8 @@ create_desktop_file (const char  *id,
   g_autofree char *exec_string_raw = NULL;
   g_autofree char *wm_class = NULL;
   g_autofree char *desktop_entry = NULL;
+  g_autofree char *quoted_profile_dir = NULL;
+  g_autofree char *quoted_address = NULL;
   XdpPortal *portal = ephy_get_portal ();
 
   g_assert (profile_dir);
@@ -373,10 +375,13 @@ create_desktop_file (const char  *id,
     return FALSE;
   }
 
+  quoted_profile_dir = g_shell_quote (profile_dir);
+  quoted_address = g_shell_quote (address);
+
   file = g_key_file_new ();
   exec_string_raw = g_strdup_printf ("epiphany --application-mode \"--profile=%s\" %s",
-                                     profile_dir,
-                                     address);
+                                     quoted_profile_dir,
+                                     quoted_address);
   exec_string = escape_exec_string (exec_string_raw);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
   g_key_file_set_value (file, "Desktop Entry", "StartupNotify", "true");
