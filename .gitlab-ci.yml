@@ -89,11 +89,7 @@ gobject-linter:
     name: "ghcr.io/bilelmoussaoui/gobject-linter:latest"
     entrypoint: [""]
   script:
-    - gobject-linter --format gitlab-codequality > gobject-linter-codequality.json
-  artifacts:
-    expire_in: "1 week"
-    reports:
-      codequality: gobject-linter-codequality.json
+    - gobject-linter
 
 flatpak:
   extends:
