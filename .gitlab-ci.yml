@@ -4,6 +4,13 @@ include:
   - component: gitlab.gnome.org/GNOME/citemplates/release-service@master
     inputs:
       dist-job-name: "flatpak"
+  - component: "gitlab.gnome.org/GNOME/citemplates/goblint@master"
+    inputs:
+      job-stage: "lint"
+      extra-rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+        - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+          when: "never"
   - project: 'Infrastructure/freedesktop-ci-templates'
     file: 'templates/fedora.yml'
     ref: 'b61a03cabbf308e81289f7aaaf0b5a80a34ffb99'
@@ -82,18 +89,6 @@ check-potfiles:
     - bash data/check-potfiles
   artifacts:
     when: on_failure
-
-gobject-linter:
-  stage: lint
-  image:
-    name: "ghcr.io/bilelmoussaoui/gobject-linter:latest"
-    entrypoint: [""]
-  script:
-    - gobject-linter --format gitlab-codequality > gobject-linter-codequality.json
-  artifacts:
-    expire_in: "1 week"
-    reports:
-      codequality: gobject-linter-codequality.json
 
 flatpak:
   extends:
