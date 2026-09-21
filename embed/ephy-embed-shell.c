@@ -864,6 +864,7 @@ ephy_embed_shell_startup (GApplication *application)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   WebKitWebsiteDataManager *data_manager;
   WebKitCookieManager *cookie_manager;
+  WebKitSecurityManager *security_manager;
   g_autofree char *filename = NULL;
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
@@ -889,28 +890,31 @@ ephy_embed_shell_startup (GApplication *application)
   data_manager = webkit_network_session_get_website_data_manager (priv->network_session);
   webkit_website_data_manager_set_favicons_enabled (data_manager, TRUE);
 
+  security_manager = webkit_web_context_get_security_manager (priv->web_context);
+
   /* about: URIs handler */
   priv->about_handler = ephy_about_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context,
                                           EPHY_ABOUT_SCHEME,
                                           (WebKitURISchemeRequestCallback)about_request_cb,
                                           shell, NULL);
-
+  webkit_security_manager_register_uri_scheme_as_display_isolated (security_manager, EPHY_ABOUT_SCHEME);
   /* Register about scheme as local so that it can contain file resources */
-  webkit_security_manager_register_uri_scheme_as_local (webkit_web_context_get_security_manager (priv->web_context),
-                                                        EPHY_ABOUT_SCHEME);
+  webkit_security_manager_register_uri_scheme_as_local (security_manager, EPHY_ABOUT_SCHEME);
 
   /* view source handler */
   priv->source_handler = ephy_view_source_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context, EPHY_VIEW_SOURCE_SCHEME,
                                           (WebKitURISchemeRequestCallback)source_request_cb,
                                           shell, NULL);
+  webkit_security_manager_register_uri_scheme_as_display_isolated (security_manager, EPHY_VIEW_SOURCE_SCHEME);
 
   /* reader mode handler */
   priv->reader_handler = ephy_reader_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context, EPHY_READER_SCHEME,
                                           (WebKitURISchemeRequestCallback)reader_request_cb,
                                           shell, NULL);
+  webkit_security_manager_register_uri_scheme_as_display_isolated (security_manager, EPHY_READER_SCHEME);
 
   /* ephy-resource handler */
   webkit_web_context_register_uri_scheme (priv->web_context, "ephy-resource",
