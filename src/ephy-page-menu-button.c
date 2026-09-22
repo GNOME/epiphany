@@ -129,8 +129,6 @@ ephy_page_menu_button_init (EphyPageMenuButton *self)
   }
 
   if (is_desktop_pantheon ()) {
-    remove_menu_item (self->page_menu, "app.about");
-
     if (xdp_portal_running_under_sandbox ())
       remove_menu_item (self->page_menu, "app.help");
 
