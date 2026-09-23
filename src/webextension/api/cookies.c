@@ -291,7 +291,7 @@ cookies_handler_set (EphyWebExtensionSender *sender,
   same_site_str = ephy_json_object_get_string (details, "sameSite");
   expiration = ephy_json_object_get_int (details, "expirationDate");
   secure = ephy_json_object_get_boolean (details, "secure", FALSE);
-  http_only = ephy_json_object_get_boolean (details, "httpOnline", FALSE);
+  http_only = ephy_json_object_get_boolean (details, "httpOnly", FALSE);
 
   if (!url) {
     g_task_return_new_error (task, WEB_EXTENSION_ERROR, WEB_EXTENSION_ERROR_INVALID_ARGUMENT, "cookies.set(): Missing url property");
