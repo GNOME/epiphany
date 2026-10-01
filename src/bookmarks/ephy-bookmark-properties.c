@@ -335,7 +335,7 @@ on_add_tag_entry_activated (AdwEntryRow *row,
   EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
   const char *text = gtk_editable_get_text (GTK_EDITABLE (row));
 
-  if (!ephy_bookmarks_manager_tag_exists (self->manager, text))
+  if (!ephy_bookmarks_manager_tag_exists (self->manager, text) && g_strcmp0 (text, "") != 0)
     ephy_bookmark_properties_actions_add_tag (self);
 }
 
