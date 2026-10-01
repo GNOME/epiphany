@@ -109,6 +109,7 @@ template $EphyBookmarkProperties: Adw.Dialog {
               title: _("Add Tag");
               selectable: false;
               activates-default: true;
+              changed => $on_add_tag_entry_changed();
               entry-activated => $on_add_tag_entry_activated();
 
               [suffix]
