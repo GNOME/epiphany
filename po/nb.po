@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 4.4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-09-03 20:38+0000\n"
-"PO-Revision-Date: 2026-09-05 09:20+0200\n"
+"POT-Creation-Date: 2026-09-24 15:05+0000\n"
+"PO-Revision-Date: 2026-10-01 11:31+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -37,7 +37,8 @@ msgstr "Nettleser"
 msgid "Browse the web"
 msgstr "Se på nettsider"
 
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#. Translators: Search terms to find this application. Do NOT translate or
+#. localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in.in:6
 msgid "web;browser;internet;epiphany;"
 msgstr "nett;nettleser;internett;epiphany;"
@@ -90,6 +91,10 @@ msgid ""
 "the search term replaced with %s. \"bang\" is the bang (shortcut word) of "
 "the search engine."
 msgstr ""
+"Liste over søkemotorer. Det er en tabell med dommer, der hver dommer svarer "
+"til en søkemotor, og med følgende støttede nøkler: \"name\" er navnet på "
+"søkemotoren. \"url\" er søke-URL-en med søkeordet erstattet med %s. \"bang\""
+" er snarveiordet for søkemotoren."
 
 #: data/org.gnome.epiphany.gschema.xml:50
 msgid "Enable Search Suggestions"
@@ -97,7 +102,7 @@ msgstr "Slå på søkeforslag"
 
 #: data/org.gnome.epiphany.gschema.xml:51
 msgid "Whether to show Search Suggestion in url entry popdown."
-msgstr ""
+msgstr "Vis Søkeforslag i nedtrekksfeltet for URL-inndata."
 
 #: data/org.gnome.epiphany.gschema.xml:55
 msgid "Force new windows to be opened in tabs"
@@ -105,7 +110,8 @@ msgstr "Tving nye vinduer til å åpnes i faner"
 
 #: data/org.gnome.epiphany.gschema.xml:56
 msgid ""
-"Force new window requests to be opened in tabs instead of using a new window."
+"Force new window requests to be opened in tabs instead of using a new "
+"window."
 msgstr ""
 "Tving forespørsler om nye vinduer til å åpnes i faner i stedet for nytt "
 "vindu."
@@ -126,8 +132,8 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:68
 msgid ""
-"Whether to delay loading of tabs that are not immediately visible on session "
-"restore"
+"Whether to delay loading of tabs that are not immediately visible on session"
+" restore"
 msgstr ""
 "Om innlasting av faner som ikke er umiddelbart synlige ved gjenopprettelse "
 "av økt skal utsettes"
@@ -149,15 +155,17 @@ msgid ""
 "List of URLs with content filtering rules in JSON format to be used by the "
 "ad blocker."
 msgstr ""
+"Liste over URL-er med filtreringsregler for innhold i JSON-format til bruk "
+"av annonseblokkeren."
 
 #: data/org.gnome.epiphany.gschema.xml:78
 msgid "Whether to ask for setting browser as default"
-msgstr ""
+msgstr "Spørre om å sette nettleser som standard"
 
 #: data/org.gnome.epiphany.gschema.xml:79
 msgid ""
-"When this option is set to true, browser will ask for being default if it is "
-"not already set."
+"When this option is set to true, browser will ask for being default if it is"
+" not already set."
 msgstr ""
 "Hvis dette valget har positiv verdi («true»), vil nettleser spørre om å få "
 "bli standard nettleser hvis den ikke allerede er det."
@@ -175,7 +183,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:88
 msgid "Active clear data items."
-msgstr ""
+msgstr "Aktive tømme dataelementer."
 
 #: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
@@ -185,6 +193,11 @@ msgid ""
 "Plugins data, 128 = HSTS policies cache, 256 = Intelligent Tracking "
 "Prevention data."
 msgstr ""
+"Valg (bitmask) som angir hvilke dataelementer som skal være aktive som "
+"standard. 1 = Cookies, 2 = HTTP-diskcache, 4 = Lokal lagring, 8 = Cache for "
+"nettleserapplikasjoner, 16 = IndexDB-databaser, 32 = WebSQL-databaser, 64 = "
+"Utvidelsesdata, 128 = Cache for HSTS-policyer, 256 = Intelligent "
+"sporingsforebygging."
 
 #: data/org.gnome.epiphany.gschema.xml:95
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -201,11 +214,11 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:100
 msgid "Show url bar at bottom"
-msgstr ""
+msgstr "Vis url-linje nederst"
 
 #: data/org.gnome.epiphany.gschema.xml:101
 msgid "Whether to show url bar on bottom."
-msgstr ""
+msgstr "Vis URL-linjen nederst."
 
 #: data/org.gnome.epiphany.gschema.xml:105
 msgid "The visibility policy for the tabs bar."
@@ -214,9 +227,9 @@ msgstr "Synlighetsregler for fanelinjen."
 #: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
-"bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
-"two or more tabs) and “never” (the tabs bar is never shown). This setting is "
-"ignored in Pantheon desktop, and “always” value is used."
+"bar is always shown), “more-than-one” (the tabs bar is only shown if there’s"
+" two or more tabs) and “never” (the tabs bar is never shown). This setting "
+"is ignored in Pantheon desktop, and “always” value is used."
 msgstr ""
 "Bestemmer når fanelinjen vises. Bruk «always» for å alltid vise fanelinjen, "
 "«more-than-one» for å vise linjen når det finnes to eller flere faner og "
@@ -230,49 +243,59 @@ msgstr "Behold vinduet åpent når man lukker siste fane"
 #: data/org.gnome.epiphany.gschema.xml:111
 msgid "If enabled application window is kept open when closing the last tab."
 msgstr ""
+"Hvis aktivert, holdes applikasjonsvinduet åpent når du lukker siste fane."
 
 #: data/org.gnome.epiphany.gschema.xml:115
 msgid "Show the WebKit features preferences page."
-msgstr ""
+msgstr "Vis WebKit-funksjonsbrukervalgssiden."
 
 #: data/org.gnome.epiphany.gschema.xml:116
 msgid ""
-"Controls whether the preferences window shows the page which allows toggling "
-"experimental and development WebKit features. This setting is ignored in "
+"Controls whether the preferences window shows the page which allows toggling"
+" experimental and development WebKit features. This setting is ignored in "
 "Tech Preview, and true is always used."
 msgstr ""
+"Bestemmer om preferansevinduet viser siden som lar deg slå av og på "
+"eksperimentelle og utviklingsmessige WebKit-funksjoner. Denne innstillingen "
+"ignoreres i Tech Preview, og true brukes alltid."
 
 #: data/org.gnome.epiphany.gschema.xml:120
 msgid "Show internal WebKit features in the features preferences page."
-msgstr ""
+msgstr "Vis interne WebKit-funksjoner i bruksvalgene for funksjoner."
 
 #: data/org.gnome.epiphany.gschema.xml:121
 msgid ""
 "Controls whether the features page in the preferences window shows internal "
 "WebKit features."
-msgstr ""
+msgstr "Viser interne WebKit-funksjoner i funksjonslisten i bruksvalgene."
 
 #: data/org.gnome.epiphany.gschema.xml:127
 msgid "Reader mode article font style."
-msgstr ""
+msgstr "Lesemodus-artikkelfont."
 
 #: data/org.gnome.epiphany.gschema.xml:128
 msgid ""
 "Chooses the style of the main body text for articles in reader mode. "
 "Possible values are “sans” and “serif”."
 msgstr ""
+"Velger stil for hovedteksten i artikler i lesemodus. Mulige verdier er "
+"«sans» og «serif»."
 
 #: data/org.gnome.epiphany.gschema.xml:132
 msgid "Reader mode color scheme."
-msgstr ""
+msgstr "Lesemodus fargevalg."
 
 #: data/org.gnome.epiphany.gschema.xml:133
 msgid ""
 "Selects the style of colors for articles displayed in reader mode. Possible "
-"values are “light” (dark text on light background) and “dark” (light text on "
-"dark background). This setting is ignored on systems that provide a system-"
+"values are “light” (dark text on light background) and “dark” (light text on"
+" dark background). This setting is ignored on systems that provide a system-"
 "wide dark style preference, such as GNOME 42 and newer."
 msgstr ""
+"Velger fargevalg for artikler som vises i lesemodus. Mulige verdier er «lys»"
+" (mørk tekst på lys bakgrunn) og «mørk» (lys tekst på mørk bakgrunn). Denne "
+"innstillingen ignoreres på systemer som tilbyr en systemomfattende "
+"preferanse for mørk stil, som GNOME 42 og nyere."
 
 #: data/org.gnome.epiphany.gschema.xml:139
 msgid "Minimum font size"
@@ -364,7 +387,8 @@ msgstr "Språk"
 
 #: data/org.gnome.epiphany.gschema.xml:184
 msgid ""
-"Preferred languages. Array of locale codes or “system” to use current locale."
+"Preferred languages. Array of locale codes or “system” to use current "
+"locale."
 msgstr ""
 "Foretrukne språk. Tabell med koder eller «system» for å bruke nåværende "
 "språk."
@@ -377,15 +401,16 @@ msgstr "Tillat oppsprettvinduer"
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
-"Tillat sider å åpne nye vinduer med JavaScript (hvis JavaScript er slått på)."
+"Tillat sider å åpne nye vinduer med JavaScript (hvis JavaScript er slått "
+"på)."
 
 #: data/org.gnome.epiphany.gschema.xml:193
 msgid "Hide cookie banner"
-msgstr ""
+msgstr "Skjul kjeksbanner"
 
 #: data/org.gnome.epiphany.gschema.xml:194
 msgid "Hide cookie banners."
-msgstr ""
+msgstr "Skjul informasjonskapselbanner."
 
 #: data/org.gnome.epiphany.gschema.xml:198
 msgid "User agent"
@@ -419,7 +444,7 @@ msgstr "Hvorvidt passord skal lagres og forhåndsutfylles på nettsteder."
 
 #: data/org.gnome.epiphany.gschema.xml:213
 msgid "Autofill form data"
-msgstr ""
+msgstr "Autofyll skjema"
 
 #: data/org.gnome.epiphany.gschema.xml:214
 msgid "Whether to auto fill form data in websites."
@@ -427,35 +452,40 @@ msgstr "Hvorvidt data i skjema skal forhåndsutfylles på nettsteder."
 
 #: data/org.gnome.epiphany.gschema.xml:218
 msgid "Enable site-specific quirks"
-msgstr ""
+msgstr "Aktiver nettstedspesifikke særegenheter"
 
 #: data/org.gnome.epiphany.gschema.xml:219
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
 msgstr ""
+"Aktiver særegenheter for å få spesifikke nettsteder til å fungere bedre. Du "
+"kan ønske å deaktivere denne innstillingen hvis du feilsøker et bestemt "
+"problem."
 
 #: data/org.gnome.epiphany.gschema.xml:223
 msgid "Enable Intelligent Tracking Prevention (ITP)"
-msgstr ""
+msgstr "Aktiver Intelligent Sporingsforebygging (ITP)"
 
 #: data/org.gnome.epiphany.gschema.xml:224
 msgid "Whether to enable Intelligent Tracking Prevention."
-msgstr ""
+msgstr "Slå på Intelligent sporingshindring."
 
 #: data/org.gnome.epiphany.gschema.xml:228
 msgid "Allow websites to store local website data"
-msgstr ""
+msgstr "Tillat nettsteder å lagre lokal nettsteddata"
 
 #: data/org.gnome.epiphany.gschema.xml:229
 msgid ""
 "Whether to allow websites to store cookies, local storage data, and "
 "IndexedDB databases. Disabling this will break many websites."
 msgstr ""
+"Om nettsider skal få lagre informasjonskapsler, lokal lagring og IndexedDB-"
+"databaser. Å slå av dette bryter mange nettsider."
 
 #: data/org.gnome.epiphany.gschema.xml:233
 msgid "Default zoom level for new pages"
-msgstr ""
+msgstr "Standard zoom-nivå for nye sider"
 
 #: data/org.gnome.epiphany.gschema.xml:237
 msgid "Default reader mode zoom level."
@@ -463,7 +493,7 @@ msgstr "Forvalgt zoom-nivå i lesemodus."
 
 #: data/org.gnome.epiphany.gschema.xml:238
 msgid "Sets the zoom level for reader mode pages."
-msgstr ""
+msgstr "Setter zoom-nivået for lesemodus-sider."
 
 #: data/org.gnome.epiphany.gschema.xml:242
 msgid "Enable autosearch"
@@ -476,24 +506,30 @@ msgid ""
 "everything will be loaded as a URL unless a search engine is explicitly "
 "selected from the dropdown menu."
 msgstr ""
+"Om automatisk søk på nettet skal skje når noe som ikke ser ut som en URL "
+"skrives inn i adressefeltet. Hvis denne innstillingen er skrudd av, lastes "
+"alt som en URL med mindre en søkemotor er valgt eksplisitt fra "
+"rullegardinmenyen."
 
 #: data/org.gnome.epiphany.gschema.xml:247
 msgid "Enable mouse gestures"
-msgstr ""
+msgstr "Aktiver musbevegelser"
 
 #: data/org.gnome.epiphany.gschema.xml:248
 msgid ""
 "Whether to enable mouse gestures. Mouse gestures are based on Opera’s "
 "behaviour and are activated using the middle mouse button + gesture."
 msgstr ""
+"Om å aktivere musbevegelser. Musbevegelser er basert på Opera-atferd og "
+"aktiveres med midtmusknappen + bevegelse."
 
 #: data/org.gnome.epiphany.gschema.xml:252
 msgid "Enable navigation gestures"
-msgstr ""
+msgstr "Aktiver navigasjonsgester"
 
 #: data/org.gnome.epiphany.gschema.xml:253
 msgid "Whether to enable back and forward navigation gestures."
-msgstr ""
+msgstr "Slå på eller av navigasjonsgester for tilbake og fremover."
 
 #: data/org.gnome.epiphany.gschema.xml:257
 msgid "Last upload directory"
@@ -519,9 +555,13 @@ msgstr "Regelsett for maskinvareaksellerasjon"
 msgid ""
 "Whether to enable hardware acceleration. Possible values are “always” and "
 "“never”. Hardware acceleration may be required to achieve acceptable "
-"performance on embedded devices, but increases memory usage requirements and "
-"could expose severe hardware-specific graphics driver bugs."
+"performance on embedded devices, but increases memory usage requirements and"
+" could expose severe hardware-specific graphics driver bugs."
 msgstr ""
+"Slå på maskinvareakselerasjon. Mulige verdier er «alltid» og «aldri». "
+"Maskinvareakselerasjon kan være nødvendig for å oppnå akseptabel ytelse på "
+"innebygde enheter, men øker minnebruken og kan avdekke alvorlige feil i "
+"grafikkdrivere som er spesifikke for maskinvaren."
 
 #: data/org.gnome.epiphany.gschema.xml:272
 msgid "Always ask for download directory"
@@ -529,11 +569,11 @@ msgstr "Alltid spør etter nedlastingskatalog"
 
 #: data/org.gnome.epiphany.gschema.xml:273
 msgid "Whether to present a directory chooser dialog for every download."
-msgstr ""
+msgstr "Skal det vises et valg av mappe-dialog for hver nedlasting?"
 
 #: data/org.gnome.epiphany.gschema.xml:277
 msgid "Enable immediately switch to new open tab"
-msgstr ""
+msgstr "Aktiver umiddelbart for å bytte til ny åpen fane"
 
 #: data/org.gnome.epiphany.gschema.xml:278
 msgid "Whether to automatically switch to a new open tab."
@@ -545,9 +585,11 @@ msgstr "Slå på nettutvidelser"
 
 #: data/org.gnome.epiphany.gschema.xml:283
 msgid ""
-"Whether to enable WebExtensions. WebExtensions is a cross-browser system for "
-"extensions."
+"Whether to enable WebExtensions. WebExtensions is a cross-browser system for"
+" extensions."
 msgstr ""
+"Slå på WebExtensions. WebExtensions er et tverrnettleser-system for "
+"utvidelser."
 
 #: data/org.gnome.epiphany.gschema.xml:287
 msgid "Active WebExtensions"
@@ -555,7 +597,7 @@ msgstr "Aktive nettutvidelser"
 
 #: data/org.gnome.epiphany.gschema.xml:288
 msgid "Indicates which WebExtensions are set to active."
-msgstr ""
+msgstr "Viser hvilke WebExtensions som er satt til aktiv."
 
 #: data/org.gnome.epiphany.gschema.xml:292
 msgid "Show developer actions"
@@ -566,26 +608,28 @@ msgid ""
 "Whether to show developer context menu actions. This allows use of the Page "
 "Source and Inspect Element actions."
 msgstr ""
+"Vis utviklerkontekstmeny-handlinger. Dette gjør det mulig å bruke Sideresurs"
+" og Inspiser element-handlinger."
 
 #: data/org.gnome.epiphany.gschema.xml:297
 msgid "Always show full URL"
-msgstr ""
+msgstr "Vis alltid full URL"
 
 #: data/org.gnome.epiphany.gschema.xml:298
 msgid "Whether to show the full URL in the address bar even when unfocused."
-msgstr ""
+msgstr "Vis full URL i adressefeltet selv når vinduet ikke er i fokus."
 
 #: data/org.gnome.epiphany.gschema.xml:302
 msgid "Automatically open URIs"
-msgstr ""
+msgstr "Automatisk åpne URIs"
 
 #: data/org.gnome.epiphany.gschema.xml:303
 msgid "This is a permission map of security origins to URL schemes."
-msgstr ""
+msgstr "Dette er et tillatelseskart for sikkerhetskilder til URL-skjemaer."
 
 #: data/org.gnome.epiphany.gschema.xml:309
 msgid "Web application additional URLs"
-msgstr ""
+msgstr "Webapplikasjon – ekstra URL-er"
 
 #: data/org.gnome.epiphany.gschema.xml:310
 msgid "The list of URLs that should be opened by the web application"
@@ -593,11 +637,11 @@ msgstr "Liste med URLer som skal åpnes av nettleser"
 
 #: data/org.gnome.epiphany.gschema.xml:314
 msgid "Show navigation buttons in WebApp"
-msgstr ""
+msgstr "Vis navigasjonsknapper i WebApp"
 
 #: data/org.gnome.epiphany.gschema.xml:315
 msgid "Whether to show buttons for navigation in WebApp."
-msgstr ""
+msgstr "Vis navigasjonsknapper i WebApp."
 
 #: data/org.gnome.epiphany.gschema.xml:319
 msgid "Run in background"
@@ -608,14 +652,16 @@ msgid ""
 "If enabled, application continues running in the background after closing "
 "the window."
 msgstr ""
+"Hvis aktivert, fortsetter applikasjonen å kjøre i bakgrunnen etter at "
+"vinduet er lukket."
 
 #: data/org.gnome.epiphany.gschema.xml:324
 msgid "WebApp is system-wide"
-msgstr ""
+msgstr "WebApp er systemomfattende"
 
 #: data/org.gnome.epiphany.gschema.xml:325
 msgid "If enabled, application cannot be edited or removed."
-msgstr ""
+msgstr "Hvis aktivert, kan ikke applikasjonen redigeres eller fjernes."
 
 #: data/org.gnome.epiphany.gschema.xml:331
 msgid "The downloads folder"
@@ -623,8 +669,8 @@ msgstr "Nedlastingsmappe"
 
 #: data/org.gnome.epiphany.gschema.xml:332
 msgid ""
-"The path of the folder where to download files to; or “Downloads” to use the "
-"default downloads folder, or “Desktop” to use the desktop folder."
+"The path of the folder where to download files to; or “Downloads” to use the"
+" default downloads folder, or “Desktop” to use the desktop folder."
 msgstr ""
 "Sti til mappe hvor nedlastinger skal lagres. Bruk verdien «Downloads» for å "
 "bruke standard nedlastingsmappe, eller «Desktop» for skrivebordsmappe."
@@ -650,8 +696,8 @@ msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
-"Størrelse som skal brukes for et nytt vindu som ikke er gjenopprettet fra en "
-"tidligere økt."
+"Størrelse som skal brukes for et nytt vindu som ikke er gjenopprettet fra en"
+" tidligere økt."
 
 #: data/org.gnome.epiphany.gschema.xml:349
 msgid "Is maximized"
@@ -662,16 +708,20 @@ msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
 msgstr ""
+"Skal et nytt vindu som ikke gjenopprettes fra en tidligere økt, startes i "
+"maksimert tilstand?"
 
 #: data/org.gnome.epiphany.gschema.xml:365
 msgid "Disable forward and back buttons"
-msgstr ""
+msgstr "Deaktiver fremover- og bakover-knappene"
 
 #: data/org.gnome.epiphany.gschema.xml:366
 msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
+"Hvis satt til \"true\", deaktiveres fremover- og tilbake-knappene, slik at "
+"brukere ikke kan få tilgang til umiddelbar nettleserhistorikk"
 
 #: data/org.gnome.epiphany.gschema.xml:384
 msgid "Firefox Sync Token Server URL"
@@ -687,7 +737,7 @@ msgstr "URL for synkronisering av Firefox-kontoer"
 
 #: data/org.gnome.epiphany.gschema.xml:390
 msgid "URL to a custom Firefox Sync accounts server."
-msgstr ""
+msgstr "URL til en tilpasset Firefox Sync-konto-server."
 
 #: data/org.gnome.epiphany.gschema.xml:394
 msgid "Currently signed in sync user"
@@ -697,7 +747,9 @@ msgstr "Synkroniseringskonto som er logget inn"
 msgid ""
 "The email linked to the Mozilla account used to sync data with Mozilla’s "
 "servers."
-msgstr "E-postadressen som er koblet til Mozilla-kontoen som brukes til å synkronisere data med Mozilla sine servere."
+msgstr ""
+"E-postadressen som er koblet til Mozilla-kontoen som brukes til å "
+"synkronisere data med Mozilla sine servere."
 
 #: data/org.gnome.epiphany.gschema.xml:399
 msgid "Last sync timestamp"
@@ -740,6 +792,8 @@ msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
+"Sann hvis Ephy-samlinger skal synkroniseres med Firefox-samlinger, usann "
+"ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:424
 msgid "Enable bookmarks sync"
@@ -747,7 +801,7 @@ msgstr "Slå på synkronisering av bokmerker"
 
 #: data/org.gnome.epiphany.gschema.xml:425
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Sann hvis samlingen med bokmerker skal synkroniseres, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:429
 msgid "Bookmarks sync timestamp"
@@ -755,7 +809,7 @@ msgstr "Tidsstempel for synkronisering av bokmerker"
 
 #: data/org.gnome.epiphany.gschema.xml:430
 msgid "The timestamp at which last bookmarks sync was made."
-msgstr ""
+msgstr "Tidsstempel for siste synkronisering av bokmerker."
 
 #: data/org.gnome.epiphany.gschema.xml:434
 #: data/org.gnome.epiphany.gschema.xml:449
@@ -768,6 +822,7 @@ msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"Sann hvis bokmerkesamlingen må synkroniseres første gang, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:439
 msgid "Enable passwords sync"
@@ -775,7 +830,7 @@ msgstr "Slå på synkronisering av passord"
 
 #: data/org.gnome.epiphany.gschema.xml:440
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Sann hvis passord skal synkroniseres, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:444
 msgid "Passwords sync timestamp"
@@ -783,21 +838,22 @@ msgstr "Tidsstempel for synkronisering av passord"
 
 #: data/org.gnome.epiphany.gschema.xml:445
 msgid "The timestamp at which last passwords sync was made."
-msgstr ""
+msgstr "Tidsstempel for siste passord-synkronisering."
 
 #: data/org.gnome.epiphany.gschema.xml:450
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"Sann hvis samlingen av passord må synkroniseres første gang, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:454
 msgid "Enable history sync"
-msgstr ""
+msgstr "Aktiver historikk-synkronisering"
 
 #: data/org.gnome.epiphany.gschema.xml:455
 msgid "TRUE if history collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Sann hvis historikk skal synkroniseres, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:459
 msgid "History sync timestamp"
@@ -805,13 +861,14 @@ msgstr "Tidsstempel for synkronisering av historikk"
 
 #: data/org.gnome.epiphany.gschema.xml:460
 msgid "The timestamp at which last history sync was made."
-msgstr ""
+msgstr "Tidsstempel for siste historikk-synkronisering."
 
 #: data/org.gnome.epiphany.gschema.xml:465
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"Sann hvis historikk samling må synkroniseres første gang, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:469
 msgid "Enable open tabs sync"
@@ -819,7 +876,7 @@ msgstr "Slå på synkronisering av åpne faner"
 
 #: data/org.gnome.epiphany.gschema.xml:470
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
-msgstr ""
+msgstr "Sann hvis samlingen med åpne faner skal synkroniseres, usann ellers."
 
 #: data/org.gnome.epiphany.gschema.xml:474
 msgid "Open tabs sync timestamp"
@@ -827,11 +884,12 @@ msgstr "Tidsstempel for synkronisering av åpne faner"
 
 #: data/org.gnome.epiphany.gschema.xml:475
 msgid "The timestamp at which last open tabs sync was made."
-msgstr ""
+msgstr "Tidsstempel for siste synkronisering av åpne faner."
 
 #: data/org.gnome.epiphany.gschema.xml:486
-msgid "Decision to apply when microphone permission is requested for this host"
-msgstr ""
+msgid ""
+"Decision to apply when microphone permission is requested for this host"
+msgstr "Beslutning om å bruke når mikrofon-tillatelse kreves for denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:487
 msgid ""
@@ -840,11 +898,17 @@ msgid ""
 "needs to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å få tilgang til mikrofonen. Standardverdien «ukjent» betyr at "
+"nettleseren må be brukeren om tillatelse, mens «tillat» og «avslå» forteller"
+" den å automatisk ta en avgjørelse når den blir bedt om det."
 
 #: data/org.gnome.epiphany.gschema.xml:491
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
+"Beslutning om å bruke når plasseringstillatelse etterspørres for denne "
+"verten"
 
 #: data/org.gnome.epiphany.gschema.xml:492
 msgid ""
@@ -853,11 +917,16 @@ msgid ""
 "needs to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å få tilgang til brukerens posisjon. Standardverdien «undecided» betyr "
+"at nettleseren må spørre brukeren om tillatelse, mens «allow» og «deny» "
+"forteller den å automatisk ta en avgjørelse når den blir bedt om det."
 
 #: data/org.gnome.epiphany.gschema.xml:496
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
+"Beslutning om å bruke når varslingsretten blir bedt om for denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:497
 msgid ""
@@ -866,11 +935,17 @@ msgid ""
 "ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å vise varsler. Standardverdien «ukjent» betyr at nettleseren må spørre "
+"brukeren om tillatelse, mens «tillat» og «avvis» forteller den å automatisk "
+"ta en avgjørelse når den blir bedt om det."
 
 #: data/org.gnome.epiphany.gschema.xml:501
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
+"Beslutning om å bruke når tillatelse til lagre passord etterspørres for "
+"denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:502
 msgid ""
@@ -879,22 +954,32 @@ msgid ""
 "the user for permission, while “allow” and “deny” tell it to automatically "
 "make the decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å lagre passord. Standardverdien «undecided» betyr at nettleseren må "
+"spørre brukeren om tillatelse, mens «allow» og «deny» forteller den å "
+"automatisk ta en avgjørelse når den blir bedt om det."
 
 #: data/org.gnome.epiphany.gschema.xml:506
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
+"Beslutning om å bruke når webkamera-tillatelse etterspørres for denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:507
 msgid ""
 "This option is used to save whether a given host has been given permission "
-"to access the user’s webcam. The “undecided” default means the browser needs "
-"to ask the user for permission, while “allow” and “deny” tell it to "
+"to access the user’s webcam. The “undecided” default means the browser needs"
+" to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å få tilgang til brukerens webkamera. Standardverdien «ukjent» betyr at "
+"nettleseren må be brukeren om tillatelse, mens «tillat» og «avvis» forteller"
+" den å automatisk ta en avgjørelse når den blir bedt om det."
 
 #: data/org.gnome.epiphany.gschema.xml:511
 msgid "Decision to apply when display permission is requested for this host"
 msgstr ""
+"Beslutning om å bruke når visningsretten etterspørres for denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:512
 msgid ""
@@ -903,11 +988,15 @@ msgid ""
 "needs to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å få tilgang til brukerens skjerm. Standardverdien «undecided» betyr at "
+"nettleseren må spørre brukeren om tillatelse, mens «allow» og «deny» "
+"forteller den å automatisk ta en avgjørelse når den blir bedt om det."
 
 #: data/org.gnome.epiphany.gschema.xml:516
 msgid ""
 "Decision to apply when advertisement permission is requested for this host"
-msgstr ""
+msgstr "Beslutning om å bruke når reklame tillates for denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:517
 msgid ""
@@ -916,18 +1005,27 @@ msgid ""
 "setting is used, while “allow” and “deny” tell it to automatically make the "
 "decision upon request."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til å tillate annonseringer. Standardverdien «ukjent» betyr at nettleserens "
+"globale innstilling brukes, mens «tillat» og «avvis» forteller den å "
+"automatisk ta avgjørelsen ved forespørsel."
 
 #: data/org.gnome.epiphany.gschema.xml:521
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr ""
+"Beslutning om å bruke når en autoplay-policy er forespurt for denne verten"
 
 #: data/org.gnome.epiphany.gschema.xml:522
 msgid ""
 "This option is used to save whether a given host has been given permission "
-"to autoplay. The “undecided” default means to allow autoplay of muted media, "
-"while “allow” and “deny” tell it to allow / deny all requests to autoplay "
+"to autoplay. The “undecided” default means to allow autoplay of muted media,"
+" while “allow” and “deny” tell it to allow / deny all requests to autoplay "
 "media respectively."
 msgstr ""
+"Denne innstillingen brukes til å lagre om en gitt vert har fått tillatelse "
+"til automatisk avspilling. Standardverdien «ukjent» betyr at automatisk "
+"avspilling av dempet media tillates, mens «tillat» og «avvis» forteller den "
+"å tillate / nekte alle forespørsler om automatisk avspilling av media."
 
 #: data/org.gnome.Epiphany.metainfo.xml.in.in:9
 msgid ""
@@ -1083,7 +1181,7 @@ msgstr "Vennligst oppgi PIN for %s for å autentisere mot %s:%d."
 #: src/ephy-window.c:2348 src/preferences/autofill-view.c:365
 #: src/preferences/extension-view.c:115
 #: src/resources/gtk/bookmark-properties.blp:29
-#: src/resources/gtk/firefox-sync-dialog.blp:100
+#: src/resources/gtk/firefox-sync-dialog.blp:101
 #: src/resources/gtk/history-dialog.blp:55
 #: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:364
 #: src/window-commands.c:569 src/window-commands.c:935
@@ -1107,15 +1205,16 @@ msgstr "Velg sertifikat"
 #: embed/ephy-client-certificate-manager.c:434
 #, c-format
 msgid ""
-"The website %s:%d requests that you provide a certificate for authentication "
-"for %s."
+"The website %s:%d requests that you provide a certificate for authentication"
+" for %s."
 msgstr ""
 "Nettstedet %s:%d ber om at du oppgir et sertifikat for autentisering mot %s."
 
 #: embed/ephy-client-certificate-manager.c:439
 #, c-format
 msgid ""
-"The website %s:%d requests that you provide a certificate for authentication."
+"The website %s:%d requests that you provide a certificate for "
+"authentication."
 msgstr "Nettstedet %s:%d ber om at du oppgir et sertifikat for autentisering."
 
 #: embed/ephy-client-certificate-manager.c:446 src/window-commands.c:368
@@ -1139,7 +1238,7 @@ msgstr "Økt"
 msgid "Permanently"
 msgstr "Permanent"
 
-#: embed/ephy-download.c:713 src/preferences/prefs-general-page.c:589
+#: embed/ephy-download.c:713 src/preferences/prefs-general-page.c:590
 msgid "Select a Directory"
 msgstr "Velg en katalog"
 
@@ -1179,7 +1278,7 @@ msgid "Finished downloading %s"
 msgstr "Nedlasting av %s fullført"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:967 src/ephy-window.c:4141
+#: embed/ephy-download.c:967 src/ephy-window.c:4143
 msgid "Download finished"
 msgstr "Nedlasting fullført"
 
@@ -1230,12 +1329,13 @@ msgstr "Send e-post til «%s»"
 
 #. TRANSLATORS: This string is part of the previous translatable string.
 #. * It is appended for each extraneous mailto: URI email address. For
-#. * example if you have mailto:foo@example.com,bar@example.com,baz@example.com
+#. * example if you have
+#. mailto:foo@example.com,bar@example.com,baz@example.com
 #. * it will show
 #. * Send an email to “foo@example.com”, “bar@example.com”, “baz@example.com”
-#. * when you hover such link, at the same place as regular URLs when you hover
+#. * when you hover such link, at the same place as regular URLs when you
+#. hover
 #. * a link in a web page.
-#.
 #: embed/ephy-embed-utils.c:86
 #, c-format
 msgid ", “%s”"
@@ -1545,7 +1645,6 @@ msgstr "Vestlig (_Windows-1252)"
 #. The following encodings are so rarely used that we don't want to
 #. * pollute the "related" part of the encodings menu with them, so we
 #. * set the language group to 0 here.
-#.
 #: embed/ephy-encodings.c:137
 msgid "English (_US-ASCII)"
 msgstr "Engelsk (_US-ASCII)"
@@ -1568,7 +1667,6 @@ msgstr "Unicode (UTF-3_2 LE)"
 
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
-#.
 #: embed/ephy-encodings.c:220
 #, c-format
 msgid "Unknown (%s)"
@@ -1674,12 +1772,15 @@ msgstr "Slett nettsideapplikasjon?"
 #: embed/ephy-web-view.c:1330
 #, c-format
 msgid ""
-"“%s” will be removed. You will have to re-install the website as an app from "
-"the menu to use it again."
-msgstr "%s vil bli fjernet. Du må reinstallere nettstedet som en app fra menyen for å bruke det igjen."
+"“%s” will be removed. You will have to re-install the website as an app from"
+" the menu to use it again."
+msgstr ""
+"%s vil bli fjernet. Du må reinstallere nettstedet som en app fra menyen for "
+"å bruke det igjen."
 
 #: embed/ephy-web-view.c:1335 src/ephy-passwords-view.c:157
-#: src/preferences/autofill-view.c:366 src/resources/gtk/history-dialog.blp:144
+#: src/preferences/autofill-view.c:366
+#: src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "_Slett"
 
@@ -1700,7 +1801,8 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1773
-msgid "This website’s identification was not issued by a trusted organization."
+msgid ""
+"This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Nettstedets identifikasjon er ikke utstedt av en pålitelig organisasjon."
 
@@ -1732,8 +1834,8 @@ msgstr ""
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1793
 msgid ""
-"This website’s identification is only valid for future dates. Check the date "
-"on your computer’s calendar."
+"This website’s identification is only valid for future dates. Check the date"
+" on your computer’s calendar."
 msgstr ""
 "Nettstedets identifikasjon er kun gyldig for dato i fremtiden. Sjekk datoen "
 "på datamaskinens kalender."
@@ -1774,11 +1876,12 @@ msgstr "Eksakt feilmelding var: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
+#. The button on the unresponsive process error page. DO NOT ADD MNEMONICS
+#. HERE.
 #. Translators: tooltip for the refresh button
 #: embed/ephy-web-view.c:1887 embed/ephy-web-view.c:1940
 #: embed/ephy-web-view.c:1976 embed/ephy-web-view.c:2012
-#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1599
+#: src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1604
 msgid "Reload"
 msgstr "Last på nytt"
 
@@ -1801,7 +1904,8 @@ msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Nettstedet på %s kan ha forårsaket at Nettleser ble lukket på uventet vis."
 
-#. Further error details when a site cannot be loaded due to a page crash error.
+#. Further error details when a site cannot be loaded due to a page crash
+#. error.
 #: embed/ephy-web-view.c:1931
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
@@ -1817,7 +1921,7 @@ msgstr "Problem ved visning av side"
 #. Message title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1968
 msgid "Oops!"
-msgstr "Oops!"
+msgstr "Hopp!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1971
@@ -1825,8 +1929,8 @@ msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
-"Noe gikk galt under visning av denne siden. Vennligst last den på nytt eller "
-"gå til et annet nettsted for å fortsette."
+"Noe gikk galt under visning av denne siden. Vennligst last den på nytt eller"
+" gå til et annet nettsted for å fortsette."
 
 #. Page title when web content has become unresponsive.
 #: embed/ephy-web-view.c:2001
@@ -1869,7 +1973,8 @@ msgstr ""
 "Dette ser ikke ut som den virkelige %s. Det kan hende at noen prøver å "
 "stjele eller forandre informasjonen som går til eller fra dette nettstedet."
 
-#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
+#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS
+#. HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
 #: embed/ephy-web-view.c:2061 embed/ephy-web-view.c:2111
 msgid "Go Back"
@@ -1882,12 +1987,14 @@ msgctxt "back-access-key"
 msgid "B"
 msgstr "T"
 
-#. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
+#. The hidden button on the invalid TLS certificate error page. Do not add
+#. mnemonics here.
 #: embed/ephy-web-view.c:2067
 msgid "Accept Risk and Proceed"
 msgstr "Godta risiko og fortsett"
 
-#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
+#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS
+#. certificate error page.
 #: embed/ephy-web-view.c:2071
 msgctxt "proceed-anyway-access-key"
 msgid "P"
@@ -1994,57 +2101,62 @@ msgstr "URL til søkemotormal %s kan ikke være gyldig."
 msgid ""
 "Found unclosed URL template parameter curly bracket at pos %d of URL %s."
 msgstr ""
+"Fant ulukket URL-malparameter med klammeparentes på posisjon %d i URL-en %s."
 
 #: lib/ephy-opensearch-engine.c:220
 #, c-format
 msgid "Found URL template parameter at %d in URL %s, but without any name."
-msgstr ""
+msgstr "Fant URL-malparameter ved %d i URL %s, men uten navn."
 
 #: lib/ephy-opensearch-engine.c:243
 #, c-format
 msgid "Found unknown URL template parameter %s in URL %s."
-msgstr ""
+msgstr "Fant ukjent URL-malparameter %s i URL %s."
 
 #: lib/ephy-opensearch-engine.c:262
 #, c-format
 msgid ""
-"Parsing of URL template %s succeeded, but no search terms were found so it's "
-"not useful as a search engine."
+"Parsing of URL template %s succeeded, but no search terms were found so it's"
+" not useful as a search engine."
 msgstr ""
+"Parsing av URL-mal %s lyktes, men ingen søkeord ble funnet, så den er ikke "
+"nyttig som søkemotor."
 
 #: lib/ephy-opensearch-engine.c:339
 #, c-format
 msgid "Skipping <Param> tag as it has no name or value attribute"
 msgstr ""
+"Hopper over <Param>-taggen fordi den verken har navn eller verdi-attributt"
 
 #. TRANSLATORS: The %s is the name of the search engine.
 #: lib/ephy-opensearch-engine.c:447
 #, c-format
 msgid "Couldn't parse search engine description file for %s: "
-msgstr ""
+msgstr "Kunne ikke tolke søkemotorbeskrivelsesfil for %s:"
 
 #: lib/ephy-opensearch-engine.c:459
 #, c-format
 msgid ""
 "Couldn't create search engine as it did not provide sufficient information!"
 msgstr ""
+"Kunne ikke opprette søkemotor siden den ikke ga tilstrekkelig informasjon!"
 
 #. TRANSLATORS: The %s is the name of the search engine.
 #: lib/ephy-opensearch-engine.c:517
 #, c-format
 msgid "Couldn't download search engine description file for %s: "
-msgstr ""
+msgstr "Kunne ikke laste ned beskrivelsesfil for søkemotor for %s:"
 
 #. TRANSLATORS: The %s is the URL for the search suggestions.
 #: lib/ephy-search-engine.c:492
 #, c-format
 msgid "Couldn't load search engine suggestions from %s: "
-msgstr ""
+msgstr "Kunne ikke laste søkemotorforslag fra %s:"
 
 #: lib/ephy-search-engine.c:501
 #, c-format
 msgid "No content provided, length %ld"
-msgstr ""
+msgstr "Ingen innhold gitt, lengde %ld"
 
 #: lib/ephy-search-engine.c:520
 #, c-format
@@ -2052,12 +2164,18 @@ msgid ""
 "Got empty JSON response or non-array root node or smaller than 2 elements "
 "array root node"
 msgstr ""
+"Fikk tom JSON-respons eller rot-node som ikke er et array, eller et array "
+"med færre enn 2 elementer"
 
-#. TRANSLATORS: The first %s is the URL for the search suggestions and the second one is raw JSON content.
+#. TRANSLATORS: The first %s is the URL for the search suggestions and the
+#. second one is raw JSON content.
 #: lib/ephy-search-engine.c:525 lib/ephy-search-engine.c:540
 #, c-format
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr ""
+"Kunne ikke tolke JSON-forslag fra %s med JSON %s: \n"
+"\n"
+"Feilmeldingen er allerede på norsk og følger de gitte retningslinjene. Ingen endringer er nødvendig."
 
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
@@ -2067,64 +2185,59 @@ msgstr ""
 msgid "%s’s GNOME Web on %s"
 msgstr "%s sin GNOME nettleser på %s"
 
-#. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
+#. Translators: "friendly time" string for the current day, strftime format.
+#. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:238
 msgid "Today %I∶%M %p"
 msgstr "I dag %H.%M"
 
-#. Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34"
+#. Translators: "friendly time" string for the current day, strftime format.
+#. like "Today 15∶34"
 #: lib/ephy-time-helpers.c:241
 msgid "Today %H∶%M"
 msgstr "I dag %H.%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12∶34 am"
-#.
 #: lib/ephy-time-helpers.c:256
 msgid "Yesterday %I∶%M %p"
 msgstr "I går %H.%M"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 15∶34"
-#.
 #: lib/ephy-time-helpers.c:261
 msgid "Yesterday %H∶%M"
 msgstr "I går %H.%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12∶34 am"
-#.
 #: lib/ephy-time-helpers.c:279
 msgid "%a %I∶%M %p"
 msgstr "%a %H.%M"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 15∶34"
-#.
 #: lib/ephy-time-helpers.c:284
 msgid "%a %H∶%M"
 msgstr "%a %H.%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12∶34 am"
-#.
 #: lib/ephy-time-helpers.c:298
 msgid "%b %d %I∶%M %p"
 msgstr "%d %b %H.%M"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 15∶34"
-#.
 #: lib/ephy-time-helpers.c:303
 msgid "%b %d %H∶%M"
 msgstr "%d %b %H.%M"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
-#.
 #: lib/ephy-time-helpers.c:309
 msgid "%b %d %Y"
-msgstr "%b %d %Y"
+msgstr "%d %b %Y"
 
 #. impossible time or broken locale settings
 #: lib/ephy-time-helpers.c:318
@@ -2228,7 +2341,9 @@ msgstr "Fant ikke synkroniseringshemmelighet for innlogget bruker."
 msgid ""
 "Failed to store sync secrets (is the secret service or secrets portal "
 "broken?): "
-msgstr "Klarte ikke å lagre synkroniseringshemmelighet (er tjenesten eller portalen for hemmeligheter ødelagt?): "
+msgstr ""
+"Klarte ikke å lagre synkroniseringshemmelighet (er tjenesten eller portalen "
+"for hemmeligheter ødelagt?): "
 
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:1694
@@ -2257,7 +2372,8 @@ msgstr "Klarte ikke å laste opp meta/global post."
 #, c-format
 msgid ""
 "Your Mozilla account uses storage version %d. Web only supports version %d."
-msgstr "Din Mozilla-konto bruker lagerversjon %d. Nettleser støtter bare versjon %d."
+msgstr ""
+"Din Mozilla-konto bruker lagerversjon %d. Nettleser støtter bare versjon %d."
 
 #: lib/sync/ephy-sync-service.c:2251
 msgid "Failed to verify storage version."
@@ -2267,50 +2383,50 @@ msgstr "Klarte ikke å verifisere lagerversjon."
 msgid "Select current tag"
 msgstr "Velg aktiv tagg"
 
-#: src/bookmarks/ephy-bookmark-properties.c:164
+#: src/bookmarks/ephy-bookmark-properties.c:165
 msgid "Remove current tag"
 msgstr "Fjern denne taggen"
 
-#: src/bookmarks/ephy-bookmark-properties.c:314
+#: src/bookmarks/ephy-bookmark-properties.c:315
 msgid "Add Bookmark"
 msgstr "Legg til bokmerke"
 
-#: src/bookmarks/ephy-bookmark-properties.c:354
+#: src/bookmarks/ephy-bookmark-properties.c:355
 #: src/preferences/prefs-search-engine-page.c:91
 msgid "This field is required"
 msgstr "Dette feltet er obligatorisk"
 
-#: src/bookmarks/ephy-bookmark-properties.c:356
+#: src/bookmarks/ephy-bookmark-properties.c:357
 #: src/preferences/prefs-search-engine-page.c:96
 msgid "Address must start with either http:// or https://"
 msgstr "Adressen starter ikke med enten http:// eller https://"
 
-#: src/bookmarks/ephy-bookmark-properties.c:358
+#: src/bookmarks/ephy-bookmark-properties.c:359
 #: src/preferences/prefs-search-engine-page.c:117
 msgid "Address is not a valid URL"
 msgstr "Adressen er ikke en gyldig URL"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:658
+#: src/bookmarks/ephy-bookmarks-dialog.c:660
 #: src/resources/gtk/bookmark-row.blp:66 src/resources/gtk/lang-row.blp:34
 msgid "Move Controls"
 msgstr "Kontroller for flytting"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:663
+#: src/bookmarks/ephy-bookmarks-dialog.c:665
 #: src/resources/gtk/bookmark-row.blp:7 src/resources/gtk/lang-row.blp:7
 msgid "Move Up"
 msgstr "Flytt opp"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:664
+#: src/bookmarks/ephy-bookmarks-dialog.c:666
 #: src/resources/gtk/bookmark-row.blp:12 src/resources/gtk/lang-row.blp:12
 msgid "Move Down"
 msgstr "Flytt ned"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:849
+#: src/bookmarks/ephy-bookmarks-dialog.c:851
 msgid "Bookmark removed"
 msgstr "Bokmerke fjernet"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1014
+#: src/bookmarks/ephy-bookmarks-dialog.c:853 src/ephy-window.c:1014
 #: src/preferences/prefs-features-page.c:277
 msgid "_Undo"
 msgstr "_Angre"
@@ -2332,7 +2448,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
-msgstr "Firefox bokmerkedatabase kunne ikke åpnes. Lukk Firefox og prøv igjen."
+msgstr ""
+"Firefox bokmerkedatabase kunne ikke åpnes. Lukk Firefox og prøv igjen."
 
 #: src/bookmarks/ephy-bookmarks-import.c:336
 #: src/bookmarks/ephy-bookmarks-import.c:372
@@ -2380,7 +2497,7 @@ msgid "Save Media As"
 msgstr "Lagre medie som"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1608
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1613
 msgid "Stop"
 msgstr "Stopp"
 
@@ -2507,7 +2624,6 @@ msgstr "Starter …"
 
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
-#.
 #: src/ephy-firefox-sync-dialog.c:152
 #, c-format
 msgid "Last synchronized: %s"
@@ -2521,7 +2637,7 @@ msgstr "Noe gikk galt. Prøv igjen senere."
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
-msgstr[0] "%u min"
+msgstr[0] "%u minutt"
 msgstr[1] "%u min"
 
 #: src/ephy-header-bar.c:200
@@ -2569,19 +2685,19 @@ msgstr "Ikke tilgjengelig i inkognitomodus"
 msgid "Clear History"
 msgstr "Tøm historikk"
 
-#: src/ephy-location-entry.c:352 src/resources/gtk/location-entry.blp:77
+#: src/ephy-location-entry.c:355 src/resources/gtk/location-entry.blp:77
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Søk etter nettsteder, bokmerker og åpne faner"
 
-#: src/ephy-location-entry.c:377
+#: src/ephy-location-entry.c:380
 msgid "Not Secure — "
 msgstr "Ikke sikker – "
 
-#: src/ephy-location-entry.c:1333
+#: src/ephy-location-entry.c:1338
 msgid "Secure Site"
 msgstr "Sikkert nettsted"
 
-#: src/ephy-location-entry.c:1335
+#: src/ephy-location-entry.c:1340
 msgid "Insecure Site"
 msgstr "Usikkert nettsted"
 
@@ -2641,41 +2757,42 @@ msgstr "Slett alle passord?"
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "Dette vil tømme alle lokalt lagrede passord og kan ikke angres."
 
-#: src/ephy-passwords-view.c:253
+#: src/ephy-passwords-view.c:254
 msgid "Copy password"
 msgstr "Kopier passord"
 
-#: src/ephy-passwords-view.c:260 src/ephy-window.c:4236
+#: src/ephy-passwords-view.c:261 src/ephy-window.c:4238
 msgid "Username"
 msgstr "Brukernavn"
 
-#: src/ephy-passwords-view.c:271
+#: src/ephy-passwords-view.c:272
 msgid "Copy username"
 msgstr "Kopier brukernavn"
 
-#: src/ephy-passwords-view.c:278 src/ephy-window.c:4243
+#: src/ephy-passwords-view.c:279 src/ephy-window.c:4245
 msgid "Password"
 msgstr "Passord"
 
-#: src/ephy-passwords-view.c:291
+#: src/ephy-passwords-view.c:292
 msgid "Remove Password"
 msgstr "Fjern passord"
 
-#: src/ephy-privacy-report.c:65
+#: src/ephy-privacy-report.c:66
 msgid "Blocked trackers on this site"
 msgstr "Blokkerte sporere på denne siden"
 
-#: src/ephy-privacy-report.c:85
+#: src/ephy-privacy-report.c:86
 msgid "Sites this tracker was found on"
 msgstr "Nettsteder denne sporeren ble funnet på"
 
-#: src/ephy-privacy-report.c:254
+#: src/ephy-privacy-report.c:256
 #, c-format
 msgid "GNOME Web prevented %u tracker from following you across websites"
 msgid_plural ""
 "GNOME Web prevented %u trackers from following you across websites"
 msgstr[0] "Nettleser stoppet %u sporer fra å følge deg på tvers av nettsteder"
-msgstr[1] "Nettleser stoppet %u sporere fra å følge deg på tvers av nettsteder"
+msgstr[1] ""
+"Nettleser stoppet %u sporere fra å følge deg på tvers av nettsteder"
 
 #. Label in certificate dialog when site is untrusted. %s is a URL.
 #: src/ephy-security-dialog.c:185
@@ -2684,8 +2801,8 @@ msgid ""
 "This web site’s digital identification is not trusted. You may have "
 "connected to an attacker pretending to be %s"
 msgstr ""
-"Digitale identifikasjon for dette nettstedet er upålitelig. Du kan ha koblet "
-"til en angriper som utgir seg for å være %s"
+"Digitale identifikasjon for dette nettstedet er upålitelig. Du kan ha koblet"
+" til en angriper som utgir seg for å være %s"
 
 #. Label in certificate dialog when site uses HTTP. %s is a URL.
 #: src/ephy-security-dialog.c:192
@@ -2707,59 +2824,67 @@ msgstr "Denne nettsiden har ikke sikret tilkoblingen din skikkelig"
 msgid "Your connection seems to be secure"
 msgstr "Tilkoblingen din ser ut til å være sikker"
 
-#: src/ephy-security-dialog.c:489
+#: src/ephy-security-dialog.c:490
 msgid "Allow"
 msgstr "Tillat"
 
-#: src/ephy-security-dialog.c:490
+#: src/ephy-security-dialog.c:491
 msgid "Deny"
 msgstr "Nekt"
 
-#: src/ephy-security-dialog.c:492
+#: src/ephy-security-dialog.c:493
 msgid "Ask"
 msgstr "Spør"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:515
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:516
 msgid "Advertisements"
 msgstr "Annonser"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:517
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:518
 msgid "Notifications"
 msgstr "Varslinger"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:519
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:520
 msgid "Password Saving"
 msgstr "Lagring av passord"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:521
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:522
 msgid "Location Access"
 msgstr "Tilgang til lokasjon"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:523
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:524
 msgid "Microphone Access"
 msgstr "Tilgang til mikrofon"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:525
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:526
 msgid "Webcam Access"
 msgstr "Tilgang til kamera"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:527
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:528
 msgid "Display Access"
 msgstr "Tilgang til skjerm"
 
-#. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:529
+#. TRANSLATORS: This is a permission toggle in the Security & Permissions
+#. dialog.
+#: src/ephy-security-dialog.c:530
 msgid "Media Autoplay"
 msgstr "Automatisk avspilling av medier"
 
-#: src/ephy-security-dialog.c:529
+#: src/ephy-security-dialog.c:530
 msgid "Without Sound"
 msgstr "Uten lyd"
 
@@ -2957,7 +3082,6 @@ msgstr "Åpne lenke i inkognitovindu"
 #. * explicit user consent. Notably, websites can download malicious files
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
-#.
 #: src/ephy-window.c:2346
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
@@ -2979,7 +3103,8 @@ msgstr "Alltid følg"
 msgid "Search Engine Available"
 msgstr "Søkemotore tilgjengelig"
 
-#. TRANSLATORS: %s is the name of the search engine for this row in the popover.
+#. TRANSLATORS: %s is the name of the search engine for this row in the
+#. popover.
 #: src/ephy-window.c:2643
 #, c-format
 msgid "Add “%s”"
@@ -3059,12 +3184,12 @@ msgstr "Forespørsel om tilgang til data"
 #: src/ephy-window.c:3241
 #, c-format
 msgid ""
-"The page at “%s” would like to access its own data (including cookies) while "
-"browsing “%s”. This will allow “%s” to track your activity on “%s”."
+"The page at “%s” would like to access its own data (including cookies) while"
+" browsing “%s”. This will allow “%s” to track your activity on “%s”."
 msgstr ""
 "Siden på «%s» ønsker tilgang til egnedata (inkludert informasjonskapsler) "
-"mens «%s» vises. Dette vil gjøre det mulig for «%s» å spore din aktivitet på "
-"«%s»."
+"mens «%s» vises. Dette vil gjøre det mulig for «%s» å spore din aktivitet på"
+" «%s»."
 
 #. Translators: Clipboard policy for a specific site.
 #: src/ephy-window.c:3246
@@ -3089,43 +3214,43 @@ msgstr "_Nekt"
 msgid "_Allow"
 msgstr "_Tillat"
 
-#: src/ephy-window.c:3484 src/ephy-window.c:5160
+#: src/ephy-window.c:3486 src/ephy-window.c:5162
 msgid "Leave Website?"
 msgstr "Forlat nettsted?"
 
-#: src/ephy-window.c:3485 src/ephy-window.c:5161 src/window-commands.c:1408
+#: src/ephy-window.c:3487 src/ephy-window.c:5163 src/window-commands.c:1408
 msgid "A form was modified and has not been submitted"
 msgstr "Et skjema ble endret og er ikke sendt inn"
 
-#: src/ephy-window.c:3486 src/ephy-window.c:5162 src/window-commands.c:1412
+#: src/ephy-window.c:3488 src/ephy-window.c:5164 src/window-commands.c:1412
 msgid "_Discard Form"
 msgstr "_Forkast skjema"
 
-#: src/ephy-window.c:3507
+#: src/ephy-window.c:3509
 msgid "Download operation"
 msgstr "Nedlastingsoperasjon"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3511
 msgid "Show details"
 msgstr "Vis detaljer"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3513
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
 msgstr[0] "%d nedlastingsoperasjon aktiv"
 msgstr[1] "%d nedlastingsoperasjoner aktive"
 
-#: src/ephy-window.c:3789
+#: src/ephy-window.c:3791
 msgid "Set as Default Browser?"
 msgstr "Sett som din forvalgte nettleser?"
 
-#: src/ephy-window.c:3791
+#: src/ephy-window.c:3793
 msgid "Use Web as your default web browser and for opening external links"
 msgstr ""
 "Bruk Nettleser som din forvalgte nettleser og til å åpne eksterne lenker"
 
-#: src/ephy-window.c:3793
+#: src/ephy-window.c:3795
 msgid ""
 "Use Epiphany Technology Preview as your default web browser and for opening "
 "external links"
@@ -3133,74 +3258,75 @@ msgstr ""
 "Sett Epiphany teknologiforhåndsvisning som din forvalgte nettleser og for å "
 "åpne eksterne lenker?"
 
-#: src/ephy-window.c:3797
+#: src/ephy-window.c:3799
 msgid "_Ask Again Later"
 msgstr "S_pør igjen senere"
 
-#: src/ephy-window.c:3798
+#: src/ephy-window.c:3800
 msgid "_No"
 msgstr "_Nei"
 
-#: src/ephy-window.c:3799
+#: src/ephy-window.c:3801
 msgid "_Yes"
 msgstr "_Ja"
 
-#: src/ephy-window.c:4129
+#: src/ephy-window.c:4131
 msgid "Download started"
 msgstr "Nedlasting startet"
 
-#: src/ephy-window.c:4217
+#: src/ephy-window.c:4219
 msgid "Save Password?"
 msgstr "Lagre passord?"
 
-#: src/ephy-window.c:4218
-msgid "Passwords are saved only on your device and can be removed at any time."
+#: src/ephy-window.c:4220
+msgid ""
+"Passwords are saved only on your device and can be removed at any time."
 msgstr "Passord lagres kun på din enhet og kan fjernes når som helst."
 
-#: src/ephy-window.c:4220
+#: src/ephy-window.c:4222
 msgid "Not Now"
 msgstr "Ikke nå"
 
 # (ugh)
-#: src/ephy-window.c:4221
+#: src/ephy-window.c:4223
 msgid "Never Save"
 msgstr "Aldri lagre"
 
-#: src/ephy-window.c:4222
+#: src/ephy-window.c:4224
 msgid "Save"
 msgstr "Lagre"
 
-#: src/ephy-window.c:4423
+#: src/ephy-window.c:4425
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Nettsideapplikasjon"
 
-#: src/ephy-window.c:4426
+#: src/ephy-window.c:4428
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Installer nettsted som nettsideapplikasjon"
 
-#: src/ephy-window.c:4952
+#: src/ephy-window.c:4954
 msgid "Page URL copied"
 msgstr "URL til side kopiert"
 
-#: src/ephy-window.c:5275
+#: src/ephy-window.c:5277
 msgid "Close Multiple Tabs?"
 msgstr "Lukk flere faner?"
 
-#: src/ephy-window.c:5276
+#: src/ephy-window.c:5278
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Hvis du lukker dette vinduet vil alle fanene bli borte"
 
-#: src/ephy-window.c:5277
+#: src/ephy-window.c:5279
 msgid "C_lose Tabs"
 msgstr "_Lukk faner"
 
-#: src/ephy-window.c:5400
+#: src/ephy-window.c:5402
 msgid "New tab opened"
 msgstr "Ny fane åpnet"
 
-#: src/ephy-window.c:5404
+#: src/ephy-window.c:5406
 msgid "Switch"
 msgstr "Bytt"
 
@@ -3265,7 +3391,7 @@ msgstr "Ny søkemotor"
 msgid "A_dd Search Engine"
 msgstr "Le_gg til søkemotor"
 
-#: src/preferences/ephy-search-engine-row.c:126
+#: src/preferences/ephy-search-engine-row.c:127
 msgid "No search suggestions"
 msgstr "Ingen søkeforslag"
 
@@ -3332,15 +3458,15 @@ msgstr "Sett til forvalg"
 msgid "Add Language"
 msgstr "Legg til språk"
 
-#: src/preferences/prefs-general-page.c:402
-#: src/preferences/prefs-general-page.c:554
+#: src/preferences/prefs-general-page.c:403
+#: src/preferences/prefs-general-page.c:555
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk [%s]"
 msgstr[1] "Systemspråk [%s]"
 
-#: src/preferences/prefs-general-page.c:766
+#: src/preferences/prefs-general-page.c:767
 msgid "Supported Image Files"
 msgstr "Støttede bildefiler"
 
@@ -3356,11 +3482,11 @@ msgstr "Adressen skal ikke inneholde søkebegrepet flere ganger"
 #: src/preferences/prefs-search-engine-page.c:122
 #, c-format
 msgid ""
-"Address is not a valid URL. The address should look like https://"
-"www.example.com/search?q=%s"
+"Address is not a valid URL. The address should look like "
+"https://www.example.com/search?q=%s"
 msgstr ""
-"Adressen er ikke en gyldig URL. Adressen skal se ut slik https:///"
-"www.eksempel.no/søk=q=%s"
+"Adressen er ikke en gyldig URL. Adressen skal se ut slik "
+"https:///www.eksempel.no/søk=q=%s"
 
 #: src/preferences/prefs-search-engine-page.c:147
 msgid "A name is required"
@@ -3411,7 +3537,7 @@ msgstr "Rrediger søkemotor"
 msgid "Remove Search Engine"
 msgstr "Fjern søkemotor"
 
-#: src/preferences/webapp-additional-urls-dialog.c:72
+#: src/preferences/webapp-additional-urls-dialog.c:73
 msgid "Remove URL"
 msgstr "Fjern URL"
 
@@ -3444,7 +3570,8 @@ msgstr "Utvidelser"
 msgid "View Open Tabs"
 msgstr "Vis åpne faner"
 
-#: src/resources/gtk/action-bar-end.blp:101 src/resources/gtk/action-bar.blp:71
+#: src/resources/gtk/action-bar-end.blp:101
+#: src/resources/gtk/action-bar.blp:71
 #: src/resources/gtk/bookmarks-dialog.blp:55
 msgid "Bookmarks"
 msgstr "Bokmerker"
@@ -3586,7 +3713,8 @@ msgstr "Ferdig"
 msgid "Close"
 msgstr "Lukk"
 
-#: src/resources/gtk/bookmarks-dialog.blp:40 src/resources/gtk/data-view.blp:18
+#: src/resources/gtk/bookmarks-dialog.blp:40
+#: src/resources/gtk/data-view.blp:18
 msgid "Options"
 msgstr "Alternativer"
 
@@ -3714,8 +3842,8 @@ msgid ""
 "Firefox on other computers. GNOME Web is not Firefox and is not produced or "
 "endorsed by Mozilla."
 msgstr ""
-"Logg inn med din Mozilla-konto for å synkronisere dine data med Nettleser og "
-"Firefox på andre datamaskiner. Nettleser er ikke Firefox, og er ikke laget "
+"Logg inn med din Mozilla-konto for å synkronisere dine data med Nettleser og"
+" Firefox på andre datamaskiner. Nettleser er ikke Firefox, og er ikke laget "
 "eller godkjent av Mozilla."
 
 #: src/resources/gtk/firefox-sync-dialog.blp:43
@@ -3726,47 +3854,47 @@ msgstr "Mozilla-konto"
 msgid "Logged in"
 msgstr "Logget inn"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:50
+#: src/resources/gtk/firefox-sync-dialog.blp:51
 msgid "Sign _Out"
 msgstr "Logg _ut"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:59
+#: src/resources/gtk/firefox-sync-dialog.blp:60
 msgid "Sync Options"
 msgstr "Alternativer for synkronisering"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:62
+#: src/resources/gtk/firefox-sync-dialog.blp:63
 msgid "Sync _Bookmarks"
 msgstr "Synkroniser _bokmerker"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:68
+#: src/resources/gtk/firefox-sync-dialog.blp:69
 msgid "Sync _Passwords"
 msgstr "Synkroniser _passord"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:73
+#: src/resources/gtk/firefox-sync-dialog.blp:74
 msgid "Sync _History"
 msgstr "Synkroniser _historikk"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:78
+#: src/resources/gtk/firefox-sync-dialog.blp:79
 msgid "Sync Open _Tabs"
 msgstr "Synkroniser åpne _faner"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:82
+#: src/resources/gtk/firefox-sync-dialog.blp:83
 msgid "S_ynced Tabs"
 msgstr "S_ynkroniserte faner"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:90
+#: src/resources/gtk/firefox-sync-dialog.blp:91
 msgid "Frequency"
 msgstr "Frekvens"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:96
+#: src/resources/gtk/firefox-sync-dialog.blp:97
 msgid "Device name"
 msgstr "Enhetsnavn"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:108
+#: src/resources/gtk/firefox-sync-dialog.blp:109
 msgid "_Save"
 msgstr "_Lagre"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:116
+#: src/resources/gtk/firefox-sync-dialog.blp:117
 msgid "_Change"
 msgstr "_Endre"
 
@@ -4022,12 +4150,12 @@ msgstr "Utvidelser må installeres manuelt via filer"
 #: src/resources/gtk/prefs-extensions-page.blp:26
 msgid ""
 "Epiphany is compatible with web extensions for Mozilla Firefox. To find and "
-"add web extensions, visit <a href=\"https://"
-"addons.mozilla.org\">addons.mozilla.org</a>"
+"add web extensions, visit <a "
+"href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
 msgstr ""
 "Epiphany er kompatibel med nettsideutvidelser for Mozilla Firefox. For å "
-"finne og legge til nettsideutvidelser kan du gå til <a href=\"https://"
-"addons.mozilla.org\">addons.mozilla.org</a>"
+"finne og legge til nettsideutvidelser kan du gå til <a "
+"href=\"https://addons.mozilla.org\">addons.mozilla.org</a>"
 
 #: src/resources/gtk/prefs-extensions-page.blp:55
 msgid "No Extensions Installed"
@@ -4079,7 +4207,7 @@ msgstr "Blokker o_ppsprettvinduer"
 
 #: src/resources/gtk/prefs-general-page.blp:61
 msgid "Block C_ookie Banners"
-msgstr ""
+msgstr "Blokk C_ookie-bannere"
 
 #: src/resources/gtk/prefs-general-page.blp:71
 msgid "Most _Visited Pages"
@@ -4135,7 +4263,7 @@ msgstr "B_ytt til nye faner umiddelbart"
 
 #: src/resources/gtk/prefs-general-page.blp:201
 msgid "Touch _Navigation Gestures"
-msgstr ""
+msgstr "Berøring _Navigasjonsgestikker"
 
 #: src/resources/gtk/prefs-general-page.blp:220
 msgid "_Spell Checking"
@@ -4174,8 +4302,8 @@ msgid ""
 "Allow websites to store cookies, databases, and local storage data. "
 "Disabling website data storage will break many websites."
 msgstr ""
-"La nettsteder lagre informasjonskapsler, databaser og data på lokal lagring. "
-"Hvis du slår av lagring av data vil mange nettsteder slutte å fungere."
+"La nettsteder lagre informasjonskapsler, databaser og data på lokal lagring."
+" Hvis du slår av lagring av data vil mange nettsteder slutte å fungere."
 
 #: src/resources/gtk/prefs-privacy-page.blp:21
 msgid "_Website Data Storage"
@@ -4223,8 +4351,8 @@ msgid ""
 "To determine the search address, perform a search using the search engine "
 "that you want to add and replace the search term with %s"
 msgstr ""
-"Utfør et søk med søkemotoren du vil legge til og erstatt søkebegrepet med %s "
-"for å bestemme søkeadressen."
+"Utfør et søk med søkemotoren du vil legge til og erstatt søkebegrepet med %s"
+" for å bestemme søkeadressen."
 
 #: src/resources/gtk/privacy-report.blp:10
 msgid "Privacy Report"
@@ -4247,6 +4375,8 @@ msgid ""
 "Trackers that tried to collect personal information across websites will "
 "appear here"
 msgstr ""
+"Sporere som forsøkte å samle personlig informasjon på tvers av nettsteder "
+"vil vises her"
 
 #: src/resources/gtk/privacy-report.blp:83
 msgid "Details"
@@ -4612,8 +4742,8 @@ msgid ""
 "with this account. Open a tab by double clicking its name (tabs under Local "
 "Tabs cannot be opened)."
 msgstr ""
-"Under ser du de åpne synkroniserte fanene på dine enheter som bruker Firefox "
-"Synkronisering med denne kontoen. Åpne en fane ved å dobbeltklikke på "
+"Under ser du de åpne synkroniserte fanene på dine enheter som bruker Firefox"
+" Synkronisering med denne kontoen. Åpne en fane ved å dobbeltklikke på "
 "navnet. Faner under Lokale faner kan ikke åpnes."
 
 #: src/resources/gtk/tab-overview-menu.blp:23
@@ -4629,10 +4759,12 @@ msgid ""
 "URLs that start with the same base domain (example.com) will be opened by "
 "this web app"
 msgstr ""
+"Lenker som starter med samme grunnleggende domene (example.com) åpnes av "
+"denne nettappen"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:16
 msgid "Base Domain"
-msgstr ""
+msgstr "Grunn-domene"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:24
 msgid "Add URL"
@@ -4710,7 +4842,7 @@ msgstr "manifest.json er ugyldig"
 #: src/webextension/ephy-web-extension-manager.c:297
 #, c-format
 msgid "Failed to determine initiating URI"
-msgstr ""
+msgstr "Kunne ikke fastslå URI for oppstart"
 
 #: src/window-commands.c:132
 msgid "HTML File"
@@ -4877,9 +5009,9 @@ msgid ""
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
 "want to enable caret browsing?"
 msgstr ""
-"Hvis du trykker F7 slår du av/på bruk av markør. Denne funksjonen gir deg en "
-"bevegelig markør på nettsidene som lar deg flytte rundt med tastaturet. Vil "
-"du slå på markørmodus?"
+"Hvis du trykker F7 slår du av/på bruk av markør. Denne funksjonen gir deg en"
+" bevegelig markør på nettsidene som lar deg flytte rundt med tastaturet. Vil"
+" du slå på markørmodus?"
 
 #: src/window-commands.c:3230
 msgid "_Enable"
