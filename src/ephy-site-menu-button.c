@@ -50,6 +50,8 @@ struct _EphySiteMenuButton {
 
 G_DEFINE_FINAL_TYPE (EphySiteMenuButton, ephy_site_menu_button, GTK_TYPE_BUTTON)
 
+#define EPHY_ANIMATION_DELAY 1500
+
 void ephy_site_menu_button_update_bookmark_item (EphySiteMenuButton *self,
                                                  gboolean            has_bookmark);
 
@@ -374,22 +376,19 @@ on_animation_timeout (EphySiteMenuButton *self)
     self->is_animating = FALSE;
     self->do_animation = FALSE;
   } else {
-    int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
     int queued_state = g_array_index (self->queued_states, int, 0);
 
     LOG ("Changing state to queued state %u", queued_state);
     gtk_svg_set_state (self->svg, queued_state);
     g_array_remove_index (self->queued_states, 0);
 
-    self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
+    self->timeout_id = g_timeout_add_once (EPHY_ANIMATION_DELAY, (GSourceOnceFunc)on_animation_timeout, self);
   }
 }
 
 void
 ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
 {
-  int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
-
   if (!self->do_animation)
     return;
 
@@ -406,14 +405,12 @@ ephy_site_menu_button_animate_reader_mode (EphySiteMenuButton *self)
   gtk_svg_set_state (self->svg, 1);
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
-  self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
+  self->timeout_id = g_timeout_add_once (EPHY_ANIMATION_DELAY, (GSourceOnceFunc)on_animation_timeout, self);
 }
 
 void
 ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self)
 {
-  int delay = adw_get_enable_animations (GTK_WIDGET (self)) ? 1400 : 1500;
-
   if (!self->do_animation)
     return;
 
@@ -430,7 +427,7 @@ ephy_site_menu_button_animate_search_engine (EphySiteMenuButton *self)
   gtk_svg_set_state (self->svg, 2);
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
-  self->timeout_id = g_timeout_add_once (delay, (GSourceOnceFunc)on_animation_timeout, self);
+  self->timeout_id = g_timeout_add_once (EPHY_ANIMATION_DELAY, (GSourceOnceFunc)on_animation_timeout, self);
 }
 
 void
