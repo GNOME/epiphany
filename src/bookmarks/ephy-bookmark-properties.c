@@ -199,7 +199,6 @@ ephy_bookmark_properties_actions_add_tag (EphyBookmarkProperties *self)
 
   /* Empty entry and disable button's action until new text is inserted */
   gtk_editable_set_text (GTK_EDITABLE (self->add_tag_row), "");
-  gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->add_tag_row));
 }
@@ -237,22 +236,6 @@ ephy_bookmark_properties_actions_save_bookmark (EphyBookmarkProperties *self)
   ephy_bookmarks_manager_add_bookmark (self->manager, self->bookmark);
 
   adw_dialog_close (ADW_DIALOG (self));
-}
-
-static void
-ephy_bookmark_properties_buffer_text_changed_cb (EphyBookmarkProperties *self,
-                                                 GParamSpec             *pspec,
-                                                 GtkEntryBuffer         *buffer)
-{
-  const char *text;
-
-  g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
-
-  text = gtk_editable_get_text (GTK_EDITABLE (self->add_tag_row));
-  if (ephy_bookmarks_manager_tag_exists (self->manager, text) || g_strcmp0 (text, "") == 0)
-    gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
-  else
-    gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", TRUE);
 }
 
 static void
@@ -327,6 +310,22 @@ on_tags_activated (AdwActionRow *row,
   EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
 
   adw_navigation_view_push_by_tag (ADW_NAVIGATION_VIEW (self->navigation_view), "tags");
+}
+
+static void
+on_add_tag_entry_changed (AdwEntryRow *row,
+                          gpointer     user_data)
+{
+  EphyBookmarkProperties *self = EPHY_BOOKMARK_PROPERTIES (user_data);
+  const char *text;
+
+  g_assert (EPHY_IS_BOOKMARK_PROPERTIES (self));
+
+  text = gtk_editable_get_text (GTK_EDITABLE (self->add_tag_row));
+  if (ephy_bookmarks_manager_tag_exists (self->manager, text) || g_strcmp0 (text, "") == 0)
+    gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
+  else
+    gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", TRUE);
 }
 
 static void
@@ -505,6 +504,7 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, tag_header_bar);
 
   gtk_widget_class_bind_template_callback (widget_class, on_tags_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_add_tag_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_add_tag_entry_activated);
 
   gtk_widget_class_install_action (widget_class, "bookmark-properties.add-tag",
@@ -547,12 +547,6 @@ ephy_bookmark_properties_init (EphyBookmarkProperties *self)
   /* Disable the "add-tag" action until text is inserted in the corresponding
    * entry */
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "bookmark-properties.add-tag", FALSE);
-
-  g_signal_connect_object (self->add_tag_row,
-                           "notify::text-length",
-                           G_CALLBACK (ephy_bookmark_properties_buffer_text_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 }
 
 GtkWidget *
