@@ -5509,35 +5509,6 @@ ephy_window_get_show_sidebar (EphyWindow *self)
   return adw_overlay_split_view_get_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (self->overlay_split_view));
 }
 
-static void
-bookmark_removed_toast_dismissed (AdwToast     *toast,
-                                  EphyBookmark *bookmark)
-{
-  g_object_unref (bookmark);
-}
-
-static void
-bookmark_removed_toast_button_clicked (AdwToast     *toast,
-                                       EphyBookmark *bookmark)
-{
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-
-  if (ephy_bookmarks_manager_get_bookmark_by_url (manager, ephy_bookmark_get_url (bookmark)))
-    return;
-
-  ephy_bookmarks_manager_add_bookmark (manager, bookmark);
-}
-
-void
-ephy_window_bookmark_removed_toast (EphyWindow   *self,
-                                    EphyBookmark *bookmark,
-                                    AdwToast     *toast)
-{
-  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, G_CONNECT_DEFAULT);
-  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, G_CONNECT_DEFAULT);
-  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
-}
-
 void
 ephy_window_toggle_bookmarks (EphyWindow *self)
 {

@@ -709,16 +709,6 @@ bookmark_removed_toast_button_clicked (AdwToast     *toast,
   ephy_bookmarks_manager_add_bookmark (manager, bookmark);
 }
 
-void
-ephy_bookmarks_dialog_bookmark_removed_toast (EphyBookmarksDialog *self,
-                                              EphyBookmark        *bookmark,
-                                              AdwToast            *toast)
-{
-  g_signal_connect_object (toast, "dismissed", G_CALLBACK (bookmark_removed_toast_dismissed), bookmark, G_CONNECT_DEFAULT);
-  g_signal_connect_object (toast, "button-clicked", G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark, G_CONNECT_DEFAULT);
-  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
-}
-
 static void
 ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
                                          EphyBookmark         *bookmark,
@@ -851,10 +841,18 @@ ephy_bookmarks_dialog_bookmark_removed_cb (EphyBookmarksDialog  *self,
     AdwToast *toast = adw_toast_new (_("Bookmark removed"));
 
     adw_toast_set_button_label (toast, _("_Undo"));
+
+    g_signal_connect_object (toast, "dismissed",
+                             G_CALLBACK (bookmark_removed_toast_dismissed), bookmark,
+                             G_CONNECT_DEFAULT);
+    g_signal_connect_object (toast, "button-clicked",
+                             G_CALLBACK (bookmark_removed_toast_button_clicked), bookmark,
+                             G_CONNECT_DEFAULT);
+
     if (ephy_window_get_show_sidebar (window))
-      ephy_bookmarks_dialog_bookmark_removed_toast (self, bookmark, toast);
+      adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
     else
-      ephy_window_bookmark_removed_toast (window, bookmark, toast);
+      ephy_window_add_toast (window, toast);
   }
 }
 

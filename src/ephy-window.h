@@ -114,10 +114,6 @@ void              ephy_window_switch_to_new_tab          (EphyWindow *window);
 
 gboolean          ephy_window_get_show_sidebar           (EphyWindow *window);
 
-void              ephy_window_bookmark_removed_toast     (EphyWindow   *window,
-                                                          EphyBookmark *bookmark,
-                                                          AdwToast     *toast);
-
 void              ephy_window_toggle_bookmarks           (EphyWindow *window);
 
 void              ephy_window_add_toast                  (EphyWindow *window,
