@@ -4658,6 +4658,8 @@ ephy_window_constructed (GObject *object)
   shell = ephy_shell_get_default ();
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
 
+  g_signal_connect (shell, "password-form-submitted", G_CALLBACK (save_password_cb), NULL);
+
   /* Setup incognito mode style */
   if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     gtk_widget_add_css_class (GTK_WIDGET (window), "incognito-mode");
@@ -4771,6 +4773,7 @@ ephy_window_constructed (GObject *object)
 
   downloads_manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
   g_signal_connect_object (downloads_manager, "download-added", G_CALLBACK (download_added_cb), window, G_CONNECT_SWAPPED);
+  g_signal_connect (downloads_manager, "download-completed", G_CALLBACK (download_completed_cb), NULL);
 }
 
 static void
@@ -4779,8 +4782,6 @@ ephy_window_class_init (EphyWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
-  EphyShell *shell;
-  EphyDownloadsManager *manager;
 
   object_class->constructed = ephy_window_constructed;
   object_class->dispose = ephy_window_dispose;
@@ -4828,11 +4829,6 @@ ephy_window_class_init (EphyWindowClass *klass)
                                                  G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (props), props);
-
-  shell = ephy_shell_get_default ();
-  manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
-  g_signal_connect (manager, "download-completed", G_CALLBACK (download_completed_cb), NULL);
-  g_signal_connect (shell, "password-form-submitted", G_CALLBACK (save_password_cb), NULL);
 }
 
 static void
