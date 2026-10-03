@@ -114,8 +114,18 @@ static void
 ephy_tab_view_class_init (EphyTabViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = ephy_tab_view_get_property;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/tab-view.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyTabView, tab_view);
+
+  gtk_widget_class_bind_template_callback (widget_class, notify_n_pages_cb);
+  gtk_widget_class_bind_template_callback (widget_class, notify_selected_page_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_menu_cb);
+  gtk_widget_class_bind_template_callback (widget_class, indicator_activated_cb);
 
   properties[PROP_N_PAGES] =
     g_param_spec_int ("n-pages",
@@ -143,36 +153,12 @@ ephy_tab_view_class_init (EphyTabViewClass *klass)
 static void
 ephy_tab_view_init (EphyTabView *self)
 {
-  self->tab_view = ADW_TAB_VIEW (adw_tab_view_new ());
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   /* https://gitlab.gnome.org/GNOME/epiphany/-/issues/2296 */
   adw_tab_view_remove_shortcuts (self->tab_view,
                                  ADW_TAB_VIEW_SHORTCUT_CONTROL_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_END |
                                  ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_END);
-  adw_bin_set_child (ADW_BIN (self), GTK_WIDGET (self->tab_view));
-
-  g_signal_connect_object (self->tab_view,
-                           "notify::n-pages",
-                           G_CALLBACK (notify_n_pages_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->tab_view,
-                           "notify::selected-page",
-                           G_CALLBACK (notify_selected_page_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->tab_view,
-                           "setup-menu",
-                           G_CALLBACK (setup_menu_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->tab_view,
-                           "indicator-activated",
-                           G_CALLBACK (indicator_activated_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 }
 
 EphyTabView *

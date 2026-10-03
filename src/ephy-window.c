@@ -3757,13 +3757,6 @@ setup_tab_view (EphyWindow *window)
 {
   EphyTabView *tab_view = ephy_tab_view_new ();
   AdwTabView *view = ephy_tab_view_get_tab_view (tab_view);
-  g_autoptr (GtkBuilder) builder = NULL;
-
-  gtk_widget_set_vexpand (GTK_WIDGET (tab_view), TRUE);
-
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/notebook-context-menu.ui");
-
-  adw_tab_view_set_menu_model (view, G_MENU_MODEL (gtk_builder_get_object (builder, "notebook-menu")));
 
   g_signal_connect_object (view, "notify::selected-page",
                            G_CALLBACK (tab_view_notify_selected_page_cb),

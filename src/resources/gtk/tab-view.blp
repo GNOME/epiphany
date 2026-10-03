@@ -1,4 +1,5 @@
 using Gtk 4.0;
+using Adw 1;
 
 menu notebook-menu {
   section {
@@ -58,4 +59,16 @@ menu notebook-menu {
       action: "tab.close";
     }
   }
+}
+
+template $EphyTabView: Adw.Bin {
+  vexpand: true;
+
+  child: Adw.TabView tab_view {
+    menu-model: notebook-menu;
+    notify::n-pages => $notify_n_pages_cb() swapped;
+    notify::selected-page => $notify_selected_page_cb() swapped;
+    setup-menu => $setup_menu_cb() swapped;
+    indicator-activated => $indicator_activated_cb() swapped;
+  };
 }
