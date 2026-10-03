@@ -4573,11 +4573,8 @@ ephy_window_constructed (GObject *object)
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
-  AdwBreakpoint *breakpoint;
   EphyDownloadsManager *downloads_manager;
-  g_autoptr (GtkBuilder) builder = NULL;
   GtkEventController *scroll_controller;
-  GtkGesture *pan_gesture;
 
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
@@ -4652,28 +4649,8 @@ ephy_window_constructed (GObject *object)
                                            accels_navigation_ltr_rtl[i].accelerators);
   }
 
-  g_signal_connect (window, "notify::fullscreened",
-                    G_CALLBACK (notify_fullscreen_cb), NULL);
-
   window->tab_view = setup_tab_view (window);
   window->tab_bar = adw_tab_bar_new ();
-  window->overview = adw_tab_overview_new ();
-  window->fullscreen_box = ephy_fullscreen_box_new ();
-
-  pan_gesture = gtk_gesture_pan_new (GTK_ORIENTATION_VERTICAL);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (pan_gesture), GTK_PHASE_CAPTURE);
-  g_signal_connect_object (pan_gesture, "pan", G_CALLBACK (pan_cb), window, G_CONNECT_SWAPPED);
-  gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (pan_gesture));
-
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/tab-overview-menu.ui");
-
-  adw_tab_overview_set_enable_new_tab (ADW_TAB_OVERVIEW (window->overview), TRUE);
-  adw_tab_overview_set_secondary_menu (ADW_TAB_OVERVIEW (window->overview),
-                                       G_MENU_MODEL (gtk_builder_get_object (builder, "overview-menu")));
-  g_signal_connect_swapped (window->overview, "notify::open",
-                            G_CALLBACK (notify_overview_open_cb), window);
-  g_signal_connect_swapped (window->overview, "create-tab",
-                            G_CALLBACK (create_tab_cb), window);
 
   adw_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
   adw_tab_overview_set_view (ADW_TAB_OVERVIEW (window->overview), ephy_tab_view_get_tab_view (window->tab_view));
@@ -4713,26 +4690,6 @@ ephy_window_constructed (GObject *object)
 
   ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
   ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar_revealer);
-
-  adw_tab_overview_set_child (ADW_TAB_OVERVIEW (window->overview),
-                              GTK_WIDGET (window->fullscreen_box));
-
-  ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  window->bookmarks_dialog = ephy_bookmarks_dialog_new ();
-
-  /* Overlay Split View */
-  window->overlay_split_view = adw_overlay_split_view_new ();
-  adw_application_window_set_content (ADW_APPLICATION_WINDOW (window), GTK_WIDGET (window->overlay_split_view));
-
-  adw_overlay_split_view_set_max_sidebar_width (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), 360);
-  adw_overlay_split_view_set_collapsed (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), TRUE);
-  adw_overlay_split_view_set_show_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), FALSE);
-  adw_overlay_split_view_set_sidebar_position (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_PACK_END);
-
-  adw_overlay_split_view_set_content (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), GTK_WIDGET (window->overview));
-  adw_overlay_split_view_set_sidebar (ADW_OVERLAY_SPLIT_VIEW (window->overlay_split_view), window->bookmarks_dialog);
-  g_signal_connect_object (window->overlay_split_view, "notify::show-sidebar",
-                           G_CALLBACK (show_sidebar_cb), window, G_CONNECT_SWAPPED);
 
   ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
   ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
@@ -4814,15 +4771,6 @@ ephy_window_constructed (GObject *object)
 
   downloads_manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
   g_signal_connect_object (downloads_manager, "download-added", G_CALLBACK (download_added_cb), window, G_CONNECT_SWAPPED);
-
-  gtk_widget_set_size_request (GTK_WIDGET (window), 360, 200);
-
-  breakpoint = adw_breakpoint_new (adw_breakpoint_condition_parse ("max-width: 600px"));
-  adw_breakpoint_add_setters (breakpoint,
-                              G_OBJECT (window), "adaptive-mode", EPHY_ADAPTIVE_MODE_NARROW,
-                              NULL);
-
-  adw_application_window_add_breakpoint (ADW_APPLICATION_WINDOW (window), breakpoint);
 }
 
 static void
@@ -4845,6 +4793,19 @@ ephy_window_class_init (EphyWindowClass *klass)
   widget_class->unrealize = ephy_window_unrealize;
 
   window_class->close_request = ephy_window_close_request;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/window.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, overlay_split_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, overview);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, fullscreen_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, bookmarks_dialog);
+
+  gtk_widget_class_bind_template_callback (widget_class, notify_fullscreen_cb);
+  gtk_widget_class_bind_template_callback (widget_class, show_sidebar_cb);
+  gtk_widget_class_bind_template_callback (widget_class, notify_overview_open_cb);
+  gtk_widget_class_bind_template_callback (widget_class, create_tab_cb);
+  gtk_widget_class_bind_template_callback (widget_class, pan_cb);
 
   props[PROP_ACTIVE_CHILD] = g_param_spec_override ("active-child",
                                                     g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "active-child"));
@@ -4881,6 +4842,8 @@ ephy_window_init (EphyWindow *window)
   g_autoptr (GtkWindowGroup) window_group = gtk_window_group_new ();
 
   LOG ("EphyWindow initializing %p", window);
+
+  gtk_widget_init_template (GTK_WIDGET (window));
 
   window->uid = window_uid++;
   window->adaptive_mode = EPHY_ADAPTIVE_MODE_NORMAL;
