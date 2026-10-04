@@ -4264,10 +4264,10 @@ download_completed_cb (EphyDownloadsManager *downloads_manager,
   const char *path;
 
   path = ephy_download_get_destination (download);
-  if (!path)
-    return;
-
   window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
+  if (!path || !window)
+    return;
 
   if (window->download_start_toast)
     adw_toast_dismiss (window->download_start_toast);
@@ -4341,9 +4341,8 @@ save_password_cb (EphyEmbedShell          *shell,
   AdwPreferencesGroup *prefs_group;
   GtkWidget *password_entry;
 
-  /* Sanity checks would have already occurred before this point */
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ()));
-  if (!gtk_widget_is_visible (GTK_WIDGET (window)))
+  if (!window || !gtk_widget_is_visible (GTK_WIDGET (window)))
     return;
 
   dialog = adw_alert_dialog_new (_("Save Password?"),
