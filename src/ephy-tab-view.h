@@ -79,7 +79,8 @@ gint          ephy_tab_view_add_tab           (EphyTabView *self,
                                                EphyEmbed   *embed,
                                                EphyEmbed   *parent,
                                                int          position,
-                                               gboolean     jump_to);
+                                               gboolean     jump_to,
+                                               gboolean     pinned);
 
 GtkWidget    *ephy_tab_view_get_current_page  (EphyTabView *self);
 

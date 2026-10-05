@@ -442,12 +442,18 @@ ephy_tab_view_add_tab (EphyTabView *self,
                        EphyEmbed   *embed,
                        EphyEmbed   *parent,
                        int          position,
-                       gboolean     jump_to)
+                       gboolean     jump_to,
+                       gboolean     pinned)
 {
   AdwTabPage *page;
   EphyWebView *view;
 
-  if (parent) {
+  if (pinned) {
+    if (position < 0)
+      page = adw_tab_view_append_pinned (self->tab_view, GTK_WIDGET (embed));
+    else
+      page = adw_tab_view_insert_pinned (self->tab_view, GTK_WIDGET (embed), position);
+  } else if (parent) {
     AdwTabPage *parent_page;
 
     parent_page = adw_tab_view_get_page (self->tab_view, GTK_WIDGET (parent));

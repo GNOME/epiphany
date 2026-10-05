@@ -40,7 +40,8 @@ struct _EphyEmbedContainerInterface
                                     EphyEmbed *child,
                                     EphyEmbed *parent,
                                     int position,
-                                    gboolean set_active);
+                                    gboolean set_active,
+                                    gboolean pinned);
 
   void (* set_active_child)        (EphyEmbedContainer *container,
                                     EphyEmbed *child);
@@ -61,7 +62,8 @@ gint              ephy_embed_container_add_child        (EphyEmbedContainer *con
                                                          EphyEmbed          *child,
                                                          EphyEmbed          *parent,
                                                          int                 position,
-                                                         gboolean            set_active);
+                                                         gboolean            set_active,
+                                                         gboolean            pinned);
 void              ephy_embed_container_set_active_child (EphyEmbedContainer *container,
                                                          EphyEmbed          *child);
 void              ephy_embed_container_remove_child     (EphyEmbedContainer *container,

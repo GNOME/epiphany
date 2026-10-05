@@ -53,6 +53,7 @@ typedef struct {
 typedef struct {
   TabViewTracker *tab_view_tracker;
   int position;
+  gboolean pinned;
   char *url;
   WebKitWebViewSessionState *state;
 } ClosedTab;
@@ -209,12 +210,14 @@ closed_tab_free (ClosedTab *tab)
 static ClosedTab *
 closed_tab_new (EphyWebView    *web_view,
                 int             position,
+                gboolean        pinned,
                 TabViewTracker *tab_view_tracker)
 {
   ClosedTab *tab = g_new0 (ClosedTab, 1);
 
   tab->url = g_strdup (ephy_web_view_get_address (web_view));
   tab->position = position;
+  tab->pinned = pinned;
   /* Takes the ownership of the tracker */
   tab->tab_view_tracker = tab_view_tracker;
   tab->state = ephy_embed_get_session_state (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view));
@@ -245,7 +248,10 @@ ephy_session_undo_close_tab (EphySession *session)
   if (tab_view) {
     int n_pages = ephy_tab_view_get_n_pages (tab_view);
 
-    if (tab->position <= 0) {
+    if (tab->pinned) {
+      embed = NULL;
+      flags |= EPHY_NEW_TAB_PINNED;
+    } else if (tab->position <= 0) {
       /* Just prepend in the first position. */
       embed = NULL;
       flags |= EPHY_NEW_TAB_FIRST;
@@ -295,7 +301,8 @@ static void
 ephy_session_tab_closed (EphySession *session,
                          EphyTabView *tab_view,
                          EphyEmbed   *embed,
-                         gint         position)
+                         gint         position,
+                         gboolean     pinned)
 {
   EphyWebView *view;
   WebKitWebView *wk_view;
@@ -311,6 +318,7 @@ ephy_session_tab_closed (EphySession *session,
   }
 
   tab = closed_tab_new (view, position,
+                        pinned,
                         ephy_session_ref_or_create_tab_view_tracker (session, tab_view));
   g_queue_push_head (session->closed_tabs, tab);
 
@@ -363,7 +371,8 @@ tab_view_page_detached_cb (AdwTabView  *tab_view,
     (ephy_embed_get_web_view (embed), G_CALLBACK (load_changed_cb),
     session);
 
-  ephy_session_tab_closed (session, ephy_tab_view, embed, position);
+  ephy_session_tab_closed (session, ephy_tab_view, embed, position,
+                           adw_tab_page_get_pinned (page));
 }
 
 static void
