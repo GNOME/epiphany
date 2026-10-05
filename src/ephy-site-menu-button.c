@@ -26,6 +26,7 @@
 
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
+#include "ephy-embed-container.h"
 #include "ephy-embed.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
@@ -120,7 +121,7 @@ on_bookmark_added (EphySiteMenuButton *self,
                    EphyBookmark       *bookmark)
 {
   GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
-  EphyEmbed *embed = ephy_window_get_active_embed (EPHY_WINDOW (window));
+  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   EphyWebView *web_view = ephy_embed_get_web_view (embed);
   const char *address = ephy_web_view_get_address (web_view);
 
@@ -135,7 +136,7 @@ on_bookmark_removed (EphySiteMenuButton *self,
                      EphyBookmark       *bookmark)
 {
   GtkWidget *window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
-  EphyEmbed *embed = ephy_window_get_active_embed (EPHY_WINDOW (window));
+  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   EphyWebView *web_view = ephy_embed_get_web_view (embed);
   const char *address = ephy_web_view_get_address (web_view);
 

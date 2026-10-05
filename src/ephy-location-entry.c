@@ -441,11 +441,11 @@ static void
 on_focus_enter (GtkEventControllerFocus *controller,
                 EphyLocationEntry       *self)
 {
-  EphyWindow *window;
+  EphyEmbedContainer *window;
 
-  window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
+  window = EPHY_EMBED_CONTAINER (gtk_widget_get_root (GTK_WIDGET (self)));
   if (window) {
-    EphyEmbed *active_embed = ephy_window_get_active_embed (window);
+    EphyEmbed *active_embed = ephy_embed_container_get_active_child (window);
     const char *typed_input = ephy_embed_get_typed_input (active_embed);
 
     if (typed_input) {
@@ -752,7 +752,7 @@ on_editable_changed (GtkEditable *editable,
                      GtkEntry    *entry)
 {
   EphyLocationEntry *self = EPHY_LOCATION_ENTRY (gtk_widget_get_ancestor (GTK_WIDGET (entry), EPHY_TYPE_LOCATION_ENTRY));
-  EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
+  EphyEmbedContainer *window = EPHY_EMBED_CONTAINER (gtk_widget_get_root (GTK_WIDGET (self)));
   const char *text = gtk_editable_get_text (editable);
 
   if (text && strlen (text) > 0)
@@ -764,7 +764,7 @@ on_editable_changed (GtkEditable *editable,
   g_signal_emit (self, signals[USER_CHANGED], 0, text);
 
   if (window) {
-    EphyEmbed *embed = ephy_window_get_active_embed (EPHY_WINDOW (window));
+    EphyEmbed *embed = ephy_embed_container_get_active_child (window);
     const char *text = gtk_editable_get_text (editable);
 
     ephy_embed_set_typed_input (embed, text);
@@ -1440,8 +1440,8 @@ ephy_location_entry_reset (EphyLocationEntry *self)
   old_text = !!old_text ? old_text : "";
 
   if (g_strcmp0 (text, old_text) == 0) {
-    EphyWindow *window = EPHY_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
-    EphyEmbed *embed = ephy_window_get_active_embed (window);
+    EphyEmbedContainer *window = EPHY_EMBED_CONTAINER (gtk_widget_get_root (GTK_WIDGET (self)));
+    EphyEmbed *embed = ephy_embed_container_get_active_child (window);
     EphyWebView *web_view = ephy_embed_get_web_view (embed);
 
     gtk_widget_grab_focus (GTK_WIDGET (web_view));

@@ -47,8 +47,6 @@ typedef enum
 
 EphyWindow       *ephy_window_new                 (void);
 
-EphyEmbed        *ephy_window_get_active_embed    (EphyWindow *window);
-
 EphyTabView      *ephy_window_get_tab_view        (EphyWindow *window);
 
 void              ephy_window_toggle_tab_overview (EphyWindow *window);

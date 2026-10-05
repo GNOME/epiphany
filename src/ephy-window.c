@@ -802,9 +802,7 @@ on_request_background (GObject      *source_object,
 {
   XdpPortal *portal = XDP_PORTAL (source_object);
   g_autoptr (GError) error = NULL;
-  GtkWidget *window;
-  EphyWindow *ephy_window;
-  EphyEmbed *embed;
+  EphyWindow *window = EPHY_WINDOW (user_data);
   g_autofree char *status = NULL;
 
   if (!xdp_portal_request_background_finish (portal, res, &error)) {
@@ -813,19 +811,15 @@ on_request_background (GObject      *source_object,
     return;
   }
 
-  window = GTK_WIDGET (user_data);
-  gtk_widget_set_visible (window, FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
 
-  ephy_window = EPHY_WINDOW (window);
-  embed = ephy_window_get_active_embed (ephy_window);
-
-  status = g_strdup (ephy_embed_get_title (embed));
+  status = g_strdup (ephy_embed_get_title (window->active_embed));
 
   /* 96 is a limit by freedesktop portal */
   if (strlen (status) > 96)
     status[95] = '\0';
 
-  xdp_portal_set_background_status (portal, status, ephy_window->cancellable, on_set_background_status, NULL);
+  xdp_portal_set_background_status (portal, status, window->cancellable, on_set_background_status, NULL);
 }
 
 static gboolean
@@ -1238,14 +1232,13 @@ sync_tab_address (EphyWebView *view,
   const char *typed_address;
   char *location;
   gboolean is_internal_page;
-  EphyEmbed *embed = window->active_embed;
   EphyTitleWidget *title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
   const char *current_text = ephy_title_widget_get_address (title_widget);
   GActionGroup *action_group;
   GAction *action;
   EphySecurityLevel security_level;
 
-  if (window->closing || ephy_embed_get_web_view (embed) != view)
+  if (window->closing || ephy_embed_get_web_view (window->active_embed) != view)
     return;
 
   address = ephy_web_view_get_display_address (view);
@@ -1259,7 +1252,7 @@ sync_tab_address (EphyWebView *view,
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_INTERNAL_PAGE, is_internal_page);
 
-  view = ephy_embed_get_web_view (ephy_window_get_active_embed (window));
+  view = ephy_embed_get_web_view (window->active_embed);
   ephy_web_view_get_security_level (view, &security_level, NULL, NULL, NULL);
 
   action_group = ephy_window_get_action_group (window, "win");
@@ -1273,8 +1266,8 @@ sync_tab_address (EphyWebView *view,
   if ((ephy_web_view_get_is_blank (view) ||
        ephy_web_view_is_newtab (view) ||
        ephy_web_view_is_overview (view)) &&
-      ephy_embed_get_typed_input (embed))
-    location = g_strdup (ephy_embed_get_typed_input (embed));
+      ephy_embed_get_typed_input (window->active_embed))
+    location = g_strdup (ephy_embed_get_typed_input (window->active_embed));
   else
     location = calculate_location (typed_address, address);
 
@@ -4888,22 +4881,6 @@ ephy_window_get_tab_view (EphyWindow *window)
 }
 
 /**
- * ephy_window_get_active_embed:
- * @window: an #EphyWindow
- *
- * Returns the active #EphyEmbed for this window.
- *
- * Return value: (transfer none): the @window's active #EphyEmbed
- **/
-EphyEmbed *
-ephy_window_get_active_embed (EphyWindow *window)
-{
-  g_assert (EPHY_IS_WINDOW (window));
-
-  return window->active_embed;
-}
-
-/**
  * ephy_window_toggle_tab_overview
  * @window: an #EphyWindow
  *
@@ -5023,12 +5000,9 @@ ephy_window_copy_location (EphyWindow *window)
 {
   const char *address;
   GdkClipboard *clipboard;
-  EphyEmbed *embed;
   AdwToast *toast;
 
-  embed = ephy_window_get_active_embed (window);
-
-  if (!embed)
+  if (!window->active_embed)
     return;
 
   address = ephy_window_get_location (window);

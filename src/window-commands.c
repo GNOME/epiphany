@@ -3594,7 +3594,7 @@ window_cmd_security_and_permissions (GSimpleAction *action,
                                      GVariant      *parameter,
                                      gpointer       user_data)
 {
-  EphyWindow *window = user_data;
+  EphyEmbedContainer *window = EPHY_EMBED_CONTAINER (user_data);
   EphyWebView *view;
   const char *address;
   GTlsCertificate *certificate;
@@ -3602,7 +3602,7 @@ window_cmd_security_and_permissions (GSimpleAction *action,
   EphySecurityLevel security_level;
   GtkWidget *security_dialog;
 
-  view = ephy_embed_get_web_view (ephy_window_get_active_embed (window));
+  view = ephy_embed_get_web_view (ephy_embed_container_get_active_child (window));
   ephy_web_view_get_security_level (view, &security_level, &address, &certificate, &tls_errors);
 
   security_dialog = ephy_security_dialog_new (address, certificate, tls_errors, security_level);
