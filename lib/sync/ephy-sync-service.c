@@ -468,7 +468,7 @@ ephy_sync_service_fxa_bearer_post (EphySyncService     *self,
   SoupMessageHeaders *request_headers;
   char *url;
   char *authorization;
-  const char *content_type = "application/json; charset=utf-8";
+  const char *content_type = "application/json";
   g_autofree char *accounts_server = NULL;
   g_autoptr (GBytes) bytes = NULL;
 
@@ -486,7 +486,6 @@ ephy_sync_service_fxa_bearer_post (EphySyncService     *self,
   soup_message_set_request_body_from_bytes (msg, content_type, bytes);
   request_headers = soup_message_get_request_headers (msg);
   soup_message_headers_append (request_headers, "authorization", authorization);
-  soup_message_headers_append (request_headers, "content-type", content_type);
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)send_and_read_async_ready_cb,
                                     send_and_read_async_data_new (callback, user_data));
@@ -506,7 +505,7 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
   char *url;
   char *if_modified_since = NULL;
   char *if_unmodified_since = NULL;
-  const char *content_type = "application/json; charset=utf-8";
+  const char *content_type = "application/json";
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (data);
@@ -526,7 +525,7 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
 
   request_headers = soup_message_get_request_headers (msg);
 
-  if (g_strcmp0 (data->method, SOUP_METHOD_PUT) == 0 || g_strcmp0 (data->method, SOUP_METHOD_POST) == 0)
+  if (!data->request_body && (g_strcmp0 (data->method, SOUP_METHOD_PUT) == 0 || g_strcmp0 (data->method, SOUP_METHOD_POST) == 0))
     soup_message_headers_append (request_headers, "content-type", content_type);
 
   if (data->modified_since >= 0) {
@@ -652,10 +651,9 @@ ephy_sync_service_revoke_token (EphySyncService *self,
                                 const char      *token)
 {
   SoupMessage *msg;
-  SoupMessageHeaders *request_headers;
   char *request_body;
   char *url;
-  const char *content_type = "application/json; charset=utf-8";
+  const char *content_type = "application/json";
   g_autofree char *accounts_server = NULL;
   g_autoptr (GBytes) bytes = NULL;
 
@@ -674,8 +672,6 @@ ephy_sync_service_revoke_token (EphySyncService *self,
   msg = soup_message_new (SOUP_METHOD_POST, url);
   bytes = g_bytes_new_take (request_body, strlen (request_body));
   soup_message_set_request_body_from_bytes (msg, content_type, bytes);
-  request_headers = soup_message_get_request_headers (msg);
-  soup_message_headers_append (request_headers, "content-type", content_type);
   soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
                                     (GAsyncReadyCallback)revoke_token_cb,
                                     NULL);

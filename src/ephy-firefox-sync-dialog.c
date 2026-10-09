@@ -663,10 +663,8 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
     const char *code;
     const char *state;
     SoupMessage *msg;
-    SoupMessageHeaders *request_headers;
     char *request_body;
     char *url;
-    const char *content_type = "application/json; charset=utf-8";
     g_autofree char *accounts_server = NULL;
     g_autoptr (GBytes) bytes = NULL;
     SoupSession *soup_session;
@@ -709,6 +707,14 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
       goto out;
     }
 
+    /* Acknowledge receipt to the FxA content page. */
+    {
+      JsonObject *response = json_object_new ();
+      json_object_set_boolean_member (response, "ok", TRUE);
+      sync_message_to_fxa_content (sync_dialog, web_channel_id, command, message_id, response);
+      json_object_unref (response);
+    }
+
     /* Exchange authorization code for tokens. */
     accounts_server = ephy_sync_utils_get_accounts_server ();
     url = g_strdup_printf ("%s/oauth/token", accounts_server);
@@ -721,9 +727,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
 
     msg = soup_message_new (SOUP_METHOD_POST, url);
     bytes = g_bytes_new_take (request_body, strlen (request_body));
-    soup_message_set_request_body_from_bytes (msg, content_type, bytes);
-    request_headers = soup_message_get_request_headers (msg);
-    soup_message_headers_append (request_headers, "content-type", content_type);
+    soup_message_set_request_body_from_bytes (msg, "application/json", bytes);
 
     soup_session = soup_session_new ();
     soup_session_send_and_read_async (soup_session, msg, G_PRIORITY_DEFAULT, NULL,
