@@ -31,8 +31,8 @@ const char         *ephy_sync_utils_get_secret_collection (void);
 #define EPHY_SYNC_SECRET_SCHEMA       (ephy_sync_utils_get_secret_schema ())
 #define EPHY_SYNC_SECRET_ACCOUNT_KEY  "firefox_account"
 
-/* TODO: Register a proper Epiphany-specific client_id with Mozilla before shipping. */
-#define FXA_CLIENT_ID ""
+/* Firefox public OAuth client ID (from services/fxaccounts/FxAccountsCommon.sys.mjs) */
+#define FXA_CLIENT_ID "5882386c6d801776"
 
 #define EPHY_SYNC_STORAGE_VERSION 5
 #define EPHY_SYNC_DEVICE_ID_LEN   32
