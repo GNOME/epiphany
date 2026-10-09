@@ -164,10 +164,35 @@ population. Technical details should not be exposed in the interface.
 We target web users, not web developers. A few geek-oriented features, like the
 web inspector, are welcome so long as they are non-obtrusive.
 
-## Website
+## Privacy Policy
 
-[Epiphany has a website,](https://apps.gnome.org/Epiphany) though there is not
-very much content there.
+The GNOME Web developers are grateful that Mozilla allows third-party use of its
+Firefox Sync service. The following privacy policy statement is required to be
+displayed on this website in order to comply with the terms of service for
+Firefox Sync:
+
+### Firefox Sync
+
+By default, GNOME Web collects personal data, such as your bookmarks and web
+browsing history. This data is stored locally on your computer for your own
+personal use. It is never transmitted to the GNOME Web developers. It is never
+transmitted to any third party unless you choose to enable optional Sync
+integration. If Sync integration is enabled, your data is encrypted and
+transmitted to Mozilla's Firefox Sync server, where it is stored in encrypted
+form. Although GNOME Web uses the Firefox Sync service, GNOME Web is not
+Firefox and is not produced or endorsed by Mozilla.
+
+### Tracking Prevention
+
+GNOME Web enables Intelligent Tracking Prevention by default. It includes many
+other tracking prevention measures. [Refer to WebKit's tracking prevention
+documentation for full details.](https://webkit.org/tracking-prevention/)
+
+### Adblock
+
+GNOME Web regularly downloads updated adblock filter lists from the
+ublock-webkit-filters GitHub project. Users who are concerned about GNOME Web
+automatically connecting to GitHub may disable this feature in Preferences.
 
 ## Contact Us
 
