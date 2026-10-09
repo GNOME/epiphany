@@ -132,6 +132,10 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
   GList *tabs;
   const char *device_name;
 
+  tabs = ephy_open_tabs_record_get_tabs (record);
+  if (!is_local && !tabs)
+    return;
+
   if (is_local)
     device_name = _("Local Tabs");
   else
@@ -144,7 +148,6 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
   adw_expander_row_add_prefix (ADW_EXPANDER_ROW (expander),
                                gtk_image_new_from_icon_name ("computer-symbolic"));
 
-  tabs = ephy_open_tabs_record_get_tabs (record);
   for (GList *l = tabs; l && l->data; l = l->next) {
     const char *title = json_object_get_string_member (l->data, "title");
     JsonArray *url_history = json_object_get_array_member (l->data, "urlHistory");
@@ -186,8 +189,12 @@ synced_tabs_dialog_populate_model (SyncedTabsDialog *dialog)
   synced_tabs_dialog_populate_from_record (dialog, record, TRUE);
 
   remotes = ephy_open_tabs_manager_get_remote_tabs (dialog->manager);
-  for (GList *l = remotes; l && l->data; l = l->next)
+  for (GList *l = remotes; l && l->data; l = l->next) {
+    if (ephy_open_tabs_record_is_stale (l->data, EPHY_SYNC_TABS_MAX_AGE))
+      continue;
+
     synced_tabs_dialog_populate_from_record (dialog, l->data, FALSE);
+  }
 
   g_object_unref (record);
 }

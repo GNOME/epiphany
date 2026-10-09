@@ -27,6 +27,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-open-tabs-record.h"
 #include "ephy-password-manager.h"
 #include "ephy-password-record.h"
 #include "ephy-settings.h"
@@ -597,6 +598,35 @@ test_synchronizable_to_debug_string (void)
   g_assert_null (strstr (debug_str, "\"password\""));
 }
 
+static void
+test_open_tabs_record_stale_detection (void)
+{
+  g_autoptr (EphyOpenTabsRecord) record_fresh = NULL;
+  g_autoptr (EphyOpenTabsRecord) record_stale = NULL;
+  g_autoptr (EphyOpenTabsRecord) record_fallback_fresh = NULL;
+  gint64 now = g_get_real_time () / 1000000;
+
+  /* Fresh record: modified 1 hour ago */
+  record_fresh = ephy_open_tabs_record_new ("fresh-device", "Fresh Device");
+  ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record_fresh), now - 3600);
+  ephy_open_tabs_record_add_tab (record_fresh, "GNOME", "https://gnome.org", "");
+  g_assert_cmpint (ephy_open_tabs_record_get_server_time_modified (record_fresh), ==, now - 3600);
+  g_assert_false (ephy_open_tabs_record_is_stale (record_fresh, EPHY_SYNC_TABS_MAX_AGE));
+
+  /* Stale record: modified 10 days ago (> 7 days) */
+  record_stale = ephy_open_tabs_record_new ("stale-device", "Stale Device");
+  ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record_stale), now - (10 * 86400));
+  ephy_open_tabs_record_add_tab (record_stale, "Old Page", "https://example.com/old", "");
+  g_assert_cmpint (ephy_open_tabs_record_get_server_time_modified (record_stale), ==, now - (10 * 86400));
+  g_assert_true (ephy_open_tabs_record_is_stale (record_stale, EPHY_SYNC_TABS_MAX_AGE));
+
+  /* Fallback when server_time_modified == 0: tab with recent lastUsed */
+  record_fallback_fresh = ephy_open_tabs_record_new ("fb-fresh", "FB Fresh");
+  ephy_open_tabs_record_add_tab (record_fallback_fresh, "Recent Tab", "https://example.com", "");
+  g_assert_cmpint (ephy_open_tabs_record_get_server_time_modified (record_fallback_fresh), ==, 0);
+  g_assert_false (ephy_open_tabs_record_is_stale (record_fallback_fresh, EPHY_SYNC_TABS_MAX_AGE));
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -620,6 +650,7 @@ main (int   argc,
   g_test_add_func ("/lib/sync/password-record/json-null-and-empty", test_password_record_json_null_and_empty_fields);
   g_test_add_func ("/lib/sync/password-record/bso-roundtrip", test_password_record_bso_roundtrip);
   g_test_add_func ("/lib/sync/password-record/bso-deleted", test_password_record_bso_deleted);
+  g_test_add_func ("/lib/sync/open-tabs-record/stale-detection", test_open_tabs_record_stale_detection);
   g_test_add_func ("/lib/sync/password-manager/secret-schema", test_password_manager_secret_schema);
   g_test_add_func ("/lib/sync/password-manager/secret-collection", test_password_manager_secret_collection);
   g_test_add_func ("/lib/sync/password-manager/synchronizable-interface", test_password_synchronizable_manager_interface);

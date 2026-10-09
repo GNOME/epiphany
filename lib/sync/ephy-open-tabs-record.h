@@ -24,18 +24,24 @@
 
 G_BEGIN_DECLS
 
+/* Match Firefox's STALE_CLIENT_REMOTE_AGE (7 days in seconds) */
+#define EPHY_SYNC_TABS_MAX_AGE (7 * 86400)
+
 #define EPHY_TYPE_OPEN_TABS_RECORD (ephy_open_tabs_record_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphyOpenTabsRecord, ephy_open_tabs_record, EPHY, OPEN_TABS_RECORD, GObject)
 
-EphyOpenTabsRecord *ephy_open_tabs_record_new             (const char *id,
-                                                           const char *client_name);
-const char         *ephy_open_tabs_record_get_id          (EphyOpenTabsRecord *self);
-const char         *ephy_open_tabs_record_get_client_name (EphyOpenTabsRecord *self);
-GList              *ephy_open_tabs_record_get_tabs        (EphyOpenTabsRecord *self);
-void                ephy_open_tabs_record_add_tab         (EphyOpenTabsRecord *self,
-                                                           const char         *title,
-                                                           const char         *url,
-                                                           const char         *favicon);
+EphyOpenTabsRecord *ephy_open_tabs_record_new                      (const char *id,
+                                                                    const char *client_name);
+const char         *ephy_open_tabs_record_get_id                   (EphyOpenTabsRecord *self);
+const char         *ephy_open_tabs_record_get_client_name          (EphyOpenTabsRecord *self);
+GList              *ephy_open_tabs_record_get_tabs                 (EphyOpenTabsRecord *self);
+void                ephy_open_tabs_record_add_tab                  (EphyOpenTabsRecord *self,
+                                                                    const char         *title,
+                                                                    const char         *url,
+                                                                    const char         *favicon);
+gint64              ephy_open_tabs_record_get_server_time_modified (EphyOpenTabsRecord *self);
+gboolean            ephy_open_tabs_record_is_stale                 (EphyOpenTabsRecord *self,
+                                                                    gint64              max_age_seconds);
 
 G_END_DECLS

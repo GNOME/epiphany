@@ -38,6 +38,8 @@ struct _EphyOpenTabsRecord {
    *            tab was last accessed, or 0
    */
   GList *tabs;
+
+  gint64 server_time_modified;
 };
 
 static void json_serializable_iface_init (JsonSerializableIface *iface);
@@ -205,6 +207,43 @@ ephy_open_tabs_record_add_tab (EphyOpenTabsRecord *self,
   self->tabs = g_list_prepend (self->tabs, tab);
 }
 
+gint64
+ephy_open_tabs_record_get_server_time_modified (EphyOpenTabsRecord *self)
+{
+  g_assert (EPHY_IS_OPEN_TABS_RECORD (self));
+
+  return self->server_time_modified;
+}
+
+gboolean
+ephy_open_tabs_record_is_stale (EphyOpenTabsRecord *self,
+                                gint64              max_age_seconds)
+{
+  gint64 now;
+
+  g_assert (EPHY_IS_OPEN_TABS_RECORD (self));
+
+  now = g_get_real_time () / 1000000;
+
+  if (self->server_time_modified > 0)
+    return (now - self->server_time_modified) > max_age_seconds;
+
+  /* Fallback: if server_time_modified is not available, check the tabs' lastUsed. */
+  for (GList *l = self->tabs; l && l->data; l = l->next) {
+    JsonObject *tab = l->data;
+    gint64 last_used = json_object_get_int_member (tab, "lastUsed");
+
+    /* Normalize if lastUsed is in milliseconds */
+    if (last_used > 100000000000LL)
+      last_used /= 1000;
+
+    if (last_used > 0 && (now - last_used) <= max_age_seconds)
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 static JsonNode *
 serializable_serialize_property (JsonSerializable *serializable,
                                  const char       *name,
@@ -276,19 +315,14 @@ synchronizable_get_id (EphySynchronizable *synchronizable)
 static gint64
 synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 {
-  /* No implementation.
-   * We don't care about the server time modified of open tabs records.
-   */
-  return 0;
+  return EPHY_OPEN_TABS_RECORD (synchronizable)->server_time_modified;
 }
 
 static void
 synchronizable_set_server_time_modified (EphySynchronizable *synchronizable,
                                          gint64              server_time_modified)
 {
-  /* No implementation.
-   * We don't care about the server time modified of open tabs records.
-   */
+  EPHY_OPEN_TABS_RECORD (synchronizable)->server_time_modified = server_time_modified;
 }
 
 static void

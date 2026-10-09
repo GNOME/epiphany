@@ -228,6 +228,23 @@ synchronizable_manager_save (EphySynchronizableManager *manager,
    */
 }
 
+static gint
+compare_records_by_time_modified (gconstpointer a,
+                                  gconstpointer b)
+{
+  EphyOpenTabsRecord *record_a = EPHY_OPEN_TABS_RECORD ((gpointer)a);
+  EphyOpenTabsRecord *record_b = EPHY_OPEN_TABS_RECORD ((gpointer)b);
+  gint64 time_a = ephy_open_tabs_record_get_server_time_modified (record_a);
+  gint64 time_b = ephy_open_tabs_record_get_server_time_modified (record_b);
+
+  /* Sort descending: newer records first */
+  if (time_a > time_b)
+    return -1;
+  if (time_a < time_b)
+    return 1;
+  return 0;
+}
+
 static void
 synchronizable_manager_merge (EphySynchronizableManager              *manager,
                               gboolean                                is_initial,
@@ -248,8 +265,14 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
     if (g_strcmp0 (device_bso_id, ephy_open_tabs_record_get_id (l->data)) == 0)
       continue;
 
+    /* Exclude stale records (older than 7 days, matching Firefox behavior). */
+    if (ephy_open_tabs_record_is_stale (l->data, EPHY_SYNC_TABS_MAX_AGE))
+      continue;
+
     self->remote_records = g_list_prepend (self->remote_records, g_object_ref (l->data));
   }
+
+  self->remote_records = g_list_sort (self->remote_records, compare_records_by_time_modified);
 
   /* Only upload the local open tabs, we don't want to alter open tabs of
    * other clients. Also, overwrite any previous value by doing a force upload.
