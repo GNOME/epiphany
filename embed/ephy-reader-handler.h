@@ -30,6 +30,10 @@ G_DECLARE_FINAL_TYPE (EphyReaderHandler, ephy_reader_handler, EPHY, READER_HANDL
 
 #define EPHY_READER_SCHEME "ephy-reader"
 
+/* Readability runs in its own isolated script world, separate from both 
+ * the page's main world and Epiphany's internal "Ephy" world. */
+#define EPHY_READER_SCRIPT_WORLD_NAME "ephy-readability-world"
+
 EphyReaderHandler *ephy_reader_handler_new            (void);
 
 void               ephy_reader_handler_handle_request (EphyReaderHandler  *handler,
