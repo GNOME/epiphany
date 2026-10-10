@@ -32,6 +32,7 @@
 #include "ephy-password-record.h"
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
+#include "ephy-sync-service.h"
 #include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
 #include "ephy-synchronizable.h"

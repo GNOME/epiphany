@@ -207,13 +207,13 @@ if get_option('unit_tests').enabled()
         env: envs
   )
 
-  password_manager_test = executable('test-ephy-password-manager',
-    'ephy-password-manager-test.c',
+  sync_service_test = executable('test-ephy-sync-service',
+    'ephy-sync-service-test.c',
     dependencies: [ephymain_dep, ephysync_dep],
     c_args: test_cargs,
   )
-  test('Password manager test',
-       password_manager_test,
+  test('Sync service test',
+       sync_service_test,
        env: envs
   )
 endif
