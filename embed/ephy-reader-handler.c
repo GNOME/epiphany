@@ -160,6 +160,7 @@ readability_js_finish_cb (GObject      *object,
   g_autofree gchar *encoded_byline = NULL;
   g_autofree gchar *content = NULL;
   g_autofree gchar *reading_time = NULL;
+  g_autofree gchar *encoded_reading_time = NULL;
   g_autofree gchar *encoded_title = NULL;
   g_autoptr (GString) html = NULL;
   g_autoptr (GBytes) style_css = NULL;
@@ -181,6 +182,7 @@ readability_js_finish_cb (GObject      *object,
   title = webkit_web_view_get_title (web_view);
 
   encoded_byline = byline ? ephy_encode_for_html (byline) : g_strdup ("");
+  encoded_reading_time = reading_time ? ephy_encode_for_html (reading_time) : g_strdup ("");
   encoded_title = ephy_encode_for_html (title);
 
   html = g_string_new (NULL);
@@ -220,7 +222,7 @@ readability_js_finish_cb (GObject      *object,
                           encoded_title,
                           encoded_byline);
 
-  g_string_append (html, reading_time ? reading_time : "");
+  g_string_append (html, encoded_reading_time);
   g_string_append (html, "<br/><hr/>");
 
   /* We cannot encode the page content because it contains HTML tags inserted by
