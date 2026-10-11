@@ -46,18 +46,18 @@ template $PrefsAppearancePage: Adw.PreferencesPage {
 
     Adw.ComboRow reader_mode_font_style {
       title: _("Font Style");
-      expression: expr $reader_font_style_get_name(item as <Adw.EnumListItem>.value) as <string>;
+      expression: expr $reader_font_style_get_name(item as <EnumListItem>.value) as <string>;
 
-      model: Adw.EnumListModel {
+      model: EnumList {
         enum-type: typeof<$EphyPrefsReaderFontStyle>;
       };
     }
 
     Adw.ComboRow reader_mode_color_scheme {
       title: _("Color Scheme");
-      expression: expr $reader_color_scheme_get_name(item as <Adw.EnumListItem>.value) as <string>;
+      expression: expr $reader_color_scheme_get_name(item as <EnumListItem>.value) as <string>;
 
-      model: Adw.EnumListModel {
+      model: EnumList {
         enum-type: typeof<$EphyPrefsReaderColorScheme>;
       };
     }
