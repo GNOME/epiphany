@@ -37,7 +37,6 @@
 #include "ephy-history-dialog.h"
 #include "ephy-link.h"
 #include "ephy-lockdown.h"
-#include "ephy-notification.h"
 #include "ephy-prefs-dialog.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
@@ -531,6 +530,51 @@ sync_secrets_load_finished_cb (EphySyncService *service,
 
   register_synchronizable_managers (shell, service);
   ephy_sync_service_start_sync (service);
+}
+
+static void
+on_window_added_show_toast_cb (GtkApplication *app,
+                               GtkWindow      *window,
+                               gpointer        user_data)
+{
+  AdwToast *toast = ADW_TOAST (user_data);
+
+  if (EPHY_IS_WINDOW (window)) {
+    ephy_window_add_toast (EPHY_WINDOW (window), toast);
+    g_signal_handlers_disconnect_by_func (app, on_window_added_show_toast_cb, user_data);
+  }
+}
+
+static void
+sync_error_cb (EphySyncService *service,
+               const char      *error,
+               EphyShell       *shell)
+{
+  GtkWindow *window;
+  AdwToast *toast;
+  GList *windows;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+  if (!EPHY_IS_WINDOW (window)) {
+    windows = gtk_application_get_windows (GTK_APPLICATION (shell));
+    if (windows && EPHY_IS_WINDOW (windows->data))
+      window = GTK_WINDOW (windows->data);
+  }
+
+  toast = adw_toast_new (error);
+  adw_toast_set_button_label (toast, _("Sign In"));
+  adw_toast_set_action_name (toast, "app.firefox-sync-dialog");
+
+  if (EPHY_IS_WINDOW (window)) {
+    ephy_window_add_toast (EPHY_WINDOW (window), toast);
+  } else {
+    g_signal_connect_object (shell, "window-added",
+                             G_CALLBACK (on_window_added_show_toast_cb),
+                             toast, G_CONNECT_DEFAULT);
+  }
 }
 #endif
 
@@ -1286,6 +1330,10 @@ ephy_shell_get_sync_service (EphyShell *shell)
     g_signal_connect_object (shell->sync_service,
                              "sync-secrets-load-finished",
                              G_CALLBACK (sync_secrets_load_finished_cb),
+                             shell, G_CONNECT_DEFAULT);
+    g_signal_connect_object (shell->sync_service,
+                             "sync-error",
+                             G_CALLBACK (sync_error_cb),
                              shell, G_CONNECT_DEFAULT);
   }
 #endif
