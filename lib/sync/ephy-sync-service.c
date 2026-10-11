@@ -1685,7 +1685,7 @@ load_secrets_cb (GObject         *source_object,
   }
 
   if (!(retrievables && retrievables->data)) {
-    message = _("Could not find the sync secrets for the current sync user.");
+    message = g_strdup (_("Could not find the sync secrets for the current sync user."));
     sync_error (message);
     return;
   }
