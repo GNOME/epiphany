@@ -22,8 +22,6 @@ libephymisc_sources = [
   'ephy-flatpak-utils.c',
   'ephy-json-utils.c',
   'ephy-langs.c',
-  'ephy-notification.c',
-  'ephy-notification-container.c',
   'ephy-opensearch-autodiscovery-link.c',
   'ephy-opensearch-engine.c',
   'ephy-output-encoding.c',

@@ -2848,8 +2848,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   view = ephy_embed_get_web_view (embed);
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-  ephy_embed_attach_notification_container (window->active_embed);
-
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
   /* This doesn't change the value returned by ephy_web_view_get_location_entry_has_focus(). */
@@ -2975,8 +2973,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
     if (ephy_site_menu_button_is_animating (site_menu_button))
       ephy_site_menu_button_cancel_animation (site_menu_button);
   }
-
-  ephy_embed_detach_notification_container (window->active_embed);
 
   ephy_mouse_gesture_controller_unset_web_view (window->mouse_gesture_controller);
 

@@ -35,7 +35,6 @@
 #include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-floating-bar.h"
-#include "ephy-notification-container.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
@@ -1001,35 +1000,6 @@ ephy_embed_inspector_is_loaded (EphyEmbed *embed)
   g_assert (EPHY_IS_EMBED (embed));
 
   return embed->inspector_loaded;
-}
-
-void
-ephy_embed_attach_notification_container (EphyEmbed *embed)
-{
-  EphyNotificationContainer *container;
-
-  g_assert (EPHY_IS_EMBED (embed));
-
-  container = ephy_notification_container_get_default ();
-  if (!gtk_widget_get_parent (GTK_WIDGET (container)))
-    gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), GTK_WIDGET (container));
-}
-
-void
-ephy_embed_detach_notification_container (EphyEmbed *embed)
-{
-  EphyNotificationContainer *container;
-
-  g_assert (EPHY_IS_EMBED (embed));
-
-  container = ephy_notification_container_get_default ();
-  if (gtk_widget_get_parent (GTK_WIDGET (container)) == embed->overlay) {
-    /* Since the overlay container will own the one and only reference to the
-     * notification widget, removing it from the container will destroy the
-     * singleton. To prevent this, add a reference to it before removing it
-     * from the container. */
-    gtk_overlay_remove_overlay (GTK_OVERLAY (embed->overlay), g_object_ref (GTK_WIDGET (container)));
-  }
 }
 
 WebKitWebViewSessionState *

@@ -48,7 +48,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-header-bar.h"
 #include "ephy-location-entry.h"
-#include "ephy-notification.h"
 #include "ephy-output-encoding.h"
 #include "ephy-pixbuf-utils.h"
 #include "ephy-settings.h"

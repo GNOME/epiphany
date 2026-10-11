@@ -61,8 +61,6 @@ void             ephy_embed_set_animate_reader_mode       (EphyEmbed *embed,
 gboolean         ephy_embed_get_animate_search_engine     (EphyEmbed *embed);
 void             ephy_embed_set_animate_search_engine     (EphyEmbed *embed,
                                                            gboolean   animate);
-void             ephy_embed_attach_notification_container (EphyEmbed *embed);
-void             ephy_embed_detach_notification_container (EphyEmbed *embed);
 WebKitWebViewSessionState
                 *ephy_embed_get_session_state             (EphyEmbed *embed);
 
