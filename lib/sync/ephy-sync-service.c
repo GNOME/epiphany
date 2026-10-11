@@ -31,7 +31,6 @@
 #include <libsoup/soup.h>
 
 #include "ephy-debug.h"
-#include "ephy-notification.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-sync-crypto.h"
@@ -93,6 +92,7 @@ enum {
   STORE_FINISHED,
   LOAD_FINISHED,
   SIGN_IN_ERROR,
+  SYNC_ERROR,
   SYNC_FINISHED,
   LAST_SIGNAL
 };
@@ -772,7 +772,6 @@ get_storage_credentials_cb (SoupSession *session,
   const char *id;
   const char *key;
   const char *message;
-  const char *suggestion;
   int duration;
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
@@ -816,12 +815,11 @@ get_storage_credentials_cb (SoupSession *session,
 
 out_error:
   message = _("Failed to obtain storage credentials.");
-  suggestion = _("Please visit Firefox Sync and sign in again to continue syncing.");
 
   if (self->is_signing_in)
     ephy_sync_service_report_sign_in_error (self, message, TRUE);
   else
-    ephy_notification_show (ephy_notification_new (message, suggestion));
+    g_signal_emit (self, signals[SYNC_ERROR], 0, message);
 
   ephy_sync_service_clear_storage_queue (self);
 
@@ -1618,9 +1616,10 @@ sync_frequency_changed_cb (GSettings       *settings,
 }
 
 static void
-sync_error (const char *message)
+sync_error (EphySyncService *self,
+            const char      *message)
 {
-  ephy_notification_show (ephy_notification_new (message, _("Please visit Firefox Sync and sign in again to continue syncing.")));
+  g_signal_emit (self, signals[SYNC_ERROR], 0, message);
 
   /* Reset the sync user so that it will be considered signed out
    * when the preferences dialog is opened. */
@@ -1646,14 +1645,14 @@ retrieve_secret_cb (GObject         *source_object,
   value = secret_retrievable_retrieve_secret_finish (retrievable, result, &error);
   if (!value) {
     message = g_strdup_printf (_("The sync secrets for the current sync user are invalid: %s"), error->message);
-    sync_error (message);
+    sync_error (self, message);
     return;
   }
 
   node = json_from_string (secret_value_get_text (value), &error);
   if (error) {
     message = g_strdup_printf (_("The sync secrets for the current sync user are not valid JSON: %s"), error->message);
-    sync_error (message);
+    sync_error (self, message);
     return;
   }
 
@@ -1680,13 +1679,13 @@ load_secrets_cb (GObject         *source_object,
     if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       return;
     message = g_strdup_printf (_("Could not find the sync secrets for the current sync user: %s"), error->message);
-    sync_error (message);
+    sync_error (self, message);
     return;
   }
 
   if (!(retrievables && retrievables->data)) {
     message = g_strdup (_("Could not find the sync secrets for the current sync user."));
-    sync_error (message);
+    sync_error (self, message);
     return;
   }
 
@@ -1964,6 +1963,14 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
 
   signals[SIGN_IN_ERROR] =
     g_signal_new ("sync-sign-in-error",
+                  EPHY_TYPE_SYNC_SERVICE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
+
+  signals[SYNC_ERROR] =
+    g_signal_new ("sync-error",
                   EPHY_TYPE_SYNC_SERVICE,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
