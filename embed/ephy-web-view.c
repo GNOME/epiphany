@@ -131,6 +131,7 @@ struct _EphyWebView {
   EphyWebViewMessageHandler message_handlers_to_unregister;
   gboolean just_registered_message_handlers;
 
+  AdwDialog *unresponsive_process_dialog;
   guint unresponsive_process_timeout_id;
 
   guint64 uid;
@@ -817,6 +818,7 @@ on_unresponsive_dialog_response (AdwAlertDialog *dialog,
                                                                             (GSourceFunc)unresponsive_process_timeout_cb,
                                                                             web_view,
                                                                             NULL);
+  g_clear_object (&web_view->unresponsive_process_dialog);
 }
 
 static gboolean
@@ -830,6 +832,7 @@ unresponsive_process_timeout_cb (gpointer user_data)
     if (!gtk_widget_get_mapped (GTK_WIDGET (web_view)))
       return G_SOURCE_CONTINUE;
 
+    g_assert (!web_view->unresponsive_process_dialog);
     dialog = adw_alert_dialog_new (_("Page Unresponsive"), NULL);
 
     adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
@@ -842,6 +845,8 @@ unresponsive_process_timeout_cb (gpointer user_data)
                                     NULL);
 
     g_signal_connect_object (dialog, "response", G_CALLBACK (on_unresponsive_dialog_response), web_view, G_CONNECT_DEFAULT);
+    web_view->unresponsive_process_dialog = g_object_ref_sink (dialog);
+
     adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (web_view))));
   }
 
@@ -863,6 +868,9 @@ is_web_process_responsive_changed_cb (EphyWebView *web_view,
                                                                             (GSourceFunc)unresponsive_process_timeout_cb,
                                                                             web_view,
                                                                             NULL);
+  } else if (web_view->unresponsive_process_dialog) {
+    adw_dialog_close (web_view->unresponsive_process_dialog);
+    g_clear_object (&web_view->unresponsive_process_dialog);
   }
 }
 
@@ -3903,6 +3911,11 @@ static void
 ephy_web_view_dispose (GObject *object)
 {
   EphyWebView *view = EPHY_WEB_VIEW (object);
+
+  if (view->unresponsive_process_dialog) {
+    adw_dialog_close (view->unresponsive_process_dialog);
+    g_clear_object (&view->unresponsive_process_dialog);
+  }
 
   g_clear_object (&view->opensearch_engines);
   g_clear_object (&view->certificate);
