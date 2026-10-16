@@ -656,7 +656,7 @@ run_readability_js_if_needed (gpointer data)
       script = (const char *)g_bytes_get_data (bytes, &length);
       webkit_web_view_evaluate_javascript (WEBKIT_WEB_VIEW (web_view),
                                            script, length,
-                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                           EPHY_READER_SCRIPT_WORLD_NAME,
                                            "resource:///org/gnome/epiphany/readability/Readability-readerable.js",
                                            web_view->cancellable,
                                            readability_js_finish_cb,
