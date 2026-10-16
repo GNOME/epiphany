@@ -56,6 +56,12 @@
             "name" : "epiphany",
             "buildsystem" : "meson",
             "builddir" : true,
+            "run-tests" : true,
+            "test-rule" : "",
+            "test-commands" : [
+              "flatpak-spawn --sandbox --directory=/ --sandbox-expose-path-ro-try=/this_path_doesnt_exist echo",
+              "meson test --wrapper='/usr/bin/strace -f' --no-stdsplit --verbose --print-errorlogs \"epiphany:Web view test\""
+            ],
             "config-opts" : [
                 "-Dtech_preview=true",
                 "-Dprofile=Devel"
@@ -69,15 +75,16 @@
                     "--socket=fallback-x11",
                     "--socket=pulseaudio",
                     "--socket=wayland",
-                    "--own-name=org.gnome.Epiphany.WebAppProvider"
+                    "--env=G_MESSAGES_DEBUG=all",
+                    "--own-name=org.gnome.Epiphany.WebAppProvider",
+                    "--env=GTK_A11Y=none",
+                    "--env=NO_AT_SPI=1"
                 ]
             },
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
-                    "branch" : "main",
-                    "disable-shallow-clone" : true
+                    "type" : "dir",
+                    "path" : "."
                 }
             ]
         }

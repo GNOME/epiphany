@@ -474,12 +474,107 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
   g_object_unref (g_object_ref_sink (view));
 }
 
+// int
+// isFlatpakSpawnUsable()
+// {
+//     gboolean ret;
+//     GSubprocess *process;
+
+//     process = g_subprocess_new(G_SUBPROCESS_FLAGS_STDOUT_SILENCE | G_SUBPROCESS_FLAGS_STDERR_SILENCE,
+//         NULL, "flatpak-spawn", "--sandbox", "--directory=/", "--sandbox-expose-path-ro-try=/this_path_doesnt_exist", "echo", NULL);
+
+//     if (!process->get())
+//         ret = false;
+//     else
+//         ret = g_subprocess_wait_check(process->get(), NULL, NULL);
+
+//     if (!ret)
+//         g_warning("flatpak-spawn --sandbox is not usable. Sandboxed processes will be spawned without a sandbox.");
+
+//     return ret;
+// }
+
+static int
+is_flatpak_spawn_usable(void)
+{
+    static gboolean ret = FALSE;
+
+    GError *error = NULL;
+    GSubprocess *process = g_subprocess_new(
+        G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
+        G_SUBPROCESS_FLAGS_STDERR_SILENCE,
+        &error,
+        // Works
+        // [pid   157] execve("/usr/bin/flatpak-spawn", ["/usr/bin/flatpak-spawn", "--sandbox", "--directory=/", "--sandbox-expose-path-ro-try=/th"..., "echo"], 0x557d5d6f2530 /* 55 vars */ <unfinished ...>
+        // "/usr/bin/flatpak-spawn",
+        // Fails
+        // [pid   157] execve("/run/build/epiphany/_flatpak_build/src/flatpak-spawn", ["flatpak-spawn", "--sandbox", "--directory=/", "--sandbox-expose-path-ro-try=/th"..., "echo"], 0x55e92a33f530 /* 55 vars */) = -1 ENOENT
+        // (No such file or directory)
+        // [pid   157] execve("/run/ccache/bin/flatpak-spawn", ["flatpak-spawn", "--sandbox", "--directory=/", "--sandbox-expose-path-ro-try=/th"..., "echo"], 0x55e92a33f530 /* 55 vars */) = -1 ENOENT (No such file or direc
+        // tory)
+        // [pid   157] execve("/app/bin/flatpak-spawn", ["flatpak-spawn", "--sandbox", "--directory=/", "--sandbox-expose-path-ro-try=/th"..., "echo"], 0x55e92a33f530 /* 55 vars */) = -1 ENOENT (No such file or directory)
+        // [pid   157] execve("/usr/bin\n/flatpak-spawn", ["flatpak-spawn", "--sandbox", "--directory=/", "--sandbox-expose-path-ro-try=/th"..., "echo"], 0x55e92a33f530 /* 55 vars */) = -1 ENOENT (No such file or directory)
+        // [pid   157] write(3, "\1\0\0\0", 4)     = 4
+        // [pid   119] <... read resumed>, "\1\0\0\0", 8) = 4
+        // [pid   157] write(3, "\2\0\0\0", 4 <unfinished ...>
+        // [pid   119] read(9 <unfinished ...>
+        // [pid   157] <... write resumed>)        = 4
+        // [pid   119] <... read resumed>, "\2\0\0\0", 4) = 4
+        // [pid   157] close(3)                    = 0
+        // [pid   157] exit_group(1)               = ?
+        // [pid   119] wait4(157 <unfinished ...>
+        // [pid   157] +++ exited with 1 +++
+        // [pid   119] <... wait4 resumed>, NULL, 0, NULL) = 157
+        // [pid   119] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=157, si_uid=1000, si_status=1, si_utime=0, si_stime=0} ---
+        // [pid   119] close(9)                    = 0
+        // [pid   119] getpeername(2, 0x7ffedb046f20, [128]) = -1 ENOTSOCK (Socket operation on non-socket)
+        // [pid   119] futex(0x7f2b58142f38, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+        // [pid   119] ioctl(2, TCGETS2, 0x7ffedb046f10) = -1 ENOTTY (Inappropriate ioctl for device)
+        // [pid   119] futex(0x7f2b58142f38, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+        // [pid   119] getpid()                    = 119
+        // [pid   119] openat(AT_FDCWD, "/etc/localtime", O_RDONLY|O_CLOEXEC) = 9
+        // [pid   119] fstat(9, {st_mode=S_IFREG|0644, st_size=114, ...}) = 0
+        // [pid   119] fstat(9, {st_mode=S_IFREG|0644, st_size=114, ...}) = 0
+        // [pid   119] read(9, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 4096) = 114
+        // [pid   119] lseek(9, -60, SEEK_CUR)     = 54
+        // [pid   119] read(9, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 4096) = 60
+        // [pid   119] lseek(9, 113, SEEK_SET)     = 113
+        // [pid   119] close(9)                    = 0
+        // [pid   119] ioctl(2, TCGETS2, 0x7ffedb046ed0) = -1 ENOTTY (Inappropriate ioctl for device)
+        // [pid   119] write(2, "\n(/run/build/epiphany/_flatpak_b"..., 197
+        // (/run/build/epiphany/_flatpak_build/tests/test-ephy-web-view:119): epiphany-WARNING **: 10:06:19.928: flatpak-spawn --sandbox is not usable. Sandboxed processes will be spawned without a sandbox.
+        // ) = 197
+        "flatpak-spawn",
+        "--sandbox",
+        "--directory=/",
+        "--sandbox-expose-path-ro-try=/this_path_doesnt_exist",
+        "echo",
+        NULL);
+
+    if (process == NULL) {
+        ret = FALSE;
+        g_clear_error(&error);
+    } else {
+        ret = g_subprocess_wait_check(process, NULL, &error);
+        g_object_unref(process);
+        g_clear_error(&error);
+    }
+
+    if (!ret) {
+        g_warning("flatpak-spawn --sandbox is not usable. "
+                  "Sandboxed processes will be spawned without a sandbox.");
+    }
+
+    return ret;
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   int ret;
   SoupServer *server;
+  gchar *path;
 
   /* FIXME: disable AC mode for now for WebView tests because CI doesn't support it. */
   g_setenv ("WEBKIT_DISABLE_COMPOSITING_MODE", "1", FALSE);
@@ -494,6 +589,13 @@ main (int   argc,
     g_debug ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }
+
+  path = g_strescape(g_getenv("PATH"), NULL);
+  g_print("PATH=%s\n", path);
+  g_free(path);
+
+  g_assert( is_flatpak_spawn_usable() );
+  return 0;
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
