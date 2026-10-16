@@ -4,7 +4,7 @@ envs = [
   'GSETTINGS_SCHEMA_DIR=' + join_paths(meson.project_build_root(), 'data'),
   'GSETTINGS_BACKEND=memory',
   'GTK_IM_MODULE=none',
-  'PATH=' + join_paths(meson.project_build_root(), 'src') + ':' + run_command('printenv', 'PATH', check: true).stdout(),
+  'PATH=' + join_paths(meson.project_build_root(), 'src') + ':' + run_command('printenv', 'PATH', check: true).stdout().strip(),
 ]
 
 test_cargs = ['-UG_DISABLE_ASSERT']
