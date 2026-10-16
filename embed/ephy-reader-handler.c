@@ -258,7 +258,8 @@ ephy_reader_request_begin_get_source_from_web_view (EphyReaderRequest *request,
   }
 
   script = (const char *)g_bytes_get_data (bytes, &length);
-  webkit_web_view_evaluate_javascript (web_view, script, length, NULL,
+  webkit_web_view_evaluate_javascript (web_view, script, length,
+                                       ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
                                        "resource:///org/gnome/epiphany/readability/Readability.js",
                                        request->cancellable,
                                        readability_js_finish_cb,
