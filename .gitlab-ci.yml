@@ -89,22 +89,16 @@ check-potfiles:
   artifacts:
     when: on_failure
 
-.flatpak test args:
-  before_script:
-    - jq "(.modules[] | select(.name == \"${FLATPAK_MODULE}\") | .[\"build-options\"][\"test-args\"]) += [\"--env=WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS=1\"]" "${MANIFEST_PATH}" > "${MANIFEST_PATH}.tmp" && mv "${MANIFEST_PATH}.tmp" "${MANIFEST_PATH}"
-
 flatpak:
   extends:
     - '.flatpak'
     - '.flatpak rules'
-    - '.flatpak test args'
   needs: []
 
 flatpak aarch64:
   extends:
     - '.flatpak@aarch64'
     - '.flatpak rules'
-    - '.flatpak test args'
   needs: []
 
 scanbuild:
