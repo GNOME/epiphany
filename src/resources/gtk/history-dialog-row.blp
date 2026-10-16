@@ -1,0 +1,42 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyHistoryDialogRow: Adw.ActionRow {
+  use-markup: false;
+  title-lines: 1;
+  subtitle-lines: 1;
+  activatable: true;
+
+  [prefix]
+  Image icon {
+    pixel-size: 16;
+  }
+
+  [prefix]
+  CheckButton check_button {
+    valign: center;
+    tooltip-text: _("Remove the selected pages from history");
+
+    styles [
+      "selection-mode",
+    ]
+  }
+
+  [suffix]
+  Label date_label {
+    label: bind template.date as <string>;
+    ellipsize: end;
+    xalign: 0;
+  }
+
+  [suffix]
+  Button copy_url_button {
+    icon-name: "edit-copy-symbolic";
+    valign: center;
+    tooltip-text: _("Copy URL");
+
+    styles [
+      "flat",
+    ]
+  }
+}

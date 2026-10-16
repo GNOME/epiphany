@@ -32,6 +32,10 @@ G_DECLARE_FINAL_TYPE (EphyHistoryDialogRow, ephy_history_dialog_row, EPHY, HISTO
 
 GtkWidget      *ephy_history_dialog_row_new                  (EphyHistoryURL *url);
 
+GtkWidget      *ephy_history_dialog_row_get_check_button     (EphyHistoryDialogRow *self);
+
+GtkWidget      *ephy_history_dialog_row_get_copy_url_button  (EphyHistoryDialogRow *self);
+
 EphyHistoryURL *ephy_history_dialog_row_create_history_url   (EphyHistoryDialogRow *row);
 
 G_END_DECLS

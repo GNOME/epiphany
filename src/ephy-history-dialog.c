@@ -35,15 +35,11 @@
 #include <gtk/gtk.h>
 
 #include "ephy-debug.h"
-#include "ephy-embed-prefs.h"
-#include "ephy-favicon-helpers.h"
 #include "ephy-history-dialog-row.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-snapshot-service.h"
-#include "ephy-time-helpers.h"
-#include "ephy-uri-helpers.h"
 #include "ephy-window.h"
 
 #define NUM_FETCH_LIMIT 15
@@ -208,7 +204,7 @@ set_selection_active (EphyHistoryDialog *self,
   self->selection_active = selection_active;
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
-    GtkWidget *check_button = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "check-button"));
+    GtkWidget *check_button = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (row));
 
     /* Uncheck all rows when toggling selection mode */
     gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), FALSE);
@@ -284,7 +280,7 @@ on_select_all_button_clicked (GtkButton         *button,
   set_is_all_selected (self, !self->is_all_selected);
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
-    GtkWidget *check_button = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "check-button"));
+    GtkWidget *check_button = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (row));
 
     gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), self->is_all_selected);
   }
@@ -406,10 +402,9 @@ get_checked_rows (EphyHistoryDialog *self)
   int i = 0;
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
-    GtkCheckButton *check_button =
-      GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (row), "check-button"));
+    GtkWidget *check_button = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (row));
 
-    if (gtk_check_button_get_active (check_button))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (check_button)))
       checked_rows = g_list_prepend (checked_rows, row);
   }
 
@@ -516,83 +511,25 @@ row_check_button_toggled (GtkCheckButton    *check_button,
   update_ui_state (self);
 }
 
-static void
-ephy_history_dialog_row_favicon_loaded_cb (GObject      *source,
-                                           GAsyncResult *result,
-                                           gpointer      user_data)
-{
-  g_autoptr (GtkWidget) icon = user_data;
-  WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
-  g_autoptr (GdkTexture) icon_texture = NULL;
-  g_autoptr (GIcon) favicon = NULL;
-  int scale;
-
-  icon_texture = webkit_favicon_database_get_favicon_finish (database, result, NULL);
-  if (!icon_texture)
-    return;
-
-  scale = gtk_widget_get_scale_factor (icon);
-  favicon = ephy_favicon_get_from_texture_scaled (icon_texture, FAVICON_SIZE * scale, FAVICON_SIZE * scale);
-  if (favicon && icon)
-    gtk_image_set_from_gicon (GTK_IMAGE (icon), favicon);
-}
-
 static GtkWidget *
 create_row (EphyHistoryDialog *self,
             EphyHistoryURL    *url)
 {
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitFaviconDatabase *database;
-  GtkWidget *icon;
-  GtkWidget *date;
   GtkWidget *row;
   GtkWidget *check_button;
   GtkWidget *copy_url_button;
 
-  /* Row */
   row = ephy_history_dialog_row_new (url);
 
-  /* Fav Icon */
-  icon = gtk_image_new ();
-  gtk_image_set_pixel_size (GTK_IMAGE (icon), 16);
-  adw_action_row_add_prefix (ADW_ACTION_ROW (row), icon);
-
-  database = ephy_embed_shell_get_favicon_database (shell);
-  webkit_favicon_database_get_favicon (database,
-                                       url->url,
-                                       self->cancellable,
-                                       (GAsyncReadyCallback)ephy_history_dialog_row_favicon_loaded_cb,
-                                       g_object_ref (icon));
-
-  /* Date */
-  date = gtk_label_new (ephy_time_helpers_utf_friendly_time (url->last_visit_time / 1000000));
-  gtk_label_set_ellipsize (GTK_LABEL (date), PANGO_ELLIPSIZE_END);
-  gtk_label_set_xalign (GTK_LABEL (date), 0);
-
-  /* CheckButton */
-  check_button = gtk_check_button_new ();
-  g_object_set_data (G_OBJECT (row), "check-button", check_button);
-  gtk_widget_set_valign (check_button, GTK_ALIGN_CENTER);
-  gtk_widget_set_tooltip_text (check_button, _("Remove the selected pages from history"));
-  gtk_widget_add_css_class (check_button, "selection-mode");
+  check_button = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (row));
   g_signal_connect (check_button, "toggled", G_CALLBACK (row_check_button_toggled), self);
-
-  /* Copy URL button */
-  copy_url_button = gtk_button_new_from_icon_name ("edit-copy-symbolic");
-  gtk_widget_set_valign (copy_url_button, GTK_ALIGN_CENTER);
-  gtk_widget_set_tooltip_text (copy_url_button, _("Copy URL"));
-  gtk_widget_add_css_class (copy_url_button, "flat");
-  g_signal_connect (copy_url_button, "clicked", G_CALLBACK (row_copy_url_button_clicked), self);
-
-  adw_action_row_add_prefix (ADW_ACTION_ROW (row), check_button);
-  adw_action_row_add_suffix (ADW_ACTION_ROW (row), date);
-  adw_action_row_add_suffix (ADW_ACTION_ROW (row), copy_url_button);
-
-  gtk_widget_set_sensitive (check_button, ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
   /* Hide the CheckButton if selection isn't active */
   if (!self->selection_active)
     gtk_widget_set_visible (check_button, FALSE);
+
+  copy_url_button = ephy_history_dialog_row_get_copy_url_button (EPHY_HISTORY_DIALOG_ROW (row));
+  g_signal_connect (copy_url_button, "clicked", G_CALLBACK (row_copy_url_button_clicked), self);
 
   return row;
 }
@@ -750,9 +687,9 @@ check_rows_interval (GtkListBox *listbox,
 
   for (index = start; index <= end; index++) {
     GtkListBoxRow *row = gtk_list_box_get_row_at_index (listbox, index);
-    GtkCheckButton *check_button = GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (row), "check-button"));
+    GtkWidget *check_button = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (row));
 
-    gtk_check_button_set_active (check_button, TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), TRUE);
   }
 }
 
@@ -761,12 +698,12 @@ handle_selection_row_activated_event (EphyHistoryDialog *self,
                                       GtkListBoxRow     *activated_row)
 {
   g_autoptr (GList) checked_rows = get_checked_rows (self);
-  GtkCheckButton *check_button = GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (activated_row), "check-button"));
-  gboolean button_checked = gtk_check_button_get_active (check_button);
+  GtkWidget *check_button = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (activated_row));
+  gboolean button_checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (check_button));
 
   /* If Shift modifier isn't active, event simply toggles the row's checkbox button */
   if (!self->shift_modifier_active) {
-    gtk_check_button_set_active (check_button, !button_checked);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), !button_checked);
     return;
   }
 
@@ -785,13 +722,12 @@ handle_selection_row_activated_event (EphyHistoryDialog *self,
     int i = 0;
 
     while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->listbox), i++))) {
-      GtkCheckButton *row_check_btn =
-        GTK_CHECK_BUTTON (g_object_get_data (G_OBJECT (row), "check-button"));
+      GtkWidget *row_check_btn = ephy_history_dialog_row_get_check_button (EPHY_HISTORY_DIALOG_ROW (row));
 
-      gtk_check_button_set_active (row_check_btn, FALSE);
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (row_check_btn), FALSE);
     }
 
-    gtk_check_button_set_active (check_button, TRUE);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (check_button), TRUE);
   }
 }
 
