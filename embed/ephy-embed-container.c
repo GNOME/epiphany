@@ -58,7 +58,8 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
                                 EphyEmbed          *child,
                                 EphyEmbed          *parent,
                                 int                 position,
-                                gboolean            set_active)
+                                gboolean            set_active,
+                                gboolean            pinned)
 {
   EphyEmbedContainerInterface *iface;
 
@@ -66,7 +67,7 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
   g_assert (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
-  return iface->add_child (container, child, parent, position, set_active);
+  return iface->add_child (container, child, parent, position, set_active, pinned);
 }
 
 /**

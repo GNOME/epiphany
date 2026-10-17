@@ -1142,6 +1142,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
   GtkWidget *web_view;
   EphyEmbed *embed = NULL;
   gboolean jump_to = FALSE;
+  gboolean pinned = FALSE;
   int position = -1;
   EphyEmbed *parent = NULL;
 
@@ -1153,6 +1154,9 @@ ephy_shell_new_tab_full (EphyShell       *shell,
 
   if (flags & EPHY_NEW_TAB_JUMP)
     jump_to = TRUE;
+
+  if (flags & EPHY_NEW_TAB_PINNED)
+    pinned = TRUE;
 
   if (!window)
     window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
@@ -1182,7 +1186,7 @@ ephy_shell_new_tab_full (EphyShell       *shell,
                                     "title", title,
                                     "progress-bar-enabled", ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION,
                                     NULL));
-  ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, parent, position, jump_to);
+  ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, parent, position, jump_to, pinned);
 
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
