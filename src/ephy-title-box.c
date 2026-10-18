@@ -48,45 +48,6 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, ADW_TYPE_BIN,
                                G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                       ephy_title_box_title_widget_interface_init))
 
-static void
-ephy_title_box_constructed (GObject *object)
-{
-  EphyTitleBox *title_box = EPHY_TITLE_BOX (object);
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-
-  G_OBJECT_CLASS (ephy_title_box_parent_class)->constructed (object);
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
-  adw_bin_set_child (ADW_BIN (title_box), vbox);
-
-  title_box->title = gtk_label_new (NULL);
-  gtk_widget_add_css_class (title_box->title, "title");
-  gtk_label_set_single_line_mode (GTK_LABEL (title_box->title), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (title_box->title), PANGO_ELLIPSIZE_END);
-  gtk_label_set_text (GTK_LABEL (title_box->title), g_get_application_name ());
-  gtk_box_append (GTK_BOX (vbox), title_box->title);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_widget_add_css_class (hbox, "subtitle");
-  gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE_FILL);
-  gtk_box_append (GTK_BOX (vbox), hbox);
-
-  title_box->security_button = gtk_menu_button_new ();
-  gtk_widget_set_valign (title_box->security_button, GTK_ALIGN_BASELINE_FILL);
-  gtk_box_append (GTK_BOX (hbox), title_box->security_button);
-  gtk_widget_add_css_class (title_box->security_button, "entry-icon");
-
-  title_box->subtitle = gtk_label_new (NULL);
-  gtk_widget_set_valign (title_box->subtitle, GTK_ALIGN_BASELINE_FILL);
-  gtk_label_set_single_line_mode (GTK_LABEL (title_box->subtitle), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (title_box->subtitle), PANGO_ELLIPSIZE_END);
-  gtk_label_set_selectable (GTK_LABEL (title_box->subtitle), TRUE);
-  gtk_box_append (GTK_BOX (hbox), title_box->subtitle);
-}
-
 static const char *
 ephy_title_box_title_widget_get_address (EphyTitleWidget *widget)
 {
@@ -186,10 +147,16 @@ static void
 ephy_title_box_class_init (EphyTitleBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = ephy_title_box_constructed;
   object_class->get_property = ephy_title_box_get_property;
   object_class->set_property = ephy_title_box_set_property;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/title-box.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyTitleBox, title);
+  gtk_widget_class_bind_template_child (widget_class, EphyTitleBox, security_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyTitleBox, subtitle);
 
   props[PROP_ADDRESS] = g_param_spec_override ("address",
                                                g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_TITLE_WIDGET), "address"));
@@ -202,6 +169,7 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
 static void
 ephy_title_box_init (EphyTitleBox *title_box)
 {
+  gtk_widget_init_template (GTK_WIDGET (title_box));
 }
 
 /**

@@ -1,0 +1,44 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyTitleBox: Adw.Bin {
+  child: Box {
+    orientation: vertical;
+    valign: center;
+
+    Label title {
+      single-line-mode: true;
+      ellipsize: end;
+      label: bind $g_get_application_name();
+
+      styles [
+        "title",
+      ]
+    }
+
+    Box {
+      spacing: 4;
+      halign: center;
+      valign: baseline_fill;
+
+      styles [
+        "subtitle",
+      ]
+
+      MenuButton security_button {
+        valign: baseline_fill;
+
+        styles [
+          "entry-icon",
+        ]
+      }
+
+      Label subtitle {
+        valign: baseline_fill;
+        single-line-mode: true;
+        ellipsize: end;
+        selectable: true;
+      }
+    }
+  };
+}
