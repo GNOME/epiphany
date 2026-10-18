@@ -1,0 +1,25 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyHeaderBar: Adw.Bin {
+  child: Adw.HeaderBar header_bar {
+    [start]
+    $EphyActionBarStart action_bar_start {}
+
+    title-widget: Adw.Bin event_box {};
+
+    [end]
+    Button restore_button {
+      icon-name: "view-restore-symbolic";
+      tooltip-text: _("Exit Fullscreen");
+      visible: false;
+      action-name: "win.fullscreen";
+    }
+
+    [end]
+    $EphyPageMenuButton page_menu_button {}
+
+    [end]
+    $EphyActionBarEnd action_bar_end {}
+  };
+}

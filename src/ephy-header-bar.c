@@ -55,6 +55,7 @@ struct _EphyHeaderBar {
   EphyTitleWidget *title_widget;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
+  GtkWidget *event_box;
   GtkWidget *page_menu_button;
   GtkWidget *zoom_level_label;
   GtkWidget *restore_button;
@@ -142,8 +143,7 @@ static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-  GtkWidget *event_box;
-  EphyEmbedShell *embed_shell;
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
   GtkSizeGroup *downloads_size_group;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
@@ -155,26 +155,11 @@ ephy_header_bar_constructed (GObject *object)
                            G_CALLBACK (fullscreen_changed_cb), header_bar,
                            G_CONNECT_SWAPPED);
 
-  /* Header bar */
-  header_bar->header_bar = adw_header_bar_new ();
-  adw_bin_set_child (ADW_BIN (header_bar), header_bar->header_bar);
-
-  /* Start action elements */
-  header_bar->action_bar_start = ephy_action_bar_start_new ();
-  adw_header_bar_pack_start (ADW_HEADER_BAR (header_bar->header_bar),
-                             GTK_WIDGET (header_bar->action_bar_start));
-
-  embed_shell = ephy_embed_shell_get_default ();
-
   /* Title widget (location entry or title box) */
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
   else
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
-
-  event_box = adw_bin_new ();
-  adw_header_bar_set_title_widget (ADW_HEADER_BAR (header_bar->header_bar), event_box);
-  gtk_widget_set_name (event_box, "title-box-container");
 
   if (is_desktop_pantheon ()) {
     /* Use a full-width entry on Pantheon */
@@ -182,7 +167,7 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 6);
     gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 6);
 
-    adw_bin_set_child (ADW_BIN (event_box), GTK_WIDGET (header_bar->title_widget));
+    adw_bin_set_child (ADW_BIN (header_bar->event_box), GTK_WIDGET (header_bar->title_widget));
   } else {
     GtkWidget *clamp;
 
@@ -192,26 +177,8 @@ ephy_header_bar_constructed (GObject *object)
     adw_clamp_set_tightening_threshold (ADW_CLAMP (clamp), 560);
     adw_clamp_set_child (ADW_CLAMP (clamp), GTK_WIDGET (header_bar->title_widget));
 
-    adw_bin_set_child (ADW_BIN (event_box), clamp);
+    adw_bin_set_child (ADW_BIN (header_bar->event_box), clamp);
   }
-
-  /* Fullscreen restore button */
-  header_bar->restore_button = gtk_button_new_from_icon_name ("view-restore-symbolic");
-  gtk_widget_set_tooltip_text (header_bar->restore_button, _("Exit Fullscreen"));
-  gtk_widget_set_visible (header_bar->restore_button, FALSE);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (header_bar->restore_button),
-                                  "win.fullscreen");
-  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar),
-                           GTK_WIDGET (header_bar->restore_button));
-
-  /* Page Menu */
-  header_bar->page_menu_button = GTK_WIDGET (ephy_page_menu_button_new ());
-  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar), header_bar->page_menu_button);
-
-  /* End action elements */
-  header_bar->action_bar_end = ephy_action_bar_end_new ();
-  adw_header_bar_pack_end (ADW_HEADER_BAR (header_bar->header_bar),
-                           GTK_WIDGET (header_bar->action_bar_end));
 
   /* Sync the size of placeholder in EphyActionBarStart with downloads button */
   downloads_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -224,7 +191,8 @@ ephy_header_bar_constructed (GObject *object)
   if (ephy_profile_dir_is_web_application ()) {
     GtkWidget *navigation_box = ephy_action_bar_start_get_navigation_box (header_bar->action_bar_start);
 
-    g_settings_bind (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SHOW_NAVIGATION_BUTTONS, navigation_box, "visible", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
+    g_settings_bind (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_SHOW_NAVIGATION_BUTTONS, navigation_box,
+                     "visible", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
   }
 }
 
@@ -241,17 +209,28 @@ ephy_header_bar_dispose (GObject *object)
 static void
 ephy_header_bar_init (EphyHeaderBar *header_bar)
 {
+  gtk_widget_init_template (GTK_WIDGET (header_bar));
 }
 
 static void
 ephy_header_bar_class_init (EphyHeaderBarClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->set_property = ephy_header_bar_set_property;
   gobject_class->get_property = ephy_header_bar_get_property;
   gobject_class->constructed = ephy_header_bar_constructed;
   gobject_class->dispose = ephy_header_bar_dispose;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/header-bar.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_start);
+  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, event_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, restore_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, page_menu_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_end);
 
   object_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
