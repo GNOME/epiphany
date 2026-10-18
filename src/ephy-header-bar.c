@@ -41,12 +41,6 @@
 
 #define POPOVER_HIDE_DELAY 300
 
-typedef enum {
-  PROP_WINDOW = 1,
-} EphyHeaderBarProps;
-
-static GParamSpec *object_properties[PROP_WINDOW + 1] = { NULL, };
-
 struct _EphyHeaderBar {
   AdwBin parent_instance;
 
@@ -66,37 +60,6 @@ struct _EphyHeaderBar {
 };
 
 G_DEFINE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, ADW_TYPE_BIN)
-
-static void
-ephy_header_bar_set_property (GObject      *object,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-
-  switch ((EphyHeaderBarProps)property_id) {
-    case PROP_WINDOW:
-      header_bar->window = EPHY_WINDOW (g_value_get_object (value));
-      g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
-      break;
-  }
-}
-
-static void
-ephy_header_bar_get_property (GObject    *object,
-                              guint       property_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
-{
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-
-  switch ((EphyHeaderBarProps)property_id) {
-    case PROP_WINDOW:
-      g_value_set_object (value, header_bar->window);
-      break;
-  }
-}
 
 static void
 sync_chromes_visibility (EphyHeaderBar *header_bar)
@@ -147,13 +110,6 @@ ephy_header_bar_constructed (GObject *object)
   GtkSizeGroup *downloads_size_group;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
-
-  g_signal_connect_object (header_bar->window, "notify::chrome",
-                           G_CALLBACK (sync_chromes_visibility), header_bar,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (header_bar->window, "notify::fullscreened",
-                           G_CALLBACK (fullscreen_changed_cb), header_bar,
-                           G_CONNECT_SWAPPED);
 
   /* Title widget (location entry or title box) */
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
@@ -207,6 +163,25 @@ ephy_header_bar_dispose (GObject *object)
 }
 
 static void
+ephy_header_bar_realize (GtkWidget *widget)
+{
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (widget);
+
+  GTK_WIDGET_CLASS (ephy_header_bar_parent_class)->realize (widget);
+
+  header_bar->window = EPHY_WINDOW (gtk_widget_get_ancestor (widget, EPHY_TYPE_WINDOW));
+
+  g_signal_connect_object (header_bar->window, "notify::chrome",
+                           G_CALLBACK (sync_chromes_visibility), header_bar,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (header_bar->window, "notify::fullscreened",
+                           G_CALLBACK (fullscreen_changed_cb), header_bar,
+                           G_CONNECT_SWAPPED);
+
+  sync_chromes_visibility (header_bar);
+}
+
+static void
 ephy_header_bar_init (EphyHeaderBar *header_bar)
 {
   gtk_widget_init_template (GTK_WIDGET (header_bar));
@@ -218,10 +193,10 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->set_property = ephy_header_bar_set_property;
-  gobject_class->get_property = ephy_header_bar_get_property;
   gobject_class->constructed = ephy_header_bar_constructed;
   gobject_class->dispose = ephy_header_bar_dispose;
+
+  widget_class->realize = ephy_header_bar_realize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/header-bar.ui");
 
@@ -231,25 +206,12 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, restore_button);
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, page_menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_end);
-
-  object_properties[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         NULL, NULL,
-                         EPHY_TYPE_WINDOW,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class,
-                                     G_N_ELEMENTS (object_properties),
-                                     object_properties);
 }
 
 GtkWidget *
-ephy_header_bar_new (EphyWindow *window)
+ephy_header_bar_new (void)
 {
-  g_assert (EPHY_IS_WINDOW (window));
-
   return GTK_WIDGET (g_object_new (EPHY_TYPE_HEADER_BAR,
-                                   "window", window,
                                    NULL));
 }
 

@@ -536,14 +536,14 @@ sync_chromes_visibility (EphyWindow *window)
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN) ||
                         ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_KIOSK;
 
-  gtk_widget_set_visible (GTK_WIDGET (window->header_bar),
+  gtk_widget_set_visible (window->header_bar,
                           !fullscreen_lockdown &&
                           (!fullscreen || window->show_fullscreen_header_bar));
   gtk_widget_set_visible (GTK_WIDGET (window->tab_bar),
                           !fullscreen_lockdown &&
                           (show_tabsbar && is_wide && !(window->is_popup) &&
                            (!fullscreen || window->show_fullscreen_header_bar)));
-  gtk_widget_set_visible (GTK_WIDGET (window->action_bar),
+  gtk_widget_set_visible (window->action_bar,
                           !fullscreen_lockdown && !is_wide &&
                           (!fullscreen || window->show_fullscreen_header_bar));
 }
@@ -3753,11 +3753,10 @@ tab_view_notify_n_pages_cb (EphyWindow *window)
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 0);
 }
 
-static EphyTabView *
+void
 setup_tab_view (EphyWindow *window)
 {
-  EphyTabView *tab_view = ephy_tab_view_new ();
-  AdwTabView *view = ephy_tab_view_get_tab_view (tab_view);
+  AdwTabView *view = ephy_tab_view_get_tab_view (window->tab_view);
 
   g_signal_connect_object (view, "notify::selected-page",
                            G_CALLBACK (tab_view_notify_selected_page_cb),
@@ -3789,8 +3788,6 @@ setup_tab_view (EphyWindow *window)
                            G_CALLBACK (tab_view_page_detached_cb),
                            window,
                            G_CONNECT_DEFAULT);
-
-  return tab_view;
 }
 
 static const char *supported_mime_types[] = {
@@ -4142,16 +4139,6 @@ sync_user_input_cb (EphyLocationController *action,
   g_assert (EPHY_IS_EMBED (window->active_embed));
   ephy_web_view_set_typed_address (ephy_embed_get_web_view (window->active_embed), address);
   window->updating_address = FALSE;
-}
-
-static GtkWidget *
-setup_header_bar (EphyWindow *window)
-{
-  GtkWidget *header_bar;
-
-  header_bar = ephy_header_bar_new (window);
-
-  return header_bar;
 }
 
 static EphyLocationController *
@@ -4511,6 +4498,7 @@ insert_action_group (const char   *prefix,
   gtk_widget_insert_action_group (widget, prefix, group);
 }
 
+
 static gboolean
 scroll_cb (EphyWindow *self,
            double      dx,
@@ -4560,7 +4548,6 @@ ephy_window_constructed (GObject *object)
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
   EphyDownloadsManager *downloads_manager;
-  GtkEventController *scroll_controller;
 
 #if 0
   /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
@@ -4635,11 +4622,11 @@ ephy_window_constructed (GObject *object)
                                            accels_navigation_ltr_rtl[i].accelerators);
   }
 
-  window->tab_view = setup_tab_view (window);
-  window->tab_bar = adw_tab_bar_new ();
-
-  adw_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
+  setup_tab_view (window);
   adw_tab_overview_set_view (ADW_TAB_OVERVIEW (window->overview), ephy_tab_view_get_tab_view (window->tab_view));
+  ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
+  adw_tab_bar_set_view (window->tab_bar, ephy_tab_view_get_tab_view (window->tab_view));
+  ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
 
   shell = ephy_shell_get_default ();
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
@@ -4652,35 +4639,7 @@ ephy_window_constructed (GObject *object)
   else if (mode == EPHY_EMBED_SHELL_MODE_AUTOMATION)
     gtk_widget_add_css_class (GTK_WIDGET (window), "automation-mode");
 
-  /* Setup the toolbar. */
-  window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
-  window->action_bar_revealer = gtk_revealer_new ();
-  gtk_widget_set_visible (window->action_bar_revealer, FALSE);
-  window->action_bar = GTK_WIDGET (ephy_action_bar_new (window));
-  gtk_revealer_set_child (GTK_REVEALER (window->action_bar_revealer), window->action_bar);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (window->action_bar_revealer), FALSE);
-  window->toast_overlay = adw_toast_overlay_new ();
-  adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (window->toast_overlay), GTK_WIDGET (window->tab_view));
-
-  /* Add scroll container to hide action bar during scrolling */
-  scroll_controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-  gtk_event_controller_set_propagation_phase (scroll_controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_object (scroll_controller, "scroll", G_CALLBACK (scroll_cb), window, G_CONNECT_SWAPPED);
-  gtk_widget_add_controller (GTK_WIDGET (window->tab_view), scroll_controller);
-
-  ephy_fullscreen_box_set_content (window->fullscreen_box, GTK_WIDGET (window->toast_overlay));
-  window->header_bin_top = adw_bin_new ();
-  adw_bin_set_child (ADW_BIN (window->header_bin_top), window->header_bar);
-  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->header_bin_top));
-  window->header_bin_bottom = adw_bin_new ();
-  ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, GTK_WIDGET (window->header_bin_bottom));
-
-  ephy_fullscreen_box_add_top_bar (window->fullscreen_box, GTK_WIDGET (window->tab_bar));
-  ephy_fullscreen_box_add_bottom_bar (window->fullscreen_box, window->action_bar_revealer);
-
-  ephy_tab_view_set_tab_bar (window->tab_view, window->tab_bar);
-  ephy_tab_view_set_tab_overview (window->tab_view, ADW_TAB_OVERVIEW (window->overview));
 
   /* other notifiers */
   action = g_action_map_lookup_action (G_ACTION_MAP (shell),
@@ -4786,6 +4745,14 @@ ephy_window_class_init (EphyWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, overlay_split_view);
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, overview);
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, fullscreen_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, header_bin_top);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, header_bin_bottom);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, tab_bar);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, toast_overlay);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, tab_view);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, action_bar_revealer);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, action_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, bookmarks_dialog);
 
   gtk_widget_class_bind_template_callback (widget_class, notify_fullscreen_cb);
@@ -4793,6 +4760,7 @@ ephy_window_class_init (EphyWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, notify_overview_open_cb);
   gtk_widget_class_bind_template_callback (widget_class, create_tab_cb);
   gtk_widget_class_bind_template_callback (widget_class, pan_cb);
+  gtk_widget_class_bind_template_callback (widget_class, scroll_cb);
 
   props[PROP_ACTIVE_CHILD] = g_param_spec_override ("active-child",
                                                     g_object_interface_find_property (g_type_default_interface_get (EPHY_TYPE_EMBED_CONTAINER), "active-child"));

@@ -26,7 +26,6 @@
 #include "ephy-action-bar-end.h"
 #include "ephy-action-bar-start.h"
 #include "ephy-adaptive-mode.h"
-#include "ephy-window.h"
 
 G_BEGIN_DECLS
 
@@ -34,7 +33,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, AdwBin);
 
-EphyActionBar      *ephy_action_bar_new                  (EphyWindow *window);
+EphyActionBar      *ephy_action_bar_new                  (void);
 
 void                ephy_action_bar_set_zoom_level       (EphyActionBar *self,
                                                           const char    *zoom_level);

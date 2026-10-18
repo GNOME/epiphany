@@ -53,7 +53,36 @@ template $EphyWindow: Adw.ApplicationWindow {
       notify::open => $notify_overview_open_cb() swapped;
       create-tab => $create_tab_cb() swapped;
 
-      child: $EphyFullscreenBox fullscreen_box {};
+      child: $EphyFullscreenBox fullscreen_box {
+        [top]
+        Adw.Bin header_bin_top {
+          child: $EphyHeaderBar header_bar {};
+        }
+
+        [top]
+        Adw.TabBar tab_bar {}
+
+        Adw.ToastOverlay toast_overlay {
+          child: $EphyTabView tab_view {
+            EventControllerScroll { // Hides action bar during scrolling
+              propagation-phase: capture;
+              flags: vertical;
+              scroll => $scroll_cb() swapped;
+            }
+          };
+        }
+
+        [bottom]
+        Adw.Bin header_bin_bottom {}
+
+        [bottom]
+        Revealer action_bar_revealer {
+          visible: false;
+          reveal-child: false;
+
+          child: $EphyActionBar action_bar {};
+        }
+      };
     };
 
     sidebar: $EphyBookmarksDialog bookmarks_dialog {};

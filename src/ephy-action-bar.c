@@ -28,6 +28,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-favicon-helpers.h"
+#include "ephy-fullscreen-box.h"
 #include "ephy-page-menu-button.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -36,16 +37,9 @@
 
 #define NEEDS_ATTENTION_ANIMATION_TIMEOUT 2000 /*ms */
 
-typedef enum {
-  PROP_WINDOW = 1,
-} EphyActionBarProps;
-
-static GParamSpec *object_properties[PROP_WINDOW + 1] = { NULL, };
-
 struct _EphyActionBar {
   AdwBin parent_instance;
 
-  EphyWindow *window;
   GtkWidget *toolbar;
   GtkWidget *menu_button;
   AdwTabButton *tab_button;
@@ -500,51 +494,6 @@ show_downloads_cb (EphyDownloadsManager *manager,
 }
 
 static void
-ephy_action_bar_set_property (GObject      *object,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
-
-  switch ((EphyActionBarProps)property_id) {
-    case PROP_WINDOW:
-      action_bar->window = EPHY_WINDOW (g_value_get_object (value));
-      g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
-      break;
-  }
-}
-
-static void
-ephy_action_bar_get_property (GObject    *object,
-                              guint       property_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
-{
-  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
-
-  switch ((EphyActionBarProps)property_id) {
-    case PROP_WINDOW:
-      g_value_set_object (value, action_bar->window);
-      break;
-  }
-}
-
-static void
-ephy_action_bar_constructed (GObject *object)
-{
-  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
-  EphyTabView *view;
-
-  G_OBJECT_CLASS (ephy_action_bar_parent_class)->constructed (object);
-
-  view = ephy_window_get_tab_view (action_bar->window);
-
-  adw_tab_button_set_view (action_bar->tab_button,
-                           ephy_tab_view_get_tab_view (view));
-}
-
-static void
 ephy_action_bar_dispose (GObject *object)
 {
   EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
@@ -560,25 +509,29 @@ ephy_action_bar_dispose (GObject *object)
 }
 
 static void
+ephy_action_bar_realize (GtkWidget *widget)
+{
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (widget);
+  EphyWindow *window;
+  EphyTabView *tab_view;
+
+  GTK_WIDGET_CLASS (ephy_action_bar_parent_class)->realize (widget);
+
+  window = EPHY_WINDOW (gtk_widget_get_ancestor (widget, EPHY_TYPE_WINDOW));
+  tab_view = ephy_window_get_tab_view (window);
+
+  adw_tab_button_set_view (action_bar->tab_button, ephy_tab_view_get_tab_view (tab_view));
+}
+
+static void
 ephy_action_bar_class_init (EphyActionBarClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->set_property = ephy_action_bar_set_property;
-  gobject_class->get_property = ephy_action_bar_get_property;
-  gobject_class->constructed = ephy_action_bar_constructed;
   gobject_class->dispose = ephy_action_bar_dispose;
 
-  object_properties[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         NULL, NULL,
-                         EPHY_TYPE_WINDOW,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class,
-                                     G_N_ELEMENTS (object_properties),
-                                     object_properties);
+  widget_class->realize = ephy_action_bar_realize;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar.ui");
@@ -654,10 +607,9 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 }
 
 EphyActionBar *
-ephy_action_bar_new (EphyWindow *window)
+ephy_action_bar_new (void)
 {
   return g_object_new (EPHY_TYPE_ACTION_BAR,
-                       "window", window,
                        NULL);
 }
 

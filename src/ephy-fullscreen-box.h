@@ -20,13 +20,14 @@
 
 #pragma once
 
+#include <adwaita.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_FULLSCREEN_BOX (ephy_fullscreen_box_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, EPHY, FULLSCREEN_BOX, GtkWidget)
+G_DECLARE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, EPHY, FULLSCREEN_BOX, AdwBin)
 
 EphyFullscreenBox *ephy_fullscreen_box_new            (void);
 
@@ -37,14 +38,5 @@ void               ephy_fullscreen_box_set_fullscreen (EphyFullscreenBox *self,
 gboolean           ephy_fullscreen_box_get_autohide   (EphyFullscreenBox *self);
 void               ephy_fullscreen_box_set_autohide   (EphyFullscreenBox *self,
                                                        gboolean           autohide);
-
-GtkWidget         *ephy_fullscreen_box_get_content    (EphyFullscreenBox *self);
-void               ephy_fullscreen_box_set_content    (EphyFullscreenBox *self,
-                                                       GtkWidget         *content);
-
-void               ephy_fullscreen_box_add_top_bar    (EphyFullscreenBox *self,
-                                                       GtkWidget         *child);
-void               ephy_fullscreen_box_add_bottom_bar (EphyFullscreenBox *self,
-                                                       GtkWidget         *child);
 
 G_END_DECLS

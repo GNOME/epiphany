@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+
 #include "ephy-fullscreen-box.h"
 
 #include <adwaita.h>
@@ -27,7 +28,7 @@
 #define SHOW_HEADERBAR_DISTANCE_PX 5
 
 struct _EphyFullscreenBox {
-  GtkWidget parent_instance;
+  AdwBin parent_instance;
 
   AdwToolbarView *toolbar_view;
 
@@ -43,12 +44,17 @@ struct _EphyFullscreenBox {
   GList *headers;
 };
 
-G_DEFINE_FINAL_TYPE (EphyFullscreenBox, ephy_fullscreen_box, GTK_TYPE_WIDGET)
+static void ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface);
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (EphyFullscreenBox, ephy_fullscreen_box, ADW_TYPE_BIN,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                      ephy_fullscreen_box_buildable_init))
+
+static GtkBuildableIface *parent_buildable_iface;
 
 typedef enum {
   PROP_FULLSCREEN = 1,
   PROP_AUTOHIDE,
-  PROP_CONTENT,
   PROP_REVEALED,
 } EphyFullscreenBoxProps;
 
@@ -180,11 +186,11 @@ enter_cb (EphyFullscreenBox *self,
 }
 
 static void
-press_cb (EphyFullscreenBox *self,
+press_cb (GtkGesture        *gesture,
           int                n_press,
           double             x,
           double             y,
-          GtkGesture        *gesture)
+          EphyFullscreenBox *self)
 {
   gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 
@@ -269,10 +275,6 @@ ephy_fullscreen_box_get_property (GObject    *object,
       g_value_set_boolean (value, ephy_fullscreen_box_get_autohide (self));
       break;
 
-    case PROP_CONTENT:
-      g_value_set_object (value, ephy_fullscreen_box_get_content (self));
-      break;
-
     case PROP_REVEALED:
       g_value_set_boolean (value, adw_toolbar_view_get_reveal_top_bars (self->toolbar_view));
       break;
@@ -296,9 +298,6 @@ ephy_fullscreen_box_set_property (GObject      *object,
       ephy_fullscreen_box_set_autohide (self, g_value_get_boolean (value));
       break;
 
-    case PROP_CONTENT:
-      ephy_fullscreen_box_set_content (self, g_value_get_object (value));
-      break;
     case PROP_REVEALED:
       g_assert_not_reached ();
       break;
@@ -309,11 +308,6 @@ static void
 ephy_fullscreen_box_dispose (GObject *object)
 {
   EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (object);
-
-  if (self->toolbar_view) {
-    gtk_widget_unparent (GTK_WIDGET (self->toolbar_view));
-    self->toolbar_view = NULL;
-  }
 
   g_clear_pointer (&self->headers, g_list_free);
 
@@ -333,6 +327,15 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
   widget_class->root = ephy_fullscreen_box_root;
   widget_class->unroot = ephy_fullscreen_box_unroot;
 
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/fullscreen-box.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyFullscreenBox, toolbar_view);
+
+  gtk_widget_class_bind_template_callback (widget_class, notify_reveal_cb);
+  gtk_widget_class_bind_template_callback (widget_class, enter_cb);
+  gtk_widget_class_bind_template_callback (widget_class, motion_cb);
+  gtk_widget_class_bind_template_callback (widget_class, press_cb);
+
   props[PROP_FULLSCREEN] =
     g_param_spec_boolean ("fullscreen",
                           NULL, NULL,
@@ -344,12 +347,6 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
                           NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  props[PROP_CONTENT] =
-    g_param_spec_object ("content",
-                         NULL, NULL,
-                         GTK_TYPE_WIDGET,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   props[PROP_REVEALED] =
     g_param_spec_boolean ("revealed",
@@ -366,37 +363,39 @@ ephy_fullscreen_box_class_init (EphyFullscreenBoxClass *klass)
 static void
 ephy_fullscreen_box_init (EphyFullscreenBox *self)
 {
-  AdwToolbarView *toolbar_view;
-  GtkEventController *controller;
-  GtkGesture *gesture;
+  gtk_widget_init_template (GTK_WIDGET (self));
 
   self->autohide = TRUE;
+}
 
-  toolbar_view = ADW_TOOLBAR_VIEW (adw_toolbar_view_new ());
-  adw_toolbar_view_set_top_bar_style (toolbar_view, ADW_TOOLBAR_RAISED_BORDER);
-  adw_toolbar_view_set_bottom_bar_style (toolbar_view, ADW_TOOLBAR_RAISED_BORDER);
+static void
+ephy_fullscreen_box_add_child (GtkBuildable *buildable,
+                               GtkBuilder   *builder,
+                               GObject      *child,
+                               const char   *type)
+{
+  EphyFullscreenBox *self = EPHY_FULLSCREEN_BOX (buildable);
 
-  g_signal_connect_object (toolbar_view, "notify::reveal-top-bars",
-                           G_CALLBACK (notify_reveal_cb), self, G_CONNECT_SWAPPED);
+  if (!GTK_IS_WIDGET (child)) {
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+    return;
+  }
 
-  gtk_widget_set_parent (GTK_WIDGET (toolbar_view), GTK_WIDGET (self));
-  self->toolbar_view = toolbar_view;
+  if (g_strcmp0 (type, "top") == 0) {
+    adw_toolbar_view_add_top_bar (self->toolbar_view, GTK_WIDGET (child));
+    self->headers = g_list_prepend (self->headers, child);
+  } else if (g_strcmp0 (type, "bottom") == 0) {
+    adw_toolbar_view_add_bottom_bar (self->toolbar_view, GTK_WIDGET (child));
+  } else {
+    adw_toolbar_view_set_content (self->toolbar_view, GTK_WIDGET (child));
+  }
+}
 
-  controller = gtk_event_controller_motion_new ();
-  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_object (controller, "enter",
-                           G_CALLBACK (enter_cb), self, G_CONNECT_SWAPPED);
-  g_signal_connect_object (controller, "motion",
-                           G_CALLBACK (motion_cb), self, G_CONNECT_SWAPPED);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
-
-  gesture = gtk_gesture_click_new ();
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                              GTK_PHASE_CAPTURE);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
-  g_signal_connect_object (gesture, "pressed",
-                           G_CALLBACK (press_cb), self, G_CONNECT_SWAPPED);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+static void
+ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = ephy_fullscreen_box_add_child;
 }
 
 EphyFullscreenBox *
@@ -469,49 +468,4 @@ ephy_fullscreen_box_set_autohide (EphyFullscreenBox *self,
     show_ui (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_AUTOHIDE]);
-}
-
-GtkWidget *
-ephy_fullscreen_box_get_content (EphyFullscreenBox *self)
-{
-  g_return_val_if_fail (EPHY_IS_FULLSCREEN_BOX (self), NULL);
-
-  return adw_toolbar_view_get_content (self->toolbar_view);
-}
-
-void
-ephy_fullscreen_box_set_content (EphyFullscreenBox *self,
-                                 GtkWidget         *content)
-{
-  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (!content || GTK_IS_WIDGET (content));
-
-  if (ephy_fullscreen_box_get_content (self) == content)
-    return;
-
-  adw_toolbar_view_set_content (self->toolbar_view, content);
-
-  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT]);
-}
-
-void
-ephy_fullscreen_box_add_top_bar (EphyFullscreenBox *self,
-                                 GtkWidget         *child)
-{
-  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  adw_toolbar_view_add_top_bar (self->toolbar_view, child);
-
-  self->headers = g_list_prepend (self->headers, child);
-}
-
-void
-ephy_fullscreen_box_add_bottom_bar (EphyFullscreenBox *self,
-                                    GtkWidget         *child)
-{
-  g_return_if_fail (EPHY_IS_FULLSCREEN_BOX (self));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  adw_toolbar_view_add_bottom_bar (self->toolbar_view, child);
 }
