@@ -808,7 +808,7 @@ fastly_challenge_resource_finished_cb (WebKitWebResource *resource,
   WebKitURIResponse *response = webkit_web_resource_get_response (resource);
   const char *uri = webkit_web_resource_get_uri (resource);
 
-  if (!response || !strstr (uri, "fst-post-back"))
+  if (!sync_dialog->fxa_web_view || !response || !strstr (uri, "fst-post-back"))
     return;
 
   if (webkit_uri_response_get_status_code (response) != 200) {
@@ -834,9 +834,9 @@ fastly_resource_load_started_cb (WebKitWebView     *web_view,
   const char *uri = webkit_uri_request_get_uri (request);
 
   if (strstr (uri, "accounts.firefox.com"))
-    g_signal_connect (resource, "finished",
-                      G_CALLBACK (fastly_challenge_resource_finished_cb),
-                      user_data);
+    g_signal_connect_object (resource, "finished",
+                             G_CALLBACK (fastly_challenge_resource_finished_cb),
+                             user_data, G_CONNECT_DEFAULT);
 }
 
 static void
@@ -926,10 +926,10 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
                                                       NULL, NULL);
     sync_dialog->fxa_manager = webkit_user_content_manager_new ();
     webkit_user_content_manager_add_script (sync_dialog->fxa_manager, sync_dialog->fxa_script);
-    g_signal_connect (sync_dialog->fxa_manager,
-                      "script-message-received::toChromeMessageHandler",
-                      G_CALLBACK (sync_message_from_fxa_content_cb),
-                      sync_dialog);
+    g_signal_connect_object (sync_dialog->fxa_manager,
+                             "script-message-received::toChromeMessageHandler",
+                             G_CALLBACK (sync_message_from_fxa_content_cb),
+                             sync_dialog, G_CONNECT_DEFAULT);
     g_signal_connect (sync_dialog->fxa_manager,
                       "script-message-received::openWebmailClickHandler",
                       G_CALLBACK (sync_open_webmail_clicked_cb),
@@ -961,15 +961,15 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
     gtk_box_append (GTK_BOX (sync_dialog->sync_firefox_iframe_box),
                     GTK_WIDGET (sync_dialog->fxa_web_view));
 
-    g_signal_connect (sync_dialog->fxa_web_view, "resource-load-started",
-                      G_CALLBACK (fastly_resource_load_started_cb),
-                      sync_dialog);
-    g_signal_connect (sync_dialog->fxa_web_view, "load-changed",
-                      G_CALLBACK (fxa_web_view_load_changed_cb),
-                      sync_dialog);
-    g_signal_connect (sync_dialog->fxa_web_view, "load-failed",
-                      G_CALLBACK (fxa_web_view_load_failed_cb),
-                      sync_dialog);
+    g_signal_connect_object (sync_dialog->fxa_web_view, "resource-load-started",
+                             G_CALLBACK (fastly_resource_load_started_cb),
+                             sync_dialog, G_CONNECT_DEFAULT);
+    g_signal_connect_object (sync_dialog->fxa_web_view, "load-changed",
+                             G_CALLBACK (fxa_web_view_load_changed_cb),
+                             sync_dialog, G_CONNECT_DEFAULT);
+    g_signal_connect_object (sync_dialog->fxa_web_view, "load-failed",
+                             G_CALLBACK (fxa_web_view_load_failed_cb),
+                             sync_dialog, G_CONNECT_DEFAULT);
 
     g_object_unref (sync_context);
   }
@@ -1086,11 +1086,19 @@ get_sync_frequency_minutes_name (EphySyncFrequency *value)
 }
 
 static void
-prefs_sync_page_finalize (GObject *object)
+prefs_sync_page_dispose (GObject *object)
 {
   EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (object);
 
   sync_teardown_firefox_iframe (sync_dialog);
+
+  G_OBJECT_CLASS (ephy_firefox_sync_dialog_parent_class)->dispose (object);
+}
+
+static void
+prefs_sync_page_finalize (GObject *object)
+{
+  EphyFirefoxSyncDialog *sync_dialog = EPHY_FIREFOX_SYNC_DIALOG (object);
 
   g_clear_pointer (&sync_dialog->pkce_challenge, ephy_sync_crypto_pkce_challenge_free);
   g_clear_pointer (&sync_dialog->ecdh_key_pair, ephy_sync_crypto_ecdh_key_pair_free);
@@ -1110,6 +1118,7 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/firefox-sync-dialog.ui");
 
+  object_class->dispose = prefs_sync_page_dispose;
   object_class->finalize = prefs_sync_page_finalize;
 
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_page_group);
