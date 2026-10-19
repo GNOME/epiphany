@@ -376,6 +376,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
         g_ptr_array_add (to_upload, g_object_ref (l->data));
 
       g_hash_table_remove (records_ht_id, remote_id);
+      g_hash_table_remove (records_ht_url, remote_url);
     } else {
       /* Try find by URL. */
       record = g_hash_table_lookup (records_ht_url, remote_url);
@@ -385,6 +386,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
         g_ptr_array_add (to_upload, g_object_ref (l->data));
         g_hash_table_remove (records_ht_id, ephy_history_record_get_id (record));
+        g_hash_table_remove (records_ht_url, remote_url);
       } else {
         /* Different ID, different URL. This is a new record. */
         if (remote_last_visit_time > 0)
@@ -467,6 +469,8 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager *self,
         g_signal_emit (self, signals[SYNCHRONIZABLE_DELETED], 0, l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
         g_ptr_array_add (to_upload, g_object_ref (l->data));
+        g_hash_table_remove (records_ht_id, ephy_history_record_get_id (record));
+        g_hash_table_remove (records_ht_url, remote_url);
       } else {
         /* Different ID, different URL. This is a new record. */
         if (remote_last_visit_time > 0)
