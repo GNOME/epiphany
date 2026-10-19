@@ -839,6 +839,39 @@ fastly_resource_load_started_cb (WebKitWebView     *web_view,
                              user_data, G_CONNECT_DEFAULT);
 }
 
+static gboolean
+fxa_web_view_decide_policy_cb (WebKitWebView            *web_view,
+                               WebKitPolicyDecision     *decision,
+                               WebKitPolicyDecisionType  decision_type,
+                               gpointer                  user_data)
+{
+  WebKitNavigationPolicyDecision *navigation_decision;
+  WebKitNavigationAction *navigation_action;
+  WebKitURIRequest *request;
+  const char *request_uri;
+  const char *request_scheme;
+
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
+    return FALSE;
+
+  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
+  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+  request = webkit_navigation_action_get_request (navigation_action);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  request_scheme = g_uri_peek_scheme (request_uri);
+  if (g_strcmp0 (request_scheme, "https") == 0 || g_strcmp0 (request_scheme, "http") == 0) {
+    EphyShell *shell = ephy_shell_get_default ();
+    GtkWindow *window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+    EphyEmbed *embed = ephy_shell_new_tab (shell, EPHY_WINDOW (window),
+                                           NULL, EPHY_NEW_TAB_JUMP);
+    ephy_web_view_load_url (ephy_embed_get_web_view (embed), request_uri);
+  }
+
+  webkit_policy_decision_ignore (decision);
+  return TRUE;
+}
+
 static void
 fxa_web_view_load_changed_cb (WebKitWebView   *web_view,
                               WebKitLoadEvent  load_event,
@@ -961,6 +994,9 @@ sync_setup_firefox_iframe (EphyFirefoxSyncDialog *sync_dialog)
     gtk_box_append (GTK_BOX (sync_dialog->sync_firefox_iframe_box),
                     GTK_WIDGET (sync_dialog->fxa_web_view));
 
+    g_signal_connect_object (sync_dialog->fxa_web_view, "decide-policy",
+                             G_CALLBACK (fxa_web_view_decide_policy_cb),
+                             sync_dialog, G_CONNECT_DEFAULT);
     g_signal_connect_object (sync_dialog->fxa_web_view, "resource-load-started",
                              G_CALLBACK (fastly_resource_load_started_cb),
                              sync_dialog, G_CONNECT_DEFAULT);
