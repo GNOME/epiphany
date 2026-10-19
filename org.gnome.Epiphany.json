@@ -22,22 +22,6 @@
     ],
     "modules" : [
         {
-            "name" : "libportal",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dbackend-gtk4=enabled",
-                "-Dintrospection=false",
-                "-Ddocs=false"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/libportal.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "libpwquality",
             "buildsystem" : "autotools",
             "config-opts" : [

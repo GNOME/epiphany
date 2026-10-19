@@ -25,22 +25,6 @@
     ],
     "modules" : [
         {
-            "name" : "libportal",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dbackend-gtk4=enabled",
-                "-Dintrospection=false",
-                "-Ddocs=false"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/libportal.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "webkitgtk",
             "append-path": "/usr/lib/sdk/llvm22/bin",
             "prepend-ld-library-path": "/usr/lib/sdk/llvm22/lib",
