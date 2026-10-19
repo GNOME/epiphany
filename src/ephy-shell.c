@@ -432,7 +432,6 @@ static GActionEntry app_entries[] = {
   { "import-passwords", import_passwords, NULL, NULL, NULL },
   { "export-passwords", export_passwords, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
-  { "firefox-sync-dialog", show_firefox_sync, NULL, NULL, NULL },
   { "clear-data-view", show_clear_data_view, NULL, NULL, NULL},
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "help", show_help, NULL, NULL, NULL },
@@ -447,6 +446,10 @@ static GActionEntry app_entries[] = {
 
 static GActionEntry non_incognito_extra_app_entries[] = {
   { "reopen-closed-tab", reopen_closed_tab, NULL, NULL, NULL },
+};
+
+static GActionEntry browser_mode_app_entries[] = {
+  { "firefox-sync-dialog", show_firefox_sync, NULL, NULL, NULL },
 };
 
 static GActionEntry app_mode_app_entries[] = {
@@ -673,9 +676,15 @@ ephy_shell_startup (GApplication *application)
                               "enabled",
                               G_BINDING_SYNC_CREATE);
 
-      if (mode == EPHY_EMBED_SHELL_MODE_BROWSER && ephy_sync_utils_user_is_signed_in ()) {
-        /* Create the sync service. */
-        ephy_shell_get_sync_service (shell);
+      if (mode == EPHY_EMBED_SHELL_MODE_BROWSER) {
+        g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                         browser_mode_app_entries, G_N_ELEMENTS (browser_mode_app_entries),
+                                         application);
+
+        if (ephy_sync_utils_user_is_signed_in ()) {
+          /* Create the sync service. */
+          ephy_shell_get_sync_service (shell);
+        }
       }
     }
 
