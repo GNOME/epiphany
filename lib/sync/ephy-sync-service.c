@@ -1442,6 +1442,7 @@ ephy_sync_service_split_into_batches (EphySyncService           *self,
 {
   SyncCryptoKeyBundle *bundle;
   GPtrArray *batches;
+  g_autoptr (GHashTable) seen_ids = NULL;
   const char *collection;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
@@ -1454,6 +1455,7 @@ ephy_sync_service_split_into_batches (EphySyncService           *self,
     return NULL;
 
   batches = g_ptr_array_new_with_free_func (g_free);
+  seen_ids = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for (guint i = start; i < end; i += EPHY_SYNC_BATCH_SIZE) {
     JsonNode *node = json_node_new (JSON_NODE_ARRAY);
@@ -1461,15 +1463,27 @@ ephy_sync_service_split_into_batches (EphySyncService           *self,
 
     for (guint k = i; k < MIN (i + EPHY_SYNC_BATCH_SIZE, end); k++) {
       EphySynchronizable *synchronizable = g_ptr_array_index (synchronizables, k);
-      JsonNode *bso = ephy_synchronizable_to_bso (synchronizable, bundle);
-      JsonObject *object = json_object_ref (json_node_get_object (bso));
+      const char *id = ephy_synchronizable_get_id (synchronizable);
+      JsonNode *bso;
+      JsonObject *object;
+
+      if (!id || *id == '\0' || g_hash_table_contains (seen_ids, id))
+        continue;
+
+      g_hash_table_add (seen_ids, g_strdup (id));
+      bso = ephy_synchronizable_to_bso (synchronizable, bundle);
+      object = json_object_ref (json_node_get_object (bso));
 
       json_array_add_object_element (array, object);
       json_node_unref (bso);
     }
 
-    json_node_take_array (node, array);
-    g_ptr_array_add (batches, json_to_string (node, FALSE));
+    if (json_array_get_length (array) > 0) {
+      json_node_take_array (node, array);
+      g_ptr_array_add (batches, json_to_string (node, FALSE));
+    } else {
+      json_array_unref (array);
+    }
     json_node_unref (node);
   }
 
@@ -1478,27 +1492,33 @@ ephy_sync_service_split_into_batches (EphySyncService           *self,
   return batches;
 }
 
+static void start_batch_upload_cb (SoupSession *session,
+                                   SoupMessage *msg,
+                                   gpointer     user_data);
+
 static void
 commit_batch_cb (SoupSession *session,
                  SoupMessage *msg,
                  gpointer     user_data)
 {
   BatchUploadAsyncData *data = user_data;
+  const char *collection;
   const char *last_modified;
   guint status_code;
   SoupMessageHeaders *response_headers;
   g_autoptr (GBytes) response_body = NULL;
 
+  collection = ephy_synchronizable_manager_get_collection_name (data->manager);
   status_code = soup_message_get_status (msg);
   response_headers = soup_message_get_response_headers (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   if (status_code != 200) {
     g_autofree char *resp = response_body_to_string (response_body);
-    g_warning ("Failed to commit batch. Status code: %u, response: %s",
-               status_code, resp);
+    g_warning ("Failed to commit batch in collection %s. Status code: %u, response: %s",
+               collection, status_code, resp);
   } else {
-    LOG ("Successfully committed batches");
+    LOG ("Successfully committed batches in collection %s", collection);
     /* Update sync time. */
     last_modified = soup_message_headers_get_one (response_headers, "X-Last-Modified");
     if (last_modified)
@@ -1507,8 +1527,23 @@ commit_batch_cb (SoupSession *session,
       g_warning ("Missing X-Last-Modified header in batch commit response");
   }
 
-  if (data->sync_done)
+  if (data->end < data->synchronizables->len) {
+    guint step = EPHY_SYNC_MAX_BATCHES * EPHY_SYNC_BATCH_SIZE;
+    g_autofree char *endpoint = g_strdup_printf ("storage/%s?batch=true", collection);
+    BatchUploadAsyncData *next_bdata;
+
+    next_bdata = batch_upload_async_data_new (data->service, data->manager,
+                                              data->synchronizables, data->end,
+                                              MIN (data->end + step, data->synchronizables->len),
+                                              NULL, FALSE, data->sync_done);
+    ephy_sync_service_queue_storage_request_full (data->service, endpoint,
+                                                  SOUP_METHOD_POST, "[]", -1, -1,
+                                                  start_batch_upload_cb, next_bdata,
+                                                  TRUE);
+  } else if (data->sync_done) {
     g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
+  }
+
   batch_upload_async_data_free (data);
 }
 
@@ -1523,33 +1558,31 @@ upload_batch_cb (SoupSession *session,
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
+  collection = ephy_synchronizable_manager_get_collection_name (data->manager);
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
 
   /* Note: "202 Accepted" status code. */
   if (status_code != 202) {
     g_autofree char *resp = response_body_to_string (response_body);
-    g_warning ("Failed to upload batch. Status code: %u, response: %s",
-               status_code, resp);
+    g_warning ("Failed to upload batch in collection %s. Status code: %u, response: %s",
+               collection, status_code, resp);
   } else {
-    LOG ("Successfully uploaded batch");
+    LOG ("Successfully uploaded batch in collection %s", collection);
   }
 
   if (!data->batch_is_last)
     goto out;
 
-  collection = ephy_synchronizable_manager_get_collection_name (data->manager);
   endpoint = g_strdup_printf ("storage/%s?commit=true&batch=%s", collection, data->batch_id);
-  ephy_sync_service_queue_storage_request (data->service, endpoint,
-                                           SOUP_METHOD_POST, "[]", -1, -1,
-                                           commit_batch_cb,
-                                           batch_upload_async_data_dup (data));
+  ephy_sync_service_queue_storage_request_full (data->service, endpoint,
+                                                SOUP_METHOD_POST, "[]", -1, -1,
+                                                commit_batch_cb,
+                                                batch_upload_async_data_dup (data),
+                                                TRUE);
 
 out:
   g_free (endpoint);
-  /* Remove last reference to the array with the items to upload. */
-  if (data->batch_is_last)
-    g_ptr_array_unref (data->synchronizables);
   batch_upload_async_data_free (data);
 }
 
@@ -1576,12 +1609,16 @@ start_batch_upload_cb (SoupSession *session,
     g_autofree char *resp = response_body_to_string (response_body);
     g_warning ("Failed to start batch upload. Status code: %u, response: %s",
                status_code, resp);
+    if (data->sync_done)
+      g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
     goto out;
   }
 
   node = json_from_response_body (response_body, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
+    if (data->sync_done)
+      g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
     goto out;
   }
 
@@ -1594,15 +1631,21 @@ start_batch_upload_cb (SoupSession *session,
   batches = ephy_sync_service_split_into_batches (data->service, data->manager,
                                                   data->synchronizables,
                                                   data->start, data->end);
-  for (guint i = 0; i < batches->len; i++) {
+  if (!batches || batches->len == 0) {
+    if (data->sync_done)
+      g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
+    goto out;
+  }
+
+  for (guint i = batches->len; i > 0; i--) {
     BatchUploadAsyncData *data_dup = batch_upload_async_data_dup (data);
 
-    if (i == batches->len - 1)
+    if (i == batches->len)
       data_dup->batch_is_last = TRUE;
 
-    ephy_sync_service_queue_storage_request (data->service, endpoint, SOUP_METHOD_POST,
-                                             g_ptr_array_index (batches, i), -1, -1,
-                                             upload_batch_cb, data_dup);
+    ephy_sync_service_queue_storage_request_full (data->service, endpoint, SOUP_METHOD_POST,
+                                                  g_ptr_array_index (batches, i - 1), -1, -1,
+                                                  upload_batch_cb, data_dup, TRUE);
   }
 
 out:
@@ -1633,19 +1676,18 @@ merge_collection_finished_cb (GPtrArray *to_upload,
   collection = ephy_synchronizable_manager_get_collection_name (data->manager);
   endpoint = g_strdup_printf ("storage/%s?batch=true", collection);
 
-  for (guint i = 0; i < to_upload->len; i += step) {
-    bdata = batch_upload_async_data_new (data->service, data->manager,
-                                         to_upload, i,
-                                         MIN (i + step, to_upload->len),
-                                         NULL, FALSE,
-                                         data->is_last && i + step >= to_upload->len);
-    ephy_sync_service_queue_storage_request (data->service, endpoint,
-                                             SOUP_METHOD_POST, "[]", -1, -1,
-                                             start_batch_upload_cb, bdata);
-  }
+  bdata = batch_upload_async_data_new (data->service, data->manager,
+                                       to_upload, 0,
+                                       MIN (step, to_upload->len),
+                                       NULL, FALSE, data->is_last);
+  ephy_sync_service_queue_storage_request (data->service, endpoint,
+                                           SOUP_METHOD_POST, "[]", -1, -1,
+                                           start_batch_upload_cb, bdata);
 
 out:
   g_free (endpoint);
+  if (to_upload)
+    g_ptr_array_unref (to_upload);
   sync_collection_async_data_free (data);
 }
 
