@@ -59,6 +59,8 @@ struct _EphySyncService {
 
   gboolean sync_periodically;
   gboolean is_signing_in;
+  gboolean is_signing_out;
+  gboolean token_refresh_retried;
 };
 
 G_DEFINE_FINAL_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
@@ -605,7 +607,10 @@ ephy_sync_service_forget_secrets (EphySyncService *self)
   g_assert (self->secrets);
 
   user = ephy_sync_utils_get_sync_user ();
-  g_assert (user);
+  if (!user) {
+    g_hash_table_remove_all (self->secrets);
+    return;
+  }
 
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
                                         EPHY_SYNC_SECRET_ACCOUNT_KEY, user,
@@ -695,6 +700,23 @@ ephy_sync_service_revoke_tokens (EphySyncService *self)
 }
 
 static void
+ephy_sync_service_finish_sign_out (EphySyncService *self)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  self->is_signing_out = FALSE;
+
+  ephy_sync_service_clear_storage_queue (self);
+  ephy_sync_service_clear_storage_credentials (self);
+
+  ephy_sync_service_revoke_tokens (self);
+
+  ephy_sync_service_forget_secrets (self);
+  ephy_sync_utils_set_device_id (NULL);
+  ephy_sync_utils_set_sync_user (NULL);
+}
+
+static void
 ephy_sync_service_report_sign_in_error (EphySyncService *self,
                                         const char      *message,
                                         gboolean         clear_secrets)
@@ -755,6 +777,127 @@ response_body_to_string (GBytes *bytes)
   return ephy_string_shorten (str, 512);
 }
 
+static void ephy_sync_service_get_storage_credentials (EphySyncService *self);
+
+static void
+ephy_sync_service_storage_credentials_error (EphySyncService *self)
+{
+  const char *message = _("Failed to obtain storage credentials.");
+
+  self->token_refresh_retried = FALSE;
+  self->locked = FALSE;
+
+  if (self->is_signing_out) {
+    ephy_sync_service_finish_sign_out (self);
+    return;
+  }
+
+  if (self->is_signing_in)
+    ephy_sync_service_report_sign_in_error (self, message, TRUE);
+  else
+    g_signal_emit (self, signals[SYNC_ERROR], 0, message);
+
+  ephy_sync_service_clear_storage_queue (self);
+}
+
+static void
+refresh_access_token_cb (SoupSession  *session,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  EphySyncService *self;
+  g_autoptr (GBytes) bytes = NULL;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (JsonNode) node = NULL;
+  JsonObject *json;
+  const char *access_token;
+  SoupMessage *msg;
+  guint status_code;
+
+  bytes = soup_session_send_and_read_finish (session, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
+  self = EPHY_SYNC_SERVICE (user_data);
+
+  if (!bytes) {
+    g_warning ("Failed to refresh OAuth access token: %s", error->message);
+    goto out_error;
+  }
+
+  msg = soup_session_get_async_result_message (session, result);
+  status_code = soup_message_get_status (msg);
+  if (status_code != 200) {
+    g_autofree char *resp = response_body_to_string (bytes);
+    g_warning ("Failed to refresh OAuth access token. Status code: %u, response: %s",
+               status_code, resp);
+    goto out_error;
+  }
+
+  node = json_from_response_body (bytes, &error);
+  if (error) {
+    g_warning ("OAuth token refresh response is not valid JSON: %s", error->message);
+    goto out_error;
+  }
+
+  json = json_node_get_object (node);
+  if (!json || !json_object_has_member (json, "access_token")) {
+    g_warning ("OAuth token refresh response missing access_token");
+    goto out_error;
+  }
+
+  access_token = json_object_get_string_member (json, "access_token");
+  if (!access_token || !*access_token) {
+    g_warning ("OAuth token refresh response has empty access_token");
+    goto out_error;
+  }
+
+  LOG ("Successfully refreshed OAuth access token");
+  ephy_sync_service_set_secret (self, secrets[ACCESS_TOKEN], access_token);
+  ephy_sync_service_get_storage_credentials (self);
+  return;
+
+out_error:
+  ephy_sync_service_storage_credentials_error (self);
+}
+
+static void
+ephy_sync_service_refresh_access_token (EphySyncService *self)
+{
+  g_autoptr (SoupMessage) msg = NULL;
+  const char *refresh_token;
+  const char *content_type = "application/json";
+  g_autofree char *accounts_server = NULL;
+  g_autofree char *url = NULL;
+  char *request_body;
+  g_autoptr (GBytes) bytes = NULL;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  refresh_token = ephy_sync_service_get_secret (self, secrets[REFRESH_TOKEN]);
+  if (!refresh_token || !*refresh_token) {
+    g_warning ("Missing refresh token for OAuth token refresh");
+    ephy_sync_service_storage_credentials_error (self);
+    return;
+  }
+
+  accounts_server = ephy_sync_utils_get_accounts_server ();
+  url = g_strdup_printf ("%s/oauth/token", accounts_server);
+  request_body = g_strdup_printf ("{\"client_id\":\"%s\","
+                                  "\"grant_type\":\"refresh_token\","
+                                  "\"refresh_token\":\"%s\"}",
+                                  ephy_sync_utils_get_client_id (),
+                                  refresh_token);
+
+  msg = soup_message_new (SOUP_METHOD_POST, url);
+  bytes = g_bytes_new_take (request_body, strlen (request_body));
+  soup_message_set_request_body_from_bytes (msg, content_type, bytes);
+
+  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, self->cancellable,
+                                    (GAsyncReadyCallback)refresh_access_token_cb,
+                                    self);
+}
+
 static void
 get_storage_credentials_cb (SoupSession *session,
                             SoupMessage *msg,
@@ -767,13 +910,22 @@ get_storage_credentials_cb (SoupSession *session,
   const char *api_endpoint;
   const char *id;
   const char *key;
-  const char *message;
   int duration;
   guint status_code;
   g_autoptr (GBytes) response_body = NULL;
 
   status_code = soup_message_get_status (msg);
   response_body = g_bytes_ref (g_object_get_data (G_OBJECT (msg), "ephy-request-body"));
+
+  if (status_code == 401 && !self->token_refresh_retried) {
+    const char *refresh_token = ephy_sync_service_get_secret (self, secrets[REFRESH_TOKEN]);
+    if (refresh_token && *refresh_token) {
+      LOG ("Access token expired (401 from Token Server), refreshing OAuth access token...");
+      self->token_refresh_retried = TRUE;
+      ephy_sync_service_refresh_access_token (self);
+      return;
+    }
+  }
 
   if (status_code != 200) {
     g_autofree char *resp = response_body_to_string (response_body);
@@ -806,22 +958,15 @@ get_storage_credentials_cb (SoupSession *session,
   self->storage_credentials_expiry_time = duration + g_get_real_time () / 1000000;
 
   LOG ("Successfully obtained storage credentials from Token Server (endpoint: %s)", api_endpoint);
+  self->token_refresh_retried = FALSE;
+  self->locked = FALSE;
   ephy_sync_service_send_all_storage_requests (self);
   goto out;
 
 out_error:
-  message = _("Failed to obtain storage credentials.");
-
-  if (self->is_signing_in)
-    ephy_sync_service_report_sign_in_error (self, message, TRUE);
-  else
-    g_signal_emit (self, signals[SYNC_ERROR], 0, message);
-
-  ephy_sync_service_clear_storage_queue (self);
+  ephy_sync_service_storage_credentials_error (self);
 
 out:
-  self->locked = FALSE;
-
   if (node)
     json_node_unref (node);
   if (error)
@@ -838,6 +983,10 @@ get_storage_credentials_ready_cb (SoupSession  *session,
   g_autoptr (GError) error = NULL;
 
   bytes = soup_session_send_and_read_finish (session, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    return;
+  }
+
   if (!bytes)
     g_warning ("Failed to send store credentials request: %s", error->message);
 
@@ -868,8 +1017,7 @@ ephy_sync_service_get_storage_credentials (EphySyncService *self)
   key_id = ephy_sync_service_get_secret (self, secrets[KEY_ID]);
   if (!access_token || !key_id) {
     g_warning ("Missing access token or key ID for Token Server request");
-    ephy_sync_service_clear_storage_queue (self);
-    self->locked = FALSE;
+    ephy_sync_service_storage_credentials_error (self);
     return;
   }
 
@@ -880,7 +1028,7 @@ ephy_sync_service_get_storage_credentials (EphySyncService *self)
   request_headers = soup_message_get_request_headers (msg);
   soup_message_headers_append (request_headers, "authorization", authorization);
   soup_message_headers_append (request_headers, "X-KeyID", key_id);
-  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
+  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, self->cancellable,
                                     (GAsyncReadyCallback)get_storage_credentials_ready_cb,
                                     self);
 
@@ -2619,14 +2767,7 @@ delete_open_tabs_record_cb (SoupSession *session,
     LOG ("Successfully deleted open tabs record");
   }
 
-  ephy_sync_service_clear_storage_queue (self);
-  ephy_sync_service_clear_storage_credentials (self);
-
-  ephy_sync_service_revoke_tokens (self);
-
-  ephy_sync_service_forget_secrets (self);
-  ephy_sync_utils_set_device_id (NULL);
-  ephy_sync_utils_set_sync_user (NULL);
+  ephy_sync_service_finish_sign_out (self);
 }
 
 static void
@@ -2688,6 +2829,7 @@ ephy_sync_service_sign_out (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
+  self->is_signing_out = TRUE;
   ephy_sync_service_stop_periodical_sync (self);
   ephy_sync_service_delete_client_record (self);
 
