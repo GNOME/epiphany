@@ -51,6 +51,8 @@ struct _EphySyncService {
   GSList *managers;
 
   gboolean locked;
+  gboolean storage_request_in_flight;
+  guint storage_retry_id;
   char *storage_endpoint;
   char *storage_credentials_id;
   char *storage_credentials_key;
@@ -106,6 +108,7 @@ typedef void (*SoupSessionCallback) (SoupSession *session,
                                      gpointer     user_data);
 
 typedef struct {
+  EphySyncService *service;
   char *endpoint;
   char *method;
   char *request_body;
@@ -113,6 +116,7 @@ typedef struct {
   gint64 unmodified_since;
   SoupSessionCallback callback;
   gpointer user_data;
+  guint retry_count;
 } StorageRequestAsyncData;
 
 typedef struct {
@@ -141,8 +145,11 @@ typedef struct {
   gboolean sync_done;
 } BatchUploadAsyncData;
 
+static void ephy_sync_service_send_next_storage_request (EphySyncService *self);
+
 static StorageRequestAsyncData *
-storage_request_async_data_new (const char          *endpoint,
+storage_request_async_data_new (EphySyncService     *service,
+                                const char          *endpoint,
                                 const char          *method,
                                 const char          *request_body,
                                 gint64               modified_since,
@@ -153,6 +160,7 @@ storage_request_async_data_new (const char          *endpoint,
   StorageRequestAsyncData *data;
 
   data = g_new (StorageRequestAsyncData, 1);
+  data->service = g_object_ref (service);
   data->endpoint = g_strdup (endpoint);
   data->method = g_strdup (method);
   data->request_body = g_strdup (request_body);
@@ -160,6 +168,7 @@ storage_request_async_data_new (const char          *endpoint,
   data->unmodified_since = unmodified_since;
   data->callback = callback;
   data->user_data = user_data;
+  data->retry_count = 0;
 
   return data;
 }
@@ -169,6 +178,7 @@ storage_request_async_data_free (StorageRequestAsyncData *data)
 {
   g_assert (data);
 
+  g_clear_object (&data->service);
   g_free (data->endpoint);
   g_free (data->method);
   g_free (data->request_body);
@@ -217,25 +227,75 @@ send_and_read_async_ready_cb (SoupSession          *session,
 }
 
 static void
+retry_storage_request_cb (gpointer user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  self->storage_retry_id = 0;
+  self->storage_request_in_flight = FALSE;
+  ephy_sync_service_send_next_storage_request (self);
+}
+
+static void
 storage_request_async_ready_cb (SoupSession             *session,
                                 GAsyncResult            *result,
                                 StorageRequestAsyncData *data)
 {
+  EphySyncService *self = data->service;
   GBytes *bytes;
   SoupMessage *msg;
+  guint status_code;
   GError *error = NULL;
 
   bytes = soup_session_send_and_read_finish (session, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+    g_error_free (error);
+    storage_request_async_data_free (data);
+    return;
+  }
+
   if (!bytes) {
     g_warning ("Failed to send storage request: %s", error->message);
     g_error_free (error);
   }
 
   msg = soup_session_get_async_result_message (session, result);
+  status_code = msg ? soup_message_get_status (msg) : 0;
+
+  if ((status_code == 503 || status_code == 429) &&
+      !self->is_signing_out &&
+      data->retry_count < 3) {
+    SoupMessageHeaders *response_headers = soup_message_get_response_headers (msg);
+    const char *retry_after_str = soup_message_headers_get_one (response_headers, "Retry-After");
+    guint retry_seconds = 2 * (data->retry_count + 1);
+
+    if (retry_after_str) {
+      gint64 parsed = g_ascii_strtoll (retry_after_str, NULL, 10);
+      if (parsed > 0 && parsed <= 60)
+        retry_seconds = (guint)parsed;
+    }
+
+    if (bytes)
+      g_bytes_unref (bytes);
+
+    data->retry_count++;
+    LOG ("Storage server returned %u for %s %s, retrying in %u seconds (attempt %u/3)",
+         status_code, data->method, data->endpoint, retry_seconds, data->retry_count);
+    g_queue_push_head (self->storage_queue, data);
+    self->storage_retry_id = g_timeout_add_seconds_once (retry_seconds,
+                                                         (GSourceOnceFunc)retry_storage_request_cb,
+                                                         self);
+    g_source_set_name_by_id (self->storage_retry_id, "[epiphany] sync_storage_retry");
+    return;
+  }
+
   g_object_set_data_full (G_OBJECT (msg),
                           "ephy-request-body", bytes ? bytes : g_bytes_new (NULL, 0),
                           (GDestroyNotify)g_bytes_unref);
   data->callback (session, msg, data->user_data);
+
+  self->storage_request_in_flight = FALSE;
+  ephy_sync_service_send_next_storage_request (self);
   storage_request_async_data_free (data);
 }
 
@@ -546,7 +606,7 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
                                              strlen (self->storage_credentials_key),
                                              options);
   soup_message_headers_append (request_headers, "authorization", header->header);
-  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, NULL,
+  soup_session_send_and_read_async (self->session, msg, G_PRIORITY_DEFAULT, self->cancellable,
                                     (GAsyncReadyCallback)storage_request_async_ready_cb,
                                     data);
 
@@ -561,20 +621,20 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
 static void
 ephy_sync_service_send_all_storage_requests (EphySyncService *self)
 {
-  StorageRequestAsyncData *data;
-
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  while (!g_queue_is_empty (self->storage_queue)) {
-    data = g_queue_pop_head (self->storage_queue);
-    ephy_sync_service_send_storage_request (self, data);
-  }
+  ephy_sync_service_send_next_storage_request (self);
 }
 
 static void
 ephy_sync_service_clear_storage_queue (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  if (self->storage_retry_id != 0) {
+    g_clear_handle_id (&self->storage_retry_id, g_source_remove);
+    self->storage_request_in_flight = FALSE;
+  }
 
   while (!g_queue_is_empty (self->storage_queue))
     storage_request_async_data_free (g_queue_pop_head (self->storage_queue));
@@ -1036,6 +1096,63 @@ ephy_sync_service_get_storage_credentials (EphySyncService *self)
 }
 
 static void
+ephy_sync_service_send_next_storage_request (EphySyncService *self)
+{
+  StorageRequestAsyncData *data;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  if (self->locked || self->storage_request_in_flight || self->storage_retry_id != 0)
+    return;
+
+  if (g_queue_is_empty (self->storage_queue))
+    return;
+
+  if (ephy_sync_service_storage_credentials_is_expired (self)) {
+    /* Mark as locked so other requests won't lead to conflicts while
+     * obtaining new storage credentials.
+     */
+    self->locked = TRUE;
+    ephy_sync_service_clear_storage_credentials (self);
+    ephy_sync_service_get_storage_credentials (self);
+    return;
+  }
+
+  self->storage_request_in_flight = TRUE;
+  data = g_queue_pop_head (self->storage_queue);
+  ephy_sync_service_send_storage_request (self, data);
+}
+
+static void
+ephy_sync_service_queue_storage_request_full (EphySyncService     *self,
+                                              const char          *endpoint,
+                                              const char          *method,
+                                              const char          *request_body,
+                                              gint64               modified_since,
+                                              gint64               unmodified_since,
+                                              SoupSessionCallback  callback,
+                                              gpointer             user_data,
+                                              gboolean             priority)
+{
+  StorageRequestAsyncData *data;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+  g_assert (endpoint);
+  g_assert (method);
+
+  data = storage_request_async_data_new (self, endpoint, method, request_body,
+                                         modified_since, unmodified_since,
+                                         callback, user_data);
+
+  if (priority)
+    g_queue_push_head (self->storage_queue, data);
+  else
+    g_queue_push_tail (self->storage_queue, data);
+
+  ephy_sync_service_send_next_storage_request (self);
+}
+
+static void
 ephy_sync_service_queue_storage_request (EphySyncService     *self,
                                          const char          *endpoint,
                                          const char          *method,
@@ -1045,33 +1162,10 @@ ephy_sync_service_queue_storage_request (EphySyncService     *self,
                                          SoupSessionCallback  callback,
                                          gpointer             user_data)
 {
-  StorageRequestAsyncData *data;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (endpoint);
-  g_assert (method);
-
-  data = storage_request_async_data_new (endpoint, method, request_body,
-                                         modified_since, unmodified_since,
-                                         callback, user_data);
-
-  /* If the storage credentials are valid, then directly send the request.
-   * Otherwise, the request will remain queued and scheduled to be sent when
-   * the new credentials are obtained.
-   */
-  if (!ephy_sync_service_storage_credentials_is_expired (self)) {
-    ephy_sync_service_send_storage_request (self, data);
-  } else {
-    g_queue_push_tail (self->storage_queue, data);
-    if (!self->locked) {
-      /* Mark as locked so other requests won't lead to conflicts while
-       * obtaining new storage credentials.
-       */
-      self->locked = TRUE;
-      ephy_sync_service_clear_storage_credentials (self);
-      ephy_sync_service_get_storage_credentials (self);
-    }
-  }
+  ephy_sync_service_queue_storage_request_full (self, endpoint, method,
+                                                request_body, modified_since,
+                                                unmodified_since, callback,
+                                                user_data, FALSE);
 }
 
 static void
@@ -2031,6 +2125,7 @@ ephy_sync_service_dispose (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
+  g_clear_handle_id (&self->storage_retry_id, g_source_remove);
   g_clear_object (&self->session);
   g_clear_pointer (&self->secrets, g_hash_table_unref);
 
