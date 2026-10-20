@@ -661,6 +661,11 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
   g_autofree char *basename = NULL;
   const char *path;
 
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS)) {
+    g_warning ("Refusing to install WebExtension: WebExtensions are disabled");
+    return;
+  }
+
   web_extensions_dir = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
   path = g_file_peek_path (file);
   g_assert (path);
