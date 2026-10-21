@@ -76,9 +76,9 @@
 static guint64 web_view_uid = 1;
 
 typedef struct {
-  char                 *uri;
-  EphyWebViewErrorPage  page;
-  GError               *error;
+  char *uri;
+  EphyWebViewErrorPage page;
+  GError *error;
 } ScheduledErrorPageLoad;
 
 struct _EphyWebView {
@@ -135,8 +135,8 @@ struct _EphyWebView {
   EphyWebViewErrorPage error_page;
   ScheduledErrorPageLoad *scheduled_error_page;
 
-  EphyWebViewMessageHandler message_handlers_to_unregister;
-  gboolean just_registered_message_handlers;
+  EphyWebViewMessageHandler message_handlers_to_register;
+  EphyWebViewMessageHandler registered_message_handlers;
 
   AdwDialog *unresponsive_process_dialog;
   guint unresponsive_process_timeout_id;
@@ -1403,12 +1403,9 @@ about_apps_message_received_cb (WebKitUserContentManager *ucm,
 }
 
 void
-ephy_web_view_register_message_handler (EphyWebView                    *view,
-                                        EphyWebViewMessageHandler       handler,
-                                        EphyWebViewMessageHandlerScope  scope)
+ephy_web_view_register_message_handler_for_next_load (EphyWebView               *view,
+                                                      EphyWebViewMessageHandler  handler)
 {
-  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
-
   /* Use this function to temporarily register message handlers in the main
    * script world so they are accessible to Epiphany's internal web content. Use
    * main world message handlers only for internal Epiphany pages. They should
@@ -1420,19 +1417,26 @@ ephy_web_view_register_message_handler (EphyWebView                    *view,
    * WebKitUserContentManager is shared between many WebKitWebViews and the
    * callback will execute for every view.
    *
+   * We always delay registration until the next load is committed, to avoid
+   * opening a race window where web content can access the message handler.
+   *
    * Message handlers registered here will be unregistered when starting a new
-   * load unless ephy_web_view_register_message_handler() has been called again.
-   * That is, it's possible for them to "stack" by loading different pages
-   * in succession without loading any pages that do not use message handlers.
-   * This should be fine, although there is theoretical abuse potential in
-   * unrealistic scenarios if there are XSS vulnerabilities in internal pages.
+   * load.
    */
 
-  if (scope == EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD)
-    view->just_registered_message_handlers = TRUE;
+  view->message_handlers_to_register |= handler;
+}
 
-  if (view->message_handlers_to_unregister & handler)
+static void
+register_message_handler (EphyWebView               *view,
+                          EphyWebViewMessageHandler  handler)
+{
+  WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
+
+  if (view->registered_message_handlers & handler)
     return;
+
+  view->registered_message_handlers |= handler;
 
   switch (handler) {
     case EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER:
@@ -1454,8 +1458,27 @@ ephy_web_view_register_message_handler (EphyWebView                    *view,
                                view, G_CONNECT_DEFAULT);
       break;
   }
+}
 
-  view->message_handlers_to_unregister |= handler;
+static void
+register_pending_message_handlers (EphyWebView *view)
+{
+  if (view->message_handlers_to_register & EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER)
+    register_message_handler (view, EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER);
+
+  if (view->message_handlers_to_register & EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER)
+    register_message_handler (view, EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER);
+
+  if (view->message_handlers_to_register & EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER)
+    register_message_handler (view, EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER);
+
+  view->message_handlers_to_register = 0;
+}
+
+static void
+unregister_pending_message_handlers (EphyWebView *view)
+{
+  view->message_handlers_to_register = 0;
 }
 
 static void
@@ -1463,22 +1486,22 @@ unregister_message_handlers (EphyWebView *view)
 {
   WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager (WEBKIT_WEB_VIEW (view));
 
-  if (view->message_handlers_to_unregister & EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER) {
+  if (view->registered_message_handlers & EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER) {
     webkit_user_content_manager_unregister_script_message_handler (ucm, "tlsErrorPage", NULL);
     g_signal_handlers_disconnect_by_func (ucm, tls_error_page_message_received_cb, view);
   }
 
-  if (view->message_handlers_to_unregister & EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER) {
+  if (view->registered_message_handlers & EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER) {
     webkit_user_content_manager_unregister_script_message_handler (ucm, "reloadPage", NULL);
     g_signal_handlers_disconnect_by_func (ucm, reload_page_message_received_cb, view);
   }
 
-  if (view->message_handlers_to_unregister & EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER) {
+  if (view->registered_message_handlers & EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER) {
     webkit_user_content_manager_unregister_script_message_handler (ucm, "aboutApps", NULL);
     g_signal_handlers_disconnect_by_func (ucm, about_apps_message_received_cb, view);
   }
 
-  view->message_handlers_to_unregister = 0;
+  view->registered_message_handlers = 0;
 }
 
 static int
@@ -1653,11 +1676,6 @@ load_changed_cb (WebKitWebView   *web_view,
       }
 
       ephy_web_view_set_loading_message (view, NULL);
-
-      if (view->just_registered_message_handlers)
-        view->just_registered_message_handlers = FALSE;
-      else if (view->message_handlers_to_unregister)
-        unregister_message_handlers (view);
       break;
     }
     case WEBKIT_LOAD_REDIRECTED:
@@ -1699,11 +1717,18 @@ load_changed_cb (WebKitWebView   *web_view,
       else
         view->error_page = EPHY_WEB_VIEW_ERROR_PAGE_NONE;
 
-      /* Zoom level. */
+      unregister_message_handlers (view);
+      register_pending_message_handlers (view);
+
       restore_zoom_level (view, uri);
       break;
     }
     case WEBKIT_LOAD_FINISHED:
+      /* If the load was canceled before WEBKIT_LOAD_COMMITTED, we must avoid
+       * improper message handler registration on next WEBKIT_LOAD_COMMITTED.
+       */
+      unregister_pending_message_handlers (view);
+
       ephy_web_view_unset_loading_message (view);
 
       /* Ensure we load the icon for this web view, if available. */
@@ -2332,7 +2357,9 @@ load_error_page (EphyWebView          *view,
                    button_accesskey, button_label);
 #pragma GCC diagnostic pop
 
-  ephy_web_view_register_message_handler (view, EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER, EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD);
+  ephy_web_view_register_message_handler_for_next_load (view, EPHY_WEB_VIEW_RELOAD_PAGE_MESSAGE_HANDLER);
+  if (EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE)
+    ephy_web_view_register_message_handler_for_next_load (view, EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER);
 
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
@@ -2425,8 +2452,6 @@ load_failed_with_tls_error_cb (WebKitWebView        *web_view,
 
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
-
-  ephy_web_view_register_message_handler (view, EPHY_WEB_VIEW_TLS_ERROR_PAGE_MESSAGE_HANDLER, EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD);
 
   view->certificate = g_object_ref (certificate);
   view->tls_errors = errors;
