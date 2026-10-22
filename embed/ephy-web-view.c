@@ -75,6 +75,12 @@
 
 static guint64 web_view_uid = 1;
 
+typedef struct {
+  char                 *uri;
+  EphyWebViewErrorPage  page;
+  GError               *error;
+} ScheduledErrorPageLoad;
+
 struct _EphyWebView {
   WebKitWebView parent_instance;
 
@@ -125,8 +131,9 @@ struct _EphyWebView {
 
   gboolean loading_error_page;
   char *tls_error_failing_uri;
-
+  WebKitLoadEvent load_event;
   EphyWebViewErrorPage error_page;
+  ScheduledErrorPageLoad *scheduled_error_page;
 
   EphyWebViewMessageHandler message_handlers_to_unregister;
   gboolean just_registered_message_handlers;
@@ -171,6 +178,27 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_FINAL_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
+
+static ScheduledErrorPageLoad *
+scheduled_error_page_load_new (const char           *uri,
+                               EphyWebViewErrorPage  page,
+                               GError               *error)
+{
+  ScheduledErrorPageLoad *scheduled_error_page = g_new (ScheduledErrorPageLoad, 1);
+  scheduled_error_page->uri = g_strdup (uri);
+  scheduled_error_page->page = page;
+  scheduled_error_page->error = error ? g_error_copy (error) : NULL;
+
+  return scheduled_error_page;
+}
+
+static void
+scheduled_error_page_load_free (ScheduledErrorPageLoad *scheduled_error_page)
+{
+  g_clear_pointer (&scheduled_error_page->uri, g_free);
+  g_clear_error (&scheduled_error_page->error);
+  g_free (scheduled_error_page);
+}
 
 static void
 open_dialog_cb (GtkFileDialog            *dialog,
@@ -1606,6 +1634,7 @@ load_changed_cb (WebKitWebView   *web_view,
   g_object_freeze_notify (object);
 
   view->in_auth_dialog = 0;
+  view->load_event = load_event;
 
   /* Warning: the URI property may remain set to the URI of the
    * previously-loaded page until WEBKIT_LOAD_COMMITTED! During
@@ -1716,6 +1745,11 @@ load_changed_cb (WebKitWebView   *web_view,
         view->reader_js_timeout = g_idle_add_once (run_readability_js_if_needed, web_view);
 
       g_clear_pointer (&view->client_certificate_manager, ephy_client_certificate_manager_free);
+
+      if (view->scheduled_error_page) {
+        ephy_web_view_load_error_page (view, view->scheduled_error_page->uri, view->scheduled_error_page->page, view->scheduled_error_page->error);
+        g_clear_pointer (&view->scheduled_error_page, scheduled_error_page_load_free);
+      }
       break;
 
     default:
@@ -2142,21 +2176,11 @@ format_no_such_file_error_page (EphyWebView  *view,
   *style = "default";
 }
 
-/**
- * ephy_web_view_load_error_page:
- * @view: an #EphyWebView
- * @uri: uri that caused the failure
- * @page: one of #EphyWebViewErrorPage
- * @error: a GError to inspect, or %NULL
- *
- * Loads an error page appropriate for @page in @view.
- *
- **/
-void
-ephy_web_view_load_error_page (EphyWebView          *view,
-                               const char           *uri,
-                               EphyWebViewErrorPage  page,
-                               GError               *error)
+static void
+load_error_page (EphyWebView          *view,
+                 const char           *uri,
+                 EphyWebViewErrorPage  page,
+                 GError               *error)
 {
   g_autoptr (GBytes) html_file = NULL;
   g_autoptr (GString) html = g_string_new (NULL);
@@ -2313,6 +2337,24 @@ ephy_web_view_load_error_page (EphyWebView          *view,
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);
   webkit_web_view_load_alternate_html (WEBKIT_WEB_VIEW (view), html->str, uri, 0);
+}
+
+void
+ephy_web_view_load_error_page (EphyWebView          *view,
+                               const char           *uri,
+                               EphyWebViewErrorPage  page,
+                               GError               *error)
+{
+  if (view->load_event == WEBKIT_LOAD_FINISHED) {
+    load_error_page (view, uri, page, error);
+    return;
+  }
+
+  /* The current load has failed, and is about to finish. To make state tracking
+   * easier, let it finish before starting to load the error page.
+   */
+  g_assert (!view->scheduled_error_page);
+  view->scheduled_error_page = scheduled_error_page_load_new (uri, page, error);
 }
 
 static gboolean
