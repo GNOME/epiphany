@@ -1047,7 +1047,7 @@ confirm_before_recover (EphyWindow *window,
                                    EPHY_NEW_TAB_APPEND_LAST);
 
   ephy_web_view_load_error_page (ephy_embed_get_web_view (embed), url,
-                                 EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL, NULL);
+                                 EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL);
 }
 
 typedef struct {

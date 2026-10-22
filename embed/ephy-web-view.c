@@ -798,7 +798,7 @@ process_terminated_cb (EphyWebView                       *web_view,
 
   if (widget && !ephy_embed_has_load_pending (EPHY_EMBED (widget))) {
     ephy_web_view_load_error_page (web_view, ephy_web_view_get_address (web_view),
-                                   error_page, NULL, NULL);
+                                   error_page, NULL);
   }
 }
 
@@ -2148,7 +2148,6 @@ format_no_such_file_error_page (EphyWebView  *view,
  * @uri: uri that caused the failure
  * @page: one of #EphyWebViewErrorPage
  * @error: a GError to inspect, or %NULL
- * @user_data: a pointer to additional data
  *
  * Loads an error page appropriate for @page in @view.
  *
@@ -2157,8 +2156,7 @@ void
 ephy_web_view_load_error_page (EphyWebView          *view,
                                const char           *uri,
                                EphyWebViewErrorPage  page,
-                               GError               *error,
-                               gpointer              user_data)
+                               GError               *error)
 {
   g_autoptr (GBytes) html_file = NULL;
   g_autoptr (GString) html = g_string_new (NULL);
@@ -2333,9 +2331,9 @@ load_failed_cb (WebKitWebView   *web_view,
       error->domain != WEBKIT_NETWORK_ERROR &&
       error->domain != WEBKIT_POLICY_ERROR) {
     if (view->address && g_str_has_prefix (view->address, "file:"))
-      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE, error, NULL);
+      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_NO_SUCH_FILE, error);
     else
-      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
+      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
     return TRUE;
   }
 
@@ -2348,7 +2346,7 @@ load_failed_cb (WebKitWebView   *web_view,
     case WEBKIT_POLICY_ERROR_CANNOT_SHOW_MIME_TYPE:
     case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URI:
     case WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT:
-      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
+      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
       return TRUE;
     case WEBKIT_NETWORK_ERROR_CANCELLED: {
       if (!view->typed_address) {
@@ -2392,7 +2390,7 @@ load_failed_with_tls_error_cb (WebKitWebView        *web_view,
   view->tls_errors = errors;
   view->tls_error_failing_uri = g_strdup (uri);
   ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view), uri,
-                                 EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL, NULL);
+                                 EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
 
   return TRUE;
 }
