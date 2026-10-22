@@ -133,8 +133,7 @@ EphyWebViewErrorPage       ephy_web_view_get_error_page           (EphyWebView  
 void                       ephy_web_view_load_error_page          (EphyWebView               *view,
                                                                    const char                *uri,
                                                                    EphyWebViewErrorPage       page,
-                                                                   GError                    *error,
-                                                                   gpointer                   user_data);
+                                                                   GError                    *error);
 void                       ephy_web_view_get_best_web_app_icon    (EphyWebView               *view,
                                                                    GCancellable              *cancellable,
                                                                    GAsyncReadyCallback        callback,
