@@ -344,7 +344,8 @@ ephy_web_extension_manager_constructed (GObject *object)
   self->web_extensions = g_ptr_array_new_full (0, g_object_unref);
   self->user_agent_overrides = create_user_agent_overrides ();
 
-  ephy_web_extension_manager_scan_directory_async (self, dir);
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS))
+    ephy_web_extension_manager_scan_directory_async (self, dir);
 }
 
 static void
