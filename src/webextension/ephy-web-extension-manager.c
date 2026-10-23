@@ -549,8 +549,7 @@ decompress_xpi_thread (GTask        *task,
   flags |= ARCHIVE_EXTRACT_SECURE_SYMLINKS;
 
   archive = archive_read_new ();
-  archive_read_support_format_all (archive);
-  archive_read_support_filter_all (archive);
+  archive_read_support_format_zip (archive);
 
   ext = archive_write_disk_new ();
   archive_write_disk_set_options (ext, flags);
