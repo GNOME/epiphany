@@ -3234,7 +3234,7 @@ set_permission (EphyPermissionRequestData *data,
                                              data->permission_type, data->origin,
                                              response ? EPHY_PERMISSION_PERMIT
                                                       : EPHY_PERMISSION_DENY);
-  } else if (EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
+  } else if (data->permission_type == EPHY_PERMISSION_TYPE_ACCESS_WEBCAM_AND_MICROPHONE) {
     ephy_permissions_manager_set_permission (permissions_manager,
                                              EPHY_PERMISSION_TYPE_ACCESS_WEBCAM,
                                              data->origin,
