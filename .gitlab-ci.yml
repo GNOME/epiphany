@@ -4,6 +4,12 @@ include:
   - component: gitlab.gnome.org/GNOME/citemplates/release-service@master
     inputs:
       dist-job-name: 'flatpak'
+  - component: gitlab.gnome.org/GNOME/citemplates/goblint@master
+    inputs:
+      job-stage: 'lint'
+    extra-rules:
+      - if: $CI_COMMIT_BRANCH =~ /gnome-\d\d+/
+        when: never
   - project: 'Infrastructure/freedesktop-ci-templates'
     file: 'templates/fedora.yml'
     ref: 'b61a03cabbf308e81289f7aaaf0b5a80a34ffb99'
