@@ -1,14 +1,12 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $EphyFirefoxSyncDialog: Adw.Window {
-  modal: false;
-  default-width: 640;
-  default-height: 800;
-  destroy-with-parent: true;
+template $EphyFirefoxSyncDialog: Adw.Dialog {
+  content-height: 640;
+  content-width: 640;
   title: _("Firefox Sync");
 
-  content: Adw.ToolbarView {
+  child: Adw.ToolbarView {
     [top]
     Adw.HeaderBar {
       Button sync_now_button {

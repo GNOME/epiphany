@@ -1083,14 +1083,10 @@ window_cmd_show_firefox_sync (GSimpleAction *action,
                               GVariant      *parameter,
                               gpointer       user_data)
 {
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
-  dialog = ephy_shell_get_firefox_sync_dialog (ephy_shell_get_default ());
-
-  if (GTK_WINDOW (user_data) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
-    gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                                  GTK_WINDOW (user_data));
-  gtk_window_present (GTK_WINDOW (dialog));
+  dialog = ADW_DIALOG (ephy_shell_get_firefox_sync_dialog (ephy_shell_get_default ()));
+  adw_dialog_present (dialog, GTK_WIDGET (user_data));
 }
 
 void

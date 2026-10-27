@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_FIREFOX_SYNC_DIALOG (ephy_firefox_sync_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, EPHY, FIREFOX_SYNC_DIALOG, AdwWindow)
+G_DECLARE_FINAL_TYPE (EphyFirefoxSyncDialog, ephy_firefox_sync_dialog, EPHY, FIREFOX_SYNC_DIALOG, AdwDialog)
 
 GtkWidget *ephy_firefox_sync_dialog_new ();
 
