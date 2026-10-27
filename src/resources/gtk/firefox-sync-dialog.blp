@@ -96,54 +96,13 @@ template $EphyFirefoxSyncDialog: Adw.Window {
           title: _("Frequency");
           expression: expr $get_sync_frequency_minutes_name() as <string>;
         }
-
-        Adw.ActionRow {
-          activatable: false;
-          title: _("Device name");
-          use-underline: true;
-
-          Button sync_device_name_cancel_button {
-            label: _("_Cancel");
-            use-underline: true;
-            valign: center;
-            visible: false;
-            clicked => $on_sync_device_name_cancel_button_clicked();
-          }
-
-          Button sync_device_name_save_button {
-            label: _("_Save");
-            use-underline: true;
-            valign: center;
-            visible: false;
-            clicked => $on_sync_device_name_save_button_clicked();
-          }
-
-          Button sync_device_name_change_button {
-            label: _("_Change");
-            use-underline: true;
-            valign: center;
-            clicked => $on_sync_device_name_change_button_clicked();
-          }
-
-          Entry sync_device_name_entry {
-            sensitive: false;
-            margin-start: 12;
-            margin-end: 12;
-            margin-top: 8;
-            margin-bottom: 8;
-          }
+        
+        Adw.EntryRow sync_device_name_entry {
+          title: _("Device Name");
+          show-apply-button: true;
+          apply => $on_sync_name_applied(template);
         }
       }
     };
   };
-}
-
-SizeGroup {
-  mode: horizontal;
-
-  widgets [
-    sync_sign_out_button,
-    synced_tabs_button,
-    sync_device_name_change_button,
-  ]
 }

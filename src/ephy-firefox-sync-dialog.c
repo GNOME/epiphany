@@ -85,10 +85,7 @@ struct _EphyFirefoxSyncDialog {
   GtkWidget *sync_frequency_row;
   GtkWidget *sync_now_button;
   GtkWidget *synced_tabs_button;
-  GtkWidget *sync_device_name_entry;
-  GtkWidget *sync_device_name_change_button;
-  GtkWidget *sync_device_name_save_button;
-  GtkWidget *sync_device_name_cancel_button;
+  AdwEntryRow *sync_device_name_entry;
 
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
@@ -1063,55 +1060,6 @@ on_sync_synced_tabs_button_clicked (GtkWidget             *button,
   gtk_window_present (GTK_WINDOW (synced_tabs_dialog));
 }
 
-static void
-on_sync_device_name_change_button_clicked (GtkWidget             *button,
-                                           EphyFirefoxSyncDialog *sync_dialog)
-{
-  gtk_widget_set_sensitive (GTK_WIDGET (sync_dialog->sync_device_name_entry), TRUE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_change_button), FALSE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_save_button), TRUE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_cancel_button), TRUE);
-}
-
-static void
-on_sync_device_name_save_button_clicked (GtkWidget             *button,
-                                         EphyFirefoxSyncDialog *sync_dialog)
-{
-  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  const char *text;
-
-  text = gtk_editable_get_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry));
-  if (g_strcmp0 (text, "") == 0) {
-    char *name = ephy_sync_utils_get_device_name ();
-    gtk_editable_set_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry), name);
-    g_free (name);
-  } else {
-    ephy_sync_service_update_device_name (service, text);
-  }
-
-  gtk_widget_set_sensitive (GTK_WIDGET (sync_dialog->sync_device_name_entry), FALSE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_change_button), TRUE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_save_button), FALSE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_cancel_button), FALSE);
-}
-
-static void
-on_sync_device_name_cancel_button_clicked (GtkWidget             *button,
-                                           EphyFirefoxSyncDialog *sync_dialog)
-{
-  char *name;
-
-  name = ephy_sync_utils_get_device_name ();
-  gtk_editable_set_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry), name);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (sync_dialog->sync_device_name_entry), FALSE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_change_button), TRUE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_save_button), FALSE);
-  gtk_widget_set_visible (GTK_WIDGET (sync_dialog->sync_device_name_cancel_button), FALSE);
-
-  g_free (name);
-}
-
 static gchar *
 get_sync_frequency_minutes_name (EphySyncFrequency *value)
 {
@@ -1119,6 +1067,22 @@ get_sync_frequency_minutes_name (EphySyncFrequency *value)
   const char *minutes_text = ngettext ("%u min", "%u mins", n_minutes);
 
   return g_strdup_printf (minutes_text, n_minutes);
+}
+
+static void
+on_sync_name_applied (EphyFirefoxSyncDialog *sync_dialog,
+                      AdwEntryRow           *row)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  const char *new_name = gtk_editable_get_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry));
+
+  if (g_strcmp0 (new_name, "") != 0) {
+    ephy_sync_service_update_device_name (service, new_name);
+  } else {
+    g_autofree char *fallback_name = ephy_sync_utils_get_device_name ();
+    gtk_editable_set_text (GTK_EDITABLE (sync_dialog->sync_device_name_entry), fallback_name);
+    ephy_sync_service_update_device_name (service, new_name);
+  }
 }
 
 static void
@@ -1172,16 +1136,11 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_now_button);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, synced_tabs_button);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_device_name_entry);
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_device_name_change_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_device_name_save_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_device_name_cancel_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_change_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_save_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_name_applied);
   gtk_widget_class_bind_template_callback (widget_class, get_sync_frequency_minutes_name);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, GDK_NO_MODIFIER_MASK, "window.close", NULL);
