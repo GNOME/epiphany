@@ -81,9 +81,9 @@ struct _EphyFirefoxSyncDialog {
   GtkWidget *sync_passwords_row;
   GtkWidget *sync_history_row;
   GtkWidget *sync_open_tabs_row;
+  GtkWidget *sync_open_tabs_row_arrow;
   GtkWidget *sync_frequency_row;
   GtkWidget *sync_now_button;
-  GtkWidget *synced_tabs_button;
   AdwEntryRow *sync_device_name_entry;
 
   WebKitWebView *fxa_web_view;
@@ -1044,8 +1044,8 @@ on_sync_sync_now_button_clicked (GtkWidget             *button,
 }
 
 static void
-on_sync_synced_tabs_button_clicked (GtkWidget             *button,
-                                    EphyFirefoxSyncDialog *sync_dialog)
+on_sync_synced_tabs_row_clicked (AdwActionRow          *row,
+                                 EphyFirefoxSyncDialog *sync_dialog)
 {
   EphyOpenTabsManager *manager;
   SyncedTabsDialog *synced_tabs_dialog;
@@ -1130,14 +1130,14 @@ ephy_firefox_sync_dialog_class_init (EphyFirefoxSyncDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_passwords_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_history_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_open_tabs_row);
+  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_open_tabs_row_arrow);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_frequency_row);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_now_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, synced_tabs_button);
   gtk_widget_class_bind_template_child (widget_class, EphyFirefoxSyncDialog, sync_device_name_entry);
 
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_row_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_name_applied);
   gtk_widget_class_bind_template_callback (widget_class, get_sync_frequency_minutes_name);
 
@@ -1246,10 +1246,6 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
                                 sync_frequency_set_mapping,
                                 NULL, NULL);
 
-  g_object_bind_property (sync_dialog->sync_open_tabs_row, "active",
-                          sync_dialog->synced_tabs_button, "sensitive",
-                          G_BINDING_SYNC_CREATE);
-
   g_signal_connect_object (service, "sync-secrets-store-finished",
                            G_CALLBACK (sync_secrets_store_finished_cb),
                            sync_dialog, G_CONNECT_DEFAULT);
@@ -1271,6 +1267,9 @@ ephy_firefox_sync_dialog_setup (EphyFirefoxSyncDialog *sync_dialog)
   g_signal_connect_object (sync_dialog->sync_open_tabs_row, "notify::active",
                            G_CALLBACK (sync_collection_toggled_cb),
                            sync_dialog, G_CONNECT_DEFAULT);
+  adw_bind_property_to_css_class (sync_dialog->sync_open_tabs_row, "active",
+                                  sync_dialog->sync_open_tabs_row_arrow, "dim-label",
+                                  G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
 
   g_free (user);
   g_free (name);

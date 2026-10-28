@@ -76,12 +76,18 @@ template $EphyFirefoxSyncDialog: Adw.Dialog {
         Adw.SwitchRow sync_open_tabs_row {
           title: _("Sync Open _Tabs");
           use-underline: true;
+        }
 
-          Button synced_tabs_button {
-            label: _("S_ynced Tabs");
-            use-underline: true;
+        Adw.ActionRow {
+          title: _("Synced Tabs");
+          sensitive: bind sync_open_tabs_row.active;
+          activatable: true;
+          activated => $on_sync_synced_tabs_row_clicked();
+
+          [suffix]
+          Image sync_open_tabs_row_arrow {
+            icon-name: "go-next-symbolic";
             valign: center;
-            clicked => $on_sync_synced_tabs_button_clicked();
           }
         }
 
