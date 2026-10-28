@@ -1064,6 +1064,8 @@ static gchar *
 get_sync_frequency_minutes_name (EphySyncFrequency *value)
 {
   guint n_minutes = value->frequency;
+
+  /* Translators: this is a number of minutes */
   const char *minutes_text = ngettext ("%u min", "%u mins", n_minutes);
 
   return g_strdup_printf (minutes_text, n_minutes);
