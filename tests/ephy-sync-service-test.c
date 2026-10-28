@@ -544,6 +544,27 @@ test_password_manager_query_without_id (void)
 }
 
 static void
+test_password_manager_initial_merge_null_password (void)
+{
+  g_autoptr (EphyPasswordManager) manager = ephy_password_manager_new ();
+  g_autoptr (GPtrArray) to_upload = NULL;
+  GList *remote_records = NULL;
+  EphyPasswordRecord *remote;
+
+  /* Record with NULL password (e.g. empty password from Firefox Sync) */
+  remote = ephy_password_record_new ("{empty-pass-uuid}", "https://site.com", "https://site.com/login",
+                                     "bob", NULL, "user", "pass",
+                                     1000, 1000);
+  remote_records = g_list_append (remote_records, remote);
+
+  to_upload = ephy_password_manager_handle_initial_merge (manager, NULL, remote_records);
+  g_assert_nonnull (to_upload);
+  g_assert_cmpuint (to_upload->len, ==, 0);
+
+  g_list_free_full (remote_records, g_object_unref);
+}
+
+static void
 test_sync_utils_log_sync_change (void)
 {
   g_autofree char *log_path = NULL;
@@ -662,6 +683,7 @@ main (int   argc,
   g_test_add_func ("/lib/sync/password-manager/regular-merge-deleted", test_password_manager_regular_merge_deleted);
   g_test_add_func ("/lib/sync/password-manager/deduplicate-records", test_password_manager_deduplicate_records);
   g_test_add_func ("/lib/sync/password-manager/query-without-id", test_password_manager_query_without_id);
+  g_test_add_func ("/lib/sync/password-manager/initial-merge-null-password", test_password_manager_initial_merge_null_password);
   g_test_add_func ("/lib/sync/utils/log-sync-change", test_sync_utils_log_sync_change);
   g_test_add_func ("/lib/sync/synchronizable/debug-string", test_synchronizable_to_debug_string);
 

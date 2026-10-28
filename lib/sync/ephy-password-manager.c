@@ -485,6 +485,9 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   password_field = ephy_password_record_get_password_field (record);
   modified = ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record));
 
+  if (!password)
+    password = "";
+
   record_str = ephy_synchronizable_to_debug_string (EPHY_SYNCHRONIZABLE (record));
 
   LOG ("Storing password record (%s, %s, %s, %s, %s, %s)",
