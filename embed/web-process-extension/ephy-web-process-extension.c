@@ -1118,7 +1118,7 @@ ephy_autofill_js_get_field_value (EphyAutofillField        field,
     return;
 
   message = webkit_user_message_new ("EphyAutoFill.GetFieldValue",
-                                     g_variant_new ("(t)", field));
+                                     g_variant_new ("(i)", field));
   webkit_web_page_send_message_to_view (web_page, message,
                                         extension->cancellable,
                                         (GAsyncReadyCallback)web_view_get_field_value_ready_cb,
