@@ -2834,7 +2834,7 @@ ephy_autofill_get_field_value (WebKitWebView     *web_view,
   if (!parameters)
     return FALSE;
 
-  g_variant_get (parameters, "(t)", &field);
+  g_variant_get (parameters, "(i)", &field);
 
   ephy_autofill_storage_get (field, view->cancellable, ephy_autofill_get_field_value_finished_cb, g_object_ref (message));
 
