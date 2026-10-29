@@ -347,11 +347,8 @@ password_filter (GtkListBoxRow *row,
   gboolean visible = FALSE;
   const char *search_text = ephy_data_view_get_search_text (EPHY_DATA_VIEW (passwords_view->data_view));
 
-  if (!search_text) {
-    gtk_widget_set_visible (GTK_WIDGET (row), TRUE);
-
+  if (!search_text)
     return TRUE;
-  }
 
   origin = ephy_password_record_get_origin (record);
   username = ephy_password_record_get_username (record);
@@ -363,8 +360,6 @@ password_filter (GtkListBoxRow *row,
 
   if (visible)
     ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (passwords_view->data_view), TRUE);
-
-  gtk_widget_set_visible (GTK_WIDGET (row), visible);
 
   return visible;
 }
