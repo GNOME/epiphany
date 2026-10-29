@@ -60,6 +60,31 @@
     <display_length compare="ge">360</display_length>
   </requires>
   <releases>
+    <release date="2026-10-29" version="51.2">
+      <description>
+        <p>Bugs fixed:</p>
+        <ul>
+          <li>#2961 WebApp Epiphany Argument Injection with data URI (Michael Catanzaro)</li>
+          <li>#2966 Crash when restoring first pinned tab (grewal)</li>
+          <li>#2969 Making a tag with an empty name and removing it crashes GNOME Web (Arak)</li>
+          <li>#2971 Unresponsive page dialog reappears even after page became responsive again (Adrián Pérez de Castro)</li>
+          <li>#2972 HTML injection in Epiphany Reader mode (Fernando Munoz)</li>
+          <li>#2976 (CVE-2026-118598) Allowing a Clipboard or Website-Data-Access prompt grants camera AND microphone access (John Cardullo)</li>
+          <li>#2978 (CVE-2026-115683) TLS/SSL Error Page Bypass window.webkit.messageHandlers.tlsErrorPage (Michael Catanzaro)</li>
+          <li>#2981 Epiphany installs XPI extensions even when the Web Extensions feature is disabled (Fernando Munoz)</li>
+          <li>#2988 (CVE-2026-118599) XPI extraction allows hard-link targets -  TAR .xpi overwrites an existing user file (Fernando Munoz)</li>
+          <li>#2989 Epiphany loads installed WebExtensions when the feature is disabled (Fernando Munoz)</li>
+          <li>!2202 Do not focus location entry when opening web URIs (John Cardullo)</li>
+          <li>!2230 reader: Escape reading time before inserting it into the page (Michael Catanzaro)</li>
+        </ul>
+        <p>Updated translations for: Chinese (Taiwan), Greek, Modern (1453-), Maori, Norwegian Bokmål.</p>
+      </description>
+      <issues>
+        <issue type="cve">CVE-2026-118598</issue>
+        <issue type="cve">CVE-2026-115683</issue>
+        <issue type="cve">CVE-2026-118599</issue>
+      </issues>
+    </release>
     <release date="2026-09-24" version="51.1">
       <description>
         <p>Bugs fixed:</p>
@@ -230,25 +255,7 @@
         <p>Updated translations for: Italian, Occitan (post 1500), Serbian.</p>
       </description>
     </release>
-    <release date="2026-03-12" version="50.0">
-      <description>
-        <p>Bugs fixed:</p>
-        <ul>
-          <li>#2175 When closing a newly created tab, focus is reset to the last tab, instead of the previously focused tab (ARAKHNID)</li>
-          <li>#2825 Bugs may cause session state to be deleted (Michael Catanzaro)</li>
-          <li>#2838 epiphany-browser 49.2 build error against Nettle 4.0 (Michael Catanzaro)</li>
-          <li>#2842 Outdated comment for translators (ARAKHNID)</li>
-          <li>#2843 UI Bug: Imported bookmarks only show one link per tag (stacked on top of each other) &amp; Drag-and-Drop is broken (ARAKHNID)</li>
-          <li>#2844 Allow web apps to run in the background, with configurable toggle and quit action, even when not sandboxed by flatpak (ARAKHNID)</li>
-          <li>!2048 Fix crash when opening javascript: URLs in new tab (Michael Catanzaro)</li>
-          <li>!2049 Fix -Wdiscarded-qualifiers warnings (Michael Catanzaro)</li>
-          <li>!2050 web-view: fix security status when restoring pages from session state (Michael Catanzaro)</li>
-          <li>!2053 session: refuse to save window without tabs (Michael Catanzaro)</li>
-          <li>!2058 Revert "Fetch locale specific adlock list" (Michael Catanzaro)</li>
-        </ul>
-        <p>Updated translations for: Catalan, Danish, English (United Kingdom), Occitan (post 1500), Polish, Uighur.</p>
-      </description>
-    </release>
+    <release date="2026-03-12" version="50.0"/>
     <release date="2026-03-02" version="50~rc"/>
     <release date="2026-01-29" version="50~beta"/>
     <release date="2026-01-05" version="50~alpha"/>
