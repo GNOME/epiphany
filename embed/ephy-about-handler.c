@@ -247,13 +247,13 @@ handle_applications_finished_cb (EphyAboutHandler       *handler,
                                  GAsyncResult           *result,
                                  WebKitURISchemeRequest *request)
 {
-  WebKitWebView *view;
+  WebKitWebView *view = webkit_uri_scheme_request_get_web_view (request);
   GString *data_str;
   gsize data_length;
   GList *applications, *p;
 
-  view = webkit_uri_scheme_request_get_web_view (request);
-  ephy_web_view_register_message_handler (EPHY_WEB_VIEW (view), EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER, EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_CURRENT_PAGE);
+  /* The load has started, but has not been committed yet, so it's not too late to register. */
+  ephy_web_view_register_message_handler_for_next_load (EPHY_WEB_VIEW (view), EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER);
 
   data_str = g_string_new (NULL);
   applications = g_task_propagate_pointer (G_TASK (result), NULL);

@@ -83,11 +83,6 @@ typedef enum {
   EPHY_WEB_VIEW_ABOUT_APPS_MESSAGE_HANDLER = 1 << 2,
 } EphyWebViewMessageHandler;
 
-typedef enum {
-  EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_CURRENT_PAGE,
-  EPHY_WEB_VIEW_REGISTER_MESSAGE_HANDLER_FOR_NEXT_LOAD
-} EphyWebViewMessageHandlerScope;
-
 GtkWidget *                ephy_web_view_new                      (void);
 GtkWidget                 *ephy_web_view_new_with_related_view    (WebKitWebView             *related_view);
 void                       ephy_web_view_load_request             (EphyWebView               *view,
@@ -187,9 +182,8 @@ char                      *ephy_web_view_get_web_app_manifest_url_finish (EphyWe
                                                                           GAsyncResult  *result,
                                                                           GError       **error);
 
-void                       ephy_web_view_register_message_handler (EphyWebView                    *view,
-                                                                   EphyWebViewMessageHandler       handler,
-                                                                   EphyWebViewMessageHandlerScope  scope);
+void                       ephy_web_view_register_message_handler_for_next_load (EphyWebView               *view,
+                                                                                 EphyWebViewMessageHandler  handler);
 
 void ephy_web_view_autofill                                       (EphyWebView               *view,
                                                                    const char                *selector,
