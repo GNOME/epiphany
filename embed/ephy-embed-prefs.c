@@ -332,7 +332,7 @@ normalize_languages (char **languages)
       int j;
 
       for (j = 0; sys_langs && sys_langs[j]; j++)
-        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[i]), "-", '_'));
+        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[j]), "-", '_'));
 
       g_strfreev (sys_langs);
     } else
