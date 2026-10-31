@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues/\n"
-"POT-Creation-Date: 2026-08-19 23:00+0000\n"
-"PO-Revision-Date: 2026-08-20 17:13+0300\n"
+"POT-Creation-Date: 2026-10-31 07:57+0000\n"
+"PO-Revision-Date: 2026-10-31 23:17+0300\n"
 "Last-Translator: Yuras Shumovich <shumovichy@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
 "Language: be\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || "
 "n%100>=20) ? 1 : 2;\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.10\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.Epiphany.desktop.in.in:2 data/org.gnome.Epiphany.metainfo.xml.in.in:6
 #: embed/ephy-about-handler.c:206 embed/ephy-about-handler.c:238 src/ephy-main.c:104 src/ephy-main.c:268
-#: src/ephy-main.c:429
+#: src/ephy-main.c:433
 msgid "Web"
 msgstr "Сеціва"
 
@@ -811,11 +811,20 @@ msgstr "Часавы адбітак сінхранізацыі адкрытых 
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Часавы адбітак апошняй сінхранізацыі адкрытых укладак."
 
-#: data/org.gnome.epiphany.gschema.xml:501
+#: data/org.gnome.epiphany.gschema.xml:494
+msgid "Enable sync change logging to disk"
+msgstr "Уключыць запіс змен пры сінхранізацыі на дыск"
+
+#: data/org.gnome.epiphany.gschema.xml:495
+msgid ""
+"Whether to log detailed sync record changes to sync-changes.log in the profile directory for debugging."
+msgstr "Ці запісваць змены пры сінхранізацыі ў каталог профілю (файл sync-changes.log) з мэтай адладкі."
+
+#: data/org.gnome.epiphany.gschema.xml:506
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на выкарыстанне мікрафона"
 
-#: data/org.gnome.epiphany.gschema.xml:502
+#: data/org.gnome.epiphany.gschema.xml:507
 msgid ""
 "This option is used to save whether a given host has been given permission to access the user’s "
 "microphone. The “undecided” default means the browser needs to ask the user for permission, while "
@@ -825,11 +834,11 @@ msgstr ""
 "значэнне «undecided» азначае, што браўзер павінен спытаць дазвол у карыстальніка, а калі настаўлена "
 "«allow» (дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:506
+#: data/org.gnome.epiphany.gschema.xml:511
 msgid "Decision to apply when geolocation permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на вызначэнне месцазнаходжання"
 
-#: data/org.gnome.epiphany.gschema.xml:507
+#: data/org.gnome.epiphany.gschema.xml:512
 msgid ""
 "This option is used to save whether a given host has been given permission to access the user’s "
 "location. The “undecided” default means the browser needs to ask the user for permission, while “allow” "
@@ -840,11 +849,11 @@ msgstr ""
 "карыстальніка, а калі настаўлена «allow» (дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе "
 "прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:511
+#: data/org.gnome.epiphany.gschema.xml:516
 msgid "Decision to apply when notification permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на паказ апавяшчэнняў"
 
-#: data/org.gnome.epiphany.gschema.xml:512
+#: data/org.gnome.epiphany.gschema.xml:517
 msgid ""
 "This option is used to save whether a given host has been given permission to show notifications. The "
 "“undecided” default means the browser needs to ask the user for permission, while “allow” and “deny” "
@@ -854,11 +863,11 @@ msgstr ""
 "значэнне «undecided» азначае, што браўзер павінен спытаць дазвол у карыстальніка, а калі настаўлена "
 "«allow» (дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:516
+#: data/org.gnome.epiphany.gschema.xml:521
 msgid "Decision to apply when save password permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на захаванне пароля"
 
-#: data/org.gnome.epiphany.gschema.xml:517
+#: data/org.gnome.epiphany.gschema.xml:522
 msgid ""
 "This option is used to save whether a given host has been given permission to save passwords. The "
 "“undecided” default means the browser needs to ask the user for permission, while “allow” and “deny” "
@@ -868,11 +877,11 @@ msgstr ""
 "«undecided» азначае, што браўзер павінен спытаць дазвол у карыстальніка, а калі настаўлена «allow» "
 "(дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:521
+#: data/org.gnome.epiphany.gschema.xml:526
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на доступ да вэб-камеры"
 
-#: data/org.gnome.epiphany.gschema.xml:522
+#: data/org.gnome.epiphany.gschema.xml:527
 msgid ""
 "This option is used to save whether a given host has been given permission to access the user’s webcam. "
 "The “undecided” default means the browser needs to ask the user for permission, while “allow” and "
@@ -882,11 +891,11 @@ msgstr ""
 "«undecided» азначае, што браўзер павінен спытаць дазвол у карыстальніка, а калі настаўлена «allow» "
 "(дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:526
+#: data/org.gnome.epiphany.gschema.xml:531
 msgid "Decision to apply when display permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на доступ да дысплэя"
 
-#: data/org.gnome.epiphany.gschema.xml:527
+#: data/org.gnome.epiphany.gschema.xml:532
 msgid ""
 "This option is used to save whether a given host has been given permission to access the user’s "
 "display. The “undecided” default means the browser needs to ask the user for permission, while “allow” "
@@ -896,11 +905,11 @@ msgstr ""
 "значэнне «undecided» азначае, што браўзер павінен спытаць дазвол у карыстальніка, а калі настаўлена "
 "«allow» (дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:531
+#: data/org.gnome.epiphany.gschema.xml:536
 msgid "Decision to apply when advertisement permission is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на на паказ рэкламных аб'яў"
 
-#: data/org.gnome.epiphany.gschema.xml:532
+#: data/org.gnome.epiphany.gschema.xml:537
 msgid ""
 "This option is used to save whether a given host has been given permission to allow advertisements. The "
 "“undecided” default means the browser global setting is used, while “allow” and “deny” tell it to "
@@ -910,11 +919,11 @@ msgstr ""
 "значэнне «undecided» азначае, што браўзер павінен спытаць дазвол у карыстальніка, а калі настаўлена "
 "«allow» (дазволіць) або «deny» (забараніць), адпаведнае рашэнне будзе прынята аўтаматычна."
 
-#: data/org.gnome.epiphany.gschema.xml:536
+#: data/org.gnome.epiphany.gschema.xml:541
 msgid "Decision to apply when an autoplay policy is requested for this host"
 msgstr "Што рабіць, калі сайт спрабуе атрымаць дазвол на аўтапрайграванне"
 
-#: data/org.gnome.epiphany.gschema.xml:537
+#: data/org.gnome.epiphany.gschema.xml:542
 msgid ""
 "This option is used to save whether a given host has been given permission to autoplay. The “undecided” "
 "default means to allow autoplay of muted media, while “allow” and “deny” tell it to allow / deny all "
@@ -1057,13 +1066,13 @@ msgid "Please enter PIN for %s, to authenticate at %s:%d."
 msgstr "Увядзіце PIN-код да %s, каб правесці аўтэнтыфікацыю для %s:%d."
 
 #: embed/ephy-client-certificate-manager.c:321 embed/ephy-client-certificate-manager.c:445
-#: embed/ephy-download.c:765 embed/ephy-web-view.c:1330 src/ephy-history-dialog.c:873
-#: src/ephy-passwords-view.c:156 src/ephy-shell.c:419 src/ephy-window.c:275 src/ephy-window.c:2348
+#: embed/ephy-download.c:780 embed/ephy-web-view.c:1359 src/ephy-history-dialog.c:837
+#: src/ephy-passwords-view.c:156 src/ephy-shell.c:418 src/ephy-window.c:276 src/ephy-window.c:2441
 #: src/preferences/autofill-view.c:365 src/preferences/extension-view.c:115
-#: src/resources/gtk/bookmark-properties.blp:29 src/resources/gtk/firefox-sync-dialog.blp:105
-#: src/resources/gtk/history-dialog.blp:55 src/resources/gtk/prefs-lang-dialog.blp:16
-#: src/window-commands.c:364 src/window-commands.c:569 src/window-commands.c:935
-#: src/window-commands.c:1402 src/window-commands.c:2110 src/window-commands.c:3226
+#: src/resources/gtk/bookmark-properties.blp:29 src/resources/gtk/history-dialog.blp:55
+#: src/resources/gtk/prefs-lang-dialog.blp:16 src/window-commands.c:364 src/window-commands.c:569
+#: src/window-commands.c:935 src/window-commands.c:1402 src/window-commands.c:2110
+#: src/window-commands.c:3226
 msgid "_Cancel"
 msgstr "_Скасаваць"
 
@@ -1109,86 +1118,86 @@ msgstr "На сеанс"
 msgid "Permanently"
 msgstr "Назаўсёды"
 
-#: embed/ephy-download.c:713 src/preferences/prefs-general-page.c:589
+#: embed/ephy-download.c:728 src/preferences/prefs-general-page.c:590
 msgid "Select a Directory"
 msgstr "Выбар каталогу"
 
-#: embed/ephy-download.c:721
+#: embed/ephy-download.c:736
 msgid "Select the Destination"
 msgstr "Выбар месца прызначэння"
 
-#: embed/ephy-download.c:763
+#: embed/ephy-download.c:778
 msgid "Download Requested"
 msgstr "Запытанае спампоўванне"
 
-#: embed/ephy-download.c:766
+#: embed/ephy-download.c:781
 msgid "_Download"
 msgstr "_Спампаваць"
 
 #. Type
-#: embed/ephy-download.c:794
+#: embed/ephy-download.c:809
 #, c-format
 msgid "Type: %s (%s)"
 msgstr "Тып: %s (%s)"
 
 #. Source
-#: embed/ephy-download.c:800
+#: embed/ephy-download.c:815
 #, c-format
 msgid "Source: %s"
 msgstr "Крыніца: %s"
 
 #. Question
-#: embed/ephy-download.c:806
+#: embed/ephy-download.c:821
 msgid "Where do you want to save the file?"
 msgstr "Дзе вы хочаце захаваць гэты файл?"
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:965
+#: embed/ephy-download.c:981
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Завершана спампоўванне %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:967 src/ephy-window.c:4141
+#: embed/ephy-download.c:983 src/ephy-window.c:4250
 msgid "Download finished"
 msgstr "Спампоўванне завершана"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:554
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Націсніце %s, каб выйсці з поўнаэкраннага рэжыму"
 
-#: embed/ephy-embed.c:554
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:554
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
 #. Translators: this means WebDriver control.
-#: embed/ephy-embed.c:828
+#: embed/ephy-embed.c:827
 msgid "Web is being controlled by automation"
 msgstr "Праграма Сеціва кіруецца сродкам аўтаматызацыі"
 
-#: embed/ephy-embed-autofill.c:116
+#: embed/ephy-embed-autofill.c:119
 msgid "Autofill All Fields"
 msgstr "Аўтазапаўненне ўсіх палей"
 
-#: embed/ephy-embed-autofill.c:125
+#: embed/ephy-embed-autofill.c:129
 msgid "Autofill Personal Fields"
 msgstr "Аўтазапаўненне палей з асабістымі данымі"
 
-#: embed/ephy-embed-autofill.c:133
+#: embed/ephy-embed-autofill.c:138
 msgid "Fill This Field"
 msgstr "Запоўніць гэтае поле"
 
-#: embed/ephy-embed-autofill.c:141
+#: embed/ephy-embed-autofill.c:147
 msgid "Do Not Autofill"
 msgstr "Не запаўняць аўтаматычна"
 
-#: embed/ephy-embed-shell.c:721
+#: embed/ephy-embed-shell.c:722
 #, c-format
 msgid "URI %s not authorized to access Epiphany resource %s"
 msgstr "URI %s не аўтарызаваны для доступу да рэсурсаў Epiphany %s"
@@ -1568,7 +1577,7 @@ msgstr "Толькі словы _цалкам"
 msgid "Search Options"
 msgstr "Параметры пошуку"
 
-#: embed/ephy-reader-handler.c:316 embed/ephy-view-source-handler.c:261
+#: embed/ephy-reader-handler.c:317 embed/ephy-view-source-handler.c:261
 #, c-format
 msgid "%s is not a valid URI"
 msgstr "%s не з'яўляецца сапраўдным URI-адрасам"
@@ -1581,110 +1590,110 @@ msgstr "Тэкст не знойдзены"
 msgid "Search wrapped back to the top"
 msgstr "Пошук працягнуты зверху"
 
-#: embed/ephy-web-view.c:247 lib/ephy-file-dialog-utils.c:76
+#: embed/ephy-web-view.c:248 lib/ephy-file-dialog-utils.c:76
 msgid "All files"
 msgstr "Усе файлы"
 
-#: embed/ephy-web-view.c:256 lib/ephy-file-dialog-utils.c:64
+#: embed/ephy-web-view.c:257 lib/ephy-file-dialog-utils.c:64
 msgid "All supported types"
 msgstr "Усе вядомыя тыпы"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:600
+#: embed/ephy-web-view.c:604
 msgid "This form is not secure ‒ passwords will not be kept private"
 msgstr "Гэтая форма небяспечная - перададзеныя паролі не будуць прыватнымі"
 
-#: embed/ephy-web-view.c:601 embed/ephy-web-view.c:3597
+#: embed/ephy-web-view.c:605 embed/ephy-web-view.c:3651
 msgid "_Dismiss"
 msgstr "_Адмовіцца"
 
-#: embed/ephy-web-view.c:776
+#: embed/ephy-web-view.c:781
 msgid "Web process crashed"
 msgstr "Працэс браўзера аварыйна завяршыўся"
 
-#: embed/ephy-web-view.c:779
+#: embed/ephy-web-view.c:784
 msgid "Web process terminated due to exceeding memory limit"
 msgstr "Працэс браўзера завяршыўся з-за недахопу памяці"
 
-#: embed/ephy-web-view.c:782
+#: embed/ephy-web-view.c:787
 msgid "Web process terminated by API request"
 msgstr "Працэс браўзера завершаны запытам API"
 
-#: embed/ephy-web-view.c:827
+#: embed/ephy-web-view.c:836
 msgid "Page Unresponsive"
 msgstr "Старонка не адказвае"
 
-#: embed/ephy-web-view.c:830
+#: embed/ephy-web-view.c:839
 #, c-format
 msgid "The current page “%s” is not responding"
 msgstr "Бягучая старонка «%s» не адказвае"
 
-#: embed/ephy-web-view.c:834
+#: embed/ephy-web-view.c:843
 msgid "_Wait"
 msgstr "_Пачакаць"
 
-#: embed/ephy-web-view.c:835
+#: embed/ephy-web-view.c:844
 msgid "Force _Stop"
 msgstr "Прымусова _спыніць"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1085
+#: embed/ephy-web-view.c:1113
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Загрузка «%s»…"
 
-#: embed/ephy-web-view.c:1087 embed/ephy-web-view.c:1093
+#: embed/ephy-web-view.c:1115 embed/ephy-web-view.c:1121
 msgid "Loading…"
 msgstr "Загрузка…"
 
-#: embed/ephy-web-view.c:1323
+#: embed/ephy-web-view.c:1352
 msgid "Delete Web App?"
 msgstr "Выдаліць вэб-праграму?"
 
-#: embed/ephy-web-view.c:1326
+#: embed/ephy-web-view.c:1355
 #, c-format
 msgid ""
 "“%s” will be removed. You will have to re-install the website as an app from the menu to use it again."
 msgstr ""
 "«%s» будзе выдалена. Каб зноў карыстацца сайтам як праграмай з меню, яе прыйдзецца ўсталяваць паўторна."
 
-#: embed/ephy-web-view.c:1331 src/ephy-passwords-view.c:157 src/preferences/autofill-view.c:366
+#: embed/ephy-web-view.c:1360 src/ephy-passwords-view.c:157 src/preferences/autofill-view.c:366
 #: src/resources/gtk/history-dialog.blp:144
 msgid "_Delete"
 msgstr "_Выдаліць"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1759
+#: embed/ephy-web-view.c:1822
 msgid "This website presented identification that belongs to a different website."
 msgstr "Гэты сайт прадставіўся пасведчаннем, якое належыць іншаму сайту."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1764
+#: embed/ephy-web-view.c:1827
 msgid "This website’s identification is too old to trust. Check the date on your computer’s calendar."
 msgstr "Пасведчанне гэтага сайта занадта старое каб яму давяраць. Праверце дату на вашым камп'ютары."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1769
+#: embed/ephy-web-view.c:1832
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Пасведчанне гэтага сайта выдадзена не адной з давераных арганізацый."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1774
+#: embed/ephy-web-view.c:1837
 msgid "This website’s identification could not be processed. It may be corrupted."
 msgstr "Не ўдалося апрацаваць пасведчанне сайта. Магчыма яно пашкоджана."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1779
+#: embed/ephy-web-view.c:1842
 msgid "This website’s identification has been revoked by the trusted organization that issued it."
 msgstr "Пасведчанне гэтага сайта было адкліканае арганізацыяй, якая яго выдала."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1784
+#: embed/ephy-web-view.c:1847
 msgid "This website’s identification cannot be trusted because it uses very weak encryption."
 msgstr "Нельга давяраць пасведчанню гэтага сайта, бо яго шыфраванне вельмі слабае."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1789
+#: embed/ephy-web-view.c:1852
 msgid ""
 "This website’s identification is only valid for future dates. Check the date on your computer’s "
 "calendar."
@@ -1692,24 +1701,24 @@ msgstr "Пасведчанне гэтага сайта будзе сапраўд
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1855 embed/ephy-web-view.c:1912
+#: embed/ephy-web-view.c:1918 embed/ephy-web-view.c:1975
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Узнікла праблема пры загрузцы старонкі"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1858
+#: embed/ephy-web-view.c:1921
 msgid "Unable to display this website"
 msgstr "Не ўдалося паказаць гэту вэб-сайт"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1863
+#: embed/ephy-web-view.c:1926
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Падобна, што сайт %s недаступны."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1867
+#: embed/ephy-web-view.c:1930
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish to verify that your internet "
 "connection is working correctly."
@@ -1718,7 +1727,7 @@ msgstr ""
 "злучэнне."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1878
+#: embed/ephy-web-view.c:1941
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Дакладная памылка: %s"
@@ -1728,81 +1737,81 @@ msgstr "Дакладная памылка: %s"
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the unresponsive process error page. DO NOT ADD MNEMONICS HERE.
 #. Translators: tooltip for the refresh button
-#: embed/ephy-web-view.c:1883 embed/ephy-web-view.c:1936 embed/ephy-web-view.c:1972
-#: embed/ephy-web-view.c:2008 src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1597
+#: embed/ephy-web-view.c:1946 embed/ephy-web-view.c:1999 embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2071 src/ephy-action-bar-start.c:37 src/ephy-location-entry.c:1602
 msgid "Reload"
 msgstr "Перазагрузіць"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1887 embed/ephy-web-view.c:1940 embed/ephy-web-view.c:1976
-#: embed/ephy-web-view.c:2012
+#: embed/ephy-web-view.c:1950 embed/ephy-web-view.c:2003 embed/ephy-web-view.c:2039
+#: embed/ephy-web-view.c:2075
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:1978
 msgid "Oops! There may be a problem"
 msgstr "Узнікла нейкая праблема"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:1983
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Старонка %s выклікала нечаканае закрыццё браўзера Сеціва."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1927
+#: embed/ephy-web-view.c:1990
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Калі гэта паўтарыцца, калі ласка, паведаміце аб праблеме распрацоўшчыкам %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1961
+#: embed/ephy-web-view.c:2024
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Узнікла праблема пры паказе старонкі"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1964
+#: embed/ephy-web-view.c:2027
 msgid "Oops!"
 msgstr "Авой!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1967
+#: embed/ephy-web-view.c:2030
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a different page to continue."
 msgstr "Падчас паказу гэтай старонкі нешта пайшло не так. Перазагрузіце яе ці наведайце іншую старонку."
 
 #. Page title when web content has become unresponsive.
-#: embed/ephy-web-view.c:1997
+#: embed/ephy-web-view.c:2060
 #, c-format
 msgid "Unresponsive Page"
 msgstr "Старонка не адказвае"
 
 #. Message title when web content has become unresponsive.
-#: embed/ephy-web-view.c:2000
+#: embed/ephy-web-view.c:2063
 msgid "Uh-oh!"
 msgstr "Ай-ай!"
 
 #. Error details when web content has become unresponsive.
-#: embed/ephy-web-view.c:2003
+#: embed/ephy-web-view.c:2066
 msgid "This page has been unresponsive for too long. Please reload or visit a different page to continue."
 msgstr "Гэтая старонка занадта доўга не адказвае. Перазагрузіце яе ці наведайце іншую старонку."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2039
+#: embed/ephy-web-view.c:2102
 #, c-format
 msgid "Security Violation"
 msgstr "Парушэнне бяспекі"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2042
+#: embed/ephy-web-view.c:2105
 msgid "This Connection is Not Secure"
 msgstr "Злучэнне не з'яўляецца бяспечным"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2047
+#: embed/ephy-web-view.c:2110
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or alter information going to "
@@ -1813,41 +1822,41 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on no such file error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2057 embed/ephy-web-view.c:2107
+#: embed/ephy-web-view.c:2120 embed/ephy-web-view.c:2170
 msgid "Go Back"
 msgstr "Назад"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the no such file error page.
-#: embed/ephy-web-view.c:2060 embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:2123 embed/ephy-web-view.c:2173
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2063
+#: embed/ephy-web-view.c:2126
 msgid "Accept Risk and Proceed"
 msgstr "Прыняць рызыку і працягнуць"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2067
+#: embed/ephy-web-view.c:2130
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title on no such file error page
 #. Message title on the no such file error page.
-#: embed/ephy-web-view.c:2090 embed/ephy-web-view.c:2093
+#: embed/ephy-web-view.c:2153 embed/ephy-web-view.c:2156
 #, c-format
 msgid "File not found"
 msgstr "Файл не знойдзены"
 
-#: embed/ephy-web-view.c:2098
+#: embed/ephy-web-view.c:2161
 #, c-format
 msgid "%s could not be found."
 msgstr "Не ўдалося знайсці %s."
 
-#: embed/ephy-web-view.c:2100
+#: embed/ephy-web-view.c:2163
 #, c-format
 msgid ""
 "Please check the file name for capitalization or other typing errors. Also check if it has been moved, "
@@ -1856,11 +1865,11 @@ msgstr ""
 "Праверце адпаведнасць малых і вялікіх літар у назве файла або іншых памылак друку. Таксама праверце, ці "
 "не быў файл перамешчаны, перайменаваны або выдалены."
 
-#: embed/ephy-web-view.c:2163
+#: embed/ephy-web-view.c:2224
 msgid "None specified"
 msgstr "Не вызначана"
 
-#: embed/ephy-web-view.c:2277
+#: embed/ephy-web-view.c:2338
 msgid "Technical information"
 msgstr "Тэхнічная інфармацыя"
 
@@ -1885,66 +1894,66 @@ msgid "Images"
 msgstr "Відарысы"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:197 src/resources/gtk/action-bar-end.blp:10
+#: lib/ephy-file-helpers.c:121 lib/ephy-file-helpers.c:192 src/resources/gtk/action-bar-end.blp:10
 #: src/resources/gtk/action-bar.blp:83 src/resources/gtk/prefs-general-page.blp:112
 msgid "Downloads"
 msgstr "Спампоўкі"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:178 lib/ephy-file-helpers.c:194
+#: lib/ephy-file-helpers.c:173 lib/ephy-file-helpers.c:189
 msgid "Desktop"
 msgstr "Стол"
 
-#: lib/ephy-file-helpers.c:191
+#: lib/ephy-file-helpers.c:186
 msgid "Home"
 msgstr "Хатняя"
 
-#: lib/ephy-file-helpers.c:428
+#: lib/ephy-file-helpers.c:436
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Не ўдалося стварыць часовы каталог у «%s»."
 
-#: lib/ephy-file-helpers.c:547
+#: lib/ephy-file-helpers.c:555
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Файл «%s» існуе. Перамясціце яго ў іншае месца."
 
-#: lib/ephy-file-helpers.c:566
+#: lib/ephy-file-helpers.c:574
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Не ўдалося стварыць каталог «%s»."
 
-#: lib/ephy-file-helpers.c:722
+#: lib/ephy-file-helpers.c:730
 #, c-format
 msgid "Error removing file %s: %s"
 msgstr "Памылка выдалення файла %s: %s"
 
-#: lib/ephy-file-helpers.c:740
+#: lib/ephy-file-helpers.c:748
 #, c-format
 msgid "Error removing directory %s: %s"
 msgstr "Памылка выдалення каталога %s: %s"
 
-#: lib/ephy-opensearch-engine.c:112
+#: lib/ephy-opensearch-engine.c:99 lib/ephy-opensearch-engine.c:118
 #, c-format
 msgid "The %s search engine template URL can't be valid."
 msgstr "URL-адрас шаблона пошукавай сістэмы %s не можа быць сапраўдным."
 
-#: lib/ephy-opensearch-engine.c:210
+#: lib/ephy-opensearch-engine.c:216
 #, c-format
 msgid "Found unclosed URL template parameter curly bracket at pos %d of URL %s."
 msgstr "Знойдзена незакрытая дужка ({) параметра шаблона URL на пазіцыі %d у URL %s."
 
-#: lib/ephy-opensearch-engine.c:220
+#: lib/ephy-opensearch-engine.c:226
 #, c-format
 msgid "Found URL template parameter at %d in URL %s, but without any name."
 msgstr "Знойдзены параметр шаблона URL у %d у URL %s, але без назвы."
 
-#: lib/ephy-opensearch-engine.c:243
+#: lib/ephy-opensearch-engine.c:249
 #, c-format
 msgid "Found unknown URL template parameter %s in URL %s."
 msgstr "Знойдзены невядомы параметр шаблона URL %s у URL %s."
 
-#: lib/ephy-opensearch-engine.c:262
+#: lib/ephy-opensearch-engine.c:268
 #, c-format
 msgid ""
 "Parsing of URL template %s succeeded, but no search terms were found so it's not useful as a search "
@@ -1953,27 +1962,36 @@ msgstr ""
 "Аналіз URL-шаблона %s прайшоў паспяхова, але пошукавыя запыты не знойдзены, таму ён непрыдатны ў якасці "
 "пошукавай сістэмы."
 
-#: lib/ephy-opensearch-engine.c:339
+#: lib/ephy-opensearch-engine.c:345
 #, c-format
 msgid "Skipping <Param> tag as it has no name or value attribute"
 msgstr "Пропуск тэга <Param>, бо ён не мае атрыбута name або value"
 
 #. TRANSLATORS: The %s is the name of the search engine.
-#: lib/ephy-opensearch-engine.c:447
+#: lib/ephy-opensearch-engine.c:453
 #, c-format
 msgid "Couldn't parse search engine description file for %s: "
 msgstr "Не ўдалося разабраць файл апісання пошукавай сістэмы для %s: "
 
-#: lib/ephy-opensearch-engine.c:459
+#: lib/ephy-opensearch-engine.c:465
 #, c-format
 msgid "Couldn't create search engine as it did not provide sufficient information!"
 msgstr "Не ўдалося стварыць пошукавую сістэму, бо яна не перадала патрэбнай інфармацыі!"
 
 #. TRANSLATORS: The %s is the name of the search engine.
-#: lib/ephy-opensearch-engine.c:517
+#: lib/ephy-opensearch-engine.c:523
 #, c-format
 msgid "Couldn't download search engine description file for %s: "
 msgstr "Не ўдалося спампаваць файл апісання пошукавай сістэмы для %s: "
+
+#: lib/ephy-opensearch-engine.c:533
+#, c-format
+msgid "Couldn't download search engine description file for %s: file is empty"
+msgstr "Не ўдалося спампаваць файл апісання пошукавай сістэмы для %s: файл пусты"
+
+#: lib/ephy-opensearch-engine.c:586
+msgid "Invalid OpenSearch URL"
+msgstr "Няправільны URL-адрас OpenSearch"
 
 #. TRANSLATORS: The %s is the URL for the search suggestions.
 #: lib/ephy-search-engine.c:492
@@ -1999,10 +2017,15 @@ msgstr ""
 msgid "Could not parse JSON suggestions from %s with JSON %s: "
 msgstr "Не ўдалося разабраць прапановы JSON з %s праз JSON %s: "
 
+#: lib/ephy-search-engine.c:617
+#, c-format
+msgid "Invalid search suggestions URL: %s"
+msgstr "Няправільны URL-адрас для прапаноў пошукавай сістэмы: %s"
+
 #. Translators: First %s is the name of the user currently logged in on the
 #. * machine. The second %s is the machine's name. You can use the variables
 #. * in a different order by changing them to %2$s and %1$s.
-#: lib/ephy-sync-utils.c:324
+#: lib/ephy-sync-utils.c:336
 #, c-format
 msgid "%s’s GNOME Web on %s"
 msgstr "Сеціва GNOME, %s на %s"
@@ -2071,27 +2094,27 @@ msgstr "%d %b %Y"
 msgid "Unknown"
 msgstr "Невядома"
 
-#: lib/ephy-web-app-utils.c:372
+#: lib/ephy-web-app-utils.c:374
 #, c-format
 msgid "Failed to get desktop filename for webapp id %s"
 msgstr "Не ўдалося атрымаць назву файла desktop для id вэб-праграмы %s"
 
-#: lib/ephy-web-app-utils.c:396
+#: lib/ephy-web-app-utils.c:401
 #, c-format
 msgid "Failed to install desktop file %s: "
 msgstr "Не ўдалося ўсталяваць файл .desktop %s: "
 
-#: lib/ephy-web-app-utils.c:435
+#: lib/ephy-web-app-utils.c:440
 #, c-format
 msgid "Profile directory %s already exists"
 msgstr "Каталог профілю %s ужо існуе"
 
-#: lib/ephy-web-app-utils.c:442
+#: lib/ephy-web-app-utils.c:447
 #, c-format
 msgid "Failed to create directory %s"
 msgstr "Не ўдалося стварыць каталог %s"
 
-#: lib/ephy-web-app-utils.c:454
+#: lib/ephy-web-app-utils.c:459
 #, c-format
 msgid "Failed to create .app file: %s"
 msgstr "Не ўдалося стварыць файл .app: %s"
@@ -2117,84 +2140,80 @@ msgstr "Памылка чытання файла CSV"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:472
+#: lib/sync/ephy-password-manager.c:501
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Пароль для %s у форме ў %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:476
+#: lib/sync/ephy-password-manager.c:505
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Пароль у форме ў %s"
 
-#: lib/sync/ephy-sync-service.c:724
+#: lib/sync/ephy-sync-service.c:807 lib/sync/ephy-sync-service.c:813
 msgid "Response body is empty, do you need to install glib-networking?"
 msgstr "Цела адказу пустое, трэба ўсталяваць glib-networking?"
 
-#: lib/sync/ephy-sync-service.c:782
+#: lib/sync/ephy-sync-service.c:845
 msgid "Failed to obtain storage credentials."
 msgstr "Не ўдалося атрымаць уліковыя даныя сховішча."
 
-#: lib/sync/ephy-sync-service.c:783 lib/sync/ephy-sync-service.c:1543
-msgid "Please visit Firefox Sync and sign in again to continue syncing."
-msgstr "Каб працягнуць сінхранізацыю, наведайце Firefox Sync і ўвайдзіце зноў."
-
-#: lib/sync/ephy-sync-service.c:1568
+#: lib/sync/ephy-sync-service.c:1927
 #, c-format
 msgid "The sync secrets for the current sync user are invalid: %s"
 msgstr "Памылковы токен сінхранізацыі для бягучага карыстальніка: %s"
 
-#: lib/sync/ephy-sync-service.c:1575
+#: lib/sync/ephy-sync-service.c:1934
 #, c-format
 msgid "The sync secrets for the current sync user are not valid JSON: %s"
 msgstr "Памылковы токен сінхранізацыі JSON для бягучага карыстальніка: %s"
 
-#: lib/sync/ephy-sync-service.c:1602
+#: lib/sync/ephy-sync-service.c:1961
 #, c-format
 msgid "Could not find the sync secrets for the current sync user: %s"
 msgstr "Не ўдалося знайсці токены сінхранізацыі для бягучага карыстальніка: %s"
 
-#: lib/sync/ephy-sync-service.c:1608
+#: lib/sync/ephy-sync-service.c:1967
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "Не ўдалося знайсці токены сінхранізацыі для бягучага карыстальніка."
 
-#: lib/sync/ephy-sync-service.c:1652
+#: lib/sync/ephy-sync-service.c:2011
 msgid "Failed to store sync secrets (is the secret service or secrets portal broken?): "
 msgstr "Не ўдалося захаваць токены сінхранізацыі (можа сэрвіс або партал токенаў не працуе?): "
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1694
+#: lib/sync/ephy-sync-service.c:2053
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Токены сінхранізацыі для %s"
 
-#: lib/sync/ephy-sync-service.c:1724
+#: lib/sync/ephy-sync-service.c:2084
 msgid "Failed to upload client record."
 msgstr "Не ўдалося запампаваць запіс карыстальніка."
 
-#: lib/sync/ephy-sync-service.c:1924
+#: lib/sync/ephy-sync-service.c:2294
 msgid "Failed to upload crypto/keys record."
 msgstr "Не ўдалося запампаваць запіс ключоў шыфравання."
 
-#: lib/sync/ephy-sync-service.c:2064
+#: lib/sync/ephy-sync-service.c:2435
 msgid "Failed to retrieve crypto keys."
 msgstr "Не ўдалося атрымаць ключы шыфравання."
 
-#: lib/sync/ephy-sync-service.c:2118
+#: lib/sync/ephy-sync-service.c:2490
 msgid "Failed to upload meta/global record."
 msgstr "Не ўдалося запампаваць запіс метаданых."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2240
+#: lib/sync/ephy-sync-service.c:2613
 #, c-format
 msgid "Your Mozilla account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Ваш уліковы запіс Mozilla выкарыстоўвае сховішча версіі %d. Браўзер Сеціва падтрымлівае толькі версію "
 "%d."
 
-#: lib/sync/ephy-sync-service.c:2251
+#: lib/sync/ephy-sync-service.c:2624
 msgid "Failed to verify storage version."
 msgstr "Не ўдалося спраўдзіць версію сховішча."
 
@@ -2202,11 +2221,11 @@ msgstr "Не ўдалося спраўдзіць версію сховішча."
 msgid "Select current tag"
 msgstr "Выбраць бягучы цэтлік"
 
-#: src/bookmarks/ephy-bookmark-properties.c:164
+#: src/bookmarks/ephy-bookmark-properties.c:165
 msgid "Remove current tag"
 msgstr "Выдаліць бягучы цэтлік"
 
-#: src/bookmarks/ephy-bookmark-properties.c:314
+#: src/bookmarks/ephy-bookmark-properties.c:298
 msgid "Add Bookmark"
 msgstr "Дадаць закладку"
 
@@ -2222,28 +2241,28 @@ msgstr "Адрас павінен пачынацца з http:// або https://"
 msgid "Address is not a valid URL"
 msgstr "Адрас не з'яўляецца сапраўдным URI"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:658 src/resources/gtk/bookmark-row.blp:66
+#: src/bookmarks/ephy-bookmarks-dialog.c:660 src/resources/gtk/bookmark-row.blp:67
 #: src/resources/gtk/lang-row.blp:34
 msgid "Move Controls"
 msgstr "Перамяшчэнне элементаў"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:663 src/resources/gtk/bookmark-row.blp:7
+#: src/bookmarks/ephy-bookmarks-dialog.c:665 src/resources/gtk/bookmark-row.blp:7
 #: src/resources/gtk/lang-row.blp:7
 msgid "Move Up"
 msgstr "Перамясціць вышэй"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:664 src/resources/gtk/bookmark-row.blp:12
+#: src/bookmarks/ephy-bookmarks-dialog.c:666 src/resources/gtk/bookmark-row.blp:12
 #: src/resources/gtk/lang-row.blp:12
 msgid "Move Down"
 msgstr "Перамясціць ніжэй"
 
-#: src/bookmarks/ephy-bookmarks-dialog.c:849
+#: src/bookmarks/ephy-bookmarks-dialog.c:841
 msgid "Bookmark removed"
 msgstr "Закладка выдалена"
 
 #. Undo, redo.
-#: src/bookmarks/ephy-bookmarks-dialog.c:851 src/ephy-window.c:1014
-#: src/preferences/prefs-features-page.c:277
+#: src/bookmarks/ephy-bookmarks-dialog.c:843 src/ephy-window.c:1108
+#: src/preferences/prefs-features-page.c:275
 msgid "_Undo"
 msgstr "_Адрабіць"
 
@@ -2260,7 +2279,7 @@ msgstr "Не правільны файл закладак Epiphany: адсутн
 #: src/bookmarks/ephy-bookmarks-import.c:322
 #, c-format
 msgid "Firefox bookmarks database could not be opened. Close Firefox and try again."
-msgstr "Не ўдалося адкрыць баду даных закладак FIrefox. Закрыйце Firefox і паўтарыце спробу."
+msgstr "Не ўдалося адкрыць базу даных закладак FIrefox. Закрыйце Firefox і паўтарыце спробу."
 
 #: src/bookmarks/ephy-bookmarks-import.c:336 src/bookmarks/ephy-bookmarks-import.c:372
 #, c-format
@@ -2307,58 +2326,54 @@ msgid "Save Media As"
 msgstr "Захаваць мультымедыя як"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1606
+#: src/ephy-action-bar-start.c:581 src/ephy-location-entry.c:1611
 msgid "Stop"
 msgstr "Спыніць"
 
-#: src/ephy-certificate-dialog.c:178
+#: src/ephy-certificate-dialog.c:182
 msgid "Show More"
 msgstr "Паказаць больш"
 
-#: src/ephy-certificate-dialog.c:252
+#: src/ephy-certificate-dialog.c:256
 msgid "The certificate does not match this website"
 msgstr "Сертыфікат не адпавядае гэтаму вэб-сайту"
 
-#: src/ephy-certificate-dialog.c:255
+#: src/ephy-certificate-dialog.c:259
 msgid "The certificate has expired"
 msgstr "Скончыўся тэрмін дзеяння сертыфіката"
 
-#: src/ephy-certificate-dialog.c:258
+#: src/ephy-certificate-dialog.c:262
 msgid "The signing certificate authority is not known"
 msgstr "Сертыфікацыйны цэнтр подпісу невядомы"
 
-#: src/ephy-certificate-dialog.c:261
+#: src/ephy-certificate-dialog.c:265
 msgid "The certificate contains errors"
 msgstr "Сертыфікат змяшчае памылкі"
 
-#: src/ephy-certificate-dialog.c:264
+#: src/ephy-certificate-dialog.c:268
 msgid "The certificate has been revoked"
 msgstr "Сертыфікат быў адкліканы"
 
-#: src/ephy-certificate-dialog.c:267
+#: src/ephy-certificate-dialog.c:271
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "Сертыфікат падпісаны з дапамогай слабога алгарытму"
 
-#: src/ephy-certificate-dialog.c:270
+#: src/ephy-certificate-dialog.c:274
 msgid "The certificate activation time is still in the future"
 msgstr "Час актывацыі сертыфіката яшчэ ў будучыні"
 
-#: src/ephy-certificate-dialog.c:312
+#: src/ephy-certificate-dialog.c:316
 msgid "The identity of this website has been verified."
 msgstr "Пасведчанне гэтага сайта праверана."
 
-#: src/ephy-certificate-dialog.c:313
+#: src/ephy-certificate-dialog.c:317
 msgid "The identity of this website has not been verified."
 msgstr "Пасведчанне гэтага сайта не праверана."
 
 #. Message on certificate dialog
-#: src/ephy-certificate-dialog.c:325
+#: src/ephy-certificate-dialog.c:329
 msgid "No problems have been detected with your connection."
 msgstr "Не знойдзена ніякіх праблем са злучэннем."
-
-#: src/ephy-certificate-dialog.c:328
-msgid "This certificate is valid. However, resources on this page were sent insecurely."
-msgstr "Сертыфікат правільны, але рэсурсы на старонцы дасланы небяспечным чынам."
 
 #: src/ephy-downloads-popover.c:214 src/resources/gtk/autofill-view.blp:13
 #: src/resources/gtk/passwords-view.blp:11
@@ -2437,16 +2452,21 @@ msgstr "Запуск…"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/ephy-firefox-sync-dialog.c:155
+#: src/ephy-firefox-sync-dialog.c:148
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Апошняя сінхранізацыя: %s"
 
-#: src/ephy-firefox-sync-dialog.c:589 src/ephy-firefox-sync-dialog.c:766
+#: src/ephy-firefox-sync-dialog.c:578 src/ephy-firefox-sync-dialog.c:759
 msgid "Something went wrong, please try again later."
 msgstr "Нешта пайшло не так, паўтарыце спробу пазней."
 
-#: src/ephy-firefox-sync-dialog.c:1022
+#: src/ephy-firefox-sync-dialog.c:931
+msgid "Firefox Sync client ID is not configured."
+msgstr "Не наладжаны ідэнтыфікатар кліента Firefox Sync."
+
+#. Translators: this is a number of minutes
+#: src/ephy-firefox-sync-dialog.c:1066
 #, c-format
 msgid "%u min"
 msgid_plural "%u mins"
@@ -2454,63 +2474,51 @@ msgstr[0] "%u хвіліна"
 msgstr[1] "%u хвіліны"
 msgstr[2] "%u хвілін"
 
-#: src/ephy-header-bar.c:200
-msgid "Exit Fullscreen"
-msgstr "Выйсці з поўнаэкраннага рэжыму"
-
-#: src/ephy-history-dialog.c:265
+#: src/ephy-history-dialog.c:267
 msgid "Select _None"
 msgstr "_Зняць вылучэнне"
 
-#: src/ephy-history-dialog.c:268 src/ephy-window.c:1022 src/resources/gtk/history-dialog.blp:47
+#: src/ephy-history-dialog.c:270 src/ephy-window.c:1116 src/resources/gtk/history-dialog.blp:47
 msgid "Select _All"
 msgstr "Вылучыць у_се"
 
-#: src/ephy-history-dialog.c:455
+#: src/ephy-history-dialog.c:482
 msgid "Link copied"
 msgstr "Спасылка скапіявана"
 
-#: src/ephy-history-dialog.c:544
-msgid "Remove the selected pages from history"
-msgstr "Выдаліць абраную старонку з гісторыі"
-
-#: src/ephy-history-dialog.c:551
-msgid "Copy URL"
-msgstr "Скапіяваць URL-адрас"
-
-#: src/ephy-history-dialog.c:869
+#: src/ephy-history-dialog.c:833
 msgid "Clear Browsing History?"
 msgstr "Ачысціць гісторыю агляду?"
 
-#: src/ephy-history-dialog.c:870
+#: src/ephy-history-dialog.c:834
 msgid "All visible links will be permanently deleted"
 msgstr "Усе бачныя спасылкі будуць незваротна выдалены"
 
-#: src/ephy-history-dialog.c:874
+#: src/ephy-history-dialog.c:838
 msgid "Cl_ear"
 msgstr "Ач_ысціць"
 
-#: src/ephy-history-dialog.c:1089
+#: src/ephy-history-dialog.c:1053
 msgid "Unavailable in Incognito Mode"
 msgstr "Недаступна ў прыватным рэжыме"
 
-#: src/ephy-history-dialog.c:1092
+#: src/ephy-history-dialog.c:1056
 msgid "Clear History"
 msgstr "Ачысціць гісторыю"
 
-#: src/ephy-location-entry.c:352 src/resources/gtk/location-entry.blp:77
+#: src/ephy-location-entry.c:354 src/resources/gtk/location-entry.blp:77
 msgid "Search for websites, bookmarks, and open tabs"
 msgstr "Пошук сайтаў, закладак і адкрытых укладак"
 
-#: src/ephy-location-entry.c:377
+#: src/ephy-location-entry.c:378
 msgid "Not Secure — "
 msgstr "Небяспечна — "
 
-#: src/ephy-location-entry.c:1331
+#: src/ephy-location-entry.c:1336
 msgid "Secure Site"
 msgstr "Бяспечны сайт"
 
-#: src/ephy-location-entry.c:1333
+#: src/ephy-location-entry.c:1338
 msgid "Insecure Site"
 msgstr "Небяспечны сайт"
 
@@ -2570,35 +2578,35 @@ msgstr "Выдаліць усе паролі?"
 msgid "This will clear all locally stored passwords, and can not be undone."
 msgstr "Гэта дзеянне выдаліць усе лакальна захаваныя паролі, і яго немагчыма скасаваць."
 
-#: src/ephy-passwords-view.c:253
+#: src/ephy-passwords-view.c:254
 msgid "Copy password"
 msgstr "Скапіяваць пароль"
 
-#: src/ephy-passwords-view.c:260 src/ephy-window.c:4236
+#: src/ephy-passwords-view.c:261 src/ephy-window.c:4354
 msgid "Username"
 msgstr "Імя карыстальніка"
 
-#: src/ephy-passwords-view.c:271
+#: src/ephy-passwords-view.c:272
 msgid "Copy username"
 msgstr "Скапіяваць імя карыстальніка"
 
-#: src/ephy-passwords-view.c:278 src/ephy-window.c:4243
+#: src/ephy-passwords-view.c:279 src/ephy-window.c:4361
 msgid "Password"
 msgstr "Пароль"
 
-#: src/ephy-passwords-view.c:291
+#: src/ephy-passwords-view.c:292
 msgid "Remove Password"
 msgstr "Выдаліць пароль"
 
-#: src/ephy-privacy-report.c:65
+#: src/ephy-privacy-report.c:66
 msgid "Blocked trackers on this site"
 msgstr "Заблакіраваныя трэкеры на гэтым сайце"
 
-#: src/ephy-privacy-report.c:85
+#: src/ephy-privacy-report.c:86
 msgid "Sites this tracker was found on"
 msgstr "Сайты, на якіх быў знойдзены гэты трэкер"
 
-#: src/ephy-privacy-report.c:254
+#: src/ephy-privacy-report.c:256
 #, c-format
 msgid "GNOME Web prevented %u tracker from following you across websites"
 msgid_plural "GNOME Web prevented %u trackers from following you across websites"
@@ -2624,89 +2632,88 @@ msgstr ""
 "Гэты сайт не бяспечны. Зламыснік можа бачыць інфармацыю, якую вы адпраўляеце або кантраляваць бачнае "
 "вам змесціва"
 
-#. Label in certificate dialog when site sends mixed content.
-#: src/ephy-security-dialog.c:199
-msgid "This web site did not properly secure your connection"
-msgstr "Гэты сайт не забяспечвае надзейны ўзровень бяспекі для злучэння"
-
 #. Label in certificate dialog on secure sites.
-#: src/ephy-security-dialog.c:204
+#: src/ephy-security-dialog.c:199
 msgid "Your connection seems to be secure"
 msgstr "Злучэнне выглядае бяспечным"
 
-#: src/ephy-security-dialog.c:489
+#: src/ephy-security-dialog.c:485
 msgid "Allow"
 msgstr "Дазволіць"
 
-#: src/ephy-security-dialog.c:490
+#: src/ephy-security-dialog.c:486
 msgid "Deny"
 msgstr "Забараніць"
 
-#: src/ephy-security-dialog.c:492
+#: src/ephy-security-dialog.c:488
 msgid "Ask"
 msgstr "Спытаць"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:515
+#: src/ephy-security-dialog.c:511
 msgid "Advertisements"
 msgstr "Рэкламныя аб’явы"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:517
+#: src/ephy-security-dialog.c:513
 msgid "Notifications"
 msgstr "Апавяшчэнні"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:519
+#: src/ephy-security-dialog.c:515
 msgid "Password Saving"
 msgstr "Захаванне пароля"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:521
+#: src/ephy-security-dialog.c:517
 msgid "Location Access"
 msgstr "Доступ да месцазнаходжання"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:523
+#: src/ephy-security-dialog.c:519
 msgid "Microphone Access"
 msgstr "Доступ да мікрафона"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:525
+#: src/ephy-security-dialog.c:521
 msgid "Webcam Access"
 msgstr "Доступ да вэб-камеры"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:527
+#: src/ephy-security-dialog.c:523
 msgid "Display Access"
 msgstr "Доступ да дысплэя"
 
 #. TRANSLATORS: This is a permission toggle in the Security & Permissions dialog.
-#: src/ephy-security-dialog.c:529
+#: src/ephy-security-dialog.c:525
 msgid "Media Autoplay"
 msgstr "Аўтапрайграванне мультымедыя"
 
-#: src/ephy-security-dialog.c:529
+#: src/ephy-security-dialog.c:525
 msgid "Without Sound"
 msgstr "Без гуку"
 
-#: src/ephy-shell.c:416
+#: src/ephy-shell.c:415
 msgid "Uninstall Web App?"
 msgstr "Выдаліць вэб-праграму?"
 
-#: src/ephy-shell.c:416
+#: src/ephy-shell.c:415
 msgid "This web appʼs data will be permanently deleted"
 msgstr "Усе даныя вэб-праграмы будуць незваротна выдалены"
 
-#: src/ephy-shell.c:420
+#: src/ephy-shell.c:419
 msgid "_Uninstall"
 msgstr "_Выдаліць"
 
-#: src/ephy-site-menu-button.c:279 src/resources/gtk/site-menu-button.blp:36
+#: src/ephy-shell.c:570
+msgid "Sign In"
+msgstr "Увайсці"
+
+#: src/ephy-site-menu-button.c:282 src/resources/gtk/site-menu-button.blp:36
 msgid "Edit _Bookmark…"
 msgstr "_Рэдагаваць закладку…"
 
-#: src/ephy-site-menu-button.c:281
+#: src/ephy-site-menu-button.c:284
 msgid "Add _Bookmark…"
 msgstr "_Дадаць закладку…"
 
@@ -2716,166 +2723,178 @@ msgid "Could not load search engines suggestions: %s"
 msgstr "Не ўдалося загрузіць прапановы пошукавых сістэм: %s"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-tab-view.c:658
+#: src/ephy-tab-view.c:650
 msgid "Open a new tab"
 msgstr "Адкрыць новую ўкладку"
 
-#: src/ephy-window.c:1015
+#: src/ephy-window.c:357 src/ephy-window.c:3575 src/ephy-window.c:5218
+msgid "Leave Website?"
+msgstr "Пакінуць вэб-сайт?"
+
+#: src/ephy-window.c:358 src/ephy-window.c:3576 src/ephy-window.c:5219 src/window-commands.c:1399
+msgid "A form was modified and has not been submitted"
+msgstr "Форма была зменена і не адпраўлена"
+
+#: src/ephy-window.c:359 src/ephy-window.c:3577 src/ephy-window.c:5220 src/window-commands.c:1403
+msgid "_Discard Form"
+msgstr "_Адхіліць форму"
+
+#: src/ephy-window.c:1109
 msgid "Re_do"
 msgstr "Паў_тарыць"
 
 #. Edit.
-#: src/ephy-window.c:1018
+#: src/ephy-window.c:1112
 msgid "Cu_t"
 msgstr "В_ыразаць"
 
-#: src/ephy-window.c:1019
+#: src/ephy-window.c:1113
 msgid "_Copy"
 msgstr "_Скапіяваць"
 
-#: src/ephy-window.c:1020
+#: src/ephy-window.c:1114
 msgid "_Paste"
 msgstr "_Уставіць"
 
-#: src/ephy-window.c:1021
+#: src/ephy-window.c:1115
 msgid "_Paste Text Only"
 msgstr "_Уставіць толькі тэкст"
 
-#: src/ephy-window.c:1023
+#: src/ephy-window.c:1117
 msgid "Generate _Password"
 msgstr "Згенерыраваць _ пароль"
 
-#: src/ephy-window.c:1025
+#: src/ephy-window.c:1119
 msgid "S_end Link by Email…"
 msgstr "_Адправіць спасылку па пошце…"
 
-#: src/ephy-window.c:1026
+#: src/ephy-window.c:1120
 msgid "Add _Link to Bookmarks"
 msgstr "Дадаць _спасылку ў закладкі"
 
-#: src/ephy-window.c:1028
+#: src/ephy-window.c:1122
 msgid "_Reload"
 msgstr "_Перазагрузіць"
 
-#: src/ephy-window.c:1029
+#: src/ephy-window.c:1123
 msgid "_Back"
 msgstr "_Назад"
 
-#: src/ephy-window.c:1030
+#: src/ephy-window.c:1124
 msgid "_Forward"
 msgstr "На_перад"
 
 #. Bookmarks
-#: src/ephy-window.c:1033
+#: src/ephy-window.c:1127
 msgid "Add Boo_kmark…"
 msgstr "Дадаць зак_ладку…"
 
 #. Links.
-#: src/ephy-window.c:1037
+#: src/ephy-window.c:1131
 msgid "Open Link in New _Window"
 msgstr "Адкрыць спасылку ў новым _акне"
 
-#: src/ephy-window.c:1038
+#: src/ephy-window.c:1132
 msgid "Open Link in New _Tab"
 msgstr "Адкрыць спасылку ў новай _укладцы"
 
-#: src/ephy-window.c:1039
+#: src/ephy-window.c:1133
 msgid "Open Link in I_ncognito Window"
 msgstr "Адкрыць спасылку ў прыват_ным акне"
 
-#: src/ephy-window.c:1040
+#: src/ephy-window.c:1134
 msgid "_Save Link As…"
 msgstr "_Захаваць спасылку як…"
 
-#: src/ephy-window.c:1041
+#: src/ephy-window.c:1135
 msgid "_Copy Link Address"
 msgstr "_Скапіяваць адрас спасылкі"
 
-#: src/ephy-window.c:1042
+#: src/ephy-window.c:1136
 msgid "_Copy E-mail Address"
 msgstr "_Скапіяваць адрас электроннай пошты"
 
 #. Images.
-#: src/ephy-window.c:1046
+#: src/ephy-window.c:1140
 msgid "View _Image in New Tab"
 msgstr "Праглядзець відарыс у _новай укладцы"
 
-#: src/ephy-window.c:1047
+#: src/ephy-window.c:1141
 msgid "Copy I_mage Address"
 msgstr "Скапіяваць адрас в_ідарыса"
 
-#: src/ephy-window.c:1048
+#: src/ephy-window.c:1142
 msgid "_Save Image As…"
 msgstr "_Захаваць відарыс як…"
 
-#: src/ephy-window.c:1049
+#: src/ephy-window.c:1143
 msgid "Set as _Wallpaper"
 msgstr "Зрабіць _фонам працоўнага стала"
 
 #. Video.
-#: src/ephy-window.c:1053
+#: src/ephy-window.c:1147
 msgid "Open Video in New _Window"
 msgstr "Адкрыць відэа ў новым _акне"
 
-#: src/ephy-window.c:1054
+#: src/ephy-window.c:1148
 msgid "Open Video in New _Tab"
 msgstr "Адкрыць відэа ў _новай укладцы"
 
-#: src/ephy-window.c:1055
+#: src/ephy-window.c:1149
 msgid "_Save Video As…"
 msgstr "_Захаваць відэа як…"
 
-#: src/ephy-window.c:1056
+#: src/ephy-window.c:1150
 msgid "_Copy Video Address"
 msgstr "_Скапіяваць адрас відэа"
 
 #. Audio.
-#: src/ephy-window.c:1060
+#: src/ephy-window.c:1154
 msgid "Open Audio in New _Window"
 msgstr "Адкрыць аўдыяфайл у новым _акне"
 
-#: src/ephy-window.c:1061
+#: src/ephy-window.c:1155
 msgid "Open Audio in New _Tab"
 msgstr "Адкрыць аўдыяфайл у _новай укладцы"
 
-#: src/ephy-window.c:1062
+#: src/ephy-window.c:1156
 msgid "_Save Audio As…"
 msgstr "_Захаваць аўдыяфайл як…"
 
-#: src/ephy-window.c:1063
+#: src/ephy-window.c:1157
 msgid "_Copy Audio Address"
 msgstr "_Скапіяваць адрас аўдыяфайла"
 
-#: src/ephy-window.c:1069
+#: src/ephy-window.c:1163
 msgid "Save Pa_ge As…"
 msgstr "Захаваць _старонку як…"
 
-#: src/ephy-window.c:1070
+#: src/ephy-window.c:1164
 msgid "_Take Screenshot…"
 msgstr "_Зрабіць здымак экрана…"
 
-#: src/ephy-window.c:1071
+#: src/ephy-window.c:1165
 msgid "_Page Source"
 msgstr "_Зыходны код старонкі"
 
-#: src/ephy-window.c:1451
+#: src/ephy-window.c:1544
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Пошук у сеціве «%s»"
 
-#: src/ephy-window.c:1480
+#: src/ephy-window.c:1573
 msgid "Open Link"
 msgstr "Адкрыць спасылку"
 
-#: src/ephy-window.c:1482
+#: src/ephy-window.c:1575
 msgid "Open Link In New Tab"
 msgstr "Адкрыць спасылку ў новай укладцы"
 
-#: src/ephy-window.c:1484
+#: src/ephy-window.c:1577
 msgid "Open Link In New Window"
 msgstr "Адкрыць спасылку ў новым акне"
 
-#: src/ephy-window.c:1486
+#: src/ephy-window.c:1579
 msgid "Open Link In Incognito Window"
 msgstr "Адкрыць спасылку ў прыват_ным акне"
 
@@ -2885,104 +2904,104 @@ msgstr "Адкрыць спасылку ў прыват_ным акне"
 #. * without consent, so they should not be able to also open those files
 #. * without user interaction.
 #.
-#: src/ephy-window.c:2346
+#: src/ephy-window.c:2439
 #, c-format
 msgid "Allow “%s” to open the “%s” link in an external app"
 msgstr "Дазволіць «%s» адкрыць спасылку «%s» у знешняй праграме"
 
-#: src/ephy-window.c:2347
+#: src/ephy-window.c:2440
 msgid "Open in External App?"
 msgstr "Адкрыць у знешняй праграме?"
 
-#: src/ephy-window.c:2349
+#: src/ephy-window.c:2442
 msgid "_Open Link"
 msgstr "_Адкрыць спасылку"
 
-#: src/ephy-window.c:2355
+#: src/ephy-window.c:2448
 msgid "Always Allow"
 msgstr "Заўсёды дазваляць"
 
-#: src/ephy-window.c:2637
+#: src/ephy-window.c:2730
 msgid "Search Engine Available"
 msgstr "Даступна пошукавая сістэма"
 
 #. TRANSLATORS: %s is the name of the search engine for this row in the popover.
-#: src/ephy-window.c:2643
+#: src/ephy-window.c:2736
 #, c-format
 msgid "Add “%s”"
 msgstr "Дадаць «%s»"
 
-#: src/ephy-window.c:2647 src/ephy-window.c:2655 src/preferences/prefs-search-engine-page.c:307
+#: src/ephy-window.c:2740 src/ephy-window.c:2748 src/preferences/prefs-search-engine-page.c:307
 #: src/preferences/prefs-search-engine-page.c:309
 msgid "Add Search Engine"
 msgstr "Дадаць пошукавую сістэму"
 
-#: src/ephy-window.c:3096
+#: src/ephy-window.c:3185
 msgid "Reader Mode Available"
 msgstr "Даступны рэжым чытання"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3195
+#: src/ephy-window.c:3284
 msgid "Notification Request"
 msgstr "Запыт дазволу на апавяшчэнні"
 
 #. Translators: Notification policy for a specific site.
-#: src/ephy-window.c:3197
+#: src/ephy-window.c:3286
 #, c-format
 msgid "The page at “%s” would like to send you notifications"
 msgstr "Старонка «%s» хацела б адпраўляць вам апавяшчэнні"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3202
+#: src/ephy-window.c:3291
 msgid "Location Access Request"
 msgstr "Запыт доступу да месцазнаходжання"
 
 #. Translators: Geolocation policy for a specific site.
-#: src/ephy-window.c:3204
+#: src/ephy-window.c:3293
 #, c-format
 msgid "The page at “%s” would like to know your location"
 msgstr "Старонка «%s» хацела б ведаць ваша месцазнаходжанне"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3209
+#: src/ephy-window.c:3298
 msgid "Microphone Access Request"
 msgstr "Запыт доступу да мікрафона"
 
 #. Translators: Microphone policy for a specific site.
-#: src/ephy-window.c:3211
+#: src/ephy-window.c:3300
 #, c-format
 msgid "The page at “%s” would like to use your microphone"
 msgstr "Старонка «%s» хацела б выкарыстоўваць мікрафон"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3216
+#: src/ephy-window.c:3305
 msgid "Webcam Access Request"
 msgstr "Запыт доступу да вэб-камеры"
 
 #. Translators: Webcam policy for a specific site.
-#: src/ephy-window.c:3218
+#: src/ephy-window.c:3307
 #, c-format
 msgid "The page at “%s” would like to use your webcam"
 msgstr "Старонка «%s» хацела б выкарыстоўваць вэб-камеру"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3223
+#: src/ephy-window.c:3312
 msgid "Webcam and Microphone Access Request"
 msgstr "Запыт доступу да мікрафона і вэб-камеры"
 
 #. Translators: Webcam and microphone policy for a specific site.
-#: src/ephy-window.c:3225
+#: src/ephy-window.c:3314
 #, c-format
 msgid "The page at “%s” would like to use your webcam and microphone"
 msgstr "Старонка «%s» хацела б выкарыстоўваць вэб-камеру і мікрафон"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3239
+#: src/ephy-window.c:3328
 msgid "Website Data Access Request"
 msgstr "Запыт доступу да даных вэб-сайта"
 
 #. Translators: Storage access policy for a specific site.
-#: src/ephy-window.c:3241
+#: src/ephy-window.c:3330
 #, c-format
 msgid ""
 "The page at “%s” would like to access its own data (including cookies) while browsing “%s”. This will "
@@ -2992,49 +3011,37 @@ msgstr ""
 "дазволіць «%s» сачыць за вашай актыўнасцю на «%s»."
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3246
+#: src/ephy-window.c:3335
 msgid "Clipboard Access Request"
 msgstr "Запыт доступу да буфера абмену"
 
 #. Translators: Clipboard policy for a specific site.
-#: src/ephy-window.c:3248
+#: src/ephy-window.c:3337
 #, c-format
 msgid "The page at “%s” would like to access your clipboard"
 msgstr "Старонка «%s» хацела б выкарыстоўваць буфер абмену"
 
-#: src/ephy-window.c:3276
+#: src/ephy-window.c:3365
 msgid "_Ask Later"
 msgstr "Спытаць _пазней"
 
-#: src/ephy-window.c:3277
+#: src/ephy-window.c:3366
 msgid "_Deny"
 msgstr "_Забараніць"
 
-#: src/ephy-window.c:3278
+#: src/ephy-window.c:3367
 msgid "_Allow"
 msgstr "_Дазволіць"
 
-#: src/ephy-window.c:3484 src/ephy-window.c:5160
-msgid "Leave Website?"
-msgstr "Пакінуць вэб-сайт?"
-
-#: src/ephy-window.c:3485 src/ephy-window.c:5161 src/window-commands.c:1399
-msgid "A form was modified and has not been submitted"
-msgstr "Форма была зменена і не адпраўлена"
-
-#: src/ephy-window.c:3486 src/ephy-window.c:5162 src/window-commands.c:1403
-msgid "_Discard Form"
-msgstr "_Адхіліць форму"
-
-#: src/ephy-window.c:3507
+#: src/ephy-window.c:3598
 msgid "Download operation"
 msgstr "Аперацыя спампоўвання"
 
-#: src/ephy-window.c:3509
+#: src/ephy-window.c:3600
 msgid "Show details"
 msgstr "Паказаць падрабязнасці"
 
-#: src/ephy-window.c:3511
+#: src/ephy-window.c:3602
 #, c-format
 msgid "%d download operation active"
 msgid_plural "%d download operations active"
@@ -3042,87 +3049,91 @@ msgstr[0] "Актыўна %d аперацыя спампоўвання"
 msgstr[1] "Актыўны %d аперацыі спампоўвання"
 msgstr[2] "Актыўна %d аперацый спампоўвання"
 
-#: src/ephy-window.c:3789
+#: src/ephy-window.c:3873
 msgid "Set as Default Browser?"
 msgstr "Зрабіць прадвызначаным браўзерам?"
 
-#: src/ephy-window.c:3791
+#: src/ephy-window.c:3875
 msgid "Use Web as your default web browser and for opening external links"
 msgstr "Выкарыстоўваць «Сеціва» ў якасці прадвызначанага браўзера і для адкрывання знешніх спасылак"
 
-#: src/ephy-window.c:3793
+#: src/ephy-window.c:3877
 msgid "Use Epiphany Technology Preview as your default web browser and for opening external links"
 msgstr ""
 "Выкарыстоўваць Epiphany Technology Preview у якасці прадвызначанага браўзера і для адкрывання знешніх "
 "спасылак"
 
-#: src/ephy-window.c:3797
+#: src/ephy-window.c:3881
 msgid "_Ask Again Later"
 msgstr "_Спытаць яшчэ раз пазней"
 
-#: src/ephy-window.c:3798
+#: src/ephy-window.c:3882
 msgid "_No"
 msgstr "_Не"
 
-#: src/ephy-window.c:3799
+#: src/ephy-window.c:3883
 msgid "_Yes"
 msgstr "_Так"
 
-#: src/ephy-window.c:4129
+#: src/ephy-window.c:4213
 msgid "Download started"
 msgstr "Спампоўванне пачалося"
 
-#: src/ephy-window.c:4217
+#: src/ephy-window.c:4261
+msgid "_Open Folder"
+msgstr "_Адкрыць папку"
+
+#: src/ephy-window.c:4335
 msgid "Save Password?"
 msgstr "Захаваць пароль?"
 
-#: src/ephy-window.c:4218
+#: src/ephy-window.c:4336
 msgid "Passwords are saved only on your device and can be removed at any time."
 msgstr "Паролі захоўваюцца толькі на вашай прыладзе і ў любы час іх можна выдаліць."
 
-#: src/ephy-window.c:4220
+#: src/ephy-window.c:4338
 msgid "Not Now"
 msgstr "Не зараз"
 
-#: src/ephy-window.c:4221
+#: src/ephy-window.c:4339
 msgid "Never Save"
 msgstr "Ніколі не захоўваць"
 
-#: src/ephy-window.c:4222
+#: src/ephy-window.c:4340
 msgid "Save"
 msgstr "Захаваць"
 
-#: src/ephy-window.c:4423
+#: src/ephy-window.c:4541
 msgctxt "shortcuts dialog"
 msgid "Web App"
 msgstr "Вэб-праграма"
 
-#: src/ephy-window.c:4426
+#: src/ephy-window.c:4544
 msgctxt "shortcuts dialog"
 msgid "Install Site as Web App"
 msgstr "Усталяваць сайт як вэб-праграму"
 
-#: src/ephy-window.c:4952
+#: src/ephy-window.c:5010
 msgid "Page URL copied"
 msgstr "URL-адрас старонкі скапіяваны"
 
-#: src/ephy-window.c:5275
+#: src/ephy-window.c:5333
 msgid "Close Multiple Tabs?"
 msgstr "Закрыць некалькі ўкладак?"
 
-#: src/ephy-window.c:5276
+#: src/ephy-window.c:5334
 msgid "If this window is closed, all open tabs will be lost"
 msgstr "Калі закрыць гэта акно, усе адкрытыя ўкладкі будуць страчаны"
 
-#: src/ephy-window.c:5277
+#: src/ephy-window.c:5335
 msgid "C_lose Tabs"
 msgstr "З_акрыць укладкі"
 
-#: src/ephy-window.c:5393
+#: src/ephy-window.c:5458
 msgid "New tab opened"
 msgstr "Адкрыта новая ўкладка"
 
-#: src/ephy-window.c:5397
+#: src/ephy-window.c:5462
 msgid "Switch"
 msgstr "Пераключыцца"
 
@@ -3186,7 +3197,7 @@ msgstr "Новая пошукавая сістэма"
 msgid "A_dd Search Engine"
 msgstr "_Дадаць пошукавую сістэму"
 
-#: src/preferences/ephy-search-engine-row.c:126
+#: src/preferences/ephy-search-engine-row.c:127
 msgid "No search suggestions"
 msgstr "Няма прапаноў пошукавай сістэмы"
 
@@ -3240,11 +3251,11 @@ msgstr "Усталяваць"
 msgid "Open File (manifest.json/xpi)"
 msgstr "Адкрыць файл (manifest.json/xpi)"
 
-#: src/preferences/prefs-features-page.c:276
+#: src/preferences/prefs-features-page.c:274
 msgid "All values reset"
 msgstr "Скінуць усе значэнні"
 
-#: src/preferences/prefs-features-page.c:330
+#: src/preferences/prefs-features-page.c:324
 msgid "Reset to default"
 msgstr "Скінуць да прадвызначаных значэнняў"
 
@@ -3252,7 +3263,7 @@ msgstr "Скінуць да прадвызначаных значэнняў"
 msgid "Add Language"
 msgstr "Дадаць мову"
 
-#: src/preferences/prefs-general-page.c:402 src/preferences/prefs-general-page.c:554
+#: src/preferences/prefs-general-page.c:403 src/preferences/prefs-general-page.c:555
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -3260,7 +3271,7 @@ msgstr[0] "Мова сістэмы (%s)"
 msgstr[1] "Мовы сістэмы (%s)"
 msgstr[2] "Мовы сістэмы (%s)"
 
-#: src/preferences/prefs-general-page.c:766
+#: src/preferences/prefs-general-page.c:767
 msgid "Supported Image Files"
 msgstr "Вядомыя файлы відарысаў"
 
@@ -3325,27 +3336,27 @@ msgstr "Рэдагаваць пошукавую сістэму"
 msgid "Remove Search Engine"
 msgstr "Выдаліць пошукавую сістэму"
 
-#: src/preferences/webapp-additional-urls-dialog.c:72
+#: src/preferences/webapp-additional-urls-dialog.c:73
 msgid "Remove URL"
 msgstr "Выдаліць URL"
 
-#: src/profile-migrator/ephy-profile-migrator.c:366
+#: src/profile-migrator/ephy-profile-migrator.c:376
 msgid "Executes only the n-th migration step"
 msgstr "Выконвае толькі n-ы крок пераносу"
 
-#: src/profile-migrator/ephy-profile-migrator.c:370
+#: src/profile-migrator/ephy-profile-migrator.c:380
 msgid "Specifies the required version for the migrator"
 msgstr "Вызначае патрэбную версію для сродку пераносу"
 
-#: src/profile-migrator/ephy-profile-migrator.c:374
+#: src/profile-migrator/ephy-profile-migrator.c:384
 msgid "Specifies the profile where the migrator should run"
 msgstr "Вызначае профіль, у кантэксце якога трэба запусціць сродак пераносу настроек"
 
-#: src/profile-migrator/ephy-profile-migrator.c:396
+#: src/profile-migrator/ephy-profile-migrator.c:406
 msgid "Web profile migrator"
 msgstr "Сродак пераносу профіляў Сеціва"
 
-#: src/profile-migrator/ephy-profile-migrator.c:397
+#: src/profile-migrator/ephy-profile-migrator.c:407
 msgid "Web profile migrator options"
 msgstr "Параметры сродку пераносу профіляў Сеціва"
 
@@ -3467,7 +3478,7 @@ msgstr "Назва"
 msgid "Tags"
 msgstr "Цэтлікі"
 
-#: src/resources/gtk/bookmark-properties.blp:73 src/resources/gtk/bookmark-row.blp:43
+#: src/resources/gtk/bookmark-properties.blp:73 src/resources/gtk/bookmark-row.blp:44
 msgid "Remove"
 msgstr "Выдаліць"
 
@@ -3475,7 +3486,7 @@ msgstr "Выдаліць"
 msgid "Add Tag"
 msgstr "Дадаць цэтлік"
 
-#: src/resources/gtk/bookmark-properties.blp:121
+#: src/resources/gtk/bookmark-properties.blp:122
 msgid "Add new tag"
 msgstr "Дадаць новы цэтлік"
 
@@ -3624,53 +3635,45 @@ msgstr "Уліковы запіс Mozilla"
 msgid "Logged in"
 msgstr "Вы ўвайшлі"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:50
+#: src/resources/gtk/firefox-sync-dialog.blp:51
 msgid "Sign _Out"
 msgstr "_Выйсці"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:59
+#: src/resources/gtk/firefox-sync-dialog.blp:60
 msgid "Sync Options"
 msgstr "Параметры сінхранізацыі"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:62
+#: src/resources/gtk/firefox-sync-dialog.blp:63
 msgid "Sync _Bookmarks"
 msgstr "Сінхранізацыя _закладак"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:68
+#: src/resources/gtk/firefox-sync-dialog.blp:69
 msgid "Sync _Passwords"
 msgstr "Сінхранізацыя _пароляў"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:73
+#: src/resources/gtk/firefox-sync-dialog.blp:74
 msgid "Sync _History"
 msgstr "Сінхранізацыя _гісторыі"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:78
-msgid "Sync _Extensions"
-msgstr "Сінхранізацыя па_шырэнняў"
-
-#: src/resources/gtk/firefox-sync-dialog.blp:83
+#: src/resources/gtk/firefox-sync-dialog.blp:79
 msgid "Sync Open _Tabs"
 msgstr "Сінхранізацыя адкрытых _укладак"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:87
+#: src/resources/gtk/firefox-sync-dialog.blp:83
 msgid "S_ynced Tabs"
 msgstr "Сін_хранізаваныя ўкладкі"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:95
+#: src/resources/gtk/firefox-sync-dialog.blp:91
 msgid "Frequency"
 msgstr "Частата"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:101
-msgid "Device name"
+#: src/resources/gtk/firefox-sync-dialog.blp:96
+msgid "Device Name"
 msgstr "Назва прылады"
 
-#: src/resources/gtk/firefox-sync-dialog.blp:113
-msgid "_Save"
-msgstr "_Захаваць"
-
-#: src/resources/gtk/firefox-sync-dialog.blp:121
-msgid "_Change"
-msgstr "_Змяніць"
+#: src/resources/gtk/header-bar.blp:14
+msgid "Exit Fullscreen"
+msgstr "Выйсці з поўнаэкраннага рэжыму"
 
 #: src/resources/gtk/history-dialog.blp:7
 msgid "History"
@@ -3700,6 +3703,14 @@ msgstr "Тут з'явяцца наведаныя старонкі"
 msgid "_Open"
 msgstr "_Адкрыць"
 
+#: src/resources/gtk/history-dialog-row.blp:18
+msgid "Remove the selected pages from history"
+msgstr "Выдаліць абраную старонку з гісторыі"
+
+#: src/resources/gtk/history-dialog-row.blp:36
+msgid "Copy URL"
+msgstr "Скапіяваць URL-адрас"
+
 #: src/resources/gtk/lang-row.blp:47
 msgid "Delete Language"
 msgstr "Выдаліць мову"
@@ -3707,46 +3718,6 @@ msgstr "Выдаліць мову"
 #: src/resources/gtk/location-entry.blp:202
 msgid "Paste and _Go"
 msgstr "Уставіць і _перайсці"
-
-#: src/resources/gtk/notebook-context-menu.blp:6
-msgid "R_eload"
-msgstr "_Перазагрузіць"
-
-#: src/resources/gtk/notebook-context-menu.blp:11
-msgid "Reload _All Tabs"
-msgstr "Перазагрузіць _усе ўкладкі"
-
-#: src/resources/gtk/notebook-context-menu.blp:16
-msgid "_Duplicate"
-msgstr "_Дубляваць"
-
-#: src/resources/gtk/notebook-context-menu.blp:23
-msgid "P_in Tab"
-msgstr "За_мацаваць укладку"
-
-#: src/resources/gtk/notebook-context-menu.blp:29
-msgid "Unp_in Tab"
-msgstr "Ад_мацаваць укладку"
-
-#: src/resources/gtk/notebook-context-menu.blp:35 src/resources/gtk/site-menu-button.blp:30
-msgid "_Mute Tab"
-msgstr "_Адключыць гук на ўкладцы"
-
-#: src/resources/gtk/notebook-context-menu.blp:42
-msgid "Close Tabs to the _Left"
-msgstr "Закрыць усе ўкладкі з_лева"
-
-#: src/resources/gtk/notebook-context-menu.blp:47
-msgid "Close Tabs to the _Right"
-msgstr "Закрыць усе ўкладкі с_права"
-
-#: src/resources/gtk/notebook-context-menu.blp:52
-msgid "Close _Other Tabs"
-msgstr "Закрыць _усе іншыя ўкладкі"
-
-#: src/resources/gtk/notebook-context-menu.blp:57 src/window-commands.c:295
-msgid "_Close"
-msgstr "_Закрыць"
 
 #: src/resources/gtk/page-menu-button.blp:7
 msgid "Main Menu"
@@ -3757,15 +3728,15 @@ msgstr "Галоўнае меню"
 msgid "_Run in Background"
 msgstr "_Запусціць у фоне"
 
-#: src/resources/gtk/page-menu-button.blp:23 src/resources/gtk/tab-overview-menu.blp:6
+#: src/resources/gtk/page-menu-button.blp:23 src/resources/gtk/window.blp:7
 msgid "_New Window"
 msgstr "_Новае акно"
 
-#: src/resources/gtk/page-menu-button.blp:28 src/resources/gtk/tab-overview-menu.blp:11
+#: src/resources/gtk/page-menu-button.blp:28 src/resources/gtk/window.blp:12
 msgid "New _Incognito Window"
 msgstr "Новае прыв_атнае акно"
 
-#: src/resources/gtk/page-menu-button.blp:33 src/resources/gtk/tab-overview-menu.blp:18
+#: src/resources/gtk/page-menu-button.blp:33 src/resources/gtk/window.blp:19
 msgid "Reopen Closed _Tab"
 msgstr "Адкрыць закрытую ўкладку зноў"
 
@@ -3797,31 +3768,35 @@ msgstr "Справаздача аб _прыватнасці"
 msgid "Passw_ords"
 msgstr "П_аролі"
 
-#: src/resources/gtk/page-menu-button.blp:79
+#: src/resources/gtk/page-menu-button.blp:77
+msgid "Firefox _Sync"
+msgstr "_Сінхранізацыя з Firefox"
+
+#: src/resources/gtk/page-menu-button.blp:84
 msgid "Pr_eferences"
 msgstr "_Налады"
 
-#: src/resources/gtk/page-menu-button.blp:84
+#: src/resources/gtk/page-menu-button.blp:89
 msgid "_Keyboard Shortcuts"
 msgstr "_Спалучэнні клавіш"
 
-#: src/resources/gtk/page-menu-button.blp:89
+#: src/resources/gtk/page-menu-button.blp:94
 msgid "_Help"
 msgstr "_Даведка"
 
-#: src/resources/gtk/page-menu-button.blp:94
+#: src/resources/gtk/page-menu-button.blp:99
 msgid "_About Web"
 msgstr "_Аб праграме Сеціва"
 
-#: src/resources/gtk/page-menu-button.blp:101
+#: src/resources/gtk/page-menu-button.blp:106
 msgid "_Uninstall Web App"
 msgstr "_Выдаліць вэб-праграму"
 
-#: src/resources/gtk/page-menu-button.blp:107
+#: src/resources/gtk/page-menu-button.blp:112
 msgid "_Quit"
 msgstr "_Выйсці"
 
-#: src/resources/gtk/passwords-view.blp:9
+#: src/resources/gtk/passwords-view.blp:9 src/resources/gtk/prefs-privacy-page.blp:52
 msgid "Passwords"
 msgstr "Паролі"
 
@@ -4097,15 +4072,19 @@ msgstr "Асабістыя даныя"
 msgid "Website _Data"
 msgstr "Даныя _вэб-сайтаў"
 
-#: src/resources/gtk/prefs-privacy-page.blp:53
+#: src/resources/gtk/prefs-privacy-page.blp:55
+msgid "_Remember Passwords"
+msgstr "_Запамінаць паролі"
+
+#: src/resources/gtk/prefs-privacy-page.blp:60
 msgid "Forms and Autofill"
 msgstr "Формы і аўтазапаўненне"
 
-#: src/resources/gtk/prefs-privacy-page.blp:56
+#: src/resources/gtk/prefs-privacy-page.blp:63
 msgid "_Autofill Forms"
 msgstr "Аўтазапаўненне _форм"
 
-#: src/resources/gtk/prefs-privacy-page.blp:62
+#: src/resources/gtk/prefs-privacy-page.blp:69
 msgid "Autofill _Data"
 msgstr "Аўтазапаўненне _даных"
 
@@ -4464,6 +4443,10 @@ msgstr "_Знайсці…"
 msgid "_Print…"
 msgstr "_Друк…"
 
+#: src/resources/gtk/site-menu-button.blp:30 src/resources/gtk/tab-view.blp:36
+msgid "_Mute Tab"
+msgstr "_Адключыць гук на ўкладцы"
+
 #: src/resources/gtk/site-menu-button.blp:41
 msgid "Add Search _Engine…"
 msgstr "_Дадаць пошукавую сістэму…"
@@ -4506,9 +4489,41 @@ msgstr ""
 "Ніжэй змешчаны адкрытыя ўкладкі, сінхранізаваныя з іншымі прыладамі, якія выкарыстоўваюць гэты ўліковы "
 "запіс Firefox. Двойчы націсніце па назве ўкладкі, каб адкрыць яе (лакальныя ўкладкі адкрыць нельга)."
 
-#: src/resources/gtk/tab-overview-menu.blp:23
-msgid "Close _All Tabs"
-msgstr "Закрыць _усе ўкладкі"
+#: src/resources/gtk/tab-view.blp:7
+msgid "R_eload"
+msgstr "_Перазагрузіць"
+
+#: src/resources/gtk/tab-view.blp:12
+msgid "Reload _All Tabs"
+msgstr "Перазагрузіць _усе ўкладкі"
+
+#: src/resources/gtk/tab-view.blp:17
+msgid "_Duplicate"
+msgstr "_Дубляваць"
+
+#: src/resources/gtk/tab-view.blp:24
+msgid "P_in Tab"
+msgstr "За_мацаваць укладку"
+
+#: src/resources/gtk/tab-view.blp:30
+msgid "Unp_in Tab"
+msgstr "Ад_мацаваць укладку"
+
+#: src/resources/gtk/tab-view.blp:43
+msgid "Close Tabs to the _Left"
+msgstr "Закрыць усе ўкладкі з_лева"
+
+#: src/resources/gtk/tab-view.blp:48
+msgid "Close Tabs to the _Right"
+msgstr "Закрыць усе ўкладкі с_права"
+
+#: src/resources/gtk/tab-view.blp:53
+msgid "Close _Other Tabs"
+msgstr "Закрыць _усе іншыя ўкладкі"
+
+#: src/resources/gtk/tab-view.blp:58 src/window-commands.c:295
+msgid "_Close"
+msgstr "_Закрыць"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.blp:5
 msgid "Additional URLs"
@@ -4527,6 +4542,10 @@ msgstr "Базавы дамен"
 msgid "Add URL"
 msgstr "Дадаць URL-адрас"
 
+#: src/resources/gtk/window.blp:24
+msgid "Close _All Tabs"
+msgstr "Закрыць _усе ўкладкі"
+
 #: src/search-provider/ephy-search-provider.c:217
 #, c-format
 msgid "Search the web for “%s”"
@@ -4537,7 +4556,7 @@ msgstr "Пошук у сеціве «%s»"
 msgid "Load “%s”"
 msgstr "Загрузіць «%s»"
 
-#: src/synced-tabs-dialog.c:136
+#: src/synced-tabs-dialog.c:140
 msgid "Local Tabs"
 msgstr "Лакальныя ўкладкі"
 
@@ -4579,25 +4598,45 @@ msgstr "Не ўдалося выдаліць вэб-праграму «%s»"
 msgid "Options for %s"
 msgstr "Параметры для %s"
 
-#: src/webextension/ephy-web-extension.c:892 src/webextension/ephy-web-extension.c:904
+#: src/webextension/ephy-web-extension.c:949 src/webextension/ephy-web-extension.c:961
 #, c-format
 msgid "Failed to parse manifest.json: %s"
 msgstr "Не ўдалося разабраць manifest.json: %s"
 
-#: src/webextension/ephy-web-extension.c:898
+#: src/webextension/ephy-web-extension.c:955
 #, c-format
 msgid "manifest.json not found"
 msgstr "manifest.json не знойдзены"
 
-#: src/webextension/ephy-web-extension.c:910 src/webextension/ephy-web-extension.c:916
+#: src/webextension/ephy-web-extension.c:967 src/webextension/ephy-web-extension.c:973
 #, c-format
 msgid "manifest.json invalid"
 msgstr "няправільны manifest.json"
 
-#: src/webextension/ephy-web-extension-manager.c:297
+#: src/webextension/ephy-web-extension-manager.c:299
 #, c-format
 msgid "Failed to determine initiating URI"
 msgstr "Не ўдалося вызначыць URI ініцыялізацыі"
+
+#: src/webextension/ephy-web-extension-manager.c:562
+#, c-format
+msgid "Could not open archive: %s"
+msgstr "Не ўдалося адкрыць архіў: %s"
+
+#: src/webextension/ephy-web-extension-manager.c:582
+#, c-format
+msgid "Error extracting archive: %s"
+msgstr "Памылка вымання архіва: %s"
+
+#: src/webextension/ephy-web-extension-manager.c:597
+#, c-format
+msgid "Could not copy archive data: %s"
+msgstr "Не ўдалося скапіяваць даныя архіва: %s"
+
+#: src/webextension/ephy-web-extension-manager.c:607
+#, c-format
+msgid "Could not finish archive: %s"
+msgstr "Не ўдалося завяршыць працу з архівам: %s"
 
 #: src/window-commands.c:132
 msgid "HTML File"
@@ -4765,6 +4804,24 @@ msgstr ""
 #: src/window-commands.c:3227
 msgid "_Enable"
 msgstr "_Уключыць"
+
+#~ msgid "Please visit Firefox Sync and sign in again to continue syncing."
+#~ msgstr "Каб працягнуць сінхранізацыю, наведайце Firefox Sync і ўвайдзіце зноў."
+
+#~ msgid "This certificate is valid. However, resources on this page were sent insecurely."
+#~ msgstr "Сертыфікат правільны, але рэсурсы на старонцы дасланы небяспечным чынам."
+
+#~ msgid "This web site did not properly secure your connection"
+#~ msgstr "Гэты сайт не забяспечвае надзейны ўзровень бяспекі для злучэння"
+
+#~ msgid "Sync _Extensions"
+#~ msgstr "Сінхранізацыя па_шырэнняў"
+
+#~ msgid "_Save"
+#~ msgstr "_Захаваць"
+
+#~ msgid "_Change"
+#~ msgstr "_Змяніць"
 
 #~ msgid "Ask o_n Download"
 #~ msgstr "_Спытаць пры спампоўванні"
