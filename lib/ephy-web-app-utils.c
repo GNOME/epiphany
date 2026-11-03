@@ -349,6 +349,21 @@ ephy_web_application_delete_by_desktop_file_id (const char      *desktop_file_id
   return ephy_web_application_delete (id, out_app_found);
 }
 
+static char *
+build_exec_string (const char *profile_dir,
+                   const char *address)
+{
+  g_autofree char *quoted_profile_dir = g_shell_quote (profile_dir);
+  g_autofree char *quoted_address = g_shell_quote (address);
+  g_autofree char *exec_string_raw = NULL;
+
+  exec_string_raw = g_strdup_printf ("epiphany --application-mode --profile=%s %s",
+                                     quoted_profile_dir,
+                                     quoted_address);
+
+  return escape_exec_string (exec_string_raw);
+}
+
 static gboolean
 create_desktop_file (const char  *id,
                      const char  *address,
@@ -359,11 +374,8 @@ create_desktop_file (const char  *id,
   g_autofree char *filename = NULL;
   g_autoptr (GKeyFile) file = NULL;
   g_autofree char *exec_string = NULL;
-  g_autofree char *exec_string_raw = NULL;
   g_autofree char *wm_class = NULL;
   g_autofree char *desktop_entry = NULL;
-  g_autofree char *quoted_profile_dir = NULL;
-  g_autofree char *quoted_address = NULL;
   XdpPortal *portal = ephy_get_portal ();
 
   g_assert (profile_dir);
@@ -375,14 +387,8 @@ create_desktop_file (const char  *id,
     return FALSE;
   }
 
-  quoted_profile_dir = g_shell_quote (profile_dir);
-  quoted_address = g_shell_quote (address);
-
   file = g_key_file_new ();
-  exec_string_raw = g_strdup_printf ("epiphany --application-mode --profile=%s %s",
-                                     quoted_profile_dir,
-                                     quoted_address);
-  exec_string = escape_exec_string (exec_string_raw);
+  exec_string = build_exec_string (profile_dir, address);
   g_key_file_set_value (file, "Desktop Entry", "Exec", exec_string);
   g_key_file_set_value (file, "Desktop Entry", "StartupNotify", "true");
   g_key_file_set_value (file, "Desktop Entry", "Terminal", "false");
@@ -1035,9 +1041,9 @@ ephy_web_application_save (EphyWebApplication *app)
   g_autofree char *name = NULL;
   g_autofree char *icon = NULL;
   g_autofree char *exec = NULL;
-  g_auto (GStrv) strings = NULL;
+  g_auto (GStrv) argv = NULL;
   g_autofree char *unescaped_url = NULL;
-  guint exec_length;
+  int argc;
   gboolean changed = FALSE;
   gboolean saved = FALSE;
   g_autoptr (GError) error = NULL;
@@ -1070,18 +1076,16 @@ ephy_web_application_save (EphyWebApplication *app)
                        (GAsyncReadyCallback)ephy_web_icon_copy_cb, NULL);
   }
 
-  exec = g_key_file_get_string (keyfile, "Desktop Entry", "Exec", NULL);
-  strings = g_strsplit (exec, " ", -1);
+  exec = g_key_file_get_value (keyfile, "Desktop Entry", "Exec", NULL);
+  if (exec && g_shell_parse_argv (exec, &argc, &argv, NULL))
+    unescaped_url = unescape_exec_string (argv[argc - 1]);
 
-  exec_length = g_strv_length (strings);
-  unescaped_url = unescape_exec_string (strings[exec_length - 1]);
   if (g_strcmp0 (unescaped_url, app->url) != 0) {
+    g_autofree char *profile_dir = ephy_web_application_get_profile_directory (app->id);
+    g_autofree char *new_exec = build_exec_string (profile_dir, app->url);
+
     changed = TRUE;
-    g_free (strings[exec_length - 1]);
-    strings[exec_length - 1] = escape_exec_string (app->url);
-    g_free (exec);
-    exec = g_strjoinv (" ", strings);
-    g_key_file_set_string (keyfile, "Desktop Entry", "Exec", exec);
+    g_key_file_set_value (keyfile, "Desktop Entry", "Exec", new_exec);
   }
 
   if (changed) {
