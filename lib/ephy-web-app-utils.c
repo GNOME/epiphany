@@ -379,7 +379,7 @@ create_desktop_file (const char  *id,
   quoted_address = g_shell_quote (address);
 
   file = g_key_file_new ();
-  exec_string_raw = g_strdup_printf ("epiphany --application-mode \"--profile=%s\" %s",
+  exec_string_raw = g_strdup_printf ("epiphany --application-mode --profile=%s %s",
                                      quoted_profile_dir,
                                      quoted_address);
   exec_string = escape_exec_string (exec_string_raw);
