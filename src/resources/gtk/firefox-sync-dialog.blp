@@ -90,7 +90,9 @@ template $EphyFirefoxSyncDialog: Adw.Dialog {
             valign: center;
           }
         }
+      }
 
+      Adw.PreferencesGroup {
         Adw.ComboRow sync_frequency_row {
           title: _("Frequency");
           expression: expr $get_sync_frequency_minutes_name() as <string>;
