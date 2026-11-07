@@ -30,6 +30,7 @@
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-shell.h"
+#include "ephy-test-utils.h"
 
 static void
 web_view_created_cb (EphyEmbedShell *shell,
@@ -63,6 +64,9 @@ main (int   argc,
   int ret;
 
   gtk_test_init (&argc, &argv);
+
+  g_log_set_always_fatal (G_LOG_FATAL_MASK | G_LOG_LEVEL_CRITICAL);
+  g_test_log_set_fatal_handler (ephy_test_utils_log_fatal_func, NULL);
 
   ephy_debug_init ();
 

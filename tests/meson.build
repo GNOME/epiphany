@@ -33,7 +33,7 @@ if get_option('unit_tests').enabled()
 
   embed_shell_test = executable('test-ephy-embed-shell',
     'ephy-embed-shell-test.c',
-    dependencies: ephymain_dep,
+    dependencies: [ephymain_dep, ephytestutils_dep],
     c_args: test_cargs + ['-DTEST_DIR="' + meson.current_source_dir() + '"'],
   )
   test('Embed shell test',

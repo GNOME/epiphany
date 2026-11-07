@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <unistd.h>
+
 #include <glib.h>
 #include <gtk/gtk.h>
 
@@ -139,6 +141,9 @@ test_ephy_file_create_delete_dir (void)
     GError *error = NULL;
 
     test = dir_tests[i];
+
+    if (geteuid () == 0 && !test.can_create)
+      continue;
 
     g_test_message ("DIR: testing for %s", test.dir);
 
