@@ -1080,7 +1080,7 @@ session_parser_context_free (SessionParserContext *context)
 
   if (context->window) {
     /* This can only happen if the session state is malformed. */
-    g_signal_handler_disconnect (context->window, context->destroy_id);
+    g_clear_signal_handler (&context->destroy_id, context->window);
   }
 
   g_free (context);

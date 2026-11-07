@@ -70,8 +70,7 @@ ephy_reader_request_new (EphyReaderHandler      *handler,
 static void
 ephy_reader_request_free (EphyReaderRequest *request)
 {
-  if (request->load_changed_id > 0)
-    g_signal_handler_disconnect (request->web_view, request->load_changed_id);
+  g_clear_signal_handler (&request->load_changed_id, request->web_view);
 
   g_object_unref (request->source_handler);
   g_object_unref (request->scheme_request);
