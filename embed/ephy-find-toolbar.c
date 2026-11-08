@@ -264,7 +264,7 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   GtkWidget *box;
   GtkWidget *settings_popover;
   GtkEventController *event_controller;
-  GMenu *model;
+  g_autoptr (GMenu) model = NULL;
   g_autoptr (GSimpleActionGroup) group = NULL;
   g_autoptr (GSimpleAction) case_action = NULL;
   g_autoptr (GSimpleAction) word_action = NULL;
@@ -316,8 +316,8 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
   gtk_widget_insert_action_group (GTK_WIDGET (toolbar), "search-options", G_ACTION_GROUP (group));
 
   model = g_menu_new ();
-  g_menu_append_item (model, g_menu_item_new (_("_Case Sensitive"), "search-options.case-sensitive"));
-  g_menu_append_item (model, g_menu_item_new (_("Match Whole _Word Only"), "search-options.match-whole-word"));
+  g_menu_append (model, _("_Case Sensitive"), "search-options.case-sensitive");
+  g_menu_append (model, _("Match Whole _Word Only"), "search-options.match-whole-word");
   settings_popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (model));
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->options_button), settings_popover);
   gtk_widget_set_tooltip_text (toolbar->options_button, _("Search Options"));

@@ -601,15 +601,19 @@ int
 ephy_bookmark_tags_compare (const char *tag1,
                             const char *tag2)
 {
+  g_autofree char *tag1_casefolded = NULL;
+  g_autofree char *tag2_casefolded = NULL;
   int result;
   int result_casefolded;
 
   g_assert (tag1);
   g_assert (tag2);
 
+  tag1_casefolded = g_utf8_casefold (tag1, -1);
+  tag2_casefolded = g_utf8_casefold (tag2, -1);
+
   result = g_strcmp0 (tag1, tag2);
-  result_casefolded = g_strcmp0 (g_utf8_casefold (tag1, -1),
-                                 g_utf8_casefold (tag2, -1));
+  result_casefolded = g_strcmp0 (tag1_casefolded, tag2_casefolded);
 
   if (result == 0)
     return 0;

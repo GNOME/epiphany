@@ -152,8 +152,7 @@ ephy_history_service_finalize (GObject *object)
   g_free (self->history_filename);
 
   for (size_t i = 0; i < EPHY_HISTORY_STATEMENT_LEN; ++i)
-    if (self->statements[i])
-      g_object_unref (self->statements[i]);
+    g_clear_object (&self->statements[i]);
   g_free (self->statements);
 
   G_OBJECT_CLASS (ephy_history_service_parent_class)->finalize (object);
@@ -440,6 +439,9 @@ static void
 ephy_history_service_close_database_connections (EphyHistoryService *self)
 {
   g_assert (self->history_thread == g_thread_self ());
+
+  for (size_t i = 0; i < EPHY_HISTORY_STATEMENT_LEN; ++i)
+    g_clear_object (&self->statements[i]);
 
   ephy_sqlite_connection_close (self->history_database);
   g_clear_object (&self->history_database);
@@ -1493,6 +1495,8 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
     return FALSE;
 
   ephy_history_service_commit_transaction (self);
+  for (size_t i = 0; i < EPHY_HISTORY_STATEMENT_LEN; ++i)
+    g_clear_object (&self->statements[i]);
   ephy_sqlite_connection_close (self->history_database);
   ephy_sqlite_connection_delete_database (self->history_database);
 

@@ -180,6 +180,7 @@ ephy_sqlite_connection_open (EphySQLiteConnection  *self,
 void
 ephy_sqlite_connection_close (EphySQLiteConnection *self)
 {
+  g_clear_object (&self->connection_table_exists_statement);
   g_clear_pointer (&self->database, sqlite3_close);
 }
 

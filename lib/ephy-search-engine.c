@@ -169,6 +169,8 @@ ephy_search_engine_finalize (GObject *object)
   g_clear_pointer (&self->name, g_free);
   g_clear_pointer (&self->url, g_free);
   g_clear_pointer (&self->bang, g_free);
+  g_clear_pointer (&self->suggestions_url, g_free);
+  g_clear_pointer (&self->opensearch_url, g_free);
 
   G_OBJECT_CLASS (ephy_search_engine_parent_class)->finalize (object);
 }

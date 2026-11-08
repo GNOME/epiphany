@@ -124,6 +124,8 @@ ephy_bookmarks_manager_finalize (GObject *object)
 
   g_sequence_free (self->bookmarks);
   g_sequence_free (self->tags);
+  g_sequence_free (self->bookmarks_order);
+  g_sequence_free (self->tags_order);
   g_free (self->gvdb_filename);
 
   G_OBJECT_CLASS (ephy_bookmarks_manager_parent_class)->finalize (object);
@@ -260,8 +262,8 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 
   self->bookmarks = g_sequence_new (g_object_unref);
   self->tags = g_sequence_new (g_free);
-  self->bookmarks_order = g_sequence_new (g_free);
-  self->tags_order = g_sequence_new (g_free);
+  self->bookmarks_order = g_sequence_new ((GDestroyNotify)g_variant_unref);
+  self->tags_order = g_sequence_new ((GDestroyNotify)g_variant_unref);
 
   g_sequence_insert_sorted (self->tags,
                             g_strdup (EPHY_BOOKMARKS_FAVORITES_TAG),
@@ -662,7 +664,7 @@ ephy_bookmarks_manager_add_to_bookmarks_order (EphyBookmarksManager *self,
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
 
   variant = g_variant_new ("(ssi)", type, item, index);
-  g_sequence_insert_sorted (self->bookmarks_order, variant,
+  g_sequence_insert_sorted (self->bookmarks_order, g_variant_ref_sink (variant),
                             (GCompareDataFunc)sort_bookmarks_order, NULL);
 }
 
@@ -671,8 +673,8 @@ ephy_bookmarks_manager_clear_bookmarks_order (EphyBookmarksManager *self)
 {
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
 
-  g_free (self->bookmarks_order);
-  self->bookmarks_order = g_sequence_new (g_free);
+  g_sequence_free (self->bookmarks_order);
+  self->bookmarks_order = g_sequence_new ((GDestroyNotify)g_variant_unref);
 }
 
 GSequence *
@@ -768,7 +770,7 @@ ephy_bookmarks_manager_tags_order_add_tag (EphyBookmarksManager *self,
 
   g_variant_builder_close (&builder);
   variant = g_variant_builder_end (&builder);
-  g_sequence_append (self->tags_order, variant);
+  g_sequence_append (self->tags_order, g_variant_ref_sink (variant));
 
   g_sequence_free (urls);
 }
@@ -777,7 +779,7 @@ void
 ephy_bookmarks_manager_tags_order_add_tag_variant (EphyBookmarksManager *self,
                                                    GVariant             *variant)
 {
-  g_sequence_append (self->tags_order, variant);
+  g_sequence_append (self->tags_order, g_variant_ref_sink (variant));
 }
 
 void

@@ -152,6 +152,7 @@ ephy_site_menu_button_dispose (GObject *object)
   EphySiteMenuButton *self = EPHY_SITE_MENU_BUTTON (object);
 
   g_clear_handle_id (&self->timeout_id, g_source_remove);
+  g_clear_pointer (&self->description, g_free);
 
   g_array_free (self->queued_states, TRUE);
   self->queued_states = NULL;

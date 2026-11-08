@@ -48,6 +48,7 @@ test_ephy_uri_get_decoded_host (void)
 
   result = ephy_uri_get_decoded_host ("https://[::1]:8080/");
   g_assert_cmpstr (result, ==, "[::1]");
+  g_clear_pointer (&result, g_free);
 
   result = ephy_uri_get_decoded_host ("data:text/html,hello i am https://microsoft.com");
   g_assert_cmpstr (result, ==, NULL);

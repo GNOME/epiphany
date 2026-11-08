@@ -253,6 +253,7 @@ update_tags_order_without_list_box (EphyBookmarksDialog *self,
                                 (GCompareDataFunc)g_strcmp0, NULL);
     }
   }
+  g_sequence_free (bookmarks);
 
   ephy_bookmarks_manager_tags_order_clear_tag (self->manager, tag);
   ephy_bookmarks_manager_tags_order_add_tag (self->manager, tag, urls);
@@ -1409,6 +1410,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
       bookmark_row = create_bookmark_row (bookmark, self);
       gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), bookmark_row);
     }
+    g_sequence_free (bookmarks);
 
     update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
     update_bookmarks_order (self);

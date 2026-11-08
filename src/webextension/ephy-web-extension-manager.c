@@ -333,7 +333,8 @@ static void
 ephy_web_extension_manager_constructed (GObject *object)
 {
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (object);
-  g_autofree char *dir = g_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
+  g_autofree char *profile_dir = ephy_default_profile_dir ();
+  g_autofree char *dir = g_build_filename (profile_dir, "web_extensions", NULL);
 
   G_OBJECT_CLASS (ephy_web_extension_manager_parent_class)->constructed (object);
 

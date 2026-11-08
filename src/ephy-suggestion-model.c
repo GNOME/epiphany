@@ -553,7 +553,7 @@ tabs_query (EphySuggestionModel *self,
         suggestion = ephy_suggestion_new_with_custom_subtitle (markup, title, escaped_address, address);
         ephy_suggestion_set_secondary_icon (suggestion, "go-jump-symbolic");
 
-        g_sequence_append (data->tabs, g_object_ref (suggestion));
+        g_sequence_append (data->tabs, g_steal_pointer (&suggestion));
       }
     }
   }
@@ -601,7 +601,7 @@ bookmarks_query (EphySuggestionModel *self,
       suggestion = ephy_suggestion_new (markup, title, url, FALSE);
       ephy_suggestion_set_secondary_icon (suggestion, "ephy-starred-symbolic");
 
-      g_sequence_append (data->bookmarks, g_object_ref (suggestion));
+      g_sequence_append (data->bookmarks, g_steal_pointer (&suggestion));
     }
   }
 

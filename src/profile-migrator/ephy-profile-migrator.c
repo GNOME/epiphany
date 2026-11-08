@@ -235,6 +235,7 @@ migrate_pre_flatpak_webapps (void)
 
 next:
     g_clear_error (&error);
+    g_clear_object (&info);
     info = g_file_enumerator_next_file (children, NULL, &error);
     if (!info && error) {
       g_warning ("Cannot enumerate next file: %s", error->message);
@@ -246,8 +247,9 @@ next:
 static void
 migrate_gsb_db (void)
 {
-  g_autofree char *threats_db = g_build_filename (ephy_default_cache_dir (), "gsb-threats.db", NULL);
-  g_autofree char *threats_db_journal = g_build_filename (ephy_default_cache_dir (), "gsb-threats.db-journal", NULL);
+  g_autofree char *cache_dir = ephy_default_cache_dir ();
+  g_autofree char *threats_db = g_build_filename (cache_dir, "gsb-threats.db", NULL);
+  g_autofree char *threats_db_journal = g_build_filename (cache_dir, "gsb-threats.db-journal", NULL);
 
   if (g_unlink (threats_db) == -1 && errno != ENOENT)
     g_warning ("Failed to delete %s: %s", threats_db, g_strerror (errno));
@@ -279,7 +281,8 @@ migrate_nothing (void)
 static void
 migrate_add_pinned_column (void)
 {
-  g_autofree char *filename = g_build_filename (ephy_default_profile_dir (), EPHY_HISTORY_FILE, NULL);
+  g_autofree char *profile_dir = ephy_default_profile_dir ();
+  g_autofree char *filename = g_build_filename (profile_dir, EPHY_HISTORY_FILE, NULL);
   EphySQLiteConnection *db;
   GError *error = NULL;
 
