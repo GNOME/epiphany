@@ -116,7 +116,7 @@ ephy_bookmark_row_properties_button_clicked_cb (EphyBookmarkRow *row,
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_BUTTON (button));
 
-  dialog = ephy_bookmark_properties_new (ephy_bookmark_row_get_bookmark (row), FALSE);
+  dialog = ephy_bookmark_properties_new (row->bookmark, FALSE);
   adw_dialog_present (ADW_DIALOG (dialog), gtk_widget_get_parent (GTK_WIDGET (row)));
 }
 
