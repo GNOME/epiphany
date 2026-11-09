@@ -1,0 +1,64 @@
+using Gtk 4.0;
+using Adw 1;
+
+menu move_menu {
+  section {
+    item {
+      label: _("Move Up");
+      action: "row.move-up";
+    }
+
+    item {
+      label: _("Move Down");
+      action: "row.move-down";
+    }
+  }
+}
+
+template $EphyBookmarkTagRow: Adw.ActionRow {
+  activatable: true;
+  use-markup: false;
+  title: bind template.tag;
+  tooltip-text: bind template.tag;
+
+  [prefix]
+  Image tag_image {
+    icon-name: "ephy-bookmark-tag-symbolic";
+  }
+
+  [prefix]
+  Image drag_handle {
+    icon-name: "list-drag-handle-symbolic";
+
+    DragSource {
+      actions: move;
+      prepare => $on_drag_prepare() swapped;
+      drag-begin => $on_drag_begin() swapped;
+    }
+  }
+
+  [suffix]
+  Image {
+    icon-name: "go-next-symbolic";
+  }
+
+  [suffix]
+  MenuButton move_menu_button {
+    icon-name: "view-more-symbolic";
+    receives-default: false;
+    tooltip-text: _("Move Controls");
+    valign: center;
+    menu-model: move_menu;
+
+    styles [
+      "flat",
+    ]
+  }
+
+  DropTarget {
+    formats: "AdwActionRow";
+    actions: move;
+    preload: true;
+    drop => $on_target_drop() swapped;
+  }
+}

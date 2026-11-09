@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "ephy-bookmark-row.h"
+#include "ephy-bookmark-tag-row.h"
 #include "ephy-bookmark.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
@@ -55,13 +56,6 @@ G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
 
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
-
-enum {
-  MOVE_TAG_ROW,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
 
 static GtkWidget * create_bookmark_row (gpointer item,
                                         gpointer user_data);
@@ -99,17 +93,10 @@ update_rows_movable (EphyBookmarksDialog *self,
     gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-up", i > 0);
     gtk_widget_action_set_enabled (GTK_WIDGET (row), "row.move-down", i < (n_rows - 1));
 
-    if (EPHY_IS_BOOKMARK_ROW (row)) {
+    if (EPHY_IS_BOOKMARK_ROW (row))
       ephy_bookmark_row_set_movable (EPHY_BOOKMARK_ROW (row), n_rows > 1);
-    } else {
-      GtkWidget *drag_handle = gtk_widget_get_first_child (gtk_widget_get_first_child (
-                                                             gtk_widget_get_first_child (GTK_WIDGET (row))));
-      GtkWidget *move_menu_button = gtk_widget_get_last_child (gtk_widget_get_last_child (
-                                                                 gtk_widget_get_first_child (GTK_WIDGET (row))));
-
-      gtk_widget_set_sensitive (drag_handle, n_rows > 1);
-      gtk_widget_set_sensitive (move_menu_button, n_rows > 1);
-    }
+    else if (EPHY_IS_BOOKMARK_TAG_ROW (row))
+      ephy_bookmark_tag_row_set_movable (EPHY_BOOKMARK_TAG_ROW (row), n_rows > 1);
   }
 }
 
@@ -125,10 +112,10 @@ update_bookmarks_order (EphyBookmarksDialog *self)
     const char *type = g_object_get_data (G_OBJECT (row), "type");
     const char *item;
 
-    if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0)
+    if (EPHY_IS_BOOKMARK_ROW (row))
       item = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
     else
-      item = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+      item = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
 
     ephy_bookmarks_manager_add_to_bookmarks_order (self->manager, type, item, i - 1);
   }
@@ -327,9 +314,14 @@ remove_tag_row (EphyBookmarksDialog *self,
   int i = 0;
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
-    const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+    const char *row_tag;
 
-    if (g_strcmp0 (title, tag) == 0)
+    if (!EPHY_IS_BOOKMARK_TAG_ROW (row))
+      continue;
+
+    row_tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
+
+    if (g_strcmp0 (row_tag, tag) == 0)
       gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
   }
 
@@ -338,9 +330,14 @@ remove_tag_row (EphyBookmarksDialog *self,
 
   i = 0;
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), i++))) {
-    const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+    const char *row_tag;
 
-    if (g_strcmp0 (title, tag) == 0)
+    if (!EPHY_IS_BOOKMARK_TAG_ROW (row))
+      continue;
+
+    row_tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
+
+    if (g_strcmp0 (row_tag, tag) == 0)
       gtk_list_box_remove (GTK_LIST_BOX (self->searching_bookmarks_list_box), GTK_WIDGET (row));
   }
 }
@@ -496,129 +493,9 @@ on_tag_row_activated (AdwActionRow *row,
                       gpointer      user_data)
 {
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
-  const char *tag = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+  const char *tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
 
   ephy_bookmarks_dialog_show_tag_detail (self, tag);
-}
-
-static GdkContentProvider *
-tag_row_drag_prepare_cb (AdwActionRow *self,
-                         double        x,
-                         double        y)
-{
-  return gdk_content_provider_new_typed (ADW_TYPE_ACTION_ROW, self);
-}
-
-static void
-tag_row_drag_begin_cb (AdwActionRow *self,
-                       GdkDrag      *drag)
-{
-  GtkWidget *drag_list;
-  GtkWidget *drag_row;
-  GtkWidget *drag_image;
-  GtkWidget *drag_icon;
-  int width, height;
-  const char *tag = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (self));
-
-  width = gtk_widget_get_width (GTK_WIDGET (self));
-  height = gtk_widget_get_height (GTK_WIDGET (self));
-
-  drag_list = gtk_list_box_new ();
-  gtk_widget_set_size_request (drag_list, width, height);
-  gtk_widget_add_css_class (drag_list, "boxed-list");
-
-  drag_row = adw_action_row_new ();
-  if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
-    drag_image = gtk_image_new_from_icon_name ("ephy-heart-filled-symbolic");
-  else
-    drag_image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic");
-  adw_action_row_add_prefix (ADW_ACTION_ROW (drag_row), drag_image);
-  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (drag_row), FALSE);
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (drag_row), tag);
-
-  drag_image = gtk_image_new_from_icon_name ("go-next-symbolic");
-  adw_action_row_add_suffix (ADW_ACTION_ROW (drag_row), drag_image);
-
-  drag_image = gtk_image_new_from_icon_name ("list-drag-handle-symbolic");
-  adw_action_row_add_prefix (ADW_ACTION_ROW (drag_row), drag_image);
-
-  gtk_list_box_append (GTK_LIST_BOX (drag_list), drag_row);
-
-  drag_icon = gtk_drag_icon_get_for_drag (drag);
-  gtk_widget_add_css_class (drag_icon, "boxed-list");
-  gtk_drag_icon_set_child (GTK_DRAG_ICON (drag_icon), drag_list);
-}
-
-static gboolean
-tag_row_drop_cb (AdwActionRow *self,
-                 const GValue *value,
-                 double        x,
-                 double        y)
-{
-  AdwActionRow *source;
-
-  if (!G_VALUE_HOLDS (value, ADW_TYPE_ACTION_ROW))
-    return FALSE;
-
-  source = g_value_get_object (value);
-  g_object_set_data (G_OBJECT (source), "list-box", gtk_widget_get_parent (GTK_WIDGET (source)));
-
-  if (EPHY_IS_BOOKMARK_ROW (source))
-    g_signal_emit_by_name (source, "move-row", self);
-  else
-    g_signal_emit (source, signals[MOVE_TAG_ROW], 0, self);
-
-  return TRUE;
-}
-
-static void
-tag_row_move_up_cb (GSimpleAction *action,
-                    GVariant      *parameter,
-                    gpointer       user_data)
-{
-  GtkWidget *row = GTK_WIDGET (user_data);
-  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (row));
-  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)) - 1;
-  GtkListBoxRow *prev_row = gtk_list_box_get_row_at_index (list_box, index);
-
-  if (!prev_row)
-    return;
-
-  g_object_set_data (G_OBJECT (row), "list-box", list_box);
-  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_TAG_ROW], 0, ADW_ACTION_ROW (prev_row));
-}
-
-static void
-tag_row_move_down_cb (GSimpleAction *action,
-                      GVariant      *parameter,
-                      gpointer       user_data)
-{
-  GtkWidget *row = GTK_WIDGET (user_data);
-  GtkListBox *list_box = GTK_LIST_BOX (gtk_widget_get_parent (row));
-  int index = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row)) + 1;
-  GtkListBoxRow *next_row = gtk_list_box_get_row_at_index (list_box, index);
-
-  if (!next_row)
-    return;
-
-  g_object_set_data (G_OBJECT (row), "list-box", list_box);
-  g_signal_emit (ADW_ACTION_ROW (row), signals[MOVE_TAG_ROW], 0, ADW_ACTION_ROW (next_row));
-}
-
-static GActionGroup *
-create_tag_row_action_group (GtkWidget *row)
-{
-  const GActionEntry entries[] = {
-    { "move-up", tag_row_move_up_cb },
-    { "move-down", tag_row_move_down_cb },
-  };
-
-  GSimpleActionGroup *group;
-
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), row);
-
-  return G_ACTION_GROUP (group);
 }
 
 static GtkWidget *
@@ -626,66 +503,18 @@ create_tag_row (EphyBookmarksDialog *self,
                 const char          *tag)
 {
   GtkWidget *row;
-  GtkWidget *image;
-  GtkWidget *move_menu_button;
-  GMenu *move_menu;
-  GtkWidget *drag_image;
-  GtkDragSource *source;
-  GtkDropTarget *target;
   gboolean is_editing;
 
-  row = adw_action_row_new ();
+  row = ephy_bookmark_tag_row_new (g_strdup (tag));
   g_object_set_data_full (G_OBJECT (row), "type",
                           g_strdup (EPHY_LIST_BOX_ROW_TYPE_TAG),
                           (GDestroyNotify)g_free);
 
-  if (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
-    image = gtk_image_new_from_icon_name ("ephy-heart-filled-symbolic");
-  else
-    image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic");
-
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
-  adw_action_row_add_prefix (ADW_ACTION_ROW (row), image);
-  adw_preferences_row_set_use_markup (ADW_PREFERENCES_ROW (row), FALSE);
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), tag);
-  gtk_widget_set_tooltip_text (row, tag);
-
-  image = gtk_image_new_from_icon_name ("go-next-symbolic");
-  adw_action_row_add_suffix (ADW_ACTION_ROW (row), image);
-
-  move_menu_button = gtk_menu_button_new ();
-  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (move_menu_button), "view-more-symbolic");
-  gtk_widget_set_receives_default (move_menu_button, FALSE);
-  gtk_widget_set_valign (move_menu_button, GTK_ALIGN_CENTER);
-  gtk_widget_set_tooltip_text (move_menu_button, _("Move Controls"));
-  gtk_widget_add_css_class (move_menu_button, "flat");
-
-  gtk_widget_insert_action_group (row, "row", create_tag_row_action_group (row));
-  move_menu = g_menu_new ();
-  g_menu_append (move_menu, _("Move Up"), "row.move-up");
-  g_menu_append (move_menu, _("Move Down"), "row.move-down");
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (move_menu_button), G_MENU_MODEL (move_menu));
-  adw_action_row_add_suffix (ADW_ACTION_ROW (row), move_menu_button);
-
-  drag_image = gtk_image_new_from_icon_name ("list-drag-handle-symbolic");
-  adw_action_row_add_prefix (ADW_ACTION_ROW (row), drag_image);
-
-  g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, G_CONNECT_DEFAULT);
-  g_signal_connect_object (row, "move-tag-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
-
-  source = gtk_drag_source_new ();
-  gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
-  g_signal_connect_swapped (source, "prepare", G_CALLBACK (tag_row_drag_prepare_cb), row);
-  g_signal_connect_swapped (source, "drag-begin", G_CALLBACK (tag_row_drag_begin_cb), row);
-  gtk_widget_add_controller (drag_image, GTK_EVENT_CONTROLLER (source));
-
-  target = gtk_drop_target_new (ADW_TYPE_ACTION_ROW, GDK_ACTION_MOVE);
-  gtk_drop_target_set_preload (target, TRUE);
-  g_signal_connect_swapped (target, "drop", G_CALLBACK (tag_row_drop_cb), row);
-  gtk_widget_add_controller (row, GTK_EVENT_CONTROLLER (target));
-
   is_editing = !gtk_widget_is_visible (self->edit_button);
   set_row_is_editable (row, is_editing);
+
+  g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, G_CONNECT_DEFAULT);
+  g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
 
   return row;
 }
@@ -741,10 +570,8 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
       update_tags_order_without_list_box (self, tag, FALSE);
 
       while ((existing_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
-        const char *type = g_object_get_data (G_OBJECT (existing_row), "type");
-
-        if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0 &&
-            g_strcmp0 (adw_preferences_row_get_title (ADW_PREFERENCES_ROW (existing_row)), tag) == 0) {
+        if (EPHY_IS_BOOKMARK_TAG_ROW (existing_row) &&
+            g_strcmp0 (ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (existing_row)), tag) == 0) {
           exists = TRUE;
           break;
         }
@@ -889,8 +716,14 @@ ephy_bookmarks_dialog_tag_deleted_cb (EphyBookmarksDialog  *self,
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
-    const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
-    if (g_strcmp0 (title, tag) == 0) {
+    const char *row_tag;
+
+    if (!EPHY_IS_BOOKMARK_TAG_ROW (row))
+      continue;
+
+    row_tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
+
+    if (g_strcmp0 (row_tag, tag) == 0) {
       gtk_list_box_remove (GTK_LIST_BOX (self->bookmarks_list_box), GTK_WIDGET (row));
       update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
       break;
@@ -901,8 +734,14 @@ ephy_bookmarks_dialog_tag_deleted_cb (EphyBookmarksDialog  *self,
 
   i = 0;
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), i++))) {
-    const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
-    if (g_strcmp0 (title, tag) == 0) {
+    const char *row_tag;
+
+    if (!EPHY_IS_BOOKMARK_TAG_ROW (row))
+      continue;
+
+    row_tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
+
+    if (g_strcmp0 (row_tag, tag) == 0) {
       gtk_list_box_remove (GTK_LIST_BOX (self->searching_bookmarks_list_box), GTK_WIDGET (row));
       break;
     }
@@ -1061,7 +900,7 @@ row_clicked_cb (GtkGesture          *gesture,
       ephy_window_toggle_bookmarks (window);
     }
   } else {
-    const char *tag = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+    const char *tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
     ephy_bookmarks_dialog_show_tag_detail (self, tag);
   }
 }
@@ -1076,7 +915,7 @@ set_row_is_editable (GtkWidget *row,
   gtk_widget_set_visible (drag_handle, is_editable);
   if (EPHY_IS_BOOKMARK_ROW (row))
     gtk_widget_set_visible (buttons_box, is_editable);
-  else
+  else if (EPHY_IS_BOOKMARK_TAG_ROW (row))
     gtk_widget_set_visible (gtk_widget_get_last_child (buttons_box), is_editable);
 }
 
@@ -1304,20 +1143,6 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_done_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_key_pressed);
-
-  /* FIXME: Once tag rows are moved to their own file, move this signal
-   * definition there too. We should define the signal on an Epiphany
-   * type, not on ADW_TYPE_ACTION_ROW.
-   *
-   * https://gitlab.gnome.org/GNOME/epiphany/-/issues/2721
-   */
-  signals[MOVE_TAG_ROW] =
-    g_signal_new ("move-tag-row",
-                  ADW_TYPE_ACTION_ROW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  ADW_TYPE_ACTION_ROW);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);

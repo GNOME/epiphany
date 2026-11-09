@@ -165,11 +165,7 @@ drop_cb (AdwActionRow *self,
 
   source = g_value_get_object (value);
   g_object_set_data (G_OBJECT (source), "list-box", gtk_widget_get_parent (GTK_WIDGET (source)));
-
-  if (EPHY_IS_BOOKMARK_ROW (source))
-    g_signal_emit (source, signals[MOVE_ROW], 0, self);
-  else
-    g_signal_emit_by_name (source, "move-tag-row", self);
+  g_signal_emit_by_name (source, "move-row", self);
 
   return TRUE;
 }
