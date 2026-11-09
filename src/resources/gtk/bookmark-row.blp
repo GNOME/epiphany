@@ -19,6 +19,7 @@ template $EphyBookmarkRow: Adw.ActionRow {
   title-lines: 1;
   use-markup: false;
   activatable: true;
+  activated => $on_row_activated();
 
   [prefix]
   Image favicon_image {
@@ -43,6 +44,7 @@ template $EphyBookmarkRow: Adw.ActionRow {
     receives-default: false;
     tooltip-text: _("Remove");
     valign: center;
+    clicked => $ephy_bookmark_row_remove_button_clicked_cb() swapped;
 
     styles [
       "flat",
@@ -54,6 +56,7 @@ template $EphyBookmarkRow: Adw.ActionRow {
     icon-name: "document-edit-symbolic";
     receives-default: false;
     valign: center;
+    clicked => $ephy_bookmark_row_properties_button_clicked_cb() swapped;
 
     styles [
       "flat",
@@ -71,5 +74,12 @@ template $EphyBookmarkRow: Adw.ActionRow {
     styles [
       "flat",
     ]
+  }
+
+  DropTarget {
+    formats: "AdwActionRow";
+    actions: move;
+    preload: true;
+    drop => $drop_cb() swapped;
   }
 }

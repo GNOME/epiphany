@@ -91,6 +91,13 @@ move_down_cb (GtkWidget  *self,
 }
 
 static void
+on_row_activated (AdwActionRow *self,
+                  gpointer      user_data)
+{
+  ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (self), 0);
+}
+
+static void
 ephy_bookmark_row_remove_button_clicked_cb (EphyBookmarkRow *row,
                                             GtkButton       *button)
 {
@@ -335,41 +342,18 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, properties_button);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, move_menu_button);
 
+  gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, drag_begin_cb);
-}
-
-static void
-on_row_activated (AdwActionRow *self,
-                  gpointer      user_data)
-{
-  ephy_bookmark_row_open (EPHY_BOOKMARK_ROW (self), 0);
+  gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_row_remove_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_row_properties_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, drop_cb);
 }
 
 static void
 ephy_bookmark_row_init (EphyBookmarkRow *self)
 {
-  GtkDropTarget *target;
-
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  g_signal_connect_object (self, "activated", G_CALLBACK (on_row_activated), self, G_CONNECT_DEFAULT);
-
-  g_signal_connect_object (self->remove_button,
-                           "clicked",
-                           G_CALLBACK (ephy_bookmark_row_remove_button_clicked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->properties_button,
-                           "clicked",
-                           G_CALLBACK (ephy_bookmark_row_properties_button_clicked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  target = gtk_drop_target_new (ADW_TYPE_ACTION_ROW, GDK_ACTION_MOVE);
-  gtk_drop_target_set_preload (target, TRUE);
-  g_signal_connect_swapped (target, "drop", G_CALLBACK (drop_cb), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
 }
 
 GtkWidget *
