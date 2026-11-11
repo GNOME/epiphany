@@ -220,12 +220,6 @@ ephy_header_bar_get_page_menu_button (EphyHeaderBar *header_bar)
   return header_bar->page_menu_button;
 }
 
-EphyWindow *
-ephy_header_bar_get_window (EphyHeaderBar *header_bar)
-{
-  return header_bar->window;
-}
-
 EphyActionBarStart *
 ephy_header_bar_get_action_bar_start (EphyHeaderBar *header_bar)
 {
