@@ -354,13 +354,6 @@ ephy_action_bar_end_init (EphyActionBarEnd *action_bar_end)
                     action_bar_end);
 }
 
-EphyActionBarEnd *
-ephy_action_bar_end_new (void)
-{
-  return g_object_new (EPHY_TYPE_ACTION_BAR_END,
-                       NULL);
-}
-
 void
 ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEnd *action_bar_end,
                                                gboolean          show)

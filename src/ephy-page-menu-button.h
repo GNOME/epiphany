@@ -29,8 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyPageMenuButton, ephy_page_menu_button, EPHY, PAGE_MENU_BUTTON, AdwBin)
 
-EphyPageMenuButton   *ephy_page_menu_button_new (void);
-
 void                  ephy_page_menu_button_popup          (EphyPageMenuButton *self);
 void                  ephy_page_menu_button_popdown        (EphyPageMenuButton *self);
 

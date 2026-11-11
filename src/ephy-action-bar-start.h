@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyActionBarStart, ephy_action_bar_start, EPHY, ACTION_BAR_START, GtkBox);
 
-EphyActionBarStart *ephy_action_bar_start_new                               (void);
 GtkWidget          *ephy_action_bar_start_get_navigation_box                (EphyActionBarStart *action_bar_start);
 void                ephy_action_bar_start_change_combined_stop_reload_state (EphyActionBarStart *action_bar_start,
                                                                              gboolean            loading);

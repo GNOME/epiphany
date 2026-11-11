@@ -33,8 +33,6 @@ G_DECLARE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, EPHY, BOOKMARK
 void ephy_bookmarks_dialog_set_is_editing (EphyBookmarksDialog *self,
                                            gboolean             is_editing);
 
-GtkWidget *ephy_bookmarks_dialog_new      (void);
-
 void ephy_bookmarks_dialog_focus (EphyBookmarksDialog *self);
 
 void ephy_bookmarks_dialog_clear_search (EphyBookmarksDialog *self);

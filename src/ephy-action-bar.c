@@ -606,13 +606,6 @@ ephy_action_bar_init (EphyActionBar *action_bar)
                            object, G_CONNECT_DEFAULT);
 }
 
-EphyActionBar *
-ephy_action_bar_new (void)
-{
-  return g_object_new (EPHY_TYPE_ACTION_BAR,
-                       NULL);
-}
-
 void
 ephy_action_bar_set_zoom_level (EphyActionBar *self,
                                 const char    *zoom_level)

@@ -398,12 +398,6 @@ ephy_fullscreen_box_buildable_init (GtkBuildableIface *iface)
   iface->add_child = ephy_fullscreen_box_add_child;
 }
 
-EphyFullscreenBox *
-ephy_fullscreen_box_new (void)
-{
-  return g_object_new (EPHY_TYPE_FULLSCREEN_BOX, NULL);
-}
-
 gboolean
 ephy_fullscreen_box_get_fullscreen (EphyFullscreenBox *self)
 {

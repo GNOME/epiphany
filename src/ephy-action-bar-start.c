@@ -556,13 +556,6 @@ ephy_action_bar_start_init (EphyActionBarStart *action_bar_start)
   action_bar_start->cancellable = g_cancellable_new ();
 }
 
-EphyActionBarStart *
-ephy_action_bar_start_new (void)
-{
-  return g_object_new (EPHY_TYPE_ACTION_BAR_START,
-                       NULL);
-}
-
 GtkWidget *
 ephy_action_bar_start_get_navigation_box (EphyActionBarStart *action_bar_start)
 {

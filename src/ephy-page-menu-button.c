@@ -139,12 +139,6 @@ ephy_page_menu_button_init (EphyPageMenuButton *self)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (self->menu_button), self->page_menu_popover);
 }
 
-EphyPageMenuButton *
-ephy_page_menu_button_new (void)
-{
-  return g_object_new (EPHY_TYPE_PAGE_MENU_BUTTON, NULL);
-}
-
 void
 ephy_page_menu_button_popup (EphyPageMenuButton *self)
 {

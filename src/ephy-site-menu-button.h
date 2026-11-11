@@ -28,8 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySiteMenuButton, ephy_site_menu_button, EPHY, SITE_MENU_BUTTON, GtkButton)
 
-GtkWidget *ephy_site_menu_button_new  (void);
-
 void       ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
                                                  const char         *zoom_level);
 

@@ -161,12 +161,6 @@ ephy_tab_view_init (EphyTabView *self)
                                  ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_HOME | ADW_TAB_VIEW_SHORTCUT_CONTROL_SHIFT_END);
 }
 
-EphyTabView *
-ephy_tab_view_new (void)
-{
-  return g_object_new (EPHY_TYPE_TAB_VIEW, NULL);
-}
-
 void
 ephy_tab_view_next (EphyTabView *self)
 {

@@ -35,8 +35,6 @@ G_DECLARE_FINAL_TYPE (EphyTabView, ephy_tab_view, EPHY, TAB_VIEW, AdwBin)
 typedef void (*EphyTabViewCallback) (GtkWidget *widget,
                                      gpointer   data);
 
-EphyTabView *ephy_tab_view_new                (void);
-
 void         ephy_tab_view_next               (EphyTabView *self);
 
 void         ephy_tab_view_pin                (EphyTabView *self);

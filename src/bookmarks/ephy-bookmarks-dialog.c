@@ -1452,13 +1452,6 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   gtk_widget_add_controller (self->searching_bookmarks_list_box, GTK_EVENT_CONTROLLER (gesture));
 }
 
-GtkWidget *
-ephy_bookmarks_dialog_new (void)
-{
-  return g_object_new (EPHY_TYPE_BOOKMARKS_DIALOG,
-                       NULL);
-}
-
 void
 ephy_bookmarks_dialog_focus (EphyBookmarksDialog *self)
 {

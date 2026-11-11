@@ -227,12 +227,6 @@ ephy_site_menu_button_init (EphySiteMenuButton *self)
   self->queued_states = g_array_new (FALSE, FALSE, sizeof (int));
 }
 
-GtkWidget *
-ephy_site_menu_button_new (void)
-{
-  return g_object_new (EPHY_TYPE_SITE_MENU_BUTTON, NULL);
-}
-
 void
 ephy_site_menu_button_set_zoom_level (EphySiteMenuButton *self,
                                       const char         *zoom_level)

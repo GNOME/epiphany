@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyActionBarEnd, ephy_action_bar_end, EPHY, ACTION_BAR_END, GtkBox);
 
-EphyActionBarEnd *ephy_action_bar_end_new                       (void);
 void              ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEnd *action_bar_end,
                                                                  gboolean          show);
 void              ephy_action_bar_end_show_downloads            (EphyActionBarEnd *action_bar_end);

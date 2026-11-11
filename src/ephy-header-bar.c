@@ -208,13 +208,6 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_end);
 }
 
-GtkWidget *
-ephy_header_bar_new (void)
-{
-  return GTK_WIDGET (g_object_new (EPHY_TYPE_HEADER_BAR,
-                                   NULL));
-}
-
 EphyTitleWidget *
 ephy_header_bar_get_title_widget (EphyHeaderBar *header_bar)
 {
