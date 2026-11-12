@@ -96,11 +96,12 @@ static void
 ask_for_extension_installation (gpointer user_data)
 {
   AskForExtensionInstallationData *data = user_data;
+  g_autofree char *basename = g_file_get_basename (data->file);
   AdwDialog *dialog;
 
   dialog = adw_alert_dialog_new (_("Install WebExtension?"), NULL);
 
-  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog), _("Do you want to install `%s`?"), g_file_get_basename (data->file));
+  adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog), _("Do you want to install `%s`?"), basename);
   adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
                                   "cancel", _("Cancel"),
                                   "install", _("Install"),
