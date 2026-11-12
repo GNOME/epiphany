@@ -80,6 +80,28 @@ ask_for_installation_data_free (AskForExtensionInstallationData *data)
 }
 
 static void
+on_extension_installed_cb (GObject      *source_object,
+                           GAsyncResult *res,
+                           gpointer      user_data)
+{
+  EphyWebExtensionManager *manager = EPHY_WEB_EXTENSION_MANAGER (source_object);
+  g_autoptr (GError) error = NULL;
+
+  if (!ephy_web_extension_manager_install_finish (manager, res, &error)) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+      PrefsExtensionsPage *self = EPHY_PREFS_EXTENSIONS_PAGE (user_data);
+      AdwPreferencesDialog *prefs_dialog = ADW_PREFERENCES_DIALOG (gtk_widget_get_ancestor (GTK_WIDGET (self), ADW_TYPE_PREFERENCES_DIALOG));
+      g_autofree char *error_message = g_strdup_printf (_("Failed to load extension: %s"),
+                                                        error->message);
+      AdwToast *toast = adw_toast_new (error_message);
+
+      adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+      adw_preferences_dialog_add_toast (prefs_dialog, toast);
+    }
+  }
+}
+
+static void
 on_install_extension (AdwAlertDialog *self,
                       char           *response,
                       gpointer        user_data)
@@ -87,7 +109,11 @@ on_install_extension (AdwAlertDialog *self,
   AskForExtensionInstallationData *data = user_data;
 
   if (g_strcmp0 (response, "install") == 0)
-    ephy_web_extension_manager_install (data->page->web_extension_manager, data->file);
+    ephy_web_extension_manager_install_async (data->page->web_extension_manager,
+                                              data->file,
+                                              data->page->cancellable,
+                                              on_extension_installed_cb,
+                                              data->page);
 
   g_clear_pointer (&data, ask_for_installation_data_free);
 }

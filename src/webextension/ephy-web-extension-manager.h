@@ -40,8 +40,15 @@ GPtrArray              *ephy_web_extension_manager_get_web_extensions           
 void                    ephy_web_extension_manager_install_actions                  (EphyWebExtensionManager *self,
                                                                                      EphyWindow              *window);
 
-void                    ephy_web_extension_manager_install                          (EphyWebExtensionManager *self,
-                                                                                     GFile                   *file);
+void                    ephy_web_extension_manager_install_async                    (EphyWebExtensionManager *self,
+                                                                                     GFile                   *file,
+                                                                                     GCancellable            *cancellable,
+                                                                                     GAsyncReadyCallback      callback,
+                                                                                     gpointer                 user_data);
+
+gboolean                ephy_web_extension_manager_install_finish                   (EphyWebExtensionManager  *self,
+                                                                                     GAsyncResult             *result,
+                                                                                     GError                  **error);
 
 void                    ephy_web_extension_manager_uninstall                        (EphyWebExtensionManager *self,
                                                                                      EphyWebExtension        *web_extension);

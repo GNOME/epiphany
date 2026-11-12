@@ -193,14 +193,30 @@ on_web_extension_loaded (GObject      *source_object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
+  EphyShell *shell = NULL;
+  EphyWindow *window = NULL;
   GFile *target = G_FILE (source_object);
   g_autoptr (GError) error = NULL;
   g_autoptr (EphyWebExtension) web_extension = NULL;
   EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
 
   web_extension = ephy_web_extension_load_finished (source_object, result, &error);
+
+  shell = ephy_shell_get_default ();
+  window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
+
   if (!web_extension) {
     g_warning ("Failed to load extension %s: %s", g_file_peek_path (target), error->message);
+
+    if (window) {
+      g_autofree char *basename = g_file_get_basename (target);
+      g_autofree char *error_message = g_strdup_printf (_("Failed to load extension %s: %s"),
+                                                        basename, error->message);
+      AdwToast *toast = adw_toast_new (error_message);
+
+      adw_toast_set_priority (toast, ADW_TOAST_PRIORITY_HIGH);
+      ephy_window_add_toast (window, toast);
+    }
     return;
   }
 
@@ -449,21 +465,28 @@ ephy_web_extension_manager_install_actions (EphyWebExtensionManager *self,
     ephy_web_extension_manager_add_web_extension_to_window (self, g_ptr_array_index (self->web_extensions, i), window);
 }
 
-void
+static void
 on_new_web_extension_loaded (GObject      *source_object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
+  g_autoptr (GTask) task = G_TASK (user_data);
   g_autoptr (GError) error = NULL;
   EphyWebExtension *web_extension;
-  EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
+  EphyWebExtensionManager *self = g_task_get_source_object (task);
+
+  g_assert (g_task_is_valid (task, self));
+  g_assert (g_task_get_source_tag (task) == ephy_web_extension_manager_install_async);
 
   web_extension = ephy_web_extension_load_finished (source_object, result, &error);
   if (!web_extension) {
+    ephy_file_delete_dir_recursively (g_file_peek_path (G_FILE (source_object)), NULL);
+    g_task_return_error (task, g_steal_pointer (&error));
     return;
   }
 
   ephy_web_extension_manager_add_to_list (self, web_extension);
+  g_task_return_boolean (task, TRUE);
 }
 
 static char *
@@ -479,15 +502,21 @@ on_extension_decompressed (GObject      *source,
                            GAsyncResult *res,
                            gpointer      user_data)
 {
-  EphyWebExtensionManager *self = EPHY_WEB_EXTENSION_MANAGER (user_data);
+  g_autoptr (GTask) task = G_TASK (user_data);
+  EphyWebExtensionManager *self = g_task_get_source_object (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   g_autoptr (GError) error = NULL;
   g_autoptr (GFile) target = NULL;
   GFileInfo *file_info;
   g_autofree char *path = decompress_xpi_finish (self, res, &error);
 
-  if (error || !path) {
+  g_assert (g_task_is_valid (task, self));
+  g_assert (g_task_get_source_tag (task) == ephy_web_extension_manager_install_async);
+
+  if (!path) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Could not decompress WebExtension: %s", error ? error->message : "Unknown error");
+      g_warning ("Could not decompress WebExtension: %s", error->message);
+    g_task_return_error (task, g_steal_pointer (&error));
     return;
   }
 
@@ -495,10 +524,11 @@ on_extension_decompressed (GObject      *source,
   file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, NULL, &error);
   if (!file_info) {
     g_warning ("Failed to query file info: %s", error->message);
+    g_task_return_error (task, g_steal_pointer (&error));
     return;
   }
 
-  ephy_web_extension_load_async (g_steal_pointer (&target), file_info, self->cancellable, on_new_web_extension_loaded, self);
+  ephy_web_extension_load_async (g_steal_pointer (&target), file_info, cancellable, on_new_web_extension_loaded, g_steal_pointer (&task));
 }
 
 static int
@@ -649,9 +679,10 @@ decompress_xpi (GFile               *extension,
  * Install a new web web_extension into the local web_extension directory.
  * File should only point to a manifest.json or a .xpi file
  */
-void
+static void
 ephy_web_extension_manager_install (EphyWebExtensionManager *self,
-                                    GFile                   *file)
+                                    GFile                   *file,
+                                    GTask                   *task)
 {
   g_autoptr (GFile) target = NULL;
   g_autoptr (GFileInfo) file_info = NULL;
@@ -660,12 +691,17 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
   g_autoptr (GFile) web_extensions_dir = NULL;
   g_autofree char *basename = NULL;
   const char *path;
+  GCancellable *cancellable;
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_WEBEXTENSIONS)) {
     g_warning ("Refusing to install WebExtension: WebExtensions are disabled");
+    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED,
+                             _("WebExtensions are disabled"));
+    g_object_unref (task);
     return;
   }
 
+  cancellable = g_task_get_cancellable (task);
   web_extensions_dir = g_file_new_build_filename (ephy_default_profile_dir (), "web_extensions", NULL);
   path = g_file_peek_path (file);
   g_assert (path);
@@ -674,7 +710,7 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
   /* FIXME: Make this async. */
 
   if (is_xpi) {
-    decompress_xpi (file, web_extensions_dir, self->cancellable, on_extension_decompressed, self);
+    decompress_xpi (file, web_extensions_dir, cancellable, on_extension_decompressed, task);
   } else {
     /* Otherwise we copy the parent directory. */
     g_autoptr (GFile) parent = g_file_get_parent (file);
@@ -684,15 +720,45 @@ ephy_web_extension_manager_install (EphyWebExtensionManager *self,
     ephy_copy_directory (g_file_peek_path (parent), g_file_peek_path (target));
 
     if (target) {
-      file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, self->cancellable, &error);
+      file_info = g_file_query_info (target, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, cancellable, &error);
       if (!file_info) {
         g_warning ("Failed to query file info: %s", error->message);
+        g_task_return_error (task, g_steal_pointer (&error));
+        g_object_unref (task);
         return;
       }
 
-      ephy_web_extension_load_async (g_steal_pointer (&target), file_info, self->cancellable, on_new_web_extension_loaded, self);
+      ephy_web_extension_load_async (g_steal_pointer (&target), file_info, cancellable, on_new_web_extension_loaded, task);
     }
   }
+}
+
+void
+ephy_web_extension_manager_install_async (EphyWebExtensionManager *self,
+                                          GFile                   *file,
+                                          GCancellable            *cancellable,
+                                          GAsyncReadyCallback      callback,
+                                          gpointer                 user_data)
+{
+  g_autoptr (GTask) task = NULL;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ephy_web_extension_manager_install_async);
+  g_task_set_name (task, "[epiphany] ephy_web_extension_manager_install_async");
+  g_task_set_return_on_cancel (task, TRUE);
+
+  ephy_web_extension_manager_install (self, file, g_steal_pointer (&task));
+}
+
+gboolean
+ephy_web_extension_manager_install_finish (EphyWebExtensionManager  *self,
+                                           GAsyncResult             *result,
+                                           GError                  **error)
+{
+  g_assert (g_task_is_valid (result, self));
+  g_assert (g_task_get_source_tag (G_TASK (result)) == ephy_web_extension_manager_install_async);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 void
