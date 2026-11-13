@@ -22,8 +22,6 @@
 
 #include "ephy-downloads-popover.h"
 
-#include <glib/gi18n.h>
-
 #include "ephy-download-widget.h"
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-shell.h"
@@ -36,8 +34,6 @@ struct _EphyDownloadsPopover {
 };
 
 G_DEFINE_FINAL_TYPE (EphyDownloadsPopover, ephy_downloads_popover, GTK_TYPE_POPOVER)
-
-#define DOWNLOADS_BOX_MIN_SIZE 330
 
 static void
 download_box_row_activated_cb (EphyDownloadsPopover *popover,
@@ -153,34 +149,24 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
 static void
 ephy_downloads_popover_class_init (EphyDownloadsPopoverClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/downloads-popover.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadsPopover, downloads_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadsPopover, clear_button);
+
+  gtk_widget_class_bind_template_callback (widget_class, download_box_row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, clear_button_clicked_cb);
 }
 
 static void
 ephy_downloads_popover_init (EphyDownloadsPopover *popover)
 {
-  GtkWidget *scrolled_window;
-  GtkWidget *vbox;
   GList *downloads, *l;
   EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
-  gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
-  scrolled_window = gtk_scrolled_window_new ();
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (scrolled_window),
-                                              DOWNLOADS_BOX_MIN_SIZE);
-
-  popover->downloads_box = gtk_list_box_new ();
-  g_signal_connect_swapped (popover->downloads_box, "row-activated",
-                            G_CALLBACK (download_box_row_activated_cb),
-                            popover);
-  gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (popover->downloads_box), TRUE);
-  gtk_list_box_set_selection_mode (GTK_LIST_BOX (popover->downloads_box), GTK_SELECTION_NONE);
-  gtk_widget_add_css_class (popover->downloads_box, "background");
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), popover->downloads_box);
+  gtk_widget_init_template (GTK_WIDGET (popover));
 
   downloads = ephy_downloads_manager_get_downloads (manager);
   for (l = downloads; l; l = g_list_next (l)) {
@@ -209,21 +195,7 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                            G_CALLBACK (download_removed_cb),
                            popover, G_CONNECT_SWAPPED);
 
-  gtk_box_append (GTK_BOX (vbox), scrolled_window);
-
-  popover->clear_button = gtk_button_new_with_mnemonic (_("_Clear All"));
   gtk_widget_set_sensitive (popover->clear_button, !ephy_downloads_manager_has_active_downloads (manager));
-  g_signal_connect_swapped (popover->clear_button, "clicked",
-                            G_CALLBACK (clear_button_clicked_cb),
-                            popover);
-  gtk_widget_set_halign (popover->clear_button, GTK_ALIGN_END);
-  gtk_widget_set_margin_start (popover->clear_button, 6);
-  gtk_widget_set_margin_end (popover->clear_button, 6);
-  gtk_widget_set_margin_top (popover->clear_button, 6);
-  gtk_widget_set_margin_bottom (popover->clear_button, 6);
-  gtk_box_append (GTK_BOX (vbox), popover->clear_button);
-
-  gtk_popover_set_child (GTK_POPOVER (popover), vbox);
 }
 
 GtkWidget *

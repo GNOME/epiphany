@@ -1,0 +1,37 @@
+using Gtk 4.0;
+
+template $EphyDownloadsPopover: Popover {
+  child: Box {
+    orientation: vertical;
+
+    ScrolledWindow {
+      hscrollbar-policy: never;
+      min-content-height: 330; // downloads box min size
+
+      child: ListBox downloads_box {
+        activate-on-single-click: true;
+        selection-mode: none;
+        row-activated => $download_box_row_activated_cb() swapped;
+
+        styles [
+          "background",
+        ]
+      };
+    }
+
+    Button clear_button {
+      label: _("_Clear All");
+      use-underline: true;
+      halign: end;
+      margin-start: 6;
+      margin-end: 6;
+      margin-top: 6;
+      margin-bottom: 6;
+      clicked => $clear_button_clicked_cb() swapped;
+    }
+  };
+
+  styles [
+    "menu",
+  ]
+}
