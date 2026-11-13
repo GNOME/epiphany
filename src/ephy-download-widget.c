@@ -277,9 +277,11 @@ download_destination_changed_cb (WebKitDownload     *download,
 }
 
 static GdkContentProvider *
-download_drag_prepare (WebKitDownload *download)
+download_drag_prepare (EphyDownloadWidget *widget)
 {
-  const char *dest = webkit_download_get_destination (download);
+  WebKitDownload *wk_download = ephy_download_get_webkit_download (widget->download);
+  const char *dest = webkit_download_get_destination (wk_download);
+
   return gdk_content_provider_new_typed (G_TYPE_FILE, g_file_new_for_path (dest));
 }
 
@@ -345,44 +347,11 @@ ephy_download_widget_constructed (GObject *object)
   WebKitDownload *download;
   const char *action_icon_name = NULL;
   g_autoptr (GError) error = NULL;
-  PangoAttrList *status_attrs;
-  GtkWidget *grid;
-  GtkDragSource *source;
 
   G_OBJECT_CLASS (ephy_download_widget_parent_class)->constructed (object);
 
-  grid = gtk_grid_new ();
-  gtk_widget_set_visible (grid, TRUE);
-  adw_bin_set_child (ADW_BIN (widget), grid);
-
-  widget->icon = gtk_image_new ();
-  gtk_widget_set_margin_end (widget->icon, 4);
   update_download_icon (widget);
-  gtk_grid_attach (GTK_GRID (grid), widget->icon, 0, 0, 1, 1);
-
-  widget->filename = gtk_label_new (NULL);
-  gtk_widget_set_hexpand (widget->filename, true);
-  gtk_label_set_xalign (GTK_LABEL (widget->filename), 0);
-  gtk_label_set_max_width_chars (GTK_LABEL (widget->filename), 30);
-  gtk_label_set_ellipsize (GTK_LABEL (widget->filename), PANGO_ELLIPSIZE_END);
   update_download_destination (widget);
-  gtk_grid_attach (GTK_GRID (grid), widget->filename, 1, 0, 1, 1);
-
-  widget->progress = gtk_progress_bar_new ();
-  gtk_widget_set_margin_top (widget->progress, 6);
-  gtk_widget_set_margin_bottom (widget->progress, 6);
-  gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (widget->progress), 0.05);
-  gtk_grid_attach (GTK_GRID (grid), widget->progress, 0, 1, 2, 1);
-
-  widget->status = gtk_label_new (NULL);
-  gtk_label_set_xalign (GTK_LABEL (widget->status), 0);
-  g_object_set (widget->status, "width-request", 260, NULL);
-  gtk_label_set_max_width_chars (GTK_LABEL (widget->status), 30);
-  gtk_label_set_ellipsize (GTK_LABEL (widget->status), PANGO_ELLIPSIZE_END);
-  status_attrs = pango_attr_list_new ();
-  pango_attr_list_insert (status_attrs, pango_attr_font_features_new ("tnum=1"));
-  gtk_label_set_attributes (GTK_LABEL (widget->status), status_attrs);
-  pango_attr_list_unref (status_attrs);
 
   if (ephy_download_failed (widget->download, &error)) {
     g_autofree char *error_msg = NULL;
@@ -394,7 +363,6 @@ ephy_download_widget_constructed (GObject *object)
   } else {
     update_status_label (widget, _("Starting…"));
   }
-  gtk_grid_attach (GTK_GRID (grid), widget->status, 0, 2, 2, 1);
 
   if (ephy_download_succeeded (widget->download))
     action_icon_name = "folder-open-symbolic";
@@ -402,14 +370,8 @@ ephy_download_widget_constructed (GObject *object)
     action_icon_name = "list-remove-symbolic";
   else
     action_icon_name = "window-close-symbolic";
-  widget->action_button = gtk_button_new_from_icon_name (action_icon_name);
-  g_signal_connect_swapped (widget->action_button, "clicked",
-                            G_CALLBACK (widget_action_button_clicked_cb),
-                            widget);
-  gtk_widget_set_valign (widget->action_button, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_start (widget->action_button, 10);
-  gtk_widget_add_css_class (widget->action_button, "circular");
-  gtk_grid_attach (GTK_GRID (grid), widget->action_button, 3, 0, 1, 3);
+
+  gtk_button_set_icon_name (GTK_BUTTON (widget->action_button), action_icon_name);
 
   download = ephy_download_get_webkit_download (widget->download);
   g_signal_connect (download, "notify::estimated-progress",
@@ -430,23 +392,29 @@ ephy_download_widget_constructed (GObject *object)
   g_signal_connect (widget->download, "notify::content-type",
                     G_CALLBACK (download_content_type_changed_cb),
                     widget);
-
-  source = gtk_drag_source_new ();
-  gtk_drag_source_set_actions (source, GDK_ACTION_COPY);
-  g_signal_connect_swapped (source, "prepare", G_CALLBACK (download_drag_prepare), download);
-
-  gtk_widget_add_controller (GTK_WIDGET (widget), GTK_EVENT_CONTROLLER (source));
 }
 
 static void
 ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_download_widget_constructed;
   object_class->get_property = ephy_download_widget_get_property;
   object_class->set_property = ephy_download_widget_set_property;
   object_class->dispose = ephy_download_widget_dispose;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/download-widget.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadWidget, icon);
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadWidget, filename);
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadWidget, progress);
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadWidget, status);
+  gtk_widget_class_bind_template_child (widget_class, EphyDownloadWidget, action_button);
+
+  gtk_widget_class_bind_template_callback (widget_class, widget_action_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, download_drag_prepare);
 
   /**
    * EphyDownloadWidget::download:
@@ -465,6 +433,7 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
 static void
 ephy_download_widget_init (EphyDownloadWidget *widget)
 {
+  gtk_widget_init_template (GTK_WIDGET (widget));
 }
 
 /**

@@ -1,0 +1,77 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EphyDownloadWidget: Adw.Bin {
+  child: Grid {
+    Image icon {
+      margin-end: 4;
+
+      layout {
+        column: 0;
+        row: 0;
+      }
+    }
+
+    Label filename {
+      hexpand: true;
+      xalign: 0;
+      max-width-chars: 30;
+      ellipsize: end;
+
+      layout {
+        column: 1;
+        row: 0;
+      }
+    }
+
+    ProgressBar progress {
+      margin-top: 6;
+      margin-bottom: 6;
+      pulse-step: 0.05;
+
+      layout {
+        column: 0;
+        row: 1;
+        column-span: 2;
+      }
+    }
+
+    Label status {
+      xalign: 0;
+      width-request: 260;
+      max-width-chars: 30;
+      ellipsize: end;
+
+      styles [
+        "numeric",
+      ]
+
+      layout {
+        column: 0;
+        row: 2;
+        column-span: 2;
+      }
+    }
+
+    Button action_button {
+      valign: center;
+      margin-start: 10;
+      clicked => $widget_action_button_clicked_cb() swapped;
+
+      styles [
+        "circular",
+      ]
+
+      layout {
+        column: 3;
+        row: 0;
+        row-span: 3;
+      }
+    }
+  };
+
+  DragSource {
+    actions: copy;
+    prepare => $download_drag_prepare() swapped;
+  }
+}
