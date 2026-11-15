@@ -311,6 +311,18 @@ migrate_session_state_backup (void)
     g_warning ("Failed to delete %s: %s", session_backup, g_strerror (errno));
 }
 
+static void
+migrate_auto_open_urls (void)
+{
+  /* This is a profile-specific setting, so why are we resetting it only for
+   * the default profile? Because the goal here is to clear auto-open URLs
+   * leaked when in incognito mode. Incognito mode always forces the default
+   * profile, so there's no need to clear the setting in other profiles.
+   */
+  if (ephy_profile_dir_is_default ())
+    g_settings_reset (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_AUTO_OPEN_SCHEMES);
+}
+
 /* If adding anything here, you need to edit EPHY_PROFILE_MIGRATION_VERSION
  * in ephy-profile-utils.h. */
 const int EPHY_MINIMUM_MIGRATION_VERSION = 37;
@@ -321,6 +333,7 @@ const EphyProfileMigrator migrators[] = {
   /* 39 */ migrate_search_engines,
   /* 40 */ migrate_add_pinned_column,
   /* 41 */ migrate_session_state_backup,
+  /* 42 */ migrate_auto_open_urls,
 };
 
 static gboolean
