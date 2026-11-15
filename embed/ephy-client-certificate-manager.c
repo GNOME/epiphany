@@ -135,6 +135,7 @@ object_details_cb (GObject      *source_object,
   GckObject *object = GCK_OBJECT (source_object);
   g_autoptr (GckAttributes) attrs = NULL;
   const GckAttribute *attr;
+  const GckAttribute *attr_id;
   const GckAttribute *attr_label;
   CK_OBJECT_CLASS cka_class;
   g_autoptr (GError) error = NULL;
@@ -160,6 +161,7 @@ object_details_cb (GObject      *source_object,
   }
 
   attr = gck_attributes_find (attrs, CKA_VALUE);
+  attr_id = gck_attributes_find (attrs, CKA_ID);
   attr_label = gck_attributes_find (attrs, CKA_LABEL);
   if (attr && attr->value && attr->length) {
     g_autoptr (GckAttributes) attributes = NULL;
@@ -170,9 +172,17 @@ object_details_cb (GObject      *source_object,
     g_autofree char *priv = NULL;
     g_autoptr (GTlsCertificate) tls_cert = NULL;
     g_autoptr (WebKitCredential) credential = NULL;
-    g_autofree char *label = g_strndup ((char *)attr_label->value, attr_label->length);
 
-    gck_builder_add_string (&builder, CKA_LABEL, label);
+    if (attr_id && attr_id->value && attr_id->length > 0) {
+      gck_builder_add_data (&builder, CKA_ID, attr_id->value, attr_id->length);
+    } else if (attr_label && attr_label->value && attr_label->length > 0) {
+      g_autofree char *label = g_strndup ((char *)attr_label->value, attr_label->length);
+
+      gck_builder_add_string (&builder, CKA_LABEL, label);
+    } else {
+      process_next_object (self);
+      return;
+    }
     attributes = gck_builder_end (&builder);
 
     uri_data.attributes = attributes;
