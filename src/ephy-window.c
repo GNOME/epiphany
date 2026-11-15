@@ -2299,6 +2299,7 @@ open_url_permission_data_new (const char       *opener_origin,
   data->target_scheme = g_strdup (g_uri_get_scheme (navigation_uri));
   data->request = g_object_ref (request);
   data->window = g_object_ref (window);
+  data->always_allow_switch = NULL;
 
   return data;
 }
@@ -2317,12 +2318,16 @@ static void
 add_auto_open_scheme (char *openeer_uri,
                       char *target_scheme)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
   GVariantBuilder builder;
   GVariant *variant;
   GHashTable *table = load_auto_open_schemes_table ();
   GHashTableIter iter;
   gpointer key;
   gpointer value;
+
+  g_assert (mode != EPHY_EMBED_SHELL_MODE_INCOGNITO);
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ss)"));
   g_hash_table_iter_init (&iter, table);
@@ -2346,7 +2351,7 @@ on_open (AdwAlertDialog *self,
   if (g_strcmp0 (response, "open") == 0) {
     const char *uri = webkit_uri_request_get_uri (data->request);
     g_autoptr (GFile) file = g_file_new_for_uri (uri);
-    gboolean always_allow = adw_switch_row_get_active (ADW_SWITCH_ROW (data->always_allow_switch));
+    gboolean always_allow = data->always_allow_switch ? adw_switch_row_get_active (ADW_SWITCH_ROW (data->always_allow_switch)) : FALSE;
 
     if (always_allow)
       add_auto_open_scheme (data->opener_origin, data->target_scheme);
@@ -2368,6 +2373,8 @@ ask_for_permission (gpointer user_data)
   AdwDialog *dialog;
   GtkWidget *always_allow_switch;
   GtkWidget *group;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
 
   /* Additional user interaction is required to prevent malicious websites
    * from launching URL handler application's on the user's computer without
@@ -2381,12 +2388,15 @@ ask_for_permission (gpointer user_data)
   adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "open", _("_Open Link"));
   adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog), "open", ADW_RESPONSE_SUGGESTED);
 
-  group = adw_preferences_group_new ();
-  always_allow_switch = adw_switch_row_new ();
-  data->always_allow_switch = g_object_ref (always_allow_switch);
-  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (always_allow_switch), _("Always Allow"));
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), always_allow_switch);
-  adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), group);
+  if (mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    group = adw_preferences_group_new ();
+    always_allow_switch = adw_switch_row_new ();
+    data->always_allow_switch = g_object_ref (always_allow_switch);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (always_allow_switch), _("Always Allow"));
+    adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), always_allow_switch);
+    adw_alert_dialog_set_extra_child (ADW_ALERT_DIALOG (dialog), group);
+  }
+
   adw_dialog_present (dialog, GTK_WIDGET (data->window));
 
   g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (on_open), data);
