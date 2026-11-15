@@ -1210,11 +1210,11 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
       EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, item);
 
       row = create_bookmark_row (bookmark, self);
-      gtk_list_box_append (GTK_LIST_BOX (self->bookmarks_list_box), row);
     } else {
       row = create_tag_row (self, item);
-      gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), row);
     }
+
+    gtk_list_box_insert (GTK_LIST_BOX (self->bookmarks_list_box), row, index);
   }
 
   update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
