@@ -2255,11 +2255,16 @@ url_should_open_automatically (const char *opener_origin,
   g_autoptr (GUri) uri = g_uri_parse (navigation_uri, G_URI_FLAGS_NONE, &error);
   g_autoptr (GHashTable) table = NULL;
   const char *pref_scheme;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  EphyEmbedShellMode mode = ephy_embed_shell_get_mode (shell);
 
   if (!uri) {
     g_warning ("Failed to parse URI %s: %s", navigation_uri, error->message);
     return FALSE;
   }
+
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    return FALSE;
 
   table = load_auto_open_schemes_table ();
   pref_scheme = g_hash_table_lookup (table, opener_origin);
