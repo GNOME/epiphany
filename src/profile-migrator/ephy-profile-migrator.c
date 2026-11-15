@@ -259,7 +259,8 @@ migrate_gsb_db (void)
 static void
 migrate_search_engines (void)
 {
-  g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
+  if (ephy_profile_dir_is_default ())
+    g_settings_reset (EPHY_SETTINGS_MAIN, EPHY_PREFS_SEARCH_ENGINES);
 }
 
 [[maybe_unused]]
