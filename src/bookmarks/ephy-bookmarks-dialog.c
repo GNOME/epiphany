@@ -592,7 +592,7 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
                                NULL);
 
   row = create_bookmark_row (bookmark, self);
-  set_row_is_editable (row, FALSE);
+  ephy_bookmark_row_set_movable (EPHY_BOOKMARK_ROW (row), FALSE);
   gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), row);
 
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0) {
@@ -931,6 +931,11 @@ ephy_bookmarks_dialog_set_is_editing (EphyBookmarksDialog *self,
   i = 0;
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), i++)))
     set_row_is_editable (GTK_WIDGET (row), is_editing);
+  i = 0;
+  while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->searching_bookmarks_list_box), i++))) {
+    if (EPHY_IS_BOOKMARK_ROW (row))
+      set_row_is_editable (GTK_WIDGET (row), is_editing);
+  }
 }
 
 static void
@@ -973,12 +978,7 @@ on_search_entry_changed (GtkSearchEntry *entry,
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->tag_detail_list_box));
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (self->searching_bookmarks_list_box));
 
-  if (g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") != 0) {
-    ephy_bookmarks_dialog_set_is_editing (self, FALSE);
-    gtk_widget_set_sensitive (self->edit_button, FALSE);
-  } else {
-    gtk_widget_set_sensitive (self->edit_button, TRUE);
-
+  if (g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") == 0) {
     if (!has_bookmarks)
       gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
     else if (tag_detail_has_row)
@@ -1204,7 +1204,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
     GtkWidget *bookmark_row;
 
     bookmark_row = create_bookmark_row (bookmark, self);
-    set_row_is_editable (bookmark_row, FALSE);
+    ephy_bookmark_row_set_movable (EPHY_BOOKMARK_ROW (bookmark_row), FALSE);
     gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), bookmark_row);
   }
 
