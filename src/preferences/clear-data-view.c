@@ -175,7 +175,7 @@ all_children_visible (GtkTreeModel       *model,
   return gtk_tree_model_iter_n_children (model, child_iter) == gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), &filter_iter);
 }
 
-static void
+static gboolean
 on_clear_button_clicked (ClearDataView *clear_data_view)
 {
   GtkTreeIter top_iter;
@@ -183,8 +183,9 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
   GList *data_to_remove = NULL;
   WebKitWebsiteDataTypes types_to_remove = 0;
 
-  if (!gtk_tree_model_get_iter_first (clear_data_view->treestore, &top_iter))
-    return;
+  if (!gtk_tree_model_get_iter_first (clear_data_view->treestore, &top_iter)
+      || !ephy_data_view_get_has_data (EPHY_DATA_VIEW (clear_data_view)))
+    return GDK_EVENT_PROPAGATE;
 
   do {
     guint type;
@@ -252,6 +253,8 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
                                      clear_data_view->cancellable,
                                      (GAsyncReadyCallback)website_data_fetched_cb,
                                      clear_data_view);
+
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -447,6 +450,10 @@ clear_data_view_class_init (ClearDataViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, item_toggled_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, search_text_changed_cb);
+
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Delete, GDK_SHIFT_MASK,
+                                (GtkShortcutFunc)on_clear_button_clicked,
+                                NULL);
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

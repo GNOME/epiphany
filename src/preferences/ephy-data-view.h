@@ -35,14 +35,6 @@ struct _EphyDataViewClass
 
 AdwToastOverlay *ephy_data_view_get_toast_overlay (EphyDataView *self);
 
-const gchar *ephy_data_view_get_clear_button_label (EphyDataView *self);
-void         ephy_data_view_set_clear_button_label (EphyDataView *self,
-                                                    const gchar  *label);
-
-const gchar *ephy_data_view_get_clear_button_tooltip (EphyDataView *self);
-void         ephy_data_view_set_clear_button_tooltip (EphyDataView *self,
-                                                      const gchar  *description);
-
 gboolean ephy_data_view_get_is_loading (EphyDataView *self);
 void     ephy_data_view_set_is_loading (EphyDataView *self,
                                         gboolean      is_loading);
@@ -59,9 +51,10 @@ gboolean ephy_data_view_get_can_clear (EphyDataView *self);
 void     ephy_data_view_set_can_clear (EphyDataView *self,
                                        gboolean      can_clear);
 
-const gchar *ephy_data_view_get_search_text (EphyDataView *self);
+GtkWidget *ephy_data_view_get_clear_button (EphyDataView *self);
+void       ephy_data_view_set_clear_button (EphyDataView *self,
+                                            GtkWidget    *clear_button);
 
-void      ephy_data_view_set_options_menu (EphyDataView *self,
-                                           GMenuModel   *model);
+const gchar *ephy_data_view_get_search_text (EphyDataView *self);
 
 G_END_DECLS

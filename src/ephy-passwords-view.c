@@ -36,20 +36,39 @@ struct _EphyPasswordsView {
   GtkWidget *listbox;
   GtkWidget *confirmation_dialog;
 
-  GActionGroup *action_group;
   GCancellable *cancellable;
-  GMenu *options_menu;
 };
 
 G_DEFINE_FINAL_TYPE (EphyPasswordsView, ephy_passwords_view, ADW_TYPE_DIALOG)
 
 static void populate_model (EphyPasswordsView *passwords_view);
+static GtkWidget *confirmation_dialog_construct (EphyPasswordsView *self);
 
 static void
 on_search_text_changed (EphyPasswordsView *passwords_view)
 {
   ephy_data_view_set_has_search_results (EPHY_DATA_VIEW (passwords_view->data_view), FALSE);
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (passwords_view->listbox));
+}
+
+static gboolean
+on_clear_button_clicked (EphyPasswordsView *self)
+{
+  if (!ephy_data_view_get_has_data (EPHY_DATA_VIEW (self->data_view)))
+    return GDK_EVENT_PROPAGATE;
+
+  if (!self->confirmation_dialog) {
+    GtkWidget **confirmation_dialog;
+
+    self->confirmation_dialog = confirmation_dialog_construct (self);
+    confirmation_dialog = &self->confirmation_dialog;
+    g_object_add_weak_pointer (G_OBJECT (self->confirmation_dialog),
+                               (gpointer *)confirmation_dialog);
+  }
+
+  adw_dialog_present (ADW_DIALOG (self->confirmation_dialog), GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self))));
+
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -129,8 +148,13 @@ ephy_passwords_view_class_init (EphyPasswordsViewClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, listbox);
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, data_view);
-  gtk_widget_class_bind_template_child (widget_class, EphyPasswordsView, options_menu);
+
   gtk_widget_class_bind_template_callback (widget_class, on_search_text_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_clear_button_clicked);
+
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Delete, GDK_SHIFT_MASK,
+                                (GtkShortcutFunc)on_clear_button_clicked,
+                                NULL);
 }
 
 static void
@@ -165,25 +189,6 @@ confirmation_dialog_construct (EphyPasswordsView *self)
                             self);
 
   return GTK_WIDGET (dialog);
-}
-
-static void
-forget_all (GSimpleAction *action,
-            GVariant      *parameter,
-            gpointer       user_data)
-{
-  EphyPasswordsView *self = EPHY_PASSWORDS_VIEW (user_data);
-
-  if (!self->confirmation_dialog) {
-    GtkWidget **confirmation_dialog;
-
-    self->confirmation_dialog = confirmation_dialog_construct (self);
-    confirmation_dialog = &self->confirmation_dialog;
-    g_object_add_weak_pointer (G_OBJECT (self->confirmation_dialog),
-                               (gpointer *)confirmation_dialog);
-  }
-
-  adw_dialog_present (ADW_DIALOG (self->confirmation_dialog), GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self))));
 }
 
 static void
@@ -321,21 +326,6 @@ populate_model (EphyPasswordsView *self)
                                populate_model_cb, self);
 }
 
-static GActionGroup *
-create_action_group (EphyPasswordsView *self)
-{
-  const GActionEntry entries[] = {
-    { "forget-all", forget_all },
-  };
-
-  GSimpleActionGroup *group;
-
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), self);
-
-  return G_ACTION_GROUP (group);
-}
-
 static gboolean
 password_filter (GtkListBoxRow *row,
                  gpointer       user_data)
@@ -371,17 +361,12 @@ ephy_passwords_view_init (EphyPasswordsView *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->action_group = create_action_group (self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "passwords", self->action_group);
-
   self->cancellable = g_cancellable_new ();
 
   gtk_list_box_set_filter_func (GTK_LIST_BOX (self->listbox), password_filter, self, NULL);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (self->listbox), GTK_SELECTION_NONE);
 
   populate_model (self);
-
-  ephy_data_view_set_options_menu (EPHY_DATA_VIEW (self->data_view), G_MENU_MODEL (self->options_menu));
 }
 
 void

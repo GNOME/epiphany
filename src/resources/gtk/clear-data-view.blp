@@ -3,14 +3,12 @@ using Adw 1;
 
 template $ClearDataView: $EphyDataView {
   title: _("Website Data");
-  clear-button-label: _("_Clear Data");
-  clear-button-tooltip: _("Remove selected website data");
   search-description: _("Search website data");
   empty-title: _("No Website Data Found");
   empty-description: _("Website data will be listed here");
   has-search-results: "True";
   can-clear: "True";
-  clear-button-clicked => $on_clear_button_clicked();
+  clear-button: clear_button;
   notify::search-text => $search_text_changed_cb() swapped;
 
   ScrolledWindow scrolled_window {
@@ -71,5 +69,17 @@ template $ClearDataView: $EphyDataView {
         }
       }
     }
+  }
+
+  [bottom-end]
+  Button clear_button {
+    label: _("_Clear Data");
+    use-underline: true;
+    tooltip-text: _("Remove Selected Website Data");
+    clicked => $on_clear_button_clicked() swapped;
+
+    styles [
+      "destructive-action",
+    ]
   }
 }

@@ -4,19 +4,12 @@ using Adw 1;
 template $EphyDataView: Adw.NavigationPage {
   child: Adw.ToolbarView box {
     [top]
-    Adw.HeaderBar header_bar {
+    Adw.HeaderBar top_bar {
       [start]
       ToggleButton search_button {
         icon-name: "edit-find-symbolic";
         active: bind search_bar.search-mode-enabled bidirectional;
         tooltip-text: _("Search");
-      }
-
-      [end]
-      MenuButton options_menu_button {
-        icon-name: "view-more-symbolic";
-        tooltip-text: _("Options");
-        visible: false;
       }
     }
 
@@ -70,16 +63,6 @@ template $EphyDataView: Adw.NavigationPage {
     };
 
     [bottom]
-    ActionBar {
-      [end]
-      Button clear_button {
-        use-underline: true;
-        clicked => $on_clear_button_clicked() swapped;
-
-        styles [
-          "destructive-action",
-        ]
-      }
-    }
+    ActionBar bottom_bar {}
   };
 }
