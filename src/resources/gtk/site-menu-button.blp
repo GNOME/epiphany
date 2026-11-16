@@ -11,6 +11,7 @@ menu menu_model {
     item {
       label: _("_Reader Mode");
       action: "win.toggle-reader-mode";
+      accel: "<alt><Primary>r";
     }
   }
 }
@@ -19,22 +20,26 @@ menu items_section {
   item {
     label: _("_Find…");
     action: "win.find";
+    accel: "<Primary>F";
   }
 
   item {
     label: _("_Print…");
     action: "win.print";
+    accel: "<Primary>P";
   }
 
   item {
     label: _("_Mute Tab");
     action: "tab.mute";
+    accel: "<Primary>M";
     hidden-when: "action-disabled";
   }
 
   item {
     label: _("Edit _Bookmark…");
     action: "win.bookmark-page";
+    accel: "<Primary>D";
   }
 
   item {

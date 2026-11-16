@@ -82,13 +82,35 @@
  * #EphyWindow is Epiphany's main widget.
  */
 
+/* Browser-reserved shortcuts that must always be handled by the window before
+ * web content sees them (registered in GTK_PHASE_CAPTURE via GtkApplication).
+ */
 const struct {
   const char *action_and_target;
   const char *accelerators[9];
 } accels [] = {
+  { "win.new-tab", { "<Primary>T", NULL } },
+  { "win.location", { "F6", "Go", "OpenURL", NULL } },
+  { "win.home", { "<alt>Home", NULL } },
+  { "tab.close", { "<Primary>W", NULL } },
+}, accels_navigation_ltr [] = {
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "<alt>KP_6", "Forward", NULL } }
+}, accels_navigation_rtl [] = {
+  { "toolbar.navigation-back", { "<alt>Right", "<alt>KP_Right", "<alt>KP_6", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Forward", NULL } }
+}, *accels_navigation_ltr_rtl;
+
+/* Website-overridable shortcuts handled in GTK_PHASE_BUBBLE so that the
+ * focused WebKitWebView receives key events first and Epiphany only handles
+ * them if the web page does not.
+ */
+const struct {
+  const char *action_and_target;
+  const char *accelerators[9];
+} bubble_accels [] = {
   /* Page Menu accels */
   { "win.page-menu", { "F10", NULL } },
-  { "win.new-tab", { "<Primary>T", NULL } },
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
@@ -107,10 +129,8 @@ const struct {
   { "win.find-prev", { "<shift><Primary>G", NULL } },
   { "win.find-next", { "<Primary>G", NULL } },
   { "win.bookmark-page", { "<Primary>D", "AddFavorite", NULL } },
-  { "win.add-search-engine", { NULL } },
   { "win.bookmarks", { "<alt><Primary>D", NULL } },
   { "win.show-downloads", { "<shift><Primary>Y", NULL } },
-  { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
   { "win.toggle-reader-mode", { "<alt><Primary>r", NULL } },
@@ -118,10 +138,9 @@ const struct {
   { "win.select-all", { "<Primary>A", NULL } },
 
   { "win.send-to", { "Send", NULL } },
-  { "win.location", { "<Primary>L", "<alt>D", "F6", "Go", "OpenURL", NULL } },
+  { "win.location", { "<Primary>L", "<alt>D", NULL } },
   { "win.location-search", {"<Primary>K", NULL} },
   { "win.copy-location", { "<shift><Primary>C", NULL } },
-  { "win.home", { "<alt>Home", NULL } },
   { "win.tabs-view", { "<shift><Primary>O", NULL } },
 
   /* Toggle actions */
@@ -131,21 +150,12 @@ const struct {
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
   { "toolbar.reload", { "<Primary>R", "F5", "Refresh", "Reload", NULL } },
-  { "toolbar.reload-bypass-cache", { "<shift><Primary>R", "<shift>F5" } },
-  { "toolbar.combined-stop-reload", { NULL } },
+  { "toolbar.reload-bypass-cache", { "<shift><Primary>R", "<shift>F5", NULL } },
 
   /* Tabs */
   { "tab.duplicate", { "<shift><Primary>K", NULL } },
-  { "tab.close", { "<Primary>W", NULL } },
   { "tab.mute", { "<Primary>M", NULL } },
-  { "tab.pin", { NULL } }
-}, accels_navigation_ltr [] = {
-  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Back", NULL } },
-  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "<alt>KP_6", "Forward", NULL } }
-}, accels_navigation_rtl [] = {
-  { "toolbar.navigation-back", { "<alt>Right", "<alt>KP_Right", "<alt>KP_6", "Back", NULL } },
-  { "toolbar.navigation-forward", { "<alt>Left", "<alt>KP_Left", "<alt>KP_4", "Forward", NULL } }
-}, *accels_navigation_ltr_rtl;
+};
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
@@ -184,6 +194,7 @@ struct _EphyWindow {
   AdwToast *download_start_toast;
   GtkWidget *header_bin_top;
   GtkWidget *header_bin_bottom;
+  GtkShortcutController *bubble_shortcut_controller;
   GCancellable *cancellable;
 
   GListModel *search_engine_model;
@@ -704,83 +715,6 @@ notify_fullscreen_cb (EphyWindow *window)
   if (!fullscreen)
     window->show_fullscreen_header_bar = FALSE;
 }
-
-#if 0
-/* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
-static gboolean
-ephy_window_should_view_receive_key_press_event (EphyWindow      *window,
-                                                 guint            keyval,
-                                                 GdkModifierType  state)
-{
-  state &= (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK);
-
-  /* Focus location entry */
-  if (keyval == GDK_KEY_F6)
-    return FALSE;
-
-  /* Websites are allowed to override most Epiphany accelerators, but not
-   * window or tab management accelerators. */
-  if (state == GDK_CONTROL_MASK)
-    return keyval != GDK_KEY_n &&            /* New Window */
-           keyval != GDK_KEY_q &&            /* Quit */
-           keyval != GDK_KEY_T &&            /* Reopen Closed Tab */
-           keyval != GDK_KEY_t &&            /* New Tab */
-           keyval != GDK_KEY_w &&            /* Close Tab */
-           keyval != GDK_KEY_Page_Up &&      /* Previous Tab */
-           keyval != GDK_KEY_KP_Page_Up &&   /* Previous Tab */
-           keyval != GDK_KEY_Page_Down &&    /* Next Tab */
-           keyval != GDK_KEY_KP_Page_Down && /* Next Tab */
-           keyval != GDK_KEY_Tab &&          /* Next Tab */
-           keyval != GDK_KEY_KP_Tab &&       /* Next Tab */
-           keyval != GDK_KEY_ISO_Left_Tab;   /* Previous Tab (Shift+Tab -> ISO Left Tab) */
-
-  if (state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-    return keyval != GDK_KEY_n &&            /* New Incognito Window */
-           keyval != GDK_KEY_Page_Up &&      /* Move Tab Left */
-           keyval != GDK_KEY_KP_Page_Up &&   /* Move Tab Left */
-           keyval != GDK_KEY_Page_Down &&    /* Move Tab Right */
-           keyval != GDK_KEY_KP_Page_Down;   /* Move Tab Right */
-
-  if (state == GDK_ALT_MASK)
-    return keyval != GDK_KEY_Left &&      /* Back */
-           keyval != GDK_KEY_Right &&     /* Forward */
-           keyval != GDK_KEY_Home &&      /* Homepage */
-           keyval != GDK_KEY_1 &&         /* Switch To Tab 1 */
-           keyval != GDK_KEY_2 &&         /* Switch To Tab 2 */
-           keyval != GDK_KEY_3 &&         /* Switch To Tab 3 */
-           keyval != GDK_KEY_4 &&         /* Switch To Tab 4 */
-           keyval != GDK_KEY_5 &&         /* Switch To Tab 5 */
-           keyval != GDK_KEY_6 &&         /* Switch To Tab 6 */
-           keyval != GDK_KEY_7 &&         /* Switch To Tab 7 */
-           keyval != GDK_KEY_8 &&         /* Switch To Tab 8 */
-           keyval != GDK_KEY_9 &&         /* Switch To Tab 9 */
-           keyval != GDK_KEY_0;           /* Switch To Tab 10 */
-
-  return TRUE;
-}
-
-static gboolean
-handle_key_cb (EphyWindow            *window,
-               guint                  keyval,
-               guint                  keycode,
-               GdkModifierType        state,
-               GtkEventControllerKey *controller)
-{
-  EphyWebView *view;
-
-  if (!window->active_embed)
-    return GDK_EVENT_PROPAGATE;
-
-  view = ephy_embed_get_web_view (window->active_embed);
-  if (gtk_window_get_focus (GTK_WINDOW (window)) != GTK_WIDGET (view))
-    return GDK_EVENT_PROPAGATE;
-
-  if (ephy_window_should_view_receive_key_press_event (window, keyval, state))
-    return gtk_event_controller_key_forward (controller, GTK_WIDGET (view));
-
-  return GDK_EVENT_PROPAGATE;
-}
-#endif
 
 static void
 on_set_background_status (GObject      *source_object,
@@ -4558,11 +4492,6 @@ ephy_window_constructed (GObject *object)
   GApplication *app;
   EphyDownloadsManager *downloads_manager;
 
-#if 0
-  /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
-  GtkEventController *controller;
-#endif
-
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
   window = EPHY_WINDOW (object);
@@ -4716,14 +4645,16 @@ ephy_window_constructed (GObject *object)
 
   ephy_web_extension_manager_install_actions (ephy_web_extension_manager_get_default (), window);
 
-#if 0
-  /* Disabled due to https://gitlab.gnome.org/GNOME/epiphany/-/issues/1915 */
-  controller = gtk_event_controller_key_new ();
-  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (handle_key_cb), window);
-  g_signal_connect_swapped (controller, "key-released", G_CALLBACK (handle_key_cb), window);
-  gtk_widget_add_controller (GTK_WIDGET (window), controller);
-#endif
+  for (i = 0; i < G_N_ELEMENTS (bubble_accels); i++) {
+    for (guint j = 0; bubble_accels[i].accelerators[j] != NULL; j++) {
+      GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (bubble_accels[i].accelerators[j]);
+      GtkShortcutAction *shortcut_action = gtk_named_action_new (bubble_accels[i].action_and_target);
+
+      g_assert (trigger != NULL);
+      gtk_shortcut_controller_add_shortcut (window->bubble_shortcut_controller,
+                                            gtk_shortcut_new (trigger, shortcut_action));
+    }
+  }
 
   downloads_manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell));
   g_signal_connect_object (downloads_manager, "download-added", G_CALLBACK (download_added_cb), window, G_CONNECT_SWAPPED);
@@ -4763,6 +4694,7 @@ ephy_window_class_init (EphyWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, action_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, action_bar);
   gtk_widget_class_bind_template_child (widget_class, EphyWindow, bookmarks_dialog);
+  gtk_widget_class_bind_template_child (widget_class, EphyWindow, bubble_shortcut_controller);
 
   gtk_widget_class_bind_template_callback (widget_class, notify_fullscreen_cb);
   gtk_widget_class_bind_template_callback (widget_class, show_sidebar_cb);

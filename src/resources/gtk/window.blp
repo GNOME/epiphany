@@ -93,4 +93,9 @@ template $EphyWindow: Adw.ApplicationWindow {
     propagation-phase: capture;
     pan => $pan_cb() swapped;
   }
+
+  ShortcutController bubble_shortcut_controller {
+    propagation-phase: bubble;
+    scope: local;
+  }
 }
