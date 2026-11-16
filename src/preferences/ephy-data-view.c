@@ -210,7 +210,7 @@ ephy_data_view_finalize (GObject *object)
 }
 
 static gboolean
-find_shortuct_cb (EphyDataView *self)
+find_shortcut_cb (EphyDataView *self)
 {
   EphyDataViewPrivate *priv = ephy_data_view_get_instance_private (self);
   gboolean search;
@@ -305,7 +305,7 @@ ephy_data_view_class_init (EphyDataViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 
   gtk_widget_class_add_binding (widget_class, GDK_KEY_F, GDK_CONTROL_MASK,
-                                (GtkShortcutFunc)find_shortuct_cb, NULL);
+                                (GtkShortcutFunc)find_shortcut_cb, NULL);
 }
 
 static void
