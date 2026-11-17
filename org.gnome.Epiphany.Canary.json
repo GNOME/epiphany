@@ -66,24 +66,6 @@
             ]
         },
         {
-            "name" : "epiphany",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dprofile=Canary"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
-                    "branch" : "main",
-                    "disable-shallow-clone" : true
-                }
-            ],
-            "post-install" : [
-                "sed -i 's;Exec=epiphany;Exec=ephy-wrapper;g' /app/share/applications/org.gnome.Epiphany.Canary.desktop"
-            ]
-        },
-        {
             "name" : "ephy-wrapper",
             "buildsystem" : "simple",
             "build-commands" : [
@@ -99,6 +81,24 @@
                         "exec epiphany \"$@\""
                     ]
                 }
+            ]
+        },
+        {
+            "name" : "epiphany",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dprofile=Canary"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/epiphany.git",
+                    "branch" : "main",
+                    "disable-shallow-clone" : true
+                }
+            ],
+            "post-install" : [
+                "sed -i 's;Exec=epiphany;Exec=ephy-wrapper;g' /app/share/applications/org.gnome.Epiphany.Canary.desktop"
             ]
         }
     ]
