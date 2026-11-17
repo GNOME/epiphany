@@ -923,11 +923,12 @@ void
 ephy_bookmarks_dialog_set_is_editing (EphyBookmarksDialog *self,
                                       gboolean             is_editing)
 {
+  gboolean has_bookmarks = g_list_model_get_n_items (G_LIST_MODEL (self->manager)) > 0;
   GtkListBoxRow *row;
   int i = 0;
 
-  gtk_widget_set_visible (self->edit_button, !is_editing);
-  gtk_widget_set_visible (self->done_button, is_editing);
+  gtk_widget_set_visible (self->edit_button, has_bookmarks && !is_editing);
+  gtk_widget_set_visible (self->done_button, has_bookmarks && is_editing);
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++)))
     set_row_is_editable (GTK_WIDGET (row), is_editing);
@@ -968,6 +969,7 @@ on_search_entry_changed (GtkSearchEntry *entry,
                          gpointer        user_data)
 {
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
+  gboolean has_bookmarks = g_list_model_get_n_items (G_LIST_MODEL (self->manager)) > 0;
   gboolean tag_detail_has_row = !!gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->tag_detail_list_box), 0);
   GtkListBoxRow *row;
   int idx = 0;
@@ -981,7 +983,9 @@ on_search_entry_changed (GtkSearchEntry *entry,
   } else {
     gtk_widget_set_sensitive (self->edit_button, TRUE);
 
-    if (tag_detail_has_row)
+    if (!has_bookmarks)
+      gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
+    else if (tag_detail_has_row)
       gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
     else
       gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
