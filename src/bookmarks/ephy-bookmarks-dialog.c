@@ -909,14 +909,10 @@ static void
 set_row_is_editable (GtkWidget *row,
                      gboolean   is_editable)
 {
-  GtkWidget *drag_handle = gtk_widget_get_first_child (gtk_widget_get_first_child (gtk_widget_get_first_child (row)));
-  GtkWidget *buttons_box = gtk_widget_get_last_child (gtk_widget_get_first_child (row));
-
-  gtk_widget_set_visible (drag_handle, is_editable);
   if (EPHY_IS_BOOKMARK_ROW (row))
-    gtk_widget_set_visible (buttons_box, is_editable);
+    ephy_bookmark_row_set_editable (EPHY_BOOKMARK_ROW (row), is_editable);
   else if (EPHY_IS_BOOKMARK_TAG_ROW (row))
-    gtk_widget_set_visible (gtk_widget_get_last_child (buttons_box), is_editable);
+    ephy_bookmark_tag_row_set_editable (EPHY_BOOKMARK_TAG_ROW (row), is_editable);
 }
 
 void

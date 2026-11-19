@@ -33,6 +33,9 @@ GtkWidget           *ephy_bookmark_tag_row_new              (const char *tag);
 
 const char          *ephy_bookmark_tag_row_get_tag          (EphyBookmarkTagRow *self);
 
+void                 ephy_bookmark_tag_row_set_editable   (EphyBookmarkTagRow *self,
+                                                           gboolean            is_editing);
+
 void                 ephy_bookmark_tag_row_set_movable      (EphyBookmarkTagRow *self,
                                                              gboolean            movable);
 

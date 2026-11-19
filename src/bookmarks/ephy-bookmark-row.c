@@ -377,9 +377,23 @@ ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self)
 }
 
 void
+ephy_bookmark_row_set_editable (EphyBookmarkRow *self,
+                                gboolean         editable)
+{
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
+
+  gtk_widget_set_visible (self->drag_handle, editable);
+  gtk_widget_set_visible (self->remove_button, editable);
+  gtk_widget_set_visible (self->properties_button, editable);
+  gtk_widget_set_visible (self->move_menu_button, editable);
+}
+
+void
 ephy_bookmark_row_set_movable (EphyBookmarkRow *self,
                                gboolean         movable)
 {
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
+
   gtk_widget_set_sensitive (self->drag_handle, movable);
   gtk_widget_set_sensitive (self->move_menu_button, movable);
 }

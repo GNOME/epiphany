@@ -244,6 +244,16 @@ ephy_bookmark_tag_row_get_tag (EphyBookmarkTagRow *self)
 }
 
 void
+ephy_bookmark_tag_row_set_editable (EphyBookmarkTagRow *self,
+                                    gboolean            editable)
+{
+  g_assert (EPHY_IS_BOOKMARK_TAG_ROW (self));
+
+  gtk_widget_set_visible (self->drag_handle, editable);
+  gtk_widget_set_visible (self->move_menu_button, editable);
+}
+
+void
 ephy_bookmark_tag_row_set_movable (EphyBookmarkTagRow *self,
                                    gboolean            movable)
 {
