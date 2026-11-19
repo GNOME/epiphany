@@ -54,11 +54,8 @@ struct _EphyBookmarksDialog {
 
 G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
 
-#define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
-#define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
-
-static GtkWidget * create_bookmark_row (gpointer item,
-                                        gpointer user_data);
+static GtkWidget *create_bookmark_row (gpointer item,
+                                       gpointer user_data);
 static GtkWidget *create_tag_row (EphyBookmarksDialog *self,
                                   const char          *tag);
 static void set_row_is_editable (GtkWidget *row,
@@ -109,15 +106,15 @@ update_bookmarks_order (EphyBookmarksDialog *self)
   ephy_bookmarks_manager_clear_bookmarks_order (self->manager);
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
-    const char *type = g_object_get_data (G_OBJECT (row), "type");
     const char *item;
 
-    if (EPHY_IS_BOOKMARK_ROW (row))
+    if (EPHY_IS_BOOKMARK_ROW (row)) {
       item = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
-    else
+      ephy_bookmarks_manager_add_to_bookmarks_order (self->manager, "bookmark", item, i - 1);
+    } else {
       item = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
-
-    ephy_bookmarks_manager_add_to_bookmarks_order (self->manager, type, item, i - 1);
+      ephy_bookmarks_manager_add_to_bookmarks_order (self->manager, "tag", item, i - 1);
+    }
   }
 
   ephy_bookmarks_manager_save (self->manager, TRUE, FALSE,
@@ -296,9 +293,7 @@ remove_bookmark_row (EphyBookmarksDialog *self,
   g_assert (GTK_IS_LIST_BOX (list_box));
 
   while ((row = gtk_list_box_get_row_at_index (list_box, i++))) {
-    const char *type = g_object_get_data (G_OBJECT (row), "type");
-
-    if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0 &&
+    if (EPHY_IS_BOOKMARK_ROW (row) &&
         g_strcmp0 (ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row)), url) == 0) {
       gtk_list_box_remove (list_box, GTK_WIDGET (row));
       break;
@@ -382,13 +377,13 @@ ephy_bookmarks_dialog_bookmark_tag_added_cb (EphyBookmarksDialog  *self,
   exists = FALSE;
 
   while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
-    const char *title = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
-    const char *type = g_object_get_data (G_OBJECT (row), "type");
+    if (EPHY_IS_BOOKMARK_TAG_ROW (row)) {
+      const char *row_tag = ephy_bookmark_tag_row_get_tag (EPHY_BOOKMARK_TAG_ROW (row));
 
-    if (g_strcmp0 (title, tag) == 0 &&
-        g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0) {
-      exists = TRUE;
-      break;
+      if (g_strcmp0 (row_tag, tag) == 0) {
+        exists = TRUE;
+        break;
+      }
     }
   }
 
@@ -425,9 +420,7 @@ ephy_bookmarks_dialog_bookmark_tag_removed_cb (EphyBookmarksDialog  *self,
 
     exists = FALSE;
     while ((row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (self->bookmarks_list_box), i++))) {
-      const char *type = g_object_get_data (G_OBJECT (row), "type");
-
-      if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
+      if (EPHY_IS_BOOKMARK_ROW (row)) {
         const char *url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
 
         if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
@@ -477,9 +470,6 @@ create_bookmark_row (gpointer item,
   gboolean is_editing = !gtk_widget_is_visible (self->edit_button);
 
   row = ephy_bookmark_row_new (bookmark);
-  g_object_set_data_full (G_OBJECT (row), "type",
-                          g_strdup (EPHY_LIST_BOX_ROW_TYPE_BOOKMARK),
-                          (GDestroyNotify)g_free);
 
   g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
 
@@ -506,9 +496,6 @@ create_tag_row (EphyBookmarksDialog *self,
   gboolean is_editing;
 
   row = ephy_bookmark_tag_row_new (g_strdup (tag));
-  g_object_set_data_full (G_OBJECT (row), "type",
-                          g_strdup (EPHY_LIST_BOX_ROW_TYPE_TAG),
-                          (GDestroyNotify)g_free);
 
   is_editing = !gtk_widget_is_visible (self->edit_button);
   set_row_is_editable (row, is_editing);
@@ -762,32 +749,25 @@ static int
 tags_list_box_sort_func (GtkListBoxRow *row1,
                          GtkListBoxRow *row2)
 {
-  const char *type1;
-  const char *type2;
   const char *title1;
   const char *title2;
 
   g_assert (GTK_IS_LIST_BOX_ROW (row1));
   g_assert (GTK_IS_LIST_BOX_ROW (row2));
 
-  type1 = g_object_get_data (G_OBJECT (row1), "type");
-  type2 = g_object_get_data (G_OBJECT (row2), "type");
-
   title1 = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row1));
   title2 = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row2));
 
-  if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0
-      && g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
+  if (EPHY_IS_BOOKMARK_TAG_ROW (row1) && EPHY_IS_BOOKMARK_TAG_ROW (row2))
     return ephy_bookmark_tags_compare (title1, title2);
 
-  if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0
-      && g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0)
+  if (EPHY_IS_BOOKMARK_ROW (row1) && EPHY_IS_BOOKMARK_ROW (row2))
     return ephy_bookmark_bookmarks_compare_func (ephy_bookmark_row_get_bookmark (EPHY_BOOKMARK_ROW (row1)),
                                                  ephy_bookmark_row_get_bookmark (EPHY_BOOKMARK_ROW (row2)));
 
-  if (g_strcmp0 (type1, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
+  if (EPHY_IS_BOOKMARK_TAG_ROW (row1))
     return -1;
-  if (g_strcmp0 (type2, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0)
+  if (EPHY_IS_BOOKMARK_TAG_ROW (row2))
     return 1;
 
   return g_strcmp0 (title1, title2);
@@ -863,7 +843,6 @@ row_clicked_cb (GtkGesture          *gesture,
   GtkWidget *list;
   GtkListBoxRow *row;
   guint button;
-  const char *type;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
@@ -882,8 +861,7 @@ row_clicked_cb (GtkGesture          *gesture,
   if (!row)
     return;
 
-  type = g_object_get_data (G_OBJECT (row), "type");
-  if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
+  if (EPHY_IS_BOOKMARK_ROW (row)) {
     GdkModifierType modifiers;
     EphyLinkFlags flags;
 
@@ -1043,7 +1021,7 @@ populate_bookmarks_list_box (EphyBookmarksDialog *self)
 
     g_variant_get (variant, "(ssi)", &type, &item, &index);
 
-    if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
+    if (g_strcmp0 (type, "bookmark") == 0) {
       EphyBookmark *bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self->manager, item);
 
       row = create_bookmark_row (bookmark, self);
