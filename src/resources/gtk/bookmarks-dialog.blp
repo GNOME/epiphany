@@ -101,6 +101,11 @@ template $EphyBookmarksDialog: Adw.Bin {
                   styles [
                     "boxed-list",
                   ]
+
+                  GestureClick {
+                    button: 0;
+                    released => $row_clicked_cb();
+                  }
                 };
               }
 
@@ -113,6 +118,11 @@ template $EphyBookmarksDialog: Adw.Bin {
                   styles [
                     "boxed-list",
                   ]
+
+                  GestureClick {
+                    button: 0;
+                    released => $row_clicked_cb();
+                  }
                 };
               }
 
@@ -152,6 +162,11 @@ template $EphyBookmarksDialog: Adw.Bin {
                     styles [
                       "boxed-list",
                     ]
+
+                    GestureClick {
+                      button: 0;
+                      released => $row_clicked_cb();
+                    }
                   }
                 };
               }

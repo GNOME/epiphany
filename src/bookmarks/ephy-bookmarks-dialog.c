@@ -1143,6 +1143,7 @@ ephy_bookmarks_dialog_class_init (EphyBookmarksDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_done_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_key_pressed);
+  gtk_widget_class_bind_template_callback (widget_class, row_clicked_cb);
 
   gtk_widget_class_install_action (widget_class, "dialog.tag-detail-back", NULL,
                                    (GtkWidgetActionActivateFunc)tag_detail_back);
@@ -1154,7 +1155,6 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   GSequence *tags;
   GSequenceIter *iter;
   GSequence *bookmarks;
-  GtkGesture *gesture;
   GtkFilter *filter;
   g_autoptr (GtkFilterListModel) filter_model = NULL;
 
@@ -1260,21 +1260,6 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
   g_signal_connect_object (self->manager, "sorted",
                            G_CALLBACK (ephy_bookmarks_dialog_sorted_cb),
                            self, G_CONNECT_SWAPPED);
-
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
-  g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
-  gtk_widget_add_controller (self->bookmarks_list_box, GTK_EVENT_CONTROLLER (gesture));
-
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
-  g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
-  gtk_widget_add_controller (self->tag_detail_list_box, GTK_EVENT_CONTROLLER (gesture));
-
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
-  g_signal_connect (gesture, "released", G_CALLBACK (row_clicked_cb), self);
-  gtk_widget_add_controller (self->searching_bookmarks_list_box, GTK_EVENT_CONTROLLER (gesture));
 }
 
 void
