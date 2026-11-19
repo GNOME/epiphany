@@ -50,6 +50,8 @@ struct _EphyBookmarksDialog {
   char *tag_detail_tag;
 
   EphyBookmarksManager *manager;
+
+  gboolean is_editing;
 };
 
 G_DEFINE_FINAL_TYPE (EphyBookmarksDialog, ephy_bookmarks_dialog, ADW_TYPE_BIN)
@@ -467,13 +469,12 @@ create_bookmark_row (gpointer item,
   EphyBookmark *bookmark = EPHY_BOOKMARK (item);
   EphyBookmarksDialog *self = EPHY_BOOKMARKS_DIALOG (user_data);
   GtkWidget *row;
-  gboolean is_editing = !gtk_widget_is_visible (self->edit_button);
 
   row = ephy_bookmark_row_new (bookmark);
 
   g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
 
-  set_row_is_editable (row, is_editing);
+  set_row_is_editable (row, self->is_editing);
 
   return row;
 }
@@ -493,12 +494,10 @@ create_tag_row (EphyBookmarksDialog *self,
                 const char          *tag)
 {
   GtkWidget *row;
-  gboolean is_editing;
 
   row = ephy_bookmark_tag_row_new (g_strdup (tag));
 
-  is_editing = !gtk_widget_is_visible (self->edit_button);
-  set_row_is_editable (row, is_editing);
+  set_row_is_editable (row, self->is_editing);
 
   g_signal_connect_object (row, "activated", G_CALLBACK (on_tag_row_activated), self, G_CONNECT_DEFAULT);
   g_signal_connect_object (row, "move-row", G_CALLBACK (row_moved_cb), self, G_CONNECT_DEFAULT);
@@ -900,6 +899,8 @@ ephy_bookmarks_dialog_set_is_editing (EphyBookmarksDialog *self,
   gboolean has_bookmarks = g_list_model_get_n_items (G_LIST_MODEL (self->manager)) > 0;
   GtkListBoxRow *row;
   int i = 0;
+
+  self->is_editing = is_editing;
 
   gtk_widget_set_visible (self->edit_button, has_bookmarks && !is_editing);
   gtk_widget_set_visible (self->done_button, has_bookmarks && is_editing);
