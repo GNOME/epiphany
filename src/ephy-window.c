@@ -128,7 +128,7 @@ const struct {
   { "win.find", { "<Primary>F", NULL } },
   { "win.find-prev", { "<shift><Primary>G", NULL } },
   { "win.find-next", { "<Primary>G", NULL } },
-  { "win.bookmark-page", { "<Primary>D", "AddFavorite", NULL } },
+  { "win.bookmark-page", { "AddFavorite", "<Primary>D", NULL } },
   { "win.bookmarks", { "<alt><Primary>D", NULL } },
   { "win.show-downloads", { "<shift><Primary>Y", NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
