@@ -568,6 +568,10 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
         gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), row);
         update_rows_movable (self, GTK_LIST_BOX (self->bookmarks_list_box));
         update_bookmarks_order (self);
+
+        row = create_tag_row (self, tag);
+        ephy_bookmark_tag_row_set_editable (EPHY_BOOKMARK_TAG_ROW (row), FALSE);
+        gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), row);
       }
     }
   }
