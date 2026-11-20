@@ -55,6 +55,7 @@ template $EphyBookmarkRow: Adw.ActionRow {
   Button properties_button {
     icon-name: "document-edit-symbolic";
     receives-default: false;
+    tooltip-text: _("Properties");
     valign: center;
     clicked => $ephy_bookmark_row_properties_button_clicked_cb() swapped;
 
