@@ -43,6 +43,9 @@ void                 ephy_bookmark_row_open             (EphyBookmarkRow *self,
 void                 ephy_bookmark_row_set_editable     (EphyBookmarkRow *self,
                                                          gboolean         editable);
 
+void                 ephy_bookmark_row_set_can_move     (EphyBookmarkRow *self,
+                                                         gboolean         can_move);
+
 void                 ephy_bookmark_row_set_movable     (EphyBookmarkRow *self,
                                                         gboolean         movable);
 

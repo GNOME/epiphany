@@ -41,6 +41,8 @@ struct _EphyBookmarkRow {
   GtkWidget *remove_button;
   GtkWidget *properties_button;
   GtkWidget *move_menu_button;
+
+  gboolean can_move;
 };
 
 G_DEFINE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, ADW_TYPE_ACTION_ROW)
@@ -350,6 +352,8 @@ static void
 ephy_bookmark_row_init (EphyBookmarkRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->can_move = TRUE;
 }
 
 GtkWidget *
@@ -382,10 +386,25 @@ ephy_bookmark_row_set_editable (EphyBookmarkRow *self,
 {
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
-  gtk_widget_set_visible (self->drag_handle, editable);
   gtk_widget_set_visible (self->remove_button, editable);
   gtk_widget_set_visible (self->properties_button, editable);
-  gtk_widget_set_visible (self->move_menu_button, editable);
+
+  if (self->can_move) {
+    gtk_widget_set_visible (self->drag_handle, editable);
+    gtk_widget_set_visible (self->move_menu_button, editable);
+  }
+}
+
+void
+ephy_bookmark_row_set_can_move (EphyBookmarkRow *self,
+                                gboolean         can_move)
+{
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
+
+  self->can_move = can_move;
+
+  gtk_widget_set_visible (self->drag_handle, can_move);
+  gtk_widget_set_visible (self->move_menu_button, can_move);
 }
 
 void
@@ -393,6 +412,9 @@ ephy_bookmark_row_set_movable (EphyBookmarkRow *self,
                                gboolean         movable)
 {
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
+
+  if (!self->can_move)
+    return;
 
   gtk_widget_set_sensitive (self->drag_handle, movable);
   gtk_widget_set_sensitive (self->move_menu_button, movable);

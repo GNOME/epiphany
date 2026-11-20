@@ -578,7 +578,7 @@ ephy_bookmarks_dialog_bookmark_added_cb (EphyBookmarksDialog  *self,
                                NULL);
 
   row = create_bookmark_row (bookmark, self);
-  ephy_bookmark_row_set_movable (EPHY_BOOKMARK_ROW (row), FALSE);
+  ephy_bookmark_row_set_can_move (EPHY_BOOKMARK_ROW (row), FALSE);
   gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), row);
 
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0) {
@@ -1183,7 +1183,7 @@ ephy_bookmarks_dialog_init (EphyBookmarksDialog *self)
     GtkWidget *bookmark_row;
 
     bookmark_row = create_bookmark_row (bookmark, self);
-    ephy_bookmark_row_set_movable (EPHY_BOOKMARK_ROW (bookmark_row), FALSE);
+    ephy_bookmark_row_set_can_move (EPHY_BOOKMARK_ROW (bookmark_row), FALSE);
     gtk_list_box_append (GTK_LIST_BOX (self->searching_bookmarks_list_box), bookmark_row);
   }
 
