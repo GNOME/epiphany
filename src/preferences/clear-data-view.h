@@ -20,15 +20,14 @@
 
 #pragma once
 
+#include <adwaita.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
-
-#include "ephy-data-view.h"
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_CLEAR_DATA_VIEW (clear_data_view_get_type ())
 
-G_DECLARE_FINAL_TYPE (ClearDataView, clear_data_view, EPHY, CLEAR_DATA_VIEW, EphyDataView)
+G_DECLARE_FINAL_TYPE (ClearDataView, clear_data_view, EPHY, CLEAR_DATA_VIEW, AdwNavigationPage)
 
 G_END_DECLS

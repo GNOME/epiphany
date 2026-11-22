@@ -26,11 +26,11 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_DATA_VIEW (ephy_data_view_get_type ())
 
-G_DECLARE_DERIVABLE_TYPE (EphyDataView, ephy_data_view, EPHY, DATA_VIEW, AdwNavigationPage)
+G_DECLARE_DERIVABLE_TYPE (EphyDataView, ephy_data_view, EPHY, DATA_VIEW, AdwBin)
 
 struct _EphyDataViewClass
 {
-  AdwNavigationPageClass parent_class;
+  AdwBinClass parent_class;
 };
 
 AdwToastOverlay *ephy_data_view_get_toast_overlay (EphyDataView *self);

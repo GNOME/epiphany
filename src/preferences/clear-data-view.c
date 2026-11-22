@@ -28,13 +28,15 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
+#include "ephy-data-view.h"
 #include "ephy-embed-shell.h"
 #include "ephy-history-service.h"
 #include "ephy-settings.h"
 
 struct _ClearDataView {
-  EphyDataView parent_instance;
+  AdwNavigationPage parent_instance;
 
+  EphyDataView *data_view;
   GtkWidget *treeview;
   GtkTreeModel *treestore;
   GtkTreeModelFilter *treemodelfilter;
@@ -52,7 +54,7 @@ enum {
   SENSITIVE_COLUMN
 };
 
-G_DEFINE_FINAL_TYPE (ClearDataView, clear_data_view, EPHY_TYPE_DATA_VIEW)
+G_DEFINE_FINAL_TYPE (ClearDataView, clear_data_view, ADW_TYPE_NAVIGATION_PAGE)
 
 #define PERSISTENT_DATA_TYPES WEBKIT_WEBSITE_DATA_COOKIES | \
         WEBKIT_WEBSITE_DATA_DISK_CACHE | \
@@ -116,17 +118,17 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
     return;
   }
 
-  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), FALSE);
+  ephy_data_view_set_is_loading (clear_data_view->data_view, FALSE);
 
   if (!data_list) {
-    ephy_data_view_set_has_data (EPHY_DATA_VIEW (clear_data_view), FALSE);
+    ephy_data_view_set_has_data (clear_data_view->data_view, FALSE);
 
     if (error)
       g_error_free (error);
     return;
   }
 
-  ephy_data_view_set_has_data (EPHY_DATA_VIEW (clear_data_view), TRUE);
+  ephy_data_view_set_has_data (clear_data_view->data_view, TRUE);
   active_items = g_settings_get_int (EPHY_SETTINGS_MAIN, EPHY_PREFS_ACTIVE_CLEAR_DATA_ITEMS);
 
   treestore = GTK_TREE_STORE (clear_data_view->treestore);
@@ -184,7 +186,7 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
   WebKitWebsiteDataTypes types_to_remove = 0;
 
   if (!gtk_tree_model_get_iter_first (clear_data_view->treestore, &top_iter)
-      || !ephy_data_view_get_has_data (EPHY_DATA_VIEW (clear_data_view)))
+      || !ephy_data_view_get_has_data (clear_data_view->data_view))
     return GDK_EVENT_PROPAGATE;
 
   do {
@@ -237,7 +239,7 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
   }
 
   if (types_to_clear || types_to_remove) {
-    AdwToastOverlay *toast_overlay = ephy_data_view_get_toast_overlay (EPHY_DATA_VIEW (clear_data_view));
+    AdwToastOverlay *toast_overlay = ephy_data_view_get_toast_overlay (clear_data_view->data_view);
     AdwToast *toast = adw_toast_new (_("Data cleared"));
 
     adw_toast_overlay_add_toast (toast_overlay, toast);
@@ -246,7 +248,7 @@ on_clear_button_clicked (ClearDataView *clear_data_view)
   g_list_free_full (data_to_remove, (GDestroyNotify)webkit_website_data_unref);
 
   /* Reload tree */
-  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), TRUE);
+  ephy_data_view_set_is_loading (clear_data_view->data_view, TRUE);
   gtk_tree_store_clear (GTK_TREE_STORE (clear_data_view->treestore));
   webkit_website_data_manager_fetch (get_website_data_manager (),
                                      PERSISTENT_DATA_TYPES,
@@ -371,7 +373,7 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
 
   gtk_tree_path_free (path);
 
-  ephy_data_view_set_can_clear (EPHY_DATA_VIEW (clear_data_view), any_item_checked (clear_data_view));
+  ephy_data_view_set_can_clear (clear_data_view->data_view, any_item_checked (clear_data_view));
 }
 
 static void
@@ -392,7 +394,7 @@ row_visible_func (GtkTreeModel  *model,
   if (gtk_tree_model_iter_has_child (model, iter))
     return TRUE;
 
-  search_text = ephy_data_view_get_search_text (EPHY_DATA_VIEW (clear_data_view));
+  search_text = ephy_data_view_get_search_text (clear_data_view->data_view);
   if (!search_text || search_text[0] == '\0')
     return TRUE;
 
@@ -443,6 +445,7 @@ clear_data_view_class_init (ClearDataViewClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/clear-data-view.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, ClearDataView, data_view);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, treeview);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, active_column);
   gtk_widget_class_bind_template_child (widget_class, ClearDataView, name_column);
@@ -482,7 +485,7 @@ clear_data_view_init (ClearDataView *clear_data_view)
                                           clear_data_view,
                                           NULL);
 
-  ephy_data_view_set_is_loading (EPHY_DATA_VIEW (clear_data_view), TRUE);
+  ephy_data_view_set_is_loading (clear_data_view->data_view, TRUE);
 
   clear_data_view->cancellable = g_cancellable_new ();
 
