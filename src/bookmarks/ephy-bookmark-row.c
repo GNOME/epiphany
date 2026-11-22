@@ -323,12 +323,12 @@ ephy_bookmark_row_constructed (GObject *object)
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
                    self->remove_button,
                    "visible",
-                   G_SETTINGS_BIND_INVERT_BOOLEAN);
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
   g_settings_bind (EPHY_SETTINGS_LOCKDOWN,
                    EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING,
                    self->properties_button,
                    "visible",
-                   G_SETTINGS_BIND_INVERT_BOOLEAN);
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
 }
 
 static void
