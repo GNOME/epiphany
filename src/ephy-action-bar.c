@@ -41,6 +41,7 @@ struct _EphyActionBar {
   AdwBin parent_instance;
 
   GtkWidget *toolbar;
+  GtkWidget *menu_button;
   AdwTabButton *tab_button;
   GtkWidget *bookmarks_button;
   GtkWidget *navigation_back;
@@ -540,6 +541,7 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_back);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, navigation_forward);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, bookmarks_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyActionBar, menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, site_menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, downloads_button);
   gtk_widget_class_bind_template_child (widget_class, EphyActionBar, downloads_icon);
@@ -569,6 +571,8 @@ ephy_action_bar_init (EphyActionBar *action_bar)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (GTK_WIDGET (action_bar->bookmarks_button),
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (GTK_WIDGET (action_bar->site_menu_button),
+                          mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (embed_shell);
