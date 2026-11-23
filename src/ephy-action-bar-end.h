@@ -33,5 +33,6 @@ void              ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEn
                                                                  gboolean          show);
 void              ephy_action_bar_end_show_downloads            (EphyActionBarEnd *action_bar_end);
 GtkWidget        *ephy_action_bar_end_get_downloads_revealer    (EphyActionBarEnd *action_bar_end);
+GtkWidget        *ephy_action_bar_end_get_page_menu_button (EphyActionBarEnd *action_bar_end);
 
 G_END_DECLS

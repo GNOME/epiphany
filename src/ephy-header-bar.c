@@ -169,6 +169,7 @@ ephy_header_bar_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (ephy_header_bar_parent_class)->realize (widget);
 
+  header_bar->page_menu_button = ephy_action_bar_end_get_page_menu_button (EPHY_ACTION_BAR_END (header_bar->action_bar_end));
   header_bar->window = EPHY_WINDOW (gtk_widget_get_ancestor (widget, EPHY_TYPE_WINDOW));
 
   g_signal_connect_object (header_bar->window, "notify::chrome",
@@ -204,7 +205,6 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_start);
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, restore_button);
-  gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, page_menu_button);
   gtk_widget_class_bind_template_child (widget_class, EphyHeaderBar, action_bar_end);
 }
 
@@ -240,14 +240,12 @@ ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
     case EPHY_ADAPTIVE_MODE_NORMAL:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), TRUE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), TRUE);
-      gtk_widget_set_visible (header_bar->page_menu_button, TRUE);
       adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), TRUE);
 
       break;
     case EPHY_ADAPTIVE_MODE_NARROW:
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_start), FALSE);
       gtk_widget_set_visible (GTK_WIDGET (header_bar->action_bar_end), FALSE);
-      gtk_widget_set_visible (header_bar->page_menu_button, FALSE);
       adw_header_bar_set_show_end_title_buttons (ADW_HEADER_BAR (header_bar->header_bar), FALSE);
 
       break;
